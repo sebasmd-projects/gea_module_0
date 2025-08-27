@@ -1,0 +1,197 @@
+# Gestión de ubicaciones de activos: administración y modelos.
+# Copyright (C) 2024 GEA
+# This file is distributed under the same license as the GEA package.
+# Sebastián Morales <sebastian.morales@propensionesabogados.com>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: GEA 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-07 21:49-0500\n"
+"PO-Revision-Date: 2025-01-03 19:15-0500\n"
+"Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
+"Language-Team: Spanish <es@li.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Translated-Using: django-rosetta 0.10.0\n"
+
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:31
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:110
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:202
+msgid "Required Fields"
+msgstr "Campos Requeridos"
+
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:40
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:123
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:219
+msgid "Dates"
+msgstr "Fechas"
+
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:50
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:133
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:229
+msgid "Priority"
+msgstr "Prioridad"
+
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:153
+msgid "Asset Name (ES)"
+msgstr "Nombre del Activo (ES)"
+
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:154
+msgid "Reference"
+msgstr "Referencia"
+
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:155
+#: .\apps\project\specific\assets_management\assets_location\models.py:106
+msgid "Country"
+msgstr "País"
+
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:197
+msgid "User Field"
+msgstr "Campo de Usuario"
+
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:210
+msgid "Optional Fields"
+msgstr "Campos Opcionales"
+
+#: .\apps\project\specific\assets_management\assets_location\forms.py:54
+#: .\apps\project\specific\assets_management\assets_location\forms.py:107
+msgid "Enter any relevant notes or details here (Spanish)"
+msgstr "Introduzca aquí cualquier nota o detalle relevante"
+
+#: .\apps\project\specific\assets_management\assets_location\forms.py:59
+#: .\apps\project\specific\assets_management\assets_location\forms.py:112
+msgid "Enter any relevant notes or details here (English)"
+msgstr "Introduzca aquí cualquier nota o detalle relevante (en inglés)"
+
+#: .\apps\project\specific\assets_management\assets_location\forms.py:79
+msgid "A similar asset location already exists."
+msgstr "Ya existe una ubicación de activos similar."
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:22
+msgid "Africa"
+msgstr "África"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:23
+msgid "Antarctica"
+msgstr "Antártida"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:24
+msgid "Asia"
+msgstr "Asia"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:25
+msgid "Central America"
+msgstr "Centroamérica"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:26
+msgid "Europe"
+msgstr "Europa"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:27
+msgid "North America"
+msgstr "Norteamérica"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:28
+msgid "Oceania"
+msgstr "Oceanía"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:29
+msgid "South America"
+msgstr "Sudamérica"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:32
+msgid "continent"
+msgstr "continente"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:39
+msgid "Country Name (ES)"
+msgstr "Nombre del País (ES)"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:44
+msgid "Country Name (EN)"
+msgstr "Nombre del País (EN)"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:60
+msgid "3. Country"
+msgstr "3. País"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:61
+msgid "3. Countries"
+msgstr "3. Países"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:79
+#: .\apps\project\specific\assets_management\assets_location\models.py:152
+msgid "Created By"
+msgstr "Creado Por"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:84
+msgid "location reference"
+msgstr "referencia de la ubicación"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:91
+msgid "description (ES)"
+msgstr "descripción"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:97
+msgid "description (EN)"
+msgstr "descripción"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:128
+msgid "2. Location"
+msgstr "2. Ubicación"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:129
+msgid "2. Locations"
+msgstr "2. Ubicaciones"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:135
+msgid "Units"
+msgstr "Unidades"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:136
+msgid "Boxes"
+msgstr "Cajas"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:137
+msgid "Containers"
+msgstr "Contenedores"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:160
+msgid "Asset"
+msgstr "Activo"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:167
+msgid "location"
+msgstr "ubicación"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:171
+msgid "quantity type"
+msgstr "tipo de cantidad"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:178
+msgid "amount"
+msgstr "cantidad"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:182
+msgid "observations (ES)"
+msgstr "observaciones"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:188
+msgid "observations (EN)"
+msgstr "observaciones"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:204
+msgid "1. Location Registration"
+msgstr "1. Registro de Ubicación"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:205
+msgid "1. Locations Registration"
+msgstr "1. Registros de Ubicaciones"
+
+#: .\apps\project\specific\assets_management\assets_location\views.py:107
+msgid "A location with the same details already exists."
+msgstr "Ya existe una ubicación con los mismos detalles."

@@ -1,0 +1,48 @@
+{% extends 'dashboard/layout/common.html' %}
+
+{% load static i18n %}
+
+{% block feather_icons %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js" integrity="sha384-RyE9TSx1shZZA6GS7TToIk1J7zY1mU8evbLDXYgOz4zgduwPFEtnHd1bswt8PG/u" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block font_awesome_icons %}
+  <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/js/all.min.js" integrity="sha384-QM3vQ1ro1SUguF26PKxC17ZxibTi/ixpgL9NRL5/RHw1AmA0pfSeGCh6k+uqbyzJ" crossorigin="anonymous"></script>
+{% endblock %}
+
+
+{% block body_properties %}
+  class="nav-fixed"
+{% endblock %}
+
+{% block nav %}
+  {% include 'dashboard/partials/nav.html' %}
+{% endblock %}
+
+{% block layout %}
+  <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+      {% block side_nav %}
+        <div id="layoutSidenav_nav">
+          {% include 'dashboard/partials/side_nav.html' %}
+        </div>
+      {% endblock %}
+    </div>
+
+    {% block side_content %}
+      <div id="layoutSidenav_content">
+
+        {% block layout_main %}{% endblock %}
+
+
+        {% block layout_content %}{% endblock %}
+
+
+        {% block layout_footer %}
+          {% include 'dashboard/partials/footer.html' %}
+        {% endblock %}
+        
+      </div>
+    {% endblock %}
+  </div>
+{% endblock %}

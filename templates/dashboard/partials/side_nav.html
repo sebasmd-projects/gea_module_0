@@ -1,0 +1,89 @@
+{% load i18n %}
+
+<nav class="sidenav shadow-right sidenav-light">
+    <div class="sidenav-menu">
+        <div class="nav accordion" id="accordionSidenav">
+            {% comment %}
+                <div class="sidenav-menu-heading d-sm-none">Account</div>
+                <a class="nav-link d-sm-none" href="#!">
+                    <div class="nav-link-icon"><i data-feather="bell"></i></div>
+                    Alerts
+                    <span class="badge bg-warning-soft text-warning ms-auto">4 New!</span>
+                </a>
+                <a class="nav-link d-sm-none" href="#!">
+                    <div class="nav-link-icon"><i data-feather="mail"></i></div>
+                    Messages
+                    <span class="badge bg-success-soft text-success ms-auto">2 New!</span>
+                </a>
+            {% endcomment %}
+
+            
+
+            <div class="sidenav-menu-heading">{% trans 'Dashboard' %}</div>
+
+            <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseLanguage" aria-expanded="false" aria-controls="collapseLanguage">
+                <div class="nav-link-icon"><i data-feather="globe"></i></div>
+                {% trans 'Language' %}
+                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+            </a>
+            <div class="collapse" id="collapseLanguage" data-bs-parent="#accordionSidenav">
+                <nav class="sidenav-menu-nested nav">
+                    {% for lang in LANGUAGES %}
+                        <a class="nav-link text-capitalize" href="{% url 'set_language' %}?lang={{ lang.0 }}">{{ lang.1 }}</a>
+                    {% endfor %}
+                </nav>
+            </div>
+
+            <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                <div class="nav-link-icon"><i data-feather="grid"></i></div>
+                {% trans 'Pages' %}
+                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+            </a>
+            <div class="collapse" id="collapsePages" data-bs-parent="#accordionSidenav">
+                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPagesMenu">
+                    <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAccount" aria-expanded="false" aria-controls="pagesCollapseAccount">
+                        {% trans 'Account' %}
+                        <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="pagesCollapseAccount" data-bs-parent="#accordionSidenavPagesMenu">
+                        <nav class="sidenav-menu-nested nav">
+                            <!-- <a class="nav-link" href="account-profile.html">Profile</a> -->
+                            <a class="nav-link" href="{% url 'two_factor:profile' %}">{% trans 'Security' %}</a>
+                            <!-- <a class="nav-link" href="account-notifications.html">Notifications</a> -->
+                        </nav>
+                    </div>
+                </nav>
+            </div>
+
+            <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseApps" aria-expanded="false" aria-controls="collapseApps">
+                <div class="nav-link-icon"><i data-feather="globe"></i></div>
+                {% trans 'Documents' %}
+                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+            </a>
+            <div class="collapse" id="collapseApps" data-bs-parent="#accordionSidenav">
+                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAppsMenu">
+                    <a class="nav-link" href="https://wa.me/573183280176?text=KYC" target="_blank" rel="noopener noreferrer">KYC</a>
+                    <a class="nav-link" href="https://wa.me/573183280176?text=CIS" target="_blank" rel="noopener noreferrer">CIS</a>
+                    <a class="nav-link" href="https://wa.me/573183280176?text=IDONEIDAD" target="_blank" rel="noopener noreferrer">{% trans 'IDONEITY' %}</a>
+                </nav>
+            </div>
+
+            {% if request.user.user_type in 'HRI' %}
+                {% if request.user.is_verified_holder %}
+                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseAssets" aria-expanded="false" aria-controls="collapseAssets">
+                    <div class="nav-link-icon"><i data-feather="box"></i></div>
+                    {% trans 'Assets' %}
+                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseAssets" data-bs-parent="#accordionSidenav">
+                    <nav class="sidenav-menu-nested nav">
+                        <a class="nav-link" href="{% url 'assets_location:add_location' %}">{% trans 'Add Location Reference' %}</a>
+                        <a class="nav-link" href="{% url 'assets_location:add_asset_location' %}">{% trans 'Add Asset' %}</a>
+                    </nav>
+                </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    {% include 'dashboard/partials/side_nav/footer.html' %}
+</nav>

@@ -1,0 +1,45 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-12 17:53-0500\n"
+"PO-Revision-Date: 2025-08-12 17:55-0500\n"
+"Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Translated-Using: django-rosetta 0.10.0\n"
+
+#: .\apps\project\specific\documents\pol\apps.py:7
+#: .\apps\project\specific\documents\pol\apps.py:8
+msgid "Proof of life"
+msgstr "POL"
+
+#: .\apps\project\specific\documents\pol\models.py:12
+msgid "Primer nombre"
+msgstr "Primer nombre"
+
+#: .\apps\project\specific\documents\pol\models.py:17
+msgid "Primer apellido"
+msgstr "Primer apellido"
+
+#: .\apps\project\specific\documents\pol\models.py:22
+msgid "Confirmo la prueba de vida (Proof of life, POL)"
+msgstr "Confirmo la prueba de vida (Proof of life, POL)"
+
+#: .\apps\project\specific\documents\pol\models.py:33
+msgid "Prueba de vida"
+msgstr "Prueba de vida"
+
+#: .\apps\project\specific\documents\pol\models.py:34
+msgid "Pruebas de vida"
+msgstr "Pruebas de vida"

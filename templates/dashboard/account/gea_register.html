@@ -1,0 +1,210 @@
+{% extends 'dashboard/account/layout/account.html' %}
+
+{% load static i18n %}
+
+{% block layout_content %}
+  <div class="min-vh-100 d-flex align-items-center justify-content-center container-xl">
+    <div class="card">
+      <div class="card-header text-center my-2">
+        <a href="{% url 'core:index' %}">
+          <img
+            src="https://propensionesabogados.com/static/assets/imgs/GEA/gea%20logo.webp"
+            class="card-img-top img-fluid"
+            alt="..."
+            style="max-width: 200px"
+          />
+        </a>
+      </div>
+
+      <div class="card-body">
+        <form method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ next }}" />
+
+          <!-- Display non-field errors -->
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+              {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="input-group mb-3">
+                <div class="form-floating">
+                  {{ form.username }}
+                  <label for="register_username">{% trans 'Username' %}</label>
+                  <!-- Display field-specific errors -->
+                  {% if form.username.errors %}
+                    <div class="invalid-feedback d-block">
+                      {% for error in form.username.errors %}
+                        <p>{{ error }}</p>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+        
+            <div class="col-md-6">
+              <div class="input-group mb-3">
+                <div class="form-floating">
+                  {{ form.email }}
+                  <label for="register_email">{% trans 'Email' %}</label>
+                  {% if form.email.errors %}
+                    <div class="invalid-feedback d-block">
+                      {% for error in form.email.errors %}
+                        <p>{{ error }}</p>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+        
+            <div class="col-md-6">
+              <div class="input-group mb-3">
+                <div class="form-floating">
+                  {{ form.password }}
+                  <label for="register_password">{% trans 'Password' %}</label>
+                  {% if form.password.errors %}
+                    <div class="invalid-feedback d-block">
+                      {% for error in form.password.errors %}
+                        <p>{{ error }}</p>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+                <button class="btn btn-outline-dark" type="button" id="togglePassword">
+                  <i class="bi bi-eye-slash" id="togglePasswordIcon"></i>
+                </button>
+              </div>
+            </div>
+        
+            <div class="col-md-6">
+              <div class="input-group mb-3">
+                <div class="form-floating">
+                  {{ form.confirm_password }}
+                  <label for="register_confirm_password">{% trans 'Confirm Password' %}</label>
+                  {% if form.confirm_password.errors %}
+                    <div class="invalid-feedback d-block">
+                      {% for error in form.confirm_password.errors %}
+                        <p>{{ error }}</p>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+                <button class="btn btn-outline-dark" type="button" id="toggleConfirmPassword">
+                  <i class="bi bi-eye-slash" id="toggleConfirmPasswordIcon"></i>
+                </button>
+              </div>
+            </div>
+        
+            <div class="col-md-6">
+              <div class="input-group mb-3">
+                <div class="form-floating">
+                  {{ form.first_name }}
+                  <label for="register_first_name">{% trans 'First Names' %}</label>
+                  {% if form.first_name.errors %}
+                    <div class="invalid-feedback d-block">
+                      {% for error in form.first_name.errors %}
+                        <p>{{ error }}</p>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+        
+            <div class="col-md-6">
+              <div class="input-group mb-3">
+                <div class="form-floating">
+                  {{ form.last_name }}
+                  <label for="register_last_name">{% trans 'Last Names' %}</label>
+                  {% if form.last_name.errors %}
+                    <div class="invalid-feedback d-block">
+                      {% for error in form.last_name.errors %}
+                        <p>{{ error }}</p>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+        
+            <div class="col-md-12">
+              <div class="input-group mb-3">
+                <div class="form-floating">
+                  {{ form.user_type }}
+                  <label for="register_user_type">{% trans 'User Type' %}</label>
+                  {% if form.user_type.errors %}
+                    <div class="invalid-feedback d-block">
+                      {% for error in form.user_type.errors %}
+                        <p>{{ error }}</p>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="input-group mb-3">
+                <div class="form-floating">
+                  {{ form.unique_code}}
+                  <label for="register_unique_code">{% trans "Unique Code" %}</label>
+                  {% if form.unique_code.errors %}
+                    <div class="invalid-feedback d-block">
+                      {% for error in form.unique_code.errors %}
+                        <p>{{ error }}</p>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+            </div>
+
+          </div>
+        
+          <div class="d-grid gap-2 mt-3">
+            <button type="submit" class="btn btn-success">{% trans 'Register' %}</button>
+            <a class="btn btn-outline-dark" href="{% url 'two_factor:login' %}">{% trans 'Do you already have an account? Sign in' %}</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('togglePassword').addEventListener('click', function () {
+      const passwordInput = document.getElementById('register_password');
+      const passwordIcon = document.getElementById('togglePasswordIcon');
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      passwordIcon.classList.toggle('bi-eye');
+      passwordIcon.classList.toggle('bi-eye-slash');
+    });
+
+    document.getElementById('toggleConfirmPassword').addEventListener('click', function () {
+      const confirmPasswordInput = document.getElementById('register_confirm_password');
+      const confirmPasswordIcon = document.getElementById('toggleConfirmPasswordIcon');
+      const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      confirmPasswordInput.setAttribute('type', type);
+      confirmPasswordIcon.classList.toggle('bi-eye');
+      confirmPasswordIcon.classList.toggle('bi-eye-slash');
+    });
+  </script>
+{% endblock %}
+
+
+
+<!-- TODO TYC -->
+        <!-- <div class="text-center mt-3" style="font-size:11px">
+          <a href="" target="_blank">
+            Condiciones del Servicio
+          </a>
+          <span class="mx-1">&middot;</span>
+          <a href="" target="_blank">
+            Política de Privacidad
+          </a>
+        </div> -->

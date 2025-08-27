@@ -1,0 +1,53 @@
+{% load i18n %} {% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{{ title }}: {{ error }}</title>
+    <link rel="icon" href="{{ error_favicon }}" type="image/x-icon" />
+  </head>
+
+  <body id="error-body">
+    <style>
+      body {
+        font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
+          "Apple Color Emoji", "Segoe UI Emoji";
+        height: 100vh;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #000;
+        background: #fff;
+        margin: 0;
+      }
+
+      .error-message {
+        display: inline-block;
+        margin: 0 20px 0 0;
+        padding-right: 23px;
+        font-size: 24px;
+        font-weight: 500;
+        vertical-align: top;
+      }
+    </style>
+
+    <div>
+      <h1 class="error-message">{{ status }} |</h1>
+      <h2 class="error-message">{{ error }}</h2>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const status = parseInt("{{ status }}", 10);
+        if (status >= 400 && status < 500) {
+          setTimeout(function () {
+            window.location.href = "{% url 'core:index' %}";
+          }, 5000);
+        }
+      });
+    </script>
+  </body>
+</html>

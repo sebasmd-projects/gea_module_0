@@ -1,0 +1,252 @@
+# Gestión de activos: administración, filtros y modelos.
+# Copyright (C) 2024 GEA
+# This file is distributed under the same license as the GEA package.
+# Sebastián Morales <sebastian.morales@propensionesabogados.com>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: GEA 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-12 17:53-0500\n"
+"PO-Revision-Date: 2025-01-03 19:13-0500\n"
+"Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
+"Language-Team: Spanish <es@li.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Translated-Using: django-rosetta 0.10.0\n"
+
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:53
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:116
+msgid "Details"
+msgstr "Detalles"
+
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:61
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:125
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:223
+msgid "Dates"
+msgstr "Fechas"
+
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:71
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:135
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:234
+msgid "Priority"
+msgstr "Prioridad"
+
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:199
+msgid "Required Fields"
+msgstr "Campos Requeridos"
+
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:211
+msgid "Optional Fields"
+msgstr "Campos Opcionales"
+
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:247
+msgid "Asset Name (ES)"
+msgstr "Nombre del Activo (ES)"
+
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:251
+msgid "Asset Name (EN)"
+msgstr "Nombre del Activo (EN)"
+
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:257
+msgid "Total Quantity by Type"
+msgstr "Cantidad Total por Tipo"
+
+#: .\apps\project\specific\assets_management\assets\admin\filters.py:7
+msgid "Total Quantity Zero"
+msgstr "Cantidad Total Cero"
+
+#: .\apps\project\specific\assets_management\assets\admin\filters.py:12
+#: .\apps\project\specific\assets_management\assets\admin\filters.py:30
+msgid "Yes"
+msgstr "Sí"
+
+#: .\apps\project\specific\assets_management\assets\admin\filters.py:13
+#: .\apps\project\specific\assets_management\assets\admin\filters.py:31
+msgid "No"
+msgstr "No"
+
+#: .\apps\project\specific\assets_management\assets\admin\filters.py:25
+msgid "Has Image"
+msgstr "Tiene Imagen"
+
+#: .\apps\project\specific\assets_management\assets\admin\filters.py:43
+msgid "Quantity Type"
+msgstr "Tipo de Cantidad"
+
+#: .\apps\project\specific\assets_management\assets\models.py:24
+msgid "category (ES)"
+msgstr "categoría (ES)"
+
+#: .\apps\project\specific\assets_management\assets\models.py:29
+msgid "category (EN)"
+msgstr "categoría (EN)"
+
+#: .\apps\project\specific\assets_management\assets\models.py:36
+msgid "description"
+msgstr "descripción"
+
+#: .\apps\project\specific\assets_management\assets\models.py:52
+msgid "2. Category"
+msgstr "2. Categoría"
+
+#: .\apps\project\specific\assets_management\assets\models.py:53
+msgid "2. Categories"
+msgstr "2. Categorías"
+
+#: .\apps\project\specific\assets_management\assets\models.py:59
+msgid "asset (es)"
+msgstr "activo (es)"
+
+#: .\apps\project\specific\assets_management\assets\models.py:64
+msgid "asset (en)"
+msgstr "activo (en)"
+
+#: .\apps\project\specific\assets_management\assets\models.py:81
+msgid "1. Asset Name"
+msgstr "1. Nombre del Activo"
+
+#: .\apps\project\specific\assets_management\assets\models.py:82
+msgid "1. Asset Names"
+msgstr "1. Nombres de Activos"
+
+#: .\apps\project\specific\assets_management\assets\models.py:120
+msgid "img"
+msgstr "imagen"
+
+#: .\apps\project\specific\assets_management\assets\models.py:131
+msgid "asset"
+msgstr "activo"
+
+#: .\apps\project\specific\assets_management\assets\models.py:138
+msgid "category"
+msgstr "categoría"
+
+#: .\apps\project\specific\assets_management\assets\models.py:142
+#: .\apps\project\specific\assets_management\assets\models.py:250
+msgid "description (ES)"
+msgstr "descripción (ES)"
+
+#: .\apps\project\specific\assets_management\assets\models.py:148
+#: .\apps\project\specific\assets_management\assets\models.py:256
+msgid "description (EN)"
+msgstr "descripción (EN)"
+
+#: .\apps\project\specific\assets_management\assets\models.py:154
+#: .\apps\project\specific\assets_management\assets\models.py:262
+msgid "observations (ES)"
+msgstr "observaciones (ES)"
+
+#: .\apps\project\specific\assets_management\assets\models.py:161
+#: .\apps\project\specific\assets_management\assets\models.py:269
+msgid "observations (EN)"
+msgstr "observaciones (EN)"
+
+#: .\apps\project\specific\assets_management\assets\models.py:194
+msgid "3. Asset"
+msgstr "3. Activo"
+
+#: .\apps\project\specific\assets_management\assets\models.py:195
+msgid "3. Assets"
+msgstr "3. Activos"
+
+#: .\apps\project\specific\assets_management\assets\models.py:202
+msgid "Zimbawes"
+msgstr "Zimbawes"
+
+#: .\apps\project\specific\assets_management\assets\models.py:203
+msgid "Exotics"
+msgstr "Exóticos"
+
+#: .\apps\project\specific\assets_management\assets\models.py:204
+msgid "German Parchments"
+msgstr "Bonos Alemanes"
+
+#: .\apps\project\specific\assets_management\assets\models.py:205
+msgid "German"
+msgstr "Alemanes"
+
+#: .\apps\project\specific\assets_management\assets\models.py:206
+msgid "Dragons"
+msgstr "Dragones"
+
+#: .\apps\project\specific\assets_management\assets\models.py:207
+msgid "Micro Ingots"
+msgstr "Micro Lingotes"
+
+#: .\apps\project\specific\assets_management\assets\models.py:208
+msgid "Dinars"
+msgstr "Dinares"
+
+#: .\apps\project\specific\assets_management\assets\models.py:210
+msgid "One Million Dollar Bills"
+msgstr "Billete de un millón de dolares"
+
+#: .\apps\project\specific\assets_management\assets\models.py:211
+msgid "Agrocheques"
+msgstr "Agrocheques"
+
+#: .\apps\project\specific\assets_management\assets\models.py:212
+msgid "Super Pechiles"
+msgstr "Superpechiles"
+
+#: .\apps\project\specific\assets_management\assets\models.py:213
+msgid "Coins"
+msgstr "Monedas"
+
+#: .\apps\project\specific\assets_management\assets\models.py:214
+msgid "Lion Heads"
+msgstr "Cabezas de León"
+
+#: .\apps\project\specific\assets_management\assets\models.py:215
+msgid "Shanghai Banknotes"
+msgstr "Billetes de Shangai"
+
+#: .\apps\project\specific\assets_management\assets\models.py:216
+msgid "Black Dragons"
+msgstr "Dragones Negros"
+
+#: .\apps\project\specific\assets_management\assets\models.py:217
+msgid "Black Eagles"
+msgstr "Águilas Negras"
+
+#: .\apps\project\specific\assets_management\assets\models.py:218
+msgid "Others"
+msgstr "Otros"
+
+#: .\apps\project\specific\assets_management\assets\models.py:233
+msgid "Created By"
+msgstr "Creado por"
+
+#: .\apps\project\specific\assets_management\assets\models.py:238
+msgid "asset name"
+msgstr "Nombre del Activo"
+
+#: .\apps\project\specific\assets_management\assets\models.py:245
+msgid "Has Item"
+msgstr "Tiene el Activo"
+
+#: .\apps\project\specific\assets_management\assets\models.py:277
+msgid "4. Pre-Registration Asset"
+msgstr "4. Pre-Registro de Activos"
+
+#: .\apps\project\specific\assets_management\assets\models.py:278
+msgid "4. Pre-Registration Assets"
+msgstr "4. Pre-Registro de Activos"
+
+#, fuzzy
+#~| msgid "observations (EN)"
+#~ msgid "Observations (EN)"
+#~ msgstr "observaciones (EN)"
+
+#, fuzzy
+#~| msgid "asset"
+#~ msgid "assets"
+#~ msgstr "activo"
+
+#, fuzzy
+#~ msgid "Observations"
+#~ msgstr "observaciones (ES)"

@@ -1,0 +1,34 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+    <head>
+      <title>{% block title %}{% endblock title %}</title>
+      {% block meta %}{% endblock meta %}
+      {% block canonical %}{% endblock canonical %}
+      {% block fonts %}{% endblock fonts %}
+      {% block favicon %}{% endblock favicon %}
+      {% block third_css %}{% endblock third_css %}
+      {% block simple_datatables %}{% endblock simple_datatables %}
+      {% block bootstrap_js %}{% endblock bootstrap_js %}
+      {% block third_js %}{% endblock third_js %}
+      {% block custom_js %}{% endblock custom_js %}
+      {% block custom_css %}{% endblock custom_css %}
+      {% block bootstrap_icons %}{% endblock bootstrap_icons %}
+      {% block feather_icons %}{% endblock feather_icons %}
+      {% block font_awesome_icons %}{% endblock font_awesome_icons %}
+    </head>
+  <body {% block body_properties %}{% endblock body_properties %}>
+    {% block simple_datatables_js %}{% endblock simple_datatables_js %}
+    {% block charts_js %}{% endblock charts_js %}
+    {% block header %}{% endblock header %}
+    {% block nav %}{% endblock nav %}
+    {% block layout %}{% endblock layout %}
+    {% block main %}{% endblock main %}
+    {% block content %}{% endblock content %}
+    {% block footer %}{% endblock footer %}
+    {% block scroll_top %}{% endblock scroll_top %}
+    {% block body_third_js %}{% endblock body_third_js %}
+    {% block body_custom_js %}{% endblock body_custom_js %}
+    {% block modals %}{% endblock modals %}
+  </body>
+</html>

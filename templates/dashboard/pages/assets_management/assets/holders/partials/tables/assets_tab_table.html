@@ -1,0 +1,72 @@
+{% load i18n static %}
+
+{% for field in assets %}
+  <tr>
+    <td>
+      {{ forloop.counter }}
+    </td>
+
+    <td>
+      {% if field.asset.asset_img %}
+        <img src="{{ field.asset.asset_img.url }}" alt="{{ field.asset.asset_name.en_name }}" class="img-thumbnail"
+        style="width: auto; height: 50px;">
+      {% else %}
+        <img src="https://propensionesabogados.com/static/assets/imgs/GEA/favicon_gea.webp" alt="{{ field.asset.asset_name.en_name }}"
+        class="img-thumbnail" style="width: 50px; height: 50px;">
+      {% endif %}
+    </td>
+
+    {% if LANGUAGE_CODE == "es" %}
+      <td>{{ field.asset.asset_name.es_name }}</td>
+    {% else %}
+      <td>{{ field.asset.asset_name.en_name }}</td>
+    {% endif %}
+
+    {% if LANGUAGE_CODE == "es" %}
+      <td>{{ field.asset.category.es_name }}</td>
+    {% else %}
+      <td>{{ field.asset.category.en_name }}</td>
+    {% endif %}
+
+    <td>
+      {{ field.location.reference }}
+    </td>
+
+    <td>
+      {{ field.location.country.get_continent_display }}
+    </td>
+
+    <td>
+      {% if LANGUAGE_CODE == "es" %}
+        {{ field.location.country.es_country_name }}
+      {% else %}
+        {{ field.location.country.en_country_name }}
+      {% endif %}
+    </td>
+
+    <td>
+      {{ field.amount}}
+    </td>
+
+    <td>
+      {{ field.get_quantity_type_display }}
+    </td>
+
+    <td>
+      <a href="{% url 'assets_location:update_asset_location' field.id %}" class="btn btn-datatable btn-icon btn-outline-cyan" id="edit_asset_{{ field.id }}">
+        <i class="fa-regular fa-pen-to-square"></i>
+      </a>
+
+      <button class="btn btn-datatable btn-icon btn-outline-danger" id="btn-modal-delete-asset" data-asset-id="{{ field.id }}">
+        <i class="fa-regular fa-trash-can"></i>
+      </button>
+
+      <a  href="https://wa.me/573183280176?text=Hola, podrían darme soporte con mi activo {{ field.asset.asset_name.es_name }} referencia {{ field.location.reference }}, mi usuario es {{ request.user.username }}"
+          target="_blank"
+          class="btn btn-datatable btn-icon btn-outline-success">
+        <i class="fa-brands fa-whatsapp"></i>
+      </a>
+    </td>
+  </tr>
+{% empty %}
+{% endfor %}

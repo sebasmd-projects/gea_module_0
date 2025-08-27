@@ -1,0 +1,22 @@
+{% extends 'dashboard/layout/common.html' %}
+
+{% load static i18n %}
+
+{% block bootstrap_icons %}
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+{% endblock bootstrap_icons %}
+
+{% block body_properties %}class="bg-primary"{% endblock body_properties %}
+
+{% block layout %}
+<div id="layoutAuthentication">
+    <div id="layoutAuthentication_content">
+        <main>
+            {% block layout_content %}{% endblock %}
+        </main>
+    </div>
+    <div id="layoutAuthentication_footer">
+        {% include 'dashboard/partials/account_footer.html' %}
+    </div>
+</div>
+{% endblock %}

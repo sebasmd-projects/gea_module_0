@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+
+{% load static i18n honeypot %}
+
+{% block title %}
+GEA | {% trans 'HOME | ABOUT | FEATURES | SERVICES' %}
+{% endblock title %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+<meta content="index, nofollow" name="robots" />
+<meta content="index, nofollow" name="googlebot" />
+
+<meta content="https://propensionesabogados.com/static/assets/imgs/GEA/gea logo.webp" property="og:image" />
+<meta content="https://gea.propensionesabogados.com/" property="og:url" />
+
+<meta content="GEA PROPENSIONES ABOGADOS" property="site_name" />
+<meta content="GEA PROPENSIONES ABOGADOS" property="og:site_name" />
+<meta content="website" property="og:type" />
+
+<meta content="{% trans 'GEA | Comprehensive and Secure Historical Asset Management Solution' %}"
+    name="twitter:title" />
+<meta content="{% trans 'All-in-one suite for business management of historical assets safely and easily' %}"
+    name="twitter:description" />
+<meta content="https://propensionesabogados.com/static/assets/imgs/GEA/gea logo.webp" name="twitter:image" />
+<meta content="summary_large_image" name="twitter:card" />
+{% endblock meta %}
+
+{% block custom_css %}
+<link href="{% static 'assets/css/site/main.css' %}" rel="stylesheet">
+{% endblock custom_css %}
+
+{% block body_properties %}class="index-page"{% endblock body_properties %}
+
+{% block header %}
+{% include 'core/partials/header.html' %}
+{% endblock header %}
+
+{% block main %}
+<main class="main">
+    {% include 'core/index/sections/section-1-hero.html' %}
+</main>
+{% endblock main %}

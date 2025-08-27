@@ -1,0 +1,51 @@
+{% load i18n %}
+
+<table id="asset_and_category_table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>{% trans 'Asset Name' %}</th>
+            <th>{% trans 'Category' %}</th>
+            <th>{% trans 'Description' %}</th>
+            <th>{% trans 'Observations' %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for asset in assets %}
+            <tr>
+                <td>
+                    {{ forloop.counter }}
+                </td>
+                <td>
+                    {% if request.LANGUAGE_CODE == 'es' %}
+                        {{ asset.asset_name.es_name}}
+                    {% else %}
+                        {{ asset.asset_name.en_name}}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if request.LANGUAGE_CODE == 'es' %}
+                        {{ asset.category.es_name}}
+                    {% else %}
+                        {{ asset.category.en_name}}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if request.LANGUAGE_CODE == 'es' %}
+                        {{ asset.es_description}}
+                    {% else %}
+                        {{ asset.en_description}}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if request.LANGUAGE_CODE == 'es' %}
+                        {{ asset.es_observations}}
+                    {% else %}
+                        {{ asset.en_observations}}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+

@@ -1,0 +1,104 @@
+{% extends 'dashboard/layout/base.html' %}
+
+{% load i18n custom_filters %}
+
+{% block layout_main %}
+
+{% include 'dashboard/pages/assets_management/assets/holders/partials/header.html' %}
+
+<div class="container-xl px-4 mt-n10">
+    {% include 'dashboard/pages/assets_management/partials/header_cards.html' %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card my-3">
+                <div class="card-header border-bottom">
+                    <h3 class="text-center">{% trans 'Add New Location Reference' %}</h3>
+                </div>
+
+
+                <div class="card-body">
+                    <form method="post">
+                        {{ form.media.css }}
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.non_field_errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="id_reference">{% trans 'Reference' %}</label>
+                                    {{ form.reference|add_attrs:"class=form-control" }}
+                                    {% if form.reference.errors %}
+                                        <div class="text-danger mt-2">
+                                            {{ form.reference.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="id_country">{% trans 'Country' %}</label>
+                                    {{ form.country|add_attrs:"class=form-select" }}
+                                    {% if form.country.errors %}
+                                        <div class="text-danger mt-2">
+                                            {{ form.country.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if LANGUAGE_CODE == "es" %}
+                            <div class="form-floating mb-3">
+                                {{ form.description_es|add_attrs:"class=form-control" }}
+                                <label for="id_description_es">{% trans 'Description (ES)' %}</label>
+                            </div>
+                        {% else %}
+                            <div class="form-floating mb-3">
+                                {{ form.description_en|add_attrs:"class=form-control" }}
+                                <label for="id_description_en">{% trans 'Description (EN)' %}</label>
+                            </div>
+                        {% endif %}
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-outline-success">
+                                {% trans 'Add Location Reference' %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card-footer">
+                    <p>
+                        {% blocktrans %}
+                        The Location Reference serves as a unique identifier to manage inventory across various
+                        locations.
+                        {% endblocktrans %}
+                    </p>
+
+                    <p>
+                        {% blocktrans %}
+                        It allows differentiation between inventory located in the same country but in different areas,
+                        inventory in different countries, or inventory in the same country as well as across multiple
+                        countries.
+                        {% endblocktrans %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block body_custom_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{{ form.media.js }}
+{% endblock %}

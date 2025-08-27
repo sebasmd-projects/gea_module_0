@@ -1,0 +1,96 @@
+{% extends 'dashboard/pages/documents/certificates/certificate_base.html' %}
+
+{% load static i18n %}
+
+{% block title %}{% trans 'Verify your Certificate' %}{% endblock title %}
+
+{% block main %}
+<div class="container mt-5">
+    <div class="container text-center">
+        <a href="{% url 'core:index' %}">
+            <img src="https://propensionesabogados.com/static/assets/imgs/GEA/gea%20logo.webp" alt="" class="img-fluid" style="max-height: 140px;"/>
+        </a>
+    </div>
+    <h1 class="mb-4 text-center">{% trans 'Verify your Certificate' %}</h1>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                {{ form.non_field_errors }}
+                <div class="form-floating mb-3">
+                    <select name="{{ form.document_type.name }}"
+                            id="floatingDocumentType"
+                            class="form-select{% if form.document_type.errors %} is-invalid{% endif %}">
+                        {% for choice in form.document_type.field.choices %}
+                            <option value="{{ choice.0 }}"{% if choice.0 == form.document_type.value %}selected{% endif %}>
+                                {{ choice.1 }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <label for="floatingDocumentType">{{ form.document_type.label }}</label>
+                    {% if form.document_type.errors %}
+                        <div class="invalid-feedback">
+                            {{ form.document_type.errors.as_text }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text"
+                           name="{{ form.document_number.name }}"
+                           id="floatingIDNumber"
+                           class="form-control{% if form.document_number.errors %} is-invalid{% endif %}"
+                           placeholder="C.C."
+                           value="{{ form.document_number.value|default_if_none:'' }}">
+                    <label for="floatingIDNumber">{{ form.document_number.label }}</label>
+                    {% if form.document_number.errors %}
+                        <div class="invalid-feedback">
+                            {{ form.document_number.errors.as_text }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                {% if messages %}
+                    <div class="alert alert-danger" role="alert">
+                        {% for message in messages %}
+                        <div id="lockout-timer">
+                            <p id="remaining-time">{{ message }} {% trans 'Please try again in' %} <span id="time-left">0</span> {% trans 'minutes.' %}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+            <button type="submit" class="btn btn-primary w-100">{% trans 'Verify' %}</button>
+            </div>
+        </div>
+        
+    </form>
+</div>
+{% endblock main %}
+
+
+{% block body_custom_js %}
+<script>
+    function updateRemainingTime() {
+        fetch("{% url 'certificates:lockout_time' %}")
+            .then(response => response.json())
+            .then(data => {
+                const remainingTime = data.remaining_time;
+                if (remainingTime > 0) {
+                    const minutes = Math.floor(remainingTime / 60);
+                    const seconds = remainingTime % 60;
+                    document.getElementById('time-left').innerText = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+                    document.getElementById('lockout-timer').style.display = 'block';
+                } else {
+                    document.getElementById('lockout-timer').style.display = 'none';
+                }
+            })
+            .catch(error => console.error('Error fetching lockout time:', error));
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        updateRemainingTime();
+        setInterval(updateRemainingTime, 10*1000);
+    });
+</script>
+{% endblock body_custom_js %}
+    

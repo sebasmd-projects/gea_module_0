@@ -1,0 +1,55 @@
+{% extends 'dashboard/layout/base.html' %}
+
+{% load i18n static %}
+
+{% block layout_main %}
+
+{% include 'dashboard/pages/assets_management/assets/holders/partials/header.html' %}
+
+<div class="container-xl px-4 mt-n10">
+    {% include 'dashboard/pages/assets_management/partials/header_cards.html' %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card my-3">
+                <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+                    <h3 class="text-center m-0">{% block asset_location_title %}{% endblock %}</h3>
+                </div>
+
+                <div class="card-body">
+                    {% block asset_location_form %}{% endblock %}
+                </div>
+
+                <div class="card-footer">
+                    <p>
+                        {% blocktrans %}
+                        The Asset Location ties a specific asset to a location, defining where and in what quantity the
+                        asset is available.
+                        {% endblocktrans %}
+                    </p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    {% include 'dashboard/pages/assets_management/asset_location/includes/asset_and_category.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block body_custom_js %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+{{ form.media.js }}
+{% endblock %}
+
+{% block simple_datatables %}
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+{% endblock simple_datatables %}
+
+{% block simple_datatables_js %}
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+    crossorigin="anonymous"></script>
+<script src="{% static 'assets/js/dashboard/datatables/simple-datatable.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,234 @@
+{% extends 'core/base.html' %}
+
+{% load i18n static %}
+
+{% block title %}
+    {% trans 'Code Generator' %}
+{% endblock title %}
+
+{% block meta %}
+<meta charset="UTF-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+<meta content="noindex, nofollow, noarchive" name="robots"  />
+<meta content="noindex, nofollow, noarchive" name="googlebot" />
+{% endblock meta %}
+
+{% block third_css %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+{% endblock third_css %}
+
+{% block custom_css %}
+    <link href="{% static 'assets/css/site/main.css' %}" rel="stylesheet">
+{% endblock custom_css %}
+
+{% block header %}
+    {% include 'core/partials/header.html' %}
+{% endblock header %}
+
+{% block main %}
+    <main class="container min-vh-100" style="padding-top: 100px;">
+        <h1 class="my-4 text-center">{% trans 'Code Generator' %}</h1>
+        <form id="barcodeForm" method="post">
+            {% csrf_token %}
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="id_reference" placeholder="{% trans 'Reference' %}" name="id_reference" required>
+                <label for="id_reference">{% trans 'Reference' %}*</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <textarea type="text" class="form-control" id="id_description" placeholder="{% trans 'Reference' %}" name="id_description" style="height: 100px"></textarea>
+                <label for="id_description">{% trans 'Description' %}</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="id_custom_text_input" placeholder="{% trans 'Custom Text' %}" name="id_custom_text_input" required>
+                <label for="id_custom_text_input">{% trans 'Custom Text' %}*</label>
+            </div>
+
+            <div class="row g-2">
+                <div class="col-md">
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="id_include_nit">
+                        <label class="form-check-label" for="id_include_nit">{% trans 'Include' %} NIT</label>
+                    </div>
+                </div>
+
+                <div class="col-md">
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="id_include_f991" name="include_f991">
+                        <label class="form-check-label" for="id_include_f991">{% trans 'Include' %} F991</label>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="id_include_m9q0" name="include_m9q0">
+                        <label class="form-check-label" for="id_include_m9q0">{% trans 'Include' %} M9Q0</label>
+                    </div>
+                </div>
+
+                <div class="col-md">
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="id_include_date">
+                        <label class="form-check-label" for="id_include_date">{% trans 'Include' %} (DDMMYYYY)</label>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="id_include_random_code">
+                        <label class="form-check-label" for="id_include_random_code">{% trans 'Include' %} Random Code (4)</label>
+                    </div>
+                </div>
+                
+
+
+                <div class="col-md">
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="id_generate_barcode">
+                        <label class="form-check-label" for="id_generate_barcode">{% trans 'Generate Barcode' %}</label>
+                    </div>
+                </div>
+                <!-- <div class="col-md">
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="id_generate_qr_code">
+                        <label class="form-check-label" for="id_generate_qr_code">{% trans 'QR Code' %}</label>
+                    </div>
+                </div> -->
+                
+            </div>
+
+
+
+            <div class="d-grid gap-2">
+                <button type="button" id="generateBarcode" class="btn btn-primary">{% trans 'Next' %} <i class="bi bi-upc-scan"></i></button>
+            </div>
+
+        </form>
+
+        <div id="barcodeOutput" class="mt-2 mb-2 text-center" style="display:none;">
+            <div class="d-grid gap-2">
+                <a id="downloadLink" download class="btn btn-success mt-3">{% trans 'Download' %} <i class="bi bi-cloud-arrow-down"></i></a>
+            </div>
+            <img id="barcodeImage" class="img-fluid" src="{{ barcode_image }}" alt="{% trans 'Bar Code' %}"/>
+        </div>
+
+        <div id="qrOutput" class="mt-2 mb-2 text-center" style="display:none;">
+            <div class="d-grid gap-2">
+                <a id="downloadQRLink" download class="btn btn-success mt-3">
+                    {% trans 'Download QR' %} <i class="bi bi-cloud-arrow-down"></i>
+                </a>
+            </div>
+            <img id="qrImage" class="img-fluid" src="" alt="{% trans 'QR Code' %}" />
+            <div class="mt-2">
+                <a id="qrTextLink" href="" target="_blank"></a>
+            </div>
+            <div class="mt-2">
+                <p id="qrDynamicUrl"></p>
+            </div>
+        </div>
+        
+        
+    </main>
+{% endblock main %}
+
+{% block body_custom_js %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+            $("#generateBarcode").click(function () {
+                const isValid = validateForm();
+
+                if (!isValid) {
+                    alert("Por favor, completa todos los campos requeridos.");
+                    return;
+                }
+
+                const reference = $("#id_reference").val();
+                const description = $("#id_description").val();
+                const customTextInput = $("#id_custom_text_input").val();
+                const includeNIT = $("#id_include_nit").is(":checked");
+                const includeDate = $("#id_include_date").is(":checked");
+                const includeRandomCode = $("#id_include_random_code").is(":checked");
+                const generateQRCode = $("#id_generate_qr_code").is(":checked");
+                const generateBarcode = $("#id_generate_barcode").is(":checked");
+                const includeF991 = $("#id_include_f991").is(":checked");
+                const includeM9Q0 = $("#id_include_m9q0").is(":checked");
+                
+                $.ajax({
+                    url: "{% url 'code_gen:code_generate' %}",
+                    type: "POST",
+                    headers: {
+                        "X-CSRFToken": csrftoken,
+                    },
+                    data: {
+                        reference: reference,
+                        description: description,
+                        custom_text_input: customTextInput,
+                        include_nit: includeNIT,
+                        include_date: includeDate,
+                        include_random_code: includeRandomCode,
+                        generate_qr_code: generateQRCode,
+                        include_f991: includeF991,
+                        include_m9q0: includeM9Q0,
+                        generate_barcode: generateBarcode
+                    },
+                    success: function (response) {
+                        if (response.barcode_image) {
+                            $("#barcodeOutput").show();
+                            const imageUrl = response.barcode_image;
+                            $("#barcodeImage").attr("src", imageUrl);
+                            $("#downloadLink").attr("href", imageUrl);
+                        }
+                
+                        if (response.qr_image_url) {
+                            $("#qrOutput").show();
+                            const qrImageUrl = response.qr_image_url;
+                            $("#qrImage").attr("src", qrImageUrl);
+                            $("#downloadQRLink").attr("href", qrImageUrl);
+                        
+                            const dynamicUrl = response.qr_image_url;
+                            $("#qrDynamicUrl").text(dynamicUrl).wrap(`<a href="${dynamicUrl}" target="_blank"></a>`);
+                        }
+                    },
+                    error: function (xhr) {
+                        alert(xhr.responseJSON.error);
+                    }
+                });
+            
+            
+            });
+        
+            // Función para validar los campos del formulario
+            function validateForm() {
+                let isValid = true;
+        
+                // Campos requeridos
+                if ($("#id_reference").val().trim() === "") {
+                    $("#id_reference").addClass("is-invalid");
+                    isValid = false;
+                } else {
+                    $("#id_reference").removeClass("is-invalid");
+                }
+        
+                if ($("#id_custom_text_input").val().trim() === "") {
+                    $("#id_custom_text_input").addClass("is-invalid");
+                    isValid = false;
+                } else {
+                    $("#id_custom_text_input").removeClass("is-invalid");
+                }
+        
+                return isValid;
+            }
+        });
+    </script>
+    <script src="{% static 'assets/js/site/main.js' %}"></script>
+{% endblock body_custom_js %}
+
+{% block footer %}
+    {% include 'core/partials/footer.html' %}
+{% endblock footer %}

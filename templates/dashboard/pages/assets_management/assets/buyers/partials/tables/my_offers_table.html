@@ -1,0 +1,61 @@
+{% load i18n static custom_filters %}
+
+<table id="offers_table">
+    <thead>
+        <tr>
+            <th>{% trans '#' %}</th>
+            <th>{% trans 'Asset' %}</th>
+            <th>{% trans 'Offer Type' %}</th>
+            <th>{% trans 'Quantity Type' %}</th>
+            <th>{% trans 'Quantity Needed' %}</th>
+            <th>{% trans 'Country' %}</th>
+            <th>{% trans 'Value Offered (USD)' %}</th>
+            <th>{% trans 'Approved' %}</th>
+            <th>{% trans 'Actions' %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for offer in offers %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+
+            <td>{{ offer.asset_display_name }}</td>
+
+            <td>{{ offer.get_offer_type_display }}</td>
+
+            <td>{{ offer.get_quantity_type_display }}</td>
+
+            <td>{{ offer.offer_quantity }}</td>
+
+            <td>{{ offer.buyer_country.get_continent_display }} - {{ offer.buyer_country.es_country_name }}</td>
+
+            <td>{{ offer.offer_amount|currency }}</td>
+
+            <td>
+                {% if offer.is_approved %}
+                    <i data-feather="check-circle" stroke="green"></i>
+                {% else %}
+                    <i data-feather="x-circle" stroke="red"></i>
+                {% endif %}
+            </td>
+
+            <td>
+                <a href="{% url 'buyers:offer_update' offer.id %}" class="btn btn-datatable btn-icon btn-outline-primary">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                </a>
+
+                <button class="btn btn-datatable btn-icon btn-outline-danger" id="btn-modal-delete-offer" data-offer-id="{{ offer.id }}">
+                    <i class="fa-regular fa-trash-can"></i>
+                </button>
+                
+                {% if offer.is_active %}
+                <a href="{% url 'buyers:offer_details' offer.id %}" type="button" class="btn btn-datatable btn-icon btn-outline-success">
+                    <i class="fa-solid fa-eye"></i>
+                </a>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        {% endfor %}
+    </tbody>
+</table>

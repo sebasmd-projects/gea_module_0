@@ -1,0 +1,8 @@
+id,is_active,default_order,es_name,en_name,description
+1,True,1,Cajas,Petchili Boxes,Contenedor general de cajas especiales
+2,True,2,Objetos Religiosos,Religious Objects,Objetos de carácter espiritual o religioso
+3,True,3,Animales Simbólicos,Symbolic Animals,Animales representativos usados como símbolos
+4,True,4,Edificaciones,Buildings,"Palacios, templos y castillos"
+5,True,5,Tesoros y Joyas,Treasures and Jewels,Objetos de gran valor económico o simbólico
+6,True,6,Documentos,Scrolls and Scriptures,Escrituras y pergaminos valiosos
+7,True,7,Otros,Others,Elementos misceláneos sin categoría fija

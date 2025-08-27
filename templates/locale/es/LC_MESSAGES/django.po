@@ -1,0 +1,1804 @@
+# Gestión de templates
+# Copyright (C) 2024 GEA
+# This file is distributed under the same license as the GEA package.
+# Sebastián Morales <sebastian.morales@propensionesabogados.com>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: GEA 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-12 17:53-0500\n"
+"PO-Revision-Date: 2025-08-12 17:54-0500\n"
+"Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
+"Language-Team: Spanish <es@li.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Translated-Using: django-rosetta 0.10.0\n"
+
+#: .\templates\admin\change_list.html:8
+msgid "Show"
+msgstr "Mostrar"
+
+#: .\templates\admin\change_list.html:17
+msgid "(Max: 2000)"
+msgstr "(Máx: 2000)"
+
+#: .\templates\core\email\contact_email_template.html:8
+msgid "Contact Confirmation"
+msgstr "Confirmación de contacto"
+
+#: .\templates\core\email\contact_email_template.html:81
+msgid "Message Received!"
+msgstr "¡Mensaje recibido!"
+
+#: .\templates\core\email\contact_email_template.html:86
+#, python-format
+msgid "Hi %(name)s,"
+msgstr "Hola %(name)s,"
+
+#: .\templates\core\email\contact_email_template.html:88
+msgid "Thank you for contacting us through "
+msgstr "Gracias por contactarnos a través de "
+
+#: .\templates\core\email\contact_email_template.html:91
+msgid ""
+"We have received your message and will get back to you as soon as possible."
+msgstr ""
+"Hemos recibido su mensaje y nos pondremos en contacto con usted lo antes "
+"posible."
+
+#: .\templates\core\email\contact_email_template.html:94
+msgid ""
+"If you have any questions or need additional information, you can write us "
+"directly:"
+msgstr ""
+"Si tiene alguna pregunta o necesita información adicional, puede escribirnos"
+" directamente:"
+
+#: .\templates\core\email\contact_email_template.html:98
+msgid "You can also email us"
+msgstr "También puede enviarnos un correo electrónico"
+
+#: .\templates\core\email\contact_email_template.html:102
+msgid "Thank you for trusting us!"
+msgstr "¡Gracias por confiar en nosotros!"
+
+#: .\templates\core\email\contact_email_template.html:105
+msgid "Best regards,"
+msgstr "Saludos cordiales,"
+
+#: .\templates\core\email\contact_email_template.html:106
+msgid "About Us"
+msgstr "Sobre nosotros"
+
+#: .\templates\core\email\contact_email_template.html:112
+msgid "This email was sent from"
+msgstr "Este correo electrónico fue enviado desde"
+
+#: .\templates\core\email\contact_email_template.html:115
+msgid ""
+"If you did not expect this message or it was sent by mistake, please ignore "
+"it."
+msgstr "Si no esperaba este mensaje o se envió por error, por favor ignórelo."
+
+#: .\templates\core\index\index.html:6
+msgid "HOME | ABOUT | FEATURES | SERVICES"
+msgstr "INICIO | NOSOTROS | CARACTERÍSTICAS | SERVICIOS"
+
+#: .\templates\core\index\index.html:19 .\templates\core\index\index.html:20
+#: .\templates\core\index\index.html:31
+msgid "GEA | Comprehensive and Secure Historical Asset Management Solution"
+msgstr "GEA | Solución integral y segura de gestión de activos históricos"
+
+#: .\templates\core\index\index.html:21 .\templates\core\index\index.html:22
+#: .\templates\core\index\index.html:32
+msgid ""
+"All-in-one suite for business management of historical assets safely and "
+"easily"
+msgstr ""
+"Conjunto todo en uno para la gestión empresarial de activos históricos de "
+"forma segura y sencilla"
+
+#: .\templates\core\index\sections\section-1-hero.html:7
+msgid "Your browser does not support the video tag."
+msgstr "Su navegador no soporta la etiqueta de vídeo."
+
+#: .\templates\core\index\sections\section-1-hero.html:17
+#: .\templates\core\partials\header.html:70
+msgid "Client Area"
+msgstr "Área de Clientes"
+
+#: .\templates\core\index\sections\section-1-hero.html:21
+msgid "Buyer Client Area"
+msgstr "Área de Clientes"
+
+#: .\templates\core\index\sections\section-1-hero.html:25
+#: .\templates\dashboard\account\gea_register.html:170
+#: .\templates\dashboard\account\pre_register.html:33
+#: .\templates\dashboard\account\pre_register.html:67
+#: .\templates\dashboard\account\propensiones_register.html:95
+msgid "Register"
+msgstr "Registrarse"
+
+#: .\templates\core\index\sections\section-1-hero.html:28
+#: .\templates\dashboard\account\pre_register.html:77
+msgid "Login"
+msgstr "Iniciar Sesión"
+
+#: .\templates\core\index\sections\section-2-about.html:8
+msgid "MORE ABOUT US"
+msgstr "MÁS SOBRE NOSOTROS"
+
+#: .\templates\core\index\sections\section-2-about.html:9
+msgid "Institutionalization of International Asset Operations"
+msgstr "Institucionalización de las operaciones internacionales de activos"
+
+#: .\templates\core\index\sections\section-2-about.html:11
+msgid ""
+"\n"
+"                    Our initiative focuses on formalizing and streamlining the process of managing international assets.\n"
+"                    This ensures better governance, compliance, and operational efficiency across global markets.\n"
+"                    "
+msgstr ""
+"\n"
+"Nuestra iniciativa se centra en formalizar y agilizar el proceso de gestión de activos internacionales. Esto garantiza una mejor gobernanza, cumplimiento y eficiencia operativa en los mercados globales."
+
+#: .\templates\core\index\sections\section-2-about.html:20
+msgid "CEO Profile"
+msgstr "Perfil del CEO"
+
+#: .\templates\core\index\sections\section-2-about.html:22
+msgid "CEO & Founder"
+msgstr "CEO & Fundador"
+
+#: .\templates\core\index\sections\section-2-about.html:27
+msgid "Risk mitigation in asset handling"
+msgstr "Mitigación de riesgos en el manejo de activos"
+
+#: .\templates\core\index\sections\section-2-about.html:29
+msgid "Integration with global markets"
+msgstr "Integración con mercados globales"
+
+#: .\templates\core\index\sections\section-2-about.html:31
+msgid "Continuous improvement strategies"
+msgstr "Estrategias de mejora continua"
+
+#: .\templates\core\index\sections\section-2-about.html:38
+msgid "Call us anytime"
+msgstr "Llámenos en cualquier momento"
+
+#: .\templates\core\index\sections\section-2-about.html:48
+msgid "Years"
+msgstr "Años"
+
+#: .\templates\core\index\sections\section-2-about.html:49
+msgid "Of experience in managing international assets"
+msgstr "De experiencia en la gestión de activos internacionales"
+
+#: .\templates\core\index\sections\section-3-features-cards.html:14
+#: .\templates\core\index\sections\section-4-features.html:20
+msgid "Asset Management"
+msgstr "Gestión de Activos"
+
+#: .\templates\core\index\sections\section-3-features-cards.html:15
+msgid ""
+"Centralized platform for tracking and managing historical assets "
+"efficiently, ensuring data integrity and real-time updates."
+msgstr ""
+"Plataforma centralizada para rastrear y gestionar activos históricos de "
+"forma eficiente, garantizando la integridad de datos y actualizaciones en "
+"tiempo real."
+
+#: .\templates\core\index\sections\section-3-features-cards.html:23
+msgid "Compliance & Validation"
+msgstr "Cumplimiento y Validación"
+
+#: .\templates\core\index\sections\section-3-features-cards.html:24
+msgid ""
+"Automated compliance checks and robust validation processes to meet "
+"international standards and regulatory requirements."
+msgstr ""
+"Controles de cumplimiento automatizados y procesos de validación sólidos "
+"para cumplir con estándares internacionales y requisitos normativos."
+
+#: .\templates\core\index\sections\section-3-features-cards.html:32
+#: .\templates\core\index\sections\section-4-features.html:26
+msgid "Document Generation"
+msgstr "Generación de Documentos"
+
+#: .\templates\core\index\sections\section-3-features-cards.html:33
+msgid ""
+"Create and manage documents such as certificates and agreements with "
+"templates for seamless business operations."
+msgstr ""
+"Cree y administre documentos tales como certificados y acuerdos con "
+"plantillas para operaciones comerciales sin contratiempos."
+
+#: .\templates\core\index\sections\section-3-features-cards.html:41
+msgid "Security & Data Protection"
+msgstr "Seguridad y Protección de Datos"
+
+#: .\templates\core\index\sections\section-3-features-cards.html:42
+msgid ""
+"Advanced security features including data encryption, access control, and "
+"regular audits to safeguard sensitive information."
+msgstr ""
+"Funcionalidades de seguridad avanzadas que incluyen cifrado de datos, "
+"control de acceso y auditorías regulares para proteger información sensible."
+
+#: .\templates\core\index\sections\section-4-features.html:8
+#: .\templates\core\partials\header.html:20
+msgid "Features"
+msgstr "Características"
+
+#: .\templates\core\index\sections\section-4-features.html:9
+msgid ""
+"Explore the core functionalities of GEA for efficient asset management and"
+" comprehensive business solutions."
+msgstr ""
+"Explore las funcionalidades principales de GEA para una gestión eficiente "
+"de activos y soluciones empresariales integrales."
+
+#: .\templates\core\index\sections\section-4-features.html:32
+msgid "Security & Validation"
+msgstr "Seguridad y Validación"
+
+#: .\templates\core\index\sections\section-4-features.html:46
+msgid "Comprehensive Asset Management"
+msgstr "Gestión integral de activos"
+
+#: .\templates\core\index\sections\section-4-features.html:48
+msgid ""
+"GEA provides a robust platform for managing historical assets, ensuring "
+"compliance, traceability, and seamless integration with market demands."
+msgstr ""
+"GEA proporciona una plataforma robusta para gestionar activos históricos, "
+"garantizando el cumplimiento, la trazabilidad y la integración fluida con "
+"las demandas del mercado."
+
+#: .\templates\core\index\sections\section-4-features.html:51
+msgid "Centralized asset tracking and monitoring"
+msgstr "Seguimiento y monitoreo centralizado de activos"
+
+#: .\templates\core\index\sections\section-4-features.html:52
+msgid "Data analytics and reporting"
+msgstr "Análisis de datos e informes"
+
+#: .\templates\core\index\sections\section-4-features.html:53
+msgid "Asset markets for enhanced visibility"
+msgstr "Mercados de activos para mayor visibilidad"
+
+#: .\templates\core\index\sections\section-4-features.html:57
+msgid "Asset Management Illustration"
+msgstr "Ilustración de Gestión de Activos"
+
+#: .\templates\core\index\sections\section-4-features.html:66
+msgid "Automated Document Generation"
+msgstr "Generación automatizada de documentos"
+
+#: .\templates\core\index\sections\section-4-features.html:68
+msgid ""
+"Efficiently generate, manage, and store important documents related to asset"
+" transactions, client agreements, and compliance certifications."
+msgstr ""
+"Genere, administre y almacene de forma eficiente documentos importantes "
+"relacionados con transacciones de activos, acuerdos con clientes y "
+"certificaciones de cumplimiento."
+
+#: .\templates\core\index\sections\section-4-features.html:71
+msgid "Templates for various document needs"
+msgstr "Plantillas para diversas necesidades documentales"
+
+#: .\templates\core\index\sections\section-4-features.html:72
+msgid "Automated filling and real-time generation of certificates"
+msgstr "Relleno automático y generación en tiempo real de certificados"
+
+#: .\templates\core\index\sections\section-4-features.html:73
+msgid "Secure storage with easy access for verification and audit trails"
+msgstr ""
+"Almacenamiento seguro con acceso sencillo para verificación y auditorías"
+
+#: .\templates\core\index\sections\section-4-features.html:77
+msgid "Document Generation Illustration"
+msgstr "Ilustración de Generación de Documentos"
+
+#: .\templates\core\index\sections\section-4-features.html:86
+msgid "Enhanced Security & Validation"
+msgstr "Mayor Seguridad y Validación"
+
+#: .\templates\core\index\sections\section-4-features.html:88
+msgid "Advanced user authentication and role-based access control"
+msgstr ""
+"Autenticación avanzada de usuarios y control de acceso basado en roles"
+
+#: .\templates\core\index\sections\section-4-features.html:89
+msgid "Secure data encryption and validation mechanisms"
+msgstr "Cifrado seguro de datos y mecanismos de validación"
+
+#: .\templates\core\index\sections\section-4-features.html:90
+msgid "Comprehensive KYC and AML processes for client onboarding"
+msgstr "Procesos integrales de KYC y AML para la incorporación de clientes"
+
+#: .\templates\core\index\sections\section-4-features.html:93
+msgid ""
+"GEA prioritizes security with state-of-the-art encryption and validation "
+"protocols to safeguard sensitive information and ensure compliance."
+msgstr ""
+"GEA prioriza la seguridad con protocolos de cifrado y validación de "
+"vanguardia para salvaguardar información sensible y garantizar el "
+"cumplimiento."
+
+#: .\templates\core\index\sections\section-4-features.html:97
+msgid "Security Illustration"
+msgstr "Ilustración de Seguridad"
+
+#: .\templates\core\index\sections\section-6-call-to-action.html:10
+msgid "HISTORICAL ASSETS"
+msgstr "ACTIVOS HISTÓRICOS"
+
+#: .\templates\core\index\sections\section-6-call-to-action.html:11
+msgid "Comprehensive and Secure Historical Asset Management Solution"
+msgstr "Solución integral y segura de gestión de activos históricos"
+
+#: .\templates\core\index\sections\section-6-call-to-action.html:12
+#: .\templates\core\index\sections\section-7-contact.html:48
+msgid "Get In Touch"
+msgstr "Contáctanos"
+
+#: .\templates\core\index\sections\section-7-contact.html:6
+#: .\templates\core\partials\header.html:25
+msgid "Contact"
+msgstr "Contáctanos"
+
+#: .\templates\core\index\sections\section-7-contact.html:13
+msgid "Contact Info"
+msgstr "Información de Contacto"
+
+#: .\templates\core\index\sections\section-7-contact.html:19
+msgid "Our Location"
+msgstr "Nuestra Ubicación"
+
+#: .\templates\core\index\sections\section-7-contact.html:29
+msgid "Phone Number"
+msgstr "Número de Teléfono"
+
+#: .\templates\core\index\sections\section-7-contact.html:39
+msgid "Email Address"
+msgstr "Dirección de Correo Electrónico"
+
+#: .\templates\core\index\sections\section-7-contact.html:49
+msgid "You Always Have Control"
+msgstr "Usted Siempre Tiene el Control"
+
+#: .\templates\core\index\sections\section-7-contact.html:52
+msgid "Your message has been sent successfully."
+msgstr "Su mensaje ha sido enviado con éxito."
+
+#: .\templates\core\index\sections\section-7-contact.html:53
+msgid "We will contact you soon!"
+msgstr "¡Nos pondremos en contacto con usted pronto!"
+
+#: .\templates\core\index\sections\section-7-contact.html:136
+msgid "Send Message"
+msgstr "Enviar Mensaje"
+
+#: .\templates\core\index\sections\section-full-team.html:5
+msgid "Expertise in each area and human quality."
+msgstr "Experiencia en cada área y calidad humana."
+
+#: .\templates\core\index\sections\section-social-sense.html:5
+msgid "We Support Social and business Projects"
+msgstr "Apoyamos Proyectos Sociales y Empresariales"
+
+#: .\templates\core\index\sections\section-social-sense.html:30
+msgid "Public transportation"
+msgstr "Transporte Público"
+
+#: .\templates\core\index\sections\section-social-sense.html:33
+msgid "Public Transport (Metrocable)"
+msgstr "Transporte Público (Metrocable)"
+
+#: .\templates\core\index\sections\section-social-sense.html:34
+msgid ""
+"Symbolizing access to efficient and sustainable public transportation, "
+"connecting communities and improving quality of life."
+msgstr ""
+"Simbolizando el acceso a un transporte público eficiente y sostenible, "
+"conectando comunidades y mejorando la calidad de vida."
+
+#: .\templates\core\index\sections\section-social-sense.html:42
+#: .\templates\core\index\sections\section-social-sense.html:54
+msgid "Animal welfare and protection"
+msgstr "Bienestar y protección de los animales"
+
+#: .\templates\core\index\sections\section-social-sense.html:45
+msgid "Dining rooms for homeless people"
+msgstr "Comedores para personas sin hogar"
+
+#: .\templates\core\index\sections\section-social-sense.html:46
+msgid ""
+"Providing safe and welcoming spaces where homeless individuals can receive "
+"nutritious meals, fostering dignity, compassion, and a sense of community."
+msgstr ""
+"Proporcionar espacios seguros y acogedores donde las personas sin hogar "
+"puedan recibir comidas nutritivas, fomentando la dignidad, la compasión y el"
+" sentido de comunidad."
+
+#: .\templates\core\index\sections\section-social-sense.html:57
+msgid "Animalist Project"
+msgstr "Hospital anímales de calle y en Maltrato"
+
+#: .\templates\core\index\sections\section-social-sense.html:58
+msgid ""
+"Care and protection of animals, promoting animal welfare in specialized "
+"environments and through the work of committed veterinarians."
+msgstr ""
+"Cuidado y protección de los animales, promoviendo el bienestar animal en "
+"entornos especializados y a través del trabajo de veterinarios "
+"comprometidos."
+
+#: .\templates\core\index\sections\section-social-sense.html:66
+msgid "Preservation and reforestation"
+msgstr "Conservación y reforestación"
+
+#: .\templates\core\index\sections\section-social-sense.html:69
+msgid "Preservation and Reforestation"
+msgstr "Conservación y reforestación"
+
+#: .\templates\core\index\sections\section-social-sense.html:70
+msgid ""
+"Showcasing sustainability initiatives through the protection of natural "
+"resources, reforestation, and water management for a greener and balanced "
+"future."
+msgstr ""
+"Mostrar iniciativas de sostenibilidad a través de la protección de los "
+"recursos naturales, la reforestación y la gestión del agua para un futuro "
+"más verde y equilibrado."
+
+#: .\templates\core\index\sections\section-social-sense.html:78
+msgid "Care and support for older adults"
+msgstr "Atención y apoyo a adultos mayores"
+
+#: .\templates\core\index\sections\section-social-sense.html:81
+msgid "Support for Senior Citizens Homes"
+msgstr "Comedores para personas sin hogar"
+
+#: .\templates\core\index\sections\section-social-sense.html:82
+msgid ""
+"Provide care and support to older adults, promoting their emotional and "
+"physical well-being in comfortable and natural environments."
+msgstr ""
+"Proporcionar espacios seguros y acogedores donde las personas sin hogar "
+"puedan recibir comidas nutritivas, fomentando la dignidad, la compasión y el"
+" sentido de comunidad."
+
+#: .\templates\core\index\sections\section-social-sense.html:90
+msgid "Social brigades"
+msgstr "Brigadas Sociales"
+
+#: .\templates\core\index\sections\section-social-sense.html:93
+msgid "Social Brigades"
+msgstr "Brigadas Sociales"
+
+#: .\templates\core\index\sections\section-social-sense.html:94
+msgid ""
+"Mobile brigades providing health, legal, and animal welfare services to "
+"communities in need, improving quality of life."
+msgstr ""
+"Brigadas móviles que brindan servicios de salud, legales y de bienestar "
+"animal a comunidades necesitadas, mejorando la calidad de vida."
+
+#: .\templates\core\index\sections\section-social-sense.html:102
+msgid "Dairy production"
+msgstr "Productos Lácteos al Costo para Personas en Alta Pobreza"
+
+#: .\templates\core\index\sections\section-social-sense.html:105
+msgid "Dairy Production"
+msgstr "Productos Lácteos al Costo para Personas en Alta Pobreza"
+
+#: .\templates\core\index\sections\section-social-sense.html:106
+msgid ""
+"Promoting food security and rural work by highlighting the production of "
+"healthy foods and supporting families dedicated to agriculture."
+msgstr ""
+"Promover la seguridad alimentaria y el trabajo rural valorizando la "
+"producción de alimentos saludables y apoyando a las familias dedicadas a la "
+"agricultura."
+
+#: .\templates\core\index\sections\section-social-sense.html:114
+msgid "Housing projects"
+msgstr "Proyectos de vivienda"
+
+#: .\templates\core\index\sections\section-social-sense.html:117
+msgid "Housing Project"
+msgstr "Proyectos de vivienda"
+
+#: .\templates\core\index\sections\section-social-sense.html:118
+msgid ""
+"Showcasing families in safe and comfortable homes, highlighting the "
+"importance of housing projects that ensure a stable and happy environment "
+"for family development."
+msgstr ""
+"Mostrar familias en hogares seguros y confortables, resaltando la "
+"importancia de los proyectos de vivienda que garantizan un entorno estable y"
+" feliz para el desarrollo familiar."
+
+#: .\templates\core\index\sections\section-social-sense.html:127
+msgid "Previous"
+msgstr "Anterior"
+
+#: .\templates\core\index\sections\section-social-sense.html:131
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:106
+#: .\templates\two_factor\_wizard_actions.html:13
+#: .\templates\two_factor\core\setup.html:59
+msgid "Next"
+msgstr "Siguiente"
+
+#: .\templates\core\partials\banner.html:28
+msgid "Close"
+msgstr "Cerrar"
+
+#: .\templates\core\partials\banner.html:30
+#: .\templates\core\partials\banner.html:32
+msgid "View more"
+msgstr "Ver más"
+
+#: .\templates\core\partials\footer.html:14
+msgid "Phone:"
+msgstr "Teléfono:"
+
+#: .\templates\core\partials\footer.html:15
+msgid "Email:"
+msgstr "Correo:"
+
+#: .\templates\core\partials\footer.html:20
+msgid "Useful Links"
+msgstr "Enlaces Útiles"
+
+#: .\templates\core\partials\footer.html:22
+#: .\templates\core\partials\header.html:10
+msgid "Home"
+msgstr "Inicio"
+
+#: .\templates\core\partials\footer.html:23
+msgid "About us"
+msgstr "Conócenos"
+
+#: .\templates\core\partials\footer.html:24
+msgid "Terms of service"
+msgstr "Términos del servicio"
+
+#: .\templates\core\partials\footer.html:25
+msgid "Privacy policy"
+msgstr "Política de privacidad"
+
+#: .\templates\core\partials\footer.html:61
+#: .\templates\dashboard\partials\account_footer.html:9
+#: .\templates\dashboard\partials\footer.html:9
+msgid "Your unconditional ally. All Rights Reserved."
+msgstr "Su aliado incondicional. Todos los derechos reservados."
+
+#: .\templates\core\partials\footer.html:63
+#: .\templates\dashboard\partials\footer.html:9
+msgid "Created by"
+msgstr "Creado por"
+
+#: .\templates\core\partials\header.html:17
+#: .\templates\core\partials\header.html:19
+msgid "About"
+msgstr "Conócenos"
+
+#: .\templates\core\partials\header.html:21
+msgid "Team"
+msgstr "Equipo"
+
+#: .\templates\core\partials\header.html:29
+msgid "Custom APPS"
+msgstr "Aplicaciones Personalizadas"
+
+#: .\templates\core\partials\header.html:32
+msgid "Code Generation"
+msgstr "Generación de Código"
+
+#: .\templates\core\partials\header.html:45
+#: .\templates\dashboard\partials\side_nav.html:61
+msgid "Documents"
+msgstr "Documentos"
+
+#: .\templates\core\partials\header.html:48
+#: .\templates\dashboard\pages\documents\certificates\idoneity\certificate_detail.html:11
+msgid "Suitability Verification"
+msgstr "Verificación de Idoneidad"
+
+#: .\templates\core\partials\header.html:74
+msgid "Buyer"
+msgstr "Comprador"
+
+#: .\templates\core\partials\header.html:77
+msgid "LOGOUT"
+msgstr "CERRAR SESIÓN"
+
+#: .\templates\core\partials\header.html:81
+msgid "LOGIN"
+msgstr "INICIAR SESIÓN"
+
+#: .\templates\core\partials\header.html:82
+msgid "REGISTER"
+msgstr "REGISTRARSE"
+
+#: .\templates\core\partials\whatsapp.html:30
+msgid "Ask us your concerns and we can help you."
+msgstr "Consúltanos tus inquietudes y te ayudaremos."
+
+#: .\templates\core\partials\whatsapp.html:32
+msgid "Talk to an adviser now"
+msgstr "Habla con un asesor ahora"
+
+#: .\templates\core\partials\whatsapp.html:37
+msgid "Write your message..."
+msgstr "Escribe tu mensaje..."
+
+#: .\templates\dashboard\account\gea_register.html:38
+#: .\templates\dashboard\account\propensiones_register.html:28
+msgid "Username"
+msgstr "Nombre de usuario"
+
+#: .\templates\dashboard\account\gea_register.html:55
+#: .\templates\dashboard\account\propensiones_register.html:37
+msgid "Email"
+msgstr "Correo electrónico"
+
+#: .\templates\dashboard\account\gea_register.html:71
+#: .\templates\dashboard\account\propensiones_register.html:46
+#: .\templates\two_factor\core\login.html:78
+msgid "Password"
+msgstr "Contraseña"
+
+#: .\templates\dashboard\account\gea_register.html:90
+#: .\templates\dashboard\account\propensiones_register.html:58
+msgid "Confirm Password"
+msgstr "Confirmar Contraseña"
+
+#: .\templates\dashboard\account\gea_register.html:109
+#: .\templates\dashboard\account\propensiones_register.html:70
+msgid "First Names"
+msgstr "Nombres"
+
+#: .\templates\dashboard\account\gea_register.html:125
+#: .\templates\dashboard\account\propensiones_register.html:79
+msgid "Last Names"
+msgstr "Apellidos"
+
+#: .\templates\dashboard\account\gea_register.html:141
+msgid "User Type"
+msgstr "Tipo de Usuario"
+
+#: .\templates\dashboard\account\gea_register.html:157
+msgid "Unique Code"
+msgstr "Código Único"
+
+#: .\templates\dashboard\account\gea_register.html:171
+#: .\templates\dashboard\account\propensiones_register.html:96
+msgid "Do you already have an account? Sign in"
+msgstr "¿Ya tiene una cuenta? Inicie sesión"
+
+#: .\templates\dashboard\account\pre_register.html:18
+msgid "Register of Users for Historical Assets"
+msgstr "Registro de Usuarios de Activos Históricos"
+
+#: .\templates\dashboard\account\pre_register.html:48
+msgid "PROPENSIONES"
+msgstr "PROPENSIONES"
+
+#: .\templates\dashboard\account\pre_register.html:52
+msgid "Register of Users for Propensiones"
+msgstr "Registro de Usuarios de Propensiones"
+
+#: .\templates\dashboard\account\pre_register.html:76
+msgid "Go to Home"
+msgstr "Ir al Inicio"
+
+#: .\templates\dashboard\account\propensiones_register.html:88
+msgid "Citizenship Number"
+msgstr "Cédula"
+
+#: .\templates\dashboard\pages\assets_management\asset_location\add_asset_location.html:5
+#: .\templates\dashboard\pages\assets_management\partials\header_cards.html:26
+msgid "Add New Asset"
+msgstr "Agregar Nuevo Activo"
+
+#: .\templates\dashboard\pages\assets_management\asset_location\add_asset_location.html:16
+#: .\templates\dashboard\pages\assets_management\asset_location\edit_asset_location.html:16
+#: .\templates\dashboard\pages\assets_management\assets\buyers\buyer_dashboard.html:47
+#: .\templates\dashboard\pages\assets_management\assets\buyers\detail_offer.html:52
+#: .\templates\dashboard\pages\assets_management\assets\buyers\partials\tables\my_offers_table.html:7
+msgid "Asset"
+msgstr "Activo"
+
+#: .\templates\dashboard\pages\assets_management\asset_location\add_asset_location.html:28
+#: .\templates\dashboard\pages\assets_management\asset_location\edit_asset_location.html:23
+msgid "Location"
+msgstr "Ubicación"
+
+#: .\templates\dashboard\pages\assets_management\asset_location\add_asset_location.html:31
+#: .\templates\dashboard\pages\assets_management\asset_location\edit_asset_location.html:26
+msgid "+ Add Location"
+msgstr "+ Agregar Ubicación"
+
+#: .\templates\dashboard\pages\assets_management\asset_location\add_asset_location.html:40
+#: .\templates\dashboard\pages\assets_management\asset_location\edit_asset_location.html:35
+#: .\templates\dashboard\pages\assets_management\assets\buyers\buyer_dashboard.html:69
+#: .\templates\dashboard\pages\assets_management\assets\buyers\detail_offer.html:54
+#: .\templates\dashboard\pages\assets_management\assets\buyers\partials\tables\my_offers_table.html:9
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\offers_th_tf.html:8
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\thead_tfoot.html:11
+msgid "Quantity Type"
+msgstr "Tipo de Cantidad"
+
+#: .\templates\dashboard\pages\assets_management\asset_location\add_asset_location.html:47
+#: .\templates\dashboard\pages\assets_management\asset_location\edit_asset_location.html:42
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\thead_tfoot.html:10
+msgid "Amount"
+msgstr "Cantidad"
+
+#: .\templates\dashboard\pages\assets_management\asset_location\add_asset_location.html:54
+#: .\templates\dashboard\pages\assets_management\asset_location\includes\asset_and_category.html:10
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\assets_tab_pre_list_th_tf.html:6
+msgid "Observations"
+msgstr "Observaciones"
+
+#: .\templates\dashboard\pages\assets_management\asset_location\add_asset_location.html:66
+#: .\templates\dashboard\partials\side_nav.html:82
+msgid "Add Asset"
+msgstr "Agregar Activo"
+
+#: .\templates\dashboard\pages\assets_management\asset_location\asset_location_base.html:25
+msgid ""
+"\n"
+"                        The Asset Location ties a specific asset to a location, defining where and in what quantity the\n"
+"                        asset is available.\n"
+"                        "
+msgstr ""
+"\n"
+"                            La Ubicación del Activo vincula un activo específico a una ubicación, definiendo dónde y en qué cantidad el activo está disponible.\n"
+"                            "
+
+#: .\templates\dashboard\pages\assets_management\asset_location\edit_asset_location.html:5
+msgid "Edit Asset"
+msgstr "Editar Activo"
+
+#: .\templates\dashboard\pages\assets_management\asset_location\edit_asset_location.html:50
+msgid "Add Location"
+msgstr "Agregar Ubicación"
+
+#: .\templates\dashboard\pages\assets_management\asset_location\includes\asset_and_category.html:7
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\assets_tab_pre_list_th_tf.html:4
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\offers_th_tf.html:5
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\thead_tfoot.html:5
+msgid "Asset Name"
+msgstr "Nombre del Activo"
+
+#: .\templates\dashboard\pages\assets_management\asset_location\includes\asset_and_category.html:8
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\offers_th_tf.html:6
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\thead_tfoot.html:6
+msgid "Category"
+msgstr "Categoría"
+
+#: .\templates\dashboard\pages\assets_management\asset_location\includes\asset_and_category.html:9
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\locations_th_tf.html:5
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:44
+msgid "Description"
+msgstr "Descripción"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\buyer_dashboard.html:17
+msgid "My Offers"
+msgstr "Mis Ofertas"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\buyer_dashboard.html:26
+msgid "Create a New Offer"
+msgstr "Crear una nueva oferta"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\buyer_dashboard.html:58
+#: .\templates\dashboard\pages\assets_management\assets\buyers\detail_offer.html:53
+#: .\templates\dashboard\pages\assets_management\assets\buyers\partials\tables\my_offers_table.html:8
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\offers_th_tf.html:7
+msgid "Offer Type"
+msgstr "Tipo de Oferta"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\buyer_dashboard.html:80
+msgid "Value Offered Individually ($ USD)"
+msgstr "Valor Ofrecido c/u ($ USD)"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\buyer_dashboard.html:92
+msgid "Quantity required"
+msgstr "Cantidad Requerida"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\buyer_dashboard.html:103
+#: .\templates\dashboard\pages\assets_management\assets\buyers\detail_offer.html:57
+msgid "Country of Purchase"
+msgstr "País de la Compra"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\buyer_dashboard.html:115
+#: .\templates\dashboard\pages\assets_management\location\add_location.html:62
+#: .\templates\dashboard\pages\assets_management\location\edit_location.html:53
+msgid "Description (ES)"
+msgstr "Descripción (ES)"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\buyer_dashboard.html:117
+#: .\templates\dashboard\pages\assets_management\location\add_location.html:67
+#: .\templates\dashboard\pages\assets_management\location\edit_location.html:58
+msgid "Description (EN)"
+msgstr "Descripción (EN)"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\buyer_dashboard.html:130
+msgid "Observations (ES)"
+msgstr "Observaciones (ES)"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\buyer_dashboard.html:132
+msgid "Observations (EN)"
+msgstr "Observaciones (EN)"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\buyer_dashboard.html:144
+msgid "Submit Offer"
+msgstr "Enviar oferta"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\detail_offer.html:21
+msgid "Procedure"
+msgstr "Procedimiento"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\detail_offer.html:30
+#: .\templates\dashboard\pages\assets_management\assets\buyers\detail_offer.html:63
+msgid "Apply to this position/offer"
+msgstr "Aplicar a esta posición/oferta"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\detail_offer.html:35
+#: .\templates\dashboard\pages\assets_management\assets\buyers\detail_offer.html:39
+#: .\templates\dashboard\pages\assets_management\assets\buyers\detail_offer.html:68
+#: .\templates\dashboard\pages\assets_management\assets\buyers\detail_offer.html:72
+msgid "Download Offer"
+msgstr "Descargar Oferta"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\detail_offer.html:49
+msgid "Offer Summary"
+msgstr "Resumen de la Oferta"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\detail_offer.html:55
+msgid "Offer Amount"
+msgstr "Monto de la Oferta"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\detail_offer.html:56
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\offers_th_tf.html:10
+msgid "Offer Quantity"
+msgstr "Cantidad de la Oferta"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\edit_offer.html:17
+msgid "Edit Offer"
+msgstr "Editar oferta"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\edit_offer.html:34
+msgid "Asset:"
+msgstr "Activo:"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\edit_offer.html:41
+msgid "Offer Type:"
+msgstr "Tipo de Oferta:"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\edit_offer.html:48
+msgid "Quantity Type:"
+msgstr "Tipo de Cantidad:"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\edit_offer.html:55
+msgid "Value Offered Individually ($ USD):"
+msgstr "Valor Ofrecido c/u ($ USD):"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\edit_offer.html:62
+msgid "Quantity required:"
+msgstr "Cantidad Requerida:"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\edit_offer.html:69
+msgid "Country of Purchase:"
+msgstr "País de la Compra:"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\edit_offer.html:77
+msgid "Observations (EN):"
+msgstr "Observaciones (EN):"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\edit_offer.html:84
+msgid "Observations (ES):"
+msgstr "Observaciones (ES):"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\edit_offer.html:91
+msgid "Description (EN):"
+msgstr "Descripción (EN):"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\edit_offer.html:98
+msgid "Description (ES):"
+msgstr "Descripción (ES):"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\edit_offer.html:105
+msgid "Save Offer"
+msgstr "Guardar Oferta"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\edit_offer.html:107
+msgid "Go to my offers"
+msgstr "Ir al Inicio"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\partials\header.html:12
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\header.html:12
+#: .\templates\dashboard\partials\side_nav.html:23
+msgid "Dashboard"
+msgstr "Panel de Control"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\partials\header.html:14
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\header.html:14
+msgid "Overview and content summary"
+msgstr "Resumen y contenido general"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\partials\tables\my_offers_table.html:6
+msgid "#"
+msgstr "#"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\partials\tables\my_offers_table.html:10
+msgid "Quantity Needed"
+msgstr "Cantidad Requerida"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\partials\tables\my_offers_table.html:11
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\locations_th_tf.html:7
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\thead_tfoot.html:9
+#: .\templates\dashboard\pages\assets_management\location\add_location.html:48
+#: .\templates\dashboard\pages\assets_management\location\edit_location.html:39
+msgid "Country"
+msgstr "País"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\partials\tables\my_offers_table.html:12
+msgid "Value Offered (USD)"
+msgstr "Valor Ofrecido (USD)"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\partials\tables\my_offers_table.html:13
+#: .\templates\dashboard\pages\documents\certificates\idoneity\certificate_detail.html:31
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:31
+msgid "Approved"
+msgstr "Aprobado"
+
+#: .\templates\dashboard\pages\assets_management\assets\buyers\partials\tables\my_offers_table.html:14
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\locations_th_tf.html:9
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\offers_th_tf.html:13
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\thead_tfoot.html:12
+msgid "Actions"
+msgstr "Acciones"
+
+#: .\templates\dashboard\pages\assets_management\assets\holders\holder_dashboard.html:26
+msgid "My Historical Assets"
+msgstr "Mis Activos Históricos"
+
+#: .\templates\dashboard\pages\assets_management\assets\holders\holder_dashboard.html:34
+msgid "Assets in Demand (Offers)"
+msgstr "Activos en Demanda (Ofertas)"
+
+#: .\templates\dashboard\pages\assets_management\assets\holders\holder_dashboard.html:85
+msgid "Total current offers:"
+msgstr "Total de ofertas actuales:"
+
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\modals\delete_asset_modal.html:2
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\modals\delete_location_reference_modal.html:2
+msgid "Confirm Delete"
+msgstr "Confirmar Eliminación"
+
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\modals\delete_asset_modal.html:12
+msgid "Are you sure you want to delete this Asset?"
+msgstr "¿Está seguro de que desea eliminar este Activo?"
+
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\modals\delete_asset_modal.html:21
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\modals\delete_location_reference_modal.html:21
+#: .\templates\two_factor\_wizard_actions.html:5
+#: .\templates\two_factor\core\setup.html:64
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\modals\delete_location_reference_modal.html:12
+msgid "Are you sure you want to delete this location reference?"
+msgstr "¿Está seguro de que desea eliminar esta referencia de ubicación?"
+
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\locations_table.html:41
+msgid "Yes"
+msgstr "Si"
+
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\locations_table.html:43
+msgid "No"
+msgstr "No"
+
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\assets_tab_pre_list_th_tf.html:5
+msgid "Do You Have It?"
+msgstr "¿Lo tienes?"
+
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\locations_th_tf.html:4
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\thead_tfoot.html:7
+msgid "Location Reference"
+msgstr "Referencia de Ubicación"
+
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\locations_th_tf.html:6
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\thead_tfoot.html:8
+msgid "Continent"
+msgstr "Continente"
+
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\locations_th_tf.html:8
+msgid "Is Active"
+msgstr "Esta Activo"
+
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\offers_th_tf.html:4
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\thead_tfoot.html:4
+msgid "Image"
+msgstr "Imagen"
+
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\offers_th_tf.html:9
+msgid "Offer Amount per quantity type in USD"
+msgstr "Monto de la Oferta por tipo de cantidad en USD"
+
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\offers_th_tf.html:11
+msgid "Continent Preference"
+msgstr "Preferencia de Continente"
+
+#: .\templates\dashboard\pages\assets_management\assets\holders\partials\tables\partials\offers_th_tf.html:12
+msgid "Country Preference"
+msgstr "Preferencia de País"
+
+#: .\templates\dashboard\pages\assets_management\location\add_location.html:16
+msgid "Add New Location Reference"
+msgstr "Agregar Nueva Referencia de Ubicación"
+
+#: .\templates\dashboard\pages\assets_management\location\add_location.html:36
+#: .\templates\dashboard\pages\assets_management\location\edit_location.html:27
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:38
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:39
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:43
+msgid "Reference"
+msgstr "Referencia"
+
+#: .\templates\dashboard\pages\assets_management\location\add_location.html:73
+#: .\templates\dashboard\pages\assets_management\location\edit_location.html:64
+#: .\templates\dashboard\partials\side_nav.html:81
+msgid "Add Location Reference"
+msgstr "Agregar Referencia de Ubicación"
+
+#: .\templates\dashboard\pages\assets_management\location\add_location.html:81
+#: .\templates\dashboard\pages\assets_management\location\edit_location.html:72
+msgid ""
+"\n"
+"                        The Location Reference serves as a unique identifier to manage inventory across various\n"
+"                        locations.\n"
+"                        "
+msgstr ""
+"\n"
+"                        La Referencia de Ubicación sirve como un identificador único para gestionar el inventario en diversas ubicaciones.\n"
+"                        "
+
+#: .\templates\dashboard\pages\assets_management\location\add_location.html:88
+#: .\templates\dashboard\pages\assets_management\location\edit_location.html:79
+msgid ""
+"\n"
+"                        It allows differentiation between inventory located in the same country but in different areas,\n"
+"                        inventory in different countries, or inventory in the same country as well as across multiple\n"
+"                        countries.\n"
+"                        "
+msgstr ""
+"\n"
+"                        Permite diferenciar entre el inventario ubicado en el mismo país pero en diferentes áreas,\n"
+"                        inventario en diferentes países, o inventario en el mismo país así como en múltiples países.\n"
+"                        "
+
+#: .\templates\dashboard\pages\assets_management\location\edit_location.html:16
+msgid "Edit Location Reference"
+msgstr "Editar Referencia de Ubicación"
+
+#: .\templates\dashboard\pages\assets_management\partials\header_cards.html:10
+msgid "Assets and Offers"
+msgstr "Activos y Ofertas"
+
+#: .\templates\dashboard\pages\assets_management\partials\header_cards.html:43
+msgid "Booking"
+msgstr "Agenda"
+
+#: .\templates\dashboard\pages\assets_management\partials\header_cards.html:45
+msgid "Do you need help?"
+msgstr "¿Necesita ayuda?"
+
+#: .\templates\dashboard\pages\documents\certificates\certificate_base.html:6
+msgid "Certification of Suitability"
+msgstr "Certificación de Idoneidad"
+
+#: .\templates\dashboard\pages\documents\certificates\idoneity\certificate_detail.html:5
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:5
+msgid "Certificate Details"
+msgstr "Detalles del Certificado"
+
+#: .\templates\dashboard\pages\documents\certificates\idoneity\certificate_detail.html:28
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:28
+msgid "ID Number:"
+msgstr "Número de Identificación:"
+
+#: .\templates\dashboard\pages\documents\certificates\idoneity\certificate_detail.html:29
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:29
+msgid "Certificate ID:"
+msgstr "ID del Certificado:"
+
+#: .\templates\dashboard\pages\documents\certificates\idoneity\certificate_detail.html:33
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:33
+msgid "Not Approved"
+msgstr "No Aprobado"
+
+#: .\templates\dashboard\pages\documents\certificates\idoneity\certificate_detail.html:39
+#: .\templates\dashboard\pages\documents\certificates\idoneity\certificate_detail.html:48
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:49
+msgid "with document number"
+msgstr "con número de documento"
+
+#: .\templates\dashboard\pages\documents\certificates\idoneity\certificate_detail.html:40
+msgid ""
+"\n"
+"                                qualifies as a beneficiary, who has undergone a security screening and accreditation of judicial records in accordance with current regulations, criminal reports on social media, and Interpol databases. Consequently, they do <strong>NOT</strong> have any judicial or disciplinary records from the certifying entities authorized by international public consultation databases, which would affect their suitability.\n"
+"                                <br/>\n"
+"                                For the record, this is signed on "
+msgstr ""
+"\n"
+"                                califica como beneficiario, quien ha pasado por un control de seguridad y acreditación de antecedentes judiciales de acuerdo con las normas vigentes, informes criminales en redes sociales y bases de datos de Interpol. Por consiguiente, <strong>NO</strong> presenta antecedentes judiciales ni disciplinarios en las entidades certificadoras autorizadas por las bases de datos de consulta pública internacional, que afecten su idoneidad.\n"
+"                                <br/>\n"
+"                                Para constancia se firma en "
+
+#: .\templates\dashboard\pages\documents\certificates\idoneity\certificate_detail.html:43
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:44
+msgid "in Quindío, Republic of Colombia."
+msgstr "en Quindío, República de Colombia."
+
+#: .\templates\dashboard\pages\documents\certificates\idoneity\certificate_detail.html:49
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:50
+msgid ""
+"\n"
+"                                we inform you that, after the evaluation conducted, your security study <span class=\"text-danger\">HAS NOT BEEN APPROVED</span> due to not meeting the suitability requirements according to the current security regulations.\n"
+"                            "
+msgstr ""
+"\n"
+"                                le informamos que, tras la evaluación realizada, su estudio de seguridad <span class=\"text-danger\">NO HA SIDO APROBADO</span> debido a que no cumple con los requisitos de idoneidad según la normativa de seguridad vigente.\n"
+"                            "
+
+#: .\templates\dashboard\pages\documents\certificates\idoneity\certificate_detail.html:56
+msgid ""
+"We remind you that, in accordance with the provisions of the Habeas Data "
+"Law, all your personal data has been treated with due confidentiality and is"
+" protected under the strictest security standards, guaranteeing its "
+"integrity and privacy. Your data will be used exclusively for authorized "
+"purposes and within the framework of current data protection regulations."
+msgstr ""
+"Le recordamos que, de acuerdo con las disposiciones de la Ley de Habeas "
+"Data, todos sus datos personales han sido tratados con la debida "
+"confidencialidad y están protegidos bajo los más estrictos estándares de "
+"seguridad, garantizando su integridad y privacidad. Sus datos serán "
+"utilizados exclusivamente para los fines autorizados y en el marco de la "
+"normativa vigente de protección de datos."
+
+#: .\templates\dashboard\pages\documents\certificates\idoneity\certificate_detail.html:60
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:107
+msgid "Status:"
+msgstr "Estado:"
+
+#: .\templates\dashboard\pages\documents\certificates\idoneity\certificate_input.html:5
+#: .\templates\dashboard\pages\documents\certificates\idoneity\certificate_input.html:14
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_input.html:5
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_input.html:14
+msgid "Verify your Certificate"
+msgstr "Verifique su Certificado"
+
+#: .\templates\dashboard\pages\documents\certificates\idoneity\certificate_input.html:56
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_input.html:56
+msgid "Please try again in"
+msgstr "Por favor, intente de nuevo en"
+
+#: .\templates\dashboard\pages\documents\certificates\idoneity\certificate_input.html:56
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_input.html:56
+msgid "minutes."
+msgstr "minutos."
+
+#: .\templates\dashboard\pages\documents\certificates\idoneity\certificate_input.html:62
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_input.html:62
+msgid "Verify"
+msgstr "Verificar"
+
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:11
+msgid "Sovereign Verification"
+msgstr "Idoneidad Para La Compra Soberana "
+
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:38
+#, python-format
+msgid ""
+"\n"
+"                                <strong>%(name)s %(last_name)s</strong> with document <strong>%(document_type)s</strong> and number <strong>%(masked_document_number)s</strong>\n"
+"                                was duly registered to participate in the sovereign purchase of the United States after the corresponding verification,\n"
+"                                it is declared that it fully complied with the requirements demanded by the process and demonstrated that it was suitable to belong to this operation.\n"
+"                                <br/>\n"
+"                                For the record, this is signed on\n"
+"                            "
+msgstr ""
+"\n"
+"<strong>%(name)s %(last_name)s</strong> con el documento <strong>%(document_type)s</strong> número <strong>%(masked_document_number)s</strong>\n"
+"fue debidamente registrado para participar en la compra soberana de los Estados Unidos tras la verificación correspondiente.\n"
+"Se declara que cumplió plenamente con los requisitos exigidos por el proceso y demostró ser apto para formar parte de esta operación.\n"
+"<br/>\n"
+"Para constancia, se firma en"
+
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:57
+msgid ""
+"\n"
+"                            We remind you that, in accordance with the provisions of the Habeas Data Law, all your personal data has been treated with due confidentiality and is protected under the strictest security standards, guaranteeing its integrity and privacy. Your data will be used exclusively for authorized purposes and within the framework of current data protection regulations.\n"
+"                            "
+msgstr ""
+"\n"
+"Le recordamos que, de acuerdo con las disposiciones de la Ley de Habeas Data, todos sus datos personales han sido tratados con la debida confidencialidad y están protegidos bajo los más estrictos estándares de seguridad, garantizando su integridad y privacidad. Sus datos serán utilizados exclusivamente para los fines autorizados y en el marco de la normativa vigente de protección de datos."
+
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:64
+msgid ""
+"\n"
+"                                The following clarification is made: the reproduction, publication, or any improper use of this certificate for requesting money or for fraudulent purposes will result in legal sanctions, in accordance with applicable national and international regulations. Furthermore, it is warned that such conduct will lead to immediate expulsion and total disqualification, both present and future, from any participation in programs, benefits, or related agreements.\n"
+"                            "
+msgstr ""
+"\n"
+"Se deja la salvedad de que la reproducción, publicación, o cualquier uso indebido de este certificado para la solicitud de dinero o fines fraudulentos incurrirá en sanciones legales, conforme a lo dispuesto en las normativas nacionales e internacionales aplicables. Asimismo, se advierte que tal conducta será causal de expulsión inmediata y de inhabilidad total, presente y futura, para cualquier participación en los programas, beneficios, o convenios relacionados."
+
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:71
+msgid "Regulatory References:"
+msgstr "Referencias normativas:"
+
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:77
+msgid "\"Legal Warning on the Use and Reproduction of Certificates\""
+msgstr "\"Advertencia Legal sobre el Uso y Reproducción de Certificados\""
+
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:78
+msgid ""
+"\n"
+"                                United Nations Convention against Corruption (UNCAC): Article 15 and subsequent provisions, applicable to acts of forgery and misuse of official documents.\n"
+"                                "
+msgstr ""
+"\n"
+"Naciones Unidas contra la Corrupción (CNUCC): Artículo 15 y siguientes, aplicable a actos de falsificación y uso indebido de documentos oficiales."
+
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:84
+msgid "International Criminal Code (Rome Statute): "
+msgstr "Código Penal Internacional (Estatuto de Roma):"
+
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:85
+msgid ""
+"\n"
+"                                Related to fraud, forgery, and violations of international ethical standards.\n"
+"                                "
+msgstr ""
+"\n"
+"Relacionado con el fraude, falsificación y violación de normas éticas internacionales.\n"
+"                    "
+
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:91
+msgid "Internal Regulations of the Fund/Organization: "
+msgstr "Reglamentos Internos del Fondo/Organización:"
+
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:92
+msgid ""
+"\n"
+"                                In accordance with contractual clauses and specific regulations governing user relationships.\n"
+"                                "
+msgstr ""
+"\n"
+"Conforme a las cláusulas contractuales y normativas específicas que rigen las relaciones de los usuarios."
+
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:100
+msgid "Legal Warning: "
+msgstr "Advertencia legal:"
+
+#: .\templates\dashboard\pages\documents\certificates\sovereing\certificate_detail.html:101
+msgid ""
+"\n"
+"                            Any contrary act will result in the corresponding judicial actions, including reports to the competent authorities of the country and international organizations.\n"
+"                            "
+msgstr ""
+"\n"
+"Cualquier acto contrario dará lugar a las acciones judiciales pertinentes, incluidas denuncias ante las autoridades competentes del país y organismos internacionales."
+
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:6
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:33
+msgid "Code Generator"
+msgstr "Generador de Códigos"
+
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:48
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:49
+msgid "Custom Text"
+msgstr "Texto Personalizado"
+
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:56
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:63
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:69
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:76
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:82
+#| msgid "Include NIT"
+msgid "Include"
+msgstr "Incluir"
+
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:91
+msgid "Generate Barcode"
+msgstr "Generar Código de Barras"
+
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:97
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:124
+msgid "QR Code"
+msgstr "Código QR"
+
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:113
+msgid "Download"
+msgstr "Descargar"
+
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:115
+msgid "Bar Code"
+msgstr "Código de Barras"
+
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:121
+msgid "Download QR"
+msgstr "Descargar QR"
+
+#: .\templates\dashboard\pages\documents\pol\pol_form.html:5
+#: .\templates\dashboard\pages\documents\pol\pol_form.html:40
+msgid "Prueba de vida"
+msgstr "Prueba de vida"
+
+#: .\templates\dashboard\pages\documents\pol\pol_form.html:83
+msgid "Enviar"
+msgstr "Enviar"
+
+#: .\templates\dashboard\pages\documents\pol\pol_success.html:5
+msgid "Registro exitoso"
+msgstr "Registro exitoso"
+
+#: .\templates\dashboard\pages\documents\pol\pol_success.html:41
+msgid "¡Gracias por confirmar tu POL!"
+msgstr "¡Gracias por confirmar tu POL!"
+
+#: .\templates\dashboard\pages\documents\pol\pol_success.html:42
+msgid "Tu información ha sido registrada exitosamente."
+msgstr "Tu información ha sido registrada exitosamente."
+
+#: .\templates\dashboard\pages\documents\pol\pol_success.html:43
+msgid "Ya puedes cerrar esta pestaña"
+msgstr "Ya puedes cerrar esta pestaña"
+
+#: .\templates\dashboard\partials\account_footer.html:18
+msgid "Terms & Conditions"
+msgstr "Términos y Condiciones"
+
+#: .\templates\dashboard\partials\nav\user.html:20
+msgid "ADMIN"
+msgstr "ADMINISTRADOR"
+
+#: .\templates\dashboard\partials\nav\user.html:26
+#: .\templates\dashboard\partials\side_nav.html:46
+msgid "Account"
+msgstr "Cuenta"
+
+#: .\templates\dashboard\partials\nav\user.html:30
+msgid "Logout"
+msgstr "Cerrar Sesión"
+
+#: .\templates\dashboard\partials\side_nav.html:27
+msgid "Language"
+msgstr "Idioma"
+
+#: .\templates\dashboard\partials\side_nav.html:40
+msgid "Pages"
+msgstr "Páginas"
+
+#: .\templates\dashboard\partials\side_nav.html:52
+msgid "Security"
+msgstr "Seguridad"
+
+#: .\templates\dashboard\partials\side_nav.html:68
+msgid "IDONEITY"
+msgstr "IDONEIDAD"
+
+#: .\templates\dashboard\partials\side_nav.html:76
+msgid "Assets"
+msgstr "Activos"
+
+#: .\templates\dashboard\partials\side_nav\footer.html:5
+msgid "Logged in as:"
+msgstr "Conectado como:"
+
+#: .\templates\two_factor\_wizard_actions.html:11
+msgid "Back"
+msgstr "Atrás"
+
+#: .\templates\two_factor\core\backup_tokens.html:16
+#: .\templates\two_factor\profile\profile.html:18
+msgid "Backup Tokens"
+msgstr "Códigos de Respaldo"
+
+#: .\templates\two_factor\core\backup_tokens.html:19
+msgid ""
+"Backup tokens can be used when your primary and backup phone numbers aren't "
+"available. The backup tokens below can be used for login verification. If "
+"you've used up all your backup tokens, you can generate a new set of backup "
+"tokens. Only the backup tokens shown below will be valid."
+msgstr ""
+"Los códigos de respaldo pueden utilizarse cuando sus números de teléfono "
+"principal y de respaldo no estén disponibles. Los códigos de respaldo que "
+"aparecen a continuación pueden usarse para la verificación de inicio de "
+"sesión. Si ha utilizado todos sus códigos de respaldo, puede generar un "
+"nuevo conjunto. Solo los códigos de respaldo que se muestran a continuación "
+"serán válidos."
+
+#: .\templates\two_factor\core\backup_tokens.html:28
+msgid "Copy these tokens and keep them somewhere safe."
+msgstr "Copie estos códigos y guárdelos en un lugar seguro."
+
+#: .\templates\two_factor\core\backup_tokens.html:30
+msgid "You don't have any backup codes yet."
+msgstr "Aún no tiene ningún código de respaldo."
+
+#: .\templates\two_factor\core\backup_tokens.html:34
+#: .\templates\two_factor\core\setup_complete.html:18
+#: .\templates\two_factor\core\setup_complete.html:22
+msgid "Back to Account Security"
+msgstr "Volver a la Seguridad de la Cuenta"
+
+#: .\templates\two_factor\core\backup_tokens.html:35
+msgid "Generate Tokens"
+msgstr "Generar Códigos"
+
+#: .\templates\two_factor\core\login.html:26
+msgid "Enter your credentials."
+msgstr "Ingrese sus credenciales."
+
+#: .\templates\two_factor\core\login.html:34
+msgid ""
+"Use this form for entering backup tokens for logging in. These tokens have "
+"been generated for you to print and keep safe. Please enter one of these "
+"backup tokens to login to your account."
+msgstr ""
+"Use este formulario para ingresar los códigos de respaldo e iniciar sesión. "
+"Estos códigos fueron generados para que los imprima y los mantenga en un "
+"lugar seguro. Ingrese uno de estos códigos de respaldo para acceder a su "
+"cuenta."
+
+#: .\templates\two_factor\core\login.html:59
+msgid "Username or Email"
+msgstr "Usuario o Correo"
+
+#: .\templates\two_factor\core\login.html:97
+msgid "Forgot your password?"
+msgstr "¿Olvidó su contraseña?"
+
+#: .\templates\two_factor\core\login.html:113
+msgid "Or, alternatively, use one of your other authentication methods:"
+msgstr "O, alternativamente, use uno de sus otros métodos de autenticación:"
+
+#: .\templates\two_factor\core\login.html:133
+msgid "As a last resort, you can use a backup token:"
+msgstr "Como último recurso, puede usar un código de respaldo:"
+
+#: .\templates\two_factor\core\login.html:136
+msgid "Use Backup Token"
+msgstr "Usar Código de Respaldo"
+
+#: .\templates\two_factor\core\login.html:146
+msgid "New user?"
+msgstr "¿Usuario nuevo?"
+
+#: .\templates\two_factor\core\login.html:148
+msgid "Create an account!"
+msgstr "¡Cree una cuenta!"
+
+#: .\templates\two_factor\core\otp_required.html:5
+msgid "Permission Denied"
+msgstr "Permiso Denegado"
+
+#: .\templates\two_factor\core\otp_required.html:7
+msgid ""
+"The page you requested, enforces users to verify using two-factor "
+"authentication for security reasons. You need to enable these security "
+"features in order to access this page."
+msgstr ""
+"La página que solicitó exige que los usuarios verifiquen mediante "
+"autenticación de dos factores por razones de seguridad. Necesita habilitar "
+"estas funciones de seguridad para acceder a esta página."
+
+#: .\templates\two_factor\core\otp_required.html:12
+#: .\templates\two_factor\profile\profile.html:29
+msgid ""
+"Two-factor authentication is not enabled for your account. Enable two-factor"
+" authentication for enhanced account security."
+msgstr ""
+"La autenticación de dos factores no está habilitada en su cuenta. Habilite "
+"la autenticación de dos factores para mejorar la seguridad de su cuenta."
+
+#: .\templates\two_factor\core\otp_required.html:19
+msgid "Go back"
+msgstr "Volver"
+
+#: .\templates\two_factor\core\otp_required.html:21
+#: .\templates\two_factor\core\setup.html:14
+#: .\templates\two_factor\core\setup_complete.html:11
+#: .\templates\two_factor\profile\profile.html:30
+msgid "Enable Two-Factor Authentication"
+msgstr "Habilitar Autenticación de Dos Factores"
+
+#: .\templates\two_factor\core\setup.html:17
+msgid ""
+"You are about to take your account security to the next level. Follow the "
+"steps in this wizard to enable two-factor authentication."
+msgstr ""
+"Está a punto de llevar la seguridad de su cuenta al siguiente nivel. Siga "
+"los pasos de este asistente para habilitar la autenticación de dos factores."
+
+#: .\templates\two_factor\core\setup.html:22
+msgid "Please select which authentication method you would like to use."
+msgstr "Seleccione el método de autenticación que desea utilizar."
+
+#: .\templates\two_factor\core\setup.html:27
+msgid ""
+"To set up a token generator, scan the QR code below using an app like Google"
+" Authenticator, Authenticator from Windows or a similar app."
+msgstr ""
+"Para configurar un generador de tokens, escanee el código QR a continuación "
+"con una aplicación como Google Authenticator, Authenticator de Windows o una"
+" aplicación similar."
+
+#: .\templates\two_factor\core\setup.html:29
+msgid ""
+"Alternatively, use the following secret to configure the token manually in "
+"your authenticator or password manager."
+msgstr ""
+"Alternativamente, use el siguiente secreto para configurar el token "
+"manualmente en su autenticador o administrador de contraseñas."
+
+#: .\templates\two_factor\core\setup.html:30
+msgid "TOTP Secret:"
+msgstr "Secreto TOTP:"
+
+#: .\templates\two_factor\core\setup.html:31
+msgid "Then, enter the token generated by the app below to verify setup."
+msgstr ""
+"Luego, ingrese el token generado por la aplicación a continuación para "
+"verificar la configuración."
+
+#: .\templates\two_factor\core\setup.html:34
+msgid ""
+"Token validated successfully. Two-factor authentication is now enabled."
+msgstr ""
+"Token validado con éxito. La autenticación de dos factores ahora está "
+"habilitada."
+
+#: .\templates\two_factor\core\setup.html:36
+msgid "Token validation failed. Please try again."
+msgstr "La validación del token falló. Por favor, inténtelo de nuevo."
+
+#: .\templates\two_factor\core\setup.html:75
+#: .\templates\two_factor\core\setup.html:82
+msgid "Back to login"
+msgstr "Volver al inicio de sesión"
+
+#: .\templates\two_factor\core\setup_complete.html:15
+msgid ""
+"Congratulations, you've successfully enabled two-factor authentication."
+msgstr ""
+"Felicidades, ha habilitado con éxito la autenticación de dos factores."
+
+#: .\templates\two_factor\core\setup_complete.html:20
+msgid ""
+"However, it might happen that you don't have access to your primary token "
+"device. To enable account recovery, add a phone number."
+msgstr ""
+"Sin embargo, puede suceder que no tenga acceso a su dispositivo principal de"
+" tokens. Para habilitar la recuperación de la cuenta, agregue un número de "
+"teléfono."
+
+#: .\templates\two_factor\core\setup_complete.html:23
+msgid "Add Phone Number"
+msgstr "Agregar Número de Teléfono"
+
+#: .\templates\two_factor\profile\profile.html:11
+msgid "Account Security"
+msgstr "Seguridad de la Cuenta"
+
+#: .\templates\two_factor\profile\profile.html:16
+#, python-format
+msgid "Primary method: %(primary)s"
+msgstr "Método principal: %(primary)s"
+
+#: .\templates\two_factor\profile\profile.html:20
+msgid ""
+"If you don't have any device with you, you can access your account using "
+"backup tokens."
+msgstr ""
+"Si no tiene ningún dispositivo con usted, puede acceder a su cuenta "
+"utilizando códigos de respaldo."
+
+#: .\templates\two_factor\profile\profile.html:21
+#, python-format
+msgid "You have only one backup token remaining."
+msgid_plural "You have %(counter)s backup tokens remaining."
+msgstr[0] "Solo le queda un código de respaldo."
+msgstr[1] "Le quedan %(counter)s códigos de respaldo."
+
+#: .\templates\two_factor\profile\profile.html:27
+msgid "Show Codes"
+msgstr "Mostrar Códigos"
+
+#~ msgid ""
+#~ "\n"
+#~ "                        You have no assets registered. Register an asset to see available positions.\n"
+#~ "                      "
+#~ msgstr ""
+#~ "\n"
+#~ "No tiene activos registrados o No hay posturas actualmente. Registre un activo para ver las posiciones disponibles.\n"
+#~ "                    "
+
+#~ msgid "Pre Asset Registration"
+#~ msgstr "Pre Registro de Activos"
+
+#~ msgid "Finish"
+#~ msgstr "Finalizar"
+
+#~ msgid "Include Date (DDMMYYYY)"
+#~ msgstr "Incluir Fecha (DDMMYYYY)"
+
+#~ msgid "Include Random Code (4 digits)"
+#~ msgstr "Incluir Código Aleatorio (4 dígitos)"
+
+#, fuzzy
+#~ msgid "Activo:"
+#~ msgstr "Acciones"
+
+#, fuzzy
+#~ msgid "Observaciones (EN):"
+#~ msgstr "Observaciones (EN)"
+
+#, fuzzy
+#~ msgid "Observaciones (ES):"
+#~ msgstr "Observaciones (ES)"
+
+#, fuzzy
+#~ msgid "Descripción (EN):"
+#~ msgstr "Descripción (EN)"
+
+#, fuzzy
+#~ msgid "Descripción (ES):"
+#~ msgstr "Descripción (ES)"
+
+#~ msgid "PROPENSIONES ABOGADOS INTERNATIONAL"
+#~ msgstr "PROPENSIONES ABOGADOS INTERNACIONAL"
+
+#~ msgid "Enhanced governance structure"
+#~ msgstr "Estructura de gobernanza mejorada"
+
+#~ msgid "Compliance with international standards"
+#~ msgstr "Cumplimiento con estándares internacionales"
+
+#~ msgid "Streamlined asset management process"
+#~ msgstr "Proceso de gestión de activos optimizado"
+
+#~ msgid "Cross-Platform Accessibility"
+#~ msgstr "Accesibilidad Multiplataforma"
+
+#~ msgid ""
+#~ "GEA adapts seamlessly across desktops, tablets, and smartphones, ensuring "
+#~ "a consistent user experience."
+#~ msgstr ""
+#~ "GEA se adapta sin problemas a escritorios, tabletas y teléfonos "
+#~ "inteligentes, garantizando una experiencia de usuario coherente."
+
+#~ msgid "Optimized Performance"
+#~ msgstr "Rendimiento Optimizado"
+
+#~ msgid ""
+#~ "Fast loading times and efficient resource usage provide a smooth experience "
+#~ "even on low-spec devices."
+#~ msgstr ""
+#~ "Tiempos de carga rápidos y uso eficiente de recursos para brindar una "
+#~ "experiencia fluida incluso en dispositivos con especificaciones bajas."
+
+#~ msgid "Touch-Friendly Design"
+#~ msgstr "Diseño Adaptado al Tacto"
+
+#~ msgid ""
+#~ "Interactive elements and navigation are designed for easy use on touch "
+#~ "screens, enhancing mobile usability."
+#~ msgstr ""
+#~ "Los elementos interactivos y la navegación están diseñados para un fácil uso"
+#~ " en pantallas táctiles, mejorando la usabilidad móvil."
+
+#~ msgid "Phone Mockup"
+#~ msgstr "Maqueta de Teléfono"
+
+#~ msgid "Fully Responsive Design"
+#~ msgstr "Diseño Totalmente Responsivo"
+
+#~ msgid ""
+#~ "GEA ensures a responsive layout that adjusts dynamically to fit any screen"
+#~ " size, providing a consistent experience."
+#~ msgstr ""
+#~ "GEA asegura un diseño responsivo que se adapta dinámicamente a cualquier "
+#~ "tamaño de pantalla, ofreciendo una experiencia coherente."
+
+#~ msgid "Browser Compatibility"
+#~ msgstr "Compatibilidad con Navegadores"
+
+#~ msgid ""
+#~ "Compatible with major web browsers including Chrome, Firefox, Edge, and "
+#~ "Safari for a seamless experience."
+#~ msgstr ""
+#~ "Compatible con los principales navegadores web, incluyendo Chrome, Firefox, "
+#~ "Edge y Safari, para una experiencia sin interrupciones."
+
+#~ msgid "Dark Mode Support"
+#~ msgstr "Soporte de Modo Oscuro"
+
+#~ msgid ""
+#~ "GEA offers a dark mode option to reduce eye strain and improve visibility "
+#~ "in low-light environments."
+#~ msgstr ""
+#~ "GEA ofrece una opción de modo oscuro para reducir la fatiga visual y "
+#~ "mejorar la visibilidad en entornos con poca luz."
+
+#~ msgid "Support"
+#~ msgstr "Soporte"
+
+#~ msgid "All-in-one Suite"
+#~ msgstr "Plataforma todo en uno"
+
+#~ msgid "Holder"
+#~ msgstr "Tenedor"
+
+#~ msgid ""
+#~ "\n"
+#~ "                        The Location Reference serves as a unique identifier to manage inventory across various locations.\n"
+#~ "                        "
+#~ msgstr ""
+#~ "\n"
+#~ "                        La Referencia de Ubicación sirve como un identificador único para gestionar el inventario en diversas ubicaciones.\n"
+#~ "                        "
+
+#~ msgid "ASSETS"
+#~ msgstr "ACTIVOS"
+
+#~ msgid "HISTORICAL"
+#~ msgstr "HISTÓRICOS"
+
+#~ msgid ""
+#~ "\n"
+#~ "            <small>GEA | <strong>A</strong>ll-in-one <strong>T</strong>rusted <strong>L</strong>egacy\n"
+#~ "              <strong>A</strong>sset <strong>S</strong>olution</small>\n"
+#~ "            "
+#~ msgstr ""
+#~ "\n"
+#~ "            <small>GEA | <strong>A</strong>ll-in-one <strong>T</strong>rusted <strong>L</strong>egacy\n"
+#~ "              <strong>A</strong>sset <strong>S</strong>olution</small>\n"
+#~ "            "
+
+#~ msgid "Get Started"
+#~ msgstr "Comenzar"
+
+#~ msgid "With a team always willing to help"
+#~ msgstr "Con un equipo siempre dispuesto a ayudar"
+
+#~ msgid "International"
+#~ msgstr "Internacional"
+
+#~ msgid "International Team"
+#~ msgstr "Equipo internacional"
+
+#~ msgid "Multidisciplinary"
+#~ msgstr "Multidisciplinario"
+
+#~ msgid "Adapted to every need"
+#~ msgstr "Adaptado a cada necesidad"
+
+#~ msgid "Results"
+#~ msgstr "Resultados"
+
+#~ msgid "Confirmed Sales"
+#~ msgstr "Ventas confirmadas"

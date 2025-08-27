@@ -1,0 +1,207 @@
+{% extends 'dashboard/layout/base.html' %}
+
+{% load i18n static custom_filters %}
+
+{% block layout_main %}
+{% include 'dashboard/pages/assets_management/assets/holders/partials/header.html' %}
+
+<div class="container-xl px-4 mt-n10">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4" id="my_offers">
+                <div class="card-header">
+                    <h2>{% trans 'My Offers' %}</h2>
+                </div>
+                <div class="card-body">
+                    {% include 'dashboard/pages/assets_management/assets/buyers/partials/tables/my_offers_table.html' %}
+                </div>
+            </div>
+
+            <div class="card mb-4" id="create_offer">
+                <div class="card-header">
+                    <h2>{% trans 'Create a New Offer' %}</h2>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.media.css }}
+                        
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_asset" class="form-label">
+                                        <span class="fw-bold">
+                                            {% trans 'Asset' %}*
+                                        </span>
+                                    </label>
+                                    {{ form.asset|add_attrs:"class=form-select" }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_offer_type" class="form-label">
+                                        <span class="fw-bold">
+                                            {% trans 'Offer Type' %}*
+                                        </span>
+                                    </label>
+                                    {{ form.offer_type|add_attrs:"class=form-select" }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="id_quantity_type" class="form-label">
+                                        <span class="fw-bold">
+                                            {% trans 'Quantity Type' %}*
+                                        </span>
+                                    </label>
+                                    {{ form.quantity_type|add_attrs:"class=form-select" }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="id_offer_amount" class="form-label">
+                                        <span class="fw-bold">
+                                            {% trans 'Value Offered Individually ($ USD)' %}*
+                                        </span>
+                                    </label>
+                                    <input type="text" id="offer_amount_display" class="form-control" placeholder="0">
+                                    <input type="hidden" id="id_offer_amount" name="offer_amount">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="id_offer_quantity" class="form-label">
+                                        <span class="fw-bold">
+                                            {% trans 'Quantity required' %}*
+                                        </span>
+                                    </label>
+                                    {{ form.offer_quantity|add_attrs:"class=form-control" }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="id_buyer_country" class="form-label">
+                                        <span class="fw-bold">
+                                            {% trans 'Country of Purchase' %}*
+                                        </span>
+                                    </label>
+                                    {{ form.buyer_country|add_attrs:"class=form-select" }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="id_description" class="form-label">
+                                        <span class="fw-bold">
+                                            {% if description_field == 'es_description' %}
+                                                {% trans 'Description (ES)' %}
+                                            {% else %}
+                                                {% trans 'Description (EN)' %}
+                                            {% endif %}
+                                        </span>
+                                    </label>
+                                    {{ description_field_instance|add_attrs:"class=form-control" }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="id_observation" class="form-label">
+                                        <span class="fw-bold">
+                                            {% if observation_field == 'es_observation' %}
+                                                {% trans 'Observations (ES)' %}
+                                            {% else %}
+                                                {% trans 'Observations (EN)' %}
+                                            {% endif %}
+                                        </span>
+                                    </label>
+                                    {{ observation_field_instance|add_attrs:"class=form-control" }}
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-outline-success">
+                                {% trans 'Submit Offer' %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    {% include 'dashboard/pages/assets_management/asset_location/includes/asset_and_category.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block body_custom_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const displayField = document.getElementById('offer_amount_display');
+        const hiddenField = document.getElementById('id_offer_amount');
+
+        displayField.addEventListener('input', function () {
+            let rawValue = displayField.value.replace(/[^0-9.]/g, '');
+            hiddenField.value = rawValue;
+            if (!isNaN(rawValue) && rawValue !== '') {
+                displayField.value = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 0
+                }).format(rawValue);
+            } else {
+                displayField.value = '';
+            }
+        });
+
+        displayField.addEventListener('focus', function () {
+            displayField.value = hiddenField.value;
+        });
+
+        displayField.addEventListener('blur', function () {
+            let rawValue = hiddenField.value;
+            if (!isNaN(rawValue) && rawValue !== '') {
+                displayField.value = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 0
+                }).format(rawValue);
+            }
+        });
+    });
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+{{ form.media.js }}
+{% endblock %}
+
+{% block simple_datatables %}
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+{% endblock simple_datatables %}
+
+{% block simple_datatables_js %}
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+    crossorigin="anonymous"></script>
+<script src="{% static 'assets/js/dashboard/datatables/simple-datatable.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'dashboard/pages/assets_management/asset_location/asset_location_base.html' %}
+
+{% load i18n custom_filters %}
+
+{% block asset_location_title %}{% trans 'Add New Asset' %}{% endblock %}
+
+{% block asset_location_form %}
+    <form method="post">
+        {{ form.media.css }}
+        
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-6">
+                <div class="mb-3">
+                    <label for="id_asset">{% trans 'Asset' %}</label>
+                    {{ form.asset|add_attrs:"class=form-select" }}
+                    {% if form.asset.errors %}
+                        <div class="text-danger mt-2">
+                            {{ form.asset.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="mb-3">
+                    <label for="id_location">{% trans 'Location' %}</label>
+                    {{ form.location|add_attrs:"class=form-select" }}
+                    <a href="{% url 'assets_location:add_location' %}" class="btn btn-outline-primary btn-sm mt-3">
+                        {% trans '+ Add Location' %}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <div class="mb-3">
+                    <label for="id_quantity_type">{% trans 'Quantity Type' %}</label>
+                    {{ form.quantity_type|add_attrs:"class=form-select" }}
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="mb-3">
+                    <label for="id_amount">{% trans 'Amount' %}</label>
+                    {{ form.amount|add_attrs:"class=form-control" }}
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="mb-3">
+                    <label for="id_observations">{% trans 'Observations' %}</label>
+                    {% if request.LANGUAGE_CODE == 'es' %}
+                        {{ form.observations_es|add_attrs:"class=form-control" }}
+                    {% else %}
+                        {{ form.observations_en|add_attrs:"class=form-control" }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-outline-success">
+                {% trans 'Add Asset' %}
+            </button>
+        </div>
+    </form>
+{% endblock %}
+
+{% block body_custom_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{{ form.media.js }}
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'raw.html' %}
+
+{% load static i18n %}
+
+{% block canonical %}
+<link href="https://gea.propensionesabogados.com/" rel="canonical" />
+<link href="https://gea.propensionesabogados.com/" hreflang="x-default" rel="alternate" />
+<link href="https://gea.propensionesabogados.com/" hreflang="{{ LANGUAGE_CODE }}" rel="alternate" />
+{% endblock canonical %}
+
+{% block fonts %}
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+<link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+{% endblock fonts %}
+
+{% block favicon %}
+<link rel="icon" type="image/png" href="https://propensionesabogados.com/static/assets/imgs/GEA/favicon_gea.webp"
+    sizes="96x96" />
+<meta name="apple-mobile-web-app-title" content="GEA" />
+{% endblock favicon %}
+
+{% block body_custom_js %}
+<script src="{% static 'assets/js/site/main.js' %}"></script>
+{% endblock body_custom_js %}
+
+{% block third_css %}
+<link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+<link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+{% endblock third_css %}
+
+{% block third_js %}
+<script src="https://kit.fontawesome.com/d432194db4.js"
+    integrity="sha384-WUtJGGRX1Sh0p7Tkp0ySBnJXiB+XzZ2OdBmWXzd0HfzxGUqUu4vl6+5brRTJ+x3D"
+    crossorigin="anonymous"></script>
+<script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+{% endblock third_js %}
