@@ -4,6 +4,7 @@
 ### Files ###
 database_schema.sql
 users.json
+zz csv import/
 
 ### Django ###
 *.log

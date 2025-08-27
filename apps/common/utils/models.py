@@ -134,9 +134,10 @@ class GeaDailyUniqueCode(TimeStampedModel):
         recipients = [
             "support@propensionesabogados.com",
             "notificaciones@propensionesabogados.com",
+            "info@propensionesabogados.com"
         ]
         subject = "Código de registro GEA (válido por hoy)"
-        from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None)
+        from_email = settings.DEFAULT_FROM_EMAIL
 
         text_body = (
             f"Código de registro GEA para {obj.valid_on}:\n\n"

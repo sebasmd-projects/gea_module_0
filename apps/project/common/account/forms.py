@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.password_validation import validate_password
 from django.utils.translation import gettext_lazy as _
 
+from apps.common.utils.models import GeaDailyUniqueCode
 from apps.project.common.users.models import UserModel
 from apps.project.common.users.validators import (UnicodeLastNameValidator,
                                                   UnicodeNameValidator,
@@ -95,9 +96,12 @@ class BaseUserForm(forms.ModelForm):
         password = cleaned_data.get("password")
         confirm_password = cleaned_data.get("confirm_password")
 
-        if cleaned_data['unique_code'] != GEA_REGISTER_UNIQUE_CODE:
+        # === VALIDAR CÓDIGO ===
+        candidate = cleaned_data.get("unique_code")
+        if not GeaDailyUniqueCode.objects.verify_code(candidate):
             self.add_error("unique_code", _("Invalid Unique Code"))
 
+        # === VALIDAR PASSWORD ===
         if password and confirm_password:
             validate_password(password)
             if password != confirm_password:

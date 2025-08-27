@@ -5,7 +5,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportActionModelAdmin
 
-from .models import IPBlockedModel, WhiteListedIPModel
+from .models import GeaDailyUniqueCode, IPBlockedModel, WhiteListedIPModel
 
 
 class GeneralAdminModel(ImportExportActionModelAdmin, admin.ModelAdmin):
@@ -33,6 +33,15 @@ class GeneralAdminModel(ImportExportActionModelAdmin, admin.ModelAdmin):
             except ValueError:
                 messages.error(request, _("Please enter a valid number."))
         return super().changelist_view(request, extra_context=extra_context)
+
+
+@admin.register(GeaDailyUniqueCode)
+class GeaDailyUniqueCodeAdmin(admin.ModelAdmin):
+    list_display = ("valid_on", "code", "is_active", "sent_at")
+    search_fields = ("code",)
+    list_filter = ("is_active", "valid_on")
+    readonly_fields = ("sent_at", "sent_to",
+                       "last_email_message_id", "created", "updated")
 
 
 @admin.register(IPBlockedModel)
