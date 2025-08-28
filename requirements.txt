@@ -15,11 +15,11 @@ diff-match-patch==20230430
 django-admin-sortable2==2.2.1
 django-auditlog==3.0.0
 django-axes==7.0.0
-django-crontab==0.7.1
 django-ckeditor-5==0.2.13
 django-cleanup==8.1.0
 django-cors-headers==4.3.1
 django-countries==7.6.1
+django-crontab==0.7.1
 django-debug-toolbar==4.4.2
 django-encrypted-model-fields==0.6.5
 django-environ==0.11.2
@@ -55,6 +55,7 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 pytz==2024.1
 qrcode==7.4.2
+reportlab==4.0.9
 requests==2.32.3
 rosetta==0.3
 setuptools==75.6.0
