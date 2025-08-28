@@ -57,11 +57,9 @@ THIRD_PARTY_APPS = [
     'django_otp',
     'django_otp.plugins.otp_static',
     'django_otp.plugins.otp_totp',
-    'django_recaptcha',
     'drf_yasg',
     'django_ckeditor_5',
     'encrypted_model_fields',
-    'honeypot',
     'import_export',
     'parler',
     'rest_framework',
@@ -92,6 +90,7 @@ PROJECT_ASSETS_MANAGEMENT_APPS = [
 ]
 
 PROJECT_INTERNAL_APPS = [
+
 ]
 
 PROJECT_DOCUMENTS_APPS = [
@@ -284,14 +283,6 @@ EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_HOST_PASSWORD')
 EMAIL_HOST_USER = os.getenv('DJANGO_EMAIL_HOST_USER')
 EMAIL_PORT = int(os.getenv('DJANGO_EMAIL_PORT'))
 
-# reCaptchav3
-RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY')
-RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY')
-
-HONEYPOT_FIELD_NAME = os.getenv('HONEYPOT_FIELD_NAME')
-
-IP_BLOCKED_TIME_IN_MINUTES = int(os.getenv('IP_BLOCKED_TIME_IN_MINUTES'))
-
 CORS_ALLOWED_ORIGINS = list(os.getenv('CORS_ALLOWED_ORIGINS').split(','))
 
 YASG_DEFAULT_EMAIL = os.getenv('YASG_DEFAULT_EMAIL')
@@ -299,62 +290,7 @@ YASG_TERMS_OF_SERVICE = os.getenv('YASG_TERMS_OF_SERVICE')
 
 FIELD_ENCRYPTION_KEY = os.getenv('FIELD_ENCRYPTION_KEY')
 
-customColorPalette = [
-    {
-        'color': 'hsl(4, 90%, 58%)',
-        'label': 'Red'
-    },
-    {
-        'color': 'hsl(340, 82%, 52%)',
-        'label': 'Pink'
-    },
-    {
-        'color': 'hsl(291, 64%, 42%)',
-        'label': 'Purple'
-    },
-    {
-        'color': 'hsl(262, 52%, 47%)',
-        'label': 'Deep Purple'
-    },
-    {
-        'color': 'hsl(231, 48%, 48%)',
-        'label': 'Indigo'
-    },
-    {
-        'color': 'hsl(207, 90%, 54%)',
-        'label': 'Blue'
-    },
-]
-
-CKEDITOR_5_CONFIGS = {
-    'default': {
-        'toolbar': [
-            'heading', '|',
-            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'removeFormat', '|',
-            'bold', 'italic', 'underline', 'strikethrough', 'code', 'link', 'subscript', 'superscript', '|',
-            'bulletedList', 'numberedList', 'todoList', '|',
-            'insertImage', 'mediaEmbed', '|',
-            'outdent', 'indent', '|',
-            'blockQuote', 'insertTable', '|',
-            'sourceEditing',
-        ],
-    },
-    'list': {
-        'properties': {
-            'styles': 'true',
-            'startIndex': 'true',
-            'reversed': 'true',
-        }
-    }
-}
-
-CKEDITOR_5_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
-
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 15000
-
-COMMON_ATTACK_TERMS = [
-    term.strip() for term in os.getenv('COMMON_ATTACK_TERMS').split(',')
-]
 
 # Cron jobs
 CRONJOBS = [
