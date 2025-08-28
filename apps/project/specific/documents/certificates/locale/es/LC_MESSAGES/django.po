@@ -1,17 +1,18 @@
-# Gestión de certificados: administración, modelos y vistas de documentos de certificados.
-# Copyright (C) 2024 GEA
-# This file is distributed under the same license as the GEA package.
-# Sebastián Morales <sebastian.morales@propensionesabogados.com>, 2024.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: GEA 1.0\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-10 20:12-0500\n"
-"PO-Revision-Date: 2025-01-10 12:22-0500\n"
+"POT-Creation-Date: 2025-08-27 11:49-0500\n"
+"PO-Revision-Date: 2025-08-27 12:48-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
-"Language-Team: Spanish <es@li.org>\n"
-"Language: es\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,20 +22,20 @@ msgstr ""
 #: .\apps\project\specific\documents\certificates\admin.py:17
 #, python-brace-format
 msgid "Updated {num_actualizados} certificates to IDONEITY."
-msgstr "Se actualizaron {num_actualizados} certificados a IDONEIDAD."
+msgstr "Se actualizaron {num_actualizados} certificados a IDONEITY."
 
 #: .\apps\project\specific\documents\certificates\admin.py:22
 msgid "Certificate type IDONEITY not found."
-msgstr "Tipo de Certificado IDONEIDAD no encontrado."
+msgstr "No se encontró el tipo de certificado IDONEITY."
 
 #: .\apps\project\specific\documents\certificates\admin.py:25
 msgid "Assign certificate type to 'IDONEITY'"
-msgstr "Tipo de Certificado a IDONEIDAD."
+msgstr "Asignar tipo de certificado a 'IDONEITY'"
 
 #: .\apps\project\specific\documents\certificates\admin.py:39
 #: .\apps\project\specific\documents\certificates\models.py:30
 msgid "Certificate Type"
-msgstr "Tipo de Certificado"
+msgstr "Tipo de certificado"
 
 #: .\apps\project\specific\documents\certificates\admin.py:42
 #: .\apps\project\specific\documents\certificates\admin.py:100
@@ -44,7 +45,7 @@ msgstr "Fechas"
 #: .\apps\project\specific\documents\certificates\admin.py:46
 #: .\apps\project\specific\documents\certificates\admin.py:104
 msgid "Priority"
-msgstr "Prioridad"
+msgstr "Orden"
 
 #: .\apps\project\specific\documents\certificates\admin.py:88
 #: .\apps\project\specific\documents\certificates\apps.py:8
@@ -60,12 +61,12 @@ msgstr "Certificados"
 #: .\apps\project\specific\documents\certificates\forms.py:12
 #: .\apps\project\specific\documents\certificates\forms.py:25
 msgid "Document Type"
-msgstr "Tipo de Documento"
+msgstr "Tipo de documento"
 
 #: .\apps\project\specific\documents\certificates\forms.py:18
 #: .\apps\project\specific\documents\certificates\forms.py:31
 msgid "Document Number"
-msgstr "Número de Documento"
+msgstr "Número de documento"
 
 #: .\apps\project\specific\documents\certificates\models.py:16
 msgid "Idoneity"
@@ -73,32 +74,32 @@ msgstr "Idoneidad"
 
 #: .\apps\project\specific\documents\certificates\models.py:17
 msgid "Sovereign Purchase"
-msgstr "Compra Soberana"
+msgstr "Compra soberana"
 
 #: .\apps\project\specific\documents\certificates\models.py:20
 msgid "Name"
-msgstr "Nombres"
+msgstr "Nombre"
 
 #: .\apps\project\specific\documents\certificates\models.py:31
 msgid "Certificate Types"
-msgstr "Tipos de Certificados"
+msgstr "Tipos de certificados"
 
 #: .\apps\project\specific\documents\certificates\models.py:37
 #: .\apps\project\specific\documents\certificates\models.py:49
 msgid "Citizen ID (CC)"
-msgstr "Cédula de Ciudadanía (CC)"
+msgstr "Cédula (CC)"
 
 #: .\apps\project\specific\documents\certificates\models.py:38
 msgid "Foreigner ID (CE)"
-msgstr "Cédula de Extranjería (CE)"
+msgstr "Cédula Extranjería (CE)"
 
 #: .\apps\project\specific\documents\certificates\models.py:39
 msgid "Special Residence Permit (PPT)"
-msgstr "Permiso Especial de Permanencia (PPT)"
+msgstr "Permiso Especial (PPT)"
 
 #: .\apps\project\specific\documents\certificates\models.py:40
 msgid "Identity Card (TI)"
-msgstr "Tarjeta de Identidad (TI)"
+msgstr "Identificación (TI)"
 
 #: .\apps\project\specific\documents\certificates\models.py:41
 #: .\apps\project\specific\documents\certificates\models.py:48
@@ -111,15 +112,15 @@ msgstr "Registro Civil (RC)"
 
 #: .\apps\project\specific\documents\certificates\models.py:43
 msgid "Tax Identification Number (NIT)"
-msgstr "Número de Identificación Tributaria (NIT)"
+msgstr "NIT"
 
 #: .\apps\project\specific\documents\certificates\models.py:44
 msgid "Single Tax Registry (RUT)"
-msgstr "Registro Único Tributario (RUT)"
+msgstr "RUT"
 
 #: .\apps\project\specific\documents\certificates\models.py:45
 msgid "Diplomatic ID Card (CD)"
-msgstr "Carné Diplomático (CD)"
+msgstr "Tarjeta Diplomática (CD)"
 
 #: .\apps\project\specific\documents\certificates\models.py:63
 msgid "User"
@@ -131,7 +132,7 @@ msgstr "Nombres"
 
 #: .\apps\project\specific\documents\certificates\models.py:75
 msgid "Last name"
-msgstr "Apellido"
+msgstr "Apellidos"
 
 #: .\apps\project\specific\documents\certificates\models.py:81
 msgid "Document type"
@@ -155,7 +156,7 @@ msgstr "Fecha de aprobación"
 
 #: .\apps\project\specific\documents\certificates\models.py:121
 msgid "Certificate type"
-msgstr "Tipo de Certificado"
+msgstr "Tipo de certificado"
 
 #: .\apps\project\specific\documents\certificates\views.py:101
 #: .\apps\project\specific\documents\certificates\views.py:133

@@ -4,9 +4,11 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.common.utils.models import GeaDailyUniqueCode
 from apps.project.common.users.models import UserModel
-from apps.project.common.users.validators import (UnicodeLastNameValidator,
-                                                  UnicodeNameValidator,
-                                                  UnicodeUsernameValidator)
+from apps.project.common.users.validators import (
+    UnicodeLastNameValidator,
+    UnicodeNameValidator,
+    UnicodeUsernameValidator
+)
 
 USER_TXT = _('User')
 EMAIL_TXT = _('Email')

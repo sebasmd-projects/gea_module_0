@@ -8,91 +8,110 @@
 
 
 {% block layout_main %}
-  {% include 'dashboard/pages/assets_management/assets/holders/partials/header.html' %}
+{% include 'dashboard/pages/assets_management/assets/holders/partials/header.html' %}
 
-  <div class="container-xl px-4 mt-n10">
-    {% include 'dashboard/pages/assets_management/partials/header_cards.html' %}
+<div class="container-xl px-4 mt-n10">
+  {% include 'dashboard/pages/assets_management/partials/header_cards.html' %}
 
-    <div class="row">
-      <div class="col-12">
-        <!-- Tabbed dashboard card -->
-        <div class="card mb-4">
-          <div class="card-header border-bottom">
-            <!-- Dashboard card navigation -->
-            <ul class="nav nav-tabs card-header-tabs" id="dashboardNav" role="tablist">
-              <li class="nav-item me-1">
-                <a class="nav-link active" id="assets-pill" href="#assets" data-bs-toggle="tab" role="tab"
-                  aria-controls="assets" aria-selected="true">
-                  {% trans 'My Historical Assets' %}
-                </a>
-              </li>
-              
+  <div class="row">
+    <div class="col-12">
+      <!-- Tabbed dashboard card -->
+      <div class="card mb-4">
+        <div class="card-header border-bottom">
+          <!-- Dashboard card navigation -->
+          <ul class="nav nav-tabs card-header-tabs" id="dashboardNav" role="tablist">
 
-              <li class="nav-item">
-                <a class="nav-link" id="offers-pill" href="#offers" data-bs-toggle="tab" role="tab" aria-controls="offers"
-                  aria-selected="false">
-                  {% trans 'Assets in Demand (Offers)' %}
-                </a>
-              </li>
-              
-            </ul>
-          </div>
+            <li class="nav-item me-1">
+              <a class="nav-link active" id="assets-pill" href="#assets" data-bs-toggle="tab" role="tab"
+                aria-controls="assets" aria-selected="true">
+                {% trans 'My Historical Assets' %}
+              </a>
+            </li>
 
-          <div class="card-body">
-            <div class="tab-content" id="dashboardNavContent">
-              {% if request.user.is_verified_holder %}
-                <!-- Dashboard Tab Pane 1 -->
-                <div class="tab-pane fade show active" id="assets" role="tabpanel" aria-labelledby="assets-pill">
-                  <div class="mb-4 mb-lg-0">
-                    <table id="assets_table">
-                      <thead>
-                        {% include 'dashboard/pages/assets_management/assets/holders/partials/tables/partials/thead_tfoot.html' %}
-                      </thead>
-                      <tfoot>
-                        {% include 'dashboard/pages/assets_management/assets/holders/partials/tables/partials/thead_tfoot.html' %}
-                      </tfoot>
-                      <tbody id="table-content">
-                        {% include 'dashboard/pages/assets_management/assets/holders/partials/tables/assets_tab_table.html' %}
-                      </tbody>
-                    </table>
-                  </div>
-                  
-                  <div class="mb-4 mb-lg-0">
-                    {% include 'dashboard/pages/assets_management/assets/holders/partials/tables/locations_table.html' %}
-                  </div>
-                </div>
-              {% else %}
-                <!-- Dashboard Tab Pane 0 -->
-                <div class="tab-pane fade show active" id="assets" role="tabpanel" aria-labelledby="assets-pill">
-                  <div class="mb-4 mb-lg-0 ratio ratio-1x1">
-                    <iframe
-                      src="https://docs.google.com/forms/d/e/1FAIpQLSeUk5BF-iB0K7YsxHWb4xMPL1y8AN5a2yCobHxAU9N0sUP84g/viewform?embedded=true" 
-                      width="100%"
-                      frameborder="0"
-                      marginheight="0"
-                      marginwidth="0"
-                      class=""
-                    >
-                      Cargando…
-                    </iframe>
-                  </div>
-                </div>
-              {% endif %}
-              
-              <!-- Dashboard Tab Pane 2 -->
-              <div class="tab-pane fade" id="offers" role="tabpanel" aria-labelledby="offers-pill">
-                <div class="my-3">
-                  {% trans 'Total current offers:' %} {{ total_offers }}
-                </div>
+            {% if request.user.is_verified_holder %}
+            <li class="nav-item">
+              <a class="nav-link" id="offers-pill" href="#offers" data-bs-toggle="tab" role="tab" aria-controls="offers"
+                aria-selected="false">
+                {% trans 'Assets in Demand (Offers)' %}
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
 
-                {% include 'dashboard/pages/assets_management/assets/holders/partials/tables/offers_tab_table.html' %}
+        <div class="card-body">
+          <div class="tab-content" id="dashboardNavContent">
+            {% if request.user.is_verified_holder %}
+            <!-- Dashboard Tab Pane 1 -->
+            <div class="tab-pane fade show active" id="assets" role="tabpanel" aria-labelledby="assets-pill">
+              <div class="mb-4 mb-lg-0">
+                <table id="assets_table">
+                  <thead>
+                    {% include 'dashboard/pages/assets_management/assets/holders/partials/tables/partials/thead_tfoot.html' %}
+                  </thead>
+                  <tfoot>
+                    {% include 'dashboard/pages/assets_management/assets/holders/partials/tables/partials/thead_tfoot.html' %}
+                  </tfoot>
+                  <tbody id="table-content">
+                    {% include 'dashboard/pages/assets_management/assets/holders/partials/tables/assets_tab_table.html' %}
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="mb-4 mb-lg-0">
+                {% include 'dashboard/pages/assets_management/assets/holders/partials/tables/locations_table.html' %}
               </div>
             </div>
+
+            <!-- Dashboard Tab Pane 2 -->
+            <div class="tab-pane fade" id="offers" role="tabpanel" aria-labelledby="offers-pill">
+              <div class="my-3">
+                {% trans 'Total current offers:' %} {{ total_offers }}
+              </div>
+
+              {% include 'dashboard/pages/assets_management/assets/holders/partials/tables/offers_tab_table.html' %}
+            </div>
+            {% else %}
+            <!-- Dashboard Tab Pane 0 -->
+            <div class="tab-pane fade show active" id="assets" role="tabpanel" aria-labelledby="assets-pill">
+
+              <div class="card text-start">
+                <div class="card-body">
+                  <h4 class="card-title">{% trans 'Your account is under verification process.' %}</h4>
+                  <p class="card-text">
+                    {% blocktrans %}
+                    This process can take between 24 to 72 hours (1 to 3 business days), Please be patient while we
+                    verify your account.
+                    {% endblocktrans %}
+                  </p>
+                  <p>
+                    {% blocktrans %}
+                    If you have any questions, please contact our support team.
+                    {% endblocktrans %}
+                  </p>
+                  <p>
+                    <i data-feather="smartphone"></i> <a href="tel:+573183280176" target="_blank">+57 318 328 01 76</a>
+                    <br />
+                    <i data-feather="message-circle"></i> <a href="https://wa.me/573183280176" target="_blank">+57 318
+                      328 01 76</a> <br />
+                    <i data-feather="mail"></i> <a href="mailto:support@propensionesabogados.com"
+                      target="_blank">support@propensionesabogados.com</a> <br />
+                    <i data-feather="mail"></i> <a href="mailto:info@propensionesabogados.com"
+                      target="_blank">info@propensionesabogados.com</a>
+                  </p>
+                </div>
+
+              </div>
+            </div>
+            {% endif %}
+
+
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 {% endblock %}
 
 {% block simple_datatables_js %}
@@ -107,7 +126,6 @@
 
 
 {% block modals %}
-  {% include 'dashboard/pages/assets_management/assets/holders/partials/modals/delete_asset_modal.html' %}
-  {% include 'dashboard/pages/assets_management/assets/holders/partials/modals/delete_location_reference_modal.html' %}
+{% include 'dashboard/pages/assets_management/assets/holders/partials/modals/delete_asset_modal.html' %}
+{% include 'dashboard/pages/assets_management/assets/holders/partials/modals/delete_location_reference_modal.html' %}
 {% endblock modals %}
-

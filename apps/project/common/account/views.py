@@ -9,7 +9,7 @@ from django.views.generic.edit import FormView
 
 from apps.project.common.users.models import UserModel
 
-from .forms import GeaUserRegisterForm, PropensionesUserRegisterForm
+from .forms import GeaUserRegisterForm
 
 
 class UserLogoutView(View):
@@ -54,37 +54,6 @@ class GeaUserRegisterView(FormView):
 
     def form_invalid(self, form):
         return super(GeaUserRegisterView, self).form_invalid(form)
-
-    def get_success_url(self):
-        next_url = self.request.GET.get('next')
-        if next_url:
-            return next_url
-        else:
-            return reverse('two_factor:login')
-
-
-class PropensionesUserRegisterView(FormView):
-    template_name = "dashboard/account/propensiones_register.html"
-    form_class = PropensionesUserRegisterForm
-
-    def dispatch(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            return redirect('core:index')
-        return super().dispatch(request, *args, **kwargs)
-
-    def form_valid(self, form):
-        UserModel.objects.create_user(
-            username=form.cleaned_data['username'],
-            email=form.cleaned_data['email'],
-            first_name=form.cleaned_data['first_name'],
-            last_name=form.cleaned_data['last_name'],
-            password=form.cleaned_data['password'],
-            citizenship_number=form.cleaned_data['citizenship_number']
-        )
-        return super(PropensionesUserRegisterView, self).form_valid(form)
-
-    def form_invalid(self, form):
-        return super(PropensionesUserRegisterView, self).form_invalid(form)
 
     def get_success_url(self):
         next_url = self.request.GET.get('next')

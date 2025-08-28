@@ -9,17 +9,17 @@ class ProofOfLifeModel(TimeStampedModel):
     """
 
     first_name = models.CharField(
-        _("Primer nombre"),
+        _("Names"),
         max_length=50
     )
 
     last_name = models.CharField(
-        _("Primer apellido"),
+        _("Last name"),
         max_length=50
     )
 
     pol_confirmed = models.BooleanField(
-        _("Confirmo la prueba de vida (Proof of life, POL)"),
+        _("I confirm the proof of life (POL)"),
         default=False
     )
 
@@ -30,8 +30,8 @@ class ProofOfLifeModel(TimeStampedModel):
 
     class Meta:
         db_table = "apps_proof_of_life"
-        verbose_name = _("Prueba de vida")
-        verbose_name_plural = _("Pruebas de vida")
+        verbose_name = _("Proof of life")
+        verbose_name_plural = _("Proofs of life")
         ordering = ("-created",)
 
     def __str__(self):

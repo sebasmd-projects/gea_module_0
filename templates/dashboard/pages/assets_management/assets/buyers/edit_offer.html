@@ -14,7 +14,7 @@
         <div class="col-12">
             <div class="card mb-4" id="create_offer">
                 <div class="card-header">
-                    <h2>{% trans 'Edit Offer' %}</h2>
+                    <h2>{% trans 'Edit Purchase order' %}</h2>
                 </div>
                 <div class="card-body">
                     {% if messages %}
@@ -38,7 +38,7 @@
 
                             <div class="col-12">
                                 <div class="mb-3">
-                                    <label for="{{ form.offer_type.id_for_label }}" class="form-label">{% trans "Offer Type:" %}</label>
+                                    <label for="{{ form.offer_type.id_for_label }}" class="form-label">{% trans "Purchase order Type:" %}</label>
                                     {{ form.offer_type|add_class:"form-select" }}
                                 </div>
                             </div>
@@ -102,9 +102,9 @@
 
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-outline-success">
-                                {% trans "Save Offer" %}
+                                {% trans "Save Purchase order" %}
                             </button>
-                            <a href="{% url 'buyers:buyer_index' %}" class="btn btn-warning">{% trans 'Go to my offers' %}</a>
+                            <a href="{% url 'buyers:buyer_index' %}" class="btn btn-warning">{% trans 'Go to my Purchase orders' %}</a>
                         </div>
                     </form>
                 </div>

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-12 17:53-0500\n"
-"PO-Revision-Date: 2025-08-12 17:55-0500\n"
+"POT-Creation-Date: 2025-08-27 12:50-0500\n"
+"PO-Revision-Date: 2025-08-27 12:50-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -21,25 +21,22 @@ msgstr ""
 
 #: .\apps\project\specific\documents\pol\apps.py:7
 #: .\apps\project\specific\documents\pol\apps.py:8
+#: .\apps\project\specific\documents\pol\models.py:33
 msgid "Proof of life"
-msgstr "POL"
+msgstr "Prueba de vida (POL)"
 
 #: .\apps\project\specific\documents\pol\models.py:12
-msgid "Primer nombre"
-msgstr "Primer nombre"
+msgid "Names"
+msgstr "Nombres"
 
 #: .\apps\project\specific\documents\pol\models.py:17
-msgid "Primer apellido"
-msgstr "Primer apellido"
+msgid "Last name"
+msgstr "Apellidos"
 
 #: .\apps\project\specific\documents\pol\models.py:22
-msgid "Confirmo la prueba de vida (Proof of life, POL)"
-msgstr "Confirmo la prueba de vida (Proof of life, POL)"
-
-#: .\apps\project\specific\documents\pol\models.py:33
-msgid "Prueba de vida"
-msgstr "Prueba de vida"
+msgid "I confirm the proof of life (POL)"
+msgstr "Confirmo la prueba de vida (POL)"
 
 #: .\apps\project\specific\documents\pol\models.py:34
-msgid "Pruebas de vida"
+msgid "Proofs of life"
 msgstr "Pruebas de vida"

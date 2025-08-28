@@ -21,7 +21,7 @@ class CertificateTypesModel(TimeStampedModel):
         max_length=100,
         choices=CertificateTypeChoices.choices,
     )
-    
+
     def __str__(self):
         return self.name
 
@@ -43,7 +43,7 @@ class CertificateModel(TimeStampedModel):
         NIT = 'NIT', _('Tax Identification Number (NIT)')
         RUT = 'RUT', _('Single Tax Registry (RUT)')
         CD = 'CD', _('Diplomatic ID Card (CD)')
-        
+
     class DocumentTypeChoicesMin(models.TextChoices):
         PA = 'PA', _('Passport (PA)')
         CC = 'CC', _('Citizen ID (CC)')
@@ -122,7 +122,6 @@ class CertificateModel(TimeStampedModel):
         related_name='certificates_certificate_certificate_type',
         blank=True,
         null=True,
-        default=CertificateTypesModel.CertificateTypeChoices.IDONEITY
     )
 
     def masked_document_number(self):
@@ -148,7 +147,8 @@ class CertificateModel(TimeStampedModel):
         verbose_name = _("Certificate")
         verbose_name_plural = _("Certificates")
         ordering = ["default_order", "-created"]
-        unique_together = ['document_number', 'document_type', 'certificate_type']
+        unique_together = ['document_number',
+                           'document_type', 'certificate_type']
         permissions = [
             ('view_certificate', 'Can view certificate list'),
         ]

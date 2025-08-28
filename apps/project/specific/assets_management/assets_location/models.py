@@ -165,6 +165,8 @@ class AssetLocationModel(TimeStampedModel):
         on_delete=models.CASCADE,
         related_name="assetlocation_assetlocation_location",
         verbose_name=_("location"),
+        blank=True,
+        null=True
     )
 
     quantity_type = models.CharField(
@@ -191,11 +193,12 @@ class AssetLocationModel(TimeStampedModel):
     )
 
     def __str__(self) -> str:
+        location_ref = self.location.reference if self.location else _("No Location")
         return "{} - {} - {} - {} - {}".format(
             self.asset.asset_name.en_name,
             self.get_quantity_type_display(),
             self.amount,
-            self.location.reference,
+            location_ref,
             self.created_by,
         )
 

@@ -68,8 +68,7 @@ class AssetLocationModelForm(forms.ModelForm):
         amount = cleaned_data.get('amount')
         created_by = self.initial.get('user')
 
-        # Verificar duplicados
-        if AssetLocationModel.objects.filter(
+        if asset and location and AssetLocationModel.objects.filter(
             asset=asset,
             location=location,
             quantity_type=quantity_type,

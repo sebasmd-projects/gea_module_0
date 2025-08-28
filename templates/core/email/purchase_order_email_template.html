@@ -1,0 +1,134 @@
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans "New Purchase Order" %} | GEA | GLOBAL ALLIANCE</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333333;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background-color: #007bff36;
+            padding: 10px 20px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .header img {
+            width: auto;
+            height: 80px;
+        }
+
+        .header h1 {
+            margin: 10px 0 0 0;
+            font-size: 24px;
+        }
+
+        .body {
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .body p {
+            margin: 8px 0;
+        }
+
+        .section-title {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #007bff;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+            color: #999999;
+            background-color: #f4f4f4;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #000;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <img src="https://propensionesabogados.com/static/assets/imgs/GEA/gea%20logo.webp" alt="GEA Logo">
+            <h1>{% trans "Purchase Order Submitted" %}</h1>
+        </div>
+
+        <!-- Body -->
+        <div class="body">
+            <!-- English Version -->
+            <h2 class="section-title">Language: English</h2>
+            <p><strong>Asset:</strong> {{ asset }}</p>
+            <p><strong>Purchase order Type:</strong> {{ offer_type }}</p>
+            <p><strong>Quantity Type:</strong> {{ quantity_type }}</p>
+            <p><strong>Amount:</strong> $ {{ offer_amount }}</p>
+            <p><strong>Total Amount:</strong> $ {{ total_amount }}</p>
+            <p><strong>Quantity:</strong> {{ offer_quantity }}</p>
+            <p><strong>Country:</strong> {{ buyer_country }}</p>
+            <p><strong>Observations:</strong> {{ en_observation }}</p>
+            <p><strong>Description:</strong> {{ en_description }}</p>
+
+            <!-- Spanish Version -->
+            <h2 class="section-title">Idioma: Español</h2>
+            <p><strong>Activo:</strong> {{ asset }}</p>
+            <p><strong>Tipo de Orden de Compra:</strong> {{ offer_type }}</p>
+            <p><strong>Tipo de Cantidad:</strong> {{ quantity_type }}</p>
+            <p><strong>Monto:</strong> $ {{ offer_amount }}</p>
+            <p><strong>Monto Total:</strong> $ {{ total_amount }}</p>
+            <p><strong>Cantidad:</strong> {{ offer_quantity }}</p>
+            <p><strong>País:</strong> {{ buyer_country }}</p>
+            <p><strong>Observaciones:</strong> {{ es_observation }}</p>
+            <p><strong>Descripción:</strong> {{ es_description }}</p>
+
+            <hr />
+
+            <p>{{ user_name }} | {{ user_email }}</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>
+                {% trans "This email was sent from" %}
+                <a href="https://propensionesabogados.com">propensionesabogados.com</a>.
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

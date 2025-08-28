@@ -1,17 +1,18 @@
-# Formularios de contacto y modelo de contactos.
-# Copyright (C) 2024 GEA
-# This file is distributed under the same license as the GEA package.
-# Sebastián Morales <sebastian.morales@propensionesabogados.com>, 2024.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: GEA 1.0\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-10 12:20-0500\n"
-"PO-Revision-Date: 2025-01-10 12:23-0500\n"
+"POT-Creation-Date: 2025-08-27 11:49-0500\n"
+"PO-Revision-Date: 2025-08-27 11:53-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
-"Language-Team: Spanish <es@li.org>\n"
-"Language: es\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,11 +21,11 @@ msgstr ""
 
 #: .\apps\common\core\forms.py:13
 msgid "First name"
-msgstr "Nombre"
+msgstr "Nombres"
 
 #: .\apps\common\core\forms.py:14
 msgid "Last name"
-msgstr "Apellido"
+msgstr "Apellidos"
 
 #: .\apps\common\core\forms.py:15
 msgid "Your Email"
@@ -40,35 +41,35 @@ msgstr "Mensaje"
 
 #: .\apps\common\core\models.py:16
 msgid "name"
-msgstr "nombre"
+msgstr "Nombres"
 
 #: .\apps\common\core\models.py:21
 msgid "last name"
-msgstr "apellido"
+msgstr "Apellidos"
 
 #: .\apps\common\core\models.py:26
 msgid "email"
-msgstr "correo"
+msgstr "Correo"
 
 #: .\apps\common\core\models.py:31
 msgid "subject"
-msgstr "asunto"
+msgstr "Asunto"
 
 #: .\apps\common\core\models.py:36
 msgid "message"
-msgstr "mensaje"
+msgstr "Mensaje"
 
 #: .\apps\common\core\models.py:41
 msgid "Contact"
-msgstr "Contáctanos"
+msgstr "Contacto"
 
 #: .\apps\common\core\models.py:42
 msgid "Contacts"
-msgstr "Contáctanos"
+msgstr "Contactos"
 
 #: .\apps\common\core\models.py:49
 msgid "title"
-msgstr "Título (ES)"
+msgstr "Título"
 
 #: .\apps\common\core\models.py:54
 msgid "title (English)"
@@ -76,31 +77,31 @@ msgstr "Título (EN)"
 
 #: .\apps\common\core\models.py:61
 msgid "description"
-msgstr "descripción"
+msgstr "Descripción"
 
 #: .\apps\common\core\models.py:66
 msgid "image file"
-msgstr "archivo de img"
+msgstr "archivo de imagen"
 
 #: .\apps\common\core\models.py:71
 msgid "image file (English)"
-msgstr "archivo de img (EN)"
+msgstr "archivo de imagen (EN)"
 
 #: .\apps\common\core\models.py:78
 msgid "link"
-msgstr "enlace (ES)"
+msgstr "enlace"
 
 #: .\apps\common\core\models.py:85
 msgid "link (English)"
-msgstr "enlace (EN)"
+msgstr "link (EN)"
 
 #: .\apps\common\core\models.py:102
 msgid "Modal Banner"
-msgstr "Rompe trafico"
+msgstr "Banner"
 
 #: .\apps\common\core\models.py:103
 msgid "Modal Banners"
-msgstr "Rompe tráficos"
+msgstr "Banners"
 
 #: .\apps\common\core\views.py:30
 msgid "This form has already been sent."

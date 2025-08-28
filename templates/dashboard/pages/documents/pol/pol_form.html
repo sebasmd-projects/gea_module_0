@@ -2,7 +2,7 @@
 {% load static i18n %}
 
 {% block title %}
-{% trans "Prueba de vida" %}
+POL
 {% endblock title %}
 
 {% block meta %}
@@ -35,7 +35,7 @@
         class="img-fluid w-100 mb-4 rounded">
 
     <div class="container">
-        <h1 class="my-4 text-center">{% trans "Prueba de vida" %}</h1>
+        <h1 class="my-4 text-center">{% trans "POL" %}</h1>
 
         <form method="post" novalidate>
             {% csrf_token %}
@@ -78,7 +78,7 @@
 
             <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-primary">
-                    {% trans "Enviar" %} <i class="bi bi-check2-circle"></i>
+                    {% trans "Send" %} <i class="bi bi-check2-circle"></i>
                 </button>
             </div>
         </form>

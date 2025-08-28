@@ -11,7 +11,7 @@ from encrypted_model_fields.fields import (EncryptedCharField,
                                            EncryptedDateField,
                                            EncryptedEmailField)
 
-from apps.common.core.functions import generate_md5_or_sha256_hash
+from apps.common.utils.functions import generate_md5_or_sha256_hash
 from apps.common.utils.models import TimeStampedModel
 
 

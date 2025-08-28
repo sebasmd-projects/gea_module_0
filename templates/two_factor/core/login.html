@@ -6,165 +6,165 @@
 {{ form.media }}
 {% endblock %}
 
-{% block body_properties %}class="bg-primary"{% endblock body_properties %}
+{% block body_properties %}style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b
+100%);"{% endblock body_properties %}
 
 {% block layout_content %}
-  <div class="min-vh-100 d-flex align-items-center justify-content-center container-xl px-5">
-    <div class="card">
-      
-      <div class="card-header text-center">
-        <a href="{% url 'core:index' %}">
-          <img
-            src="https://propensionesabogados.com/static/assets/imgs/GEA/gea%20logo.webp"
-            class="card-img-top img-fluid"
-            alt="..."
-            style="max-width: 200px"
-          />
-        </a>
-        {% if wizard.steps.current == 'auth' %}
-        <p>
-          {% blocktrans %}Enter your credentials.{% endblocktrans %}
-        </p>
-        {% elif wizard.steps.current == 'token' %}
-        <p>
-          {{ device|as_verbose_action }}
-        </p>
-        {% elif wizard.steps.current == 'backup' %}
-        <p>
-          {% blocktrans trimmed %}Use this form for entering backup tokens for logging in.
-          These tokens have been generated for you to print and keep safe. Please
-          enter one of these backup tokens to login to your account.{% endblocktrans %}
-        </p>
-        {% endif %}
-      </div>
-      <div class="card-body p-5">
-        <form action="" method="post">
+<div class="min-vh-100 d-flex align-items-center justify-content-center container-xl px-5">
+  <div class="card mx-auto" style="max-width: 400px; width: 100%;">
 
-          {% csrf_token %}
+    <div class="card-header text-center">
+      <a href="{% url 'core:index' %}">
+        <img src="https://propensionesabogados.com/static/assets/imgs/GEA/gea%20logo%20gold.webp"
+          class="card-img-top img-fluid" alt="..." style="max-width: fit-content;" />
+      </a>
+      {% if wizard.steps.current == 'auth' %}
+      <p>
+        {% blocktrans %}Enter your credentials.{% endblocktrans %}
+      </p>
+      {% elif wizard.steps.current == 'token' %}
+      <p>
+        {{ device|as_verbose_action }}
+      </p>
+      {% elif wizard.steps.current == 'backup' %}
+      <p>
+        {% blocktrans trimmed %}Use this form for entering backup tokens for logging in.
+        These tokens have been generated for you to print and keep safe. Please
+        enter one of these backup tokens to login to your account.{% endblocktrans %}
+      </p>
+      {% endif %}
+    </div>
 
-          {{ wizard.management_form }}
+    <div class="card-body p-5">
+      <form action="" method="post">
 
-          {% if form.non_field_errors %}
-          <div class="alert alert-danger" role="alert">
-            <ul>
-              {% for error in form.non_field_errors %}
-              <li>{{ error }}</li>
-              {% endfor %}
-            </ul>
-          </div>
-          {% endif %}
-          
-          {% if wizard.steps.current == 'auth' %}
-              <!-- Form Group (username)-->
-              {% trans 'Username or Email' as username_or_email %}
-              <div class="input-group mb-3">
-                <input id="id_auth-username" type="text" class="form-control" placeholder="{{ username_or_email }}" aria-label="Username"
-                  required name="auth-username" />
-                <button class="btn btn-outline-secondary" disabled type="button" id="id_auth-username_icon">
-                  <i class="bi bi-person" id="id_auth-username_icon"></i>
-                </button>
-              </div>
-                
-              {% if form.username.errors %}
-              <div class="text-danger small">
-                {% for error in form.username.errors %}
-                {{ error }}
-                {% endfor %}
-              </div>
-              {% endif %}
+        {% csrf_token %}
 
-              <!-- Form Group (password)-->
-              <div class="input-group mb-3">
-                {% trans 'Password' as pass %}
-                <input id="id_auth-password" type="password" class="form-control" placeholder="{{ pass }}" aria-label="Password"
-                  name="auth-password" required />
-                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                  <i class="bi bi-eye-slash" id="togglePasswordIcon"></i>
-                </button>
-              </div>
+        {{ wizard.management_form }}
 
-              {% if form.password.errors %}
-              <div class="text-danger small">
-                {% for error in form.password.errors %}
-                {{ error }}
-                {% endfor %}
-              </div>
-              {% endif %}
-
-              <!-- Form Group (forgot password link)-->
-              <div class="mb-3">
-                <a class="small" href="https://wa.me/573183280176?text=contraseña%20olvidada!" target="_blank" rel="noopener noreferrer">
-                  {% trans 'Forgot your password?' %}
-                </a>
-              </div>
-          {% elif wizard.steps.current == 'token' %}
-            {% include "two_factor/_wizard_forms.html" %}
-
-          {% elif wizard.steps.current == 'backup' %}
-            {% include "two_factor/_wizard_forms.html" %}
-
-          {% endif %}
-
-
-          <input type="submit" value="" hidden />
-
-          {% if other_devices %}
-          <p class="text-center">
-            {% trans "Or, alternatively, use one of your other authentication methods:" %}
-          </p>
-          <div class="d-grid gap-2">
-            {% for other in other_devices %}
-            <button name="challenge_device" value="{{ other.persistent_id }}" class="btn btn-secondary" type="submit">
-              {{ other|as_action }}
-            </button>
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+          <ul>
+            {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
             {% endfor %}
-          </div>
-          {% endif %}
+          </ul>
+        </div>
+        {% endif %}
 
-          {% include "two_factor/_wizard_actions.html" %}
-        </form>
+        {% if wizard.steps.current == 'auth' %}
+        <!-- Form Group (username)-->
+        {% trans 'Username or Email' as username_or_email %}
+        <div class="input-group mb-3">
+          <input id="id_auth-username" type="text" class="form-control" placeholder="{{ username_or_email }}"
+            aria-label="Username" required name="auth-username" />
+          <button class="btn btn-outline-secondary" disabled type="button" id="id_auth-username_icon">
+            <i class="bi bi-person" id="id_auth-username_icon"></i>
+          </button>
+        </div>
 
-        {% block 'backup_tokens' %}
-          {% if backup_tokens %}
-            <hr>
-            <div class="backup_tokens_form">
-            <form action="" method="post">
-                {% csrf_token %}
-                  <p>{% trans "As a last resort, you can use a backup token:" %}</p>
-                  <p>
-                      <button name="wizard_goto_step" type="submit" value="backup"
-                          class="btn btn-sm btn-secondary btn-block">{% trans "Use Backup Token" %}</button>
-                  </p>
-            </form>
-            </div>
-          {% endif %}
-        {% endblock %}
+        {% if form.username.errors %}
+        <div class="text-danger small">
+          {% for error in form.username.errors %}
+          {{ error }}
+          {% endfor %}
+        </div>
+        {% endif %}
 
-      </div>
-      <div class="card-footer px-5 py-4">
-        <div class="small text-center">
-          {% trans "New user?" %}
-          <a href="{% url 'account:register' %}">
-            {% trans "Create an account!" %}
+        <!-- Form Group (password)-->
+        <div class="input-group mb-3">
+          {% trans 'Password' as pass %}
+          <input id="id_auth-password" type="password" class="form-control" placeholder="{{ pass }}"
+            aria-label="Password" name="auth-password" required />
+          <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+            <i class="bi bi-eye-slash" id="togglePasswordIcon"></i>
+          </button>
+        </div>
+
+        {% if form.password.errors %}
+        <div class="text-danger small">
+          {% for error in form.password.errors %}
+          {{ error }}
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Form Group (forgot password link)-->
+        <div class="mb-3">
+          <a class="small" href="https://wa.me/573183280176?text=contraseña%20olvidada!" target="_blank"
+            rel="noopener noreferrer">
+            {% trans 'Forgot your password?' %}
           </a>
         </div>
+        {% elif wizard.steps.current == 'token' %}
+        {% include "two_factor/_wizard_forms.html" %}
+
+        {% elif wizard.steps.current == 'backup' %}
+        {% include "two_factor/_wizard_forms.html" %}
+
+        {% endif %}
+
+
+        <input type="submit" value="" hidden />
+
+        {% if other_devices %}
+        <p class="text-center">
+          {% trans "Or, alternatively, use one of your other authentication methods:" %}
+        </p>
+        <div class="d-grid gap-2">
+          {% for other in other_devices %}
+          <button name="challenge_device" value="{{ other.persistent_id }}" class="btn btn-secondary" type="submit">
+            {{ other|as_action }}
+          </button>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% include "two_factor/_wizard_actions.html" %}
+      </form>
+
+      {% block 'backup_tokens' %}
+      {% if backup_tokens %}
+      <hr>
+      <div class="backup_tokens_form">
+        <form action="" method="post">
+          {% csrf_token %}
+          <p>{% trans "As a last resort, you can use a backup token:" %}</p>
+          <p>
+            <button name="wizard_goto_step" type="submit" value="backup" class="btn btn-sm btn-secondary btn-block">{%
+              trans "Use Backup Token" %}</button>
+          </p>
+        </form>
+      </div>
+      {% endif %}
+      {% endblock %}
+
+    </div>
+
+    <div class="card-footer px-5 py-4">
+      <div class="small text-center">
+        {% trans "New user?" %}
+        <a href="{% url 'account:register' %}">
+          {% trans "Create an account!" %}
+        </a>
       </div>
     </div>
   </div>
+</div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const passwordInput = document.getElementById('id_auth-password');
-      const togglePassword = document.getElementById('togglePassword');
-      const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const passwordInput = document.getElementById('id_auth-password');
+    const togglePassword = document.getElementById('togglePassword');
+    const togglePasswordIcon = document.getElementById('togglePasswordIcon');
 
-      togglePassword.addEventListener('click', () => {
-        const isPassword = passwordInput.type === 'password';
-        passwordInput.type = isPassword ? 'text' : 'password';
+    togglePassword.addEventListener('click', () => {
+      const isPassword = passwordInput.type === 'password';
+      passwordInput.type = isPassword ? 'text' : 'password';
 
-        togglePasswordIcon.classList.toggle('bi-eye-slash');
-        togglePasswordIcon.classList.toggle('bi-eye');
-      });
+      togglePasswordIcon.classList.toggle('bi-eye-slash');
+      togglePasswordIcon.classList.toggle('bi-eye');
     });
-  </script>
+  });
+</script>
 {% endblock %}

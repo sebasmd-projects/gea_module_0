@@ -3,16 +3,18 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import EmailMessage
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils.html import escape
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, DetailView, View, UpdateView
+from django.views.generic import CreateView, DetailView, UpdateView, View
 
 from apps.project.common.users.models import UserModel
 from apps.project.specific.assets_management.assets.models import AssetModel
 
 from .form import OfferForm, OfferUpdateForm
+from .functions import generar_orden_compra_pdf
 from .models import OfferModel
 
 
@@ -57,11 +59,19 @@ class BuyerCreateView(BuyerRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.created_by = self.request.user
 
-        self.send_email_notification(form.cleaned_data)
+        self.object = form.save()
+
+        self.send_email_notification(
+            form.cleaned_data,
+            self.object
+        )
 
         messages.success(
-            self.request, _("Your offer has been sent for verification.")
+            self.request, _(
+                "Your Purchase order has been sent for verification."
+            )
         )
+
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -80,7 +90,7 @@ class BuyerCreateView(BuyerRequiredMixin, CreateView):
         context['offers'] = OfferModel.objects.filter(
             created_by=self.request.user
         )
-        
+
         assets_qs = (
             AssetModel.objects
             .filter(is_active=True)
@@ -94,37 +104,36 @@ class BuyerCreateView(BuyerRequiredMixin, CreateView):
     def get_success_url(self):
         return self.request.path
 
-    def send_email_notification(self, cleaned_data):
+    def send_email_notification(self, cleaned_data, offer_instance):
         """Enviar correo con los datos de la oferta."""
-        subject = _("New Offer Submitted for Verification")
-        recipient_email = "notificaciones@propensionesabogados.com"
+        subject = _("New Purchase order Submitted for Verification")
+        hide_recipient_email = "notificaciones@propensionesabogados.com"
+        recipient_email = self.request.user.email
+        total_amount = offer_instance.offer_amount * offer_instance.offer_quantity
 
         # Escapar datos para evitar inyecciones de scripts
-        safe_data = {key: escape(value) for key, value in cleaned_data.items()}
+        safe_data = {
+            "asset": escape(offer_instance.asset_display_name),
+            "offer_type": escape(offer_instance.get_offer_type_display()),
+            "quantity_type": escape(offer_instance.get_quantity_type_display()),
+            "offer_amount": offer_instance.offer_amount,
+            "offer_quantity": offer_instance.offer_quantity,
+            "total_amount": total_amount,
+            "buyer_country": escape(str(offer_instance.buyer_country)),
+            "en_observation": escape(offer_instance.en_observation or ""),
+            "es_observation": escape(offer_instance.es_observation or ""),
+            "en_description": escape(offer_instance.en_description or ""),
+            "es_description": escape(offer_instance.es_description or ""),
+            "user_name": escape(self.request.user.get_full_name()),
+            "user_email": escape(self.request.user.email),
+            "user_username": escape(self.request.user.username),
+        }
 
         # Generar el cuerpo del correo con HTML
-        html_content = f"""
-        <html>
-        <body>
-            <h2>New Offer Submitted</h2>
-            <p><strong>Asset:</strong> {safe_data.get('asset')}</p>
-            <p><strong>Offer Type:</strong> {safe_data.get('offer_type')}</p>
-            <p><strong>Quantity Type:</strong> {safe_data.get('quantity_type')}</p>
-            <p><strong>Offer Amount:</strong> ${safe_data.get('offer_amount')}</p>
-            <p><strong>Offer Quantity:</strong> {safe_data.get('offer_quantity')}</p>
-            <p><strong>Country of Purchase:</strong> {safe_data.get('buyer_country')}</p>
-            <p><strong>Observations (EN):</strong> {safe_data.get('en_observation')}</p>
-            <p><strong>Observations (ES):</strong> {safe_data.get('es_observation')}</p>
-            <p><strong>Description (EN):</strong> {safe_data.get('en_description')}</p>
-            <p><strong>Description (ES):</strong> {safe_data.get('es_description')}</p>
-            <br>
-            <p>Sent by:</p>
-            <p><strong>Name:</strong> {self.request.user.get_full_name()}</p>
-            <p><strong>Email:</strong> {self.request.user.email}</p>
-            <p><strong>Username:</strong> {self.request.user.username}</p>
-        </body>
-        </html>
-        """
+        html_content = render_to_string(
+            "core/email/purchase_order_email_template.html",
+            safe_data
+        )
 
         # Crear y enviar el correo
         email = EmailMessage(
@@ -132,8 +141,15 @@ class BuyerCreateView(BuyerRequiredMixin, CreateView):
             body=html_content,
             from_email="no-reply@propensionesabogados.com",
             to=[recipient_email],
+            bcc=[hide_recipient_email]
         )
-        email.content_subtype = "html"  # Indicar que el contenido es HTML
+        email.content_subtype = "html"
+        pdf_bytes = generar_orden_compra_pdf(offer_instance, self.request.user)
+        email.attach(
+            f"purchase_order_{offer_instance.id}.pdf",
+            pdf_bytes,
+            "application/pdf"
+        )
         email.send()
 
 
@@ -142,6 +158,7 @@ class OfferUpdateView(BuyerRequiredMixin, UpdateView):
     form_class = OfferUpdateForm
     template_name = 'dashboard/pages/assets_management/assets/buyers/edit_offer.html'
     success_url = reverse_lazy('buyers:buyer_index')
+
 
 class OfferSoftDeleteView(BuyerRequiredMixin, View):
     def post(self, request, *args, **kwargs):

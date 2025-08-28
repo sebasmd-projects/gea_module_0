@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import (GeaUserRegisterView, PropensionesUserRegisterView,
+from .views import (GeaUserRegisterView,
                     UserLogoutView)
 
 app_name = "account"
@@ -11,11 +11,6 @@ urlpatterns = [
         'account/register/',
         GeaUserRegisterView.as_view(),
         name='register'
-    ),
-    path(
-        'account/register/propensiones/',
-        PropensionesUserRegisterView.as_view(),
-        name='register-propensiones'
     ),
     path(
         'account/logout/',

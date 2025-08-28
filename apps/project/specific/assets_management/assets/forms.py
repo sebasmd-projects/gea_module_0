@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _, get_language
 from django_select2 import forms as s2forms
 
-from .models import AssetModel, PreRegistrationAssetModel
+from .models import AssetModel
 
 
 class AssetNameWidget(s2forms.ModelSelect2Widget):
@@ -55,20 +55,4 @@ class AssetModelForm(forms.ModelForm):
         widgets = {
             'asset_name': AssetNameWidget,
             'category': AssetCategoryWidget,
-        }
-
-
-class PreRegistrationAssetForm(forms.ModelForm):
-
-    class Meta:
-        model = PreRegistrationAssetModel
-        fields = [
-            'has_item',
-            'es_observations',
-            'en_observations'
-        ]
-        widgets = {
-            'has_item': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'es_observations': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Observaciones'}),
-            'en_observations': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Observations'}),
         }

@@ -11,7 +11,7 @@ from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 from django_ckeditor_5.fields import CKEditor5Field
 
-from apps.common.core.functions import generate_md5_or_sha256_hash
+from apps.common.utils.functions import generate_md5_or_sha256_hash
 from apps.common.utils.models import TimeStampedModel
 from apps.project.specific.assets_management.assets.models import AssetModel
 from apps.project.specific.assets_management.assets_location.models import \
@@ -81,7 +81,7 @@ class OfferModel(TimeStampedModel):
     )
 
     offer_type = models.CharField(
-        _("Offer Type"),
+        _("Purchase order Type"),
         max_length=255,
         choices=OfferTypeChoices.choices,
         default=OfferTypeChoices.PRIVATE
@@ -197,8 +197,8 @@ class OfferModel(TimeStampedModel):
 
     class Meta:
         db_table = "apps_buyers_offer"
-        verbose_name = _("1. Offer")
-        verbose_name_plural = _("1. Offers")
+        verbose_name = _("1. Purchase order")
+        verbose_name_plural = _("1. Purchase orders")
         ordering = ["default_order", "-created"]
 
 

@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 
-from apps.common.core.functions import generate_md5_or_sha256_hash
+from apps.common.utils.functions import generate_md5_or_sha256_hash
 
 UserModel = get_user_model()
 

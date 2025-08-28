@@ -9,8 +9,8 @@
     <div class="row">
         <div class="col-12">
             <div class="card mb-4" id="my_offers">
-                <div class="card-header">
-                    <h2>{% trans 'My Offers' %}</h2>
+                <div class="card-header" style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
+                    <h2 style="color: black;">{% trans 'Purchase Orders' %}</h2>
                 </div>
                 <div class="card-body">
                     {% include 'dashboard/pages/assets_management/assets/buyers/partials/tables/my_offers_table.html' %}
@@ -18,8 +18,8 @@
             </div>
 
             <div class="card mb-4" id="create_offer">
-                <div class="card-header">
-                    <h2>{% trans 'Create a New Offer' %}</h2>
+                <div class="card-header" style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
+                    <h2 style="color: black;">{% trans 'Create a New Purchase Order' %}</h2>
                 </div>
                 <div class="card-body">
                     {% if messages %}
@@ -137,7 +137,7 @@
 
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-outline-success">
-                                {% trans 'Submit Offer' %}
+                                {% trans 'Submit Purchase Order' %}
                             </button>
                         </div>
                     </form>

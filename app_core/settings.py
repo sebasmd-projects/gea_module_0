@@ -92,7 +92,6 @@ PROJECT_ASSETS_MANAGEMENT_APPS = [
 ]
 
 PROJECT_INTERNAL_APPS = [
-    'apps.project.specific.internal.code_gen',
 ]
 
 PROJECT_DOCUMENTS_APPS = [
@@ -163,7 +162,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'apps.common.utils.middleware.RedirectWWWMiddleware',
     'apps.common.utils.middleware.RedirectAuthenticatedUserMiddleware',
-    'apps.common.utils.middleware.DetectSuspiciousRequestMiddleware',
     'axes.middleware.AxesMiddleware',
 ]
 
