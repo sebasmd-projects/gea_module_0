@@ -1,9 +1,11 @@
 
 from django.contrib import admin
+from django.core.exceptions import ValidationError
+from django.forms.models import BaseInlineFormSet
 from django.utils.translation import gettext_lazy as _
-from import_export import resources, fields
-from import_export.widgets import ForeignKeyWidget
+from import_export import fields, resources
 from import_export.admin import ImportExportModelAdmin
+from import_export.widgets import ForeignKeyWidget
 
 from apps.common.utils.admin import GeneralAdminModel
 
@@ -11,17 +13,21 @@ from ..models import AssetCategoryModel, AssetModel, AssetsNamesModel
 from .filters import (HasImageFilter, QuantityTypeFilter,
                       ZeroTotalQuantityFilter)
 
+
 class AssetCategoryResource(resources.ModelResource):
     class Meta:
         model = AssetCategoryModel
         import_id_fields = ('id',)   # usamos el id del CSV
-        fields = ('id', 'is_active', 'default_order', 'es_name', 'en_name', 'description')
+        fields = ('id', 'is_active', 'default_order',
+                  'es_name', 'en_name', 'description')
+
 
 class AssetsNamesResource(resources.ModelResource):
     class Meta:
         model = AssetsNamesModel
         import_id_fields = ('id',)   # usamos el id del CSV
         fields = ('id', 'is_active', 'default_order', 'es_name', 'en_name')
+
 
 class AssetResource(resources.ModelResource):
     # Para importar por ID directo (como viene en assets.csv) no hace falta widget especial
@@ -46,19 +52,34 @@ class AssetResource(resources.ModelResource):
             'en_observations',
         )
 
+
+class RequiredInlineFormSet(BaseInlineFormSet):
+    def clean(self):
+        super().clean()
+        if not any(
+            form.cleaned_data and not form.cleaned_data.get("DELETE", False)
+            for form in self.forms
+        ):
+            raise ValidationError(_("You must add at least one asset."))
+
+
 class AssetCategoryInline(admin.StackedInline):
     model = AssetModel  # Asume que AssetModel gestiona la relación con categoría
     fk_name = "asset_name"  # Indica el campo de ForeignKey que conecta con AssetsNamesModel
     extra = 1  # Define cuántos campos adicionales se mostrarán por defecto
+    max_num = 1
+    can_delete = False
     autocomplete_fields = ("category",)
+    formset = RequiredInlineFormSet
+
 
 @admin.register(AssetsNamesModel)
 class AssetsNamesModelAdmin(ImportExportModelAdmin, GeneralAdminModel):
 
     resource_classes = [AssetsNamesResource]
-    
+
     inlines = [AssetCategoryInline]
-    
+
     search_fields = (
         'es_name',
         'en_name'
@@ -121,9 +142,9 @@ class AssetsNamesModelAdmin(ImportExportModelAdmin, GeneralAdminModel):
 
 @admin.register(AssetCategoryModel)
 class AssetCategoryModelAdmin(ImportExportModelAdmin, GeneralAdminModel):
-    
+
     resource_classes = [AssetCategoryResource]
-    
+
     search_fields = (
         'en_name',
         'es_name'
@@ -188,7 +209,7 @@ class AssetCategoryModelAdmin(ImportExportModelAdmin, GeneralAdminModel):
 
 @admin.register(AssetModel)
 class AssetModelAdmin(ImportExportModelAdmin, GeneralAdminModel):
-    
+
     resource_classes = [AssetResource]
 
     autocomplete_fields = (

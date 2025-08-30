@@ -49,7 +49,7 @@ msgstr "Nombres"
 
 #: .\apps\project\common\users\models.py:20
 msgid "Buyer"
-msgstr "Comprador"
+msgstr "Compra"
 
 #: .\apps\project\common\users\models.py:21
 msgid "Holder"
@@ -61,7 +61,7 @@ msgstr "Representante "
 
 #: .\apps\project\common\users\models.py:23
 msgid "Intermediary"
-msgstr "Intermediario "
+msgstr "Facilitador "
 
 #: .\apps\project\common\users\models.py:43
 msgid "names"

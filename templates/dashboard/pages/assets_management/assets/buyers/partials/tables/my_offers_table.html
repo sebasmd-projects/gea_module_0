@@ -9,7 +9,7 @@
             <th>{% trans 'Quantity Type' %}</th>
             <th>{% trans 'Quantity Needed' %}</th>
             <th>{% trans 'Country' %}</th>
-            <th>{% trans 'Value Offered (USD)' %}</th>
+            <th>{% trans 'Total value of the offer ($ USD)' %}</th>
             <th>{% trans 'Approved' %}</th>
             <th>{% trans 'Actions' %}</th>
         </tr>
@@ -32,21 +32,41 @@
             <td>{{ offer.offer_amount|currency }}</td>
 
             <td>
-                {% if offer.is_approved %}
-                    <i data-feather="check-circle" stroke="green"></i>
+                {% if offer.is_approved and offer.is_active and offer.reviewed %}
+                    <!-- Verde Aprobado + Activo + Revisado -->
+                    <i class="fa-solid fa-check-double" style="color: green;" 
+                    title="{% trans 'Approved' %}"></i>
+
+                {% elif not offer.is_approved and offer.reviewed %}
+                    <!-- Rojo Revisado pero no aprobado (activo o no, no importa) -->
+                    <i class="fa-regular fa-circle-xmark" style="color: red;" 
+                    title="{% trans 'NOT Approved' %}"></i>
+
+                {% elif not offer.is_approved and not offer.reviewed %}
+                    <!-- Naranja No aprobado y No revisado (estado inicial, esperando) -->
+                    <i class="fa-regular fa-circle-xmark" style="color: orange;" 
+                    title="{% trans 'Pending for Approval' %}"></i>
+
                 {% else %}
-                    <i data-feather="x-circle" stroke="red"></i>
+                    <!-- Gris Cualquier otra combinación “inconsistente” o en revisión interna -->
+                    <i class="fa-regular fa-circle-xmark" style="color: grey;"
+                    title="{% trans 'Under review' %}"></i>
                 {% endif %}
             </td>
 
+
+
             <td>
+                
+                {% if not offer.is_active %}
                 <a href="{% url 'buyers:offer_update' offer.id %}" class="btn btn-datatable btn-icon btn-outline-primary">
                     <i class="fa-regular fa-pen-to-square"></i>
                 </a>
+                {% endif %}
 
-                <button class="btn btn-datatable btn-icon btn-outline-danger" id="btn-modal-delete-offer" data-offer-id="{{ offer.id }}">
+                <!-- <button class="btn btn-datatable btn-icon btn-outline-danger" id="btn-modal-delete-offer" data-offer-id="{{ offer.id }}">
                     <i class="fa-regular fa-trash-can"></i>
-                </button>
+                </button> -->
                 
                 {% if offer.is_active %}
                 <a href="{% url 'buyers:offer_details' offer.id %}" type="button" class="btn btn-datatable btn-icon btn-outline-success">

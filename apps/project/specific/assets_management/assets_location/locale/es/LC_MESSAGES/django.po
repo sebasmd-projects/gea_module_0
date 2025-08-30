@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 11:49-0500\n"
-"PO-Revision-Date: 2025-08-27 12:29-0500\n"
+"POT-Creation-Date: 2025-08-29 23:38-0500\n"
+"PO-Revision-Date: 2025-08-28 21:38-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -59,16 +59,16 @@ msgid "Optional Fields"
 msgstr "Campos opcionales"
 
 #: .\apps\project\specific\assets_management\assets_location\forms.py:54
-#: .\apps\project\specific\assets_management\assets_location\forms.py:107
+#: .\apps\project\specific\assets_management\assets_location\forms.py:106
 msgid "Enter any relevant notes or details here (Spanish)"
 msgstr "Ingrese aquí cualquier nota o detalle relevante (ES)"
 
 #: .\apps\project\specific\assets_management\assets_location\forms.py:59
-#: .\apps\project\specific\assets_management\assets_location\forms.py:112
+#: .\apps\project\specific\assets_management\assets_location\forms.py:111
 msgid "Enter any relevant notes or details here (English)"
 msgstr "Ingrese aquí cualquier nota o detalle relevante (EN)"
 
-#: .\apps\project\specific\assets_management\assets_location\forms.py:79
+#: .\apps\project\specific\assets_management\assets_location\forms.py:78
 msgid "A similar asset location already exists."
 msgstr "Ya existe una ubicación de activos similar."
 
@@ -169,27 +169,31 @@ msgstr "Activo"
 msgid "location"
 msgstr "ubicación"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:171
+#: .\apps\project\specific\assets_management\assets_location\models.py:173
 msgid "quantity type"
 msgstr "tipo de cantidad"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:178
+#: .\apps\project\specific\assets_management\assets_location\models.py:180
 msgid "amount"
 msgstr "cantidad"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:182
+#: .\apps\project\specific\assets_management\assets_location\models.py:184
 msgid "observations (ES)"
 msgstr "observaciones (ES)"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:188
+#: .\apps\project\specific\assets_management\assets_location\models.py:190
 msgid "observations (EN)"
 msgstr "observaciones (EN)"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:204
+#: .\apps\project\specific\assets_management\assets_location\models.py:196
+msgid "No Location"
+msgstr "Sin Ubicación"
+
+#: .\apps\project\specific\assets_management\assets_location\models.py:207
 msgid "1. Location Registration"
 msgstr "1. Registro de ubicación"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:205
+#: .\apps\project\specific\assets_management\assets_location\models.py:208
 msgid "1. Locations Registration"
 msgstr "1. Registro de Ubicaciones"
 

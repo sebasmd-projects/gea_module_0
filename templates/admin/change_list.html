@@ -3,19 +3,13 @@
 {% load i18n %}
 
 {% block content %}
-  <div>
-    <form method="get">
-      <label for="list_per_page">{% trans 'Show' %}:</label>
-      <select name="list_per_page" id="list_per_page" onchange="this.form.submit()">
-        {% for option in list_per_page_options %}
-          <option value="{{ option }}" {% if option == cl.paginator.per_page %}selected{% endif %}>{{ option }}</option>
-        {% endfor %}
-      </select>
-      o 
-      <input type="number" name="list_per_page" placeholder="Personalizado" max="2000" min="1"
-             style="width: 100px;" value="{{ cl.paginator.per_page }}" onchange="this.form.submit()">
-      <small>{% trans '(Max: 2000)' %}</small>
-    </form>
-  </div>
-  {{ block.super }}
+<div>
+  <form method="get">
+    <label for="list_per_page">{% trans 'Show' %}:</label>
+    <input type="number" name="list_per_page" placeholder="Personalizado" max="2000" min="1" style="width: 100px;"
+      value="{{ cl.paginator.per_page }}" onchange="this.form.submit()">
+    <small>{% trans '(Max: 2000)' %}</small>
+  </form>
+</div>
+{{ block.super }}
 {% endblock %}

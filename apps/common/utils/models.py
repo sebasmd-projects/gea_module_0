@@ -1,5 +1,4 @@
 from auditlog.models import AuditlogHistoryField
-from auditlog.registry import auditlog
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.db import models, transaction

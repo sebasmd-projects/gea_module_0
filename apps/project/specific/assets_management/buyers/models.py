@@ -5,11 +5,11 @@ from datetime import date
 
 from auditlog.registry import auditlog
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
-from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.common.utils.functions import generate_md5_or_sha256_hash
 from apps.common.utils.models import TimeStampedModel
@@ -25,7 +25,6 @@ class OfferModel(TimeStampedModel):
     class QuantityTypeChoices(models.TextChoices):
         UNITS = "U", _("Units")
         BOXES = "B", _("Boxes")
-        CONTAINERS = "C", _("Containers")
 
     def offers_directory_path(instance, filename) -> str:
         """
@@ -51,10 +50,8 @@ class OfferModel(TimeStampedModel):
             raise e
 
     class OfferTypeChoices(models.TextChoices):
-        SOVEREIGN = "S", _("Sovereign Purchase")
-        PRIVATE = "P", _("Private Purchase (Sovereign)")
-        BUSINESS = "B", _("Business Purchase")
-        GOVERNMENT = "G", _("Government Purchase")
+        OFFICIAL_PURCHASE_USA = "O", _(
+            "Official purchase of the United States")
 
     id = models.UUIDField(
         'ID',
@@ -84,7 +81,7 @@ class OfferModel(TimeStampedModel):
         _("Purchase order Type"),
         max_length=255,
         choices=OfferTypeChoices.choices,
-        default=OfferTypeChoices.PRIVATE
+        default=OfferTypeChoices.OFFICIAL_PURCHASE_USA
     )
 
     quantity_type = models.CharField(
@@ -95,7 +92,7 @@ class OfferModel(TimeStampedModel):
     )
 
     offer_amount = models.DecimalField(
-        _("Offer Amount per quantity type in USD"),
+        _("Total value of the offer ($ USD)"),
         max_digits=20,
         decimal_places=1,
         default=0
@@ -134,32 +131,13 @@ class OfferModel(TimeStampedModel):
         null=True
     )
 
-    es_procedure = CKEditor5Field(
-        _('Procedure (ES)'),
-        config_name='default'
-    )
-
-    en_procedure = CKEditor5Field(
-        _('Procedure (EN)'),
-        config_name='default',
-    )
-
-    es_banner = models.ImageField(
-        _("Banner (ES)"),
-        upload_to=offers_directory_path,
-        null=True,
-        blank=True
-    )
-
-    en_banner = models.ImageField(
-        _("Banner (EN)"),
-        upload_to=offers_directory_path,
-        null=True,
-        blank=True
-    )
-
     is_approved = models.BooleanField(
         _("Approved"),
+        default=False
+    )
+
+    reviewed = models.BooleanField(
+        _("Reviewed"),
         default=False
     )
 
@@ -179,13 +157,33 @@ class OfferModel(TimeStampedModel):
             return self.asset.asset_name.es_name
         return self.asset.asset_name.en_name or self.asset.asset_name.es_name
 
+    def clean(self):
+        # 1. Si está aprobado, debe tener aprobador
+        if self.is_approved and not self.approved_by:
+            raise ValidationError(
+                _("An approver is required when marking as approved."))
+
+        # 2. Si tiene aprobador, debe estar aprobado y revisado
+        if self.approved_by:
+            if not self.is_approved:
+                raise ValidationError(
+                    _("If there is an approver, the offer must be marked as approved."))
+            if not self.reviewed:
+                raise ValidationError(
+                    _("If there is an approver, the offer must be marked as reviewed."))
+
+        # 3. Si está aprobado pero no está revisado → error
+        if self.is_approved and not self.reviewed:
+            raise ValidationError(
+                _("An approved offer must also be reviewed."))
+
     def save(self, *args, **kwargs):
         if self.approved_by and not self.is_approved:
             self.is_approved = True
+            self.reviewed = True
 
         if not self.approved_by:
             self.is_approved = False
-            self.is_active = False
 
         super(OfferModel, self).save(*args, **kwargs)
 
@@ -200,6 +198,12 @@ class OfferModel(TimeStampedModel):
         verbose_name = _("1. Purchase order")
         verbose_name_plural = _("1. Purchase orders")
         ordering = ["default_order", "-created"]
+        permissions = [
+            ("can_approve_offer", _("Can approve purchase orders")),
+        ]
 
 
-auditlog.register(OfferModel, serialize_data=True)
+auditlog.register(
+    OfferModel,
+    serialize_data=True
+)

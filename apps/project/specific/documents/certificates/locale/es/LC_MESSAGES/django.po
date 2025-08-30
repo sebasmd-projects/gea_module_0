@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 11:49-0500\n"
+"POT-Creation-Date: 2025-08-28 21:37-0500\n"
 "PO-Revision-Date: 2025-08-27 12:48-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,12 +49,12 @@ msgstr "Orden"
 
 #: .\apps\project\specific\documents\certificates\admin.py:88
 #: .\apps\project\specific\documents\certificates\apps.py:8
-#: .\apps\project\specific\documents\certificates\models.py:148
+#: .\apps\project\specific\documents\certificates\models.py:147
 msgid "Certificate"
 msgstr "Certificado"
 
 #: .\apps\project\specific\documents\certificates\apps.py:9
-#: .\apps\project\specific\documents\certificates\models.py:149
+#: .\apps\project\specific\documents\certificates\models.py:148
 msgid "Certificates"
 msgstr "Certificados"
 

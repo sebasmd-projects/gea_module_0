@@ -45,6 +45,13 @@
             <!-- Dashboard Tab Pane 1 -->
             <div class="tab-pane fade show active" id="assets" role="tabpanel" aria-labelledby="assets-pill">
               <div class="mb-4 mb-lg-0">
+                <div class="d-grid gap-2">
+                  <a type="button" class="btn btn-outline-primary mb-3" href="{% url 'assets_location:add_asset_location' %}">
+                    <i class="feather text-green m-1 fa-solid fa-folder-plus"></i>
+                    {% trans 'Add New Asset' %}
+                  </a>
+                </div>
+
                 <table id="assets_table">
                   <thead>
                     {% include 'dashboard/pages/assets_management/assets/holders/partials/tables/partials/thead_tfoot.html' %}
@@ -71,6 +78,7 @@
 
               {% include 'dashboard/pages/assets_management/assets/holders/partials/tables/offers_tab_table.html' %}
             </div>
+            
             {% else %}
             <!-- Dashboard Tab Pane 0 -->
             <div class="tab-pane fade show active" id="assets" role="tabpanel" aria-labelledby="assets-pill">
@@ -90,10 +98,10 @@
                     {% endblocktrans %}
                   </p>
                   <p>
-                    <i data-feather="smartphone"></i> <a href="tel:+573183280176" target="_blank">+57 318 328 01 76</a>
+                    <i data-feather="smartphone"></i> <a href="tel:+573012283818" target="_blank">+57 301 228 3818</a>
                     <br />
-                    <i data-feather="message-circle"></i> <a href="https://wa.me/573183280176" target="_blank">+57 318
-                      328 01 76</a> <br />
+                    <i data-feather="message-circle"></i> <a href="https://wa.me/573012283818" target="_blank">
+                      +57 301 228 3818</a> <br />
                     <i data-feather="mail"></i> <a href="mailto:support@propensionesabogados.com"
                       target="_blank">support@propensionesabogados.com</a> <br />
                     <i data-feather="mail"></i> <a href="mailto:info@propensionesabogados.com"

@@ -45,10 +45,6 @@
           </td>
 
           <td>
-            {{ field.offer_amount|currency }}
-          </td>
-
-          <td>
             {{ field.offer_quantity }}
           </td>
 
@@ -69,22 +65,10 @@
               <i class="fa-solid fa-circle-info"></i>
             </a>
 
-            <a href="https://wa.me/573183280176?text=Quiero aplicar a la postura {{ field.asset.asset_name.es_name }} {{ field.id }}" class="btn btn-datatable btn-icon btn-outline-success">
+            <!-- <a href="https://wa.me/573012283818?text=Quiero aplicar a la postura {{ field.asset.asset_name.es_name }} {{ field.id }}" class="btn btn-datatable btn-icon btn-outline-success">
               <i class="fa-brands fa-whatsapp"></i>
-            </a>
-
-            {% if LANGUAGE_CODE == "es" and field.en_banner %}
-              <a href="{{ field.es_banner.url }}" target="_blank" download class="btn btn-datatable btn-icon btn-outline-primary">
-                <i class="fa-solid fa-download"></i>
-              </a>
-            {% elif field.en_banner %}
-              <a href="{{ field.en_banner.url }}" target="_blank" download class="btn btn-datatable btn-icon btn-outline-primary">
-                <i class="fa-solid fa-download"></i>
-              </a>
-            {% endif %}
-
+            </a> -->
           </td>
-          
         </tr>
     {% empty %}
     {% endfor %}

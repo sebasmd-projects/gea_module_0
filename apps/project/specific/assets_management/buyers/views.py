@@ -107,13 +107,14 @@ class BuyerCreateView(BuyerRequiredMixin, CreateView):
     def send_email_notification(self, cleaned_data, offer_instance):
         """Enviar correo con los datos de la oferta."""
         subject = _("New Purchase order Submitted for Verification")
-        hide_recipient_email = "notificaciones@propensionesabogados.com"
+        hide_recipient_email = ["notificaciones@propensionesabogados.com"]
         recipient_email = self.request.user.email
         total_amount = offer_instance.offer_amount * offer_instance.offer_quantity
 
         # Escapar datos para evitar inyecciones de scripts
         safe_data = {
-            "asset": escape(offer_instance.asset_display_name),
+            "asset_es": escape(offer_instance.asset.asset_name.es_name),
+            "asset_en": escape(offer_instance.asset.asset_name.en_name),
             "offer_type": escape(offer_instance.get_offer_type_display()),
             "quantity_type": escape(offer_instance.get_quantity_type_display()),
             "offer_amount": offer_instance.offer_amount,
@@ -128,7 +129,7 @@ class BuyerCreateView(BuyerRequiredMixin, CreateView):
             "user_email": escape(self.request.user.email),
             "user_username": escape(self.request.user.username),
         }
-
+        
         # Generar el cuerpo del correo con HTML
         html_content = render_to_string(
             "core/email/purchase_order_email_template.html",
@@ -141,7 +142,7 @@ class BuyerCreateView(BuyerRequiredMixin, CreateView):
             body=html_content,
             from_email="no-reply@propensionesabogados.com",
             to=[recipient_email],
-            bcc=[hide_recipient_email]
+            bcc=hide_recipient_email
         )
         email.content_subtype = "html"
         pdf_bytes = generar_orden_compra_pdf(offer_instance, self.request.user)
@@ -150,7 +151,8 @@ class BuyerCreateView(BuyerRequiredMixin, CreateView):
             pdf_bytes,
             "application/pdf"
         )
-        email.send()
+        
+        # email.send()
 
 
 class OfferUpdateView(BuyerRequiredMixin, UpdateView):
@@ -184,13 +186,5 @@ class OfferDetailView(DetailView):
 
         # Obtener el idioma actual del usuario
         current_language = get_language()
-
-        # Obtener el banner y el texto (procedimiento) de acuerdo con el idioma
-        banner = offer.es_banner.url if current_language == 'es' and offer.es_banner else offer.en_banner.url if offer.en_banner else None
-        procedure = offer.es_procedure if current_language == 'es' else offer.en_procedure
-
-        # Si no hay banner, mostramos el procedimiento como texto
-        context['banner'] = banner
-        context['procedure'] = procedure
 
         return context

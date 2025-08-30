@@ -11,69 +11,67 @@
 {% include 'dashboard/pages/assets_management/assets/holders/partials/header.html' %}
 
 <div class="container-xl px-4 mt-n10">
-    {% if request.user.user_type in 'HRI' %}
-        {% include 'dashboard/pages/assets_management/partials/header_cards.html' %}
-    {% endif %}
+  {% if request.user.user_type in 'HRI' %}
+  {% include 'dashboard/pages/assets_management/partials/header_cards.html' %}
+  {% endif %}
   <div class="row">
-    <div class="col-md-8">
-      <div class="card mb-4">
-        <div class="card-header">
-          <h4 class="text-center">{% trans "Procedure" %}</h4>
-        </div>
-        <div class="card-body">
-          {{ procedure|safe }}
-        </div>
-        <div class="card-footer">
-          <div class="d-grid gap-2">
-            <a href="https://wa.me/573183280176?text=Quiero aplicar a la postura id: {{ offer.id }} - {{ offer.asset_display_name }}"
-              class="btn btn-outline-success" target="_blank" rel="noopener noreferrer">
-              <i class="fa-brands fa-whatsapp mx-1"></i> {% trans 'Apply to this position/offer' %}
-            </a>
-
-            {% if LANGUAGE_CODE == "es" and offer.es_banner %}
-              <a href="{{ offer.es_banner.url }}" class="btn btn-outline-primary" download target="_blank">
-                <i class="fa-solid fa-download mx-1"></i> {% trans 'Download Offer' %}
-              </a>
-            {% elif offer.en_banner %}
-              <a href="{{ offer.en_banner.url }}" class="btn btn-outline-primary" download target="_blank">
-                <i class="fa-solid fa-download mx-1"></i> {% trans 'Download Offer' %}
-              </a>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
+    <div class="col">
       <div class="card">
         <div class="card-header">
           <h4 class="text-center">{% trans "Offer Summary" %}</h4>
         </div>
         <div class="card-body">
+          
           <p><strong>{% trans "Asset" %}:</strong> {{ offer.asset_display_name }}</p>
           <p><strong>{% trans "Offer Type" %}:</strong> {{ offer.get_offer_type_display }}</p>
           <p><strong>{% trans "Quantity Type" %}:</strong> {{ offer.get_quantity_type_display }}</p>
-          <p><strong>{% trans "Offer Amount" %}:</strong> {{ offer.offer_amount|currency }}</p>
+          {% if offer.en_observation and user.user_type == "B" %}
+          <p><strong>{% trans "Total value of the offer ($ USD)" %}:</strong> {{ offer.offer_amount|currency }}</p>
+          {% endif %}
           <p><strong>{% trans "Offer Quantity" %}:</strong> {{ offer.offer_quantity }}</p>
           <p><strong>{% trans "Country of Purchase" %}:</strong> {{ offer.buyer_country }}</p>
+
+
+          {% if offer.en_observation and user.user_type == "B" %}
+            <p><strong>{% trans "Observation (EN)" %}:</strong> {{ offer.en_observation }}</p>
+          {% endif %}
+
+          {% if offer.es_observation and user.user_type == "B" %}
+            <p><strong>{% trans "Observation (ES)" %}:</strong> {{ offer.es_observation }}</p>
+          {% endif %}
+
+
+          {% if offer.en_description and user.user_type == "B" %}
+            <p><strong>{% trans "Description (EN)" %}:</strong> {{ offer.en_description }}</p>
+          {% endif %}
+
+          {% if offer.es_description and user.user_type == "B" %}
+            <p><strong>{% trans "Description (ES)" %}:</strong> {{ offer.es_description }}</p>
+          {% endif %}
+
         </div>
+
         <div class="card-footer">
           <div class="d-grid gap-2">
-            <a href="https://wa.me/573183280176?text=Quiero aplicar a la postura id: {{ offer.id }} - {{ offer.asset_display_name }}"
-              class="btn btn-outline-success" target="_blank" rel="noopener noreferrer">
-              <i class="fa-brands fa-whatsapp mx-1"></i> {% trans 'Apply to this position/offer' %}
-            </a>
 
-            {% if LANGUAGE_CODE == "es" and offer.es_banner %}
-              <a href="{{ offer.es_banner.url }}" class="btn btn-outline-primary" download target="_blank">
-                <i class="fa-solid fa-download mx-1"></i> {% trans 'Download Offer' %}
-              </a>
-            {% elif offer.en_banner %}
-              <a href="{{ offer.en_banner.url }}" class="btn btn-outline-primary" download target="_blank">
-                <i class="fa-solid fa-download mx-1"></i> {% trans 'Download Offer' %}
-              </a>
+            {% if user.user_type == "B" %}
+            <a href="{% url 'buyers:buyer_index' %}" class="btn btn-outline-success"
+              rel="noopener noreferrer">
+              <i class="fa-solid fa-arrow-left mx-1"></i> {% trans 'Go to my Purchase Orders' %}
+            </a>
+            {% else %}
+            <a href="{% url 'assets:holder_index' %}" class="btn btn-outline-success"
+              rel="noopener noreferrer">
+              <i class="fa-solid fa-arrow-left mx-1"></i> {% trans 'Go to my Assets' %}
+            </a>
             {% endif %}
+
+
+
           </div>
         </div>
+
+
       </div>
     </div>
   </div>

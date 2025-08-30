@@ -9,7 +9,8 @@
     <div class="row">
         <div class="col-12">
             <div class="card mb-4" id="my_offers">
-                <div class="card-header" style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
+                <div class="card-header"
+                    style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
                     <h2 style="color: black;">{% trans 'Purchase Orders' %}</h2>
                 </div>
                 <div class="card-body">
@@ -18,25 +19,24 @@
             </div>
 
             <div class="card mb-4" id="create_offer">
-                <div class="card-header" style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
+                <div class="card-header"
+                    style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
                     <h2 style="color: black;">{% trans 'Create a New Purchase Order' %}</h2>
                 </div>
                 <div class="card-body">
                     {% if messages %}
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            {% for message in messages %}
-                                {{ message }}
-                            {% endfor %}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {% for message in messages %}
+                        {{ message }}
+                        {% endfor %}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                     {% endif %}
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form.media.css }}
-                        
                         <div class="row">
-
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="id_asset" class="form-label">
                                         <span class="fw-bold">
@@ -47,7 +47,18 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="id_buyer_country" class="form-label">
+                                        <span class="fw-bold">
+                                            {% trans 'Country of Purchase' %}*
+                                        </span>
+                                    </label>
+                                    {{ form.buyer_country|add_attrs:"class=form-select" }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="id_offer_type" class="form-label">
                                         <span class="fw-bold">
@@ -71,18 +82,6 @@
 
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="id_offer_amount" class="form-label">
-                                        <span class="fw-bold">
-                                            {% trans 'Value Offered Individually ($ USD)' %}*
-                                        </span>
-                                    </label>
-                                    <input type="text" id="offer_amount_display" class="form-control" placeholder="0">
-                                    <input type="hidden" id="id_offer_amount" name="offer_amount">
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="mb-3">
                                     <label for="id_offer_quantity" class="form-label">
                                         <span class="fw-bold">
                                             {% trans 'Quantity required' %}*
@@ -92,25 +91,26 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-12">
+                            <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="id_buyer_country" class="form-label">
+                                    <label for="id_offer_amount" class="form-label">
                                         <span class="fw-bold">
-                                            {% trans 'Country of Purchase' %}*
+                                            {% trans 'Total value of the offer ($ USD)' %}*
                                         </span>
                                     </label>
-                                    {{ form.buyer_country|add_attrs:"class=form-select" }}
+                                    <input type="text" id="offer_amount_display" class="form-control" placeholder="0">
+                                    <input type="hidden" id="id_offer_amount" name="offer_amount">
                                 </div>
                             </div>
 
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="id_description" class="form-label">
                                         <span class="fw-bold">
                                             {% if description_field == 'es_description' %}
-                                                {% trans 'Description (ES)' %}
+                                            {% trans 'Description (ES)' %}
                                             {% else %}
-                                                {% trans 'Description (EN)' %}
+                                            {% trans 'Description (EN)' %}
                                             {% endif %}
                                         </span>
                                     </label>
@@ -118,21 +118,20 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="id_observation" class="form-label">
                                         <span class="fw-bold">
                                             {% if observation_field == 'es_observation' %}
-                                                {% trans 'Observations (ES)' %}
+                                            {% trans 'Observations (ES)' %}
                                             {% else %}
-                                                {% trans 'Observations (EN)' %}
+                                            {% trans 'Observations (EN)' %}
                                             {% endif %}
                                         </span>
                                     </label>
                                     {{ observation_field_instance|add_attrs:"class=form-control" }}
                                 </div>
                             </div>
-
                         </div>
 
                         <div class="d-grid gap-2">

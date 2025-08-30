@@ -91,7 +91,7 @@
 
         <!-- Form Group (forgot password link)-->
         <div class="mb-3">
-          <a class="small" href="https://wa.me/573183280176?text=contraseña%20olvidada!" target="_blank"
+          <a class="small" href="https://wa.me/573012283818?text=contraseña%20olvidada!" target="_blank"
             rel="noopener noreferrer">
             {% trans 'Forgot your password?' %}
           </a>
@@ -131,8 +131,9 @@
           {% csrf_token %}
           <p>{% trans "As a last resort, you can use a backup token:" %}</p>
           <p>
-            <button name="wizard_goto_step" type="submit" value="backup" class="btn btn-sm btn-secondary btn-block">{%
-              trans "Use Backup Token" %}</button>
+            <button name="wizard_goto_step" type="submit" value="backup" class="btn btn-sm btn-secondary btn-block">
+              {% trans "Use Backup Token" %}
+            </button>
           </p>
         </form>
       </div>

@@ -361,6 +361,26 @@ auditlog.register(
 )
 
 auditlog.register(
+    CountryModel,
+    serialize_data=True
+)
+
+auditlog.register(
+    StateModel,
+    serialize_data=True
+)
+
+auditlog.register(
+    CityModel,
+    serialize_data=True
+)
+
+auditlog.register(
+    AddressModel,
+    serialize_data=True
+)
+
+auditlog.register(
     UserPersonalInformationModel,
     serialize_data=True
 )

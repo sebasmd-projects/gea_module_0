@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 11:49-0500\n"
+"POT-Creation-Date: 2025-08-28 21:37-0500\n"
 "PO-Revision-Date: 2025-08-27 12:01-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,52 +19,52 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.0\n"
 
-#: .\apps\project\common\account\forms.py:11
+#: .\apps\project\common\account\forms.py:13
 msgid "User"
 msgstr "Usuario"
 
-#: .\apps\project\common\account\forms.py:12
+#: .\apps\project\common\account\forms.py:14
 msgid "Email"
 msgstr "Correo"
 
-#: .\apps\project\common\account\forms.py:13
+#: .\apps\project\common\account\forms.py:15
 msgid "Password"
 msgstr "Contraseña"
 
-#: .\apps\project\common\account\forms.py:49
-#: .\apps\project\common\account\forms.py:54
+#: .\apps\project\common\account\forms.py:51
+#: .\apps\project\common\account\forms.py:56
 msgid "Confirm Password"
 msgstr "Confirmar contraseña"
 
-#: .\apps\project\common\account\forms.py:59
-#: .\apps\project\common\account\forms.py:65
+#: .\apps\project\common\account\forms.py:61
+#: .\apps\project\common\account\forms.py:67
 msgid "Names"
 msgstr "Nombres"
 
-#: .\apps\project\common\account\forms.py:70
-#: .\apps\project\common\account\forms.py:76
+#: .\apps\project\common\account\forms.py:72
+#: .\apps\project\common\account\forms.py:78
 msgid "Last names"
 msgstr "Apellidos"
 
-#: .\apps\project\common\account\forms.py:82
-#: .\apps\project\common\account\forms.py:88
+#: .\apps\project\common\account\forms.py:84
+#: .\apps\project\common\account\forms.py:90
 msgid "Unique Code"
 msgstr "Código Único "
 
-#: .\apps\project\common\account\forms.py:102
+#: .\apps\project\common\account\forms.py:104
 msgid "Invalid Unique Code"
 msgstr "Código único no válido"
 
-#: .\apps\project\common\account\forms.py:108
+#: .\apps\project\common\account\forms.py:110
 msgid "Passwords do not match"
 msgstr "Las contraseñas no coinciden"
 
-#: .\apps\project\common\account\forms.py:118
+#: .\apps\project\common\account\forms.py:120
 msgid "User Type"
 msgstr "Tipo de usuario"
 
-#: .\apps\project\common\account\forms.py:133
-#: .\apps\project\common\account\forms.py:139
+#: .\apps\project\common\account\forms.py:135
+#: .\apps\project\common\account\forms.py:141
 msgid "Citizenship Number"
 msgstr "Número de documento"
 

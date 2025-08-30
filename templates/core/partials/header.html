@@ -3,16 +3,23 @@
 <header id="header" class="header d-flex align-items-center fixed-top">
   <div
     class="header-container container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
-    <a href="{% url 'core:index' %}" class="logo d-flex align-items-center me-auto me-xl-0"><img
-        src="https://propensionesabogados.com/static/assets/imgs/GEA/gea%20logo.webp" alt="GEA horizontal logo" /></a>
 
+    <!-- Logo -->
+    <a href="{% url 'core:index' %}" class="logo d-flex align-items-center me-auto me-xl-0">
+      <img src="https://propensionesabogados.com/static/assets/imgs/GEA/gea%20logo.webp" alt="GEA horizontal logo" />
+    </a>
+
+    <!-- Nav -->
     <nav id="navmenu" class="navmenu">
       <ul>
+        
+        {% if request.path != "/" %}
         <li>
           <a href="{% url 'core:index' %}#hero" class="active">{% trans 'Home' %}</a>
         </li>
+        {% endif %}
 
-
+        <!-- Idiomas -->
         <li class="dropdown">
           <a href="#"><i class="bi bi-translate mx-1"></i> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
           <ul>
@@ -24,27 +31,26 @@
             {% endfor %}
           </ul>
         </li>
+
+        <!-- Bloque Auth -->
+        {% if request.user.is_authenticated %}
+          {% if request.user.user_type in 'HRI' or request.user.is_superuser %}
+          <li><a href="{% url 'assets:holder_index' %}">{% trans 'Client Area' %}</a></li>
+          {% endif %}
+
+          {% if request.user.user_type in 'B' or request.user.is_superuser %}
+          <li><a href="{% url 'buyers:buyer_index' %}">{% trans 'Buyer' %}</a></li>
+          {% endif %}
+
+          <li><a href="{% url 'account:logout' %}" class="text-danger">{% trans 'LOGOUT' %}</a></li>
+        {% else %}
+          <li><a href="{% url 'two_factor:login' %}" class="text-success">{% trans 'LOGIN' %}</a></li>
+          <li><a href="{% url 'account:register' %}" class="text-primary">{% trans 'REGISTER' %}</a></li>
+        {% endif %}
       </ul>
+
       <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
     </nav>
 
-    {% if request.user.is_authenticated %}
-    <div>
-      {% if request.user.user_type in 'HRI' or request.user.is_superuser %}
-      <a href="{% url 'assets:holder_index' %}" class="btn btn-primary rounded-pill mb-1">{% trans 'Client Area' %}</a>
-      {% endif %}
-
-      {% if request.user.user_type in 'B' or request.user.is_superuser %}
-      <a href="{% url 'buyers:buyer_index' %}" class="btn btn-primary rounded-pill mb-1">{% trans 'Buyer' %}</a>
-      {% endif %}
-
-      <a href="{% url 'account:logout' %}" class="btn btn-outline-danger rounded-pill">{% trans 'LOGOUT' %}</a>
-    </div>
-    {% else %}
-    <div>
-      <a href="{% url 'two_factor:login' %}" class="btn btn-success rounded-pill mb-1">{% trans 'LOGIN' %}</a>
-      <a href="{% url 'account:register' %}" class="btn btn-outline-primary rounded-pill">{% trans 'REGISTER' %}</a>
-    </div>
-    {% endif %}
   </div>
 </header>

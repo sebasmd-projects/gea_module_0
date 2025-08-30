@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportActionModelAdmin
+from django.db import models
 
 from apps.project.common.users.models import UserModel
 from apps.project.specific.assets_management.buyers.models import OfferModel
@@ -13,7 +14,7 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
         'asset',
         'buyer_country',
     )
-    
+
     list_display = (
         'created_by',
         'asset',
@@ -21,6 +22,13 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
         'quantity_type',
         'is_active',
         'is_approved',
+        'reviewed',
+    )
+
+    list_filter = (
+        'is_active',
+        'is_approved',
+        'reviewed',
     )
 
     search_fields = (
@@ -28,7 +36,6 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
         'asset',
         'offer_type',
         'quantity_type',
-        'is_active',
     )
 
     readonly_fields = (
@@ -46,9 +53,6 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
                 'offer_amount',
                 'offer_quantity',
                 'buyer_country',
-                'es_procedure',
-                'en_procedure',
-                
             ),
         }),
         (_('Approval'), {
@@ -56,15 +60,7 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
                 'approved_by',
                 'is_approved',
                 'is_active',
-            ),
-        }),
-        (_('Banner Image'), {
-            'fields': (
-                'es_banner',
-                'en_banner',
-            ),
-            'classes': (
-                'collapse',
+                'reviewed',
             ),
         }),
         (_('Dates'), {
@@ -80,5 +76,8 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "approved_by":
-            kwargs["queryset"] = UserModel.objects.filter(is_staff=True)
+            kwargs["queryset"] = UserModel.objects.filter(
+                models.Q(is_superuser=True) |
+                models.Q(user_permissions__codename="can_approve_offer")
+            ).distinct()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)

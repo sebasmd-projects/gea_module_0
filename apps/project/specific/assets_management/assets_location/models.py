@@ -217,6 +217,11 @@ class AssetLocationModel(TimeStampedModel):
 
 
 auditlog.register(
+    AssetCountryModel,
+    serialize_data=True
+)
+
+auditlog.register(
     LocationModel,
     serialize_data=True
 )

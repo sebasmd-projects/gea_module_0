@@ -122,7 +122,7 @@ class AssetModel(TimeStampedModel):
         null=True
     )
 
-    asset_name = models.ForeignKey(
+    asset_name = models.OneToOneField(
         AssetsNamesModel,
         on_delete=models.CASCADE,
         related_name="assets_asset_assetsnames",

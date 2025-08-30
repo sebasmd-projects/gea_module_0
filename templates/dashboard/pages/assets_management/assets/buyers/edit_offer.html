@@ -52,7 +52,7 @@
                             
                             <div class="col-12">
                                 <div class="mb-3">
-                                    <label for="{{ form.offer_amount.id_for_label }}" class="form-label">{% trans "Value Offered Individually ($ USD):" %}</label>
+                                    <label for="{{ form.offer_amount.id_for_label }}" class="form-label">{% trans "Total value of the offer ($ USD):" %}</label>
                                     {{ form.offer_amount|add_class:"form-control" }}
                                 </div>
                             </div>
@@ -102,9 +102,9 @@
 
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-outline-success">
-                                {% trans "Save Purchase order" %}
+                                {% trans "Save Purchase Order" %}
                             </button>
-                            <a href="{% url 'buyers:buyer_index' %}" class="btn btn-warning">{% trans 'Go to my Purchase orders' %}</a>
+                            <a href="{% url 'buyers:buyer_index' %}" class="btn btn-warning">{% trans 'Go to my Purchase Orders' %}</a>
                         </div>
                     </form>
                 </div>

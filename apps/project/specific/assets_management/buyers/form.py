@@ -11,7 +11,6 @@ class AssetNameWidget(s2forms.ModelSelect2Widget):
     search_fields = [
         "asset_name__es_name__icontains",
         "asset_name__en_name__icontains",
-        # (opcional) permite buscar por categoría también:
         "category__es_name__icontains",
         "category__en_name__icontains",
     ]
@@ -29,7 +28,6 @@ class AssetNameWidget(s2forms.ModelSelect2Widget):
             return es
         return en or es or str(obj.asset_name)
 
-    # (opcional pero recomendado) limitar queryset y optimizar
     def get_queryset(self):
         qs = AssetModel.objects.filter(is_active=True).select_related("asset_name", "category")
         return qs
@@ -45,7 +43,7 @@ class CountryWidget(s2forms.ModelSelect2Widget):
 
     def build_attrs(self, base_attrs, extra_attrs=None):
         attrs = super().build_attrs(base_attrs, extra_attrs)
-        attrs['data-minimum-input-length'] = 2
+        attrs['data-minimum-input-length'] = 0
         return attrs
 
     def label_from_instance(self, obj):
@@ -81,6 +79,13 @@ class OfferForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['asset'].queryset = AssetModel.objects.filter(is_active=True).select_related("asset_name", "category")
+        
+        if not self.instance.pk:  # Solo en creación, no en edición
+            try:
+                colombia = self.fields['buyer_country'].queryset.get(es_country_name__iexact="Colombia")
+                self.fields['buyer_country'].initial = colombia.pk
+            except Exception:
+                pass
 
 
 class OfferUpdateForm(forms.ModelForm):

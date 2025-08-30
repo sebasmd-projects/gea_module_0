@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 12:24-0500\n"
-"PO-Revision-Date: 2025-08-27 12:25-0500\n"
+"POT-Creation-Date: 2025-08-29 23:38-0500\n"
+"PO-Revision-Date: 2025-08-30 16:55-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -19,40 +19,44 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.0\n"
 
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:92
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:158
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:63
+msgid "You must add at least one asset."
+msgstr "Debes agregar al menos un activo."
+
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:113
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:179
 msgid "Details"
 msgstr "Detalles"
 
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:100
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:167
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:267
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:121
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:188
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:288
 msgid "Dates"
 msgstr "Fechas"
 
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:110
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:177
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:278
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:131
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:198
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:299
 msgid "Priority"
 msgstr "Orden"
 
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:243
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:264
 msgid "Required Fields"
 msgstr "Campos requeridos"
 
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:255
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:276
 msgid "Optional Fields"
 msgstr "Campos opcionales"
 
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:291
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:312
 msgid "Asset Name (ES)"
 msgstr "Nombre del activo (ES)"
 
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:295
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:316
 msgid "Asset Name (EN)"
 msgstr "Nombre del activo (EN)"
 
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:301
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:322
 msgid "Total Quantity by Type"
 msgstr "Cantidad total por tipo"
 
