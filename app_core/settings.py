@@ -19,17 +19,18 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 if os.getenv('DJANGO_DEBUG') == 'True':
     DEBUG = True
 else:
-    DEBUG = False
     CSRF_COOKIE_SAMESITE = 'Strict'
     CSRF_COOKIE_SECURE = True
+    DEBUG = False
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
-    SECURE_HSTS_SECONDS = 15768000
+    SECURE_HSTS_PRELOAD = True
+    SECURE_HSTS_SECONDS = 31536000 # 1 year
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
-    X_FRAME_OPTIONS = 'SAMEORIGIN'
+    X_FRAME_OPTIONS = 'DENY'
 
 
 if ',' in os.getenv('DJANGO_ALLOWED_HOSTS'):
@@ -52,14 +53,18 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'auditlog',
     'axes',
+    'betterforms',
+    'compressor',
     'corsheaders',
+    'django_crontab',
     'django_filters',
     'django_otp',
     'django_otp.plugins.otp_static',
     'django_otp.plugins.otp_totp',
+    'django_select2',
     'drf_yasg',
-    'django_ckeditor_5',
     'encrypted_model_fields',
+    'formtools',
     'import_export',
     'parler',
     'rest_framework',
@@ -67,9 +72,6 @@ THIRD_PARTY_APPS = [
     'rest_framework_simplejwt',
     'rosetta',
     'two_factor',
-    'django_select2',
-    'django_crontab',
-    'formtools',
 ]
 
 COMMON_APPS = [
@@ -161,6 +163,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'apps.common.utils.middleware.RedirectWWWMiddleware',
     'apps.common.utils.middleware.RedirectAuthenticatedUserMiddleware',
+    'apps.common.utils.middleware.BlockBadBotsMiddleware',
     'axes.middleware.AxesMiddleware',
 ]
 
@@ -268,6 +271,13 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = str(os.getenv('DJANGO_MEDIA_ROOT'))
 
 STATICFILES_DIRS = [str(BASE_DIR / 'public' / 'staticfiles')]
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # other finders..
+    'compressor.finders.CompressorFinder',
+)
 
 if bool(os.getenv('DJANGO_EMAIL_USE_SSL')):
     EMAIL_USE_SSL = True

@@ -1,2 +1,3 @@
 from .redirect_authenticated_user_middleware import RedirectAuthenticatedUserMiddleware
 from .redirect_www_middleware import RedirectWWWMiddleware
+from .block_bots import BlockBadBotsMiddleware

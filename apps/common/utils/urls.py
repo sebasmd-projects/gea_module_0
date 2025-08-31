@@ -31,6 +31,26 @@ def robots_txt(request):
     lines = [
         "User-agent: *",
         "Disallow: /",
+        "User-agent: GPTBot",
+        "Disallow: /",
+        "User-agent: Google-Extended",
+        "Disallow: /",
+        "User-agent: ClaudeBot",
+        "Disallow: /",
+        "User-agent: Claude-User",
+        "Disallow: /",
+        "User-agent: Claude-SearchBot",
+        "Disallow: /",
+        "User-agent: PerplexityBot",
+        "Disallow: /",
+        "User-agent: Perplexity-User",
+        "Disallow: /",
+        "User-agent: Meta-ExternalAgent",
+        "Disallow: /",
+        "User-agent: Applebot",
+        "Disallow: /",
+        "User-agent: Applebot-Extended",
+        "Disallow: /"
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
 
