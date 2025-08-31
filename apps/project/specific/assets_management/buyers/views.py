@@ -108,8 +108,7 @@ class BuyerCreateView(BuyerRequiredMixin, CreateView):
         """Enviar correo con los datos de la oferta."""
         subject = _("New Purchase order Submitted for Verification")
         hide_recipient_email = ["notificaciones@propensionesabogados.com"]
-        recipient_email = self.request.user.email
-        total_amount = offer_instance.offer_amount * offer_instance.offer_quantity
+        recipient_email = [self.request.user.email]
 
         # Escapar datos para evitar inyecciones de scripts
         safe_data = {
@@ -119,7 +118,6 @@ class BuyerCreateView(BuyerRequiredMixin, CreateView):
             "quantity_type": escape(offer_instance.get_quantity_type_display()),
             "offer_amount": offer_instance.offer_amount,
             "offer_quantity": offer_instance.offer_quantity,
-            "total_amount": total_amount,
             "buyer_country": escape(str(offer_instance.buyer_country)),
             "en_observation": escape(offer_instance.en_observation or ""),
             "es_observation": escape(offer_instance.es_observation or ""),
@@ -141,7 +139,7 @@ class BuyerCreateView(BuyerRequiredMixin, CreateView):
             subject=subject,
             body=html_content,
             from_email="no-reply@propensionesabogados.com",
-            to=[recipient_email],
+            to=recipient_email,
             bcc=hide_recipient_email
         )
         email.content_subtype = "html"
