@@ -1,0 +1,74 @@
+{% load i18n %}
+
+<!-- Confirm Delete Offer Modal -->
+<div class="modal fade" id="confirmDeleteOfferModal" tabindex="-1" aria-labelledby="confirmDeleteOfferLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title" id="confirmDeleteOfferLabel">{% trans 'Delete Purchase Order' %}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="{% trans 'Close' %}"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="alert alert-warning d-flex align-items-center" role="alert">
+                    <i class="fa-regular fa-circle-xmark me-2"></i>
+                    <div>
+                        {% trans 'Are you sure you want to delete this purchase order?' %}
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0">
+                        <tbody>
+                            <tr>
+                                <th style="width: 30%;">{% trans 'Asset' %}</th>
+                                <td id="del-asset"></td>
+                            </tr>
+                            <tr>
+                                <th>{% trans 'Purchase order Type' %}</th>
+                                <td id="del-offer-type"></td>
+                            </tr>
+                            <tr>
+                                <th>{% trans 'Quantity Type' %}</th>
+                                <td id="del-quantity-type"></td>
+                            </tr>
+                            <tr>
+                                <th>{% trans 'Quantity required' %}</th>
+                                <td id="del-quantity"></td>
+                            </tr>
+                            <tr>
+                                <th>{% trans 'Country' %}</th>
+                                <td id="del-country"></td>
+                            </tr>
+                            <tr>
+                                <th>{% trans 'Total value of the offer ($ USD)' %}</th>
+                                <td id="del-amount"></td>
+                            </tr>
+                            <tr>
+                                <th>{% trans 'Approved' %}</th>
+                                <td id="del-approved"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    {% trans 'Cancel' %}
+                </button>
+
+                <!-- Submit form to soft-delete -->
+                <form id="deleteOfferForm" method="post" action="">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" id="del-offer-id">
+                    <button type="submit" class="btn btn-outline-danger">
+                        <i class="fa-regular fa-trash-can me-1"></i> {% trans 'Delete' %}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

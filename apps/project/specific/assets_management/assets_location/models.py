@@ -134,7 +134,6 @@ class AssetLocationModel(TimeStampedModel):
     class QuantityTypeChoices(models.TextChoices):
         UNITS = "U", _("Units")
         BOXES = "B", _("Boxes")
-        CONTAINERS = "C", _("Containers")
 
     id = models.UUIDField(
         'ID',

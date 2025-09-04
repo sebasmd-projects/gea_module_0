@@ -12,7 +12,7 @@
     <!-- Nav -->
     <nav id="navmenu" class="navmenu">
       <ul>
-        
+
         {% if request.path != "/" %}
         <li>
           <a href="{% url 'core:index' %}#hero" class="active">{% trans 'Home' %}</a>
@@ -26,7 +26,8 @@
             {% for lang in LANGUAGES %}
             <li>
               <a class="dropdown-item text-capitalize" href="{% url 'set_language' %}?lang={{ lang.0 }}">
-                {{ lang.1 }}</a>
+                {{ lang.1 }}
+              </a>
             </li>
             {% endfor %}
           </ul>
@@ -34,18 +35,18 @@
 
         <!-- Bloque Auth -->
         {% if request.user.is_authenticated %}
-          {% if request.user.user_type in 'HRI' or request.user.is_superuser %}
-          <li><a href="{% url 'assets:holder_index' %}">{% trans 'Client Area' %}</a></li>
-          {% endif %}
+        {% if request.user.user_type in 'HRI' or request.user.is_superuser %}
+        <li><a href="{% url 'assets:holder_index' %}">{% trans 'Client Area' %}</a></li>
+        {% endif %}
 
-          {% if request.user.user_type in 'B' or request.user.is_superuser %}
-          <li><a href="{% url 'buyers:buyer_index' %}">{% trans 'Buyer' %}</a></li>
-          {% endif %}
+        {% if request.user.user_type in 'B' or request.user.is_superuser %}
+        <li><a href="{% url 'buyers:buyer_index' %}">{% trans 'Buyer' %}</a></li>
+        {% endif %}
 
-          <li><a href="{% url 'account:logout' %}" class="text-danger">{% trans 'LOGOUT' %}</a></li>
+        <li><a href="{% url 'account:logout' %}" class="text-danger">{% trans 'LOGOUT' %}</a></li>
         {% else %}
-          <li><a href="{% url 'two_factor:login' %}" class="text-success">{% trans 'LOGIN' %}</a></li>
-          <li><a href="{% url 'account:register' %}" class="text-primary">{% trans 'REGISTER' %}</a></li>
+        <li><a href="{% url 'two_factor:login' %}" class="text-success">{% trans 'LOGIN' %}</a></li>
+        <li><a href="{% url 'account:register' %}" class="text-primary">{% trans 'REGISTER' %}</a></li>
         {% endif %}
       </ul>
 

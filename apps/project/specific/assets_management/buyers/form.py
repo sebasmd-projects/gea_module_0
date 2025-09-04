@@ -29,7 +29,8 @@ class AssetNameWidget(s2forms.ModelSelect2Widget):
         return en or es or str(obj.asset_name)
 
     def get_queryset(self):
-        qs = AssetModel.objects.filter(is_active=True).select_related("asset_name", "category")
+        qs = AssetModel.objects.filter(
+            is_active=True).select_related("asset_name", "category")
         return qs
 
 
@@ -48,8 +49,10 @@ class CountryWidget(s2forms.ModelSelect2Widget):
 
     def label_from_instance(self, obj):
         lang = get_language()
-        es_name = getattr(obj, "es_country_name", None) or getattr(obj, "es_name", None)
-        en_name = getattr(obj, "en_country_name", None) or getattr(obj, "en_name", None)
+        es_name = getattr(obj, "es_country_name", None) or getattr(
+            obj, "es_name", None)
+        en_name = getattr(obj, "en_country_name", None) or getattr(
+            obj, "en_name", None)
         if lang == "es" and es_name:
             return es_name
         return en_name or es_name or ""
@@ -78,11 +81,13 @@ class OfferForm(forms.ModelForm):
     # Forzamos queryset del campo para que el widget lo herede
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['asset'].queryset = AssetModel.objects.filter(is_active=True).select_related("asset_name", "category")
-        
+        self.fields['asset'].queryset = AssetModel.objects.filter(
+            is_active=True).select_related("asset_name", "category")
+
         if not self.instance.pk:  # Solo en creación, no en edición
             try:
-                colombia = self.fields['buyer_country'].queryset.get(es_country_name__iexact="Colombia")
+                colombia = self.fields['buyer_country'].queryset.get(
+                    es_country_name__iexact="Colombia")
                 self.fields['buyer_country'].initial = colombia.pk
             except Exception:
                 pass
@@ -95,7 +100,8 @@ class OfferUpdateForm(forms.ModelForm):
         self.fields['offer_type'].disabled = True
         self.fields['quantity_type'].disabled = True
         self.fields['offer_amount'].disabled = True
-        self.fields['asset'].queryset = AssetModel.objects.filter(is_active=True).select_related("asset_name", "category")
+        self.fields['asset'].queryset = AssetModel.objects.filter(
+            is_active=True).select_related("asset_name", "category")
 
     class Meta:
         model = OfferModel
@@ -113,5 +119,4 @@ class OfferUpdateForm(forms.ModelForm):
         ]
         widgets = {
             "buyer_country": CountryWidget,
-            "asset": AssetNameWidget,
         }

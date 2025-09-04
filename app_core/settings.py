@@ -18,6 +18,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 if os.getenv('DJANGO_DEBUG') == 'True':
     DEBUG = True
+    ALLOWED_HOSTS = ['*']
 else:
     CSRF_COOKIE_SAMESITE = 'Strict'
     CSRF_COOKIE_SECURE = True
@@ -31,12 +32,13 @@ else:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
+    if ',' in os.getenv('DJANGO_ALLOWED_HOSTS'):
+        ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',')
+    else:
+        ALLOWED_HOSTS = [os.getenv('DJANGO_ALLOWED_HOSTS')]
 
 
-if ',' in os.getenv('DJANGO_ALLOWED_HOSTS'):
-    ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',')
-else:
-    ALLOWED_HOSTS = [os.getenv('DJANGO_ALLOWED_HOSTS')]
+
 
 
 DJANGO_APPS = [
@@ -306,3 +308,6 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 15000
 CRONJOBS = [
     ('0 1 * * *', 'apps.common.utils.cron.generate_and_send_gea_code')
 ]
+
+# ChatGPT API Key
+CHAT_GPT_API_KEY = os.getenv('CHAT_GPT_API_KEY')

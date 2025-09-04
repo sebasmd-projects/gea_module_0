@@ -181,7 +181,8 @@ class AssetCategoryModelAdmin(ImportExportModelAdmin, GeneralAdminModel):
                 'id',
                 'es_name',
                 'en_name',
-                'description',
+                'es_description',
+                'en_description',
                 'is_active',
             )
         }),

@@ -7,7 +7,25 @@
 {% endblock simple_datatables %}
 
 {% block layout_main %}
-{% include 'dashboard/pages/assets_management/assets/holders/partials/header.html' %}
+
+<header class="page-header page-header-dark pb-10"
+    style="background-image: linear-gradient(to bottom, #5e5751 0%, #5a554a 50%, #383630 100%);">
+    <div class="container-xl px-4">
+        <div class="page-header-content pt-4">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-auto mt-4">
+                    <h1 class="page-header-title">
+                        <div class="page-header-icon">
+                            <i data-feather="activity"></i>
+                        </div>
+                        {% trans 'Dashboard' %}
+                    </h1>
+                    <div class="page-header-subtitle">{% trans 'Overview and content summary' %}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
 
 <div class="container-xl px-4 mt-n10">
     <div class="row">
@@ -18,93 +36,117 @@
                 </div>
                 <div class="card-body">
                     {% if messages %}
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            {% for message in messages %}
-                                {{ message }}
-                            {% endfor %}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {% for message in messages %}
+                        {{ message }}
+                        {% endfor %}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                     {% endif %}
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form.media.css }}
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-md-3">
                                 <div class="mb-3">
-                                    <label for="{{ form.asset.id_for_label }}" class="form-label">{% trans "Asset:" %}</label>
+                                    <label for="{{ form.asset.id_for_label }}" class="form-label">
+                                        {% trans "Asset:" %}
+                                    </label>
                                     {{ form.asset|add_class:"form-select" }}
                                 </div>
                             </div>
 
-                            <div class="col-12">
+                            <div class="col-md-3">
                                 <div class="mb-3">
-                                    <label for="{{ form.offer_type.id_for_label }}" class="form-label">{% trans "Purchase order Type:" %}</label>
+                                    <label for="{{ form.offer_type.id_for_label }}" class="form-label">
+                                        {% trans "Purchase order Type:" %}
+                                    </label>
                                     {{ form.offer_type|add_class:"form-select" }}
                                 </div>
                             </div>
 
-                            <div class="col-12">
+                            <div class="col-md-3">
                                 <div class="mb-3">
-                                    <label for="{{ form.quantity_type.id_for_label }}" class="form-label">{% trans "Quantity Type:" %}</label>
+                                    <label for="{{ form.quantity_type.id_for_label }}" class="form-label">
+                                        {% trans "Quantity Type:" %}
+                                    </label>
                                     {{ form.quantity_type|add_class:"form-select" }}
                                 </div>
                             </div>
-                            
-                            <div class="col-12">
+
+                            <div class="col-md-3">
                                 <div class="mb-3">
-                                    <label for="{{ form.offer_amount.id_for_label }}" class="form-label">{% trans "Total value of the offer ($ USD):" %}</label>
+                                    <label for="{{ form.offer_amount.id_for_label }}" class="form-label">
+                                        {% trans "Total value of the offer USD:" %}
+                                    </label>
                                     {{ form.offer_amount|add_class:"form-control" }}
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="{{ form.offer_quantity.id_for_label }}" class="form-label">{% trans "Quantity required:" %}</label>
+                                    <label for="{{ form.offer_quantity.id_for_label }}" class="form-label">
+                                        {% trans "Quantity required:" %}
+                                    </label>
                                     {{ form.offer_quantity|add_class:"form-control" }}
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="{{ form.buyer_country.id_for_label }}" class="form-label">{% trans "Country of Purchase:" %}</label>
+                                    <label for="{{ form.buyer_country.id_for_label }}" class="form-label">
+                                        {% trans "Country of Purchase:" %}
+                                    </label>
                                     {{ form.buyer_country|add_class:"form-select" }}
                                 </div>
                             </div>
 
+                            {% if request.LANGUAGE_CODE == 'es' %}
                             <div class="col-md-6">
                                 <div class="mb-3 form-floating">
-                                    {{ form.en_observation|add_attrs:"class=form-control" }}
-                                    <label for="{{ form.en_observation.id_for_label }}" class="form-label">{% trans 'Observations (EN):' %}</label>
+                                    {{ form.es_description|add_class:"form-control" }}
+                                    <label for="{{ form.es_description.id_for_label }}" class="form-label">
+                                        {% trans "Description (ES):" %}
+                                    </label>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="mb-3 form-floating">
                                     {{ form.es_observation|add_class:"form-control" }}
-                                    <label for="{{ form.es_observation.id_for_label }}" class="form-label">{% trans "Observations (ES):" %}</label>
+                                    <label for="{{ form.es_observation.id_for_label }}" class="form-label">
+                                        {% trans "Observations (ES):" %}
+                                    </label>
                                 </div>
                             </div>
-
+                            {% else %}
                             <div class="col-md-6">
                                 <div class="mb-3 form-floating">
                                     {{ form.en_description|add_class:"form-control" }}
-                                    <label for="{{ form.en_description.id_for_label }}" class="form-label">{% trans "Description (EN):" %}</label>
+                                    <label for="{{ form.en_description.id_for_label }}" class="form-label">
+                                        {% trans "Description (EN):" %}
+                                    </label>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="mb-3 form-floating">
-                                    {{ form.es_description|add_class:"form-control" }}
-                                    <label for="{{ form.es_description.id_for_label }}" class="form-label">{% trans "Description (ES):" %}</label>
+                                    {{ form.en_observation|add_attrs:"class=form-control" }}
+                                    <label for="{{ form.en_observation.id_for_label }}" class="form-label">
+                                        {% trans 'Observations (EN):' %}
+                                    </label>
                                 </div>
                             </div>
+                            {% endif %}
                         </div>
 
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-outline-success">
                                 {% trans "Save Purchase Order" %}
                             </button>
-                            <a href="{% url 'buyers:buyer_index' %}" class="btn btn-warning">{% trans 'Go to my Purchase Orders' %}</a>
+                            <a href="{% url 'buyers:buyer_index' %}" class="btn btn-warning">
+                                {% trans 'Go to my Purchase Orders' %}
+                            </a>
                         </div>
                     </form>
                 </div>

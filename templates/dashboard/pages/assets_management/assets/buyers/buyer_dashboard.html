@@ -55,7 +55,7 @@
                         </div>
                     </div>
 
-
+                    <div id="alerts-container"></div>
                     <table id="offers_table">
                         <thead>
                             <tr>
@@ -72,7 +72,10 @@
                         </thead>
                         <tbody>
                             {% for offer in offers %}
-                            <tr>
+
+
+                            {% if offer.display %}
+                            <tr data-offer-row="{{ offer.id }}">
                                 <td>{{ forloop.counter }}</td>
                                 <td>{{ offer.asset_display_name }}</td>
                                 <td>{{ offer.get_offer_type_display }}</td>
@@ -83,28 +86,29 @@
                                 <td>{{ offer.offer_amount|currency }}</td>
                                 <td>
                                     {% if offer.is_approved and offer.is_active and offer.reviewed %}
-                                    <!-- Verde Aprobado + Activo + Revisado -->
                                     <i class="fa-solid fa-check-double" style="color: green;"
                                         title="{% trans 'Approved' %}"></i>
 
                                     {% elif not offer.is_approved and offer.reviewed %}
-                                    <!-- Rojo Revisado pero no aprobado (activo o no, no importa) -->
                                     <i class="fa-regular fa-circle-xmark" style="color: red;"
                                         title="{% trans 'NOT Approved' %}"></i>
 
-                                    {% elif not offer.is_approved and not offer.reviewed %}
-                                    <!-- Naranja No aprobado y No revisado (estado inicial, esperando) -->
+                                    {% elif not offer.is_approved and not offer.reviewed and offer.is_active %}
                                     <i class="fa-regular fa-circle-xmark" style="color: orange;"
                                         title="{% trans 'Pending for Approval' %}"></i>
 
                                     {% else %}
-                                    <!-- Gris Cualquier otra combinación “inconsistente” o en revisión interna -->
                                     <i class="fa-regular fa-circle-xmark" style="color: grey;"
                                         title="{% trans 'Under review' %}"></i>
                                     {% endif %}
                                 </td>
 
                                 <td>
+                                    <a href="{% url 'buyers:offer_details' offer.id %}" type="button"
+                                        class="btn btn-datatable btn-icon btn-outline-success">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </a>
+
                                     {% if not offer.reviewed %}
                                     <a href="{% url 'buyers:offer_update' offer.id %}"
                                         class="btn btn-datatable btn-icon btn-outline-primary">
@@ -112,18 +116,25 @@
                                     </a>
                                     {% endif %}
 
-                                    <!-- TODO <button class="btn btn-datatable btn-icon btn-outline-danger" id="btn-modal-delete-offer" data-offer-id="{{ offer.id }}">
+                                    {% if not offer.is_approved %}
+                                    <button class="btn btn-datatable btn-icon btn-outline-danger"
+                                        data-offer-id="{{ offer.id }}"
+                                        data-delete-url="{% url 'buyers:offer_delete' offer.id %}"
+                                        data-asset="{{ offer.asset_display_name }}"
+                                        data-offer-type="{{ offer.get_offer_type_display }}"
+                                        data-quantity-type="{{ offer.get_quantity_type_display }}"
+                                        data-quantity="{{ offer.offer_quantity }}"
+                                        data-country="{{ offer.buyer_country.get_continent_display }} - {{ offer.buyer_country.es_country_name }}"
+                                        data-amount="{{ offer.offer_amount|currency }}"
+                                        data-approved="{% if offer.is_approved %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif %}"
+                                        data-bs-toggle="modal" data-bs-target="#confirmDeleteOfferModal">
                                         <i class="fa-regular fa-trash-can"></i>
-                                    </button> -->
-
-                                    {% if offer.reviewed %}
-                                    <a href="{% url 'buyers:offer_details' offer.id %}" type="button"
-                                        class="btn btn-datatable btn-icon btn-outline-success">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </a>
+                                    </button>
                                     {% endif %}
                                 </td>
                             </tr>
+                            {% endif %}
+
                             {% empty %}
                             {% endfor %}
                         </tbody>
@@ -148,7 +159,9 @@
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form.media.css }}
+
                         <div class="row">
+
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="id_asset" class="form-label">
@@ -158,10 +171,10 @@
                                     </label>
                                     {{ form.asset|add_attrs:"class=form-select" }}
                                 </div>
-                                <button type="button" class="btn btn-outline-success mb-3" data-bs-toggle="modal"
-                                    data-bs-target="#addAssetModal">
-                                    {% trans '+ Add New Asset' %}
-                                </button>
+
+                                <a type="button" class="btn btn-outline-success mb-3" href="{% url 'assets:create' %}">
+                                    <i class="fa-solid fa-plus mx-1"></i> {% trans 'Add New Asset' %}
+                                </a>
                             </div>
 
                             <div class="col-md-4">
@@ -253,7 +266,7 @@
 
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-outline-success">
-                                {% trans 'Submit Purchase Order' %}
+                                <i class="fa-solid fa-floppy-disk mx-1"></i> {% trans 'Submit Purchase Order' %}
                             </button>
                         </div>
                     </form>
@@ -315,37 +328,13 @@
         </div>
     </div>
 </div>
-
-
 {% endblock %}
 
+
 {% block modals %}
-<div class="modal fade" id="addAssetModal" tabindex="-1" aria-labelledby="addAssetModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <form id="addAssetForm" method="post" enctype="multipart/form-data" action="{% url 'assets:add_asset' %}">
-                {% csrf_token %}
-                {{ form.media.css }}
-                {{ form.media.js }}
-
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="addAssetModalLabel">{% trans "Add New Asset" %}</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="{% trans 'Close' %}"></button>
-                </div>
-                <div class="modal-body">
-                    {{ add_asset.as_p }}
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
-                    <button type="submit" class="btn btn-primary">{% trans "Save Asset" %}</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+{% include 'dashboard/pages/assets_management/assets/buyers/modals/delete_offer_modal.html' %}
 {% endblock modals %}
+
 
 {% block body_custom_js %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -386,6 +375,151 @@
             }
         });
     });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var deleteModalEl = document.getElementById('confirmDeleteOfferModal');
+        if (!deleteModalEl) return;
+
+        deleteModalEl.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget; // Botón que abrió la modal
+
+            // Leer dataset del botón
+            var offerId = button.getAttribute('data-offer-id');
+            var deleteUrl = button.getAttribute('data-delete-url');
+            var asset = button.getAttribute('data-asset');
+            var offerType = button.getAttribute('data-offer-type');
+            var qType = button.getAttribute('data-quantity-type');
+            var qty = button.getAttribute('data-quantity');
+            var country = button.getAttribute('data-country');
+            var amount = button.getAttribute('data-amount');
+            var approved = button.getAttribute('data-approved');
+
+            // Rellenar la tabla de la modal
+            deleteModalEl.querySelector('#del-asset').textContent = asset || '';
+            deleteModalEl.querySelector('#del-offer-type').textContent = offerType || '';
+            deleteModalEl.querySelector('#del-quantity-type').textContent = qType || '';
+            deleteModalEl.querySelector('#del-quantity').textContent = qty || '';
+            deleteModalEl.querySelector('#del-country').textContent = country || '';
+            deleteModalEl.querySelector('#del-amount').textContent = amount || '';
+            deleteModalEl.querySelector('#del-approved').textContent = approved || '';
+
+            // Configurar form
+            var form = deleteModalEl.querySelector('#deleteOfferForm');
+            form.setAttribute('action', deleteUrl);
+            deleteModalEl.querySelector('#del-offer-id').value = offerId;
+        });
+    });
+</script>
+
+{% trans 'Purchase Order Successfully Deleted' as PurchaseOrderDeleted %}
+{% trans 'Close' as CloseText %}
+{% trans 'There was a problem deleting the purchase order.' as DeleteErrorText %}
+
+<script>
+    (function () {
+        const successText = "{{ PurchaseOrderDeleted }}";
+
+        function getCSRFToken() {
+            // Si usas cookies (setup típico de Django)
+            const name = 'csrftoken';
+            const cookies = document.cookie ? document.cookie.split('; ') : [];
+            for (let c of cookies) {
+                if (c.startsWith(name + '=')) return decodeURIComponent(c.split('=').pop());
+            }
+            // Fallback: buscar en el form de la modal
+            const input = document.querySelector('#deleteOfferForm input[name=csrfmiddlewaretoken]');
+            return input ? input.value : '';
+        }
+
+        function showAlert(message, type = 'success') {
+            const container = document.getElementById('alerts-container');
+            if (!container) return;
+            container.innerHTML = `
+        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+          ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ CloseText }}"></button>
+        </div>`;
+        }
+
+        function reindexTableRows(tableEl) {
+            if (!tableEl) return;
+            // Recalcular la primera columna (#) manualmente
+            const rows = tableEl.querySelectorAll('tbody tr');
+            let i = 1;
+            rows.forEach(tr => {
+                const firstCell = tr.querySelector('td');
+                if (firstCell) firstCell.textContent = i++;
+            });
+        }
+
+        function removeRowFromTable(offerId) {
+            const tr = document.querySelector(`tr[data-offer-row="${offerId}"]`);
+            if (!tr) {
+                // Fallback: si no encontramos la fila, recarga
+                location.reload();
+                return;
+            }
+
+            // Si usas Simple-DataTables y guardaste la instancia global, intenta usarla:
+            // window.offersDT = new simpleDatatables.DataTable(document.getElementById('offers_table'))
+            if (window.offersDT && typeof window.offersDT.rows?.remove === 'function') {
+                // Buscar índice de fila por elemento
+                const idx = Array.from(tr.parentElement.children).indexOf(tr);
+                if (idx >= 0) {
+                    window.offersDT.rows.remove(idx); // quita la fila del datatable
+                    return;
+                }
+            }
+
+            // Sin instancia global: manipulación DOM pura
+            const table = document.getElementById('offers_table');
+            tr.parentElement.removeChild(tr);
+            reindexTableRows(table);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteModalEl = document.getElementById('confirmDeleteOfferModal');
+            if (!deleteModalEl) return;
+
+            const form = deleteModalEl.querySelector('#deleteOfferForm');
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                const action = form.getAttribute('action');
+                const offerId = deleteModalEl.querySelector('#del-offer-id').value;
+
+                try {
+                    const resp = await fetch(action, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCSRFToken(),
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                    });
+                    const data = await resp.json();
+
+                    if (resp.ok && data && data.success) {
+                        // Cierra la modal
+                        const modal = bootstrap.Modal.getInstance(deleteModalEl) || new bootstrap.Modal(deleteModalEl);
+                        modal.hide();
+
+                        // Mensaje de éxito
+                        showAlert(successText, 'success');
+
+                        // Refresca la tabla (quitar fila + reindexar)
+                        removeRowFromTable(offerId);
+                    } else {
+                        showAlert("{{ DeleteErrorText }}", 'danger');
+                    }
+                } catch (err) {
+                    console.error(err);
+                    showAlert("{{ DeleteErrorText }}", 'danger');
+                }
+            });
+        });
+    })();
 </script>
 {% endblock %}
 

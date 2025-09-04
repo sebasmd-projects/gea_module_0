@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-29 23:38-0500\n"
-"PO-Revision-Date: 2025-08-30 16:55-0500\n"
+"POT-Creation-Date: 2025-09-04 12:35-0500\n"
+"PO-Revision-Date: 2025-09-04 12:56-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -29,34 +29,34 @@ msgid "Details"
 msgstr "Detalles"
 
 #: .\apps\project\specific\assets_management\assets\admin\__init__.py:121
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:188
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:288
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:189
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:289
 msgid "Dates"
 msgstr "Fechas"
 
 #: .\apps\project\specific\assets_management\assets\admin\__init__.py:131
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:198
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:299
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:199
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:300
 msgid "Priority"
 msgstr "Orden"
 
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:264
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:265
 msgid "Required Fields"
 msgstr "Campos requeridos"
 
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:276
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:277
 msgid "Optional Fields"
 msgstr "Campos opcionales"
 
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:312
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:313
 msgid "Asset Name (ES)"
 msgstr "Nombre del activo (ES)"
 
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:316
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:317
 msgid "Asset Name (EN)"
 msgstr "Nombre del activo (EN)"
 
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:322
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:323
 msgid "Total Quantity by Type"
 msgstr "Cantidad total por tipo"
 
@@ -82,74 +82,123 @@ msgstr "Tiene imagen"
 msgid "Quantity Type"
 msgstr "Tipo de cantidad"
 
-#: .\apps\project\specific\assets_management\assets\models.py:24
+#: .\apps\project\specific\assets_management\assets\forms.py:69
+msgid "Asset name (ES)"
+msgstr "Nombre del activo (ES)"
+
+#: .\apps\project\specific\assets_management\assets\forms.py:70
+msgid "Asset name (EN)"
+msgstr "Nombre del activo (EN)"
+
+#: .\apps\project\specific\assets_management\assets\forms.py:106
+msgid "Both ES and EN names must be set (we auto-fill the hidden one)."
+msgstr ""
+"Se deben configurar los nombres ES y EN (completamos automáticamente el "
+"oculto)."
+
+#: .\apps\project\specific\assets_management\assets\models.py:28
 msgid "category (ES)"
 msgstr "categoría (ES)"
 
-#: .\apps\project\specific\assets_management\assets\models.py:29
+#: .\apps\project\specific\assets_management\assets\models.py:35
 msgid "category (EN)"
 msgstr "categoría (EN)"
 
-#: .\apps\project\specific\assets_management\assets\models.py:36
+#: .\apps\project\specific\assets_management\assets\models.py:42
+#: .\apps\project\specific\assets_management\assets\models.py:48
 msgid "description"
 msgstr "descripción"
 
-#: .\apps\project\specific\assets_management\assets\models.py:52
+#: .\apps\project\specific\assets_management\assets\models.py:57
+msgid "created by"
+msgstr "creado por"
+
+#: .\apps\project\specific\assets_management\assets\models.py:74
 msgid "2. Category"
 msgstr "2. Categoría"
 
-#: .\apps\project\specific\assets_management\assets\models.py:53
+#: .\apps\project\specific\assets_management\assets\models.py:75
 msgid "2. Categories"
 msgstr "2. Categorías"
 
-#: .\apps\project\specific\assets_management\assets\models.py:59
+#: .\apps\project\specific\assets_management\assets\models.py:81
 msgid "asset (es)"
 msgstr "activo (ES)"
 
-#: .\apps\project\specific\assets_management\assets\models.py:64
+#: .\apps\project\specific\assets_management\assets\models.py:88
 msgid "asset (en)"
 msgstr "activo (EN)"
 
-#: .\apps\project\specific\assets_management\assets\models.py:79
+#: .\apps\project\specific\assets_management\assets\models.py:107
 msgid "1. Asset Name"
 msgstr "1. Nombre del activo"
 
-#: .\apps\project\specific\assets_management\assets\models.py:80
+#: .\apps\project\specific\assets_management\assets\models.py:108
 msgid "1. Asset Names"
 msgstr "1. Nombres de los activos"
 
-#: .\apps\project\specific\assets_management\assets\models.py:118
+#: .\apps\project\specific\assets_management\assets\models.py:146
 msgid "img"
 msgstr "img"
 
-#: .\apps\project\specific\assets_management\assets\models.py:129
+#: .\apps\project\specific\assets_management\assets\models.py:157
 msgid "asset"
 msgstr "activo"
 
-#: .\apps\project\specific\assets_management\assets\models.py:136
+#: .\apps\project\specific\assets_management\assets\models.py:164
 msgid "category"
 msgstr "categoría"
 
-#: .\apps\project\specific\assets_management\assets\models.py:140
+#: .\apps\project\specific\assets_management\assets\models.py:168
 msgid "description (ES)"
 msgstr "descripción (ES)"
 
-#: .\apps\project\specific\assets_management\assets\models.py:146
+#: .\apps\project\specific\assets_management\assets\models.py:174
 msgid "description (EN)"
 msgstr "descripción (EN)"
 
-#: .\apps\project\specific\assets_management\assets\models.py:152
+#: .\apps\project\specific\assets_management\assets\models.py:180
 msgid "observations (ES)"
 msgstr "observaciones (ES)"
 
-#: .\apps\project\specific\assets_management\assets\models.py:159
+#: .\apps\project\specific\assets_management\assets\models.py:187
 msgid "observations (EN)"
 msgstr "observaciones (EN)"
 
-#: .\apps\project\specific\assets_management\assets\models.py:192
+#: .\apps\project\specific\assets_management\assets\models.py:220
 msgid "3. Asset"
 msgstr "3. Activo"
 
-#: .\apps\project\specific\assets_management\assets\models.py:193
+#: .\apps\project\specific\assets_management\assets\models.py:221
 msgid "3. Assets"
 msgstr "3. Activos"
+
+#: .\apps\project\specific\assets_management\assets\signals.py:93
+#, python-brace-format
+msgid "Error filling asset category translation fields: {e}"
+msgstr ""
+"Error al rellenar los campos de traducción de la categoría de activos: {e}"
+
+#: .\apps\project\specific\assets_management\assets\signals.py:121
+#, python-brace-format
+msgid "Error filling asset name translation fields: {e}"
+msgstr ""
+"Error al completar los campos de traducción del nombre del activo: {e}"
+
+#: .\apps\project\specific\assets_management\assets\signals.py:165
+#, python-brace-format
+msgid "Error filling asset translation fields: {e}"
+msgstr "Error al rellenar los campos de traducción de activos: {e}"
+
+#: .\apps\project\specific\assets_management\assets\views.py:79
+msgid "Asset and Asset Name created successfully."
+msgstr "Activo y nombre del activo creados exitosamente."
+
+#: .\apps\project\specific\assets_management\assets\views.py:82
+msgid "Please fix the errors below."
+msgstr "Por favor corrija los errores a continuación."
+
+#: .\apps\project\specific\assets_management\assets\views.py:103
+#| msgid "Asset and Asset Name created successfully."
+msgid "New category created successfully."
+msgstr "Nueva categoría creada exitosamente."

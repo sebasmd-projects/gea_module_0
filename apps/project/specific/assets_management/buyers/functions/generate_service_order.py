@@ -1,4 +1,3 @@
-import datetime
 import io
 
 from reportlab.graphics.barcode import code128
@@ -10,7 +9,7 @@ from reportlab.platypus import (Image, Paragraph, SimpleDocTemplate, Spacer,
                                 Table, TableStyle)
 
 
-def generar_orden_compra_pdf(offer, user):
+def generate_service_order_pdf(offer, user):
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(
         buffer,
@@ -35,9 +34,9 @@ def generar_orden_compra_pdf(offer, user):
     elements.append(Spacer(1, 20))
 
     # ---------------- BARCODE ----------------
-    codigo_unico = f"PO-{str(offer.id)[:8].upper()}"
+    codigo_unico = f"OS-{str(offer.id)[:8].upper()}"
     fecha_str = offer.created.strftime("%d%m%Y")
-    barcode_value = f"PURCHASE ORDER PRIVATE ALLIANCE USA {fecha_str} F991 {codigo_unico}"
+    barcode_value = f"ORDEN DE SERVICIO {fecha_str} M9Q0 {codigo_unico}"
     barcode = code128.Code128(barcode_value, barHeight=25 * mm, barWidth=0.85)
 
     # Envolver barcode en una tabla de una celda para centrarlo y darle ancho total
@@ -73,7 +72,7 @@ def generar_orden_compra_pdf(offer, user):
 
     left_cell = Table(
         [[
-            Paragraph("<b>Purchase order id:</b>", styles["Normal"]),
+            Paragraph("<b>Orden de servicio id:</b>", styles["Normal"]),
             Paragraph(f"{str(offer.id)[:8].upper()}", id_style)
         ]],
         colWidths=[120, 80]
@@ -82,9 +81,9 @@ def generar_orden_compra_pdf(offer, user):
     # Columna derecha (Fecha: día, mes, año)
     right_cell = Table(
         [[
-            Paragraph("<b>Day:</b>", styles["Normal"]), fecha.strftime("%d"),
-            Paragraph("<b>Month:</b>", styles["Normal"]), fecha.strftime("%m"),
-            Paragraph("<b>Year:</b>", styles["Normal"]), fecha.strftime("%Y"),
+            Paragraph("<b>Día:</b>", styles["Normal"]), fecha.strftime("%d"),
+            Paragraph("<b>Mes:</b>", styles["Normal"]), fecha.strftime("%m"),
+            Paragraph("<b>Año:</b>", styles["Normal"]), fecha.strftime("%Y"),
         ]],
         colWidths=[40, 40, 50, 40, 40, 50]
     )
@@ -105,10 +104,10 @@ def generar_orden_compra_pdf(offer, user):
     # ---------------- AUTHORIZES and ADDRESSED TO ----------------
     addressed_and_authorizes_table = Table(
         [
-            ["AUTHORIZES:", "OFFICIAL'S POSITION:"],
-            [user.get_full_name().upper(), "OFFICIAL PURCHASE AND LIAISON"],
-            ["ADDRESSED TO:", "OFFICIAL'S POSITION:"],
-            ["GLOBAL ALLIANCE", "OFFICIAL PURCHASE DELEGATES"],
+            ["AUTORIZA:", "CARGO:"],
+            ["DR. JORGE URIEL VEGA L.", "DELEGADO OFICIAL COMPRA EE. UU."],
+            ["DIRIGIDO A:", "OFFICIAL'S POSITION:"],
+            ["JOSÉ HENRY RIVAS", "ESPECIALISTA EN CAPTACIÓN DE ACTIVOS"],
         ],
         colWidths=[275, 275],
     )
@@ -127,14 +126,14 @@ def generar_orden_compra_pdf(offer, user):
 
     # ---------------- DETALLE ----------------
     detalle_data = [
-        ["Asset", "Quantity Type", "Quantity"],
+        ["Activo", "Tipo de Cantidad", "Cantidad"],
         [
             offer.asset_display_name,
             offer.get_quantity_type_display(),
             str(offer.offer_quantity)
         ],
     ]
-    detalle_table = Table(detalle_data, colWidths=[390, 80, 80])
+    detalle_table = Table(detalle_data, colWidths=[380, 90, 80])
     detalle_table.setStyle(
         TableStyle([
             ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#007bff36")),
@@ -147,21 +146,18 @@ def generar_orden_compra_pdf(offer, user):
     elements.append(Spacer(1, 20))
 
     # ---------------- OBSERVACIONES ----------------
-    obs_data = [["Observations - Description"]]
-    if offer.es_observation or offer.en_observation:
+    obs_data = [["Observaciones - Descripción"]]
+    
+    if offer.observation:
         obs_text = ""
-        if offer.es_observation:
-            obs_text += f"ES: {offer.es_observation}<br/>"
-        if offer.en_observation:
-            obs_text += f"EN: {offer.en_observation}<br/>"
+        if offer.observation:
+            obs_text += f"{offer.observation}<br/>"
         obs_data.append([Paragraph(obs_text, styles["Normal"])])
 
-    if offer.es_description or offer.en_description:
+    if offer.description:
         desc_text = ""
-        if offer.es_description:
-            desc_text += f"ES: {offer.es_description}<br/>"
-        if offer.en_description:
-            desc_text += f"EN: {offer.en_description}<br/>"
+        if offer.description:
+            desc_text += f"{offer.description}<br/>"
         obs_data.append([Paragraph(desc_text, styles["Normal"])])
 
     # Tabla Observations independiente
@@ -176,15 +172,15 @@ def generar_orden_compra_pdf(offer, user):
 
     # ---------------- QUANTITY + TOTAL VALUE ----------------
     qt_data = [
-        [Paragraph("<b>Quantity Type</b>", styles["Normal"]),
-         Paragraph("<b>Quantity</b>", styles["Normal"])],
+        [Paragraph("<b>Tipo de Cantidad</b>", styles["Normal"]),
+         Paragraph("<b>Cantidad</b>", styles["Normal"])],
         [
             f"{offer.get_quantity_type_display()}",
             str(offer.offer_quantity),
         ],
     ]
 
-    qt_table = Table(qt_data, colWidths=[100, 80])
+    qt_table = Table(qt_data, colWidths=[90, 90])
     qt_table.setStyle(TableStyle([
         ("GRID", (0, 0), (-1, -1), 0.5, colors.black),
         ("ALIGN", (0, 1), (-1, -1), "LEFT"),   # datos alineados a la izquierda
@@ -206,12 +202,12 @@ def generar_orden_compra_pdf(offer, user):
 
     # ---------------- FOOTER ----------------
     footer_img = Image(
-        "https://propensionesabogados.com/static/assets/imgs/GEA/stamp_mitch.webp",
+        "https://propensionesabogados.com/static/assets/imgs/GEA/stamp_propensiones.webp",
         width=80,
         height=80
     )
 
-    contacto = "\nmitch@recoveryrepatriationfoundation.com\n+1 609 342 71 06"
+    contacto = "\ndirector@propensionesabogados.com\n+57 318 328 01 76"
 
     # Columna izquierda: imagen centrada sobre el texto
     contacto_table = Table(
@@ -254,46 +250,3 @@ def generar_orden_compra_pdf(offer, user):
     pdf_value = buffer.getvalue()
     buffer.close()
     return pdf_value
-
-
-# class DummyOffer:
-#     def __init__(self):
-#         self.id = 1
-#         self.created = datetime.datetime.now()
-#         self.asset_display_name = "Industrial Generator X200"
-#         self.offer_quantity = 5
-#         self.offer_amount = 12500.75
-#         self._quantity_type = "Units"
-#         self.es_observation = "Requiere entrega en bodega central en Bogotá."
-#         self.en_observation = "Requires delivery to the main warehouse in Bogotá."
-#         self.es_description = "Generador industrial de alta capacidad."
-#         self.en_description = "High-capacity industrial generator."
-
-#     def get_quantity_type_display(self):
-#         return self._quantity_type
-
-
-# class DummyUser:
-#     def get_full_name(self):
-#         return "Sebastián Morales"
-
-#     @property
-#     def email(self):
-#         return "sebastian@example.com"
-
-#     @property
-#     def username(self):
-#         return "sebastian"
-
-
-# # --- Probar la generación del PDF ---
-# offer = DummyOffer()
-# user = DummyUser()
-
-# pdf_bytes = generar_orden_compra_pdf(offer, user)
-
-# # Guardar el PDF localmente para verificar
-# with open("orden_compra_dummy.pdf", "wb") as f:
-#     f.write(pdf_bytes)
-
-# print("PDF generado: orden_compra_dummy.pdf")

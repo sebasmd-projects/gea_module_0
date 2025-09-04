@@ -6,7 +6,9 @@ from datetime import date
 from auditlog.registry import auditlog
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.db import models
+from django.db import models, transaction
+from django.db.models import CheckConstraint, F, Q
+from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
@@ -32,7 +34,12 @@ class OfferModel(TimeStampedModel):
         Path format: offer/{slugified_name}/img/YYYY/MM/DD/{hashed_filename}.{extension}
         """
         try:
-            es_name = slugify(instance.asset.asset_name.es_name)[:40]
+            name_src = (
+                getattr(instance.asset.asset_name, "es_name", None)
+                or getattr(instance.asset.asset_name, "en_name", "")
+                or "asset"
+            )
+            es_name = slugify(name_src)[:40]
             base_filename, file_extension = os.path.splitext(filename)
             filename_hash = generate_md5_or_sha256_hash(base_filename)
             path = os.path.join(
@@ -94,7 +101,7 @@ class OfferModel(TimeStampedModel):
     offer_amount = models.DecimalField(
         _("Total value of the offer ($ USD)"),
         max_digits=20,
-        decimal_places=1,
+        decimal_places=2,
         default=0
     )
 
@@ -141,11 +148,37 @@ class OfferModel(TimeStampedModel):
         default=False
     )
 
+    display = models.BooleanField(
+        _("Display"),
+        default=True
+    )
+
     approved_by = models.ForeignKey(
         UserModel,
         on_delete=models.SET_NULL,
         related_name="buyers_offer_approved_by_user",
         verbose_name=_("Approved By"),
+        null=True,
+        blank=True
+    )
+
+    reviewed_by = models.ForeignKey(
+        UserModel,
+        on_delete=models.SET_NULL,
+        related_name="buyers_offer_reviewed_by_user",
+        verbose_name=_("Reviewed By"),
+        null=True,
+        blank=True
+    )
+
+    approved_by_timestamp = models.DateTimeField(
+        verbose_name=_("Approved By Timestamp"),
+        null=True,
+        blank=True
+    )
+
+    reviewed_by_timestamp = models.DateTimeField(
+        verbose_name=_("Reviewed By Timestamp"),
         null=True,
         blank=True
     )
@@ -157,38 +190,85 @@ class OfferModel(TimeStampedModel):
             return self.asset.asset_name.es_name
         return self.asset.asset_name.en_name or self.asset.asset_name.es_name
 
+    @transaction.atomic
+    def mark_reviewed(self, user):
+        self.reviewed_by = user
+        self.reviewed = True
+        self.save(
+            update_fields=[
+                "reviewed_by",
+                "reviewed",
+                "reviewed_by_timestamp"
+            ]
+        )
+
+    @transaction.atomic
+    def mark_approved(self, user):
+        if not self.reviewed or not self.reviewed_by:
+            raise ValidationError(_("Offer must be reviewed before approval."))
+        self.approved_by = user
+        self.is_approved = True
+        self.save(
+            update_fields=[
+                "approved_by",
+                "is_approved",
+                "approved_by_timestamp"
+            ]
+        )
+
     def clean(self):
-        # 1. Si está aprobado, debe tener aprobador
+        errors = []
         if self.is_approved and not self.approved_by:
-            raise ValidationError(
+            errors.append(
                 _("An approver is required when marking as approved."))
-
-        # 2. Si tiene aprobador, debe estar aprobado y revisado
-        if self.approved_by:
-            if not self.is_approved:
-                raise ValidationError(
-                    _("If there is an approver, the offer must be marked as approved."))
-            if not self.reviewed:
-                raise ValidationError(
-                    _("If there is an approver, the offer must be marked as reviewed."))
-
-        # 3. Si está aprobado pero no está revisado → error
+        if self.reviewed and not self.reviewed_by:
+            errors.append(
+                _("A reviewer is required when marking as reviewed."))
         if self.is_approved and not self.reviewed:
-            raise ValidationError(
-                _("An approved offer must also be reviewed."))
+            errors.append(_("An approved offer must also be reviewed."))
+        if self.approved_by and not self.is_approved:
+            errors.append(
+                _("If there is an approver, the offer must be marked as approved."))
+        if self.approved_by and not self.reviewed:
+            errors.append(
+                _("If there is an approver, the offer must be marked as reviewed."))
+        if errors:
+            raise ValidationError(errors)
 
     def save(self, *args, **kwargs):
-        if self.approved_by and not self.is_approved:
-            self.is_approved = True
-            self.reviewed = True
+        self.full_clean()
 
-        if not self.approved_by:
-            self.is_approved = False
+        is_new = self._state.adding
+        old = None
+        if not is_new and self.pk:
+            old = OfferModel.objects.filter(pk=self.pk).only(
+                "is_approved", "approved_by", "reviewed", "reviewed_by").first()
 
-        super(OfferModel, self).save(*args, **kwargs)
+        # approved_at
+        if self.is_approved and self.approved_by:
+            should_set = False
+            if is_new or not self.approved_by_timestamp:
+                should_set = True
+            elif old and (old.approved_by_id != self.approved_by_id):
+                should_set = True
+            if should_set:
+                self.approved_by_timestamp = timezone.now()
+        else:
+            self.approved_by_timestamp = None
 
-    def total_value(self):
-        return self.offer_amount * self.offer_quantity
+        # reviewed_at
+        if self.reviewed and self.reviewed_by:
+            should_set = False
+            if is_new or not self.reviewed_by_timestamp:
+                should_set = True
+            elif old and (old.reviewed_by_id != self.reviewed_by_id):
+                should_set = True
+            if should_set:
+                self.reviewed_by_timestamp = timezone.now()
+        else:
+            self.reviewed_by_timestamp = None
+
+        super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return f"{self.asset.asset_name.en_name} - {self.buyer_country} - {self.offer_quantity}"
@@ -200,6 +280,7 @@ class OfferModel(TimeStampedModel):
         ordering = ["default_order", "-created"]
         permissions = [
             ("can_approve_offer", _("Can approve purchase orders")),
+            ("can_review_offer", _("Can review purchase orders")),
         ]
 
 

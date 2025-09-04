@@ -14,7 +14,7 @@ from apps.project.common.users.models import UserModel
 from apps.project.specific.assets_management.assets.models import AssetModel
 
 from .form import OfferForm, OfferUpdateForm
-from .functions import generar_orden_compra_pdf
+from .functions import generate_purchase_order_pdf
 from .models import OfferModel
 
 
@@ -127,7 +127,7 @@ class BuyerCreateView(BuyerRequiredMixin, CreateView):
             "user_email": escape(self.request.user.email),
             "user_username": escape(self.request.user.username),
         }
-        
+
         # Generar el cuerpo del correo con HTML
         html_content = render_to_string(
             "core/email/purchase_order_email_template.html",
@@ -143,13 +143,14 @@ class BuyerCreateView(BuyerRequiredMixin, CreateView):
             bcc=hide_recipient_email
         )
         email.content_subtype = "html"
-        pdf_bytes = generar_orden_compra_pdf(offer_instance, self.request.user)
+        pdf_bytes = generate_purchase_order_pdf(
+            offer_instance, self.request.user)
         email.attach(
             f"purchase_order_{offer_instance.id}.pdf",
             pdf_bytes,
             "application/pdf"
         )
-        
+
         # email.send()
 
 
@@ -162,10 +163,10 @@ class OfferUpdateView(BuyerRequiredMixin, UpdateView):
 
 class OfferSoftDeleteView(BuyerRequiredMixin, View):
     def post(self, request, *args, **kwargs):
-        offer = get_object_or_404(OfferModel, pk=kwargs.get('pk'))
-        offer.is_active = False
+        offer = get_object_or_404(OfferModel, pk=kwargs.get('id'))
+        offer.display = False
         offer.save()
-        return JsonResponse({'success': True})
+        return JsonResponse({'success': True, 'id': str(offer.pk)})
 
 
 class OfferDetailView(DetailView):
@@ -177,12 +178,3 @@ class OfferDetailView(DetailView):
         """Fetch the OfferModel instance by the ID provided in the URL."""
         return get_object_or_404(OfferModel, id=self.kwargs.get('id'))
 
-    def get_context_data(self, **kwargs):
-        """Add custom context data to be used in the template."""
-        context = super().get_context_data(**kwargs)
-        offer = context['offer']
-
-        # Obtener el idioma actual del usuario
-        current_language = get_language()
-
-        return context

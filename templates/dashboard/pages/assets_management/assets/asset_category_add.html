@@ -1,0 +1,125 @@
+{% extends 'dashboard/layout/base.html' %}
+
+{% load i18n static custom_filters %}
+
+{% block layout_main %}
+
+<header class="page-header page-header-dark pb-10"
+    style="background-image: linear-gradient(to bottom, #5e5751 0%, #5a554a 50%, #383630 100%);">
+    <div class="container-xl px-4">
+        <div class="page-header-content pt-4">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-auto mt-4">
+                    <h1 class="page-header-title">
+                        <div class="page-header-icon">
+                            <i data-feather="tool"></i>
+                        </div>
+                        {% trans 'Category' %}
+                    </h1>
+                    <div class="page-header-subtitle">
+                        {% trans 'Register a new category' %}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container px-4 mt-n10">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header"
+                    style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
+                    <h2 style="color:black;">{% trans 'New Category' %}</h2>
+                </div>
+                <div class="card-body">
+
+                    <p> {{ form.non_field_errors }} </p>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <strong class="text-dark">{% trans 'Category' %}</strong>
+                            </div>
+                            <div class="card-body row">
+                                {% if request.LANGUAGE_CODE == 'es' %}
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="{{ form.es_name.id_for_label }}">
+                                        {% trans 'Asset Category (ES)*' %}
+                                    </label>
+                                    {{ form.es_name|add_class:"form-control" }}
+                                    {% if form.es_name.errors %}
+                                    <div class="text-danger small">{{ form.es_name.errors|join:", " }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="{{ form.es_description.id_for_label }}">
+                                        {% trans 'Description (ES)' %}
+                                    </label>
+                                    {{ form.es_description|add_class:"form-control" }}
+                                    {% if form.es_description.errors %}
+                                    <div class="text-danger small">
+                                        {{ form.es_description.errors|join:", " }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                {% else %}
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="{{ form.en_name.id_for_label }}">
+                                        {% trans 'Asset Category (EN)' %}
+                                    </label>
+                                    {{ form.en_name|add_class:"form-control" }}
+                                    {% if form.en_name.errors %}
+                                    <div class="text-danger small">{{ form.en_name.errors|join:", " }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="{{ form.en_description.id_for_label }}">
+                                        {% trans 'Description (EN)' %}
+                                    </label>
+                                    {{ form.en_description|add_class:"form-control" }}
+                                    {% if form.en_description.errors %}
+                                    <div class="text-danger small">
+                                        {{ form.en_description.errors|join:", " }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-outline-success">
+                                <i class="fa-solid fa-floppy-disk mx-1"></i>{% trans 'Save' %}
+                            </button>
+
+                            <a href="{% url 'assets:create' %}" class="btn btn-outline-gold"
+                                rel="noopener noreferrer">
+                                <i class="fa-solid fa-arrow-left mx-1"></i> {% trans 'Add new Asset' %}
+                            </a>
+
+                            <a href="{% url 'buyers:buyer_index' %}" class="btn btn-outline-gold"
+                                rel="noopener noreferrer">
+                                <i class="fa-solid fa-arrow-left mx-1"></i> {% trans 'Go to my Purchase Orders' %}
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block body_custom_js %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+{% endblock %}

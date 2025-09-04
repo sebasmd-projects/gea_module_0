@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-30 18:53-0500\n"
-"PO-Revision-Date: 2025-08-30 16:56-0500\n"
+"POT-Creation-Date: 2025-09-04 12:35-0500\n"
+"PO-Revision-Date: 2025-09-04 12:57-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -19,113 +19,145 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.0\n"
 
-#: .\apps\project\specific\assets_management\buyers\admin.py:47
+#: .\apps\project\specific\assets_management\buyers\admin.py:52
 msgid "Required Fields"
 msgstr "Campos obligatorios"
 
-#: .\apps\project\specific\assets_management\buyers\admin.py:58
+#: .\apps\project\specific\assets_management\buyers\admin.py:63
 msgid "Approval"
 msgstr "Aprobación"
 
-#: .\apps\project\specific\assets_management\buyers\admin.py:66
+#: .\apps\project\specific\assets_management\buyers\admin.py:73
 msgid "Dates"
 msgstr "Fechas"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:26
+#: .\apps\project\specific\assets_management\buyers\models.py:28
 msgid "Units"
 msgstr "Unidades"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:27
+#: .\apps\project\specific\assets_management\buyers\models.py:29
 msgid "Boxes"
 msgstr "Cajas"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:54
+#: .\apps\project\specific\assets_management\buyers\models.py:61
 msgid "Official purchase of the United States"
 msgstr "Compra oficial de los Estados Unidos"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:69
+#: .\apps\project\specific\assets_management\buyers\models.py:76
 msgid "Created By"
 msgstr "Creado por"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:77
+#: .\apps\project\specific\assets_management\buyers\models.py:84
 msgid "Asset"
 msgstr "Activo"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:81
+#: .\apps\project\specific\assets_management\buyers\models.py:88
 msgid "Purchase order Type"
 msgstr "Tipo de compra"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:88
+#: .\apps\project\specific\assets_management\buyers\models.py:95
 msgid "quantity type"
 msgstr "tipo de cantidad"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:95
+#: .\apps\project\specific\assets_management\buyers\models.py:102
 msgid "Total value of the offer ($ USD)"
 msgstr "Valor total de la oferta ($ USD)"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:102
+#: .\apps\project\specific\assets_management\buyers\models.py:109
 msgid "Quantity needed"
 msgstr "Cantidad necesaria"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:107
+#: .\apps\project\specific\assets_management\buyers\models.py:114
 msgid "Observation (EN)"
 msgstr "Observación (EN)"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:112
+#: .\apps\project\specific\assets_management\buyers\models.py:119
 msgid "Observation (ES)"
 msgstr "Observación (ES)"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:117
+#: .\apps\project\specific\assets_management\buyers\models.py:124
 msgid "Description (EN)"
 msgstr "Descripción (EN)"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:122
+#: .\apps\project\specific\assets_management\buyers\models.py:129
 msgid "Description (ES)"
 msgstr "Descripción (ES)"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:130
+#: .\apps\project\specific\assets_management\buyers\models.py:137
 msgid "Country"
 msgstr "País"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:135
+#: .\apps\project\specific\assets_management\buyers\models.py:142
 msgid "Approved"
 msgstr "Aprobado"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:140
+#: .\apps\project\specific\assets_management\buyers\models.py:147
 msgid "Reviewed"
 msgstr "Revisado"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:148
+#: .\apps\project\specific\assets_management\buyers\models.py:152
+msgid "Display"
+msgstr "Mostrar"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:160
 msgid "Approved By"
 msgstr "Aprobado por"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:164
+#: .\apps\project\specific\assets_management\buyers\models.py:169
+#| msgid "Reviewed"
+msgid "Reviewed By"
+msgstr "Revisado por"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:175
+msgid "Approved By Timestamp"
+msgstr "Tiempo de aprobación"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:181
+#| msgid "Approved By Timestamp"
+msgid "Reviewed By Timestamp"
+msgstr "Marca de tiempo \"Revisado por\""
+
+#: .\apps\project\specific\assets_management\buyers\models.py:208
+msgid "Offer must be reviewed before approval."
+msgstr "La oferta debe ser revisada antes de su aprobación."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:223
 msgid "An approver is required when marking as approved."
 msgstr "Se requiere un aprobador para marcar como aprobado."
 
-#: .\apps\project\specific\assets_management\buyers\models.py:170
-msgid "If there is an approver, the offer must be marked as approved."
-msgstr "Si hay un aprobador, la oferta debe marcarse como aprobada."
+#: .\apps\project\specific\assets_management\buyers\models.py:226
+#| msgid "An approver is required when marking as approved."
+msgid "A reviewer is required when marking as reviewed."
+msgstr "Se requiere un revisor para marcar como revisado."
 
-#: .\apps\project\specific\assets_management\buyers\models.py:173
-msgid "If there is an approver, the offer must be marked as reviewed."
-msgstr "Si hay un aprobador, la oferta debe marcarse como revisada."
-
-#: .\apps\project\specific\assets_management\buyers\models.py:178
+#: .\apps\project\specific\assets_management\buyers\models.py:228
 msgid "An approved offer must also be reviewed."
 msgstr "Una oferta aprobada también debe ser revisada."
 
-#: .\apps\project\specific\assets_management\buyers\models.py:198
+#: .\apps\project\specific\assets_management\buyers\models.py:231
+msgid "If there is an approver, the offer must be marked as approved."
+msgstr "Si hay un aprobador, la oferta debe marcarse como aprobada."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:234
+msgid "If there is an approver, the offer must be marked as reviewed."
+msgstr "Si hay un aprobador, la oferta debe marcarse como revisada."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:278
 msgid "1. Purchase order"
 msgstr "1. Orden de compra"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:199
+#: .\apps\project\specific\assets_management\buyers\models.py:279
 msgid "1. Purchase orders"
 msgstr "1. Ordenes de compra"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:202
+#: .\apps\project\specific\assets_management\buyers\models.py:282
 msgid "Can approve purchase orders"
 msgstr "Puede aprobar órdenes de compra"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:283
+#| msgid "Can approve purchase orders"
+msgid "Can review purchase orders"
+msgstr "Puede revisar las órdenes de compra"
 
 #: .\apps\project\specific\assets_management\buyers\views.py:71
 msgid "Your Purchase order has been sent for verification."

@@ -12,8 +12,12 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.common.utils.functions import generate_md5_or_sha256_hash
 from apps.common.utils.models import TimeStampedModel
-from apps.project.specific.assets_management.assets.signals import (
-    auto_delete_asset_img_on_change, auto_delete_asset_img_on_delete)
+
+from .signals import (auto_delete_asset_img_on_change,
+                      auto_delete_asset_img_on_delete,
+                      auto_fill_asset_category_translation,
+                      auto_fill_asset_name_translation,
+                      auto_fill_asset_translation_fields)
 
 logger = logging.getLogger(__name__)
 UserModel = get_user_model()
@@ -23,6 +27,8 @@ class AssetCategoryModel(TimeStampedModel):
     es_name = models.CharField(
         _("category (ES)"),
         max_length=50,
+        blank=True,
+        null=True
     )
 
     en_name = models.CharField(
@@ -32,17 +38,33 @@ class AssetCategoryModel(TimeStampedModel):
         null=True
     )
 
-    description = models.TextField(
+    es_description = models.TextField(
         _("description"),
         blank=True,
         null=True
     )
 
+    en_description = models.TextField(
+        _("description"),
+        blank=True,
+        null=True
+    )
+
+    created_by = models.ForeignKey(
+        UserModel,
+        on_delete=models.CASCADE,
+        related_name="assets_asset_assetcategory",
+        verbose_name=_("created by"),
+        blank=True,
+        null=True
+    )
+
     def __str__(self) -> str:
-        return self.es_name
+        return self.es_name or self.en_name or str(self.pk)
 
     def save(self, *args, **kwargs):
-        self.es_name = self.es_name.title().strip()
+        if self.es_name:
+            self.es_name = self.es_name.title().strip()
         if self.en_name:
             self.en_name = self.en_name.title().strip()
         super(AssetCategoryModel, self).save(*args, **kwargs)
@@ -58,20 +80,26 @@ class AssetsNamesModel(TimeStampedModel):
     es_name = models.CharField(
         _("asset (es)"),
         max_length=255,
+        blank=True,
+        null=True
     )
 
     en_name = models.CharField(
         _("asset (en)"),
         max_length=255,
+        blank=True,
+        null=True
     )
 
     def __str__(self) -> str:
-        return self.en_name
+        return self.en_name or self.es_name or str(self.pk)
 
     def save(self, *args, **kwargs):
-        self.es_name = self.es_name.title().strip()
-        self.en_name = self.en_name.title().strip()
-        
+        if self.es_name:
+            self.es_name = self.es_name.title().strip()
+        if self.en_name:
+            self.en_name = self.en_name.title().strip()
+
         super(AssetsNamesModel, self).save(*args, **kwargs)
 
     class Meta:
@@ -185,7 +213,7 @@ class AssetModel(TimeStampedModel):
         return totals
 
     def __str__(self) -> str:
-        return f"{self.asset_name.es_name} ({self.category.es_name})"
+        return self.asset_name.__str__() or str(self.pk)
 
     class Meta:
         db_table = "apps_assets_asset"
@@ -202,6 +230,21 @@ post_delete.connect(
 
 pre_save.connect(
     auto_delete_asset_img_on_change,
+    sender=AssetModel
+)
+
+pre_save.connect(
+    auto_fill_asset_category_translation,
+    sender=AssetCategoryModel
+)
+
+pre_save.connect(
+    auto_fill_asset_name_translation,
+    sender=AssetsNamesModel
+)
+
+pre_save.connect(
+    auto_fill_asset_translation_fields,
     sender=AssetModel
 )
 

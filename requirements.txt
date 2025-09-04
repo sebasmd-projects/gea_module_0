@@ -44,6 +44,7 @@ et_xmlfile==2.0.0
 idna==3.7
 inflection==0.5.1
 mysqlclient==2.2.4
+openai==1.72.0
 openpyxl==3.1.2
 packaging==24.1
 phonenumbers==8.13.49
