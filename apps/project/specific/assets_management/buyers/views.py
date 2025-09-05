@@ -6,7 +6,6 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils.html import escape
-from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DetailView, UpdateView, View
 
@@ -169,7 +168,7 @@ class OfferSoftDeleteView(BuyerRequiredMixin, View):
         return JsonResponse({'success': True, 'id': str(offer.pk)})
 
 
-class OfferDetailView(DetailView):
+class OfferDetailView(LoginRequiredMixin, DetailView):
     model = OfferModel
     template_name = 'dashboard/pages/assets_management/assets/buyers/detail_offer.html'
     context_object_name = 'offer'

@@ -11,6 +11,7 @@ from apps.project.specific.assets_management.assets_location.models import (
 from apps.project.specific.assets_management.assets_location.views import \
     HolderRequiredMixin
 from apps.project.specific.assets_management.buyers.models import OfferModel
+from apps.project.specific.assets_management.buyers.views import BuyerRequiredMixin
 
 from .forms import AssetAddNewCategoryForm, AssetInlineForm, AssetNameInlineForm
 from .models import AssetModel, AssetsNamesModel, AssetCategoryModel
@@ -45,7 +46,7 @@ class HolderTemplateview(HolderRequiredMixin, TemplateView):
         return context
 
 
-class AssetNameWithInlineAssetCreateView(View):
+class AssetNameWithInlineAssetCreateView(BuyerRequiredMixin, View):
     """
     Crea un AssetsNamesModel dependiendo del idioma y, en el mismo submit,
     registra su AssetModel (1–1) con categoría (Select2) + datos.
@@ -88,7 +89,7 @@ class AssetNameWithInlineAssetCreateView(View):
         return render(request, self.template_name, context)
 
 
-class AssetAddNewCategory(CreateView):
+class AssetAddNewCategory(BuyerRequiredMixin, CreateView):
     """Create a new asset category."""
 
     model = AssetCategoryModel
