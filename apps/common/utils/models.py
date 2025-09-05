@@ -57,25 +57,26 @@ class TimeStampedModel(models.Model):
         abstract = True
         ordering = ['default_order']
 
+
 class GeaDailyUniqueCodeManager(models.Manager):
-    def today(self):
-        """Devuelve el código de hoy si existe, o None."""
+    def today(self, *, kind: str):
+        """Devuelve el código activo de hoy para un kind dado, o None."""
         today = timezone.localdate()
-        return self.filter(valid_on=today, is_active=True).first()
+        return self.filter(valid_on=today, kind=kind, is_active=True).first()
 
     @transaction.atomic
-    def get_or_create_for_today(self):
-        """Obtiene o crea el código de hoy. Garantiza unicidad por fecha."""
+    def get_or_create_for_today(self, *, kind: str):
+        """
+        Obtiene o crea el código de hoy para un kind dado. Garantiza unicidad por (fecha, kind).
+        """
         today = timezone.localdate()
-        obj = self.select_for_update().filter(valid_on=today).first()
+        obj = self.select_for_update().filter(valid_on=today, kind=kind).first()
         if obj and obj.is_active:
             return obj, False
 
         if not obj:
-            obj = GeaDailyUniqueCode(valid_on=today)
+            obj = GeaDailyUniqueCode(valid_on=today, kind=kind)
 
-        # Genera un código de 10 caracteres (A-Z, 2-7, sin caracteres ambiguos)
-        # Puedes ajustar el length si quieres más/menos entropía.
         code = get_random_string(
             length=10, allowed_chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789")
         obj.code = code
@@ -83,25 +84,54 @@ class GeaDailyUniqueCodeManager(models.Manager):
         obj.save()
         return obj, True
 
-    def verify_code(self, candidate: str) -> bool:
-        """Valida un código contra el código activo de HOY."""
+    def verify_code(self, candidate: str, *, kind: str) -> bool:
+        """Valida un código contra el código activo de HOY para el kind proporcionado."""
         if not candidate:
             return False
-        rec = self.today()
+        rec = self.today(kind=kind)
         return bool(rec and candidate.strip() == rec.code)
 
-class GeaDailyUniqueCode(TimeStampedModel):
-    """
-    Código único diario para registro GEA.
-    - 'valid_on' es la fecha (zona horaria del servidor) para la cual el código es válido.
-    - 'code' es el token que se envía por correo y se usa en el formulario.
-    """
-    valid_on = models.DateField(_("valid on"), unique=True)
-    code = models.CharField(_("code"), max_length=64, db_index=True)
 
-    sent_to = models.JSONField(_("sent to emails"), default=list, blank=True)
-    sent_at = models.DateTimeField(_("sent at"), blank=True, null=True)
-    last_email_message_id = models.CharField(_("last email message id"), max_length=255, blank=True, null=True)
+class GeaDailyUniqueCode(TimeStampedModel):
+    class KindChoices(models.TextChoices):
+        GENERAL = "G", _("General")
+        BUYER = "B", _("Buyer")
+
+    valid_on = models.DateField(
+        _("valid on")
+    )
+
+    kind = models.CharField(
+        _("kind"),
+        max_length=1,
+        choices=KindChoices.choices,
+        default=KindChoices.GENERAL
+    )
+
+    code = models.CharField(
+        _("code"),
+        max_length=64,
+        db_index=True
+    )
+
+    sent_to = models.JSONField(
+        _("sent to emails"),
+        default=list,
+        blank=True
+    )
+
+    sent_at = models.DateTimeField(
+        _("sent at"),
+        blank=True,
+        null=True
+    )
+
+    last_email_message_id = models.CharField(
+        _("last email message id"),
+        max_length=255,
+        blank=True,
+        null=True
+    )
 
     objects = GeaDailyUniqueCodeManager()
 
@@ -112,46 +142,69 @@ class GeaDailyUniqueCode(TimeStampedModel):
         indexes = [
             models.Index(fields=["valid_on"]),
             models.Index(fields=["code"]),
+            models.Index(fields=["kind", "valid_on"]),
         ]
 
     def __str__(self):
-        return f"{self.valid_on} -> {self.code}"
+        return f"{self.valid_on} [{self.get_kind_display()}] -> {self.code}"
 
     def mark_sent(self, to_list, message_id=None):
         self.sent_to = list(to_list or [])
         self.sent_at = timezone.now()
         self.last_email_message_id = message_id
-        self.save(update_fields=["sent_to", "sent_at", "last_email_message_id", "updated"])
+        self.save(
+            update_fields=[
+                "sent_to",
+                "sent_at",
+                "last_email_message_id"
+            ]
+        )
 
     @classmethod
-    def send_today(cls):
+    def send_today(cls, *, kind: str):
         """
-        Crea (si no existe) y envía el código de hoy a los destinatarios configurados.
+        Crea (si no existe) y envía el código de hoy al grupo definido según el kind.
         """
-        obj, _created = cls.objects.get_or_create_for_today()
-        recipients = [
-            "support@propensionesabogados.com",
-            "notificaciones@propensionesabogados.com",
-            "info@propensionesabogados.com"
-        ]
-        subject = "Código de registro GEA (válido por hoy)"
+        obj, _created = cls.objects.get_or_create_for_today(kind=kind)
+
+        if kind == cls.KindChoices.BUYER:
+            recipients = [
+                "support@propensionesabogados.com",
+                "notificaciones@propensionesabogados.com"
+            ]
+            subject = f"Código de registro GEA (Compra) {obj.valid_on}"
+        else:
+            recipients = [
+                "support@propensionesabogados.com",
+                "notificaciones@propensionesabogados.com",
+                "info@propensionesabogados.com",
+            ]
+            subject = f"Código de registro GEA (Facilitador, Representante, Tenedor) {obj.valid_on}"
+
         from_email = settings.DEFAULT_FROM_EMAIL
 
         text_body = (
-            f"Código de registro GEA para {obj.valid_on}:\n\n"
+            f"Código de registro GEA ({obj.get_kind_display()}) para {obj.valid_on}:\n\n"
             f"    {obj.code}\n\n"
             "Este código es válido únicamente para el día indicado.\n"
         )
         html_body = (
-            f"<p><strong>Código de registro GEA</strong> para <strong>{obj.valid_on}</strong>:</p>"
+            f"<p><strong>Código de registro GEA</strong> (<em>{obj.get_kind_display()}</em>) "
+            f"para <strong>{obj.valid_on}</strong>:</p>"
             f"<p style='font-size:20px; letter-spacing:2px;'><code>{obj.code}</code></p>"
             "<p>Este código es válido únicamente para el día indicado.</p>"
         )
 
-        msg = EmailMultiAlternatives(subject, text_body, from_email, recipients)
+        msg = EmailMultiAlternatives(
+            subject,
+            text_body,
+            from_email,
+            recipients
+        )
+
         msg.attach_alternative(html_body, "text/html")
-        message_id = msg.send()  # En backends comunes devuelve num de enviados; algunos backends no devuelven id
+
+        message_id = msg.send()
 
         obj.mark_sent(recipients, message_id=str(message_id))
         return obj
-
