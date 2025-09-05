@@ -82,33 +82,14 @@ class BaseUserForm(forms.ModelForm):
 
     unique_code = forms.CharField(
         label=_("Unique Code"),
-        required=False,
-        widget=forms.TextInput(
-            attrs={
-                "id": "register_unique_code",
-                "type": "text",
-                "placeholder": _("Unique Code"),
-                "class": "form-control"
-            }
-        )
+        required=True,
+        widget=forms.TextInput(attrs={
+            "id": "register_unique_code",
+            "type": "text",
+            "placeholder": _("Unique Code"),
+            "class": "form-control",
+        })
     )
-
-    def clean(self):
-        cleaned_data = super().clean()
-        password = cleaned_data.get("password")
-        confirm_password = cleaned_data.get("confirm_password")
-
-        # === VALIDAR CÓDIGO ===
-        candidate = cleaned_data.get("unique_code")
-        if not GeaDailyUniqueCode.objects.verify_code(candidate):
-            self.add_error("unique_code", _("Invalid Unique Code"))
-
-        # === VALIDAR PASSWORD ===
-        if password and confirm_password:
-            validate_password(password)
-            if password != confirm_password:
-                self.add_error("confirm_password", _("Passwords do not match"))
-        return cleaned_data
 
     class Meta:
         model = UserModel
@@ -125,6 +106,35 @@ class GeaUserRegisterForm(BaseUserForm):
             "class": "form-select",
         })
     )
+
+    def clean(self):
+        cleaned = super().clean()
+
+        # Validar password / confirm
+        password = cleaned.get("password")
+        confirm_password = cleaned.get("confirm_password")
+        if password and confirm_password:
+            validate_password(password)
+            if password != confirm_password:
+                self.add_error("confirm_password", _("Passwords do not match"))
+
+        # === Validar código según tipo de usuario ===
+        user_type = cleaned.get("user_type")
+        candidate = cleaned.get("unique_code")
+
+        # Mapear tipo de usuario -> kind del código
+        if user_type == UserModel.UserTypeChoices.BUYER:  # "B" comprador
+            kind = GeaDailyUniqueCode.KindChoices.BUYER
+        else:
+            kind = GeaDailyUniqueCode.KindChoices.GENERAL
+
+        if not GeaDailyUniqueCode.objects.verify_code(candidate, kind=kind):
+            # Mensaje claro indicando a qué código pertenece la validación
+            label = dict(GeaDailyUniqueCode.KindChoices.choices)[kind]
+            self.add_error("unique_code", _(
+                "Invalid Unique Code ({label})").format(label=label))
+
+        return cleaned
 
     class Meta(BaseUserForm.Meta):
         fields = BaseUserForm.Meta.fields + ("user_type",)
