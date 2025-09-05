@@ -28,7 +28,7 @@
 </header>
 
 <div class="container mt-n10">
-  {% if request.user.user_type in 'HRI' %}
+  {% if request.user.is_asset_holder or request.user.is_superuser %}
   <div class="row">
     <div class="col-md-4 mb-4">
       <a class="card lift h-100" href="{% url 'assets:holder_index' %}">
@@ -80,9 +80,8 @@
       </a>
     </div>
   </div>
-
-
   {% endif %}
+  
   <div class="row">
     <div class="col-md-8">
 
@@ -96,7 +95,7 @@
 
           {% if offer.asset.asset_img.url %}
           <div class="text-center mb-3" style="max-height: 300px;">
-            <img src="{{ offer.asset.asset_img.url }}" alt="Asset Image" class="img-fluid" style="max-height: 300px;"/>
+            <img src="{{ offer.asset.asset_img.url }}" alt="Asset Image" class="img-fluid" style="max-height: 300px;" />
           </div>
           {% endif %}
 
@@ -104,7 +103,7 @@
           <p><strong>{% trans "Category" %}:</strong> {{ offer.asset.category }}</p>
           <p><strong>{% trans "Offer Type" %}:</strong> {{ offer.get_offer_type_display }}</p>
           <p><strong>{% trans "Quantity Type" %}:</strong> {{ offer.get_quantity_type_display }}</p>
-          {% if offer.en_observation and user.user_type == "B" %}
+          {% if offer.offer_amount and user.user_type == "B" %}
           <p><strong>{% trans "Total value of the offer ($ USD)" %}:</strong> {{ offer.offer_amount|currency }}</p>
           {% endif %}
           <p><strong>{% trans "Offer Quantity" %}:</strong> {{ offer.offer_quantity }}</p>
@@ -291,7 +290,9 @@
               </div>
             </div>
 
-
+            
+            {% if request.user.is_buyer or request.user.is_superuser  %}
+              
             <!-- Payment Order Created, Sent -->
             <div class="timeline-item">
               <div class="timeline-item-marker">
@@ -435,6 +436,8 @@
               </div>
             </div>
 
+            {% endif %}
+
 
             <!-- Dead Line -->
             <div class="timeline-item">
@@ -460,4 +463,6 @@
         </div>
       </div>
     </div>
-    {% endblock %}
+  </div>
+</div>
+{% endblock %}

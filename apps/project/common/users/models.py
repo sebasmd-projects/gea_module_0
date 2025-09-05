@@ -10,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from encrypted_model_fields.fields import (EncryptedCharField,
                                            EncryptedDateField,
                                            EncryptedEmailField)
+from functools import lru_cache
 
 from apps.common.utils.functions import generate_md5_or_sha256_hash
 from apps.common.utils.models import TimeStampedModel
@@ -21,6 +22,8 @@ class UserModel(TimeStampedModel, AbstractUser):
         HOLDER = 'H', _('Holder')
         REPRESENTATIVE = 'R', _('Representative')
         INTERMEDIARY = 'I', _('Intermediary')
+
+    NOT_INCLUDE_USER_TYPE_CHOICES = {UserTypeChoices.BUYER}
 
     USERNAME_FIELD = 'email'
 
@@ -78,6 +81,22 @@ class UserModel(TimeStampedModel, AbstractUser):
         _('Verified Holder'),
         default=False
     )
+
+    @classmethod
+    @lru_cache(maxsize=1)
+    def asset_holder_values(cls):
+        return frozenset(
+            code for code, _ in cls.UserTypeChoices.choices
+            if code not in cls.NOT_INCLUDE_USER_TYPE_CHOICES
+        )
+
+    @property
+    def is_asset_holder(self):
+        return self.user_type in type(self).asset_holder_values()
+
+    @property
+    def is_buyer(self):
+        return self.user_type == type(self).UserTypeChoices.BUYER
 
     def __str__(self) -> str:
         return f"{self.get_full_name()} ({self.username})"

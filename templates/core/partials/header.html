@@ -35,11 +35,11 @@
 
         <!-- Bloque Auth -->
         {% if request.user.is_authenticated %}
-        {% if request.user.user_type in 'HRI' or request.user.is_superuser %}
+        {% if request.user.is_asset_holder or request.user.is_superuser %}
         <li><a href="{% url 'assets:holder_index' %}">{% trans 'Client Area' %}</a></li>
         {% endif %}
 
-        {% if request.user.user_type in 'B' or request.user.is_superuser %}
+        {% if request.user.is_buyer or request.user.is_superuser %}
         <li><a href="{% url 'buyers:buyer_index' %}">{% trans 'Buyer' %}</a></li>
         {% endif %}
 
