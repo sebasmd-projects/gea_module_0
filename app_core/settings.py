@@ -263,11 +263,11 @@ SESSION_COOKIE_AGE = 7200
 
 ROSETTA_SHOW_AT_ADMIN_PANEL = True
 
-STATIC_URL = '/static/'
+STATIC_URL = os.getenv('DJANGO_STATIC_URL')
 
 STATIC_ROOT = str(os.getenv('DJANGO_STATIC_ROOT'))
 
-MEDIA_URL = '/media/'
+MEDIA_URL = os.getenv('DJANGO_MEDIA_URL')
 
 MEDIA_ROOT = str(os.getenv('DJANGO_MEDIA_ROOT'))
 
@@ -276,7 +276,6 @@ STATICFILES_DIRS = [str(BASE_DIR / 'public' / 'staticfiles')]
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    # other finders..
     'compressor.finders.CompressorFinder',
 )
 
