@@ -150,7 +150,7 @@ class BuyerCreateView(BuyerRequiredMixin, CreateView):
             "application/pdf"
         )
 
-        # email.send()
+        email.send()
 
 
 class OfferUpdateView(BuyerRequiredMixin, UpdateView):
