@@ -5,6 +5,7 @@
 database_schema.sql
 users.json
 zz csv import/
+cambios.txt
 
 ### Django ###
 *.log
