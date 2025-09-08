@@ -108,6 +108,8 @@ class UserModel(TimeStampedModel, AbstractUser):
         self.username = self.username.lower().strip()
         self.email = email
         self.email_hash = generate_md5_or_sha256_hash(email)
+        if self.user_type == self.UserTypeChoices.BUYER:
+            self.is_verified_holder = True
         super().save(*args, **kwargs)
 
     def clean(self):

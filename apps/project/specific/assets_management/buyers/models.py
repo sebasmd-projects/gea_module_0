@@ -138,19 +138,16 @@ class OfferModel(TimeStampedModel):
         null=True
     )
 
-    is_approved = models.BooleanField(
-        _("Approved"),
-        default=False
-    )
-
-    reviewed = models.BooleanField(
-        _("Reviewed"),
-        default=False
-    )
-
     display = models.BooleanField(
         _("Display"),
         default=True
+    )
+
+    # Purchase order approval
+
+    is_approved = models.BooleanField(
+        _("Approved"),
+        default=False
     )
 
     approved_by = models.ForeignKey(
@@ -162,17 +159,24 @@ class OfferModel(TimeStampedModel):
         blank=True
     )
 
+    approved_by_timestamp = models.DateTimeField(
+        verbose_name=_("Approved By Timestamp"),
+        null=True,
+        blank=True
+    )
+
+    # Purchase order review
+
+    reviewed = models.BooleanField(
+        _("Reviewed"),
+        default=False
+    )
+
     reviewed_by = models.ForeignKey(
         UserModel,
         on_delete=models.SET_NULL,
         related_name="buyers_offer_reviewed_by_user",
         verbose_name=_("Reviewed By"),
-        null=True,
-        blank=True
-    )
-
-    approved_by_timestamp = models.DateTimeField(
-        verbose_name=_("Approved By Timestamp"),
         null=True,
         blank=True
     )
@@ -183,6 +187,87 @@ class OfferModel(TimeStampedModel):
         blank=True
     )
 
+    # Service Order
+    service_order_sent_by = models.ForeignKey(
+        UserModel, on_delete=models.SET_NULL,
+        related_name="buyers_offer_service_order_sent_by",
+        verbose_name=_("Service Order Sent By"),
+        null=True, blank=True
+    )
+
+    service_order_sent_at = models.DateTimeField(
+        _("Service Order Sent At"), null=True, blank=True
+    )
+
+    # Payment Order
+    payment_order_created_by = models.ForeignKey(
+        UserModel, on_delete=models.SET_NULL,
+        related_name="buyers_offer_payment_order_created_by",
+        verbose_name=_("Payment Order Created By"),
+        null=True, blank=True
+    )
+
+    payment_order_created_at = models.DateTimeField(
+        _("Payment Order Created At"), null=True, blank=True
+    )
+
+    payment_order_sent_by = models.ForeignKey(
+        UserModel, on_delete=models.SET_NULL,
+        related_name="buyers_offer_payment_order_sent_by",
+        verbose_name=_("Payment Order Sent By"),
+        null=True, blank=True
+    )
+
+    payment_order_sent_at = models.DateTimeField(
+        _("Payment Order Sent At"), null=True, blank=True
+    )
+
+    # Asset movement
+    asset_in_possession_by = models.ForeignKey(
+        UserModel, on_delete=models.SET_NULL,
+        related_name="buyers_offer_asset_in_possession_by",
+        verbose_name=_("Asset In Possession By"),
+        null=True, blank=True
+    )
+
+    asset_in_possession_at = models.DateTimeField(
+        _("Asset In Possession At"), null=True, blank=True
+    )
+
+    asset_sent_by = models.ForeignKey(
+        UserModel, on_delete=models.SET_NULL,
+        related_name="buyers_offer_asset_sent_by",
+        verbose_name=_("Asset Sent By"),
+        null=True, blank=True
+    )
+
+    asset_sent_at = models.DateTimeField(
+        _("Asset Sent At"), null=True, blank=True
+    )
+
+    # Profitability
+    profitability_created_by = models.ForeignKey(
+        UserModel, on_delete=models.SET_NULL,
+        related_name="buyers_offer_profitability_created_by",
+        verbose_name=_("Profitability Created By"),
+        null=True, blank=True
+    )
+
+    profitability_created_at = models.DateTimeField(
+        _("Profitability Created At"), null=True, blank=True
+    )
+
+    profitability_paid_by = models.ForeignKey(
+        UserModel, on_delete=models.SET_NULL,
+        related_name="buyers_offer_profitability_paid_by",
+        verbose_name=_("Profitability Paid By"),
+        null=True, blank=True
+    )
+
+    profitability_paid_at = models.DateTimeField(
+        _("Profitability Paid At"), null=True, blank=True
+    )
+
     @property
     def asset_display_name(self):
         lang = get_language()
@@ -191,28 +276,78 @@ class OfferModel(TimeStampedModel):
         return self.asset.asset_name.en_name or self.asset.asset_name.es_name
 
     @transaction.atomic
-    def mark_reviewed(self, user):
-        self.reviewed_by = user
-        self.reviewed = True
+    def mark_service_order_sent(self, user):
+        self.service_order_sent_by = user
+        if not self.service_order_sent_at:
+            self.service_order_sent_at = timezone.now()
+        self.save(update_fields=[
+                  "service_order_sent_by", "service_order_sent_at"])
+
+    @transaction.atomic
+    def mark_payment_order_created(self, user):
+        self.payment_order_created_by = user
+        if not self.payment_order_created_at:
+            self.payment_order_created_at = timezone.now()
+        self.save(update_fields=[
+                  "payment_order_created_by", "payment_order_created_at"])
+
+    @transaction.atomic
+    def mark_payment_order_sent(self, user):
+        self.payment_order_sent_by = user
+        if not self.payment_order_sent_at:
+            self.payment_order_sent_at = timezone.now()
         self.save(
             update_fields=[
-                "reviewed_by",
-                "reviewed",
-                "reviewed_by_timestamp"
+                "payment_order_sent_by",
+                "payment_order_sent_at"
             ]
         )
 
     @transaction.atomic
-    def mark_approved(self, user):
-        if not self.reviewed or not self.reviewed_by:
-            raise ValidationError(_("Offer must be reviewed before approval."))
-        self.approved_by = user
-        self.is_approved = True
+    def mark_asset_in_possession(self, user):
+        self.asset_in_possession_by = user
+        if not self.asset_in_possession_at:
+            self.asset_in_possession_at = timezone.now()
         self.save(
             update_fields=[
-                "approved_by",
-                "is_approved",
-                "approved_by_timestamp"
+                "asset_in_possession_by",
+                "asset_in_possession_at"
+            ]
+        )
+
+    @transaction.atomic
+    def mark_asset_sent(self, user):
+        self.asset_sent_by = user
+        if not self.asset_sent_at:
+            self.asset_sent_at = timezone.now()
+        self.save(
+            update_fields=[
+                "asset_sent_by",
+                "asset_sent_at"
+            ]
+        )
+
+    @transaction.atomic
+    def mark_profitability_created(self, user):
+        self.profitability_created_by = user
+        if not self.profitability_created_at:
+            self.profitability_created_at = timezone.now()
+        self.save(
+            update_fields=[
+                "profitability_created_by",
+                "profitability_created_at"
+            ]
+        )
+
+    @transaction.atomic
+    def mark_profitability_paid(self, user):
+        self.profitability_paid_by = user
+        if not self.profitability_paid_at:
+            self.profitability_paid_at = timezone.now()
+        self.save(
+            update_fields=[
+                "profitability_paid_by",
+                "profitability_paid_at"
             ]
         )
 
@@ -242,31 +377,51 @@ class OfferModel(TimeStampedModel):
         old = None
         if not is_new and self.pk:
             old = OfferModel.objects.filter(pk=self.pk).only(
-                "is_approved", "approved_by", "reviewed", "reviewed_by").first()
+                "is_approved",
+                "approved_by",
+                "reviewed",
+                "reviewed_by",
+                "service_order_sent_by",
+                "payment_order_created_by",
+                "payment_order_sent_by",
+                "asset_in_possession_by",
+                "asset_sent_by",
+                "profitability_created_by",
+                "profitability_paid_by",
+            ).first()
 
-        # approved_at
+        # --- approved ---
         if self.is_approved and self.approved_by:
-            should_set = False
-            if is_new or not self.approved_by_timestamp:
-                should_set = True
-            elif old and (old.approved_by_id != self.approved_by_id):
-                should_set = True
-            if should_set:
+            if is_new or not self.approved_by_timestamp or (old and old.approved_by_id != self.approved_by_id):
                 self.approved_by_timestamp = timezone.now()
         else:
             self.approved_by_timestamp = None
 
-        # reviewed_at
+        # --- reviewed ---
         if self.reviewed and self.reviewed_by:
-            should_set = False
-            if is_new or not self.reviewed_by_timestamp:
-                should_set = True
-            elif old and (old.reviewed_by_id != self.reviewed_by_id):
-                should_set = True
-            if should_set:
+            if is_new or not self.reviewed_by_timestamp or (old and old.reviewed_by_id != self.reviewed_by_id):
                 self.reviewed_by_timestamp = timezone.now()
         else:
             self.reviewed_by_timestamp = None
+
+        # --- auto timestamps para etapas faltantes cuando cambia el *_by ---
+        def auto_ts(field_by, field_at):
+            by_val = getattr(self, field_by)
+            at_val = getattr(self, field_at)
+            old_by_val = getattr(old, field_by) if old else None
+            if by_val:
+                if is_new or not at_val or (old and old_by_val != by_val):
+                    setattr(self, field_at, timezone.now())
+            else:
+                setattr(self, field_at, None)
+
+        auto_ts("service_order_sent_by", "service_order_sent_at")
+        auto_ts("payment_order_created_by", "payment_order_created_at")
+        auto_ts("payment_order_sent_by", "payment_order_sent_at")
+        auto_ts("asset_in_possession_by", "asset_in_possession_at")
+        auto_ts("asset_sent_by", "asset_sent_at")
+        auto_ts("profitability_created_by", "profitability_created_at")
+        auto_ts("profitability_paid_by", "profitability_paid_at")
 
         super().save(*args, **kwargs)
 
@@ -281,6 +436,13 @@ class OfferModel(TimeStampedModel):
         permissions = [
             ("can_approve_offer", _("Can approve purchase orders")),
             ("can_review_offer", _("Can review purchase orders")),
+            ("can_send_service_order", _("Can send service orders")),
+            ("can_create_payment_order", _("Can create payment orders")),
+            ("can_send_payment_order", _("Can send payment orders")),
+            ("can_set_asset_possession", _("Can set asset in possession")),
+            ("can_send_asset", _("Can send asset")),
+            ("can_set_profitability", _("Can set profitability")),
+            ("can_pay_profitability", _("Can pay profitability")),
         ]
 
 

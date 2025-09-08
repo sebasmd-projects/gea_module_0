@@ -283,8 +283,8 @@ msgstr "Descripción general y resumen del contenido"
 #: .\templates\dashboard\pages\assets_management\assets\holders\holder_dashboard.html:38
 #: .\templates\dashboard\pages\assets_management\location\add_location.html:33
 #: .\templates\dashboard\pages\assets_management\location\edit_location.html:34
-msgid "Assets and Offers"
-msgstr "Activos y Ofertas"
+msgid "Assets and Service Orders"
+msgstr "Activos y Órdenes de Servicio"
 
 #: .\templates\dashboard\pages\assets_management\asset_location\asset_location_base.html:67
 #: .\templates\dashboard\pages\assets_management\assets\buyers\detail_offer.html:72
@@ -759,8 +759,8 @@ msgid "My Historical Assets"
 msgstr "Mis activos históricos"
 
 #: .\templates\dashboard\pages\assets_management\assets\holders\holder_dashboard.html:102
-msgid "Assets in Demand (Offers)"
-msgstr "Activos en demanda (Ofertas)"
+msgid "Assets in Demand (Service Orders)"
+msgstr "Activos en demanda (Órdenes de Servicio)"
 
 #: .\templates\dashboard\pages\assets_management\assets\holders\holder_dashboard.html:130
 #: .\templates\dashboard\pages\assets_management\assets\holders\holder_dashboard.html:144

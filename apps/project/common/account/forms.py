@@ -83,11 +83,12 @@ class BaseUserForm(forms.ModelForm):
     unique_code = forms.CharField(
         label=_("Unique Code"),
         required=True,
-        widget=forms.TextInput(attrs={
+        widget=forms.PasswordInput(attrs={
             "id": "register_unique_code",
-            "type": "text",
+            "type": "password",
             "placeholder": _("Unique Code"),
             "class": "form-control",
+            "autocomplete": "one-time-code"
         })
     )
 

@@ -1,0 +1,44 @@
+{% comment %}
+<!--
+_floating_input.html
+
+Parámetros esperados:
+    field: el campo (ej: form.username)
+    label: texto del label
+    show_eye: bool (si quieres botón de ojo)
+    eye_target_id: string (id del input a togglear)
+-->
+{% endcomment %}
+
+{% load i18n custom_filters %}
+
+<div class="input-group mb-3">
+    <div class="form-floating">
+        {% if field.errors %}
+            {{ field|add_class:"form-control is-invalid" }}
+        {% else %}
+            {{ field }}
+        {% endif %}
+        <label for="{{ field.id_for_label }}">{{ label }}</label>
+    </div>
+
+    {% if show_eye %}
+        <span
+            class="btn btn-outline-dark toggle-visibility rounded-end"
+            data-target="#{{ eye_target_id }}"
+            role="button"
+            aria-label="{% trans 'Show/Hide' %}"
+            tabindex="-1"
+        >
+            <i class="bi bi-eye-slash"></i>
+        </span>
+    {% endif %}
+
+    {% if field.errors %}
+        <span class="invalid-feedback d-block">
+            {% for error in field.errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </span>
+    {% endif %}
+</div>
