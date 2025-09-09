@@ -154,7 +154,7 @@ class PurchaseOrderCreateView(BuyerRequiredMixin, CreateView):
         }
 
         html_content = render_to_string(
-            "core/email/purchase_order_email_template.html",
+            "email/purchase_order_email_template.html",
             safe_data
         )
 
