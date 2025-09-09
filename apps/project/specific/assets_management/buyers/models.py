@@ -7,7 +7,7 @@ from auditlog.registry import auditlog
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
-from django.db.models import CheckConstraint, F, Q
+from django.db.models.signals import pre_save
 from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import get_language
@@ -18,6 +18,8 @@ from apps.common.utils.models import TimeStampedModel
 from apps.project.specific.assets_management.assets.models import AssetModel
 from apps.project.specific.assets_management.assets_location.models import \
     AssetCountryModel
+
+from .signals import auto_fill_offer_translation
 
 logger = logging.getLogger(__name__)
 UserModel = get_user_model()
@@ -445,6 +447,11 @@ class OfferModel(TimeStampedModel):
             ("can_pay_profitability", _("Can pay profitability")),
         ]
 
+
+pre_save.connect(
+    auto_fill_offer_translation,
+    sender=OfferModel
+)
 
 auditlog.register(
     OfferModel,

@@ -52,14 +52,28 @@ class AssetNameWithInlineAssetCreateView(BuyerRequiredMixin, View):
     registra su AssetModel (1–1) con categoría (Select2) + datos.
     """
 
-    template_name = "dashboard/pages/assets_management/assets/assetname_inline_create.html"
+    template_name = "dashboard/pages/assets_management/assets/buyers/assetname_inline_create.html"
 
     def get(self, request, *args, **kwargs):
         name_form = AssetNameInlineForm(request=request)
         asset_form = AssetInlineForm()
+        assets = (
+            AssetModel.objects
+            .select_related("asset_name", "category")
+            .only(
+                "asset_img",
+                "es_description", "en_description",
+                "es_observations", "en_observations",
+                "asset_name__es_name", "asset_name__en_name",
+                "category__es_name", "category__en_name",
+                "created",
+            )
+            .order_by("-created")
+        )
         context = {
             "name_form": name_form,
             "asset_form": asset_form,
+            "assets": assets,
         }
         return render(request, self.template_name, context)
 
@@ -82,9 +96,16 @@ class AssetNameWithInlineAssetCreateView(BuyerRequiredMixin, View):
         else:
             messages.error(request, _("Please fix the errors below."))
 
+        assets = (
+            AssetModel.objects
+            .select_related("asset_name", "category")
+            .order_by("-created")
+        )
+        
         context = {
             "name_form": name_form,
             "asset_form": asset_form,
+            "assets": assets,
         }
         return render(request, self.template_name, context)
 
@@ -93,7 +114,7 @@ class AssetAddNewCategory(BuyerRequiredMixin, CreateView):
     """Create a new asset category."""
 
     model = AssetCategoryModel
-    template_name = "dashboard/pages/assets_management/assets/asset_category_add.html"
+    template_name = "dashboard/pages/assets_management/assets/buyers/asset_category_add.html"
     form_class = AssetAddNewCategoryForm
 
     def form_valid(self, form):
@@ -107,3 +128,8 @@ class AssetAddNewCategory(BuyerRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse("buyers:buyer_index")
+    
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["categories"] = AssetCategoryModel.objects.all()
+        return ctx

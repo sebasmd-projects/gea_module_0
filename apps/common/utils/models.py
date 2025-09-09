@@ -168,19 +168,12 @@ class GeaDailyUniqueCode(TimeStampedModel):
         obj, _created = cls.objects.get_or_create_for_today(kind=kind)
 
         if kind == cls.KindChoices.BUYER:
-            recipients = [
-                "support@propensionesabogados.com",
-                "notificaciones@propensionesabogados.com"
-            ]
+            recipients = settings.GEA_DAILY_CODE_BUYER_RECIPIENTS
             subject = f"Código de registro GEA (Compra) {obj.valid_on}"
         else:
-            recipients = [
-                "support@propensionesabogados.com",
-                "notificaciones@propensionesabogados.com",
-                "info@propensionesabogados.com",
-            ]
+            recipients = settings.GEA_DAILY_CODE_GENERAL_RECIPIENTS
             subject = f"Código de registro GEA (Facilitador, Representante, Tenedor) {obj.valid_on}"
-
+        
         from_email = settings.DEFAULT_FROM_EMAIL
 
         text_body = (

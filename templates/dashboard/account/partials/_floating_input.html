@@ -7,6 +7,14 @@ Parámetros esperados:
     label: texto del label
     show_eye: bool (si quieres botón de ojo)
     eye_target_id: string (id del input a togglear)
+
+Ejemplos de uso:
+    {% include "dashboard/account/partials/_floating_input.html" with
+        field=form.password
+        label=_("Password")
+        show_eye=True
+        eye_target_id="id_password"
+    %}
 -->
 {% endcomment %}
 

@@ -10,17 +10,17 @@ app_name = 'assets'
 
 urlpatterns = [
     path(
-        'asset/holder/',
+        'holder/assets/',
         HolderTemplateview.as_view(),
         name='holder_index'
     ),
     path(
-        "asset/create/",
+        "buyer/asset/add/",
         AssetNameWithInlineAssetCreateView.as_view(),
         name="create"
     ),
     path(
-        "asset/add/category/",
+        "buyer/asset/add/category/",
         AssetAddNewCategory.as_view(),
         name="add_category"
     ),

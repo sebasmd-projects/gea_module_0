@@ -1,29 +1,39 @@
 from django.urls import path
 
 from apps.project.specific.assets_management.buyers.views import (
-    BuyerCreateView, OfferDetailView, OfferSoftDeleteView, OfferUpdateView)
+    OfferDetailView,
+    OfferSoftDeleteView,
+    OfferUpdateView,
+    PurchaseOrderCreateView,
+    PurchaseOrdersView,
+)
 
 app_name = "buyers"
 
 urlpatterns = [
     path(
-        'offers/<uuid:id>/detail/',
+        'buyer/asset/purchase-order/<uuid:id>/detail/',
         OfferDetailView.as_view(),
         name='offer_details'
     ),
     path(
-        'offers/<uuid:pk>/update/',
+        'buyer/asset/purchase-order/<uuid:pk>/update/',
         OfferUpdateView.as_view(),
         name='offer_update'
     ),
     path(
-        'offers/<uuid:id>/delete/',
+        'buyer/asset/purchase-order/<uuid:id>/delete/',
         OfferSoftDeleteView.as_view(),
         name='offer_delete'
     ),
     path(
-        'asset/buyer/',
-        BuyerCreateView.as_view(),
+        'buyer/asset/purchase-orders/',
+        PurchaseOrdersView.as_view(),
         name='buyer_index'
     ),
+    path(
+        'buyer/asset/purchase-order/add/',
+        PurchaseOrderCreateView.as_view(),
+        name='buyer_create'
+    )
 ]

@@ -1,0 +1,44 @@
+{% comment %}
+<!--
+_buyer_header_card.html
+
+Parámetros esperados:
+    icon_class: string (nombre del icono de feather icons)
+    icon_data_feather (opcional): string (nombre del icono de feather icons para data-feather, si es distinto a icon_class)
+    page_header_title: string (título principal del header)
+    page_header_image: string (URL de la imagen del header)
+    url: string (URL a la que apunta la card)
+
+Ejemplos de uso:
+    {% url 'buyers:buyer_index' as purchase_orders_url %}
+    {% static 'assets/img/illustrations/windows.svg' as purchase_orders_image %}
+    {% trans 'Purchase Orders' as purchase_orders %}
+    {% include
+        'dashboard/pages/assets_management/assets/buyers/partials/_buyer_header_card.html' with
+        icon_class="feather-xl text-primary mb-3 fa-solid fa-table-list"
+        page_header_title=purchase_orders
+        page_header_image=purchase_orders_image
+        url=purchase_orders_url
+    %}
+-->
+{% endcomment %}
+
+{% load i18n static custom_filters %}
+
+<div class="col-md-4 mb-4 d-none d-md-block">
+    <a class="card lift h-100" href="{{ url }}">
+        <div class="card-body d-flex justify-content-center flex-column">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="me-3">
+                    {% if icon_class and icon_data_feather %}
+                        <i class="{{ icon_class }}" data-feather="{{ icon_data_feather }}"></i>
+                    {% elif icon_class %}
+                        <i class="{{ icon_class }}"></i>
+                    {% endif %}
+                    <h5>{{ page_header_title }}</h5>
+                </div>
+                <img src="{{ page_header_image }}" alt="{{ page_header_title }} img" style="width: 8rem" />
+            </div>
+        </div>
+    </a>
+</div>

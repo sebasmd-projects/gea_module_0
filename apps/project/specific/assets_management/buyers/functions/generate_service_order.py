@@ -24,7 +24,7 @@ def generate_service_order_pdf(offer, user):
 
     # ---------------- LOGOS ----------------
     logo_header = Image(
-        "https://propensionesabogados.com/static/assets/imgs/GEA/alliance-ampro-repatriation-propensiones.webp",
+        "https://globalallianceusa.com/gea/public/static/assets/imgs/logos/alliance_ampro_repatriation_propensiones.webp",
         width=doc.width,
         height=80
     )
@@ -202,12 +202,12 @@ def generate_service_order_pdf(offer, user):
 
     # ---------------- FOOTER ----------------
     footer_img = Image(
-        "https://propensionesabogados.com/static/assets/imgs/GEA/stamp_propensiones.webp",
+        "https://globalallianceusa.com/gea/public/static/assets/imgs/purchase_order/stamp_propensiones.webp",
         width=80,
         height=80
     )
 
-    contacto = "\ndirector@propensionesabogados.com\n+57 318 328 01 76"
+    contacto = "\nceo@globalallianceusa.com\n+57 318 328 01 76"
 
     # Columna izquierda: imagen centrada sobre el texto
     contacto_table = Table(

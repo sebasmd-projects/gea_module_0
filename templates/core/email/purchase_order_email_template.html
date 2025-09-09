@@ -25,7 +25,7 @@
         }
 
         .header {
-            background-color: #007bff36;
+            background-color: #ffffff;
             padding: 10px 20px;
             text-align: center;
             border-radius: 8px 8px 0 0;
@@ -86,7 +86,7 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <img src="https://propensionesabogados.com/static/assets/imgs/GEA/gea%20logo.webp" alt="GEA Logo">
+            <img src="https://globalallianceusa.com/gea/public/static/assets/imgs/logos/gea_logo.webp" alt="GEA Logo">
             <h1>{% trans "Purchase Order Submitted" %}</h1>
         </div>
 
@@ -95,22 +95,22 @@
             <!-- English Version -->
             <h2 class="section-title">Language: English</h2>
             <p><strong>Asset:</strong> {{ asset_en }}</p>
-            <p><strong>Purchase order Type:</strong> {{ offer_type }}</p>
-            <p><strong>Quantity Type:</strong> {{ quantity_type }}</p>
+            <p><strong>Purchase order Type:</strong> {{ offer_type_en }}</p>
+            <p><strong>Quantity Type:</strong> {{ quantity_type_en }}</p>
             <p><strong>Amount:</strong> $ {{ offer_amount }}</p>
             <p><strong>Quantity:</strong> {{ offer_quantity }}</p>
-            <p><strong>Country:</strong> {{ buyer_country }}</p>
+            <p><strong>Country:</strong> {{ buyer_country_en }}</p>
             <p><strong>Observations:</strong> {{ en_observation }}</p>
             <p><strong>Description:</strong> {{ en_description }}</p>
 
             <!-- Spanish Version -->
             <h2 class="section-title">Idioma: Español</h2>
             <p><strong>Activo:</strong> {{ asset_es }}</p>
-            <p><strong>Tipo de Orden de Compra:</strong> {{ offer_type }}</p>
-            <p><strong>Tipo de Cantidad:</strong> {{ quantity_type }}</p>
+            <p><strong>Tipo de Orden de Compra:</strong> {{ offer_type_es }}</p>
+            <p><strong>Tipo de Cantidad:</strong> {{ quantity_type_es }}</p>
             <p><strong>Monto:</strong> $ {{ offer_amount }}</p>
             <p><strong>Cantidad:</strong> {{ offer_quantity }}</p>
-            <p><strong>País:</strong> {{ buyer_country }}</p>
+            <p><strong>País:</strong> {{ buyer_country_es }}</p>
             <p><strong>Observaciones:</strong> {{ es_observation }}</p>
             <p><strong>Descripción:</strong> {{ es_description }}</p>
 
@@ -123,7 +123,7 @@
         <div class="footer">
             <p>
                 {% trans "This email was sent from" %}
-                <a href="https://propensionesabogados.com">propensionesabogados.com</a>.
+                <a href="https://globalallianceusa.com/gea/">globalallianceusa.com</a>.
             </p>
         </div>
     </div>

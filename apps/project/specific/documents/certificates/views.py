@@ -23,7 +23,7 @@ from .models import CertificateModel, CertificateTypesModel
 logging = logging.getLogger(__name__)
 
 
-def generate_qr_with_favicon(text_data: str, image_url: str = "https://gea.propensionesabogados.com/static/assets/imgs/favicon/gea-favicon512x512.png"):
+def generate_qr_with_favicon(text_data: str, image_url: str = "https://globalallianceusa.com/gea/public/static/assets/imgs/favicon/gea-favicon512x512.png"):
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_H,
@@ -146,11 +146,11 @@ class CertificateDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        custom_text = "gea.propensionesabogados.com/certificate/{}".format(
+        custom_text = "globalallianceusa.com/certificate/{}".format(
             str(self.object.pk)
         )
 
-        certificate_url = "https://gea.propensionesabogados.com/certificate/{}".format(
+        certificate_url = "https://globalallianceusa.com/gea/certificate/{}".format(
             self.object.pk
         )
 
@@ -229,11 +229,11 @@ class SovereignPurchaseCertificateDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        custom_text = "gea.propensionesabogados.com/certificate/sovereing/{}".format(
+        custom_text = "globalallianceusa.com/certificate/sovereing/{}".format(
             str(self.object.pk)
         )
 
-        certificate_url = "https://gea.propensionesabogados.com/certificate/sovereing/{}".format(
+        certificate_url = "https://globalallianceusa.com/gea/certificate/sovereing/{}".format(
             self.object.pk
         )
 

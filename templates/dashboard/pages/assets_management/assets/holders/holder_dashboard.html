@@ -2,12 +2,8 @@
 
 {% load i18n static %}
 
-{% block simple_datatables %}
-<link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-{% endblock simple_datatables %}
-
-
 {% block layout_main %}
+
 <header class="page-header page-header-dark pb-10"
   style="background-image: linear-gradient(to bottom, #5e5751 0%, #5a554a 50%, #383630 100%);">
   <div class="container-xl px-4">
@@ -161,7 +157,7 @@
                         <img src="{{ field.asset.asset_img.url }}" alt="{{ field.asset.asset_name.en_name }}"
                           class="img-thumbnail" style="width: auto; height: 50px;">
                         {% else %}
-                        <img src="https://propensionesabogados.com/static/assets/imgs/GEA/favicon_gea.webp"
+                        <img src="https://globalallianceusa.com/gea/public/static/assets/imgs/favicon/favicon_gea.webp"
                           alt="{{ field.asset.asset_name.en_name }}" class="img-thumbnail"
                           style="width: 50px; height: 50px;">
                         {% endif %}
@@ -359,7 +355,7 @@
                       <img src="{{ field.asset.asset_img.url }}" alt="{{ field.asset.asset_name.en_name }}"
                         class="img-thumbnail" style="width: auto; height: 50px;">
                       {% else %}
-                      <img src="https://propensionesabogados.com/static/assets/imgs/GEA/favicon_gea.webp"
+                      <img src="https://globalallianceusa.com/gea/public/static/assets/imgs/favicon/favicon_gea.webp"
                         alt="{{ field.asset.asset_name.en_name }}" class="img-thumbnail"
                         style="width: 50px; height: 50px;">
                       {% endif %}
@@ -441,10 +437,10 @@
                     <br />
                     <i data-feather="message-circle"></i> <a href="https://wa.me/573012283818" target="_blank">
                       +57 301 228 3818</a> <br />
-                    <i data-feather="mail"></i> <a href="mailto:support@propensionesabogados.com"
-                      target="_blank">support@propensionesabogados.com</a> <br />
-                    <i data-feather="mail"></i> <a href="mailto:info@propensionesabogados.com"
-                      target="_blank">info@propensionesabogados.com</a>
+                    <i data-feather="mail"></i> <a href="mailto:support@globalallianceusa.com"
+                      target="_blank">support@globalallianceusa.com</a> <br />
+                    <i data-feather="mail"></i> <a href="mailto:info@globalallianceusa.com"
+                      target="_blank">info@globalallianceusa.com</a>
                   </p>
                 </div>
 
@@ -460,6 +456,10 @@
   </div>
 </div>
 {% endblock %}
+
+{% block simple_datatables %}
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+{% endblock simple_datatables %}
 
 {% block simple_datatables_js %}
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"

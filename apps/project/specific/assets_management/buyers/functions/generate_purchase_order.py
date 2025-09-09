@@ -24,7 +24,7 @@ def generate_purchase_order_pdf(offer, user):
 
     # ---------------- LOGOS ----------------
     logo_header = Image(
-        "https://propensionesabogados.com/static/assets/imgs/GEA/alliance-ampro-repatriation-propensiones.webp",
+        "https://globalallianceusa.com/gea/public/static/assets/imgs/logos/alliance_ampro_repatriation_propensiones.webp",
         width=doc.width,
         height=80
     )
@@ -205,7 +205,7 @@ def generate_purchase_order_pdf(offer, user):
 
     # ---------------- FOOTER ----------------
     footer_img = Image(
-        "https://propensionesabogados.com/static/assets/imgs/GEA/stamp_mitch.webp",
+        "https://globalallianceusa.com/gea/public/static/assets/imgs/purchase_order/stamp_mitch.webp",
         width=80,
         height=80
     )

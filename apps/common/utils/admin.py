@@ -34,7 +34,7 @@ class GeneralAdminModel(ImportExportActionModelAdmin, admin.ModelAdmin):
 
 @admin.register(GeaDailyUniqueCode)
 class GeaDailyUniqueCodeAdmin(admin.ModelAdmin):
-    list_display = ("valid_on", "code", "is_active", "sent_at")
+    list_display = ("valid_on", "kind", "code", "is_active", "sent_at")
     search_fields = ("code",)
     list_filter = ("is_active", "valid_on")
     readonly_fields = (

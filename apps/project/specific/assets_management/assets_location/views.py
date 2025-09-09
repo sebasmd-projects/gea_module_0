@@ -121,7 +121,7 @@ class AssetUpdateView(AssetLocationMixin, UpdateView):
     success_url = reverse_lazy('assets:holder_index')
 
 
-class AseetLocationDeleteView(HolderRequiredMixin, DeleteView):
+class AssetLocationDeleteView(HolderRequiredMixin, DeleteView):
     model = AssetLocationModel
     success_url = reverse_lazy('assets:holder_index')
 
