@@ -1,30 +1,23 @@
 import re
 
+from django.conf import settings
 from django.http import HttpResponse
 from django.urls import include, path, re_path
 
 from .api import urls as api_urls
-from .views import (DecoratedTokenObtainPairView, DecoratedTokenRefreshView,
-                    DecoratedTokenVerifyView, set_language)
-
-
-def simplify_regex(pattern):
-    pattern = re.sub(
-        r'\[\^*\]\.\*\?*',
-        '',
-        pattern
-    )
-    pattern = re.sub(
-        r'\[([A-Za-z])([A-Za-z])\]',
-        lambda m: m.group(1).upper(),
-        pattern
-    )
-    pattern = re.sub(
-        r'[^a-zA-Z0-9]',
-        '',
-        pattern
-    )
-    return pattern
+from .views import (
+    DecoratedTokenObtainPairView,
+    DecoratedTokenRefreshView,
+    DecoratedTokenVerifyView,
+    handler400 as error400,
+    handler401 as error401,
+    handler403 as error403,
+    handler404 as error404,
+    handler500 as error500,
+    handler503 as error503,
+    handler504 as error504,
+    set_language
+)
 
 
 def robots_txt(request):
@@ -79,4 +72,37 @@ drf_urls = [
     )
 ]
 
+
 urlpatterns = utils_path + drf_urls
+
+if settings.DEBUG:
+    urlpatterns += [
+        path(
+            "__test__/400/",
+            lambda r: error400(r, Exception("Bad request test"))
+        ),
+        path(
+            "__test__/401/",
+            lambda r: error401(r, Exception("Unauthorized test"))
+        ),
+        path(
+            "__test__/403/",
+            lambda r: error403(r, Exception("Forbidden test"))
+        ),
+        path(
+            "__test__/404/",
+            lambda r: error404(r, Exception("Not found test"))
+        ),
+        path(
+            "__test__/500/",
+            lambda r: error500(r)
+        ),
+        path(
+            "__test__/503/",
+            lambda r: error503(r)
+        ),
+        path(
+            "__test__/504/",
+            lambda r: error504(r)
+        ),
+    ]

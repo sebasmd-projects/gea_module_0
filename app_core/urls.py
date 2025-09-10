@@ -16,9 +16,12 @@ from two_factor.urls import urlpatterns as tf_urls
 
 from apps.common.utils.views import (
     handler400 as h400,
+    handler401 as h401,
     handler403 as h403,
     handler404 as h404,
     handler500 as h500,
+    handler503 as h503,
+    handler504 as h504,
 )
 
 # ==== Tipos útiles ====
@@ -32,10 +35,13 @@ CUSTOM_APPS: Final[Iterable[str]] = tuple(
 UTILS_PATH: Final[str] = getattr(settings, "UTILS_PATH", "")
 
 # ==== Handlers de error (exportados por Django) ====
-handler400 = h400  # type: ignore[assignment]
-handler403 = h403  # type: ignore[assignment]
-handler404 = h404  # type: ignore[assignment]
-handler500 = h500  # type: ignore[assignment]
+handler400 = h400
+handler401 = h401
+handler403 = h403
+handler404 = h404
+handler500 = h500
+handler503 = h503
+handler504 = h504
 
 
 def include_if_present(dotted_path: str) -> list[URLResolver]:
@@ -123,7 +129,6 @@ urlpatterns: List[UrlItem] = [
     *third_party_urls,
     *swagger_urls,
 ]
-
 
 # ==== Static/Media en DEBUG ====
 if settings.DEBUG:

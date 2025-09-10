@@ -1,0 +1,194 @@
+{% comment %} templates/core/partials/core_nav.html {% endcomment %}
+
+{% load static i18n %}
+
+<nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white container rounded mt-5" id="sidenavAccordion">
+  <!-- Sidenav Toggle Button (SM only) -->
+  <button data-bs-target="#offcanvasDarkNavbar" data-bs-toggle="offcanvas" id="sidebarToggle" type="button" aria-controls="offcanvasDarkNavbar" aria-expanded="false" aria-label="Toggle navigation" class="btn btn-icon btn-transparent-dark order-1 order-lg-0 me-2 ms-lg-2 me-lg-0 d-md-none"><i data-feather="menu"></i></button>
+
+  <!-- Logo -->
+  <a class="navbar-brand px-5" href="{% url 'core:index' %}"><img src="{% static 'assets/imgs/logos/gea_logo.webp' %}" alt="GEA horizontal logo" /></a>
+
+  {# ======== BOTONES CENTRALES en DESKTOP (MD+): ocultos en SM ======== #}
+  {% if request.user.is_authenticated %}
+    <div class="d-none d-md-flex flex-grow-1 justify-content-center gap-2">
+      {% if request.user.is_buyer or request.user.is_superuser %}
+        <a href="{% url 'buyers:buyer_index' %}" class="btn text-black fw-semibold gea_gradient">{% trans 'Buyer' %}</a>
+      {% endif %}
+      {% if request.user.is_asset_holder or request.user.is_superuser %}
+        <a href="{% url 'assets:holder_index' %}" class="btn text-black fw-semibold gea_gradient">{% trans 'Client Area' %}</a>
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="flex-grow-1 d-none d-md-block"></div>
+  {% endif %}
+
+  <!-- Navbar Items (derecha) -->
+  <ul class="navbar-nav align-items-center ms-auto">
+    <!-- Language Selector -->
+    <li class="nav-item dropdown no-caret me-3 d-none d-md-block">
+      <a class="nav-link dropdown-toggle" id="navbarDropdownDocs" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <div class="fw-500">
+          <i class="bi bi-translate mx-1"></i> {% trans 'Language' %}
+        </div>
+        <i class="fas fa-chevron-right dropdown-arrow"></i>
+      </a>
+
+      <div class="dropdown-menu dropdown-menu-end py-0 me-sm-n15 me-lg-0 o-hidden animated--fade-in-up" aria-labelledby="navbarDropdownDocs">
+        {% for lang in LANGUAGES %}
+          <a class="dropdown-item py-3 text-capitalize" href="{% url 'set_language' %}?lang={{ lang.0 }}">
+            <div class="icon-stack bg-primary-soft text-primary me-4">
+              <i class="bi bi-globe-americas"></i>
+            </div>
+            <div>{{ lang.1 }}</div>
+          </a>
+        {% endfor %}
+      </div>
+    </li>
+
+    {# ======== BOTONES LOGIN / REGISTER en DESKTOP (MD+): ocultos en SM ======== #}
+    {% if not request.user.is_authenticated %}
+      <li class="nav-item me-2 d-none d-md-block">
+        <a class="btn btn-outline-success text-capitalize" href="{% url 'two_factor:login' %}">{% trans 'Login' %}</a>
+      </li>
+      <li class="nav-item me-3 d-none d-md-block">
+        <a class="btn btn-outline-warning text-capitalize" href="{% url 'account:register' %}">{% trans 'Register' %}</a>
+      </li>
+    {% endif %}
+
+    {% if request.user.is_authenticated %}
+      <!-- User Dropdown -->
+      <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
+        <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {% with pi=request.user.personal_information %}
+            {% if pi.gender == 'M' %}
+              <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/profile-5.png' %}" alt="{% trans 'Male avatar' %}" />
+            {% elif pi.gender == 'F' %}
+              <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/profile-2.png' %}" alt="{% trans 'Female avatar' %}" />
+            {% else %}
+              <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/demo_profile.svg' %}" alt="{% trans 'Default avatar' %}" />
+            {% endif %}
+          {% endwith %}
+        </a>
+
+        <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
+          <h6 class="dropdown-header d-flex align-items-center">
+            {% with pi=request.user.personal_information %}
+              {% if pi.gender == 'M' %}
+                <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/profile-5.png' %}" alt="{% trans 'Male avatar' %}" />
+              {% elif pi.gender == 'F' %}
+                <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/profile-2.png' %}" alt="{% trans 'Female avatar' %}" />
+              {% else %}
+                <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/demo_profile.svg' %}" alt="{% trans 'Default avatar' %}" />
+              {% endif %}
+            {% endwith %}
+            <div class="dropdown-user-details">
+              <div class="dropdown-user-details-name">{{ request.user.get_full_name }}</div>
+              <div class="dropdown-user-details-email">{{ request.user.email }}</div>
+            </div>
+          </h6>
+          <div class="dropdown-divider"></div>
+
+          {% comment %}
+          <-- TODO: Profile link -->
+          <a class="dropdown-item" href="#!">
+            <div class="dropdown-item-icon">
+              <i data-feather="user"></i>
+            </div>
+            {% trans 'Profile' %}
+          </a>
+          {% endcomment %}
+
+          <a class="dropdown-item" href="{% url 'admin:index' %}">
+            <div class="dropdown-item-icon">
+              <i data-feather="tool"></i>
+            </div>
+            {% trans 'Admin' %}
+          </a>
+
+          {% if request.user.is_buyer or request.user.is_superuser %}
+            <a class="dropdown-item" href="{% url 'buyers:buyer_index' %}">
+              <div class="dropdown-item-icon">
+                <i data-feather="shopping-bag"></i>
+              </div>
+              {% trans 'Buyer' %}
+            </a>
+          {% endif %}
+
+          {% if request.user.is_asset_holder or request.user.is_superuser %}
+            <a class="dropdown-item" href="{% url 'assets:holder_index' %}">
+              <div class="dropdown-item-icon">
+                <i data-feather="briefcase"></i>
+              </div>
+              {% trans 'Client Area' %}
+            </a>
+          {% endif %}
+
+          <a class="dropdown-item" href="{% url 'two_factor:profile' %}">
+            <div class="dropdown-item-icon">
+              <i data-feather="settings"></i>
+            </div>
+            {% trans 'Two Factor Authentication' %}
+          </a>
+
+          <a class="dropdown-item" href="{% url 'account:logout' %}">
+            <div class="dropdown-item-icon">
+              <i data-feather="log-out"></i>
+            </div>
+            {% trans 'Logout' %}
+          </a>
+        </div>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+
+{# ======== COLLAPSE SM: aquí aparecen los botones que en MD+ van fuera ======== #}
+<nav class="navbar navbar-dark bg-dark d-md-none">
+  <div class="offcanvas offcanvas-end text-bg-dark" id="offcanvasDarkNavbar" tabindex="-1">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title text-white" id="offcanvasDarkNavbarLabel">{% trans 'Menu' %}</h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body">
+      <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-translate mx-1"></i> {% trans 'Language' %}</a>
+
+          <ul class="dropdown-menu dropdown-menu-dark">
+            {% for lang in LANGUAGES %}
+              <li>
+                <a class="dropdown-item" href="{% url 'set_language' %}?lang={{ lang.0 }}"><i class="bi bi-globe-americas me-3"></i> {{ lang.1 }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="offcanvas-body">
+      {# ======== LANGUAGE SELECTOR para SM ======== #}
+      <div class="w-100 d-flex flex-column gap-2">
+        {# ======== BOTONES CENTRALES (solo autenticado) para SM ======== #}
+        {% if request.user.is_authenticated %}
+          {% if request.user.is_buyer or request.user.is_superuser %}
+            <a href="{% url 'buyers:buyer_index' %}" class="btn btn-light text-black fw-semibold gea_gradient w-100">{% trans 'Buyer' %}</a>
+          {% endif %}
+          {% if request.user.is_asset_holder or request.user.is_superuser %}
+            <a href="{% url 'assets:holder_index' %}" class="btn btn-light text-black fw-semibold gea_gradient w-100">{% trans 'Client Area' %}</a>
+          {% endif %}
+        {% endif %}
+
+        {# ======== BOTONES LOGIN / REGISTER (solo NO autenticado) para SM ======== #}
+        {% if not request.user.is_authenticated %}
+          <a class="btn btn-outline-success text-capitalize w-100" href="{% url 'two_factor:login' %}">{% trans 'Login' %}</a>
+          <a class="btn btn-outline-warning text-capitalize w-100" href="{% url 'account:register' %}">{% trans 'Register' %}</a>
+        {% else %}
+          {# ======== BOTÓN LOGOUT (solo autenticado) para SM ======== #}
+          <a class="btn btn-outline-danger text-capitalize w-100" href="{% url 'account:logout' %}">{% trans 'Logout' %}</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>

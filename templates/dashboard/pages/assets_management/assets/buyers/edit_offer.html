@@ -1,10 +1,14 @@
-{% extends 'dashboard/layout/base.html' %}
+{% extends 'raw.html' %}
 
 {% load i18n static custom_filters %}
 
 {% block simple_datatables %}
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
 {% endblock simple_datatables %}
+
+{% block icons %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js" crossorigin="anonymous"></script>
+{% endblock icons %}
 
 {% block layout_main %}
 

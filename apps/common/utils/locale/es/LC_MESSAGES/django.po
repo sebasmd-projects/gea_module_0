@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-04 12:35-0500\n"
-"PO-Revision-Date: 2025-09-04 12:38-0500\n"
+"POT-Creation-Date: 2025-09-09 18:14-0500\n"
+"PO-Revision-Date: 2025-09-09 18:18-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -64,65 +64,107 @@ msgstr "está activo"
 msgid "priority"
 msgstr "orden"
 
-#: .\apps\common\utils\models.py:99
+#: .\apps\common\utils\models.py:97
+msgid "General"
+msgstr "General"
+
+#: .\apps\common\utils\models.py:98
+msgid "Buyer"
+msgstr "Compra"
+
+#: .\apps\common\utils\models.py:101
 msgid "valid on"
 msgstr "fecha válida"
 
-#: .\apps\common\utils\models.py:100
+#: .\apps\common\utils\models.py:105
+msgid "kind"
+msgstr "Tipo"
+
+#: .\apps\common\utils\models.py:112
 msgid "code"
 msgstr "código"
 
-#: .\apps\common\utils\models.py:102
+#: .\apps\common\utils\models.py:118
 msgid "sent to emails"
 msgstr "enviado a estos correos"
 
-#: .\apps\common\utils\models.py:103
+#: .\apps\common\utils\models.py:124
 msgid "sent at"
 msgstr "enviado a"
 
-#: .\apps\common\utils\models.py:104
+#: .\apps\common\utils\models.py:130
 msgid "last email message id"
 msgstr "ID del último mensaje de correo electrónico"
 
-#: .\apps\common\utils\models.py:110
+#: .\apps\common\utils\models.py:140
 msgid "GEA daily unique code"
 msgstr "Código único diario de GEA"
 
-#: .\apps\common\utils\models.py:111
+#: .\apps\common\utils\models.py:141
 msgid "GEA daily unique codes"
 msgstr "Códigos únicos diarios de GEA"
 
-#: .\apps\common\utils\views.py:43
+#: .\apps\common\utils\views.py:41
 msgid "Error 400"
 msgstr "Error 400"
 
-#: .\apps\common\utils\views.py:44
+#: .\apps\common\utils\views.py:42
 msgid "Bad Request"
 msgstr "Solicitud incorrecta"
 
-#: .\apps\common\utils\views.py:59
+#: .\apps\common\utils\views.py:57
+#| msgid "Error 400"
+msgid "Error 401"
+msgstr "Error 401"
+
+#: .\apps\common\utils\views.py:58
+msgid "Unauthorized Access"
+msgstr "Acceso no Autorizado"
+
+#: .\apps\common\utils\views.py:73
 msgid "Error 403"
 msgstr "Error 403"
 
-#: .\apps\common\utils\views.py:60
-msgid "Prohibited Request"
-msgstr "Solicitud Prohibida"
+#: .\apps\common\utils\views.py:74
+msgid "Forbidden Access"
+msgstr "Acceso Prohibido"
 
-#: .\apps\common\utils\views.py:75
+#: .\apps\common\utils\views.py:89
 msgid "Error 404"
 msgstr "Error 404"
 
-#: .\apps\common\utils\views.py:76
+#: .\apps\common\utils\views.py:90
 msgid "Page not found"
 msgstr "Página no encontrada"
 
-#: .\apps\common\utils\views.py:90
+#: .\apps\common\utils\views.py:104
 msgid "Error 500"
 msgstr "Error 500"
 
-#: .\apps\common\utils\views.py:91
+#: .\apps\common\utils\views.py:105
 msgid "Server error"
 msgstr "Error del servidor"
+
+#: .\apps\common\utils\views.py:119
+#| msgid "Error 500"
+msgid "Error 503"
+msgstr "Error 503"
+
+#: .\apps\common\utils\views.py:120
+msgid "Service Unavailable"
+msgstr "Servicio No Disponible"
+
+#: .\apps\common\utils\views.py:134
+#| msgid "Error 500"
+msgid "Error 504"
+msgstr "Error 504"
+
+#: .\apps\common\utils\views.py:135
+msgid "Gateway Timeout"
+msgstr "Tiempo de Espera Agotado del Gateway"
+
+#~ msgid "Prohibited Request"
+#~ msgstr "Solicitud Prohibida"
 
 #~ msgid "Information"
 #~ msgstr "Información"

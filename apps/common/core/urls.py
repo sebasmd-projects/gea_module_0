@@ -1,6 +1,6 @@
-from django.urls import include, path
+from django.urls import path
 
-from apps.common.core.views import IndexTemplateView
+from apps.common.core.views import IndexTemplateView, PrivacyTemplateView, TermsTemplateView
 
 app_name = 'core'
 
@@ -9,5 +9,15 @@ urlpatterns = [
         '',
         IndexTemplateView.as_view(),
         name='index'
-    )
+    ),
+    path(
+        'privacy/',
+        PrivacyTemplateView.as_view(),
+        name='privacy'
+    ),
+    path(
+        'terms/',
+        TermsTemplateView.as_view(),
+        name='terms'
+    ),
 ]

@@ -1,0 +1,38 @@
+{
+  "name": "GEA | Secure platform for historical assets",
+  "short_name": "GEA",
+  "description": "Comprehensive and secure platform for the purchase and sale of US historical assets. Official, exclusive and trusted.",
+  "lang": "en",
+  "start_url": "/gea/",
+  "scope": "/gea/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "https://globalallianceusa.com/gea/public/static/assets/imgs/favicons/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "https://globalallianceusa.com/gea/public/static/assets/imgs/favicons/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "https://globalallianceusa.com/gea/public/static/assets/imgs/favicons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://globalallianceusa.com/gea/public/static/assets/imgs/logos/gea_logo.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ]
+}

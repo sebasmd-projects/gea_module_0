@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-04 12:35-0500\n"
+"POT-Creation-Date: 2025-09-09 18:14-0500\n"
 "PO-Revision-Date: 2025-09-04 12:56-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -182,23 +182,21 @@ msgstr ""
 #: .\apps\project\specific\assets_management\assets\signals.py:121
 #, python-brace-format
 msgid "Error filling asset name translation fields: {e}"
-msgstr ""
-"Error al completar los campos de traducción del nombre del activo: {e}"
+msgstr "Error al completar los campos de traducción del nombre del activo: {e}"
 
 #: .\apps\project\specific\assets_management\assets\signals.py:165
 #, python-brace-format
 msgid "Error filling asset translation fields: {e}"
 msgstr "Error al rellenar los campos de traducción de activos: {e}"
 
-#: .\apps\project\specific\assets_management\assets\views.py:79
+#: .\apps\project\specific\assets_management\assets\views.py:94
 msgid "Asset and Asset Name created successfully."
 msgstr "Activo y nombre del activo creados exitosamente."
 
-#: .\apps\project\specific\assets_management\assets\views.py:82
+#: .\apps\project\specific\assets_management\assets\views.py:97
 msgid "Please fix the errors below."
 msgstr "Por favor corrija los errores a continuación."
 
-#: .\apps\project\specific\assets_management\assets\views.py:103
-#| msgid "Asset and Asset Name created successfully."
+#: .\apps\project\specific\assets_management\assets\views.py:125
 msgid "New category created successfully."
 msgstr "Nueva categoría creada exitosamente."

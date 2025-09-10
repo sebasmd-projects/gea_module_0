@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-28 21:37-0500\n"
-"PO-Revision-Date: 2025-08-27 12:01-0500\n"
+"POT-Creation-Date: 2025-09-09 18:14-0500\n"
+"PO-Revision-Date: 2025-09-09 18:19-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -47,24 +47,26 @@ msgid "Last names"
 msgstr "Apellidos"
 
 #: .\apps\project\common\account\forms.py:84
-#: .\apps\project\common\account\forms.py:90
+#: .\apps\project\common\account\forms.py:89
 msgid "Unique Code"
 msgstr "Código Único "
 
-#: .\apps\project\common\account\forms.py:104
-msgid "Invalid Unique Code"
-msgstr "Código único no válido"
-
-#: .\apps\project\common\account\forms.py:110
-msgid "Passwords do not match"
-msgstr "Las contraseñas no coinciden"
-
-#: .\apps\project\common\account\forms.py:120
+#: .\apps\project\common\account\forms.py:102
 msgid "User Type"
 msgstr "Tipo de usuario"
 
-#: .\apps\project\common\account\forms.py:135
-#: .\apps\project\common\account\forms.py:141
+#: .\apps\project\common\account\forms.py:120
+msgid "Passwords do not match"
+msgstr "Las contraseñas no coinciden"
+
+#: .\apps\project\common\account\forms.py:136
+#, python-brace-format
+#| msgid "Invalid Unique Code"
+msgid "Invalid Unique Code ({label})"
+msgstr "Código único no válido ({label})"
+
+#: .\apps\project\common\account\forms.py:146
+#: .\apps\project\common\account\forms.py:152
 msgid "Citizenship Number"
 msgstr "Número de documento"
 

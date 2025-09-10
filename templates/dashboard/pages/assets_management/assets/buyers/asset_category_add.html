@@ -1,9 +1,13 @@
-{% extends 'dashboard/layout/base.html' %}
+{% extends 'raw.html' %}
 
 {% load i18n static custom_filters %}
 
-{% block layout_main %}
+{% block icons %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/d432194db4.js" integrity="sha384-WUtJGGRX1Sh0p7Tkp0ySBnJXiB+XzZ2OdBmWXzd0HfzxGUqUu4vl6+5brRTJ+x3D" crossorigin="anonymous"></script>
+{% endblock icons %}
 
+{% block layout_main %}
 <header class="page-header page-header-dark pb-10"
     style="background-image: linear-gradient(to bottom, #5e5751 0%, #5a554a 50%, #383630 100%);">
     <div class="container-xl px-4">

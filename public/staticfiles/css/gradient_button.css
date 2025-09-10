@@ -1,0 +1,8 @@
+@charset "UTF-8";
+
+.gea_gradient {
+    background-image: linear-gradient(to bottom,
+            var(--custom-gold-high) 0%,
+            var(--custom-gold-medium) 50%,
+            var(--custom-gold-low) 100%);
+}
