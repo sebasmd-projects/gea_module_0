@@ -69,7 +69,7 @@ def _localized_str(value, lang: str) -> str:
 
 
 class PurchaseOrdersView(BuyerRequiredMixin, TemplateView):
-    template_name = 'dashboard/pages/assets_management/assets/buyers/purchase_orders.html'
+    template_name = 'dashboard/pages/buyers/purchase_orders.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -97,7 +97,7 @@ class PurchaseOrdersView(BuyerRequiredMixin, TemplateView):
 class PurchaseOrderCreateView(BuyerRequiredMixin, CreateView):
     model = OfferModel
     form_class = OfferForm
-    template_name = 'dashboard/pages/assets_management/assets/buyers/create_purchase_orders.html'
+    template_name = 'dashboard/pages/buyers/create_purchase_orders.html'
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
@@ -179,7 +179,7 @@ class PurchaseOrderCreateView(BuyerRequiredMixin, CreateView):
 class OfferUpdateView(BuyerRequiredMixin, UpdateView):
     model = OfferModel
     form_class = OfferUpdateForm
-    template_name = 'dashboard/pages/assets_management/assets/buyers/edit_offer.html'
+    template_name = 'dashboard/pages/buyers/edit_offer.html'
     success_url = reverse_lazy('buyers:buyer_index')
 
 
@@ -193,7 +193,7 @@ class OfferSoftDeleteView(BuyerRequiredMixin, View):
 
 class OfferDetailView(LoginRequiredMixin, DetailView):
     model = OfferModel
-    template_name = 'dashboard/pages/assets_management/assets/buyers/detail_offer.html'
+    template_name = 'dashboard/pages/buyers/detail_offer.html'
     context_object_name = 'offer'
 
     def get_object(self, queryset=None):

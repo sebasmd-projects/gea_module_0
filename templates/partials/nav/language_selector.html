@@ -1,0 +1,22 @@
+{% load static i18n %}
+
+<!-- Language Selector -->
+<li class="nav-item dropdown no-caret me-3 d-none d-md-block">
+  <a class="nav-link dropdown-toggle" id="navbarDropdownLanguage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <div class="fw-500">
+      <i class="bi bi-translate mx-1"></i> {% trans 'Language' %}
+    </div>
+    <i class="fas fa-chevron-right dropdown-arrow"></i>
+  </a>
+
+  <div class="dropdown-menu dropdown-menu-end py-0 me-sm-n15 me-lg-0 o-hidden animated--fade-in-up" aria-labelledby="navbarDropdownLanguage">
+    {% for lang in LANGUAGES %}
+      <a class="dropdown-item py-3 text-capitalize" href="{% url 'set_language' %}?lang={{ lang.0 }}">
+        <div class="icon-stack bg-primary-soft text-primary me-4">
+          <i class="bi bi-globe-americas"></i>
+        </div>
+        <div>{{ lang.1 }}</div>
+      </a>
+    {% endfor %}
+  </div>
+</li>

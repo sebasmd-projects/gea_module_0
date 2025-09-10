@@ -1,0 +1,118 @@
+{% load i18n static custom_filters %}
+
+{% block icons %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/aa367a5aee.js" crossorigin="anonymous"></script>
+{% endblock %}
+
+<nav class="sidenav shadow-right sidenav-light">
+  <div class="sidenav-menu">
+    <div class="nav accordion" id="accordionSidenav">
+      {% comment %}
+      <-- TODO: Include alerts and notifications components when needed for small devices-->
+
+
+      <!-- Sidenav Menu Heading (Account) -->
+      <div class="sidenav-menu-heading d-sm-none">Account</div>
+      {% include 'dashboard/partials/sidenav/components/small/_alerts.html' with alert_count=4 %}
+      {% include 'dashboard/partials/sidenav/components/small/_notifications.html' with notification_count=2 %}
+      {% endcomment %}
+
+      <!-- Encabezado -->
+      <div class="sidenav-menu-heading">
+        {% trans 'Dashboard' %}
+      </div>
+
+      <!-- Idiomas (simple, sin hijos activos) -->
+      <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseLanguage" aria-expanded="false" aria-controls="collapseLanguage">
+        <div class="nav-link-icon">
+          <i data-feather="globe"></i>
+        </div>
+        {% trans 'Language' %}
+        <div class="sidenav-collapse-arrow">
+          <i class="fas fa-angle-down"></i>
+        </div>
+      </a>
+      <div class="collapse" id="collapseLanguage" data-bs-parent="#accordionSidenav">
+        <nav class="sidenav-menu-nested nav">
+          {% for lang in LANGUAGES %}
+            <a class="nav-link text-capitalize" href="{% url 'set_language' %}?lang={{ lang.0 }}">{{ lang.1 }}</a>
+          {% endfor %}
+        </nav>
+      </div>
+
+      <!-- Pages -->
+      {% is_any_active 'two_factor:profile' 'buyers:buyer_index' 'buyers:buyer_create' 'assets:create' 'assets:add_category' as pages_open %}
+      <a class="nav-link {% link_collapsed_class 'two_factor:profile' 'buyers:buyer_index' 'buyers:buyer_create' 'assets:create' 'assets:add_category' %}" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="{% aria_expanded 'two_factor:profile' 'buyers:buyer_index' 'buyers:buyer_create' 'assets:create' 'assets:add_category' %}" aria-controls="collapsePages">
+        <div class="nav-link-icon">
+          <i data-feather="grid"></i>
+        </div>
+        {% trans 'Pages' %}
+        <div class="sidenav-collapse-arrow">
+          <i class="fas fa-angle-down"></i>
+        </div>
+      </a>
+      <div class="collapse {% collapse_open_class 'two_factor:profile' 'buyers:buyer_index' 'buyers:buyer_create' 'assets:create' 'assets:add_category' %}" id="collapsePages" data-bs-parent="#accordionSidenav">
+        <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPagesMenu">
+          <!-- Account (sub-acordeón) -->
+          {% is_any_active 'two_factor:profile' as account_open %}
+          <a class="nav-link {% link_collapsed_class 'two_factor:profile' %}" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAccount" aria-expanded="{% aria_expanded 'two_factor:profile' %}" aria-controls="pagesCollapseAccount">
+            {% trans 'Account' %}
+            <div class="sidenav-collapse-arrow">
+              <i class="fas fa-angle-down"></i>
+            </div>
+          </a>
+          <div class="collapse {% collapse_open_class 'two_factor:profile' %}" id="pagesCollapseAccount" data-bs-parent="#accordionSidenavPagesMenu">
+            <nav class="sidenav-menu-nested nav">
+              <a class="nav-link {% active_class 'two_factor:profile' %}" href="{% url 'two_factor:profile' %}">{% trans 'Security' %}</a>
+            </nav>
+          </div>
+
+          <!-- Assets (sub-acordeón visible solo a ciertos roles) -->
+          {% if request.user.is_buyer or request.user.is_superadmin %}
+            {% is_any_active 'buyers:buyer_index' 'buyers:buyer_create' 'assets:create' 'assets:add_category' as assets_open %}
+            <a class="nav-link {% link_collapsed_class 'buyers:buyer_index' 'buyers:buyer_create' 'assets:create' 'assets:add_category' %}" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAssets" aria-expanded="{% aria_expanded 'buyers:buyer_index' 'buyers:buyer_create' 'assets:create' 'assets:add_category' %}" aria-controls="pagesCollapseAssets">
+              {% trans 'Assets' %}
+              <div class="sidenav-collapse-arrow">
+                <i class="fas fa-angle-down"></i>
+              </div>
+            </a>
+            <div class="collapse {% collapse_open_class 'buyers:buyer_index' 'buyers:buyer_create' 'assets:create' 'assets:add_category' %}" id="pagesCollapseAssets" data-bs-parent="#accordionSidenavPagesMenu">
+              <nav class="sidenav-menu-nested nav">
+                <a class="nav-link {% active_class 'buyers:buyer_index' %}" href="{% url 'buyers:buyer_index' %}">{% trans 'Purchase Orders' %}</a>
+                <a class="nav-link {% active_class 'buyers:buyer_create' %}" href="{% url 'buyers:buyer_create' %}">{% trans 'Add New Purchase Order' %}</a>
+                <a class="nav-link {% active_class 'assets:create' %}" href="{% url 'assets:create' %}">{% trans 'Add New Asset' %}</a>
+                <a class="nav-link {% active_class 'assets:add_category' %}" href="{% url 'assets:add_category' %}">{% trans 'Add New Category' %}</a>
+              </nav>
+            </div>
+          {% endif %}
+        </nav>
+      </div>
+
+      <!-- Assets (para holders verificados) -->
+      {% if request.user.is_asset_holder or request.user.is_superuser %}
+        {% if request.user.is_verified_holder or request.user.is_superuser %}
+          {% is_any_active 'assets_location:add_location' 'assets_location:add_asset_location' as holder_assets_open %}
+          <a class="nav-link {% link_collapsed_class 'assets_location:add_location' 'assets_location:add_asset_location' %}" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseAssets" aria-expanded="{% aria_expanded 'assets_location:add_location' 'assets_location:add_asset_location' %}" aria-controls="collapseAssets">
+            <div class="nav-link-icon">
+              <i data-feather="box"></i>
+            </div>
+            {% trans 'Assets' %}
+            <div class="sidenav-collapse-arrow">
+              <i class="fas fa-angle-down"></i>
+            </div>
+          </a>
+          <div class="collapse {% collapse_open_class 'assets_location:add_location' 'assets_location:add_asset_location' %}" id="collapseAssets" data-bs-parent="#accordionSidenav">
+            <nav class="sidenav-menu-nested nav">
+              <a class="nav-link {% active_class 'assets_location:add_location' %}" href="{% url 'assets_location:add_location' %}">{% trans 'Add Location Reference' %}</a>
+              <a class="nav-link {% active_class 'assets_location:add_asset_location' %}" href="{% url 'assets_location:add_asset_location' %}">{% trans 'Add Asset' %}</a>
+            </nav>
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+
+  {% include 'dashboard/partials/sidenav/components/footer.html' %}
+</nav>

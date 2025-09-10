@@ -1,0 +1,12 @@
+{% load static i18n %}
+
+<!-- TODO: Alerts -->
+<a class="dropdown-item dropdown-notifications-item" href="{{ alert.link }}">
+  <div class="dropdown-notifications-item-icon bg-warning">
+    <i data-feather="{{ alert.feather_icon }}"></i>
+  </div>
+  <div class="dropdown-notifications-item-content">
+    <div class="dropdown-notifications-item-content-details">{{ alert.created }}</div>
+    <div class="dropdown-notifications-item-content-text">{{ alert.message }}</div>
+  </div>
+</a>

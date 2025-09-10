@@ -23,7 +23,7 @@ class UserLogoutView(View):
 
 
 class GeaUserRegisterView(FormView):
-    template_name = "dashboard/account/gea_register.html"
+    template_name = "account/gea_register.html"
     form_class = GeaUserRegisterForm
 
     def dispatch(self, request, *args, **kwargs):

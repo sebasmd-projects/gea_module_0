@@ -1,0 +1,42 @@
+{% comment %}
+<!--
+_buyer_header_card.html
+
+Parámetros esperados:
+    url: URL a la que apunta la tarjeta.
+    icon_class: Clases CSS para el icono (por ejemplo, "feather-xl text-green mb-3" o "fa-solid fa-folder-plus").
+    icon_data_feather: Nombre del icono de Feather (por ejemplo, "plus-circle").
+    page_header_title: Título que se muestra en la tarjeta.
+    page_header_description: Descripción opcional que se muestra debajo del título.
+    page_header_image: URL de la imagen que se muestra en la tarjeta.
+
+Ejemplos de uso:
+    
+-->
+{% endcomment %}
+
+{% load i18n static custom_filters %}
+
+<div class="col-xl-4 mb-4">
+    <a class="card lift h-100" href="{{ url }}">
+        <div class="card-body d-flex justify-content-center flex-column">
+            <div class="d-flex align-items-center justify-content-between">
+
+                <div class="me-3">
+                    {% if icon_class and icon_data_feather %}
+                        <i class="{{ icon_class }}" data-feather="{{ icon_data_feather }}"></i>
+                    {% elif icon_class %}
+                        <i class="{{ icon_class }}"></i>
+                    {% endif %}
+                    <h5>{{ page_header_title }}</h5>
+
+                    {% if page_header_description %}
+                        <div class="text-muted small">{{ page_header_description }}</div>
+                    {% endif %}
+                </div>
+
+                <img src="{{ page_header_image }}" alt="{{ page_header_title }} img" style="width: 8rem" />
+            </div>
+        </div>
+    </a>
+</div>

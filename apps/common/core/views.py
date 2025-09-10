@@ -7,6 +7,9 @@ class IndexTemplateView(TemplateView):
     
 class PrivacyTemplateView(TemplateView):
     template_name = "core/privacy.html"
-    
+
 class TermsTemplateView(TemplateView):
     template_name = "core/terms.html"
+
+class LayoutTemplateView(TemplateView):
+    template_name = "dashboard/dashboard_layout_base.html"

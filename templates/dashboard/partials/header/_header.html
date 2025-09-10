@@ -1,0 +1,129 @@
+{% comment %} 
+<!-- _header.html
+
+    Parámetros esperados:
+        icon_class: clase(s) CSS para el icono (obligatorio)
+        icon_data_feather: nombre del icono feather (opcional)
+        page_title: título principal (obligatorio)
+        page_description: descripción del título (opcional)
+        parent_title: título del breadcrumb padre (opcional)
+        parent_url: URL del breadcrumb padre (opcional)
+        breadcrumbs: string con los items del breadcrumb separados por '>' (opcional)
+            Cada item puede ser "Titulo::/url" o solo "Titulo"
+            Si no se pasa 'breadcrumbs', se mantiene compatibilidad con parent_title y page_title
+
+    Ejemplos de uso:
+    1. Dashboard (con link) › Purchase Orders (con link) › Add new purchase order (activo, sin link)
+    {% url 'core:layout' as parent_url %}
+    {% include 'dashboard/partials/header/_header.html'
+        with
+        page_title='Breadcrumbs'
+        page_description='The custom page header supports and styles Bootstrap breadcrumbs'
+        parent_title='Dashboard'
+        parent_url=parent_url
+        breadcrumbs='Purchase Orders::/purchase-orders > Add new purchase order'
+    %}
+
+    2. Assets (con link) › Categories (con link) › New category (activo, sin link)
+    {% include 'dashboard/partials/header/_header.html'
+        with
+        parent_title='Dashboard'
+        parent_url='/dashboard/'
+        breadcrumbs='Assets::/assets > Categories::/assets/categories > New category'
+    %}
+
+    3. Purchase Orders (sin link) › Add new purchase order (activo, sin link)
+    {% include 'dashboard/partials/header/_header.html'
+        with
+        parent_title='Dashboard'
+        breadcrumbs='Purchase Orders > Add new purchase order'
+    %}
+
+-->
+{% endcomment %}
+
+{% load static i18n custom_filters %}
+
+<header class="page-header page-header-dark pb-10 layout_gradient_header">
+  <div class="container-xl px-4">
+    <div class="page-header-content pt-4">
+      <div class="row align-items-center justify-content-between">
+        <div class="col-auto mt-4">
+          <h1 class="page-header-title text-dark">
+            <div class="page-header-icon">
+              {% if icon_class and icon_data_feather %}
+                <i class="{{ icon_class }}" data-feather="{{ icon_data_feather }}"></i>
+              {% elif icon_class %}
+                <i class="{{ icon_class }}"></i>
+              {% endif %}
+            </div>
+            {{ page_title }}
+          </h1>
+          
+          {% if page_description %}
+              <div class="page-header-subtitle">{{ page_description }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <nav class="mt-4 rounded" aria-label="breadcrumb">
+        <ol class="breadcrumb px-3 py-2 rounded mb-0">
+          {# 1) Si viene 'breadcrumbs' (string), lo usamos #}
+          {% if breadcrumbs %}
+            {# Opcionalmente pintamos el padre primero si viene #}
+            {% if parent_title %}
+              <li class="breadcrumb-item">
+                {% if parent_url %}
+                  <a href="{{ parent_url }}">{{ parent_title }}</a>
+                {% else %}
+                  {{ parent_title }}
+                {% endif %}
+              </li>
+            {% endif %}
+
+            {# 'breadcrumbs' es un string con ítems separados por '>' #}
+            {% with items=breadcrumbs|split:'>' %}
+              {% for raw in items %}
+                {# Cada ítem puede ser "Titulo::/url" o solo "Titulo" #}
+                {% with token=raw|trim %}
+                  {% with pair=token|split:'::' %}
+                    {% if forloop.last %}
+                      <li class="breadcrumb-item active" aria-current="page">{{ pair.0 }}</li>
+                    {% else %}
+                      <li class="breadcrumb-item">
+                        {% if pair|length > 1 and pair.1 %}
+                          <a href="{{ pair.1 }}">{{ pair.0 }}</a>
+                        {% else %}
+                          {{ pair.0 }}
+                        {% endif %}
+                      </li>
+                    {% endif %}
+                  {% endwith %}
+                {% endwith %}
+              {% endfor %}
+            {% endwith %}
+
+            {# 2) Si NO viene 'breadcrumbs', mantenemos compat con parent/page_title #}
+          {% else %}
+            {% if parent_title %}
+              <li class="breadcrumb-item">
+                {% if parent_url %}
+                  <a href="{{ parent_url }}">{{ parent_title }}</a>
+                {% else %}
+                  {{ parent_title }}
+                {% endif %}
+              </li>
+            {% endif %}
+
+            {% if page_title %}
+              <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+            {% endif %}
+          {% endif %}
+        </ol>
+      </nav>
+
+    </div>
+  </div>
+</header>
+
+<link rel="stylesheet" href="{% static 'css/gradient_header.css' %}" />

@@ -3,9 +3,10 @@
 {% load i18n static %}
 
 {% block icons %}
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js" crossorigin="anonymous"></script>
-  <script src="https://kit.fontawesome.com/d432194db4.js" integrity="sha384-WUtJGGRX1Sh0p7Tkp0ySBnJXiB+XzZ2OdBmWXzd0HfzxGUqUu4vl6+5brRTJ+x3D" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"
+  crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/aa367a5aee.js" crossorigin="anonymous"></script>
 {% endblock icons %}
 
 {% block title %}<title>GEA | {{ title }}: {{ error }}</title>{% endblock title %}
@@ -24,7 +25,7 @@
               <p class="lead">{{ status }} - {{ error }}</p>
               <p>
                 {% if request.user.is_superuser %}
-                  {{ exception }}
+                {{ exception }}
                 {% endif %}
               </p>
               <a class="text-arrow-icon" href="{% url 'core:index' %}">

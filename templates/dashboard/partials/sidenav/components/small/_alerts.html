@@ -1,0 +1,9 @@
+{% load i18n %}
+
+<!-- Sidenav Link (Alerts) -->
+<a class="nav-link d-sm-none" href="{% url 'alerts:list' %}">
+    <div class="nav-link-icon">
+        <i data-feather="bell"></i>
+    </div>{% trans 'Alerts' %}
+    <span class="badge bg-warning-soft text-warning ms-auto">{{ alert_count }} {% trans 'New' %}</span>
+</a>

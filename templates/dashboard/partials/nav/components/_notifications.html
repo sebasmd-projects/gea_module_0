@@ -1,0 +1,12 @@
+{% load static i18n %}
+
+<!-- TODO: Notifications -->
+<a class="dropdown-item dropdown-notifications-item" href="{{ notification.link }}">
+  <img class="dropdown-notifications-item-img" src="{{ notification.image_url }}" />
+  <div class="dropdown-notifications-item-content">
+    <div class="dropdown-notifications-item-content-text">
+        {{ notification.message }}
+    </div>
+    <div class="dropdown-notifications-item-content-details">{{ notification.sender }} · {{ notification.timestamp }}</div>
+  </div>
+</a>

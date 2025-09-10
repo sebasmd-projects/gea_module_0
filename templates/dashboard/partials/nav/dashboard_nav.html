@@ -1,0 +1,48 @@
+{% load static i18n %}
+
+<nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
+  <!-- Sidenav Toggle Button -->
+  <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 me-2 ms-lg-2 me-lg-0" id="sidebarToggle"><i data-feather="menu"></i></button>
+
+  {% include 'partials/nav/logo.html' %}
+
+  <!-- Navbar Items -->
+  <ul class="navbar-nav align-items-center ms-auto">
+    <!-- Language Selector -->
+    {% include 'partials/nav/language_selector.html' %}
+
+    {% comment %}
+    <!-- TODO: Alerts Dropdown -->
+    <li class="nav-item dropdown no-caret d-none d-sm-block me-3 dropdown-notifications">
+      <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownAlerts" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="bell"></i></a>
+      <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownAlerts">
+        <h6 class="dropdown-header dropdown-notifications-header">
+          <i class="me-2" data-feather="bell"></i>
+          {% trans 'Alerts Center' %}
+        </h6>
+        {% for alert in alerts %}
+          {% include 'dashboard/partials/nav/components/_alerts.html' with alert=alert %}
+        {% endfor %}
+        <a class="dropdown-item dropdown-notifications-footer" href="{% url 'alerts:list' %}">{% trans 'View All Alerts' %}</a>
+      </div>
+    </li>
+
+    <!-- TODO: Notifications Dropdown -->
+    <li class="nav-item dropdown no-caret d-none d-sm-block me-3 dropdown-notifications">
+      <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownMessages" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="mail"></i></a>
+      <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownMessages">
+        <h6 class="dropdown-header dropdown-notifications-header">
+          <i class="me-2" data-feather="mail"></i>
+          {% trans 'Notification Center' %}
+        </h6>
+        {% for notification in notifications %}
+          {% include 'dashboard/partials/nav/components/_notifications.html' with notification=notification %}
+        {% endfor %}
+        <a class="dropdown-item dropdown-notifications-footer" href="{% url 'notifications:list' %}">{% trans 'Read All Notifications' %}</a>
+      </div>
+    </li>
+    {% endcomment %}
+
+    {% include 'partials/nav/user_dropdown.html' %}
+  </ul>
+</nav>

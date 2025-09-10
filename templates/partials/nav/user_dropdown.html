@@ -1,0 +1,84 @@
+{% load static i18n %}
+
+<!-- User Dropdown -->
+<li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
+  <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    {% with pi=request.user.personal_information %}
+      {% if pi.gender == 'M' %}
+        <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/profile-5.png' %}" alt="{% trans 'Male avatar' %}" />
+      {% elif pi.gender == 'F' %}
+        <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/profile-2.png' %}" alt="{% trans 'Female avatar' %}" />
+      {% else %}
+        <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/demo_profile.svg' %}" alt="{% trans 'Default avatar' %}" />
+      {% endif %}
+    {% endwith %}
+  </a>
+
+  <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
+    <h6 class="dropdown-header d-flex align-items-center">
+      {% with pi=request.user.personal_information %}
+        {% if pi.gender == 'M' %}
+          <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/profile-5.png' %}" alt="{% trans 'Male avatar' %}" />
+        {% elif pi.gender == 'F' %}
+          <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/profile-2.png' %}" alt="{% trans 'Female avatar' %}" />
+        {% else %}
+          <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/demo_profile.svg' %}" alt="{% trans 'Default avatar' %}" />
+        {% endif %}
+      {% endwith %}
+      <div class="dropdown-user-details">
+        <div class="dropdown-user-details-name">{{ request.user.get_full_name }}</div>
+        <div class="dropdown-user-details-email">{{ request.user.email }}</div>
+      </div>
+    </h6>
+    <div class="dropdown-divider"></div>
+
+    {% comment %}
+    <!-- TODO: Profile link -->
+    <a class="dropdown-item" href="#!">
+      <div class="dropdown-item-icon">
+        <i data-feather="user"></i>
+      </div>
+      {% trans 'Profile' %}
+    </a>
+    {% endcomment %}
+
+    <a class="dropdown-item" href="{% url 'admin:index' %}">
+      <div class="dropdown-item-icon">
+        <i data-feather="tool"></i>
+      </div>
+      {% trans 'Admin' %}
+    </a>
+
+    {% if request.user.is_buyer or request.user.is_superuser %}
+      <a class="dropdown-item" href="{% url 'buyers:buyer_index' %}">
+        <div class="dropdown-item-icon">
+          <i data-feather="shopping-bag"></i>
+        </div>
+        {% trans 'Buyer' %}
+      </a>
+    {% endif %}
+
+    {% if request.user.is_asset_holder or request.user.is_superuser %}
+      <a class="dropdown-item" href="{% url 'assets:holder_index' %}">
+        <div class="dropdown-item-icon">
+          <i data-feather="briefcase"></i>
+        </div>
+        {% trans 'Client Area' %}
+      </a>
+    {% endif %}
+
+    <a class="dropdown-item" href="{% url 'two_factor:profile' %}">
+      <div class="dropdown-item-icon">
+        <i data-feather="settings"></i>
+      </div>
+      {% trans 'Two Factor Authentication' %}
+    </a>
+
+    <a class="dropdown-item" href="{% url 'account:logout' %}">
+      <div class="dropdown-item-icon">
+        <i data-feather="log-out"></i>
+      </div>
+      {% trans 'Logout' %}
+    </a>
+  </div>
+</li>

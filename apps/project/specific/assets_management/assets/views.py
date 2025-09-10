@@ -52,7 +52,7 @@ class AssetNameWithInlineAssetCreateView(BuyerRequiredMixin, View):
     registra su AssetModel (1–1) con categoría (Select2) + datos.
     """
 
-    template_name = "dashboard/pages/assets_management/assets/buyers/assetname_inline_create.html"
+    template_name = "dashboard/pages/buyers/assetname_inline_create.html"
 
     def get(self, request, *args, **kwargs):
         name_form = AssetNameInlineForm(request=request)
@@ -114,7 +114,7 @@ class AssetAddNewCategory(BuyerRequiredMixin, CreateView):
     """Create a new asset category."""
 
     model = AssetCategoryModel
-    template_name = "dashboard/pages/assets_management/assets/buyers/asset_category_add.html"
+    template_name = "dashboard/pages/buyers/asset_category_add.html"
     form_class = AssetAddNewCategoryForm
 
     def form_valid(self, form):

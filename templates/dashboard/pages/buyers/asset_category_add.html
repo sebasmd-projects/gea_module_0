@@ -1,0 +1,207 @@
+{% extends 'dashboard/dashboard_layout_base.html' %}
+
+{% load i18n static custom_filters %}
+
+{% block icons %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/aa367a5aee.js" crossorigin="anonymous"></script>
+{% endblock icons %}
+
+{% block main_layout %}
+    {% url 'buyers:buyer_index' as purchase_orders_url %}
+    {% url 'buyers:buyer_create' as add_purchase_order_url %}
+    {% url 'assets:create' as add_asset_url %}
+
+    {% static 'assets/imgs/illustrations/statistics.svg' as purchase_orders_image %}
+    {% static 'assets/imgs/illustrations/windows.svg' as add_new_purchase_order_image %}
+    {% static 'assets/imgs/illustrations/browser-stats.svg' as add_asset_image %}
+
+    {% trans 'Purchase orders' as purchase_orders %}
+    {% trans 'Add new purchase order' as add_new_purchase_order %}
+    {% trans 'Add new asset' as add_new_asset %}
+    {% trans 'Category' as category %}
+    {% trans 'Register a new category' as register_new_category %}
+
+    {% include 'dashboard/partials/header/_header.html' with  icon_class="me-2"  icon_data_feather="list"  page_title=category page_description=register_new_category  parent_title=purchase_orders  parent_url=purchase_orders_url %}
+
+<div class="container-xl px-4 mt-n10">
+    <div class="row">
+        {% comment %} <!-- Purchase Orders Card --> {% endcomment %}
+        {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="file-text" page_header_title=purchase_orders page_header_image=purchase_orders_image url=purchase_orders_url %}
+
+        {% comment %} <!-- Add New Purchase Order Card --> {% endcomment %}
+        {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="file-plus" page_header_title=add_new_purchase_order page_header_image=purchase_orders_image url=add_purchase_order_url %}
+
+        {% comment %}<!-- Add New Asset Card -->{% endcomment %}
+        {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="archive" page_header_title=add_new_asset page_header_image=add_asset_image url=add_asset_url %}
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header"
+                    style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
+                    <h2 style="color:black;">{% trans 'New Category' %}</h2>
+                </div>
+                <div class="card-body">
+
+                    <p> {{ form.non_field_errors }} </p>
+
+                    <form method="post" id="categoryForm">
+                        {% csrf_token %}
+
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <strong class="text-dark">{% trans 'Category' %}</strong>
+                            </div>
+                            <div class="card-body row">
+                                {% if request.LANGUAGE_CODE == 'es' %}
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="{{ form.es_name.id_for_label }}">
+                                        {% trans 'Asset Category (ES)*' %}
+                                    </label>
+                                    {{ form.es_name|add_class:"form-control" }}
+                                    {% if form.es_name.errors %}
+                                    <div class="text-danger small">{{ form.es_name.errors|join:", " }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="{{ form.es_description.id_for_label }}">
+                                        {% trans 'Description (ES)' %}
+                                    </label>
+                                    {{ form.es_description|add_class:"form-control" }}
+                                    {% if form.es_description.errors %}
+                                    <div class="text-danger small">
+                                        {{ form.es_description.errors|join:", " }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                {% else %}
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="{{ form.en_name.id_for_label }}">
+                                        {% trans 'Asset Category (EN)' %}
+                                    </label>
+                                    {{ form.en_name|add_class:"form-control" }}
+                                    {% if form.en_name.errors %}
+                                    <div class="text-danger small">{{ form.en_name.errors|join:", " }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="{{ form.en_description.id_for_label }}">
+                                        {% trans 'Description (EN)' %}
+                                    </label>
+                                    {{ form.en_description|add_class:"form-control" }}
+                                    {% if form.en_description.errors %}
+                                    <div class="text-danger small">
+                                        {{ form.en_description.errors|join:", " }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-outline-success" id="saveBtn">
+                                <i class="fa-solid fa-floppy-disk mx-1"></i>{% trans 'Save' %}
+                            </button>
+
+                            <a href="{% url 'assets:create' %}" class="btn btn-outline-gold" rel="noopener noreferrer">
+                                <i class="fa-solid fa-arrow-left mx-1"></i> {% trans 'Add new Asset' %}
+                            </a>
+
+                            <a href="{% url 'buyers:buyer_index' %}" class="btn btn-outline-gold"
+                                rel="noopener noreferrer">
+                                <i class="fa-solid fa-arrow-left mx-1"></i> {% trans 'Go to my Purchase Orders' %}
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            {# --- LISTADO DE CATEGORÍAS --- #}
+            <div class="card mb-4">
+                <div class="card-header"
+                    style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
+                    <h2 style="color:black;">{% trans 'Categories' %}</h2>
+                </div>
+                <div class="card-body">
+                    <div id="categories-alerts"></div>
+                    <table id="categories_table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>{% trans 'Category' %}</th>
+                                <th>{% trans 'Description' %}</th>
+                                <th>{% trans 'Created' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for c in categories %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>
+                                    {% if request.LANGUAGE_CODE == 'es' %}
+                                    {{ c.es_name|default:"—" }}
+                                    {% else %}
+                                    {{ c.en_name|default:"—" }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if request.LANGUAGE_CODE == 'es' %}
+                                    {{ c.es_description|default:"" }}
+                                    {% else %}
+                                    {{ c.en_description|default:"" }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ c.created|date:"Y-m-d H:i" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">
+                                    {% trans 'No categories found.' %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block simple_datatables %}
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+{% endblock simple_datatables %}
+
+{% block simple_datatables_js %}
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+    crossorigin="anonymous"></script>
+<script src="{% static 'assets/js/dashboard/datatables/simple-datatable.js' %}"></script>
+{% endblock %}
+
+
+{% block body_custom_js %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#categoryForm").on("submit", function () {
+            $(this).find("button, a").prop("disabled", true).addClass("disabled");
+            $("#saveBtn").html('<i class="fa-solid fa-spinner fa-spin mx-1"></i> {% trans "Saving and Translating..." %}');
+            return true;
+        });
+    });
+</script>
+{% endblock %}

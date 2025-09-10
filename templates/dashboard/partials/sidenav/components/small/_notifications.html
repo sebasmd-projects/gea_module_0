@@ -1,0 +1,9 @@
+{% load i18n %}
+
+<!-- Sidenav Link (Notifications) -->
+<a class="nav-link d-sm-none" href="{% url 'notifications:list' %}">
+    <div class="nav-link-icon">
+        <i data-feather="mail"></i>
+    </div>{% trans 'Notifications' %} 
+    <span class="badge bg-success-soft text-success ms-auto">{{ notification_count }} {% trans 'New' %}</span>
+</a>
