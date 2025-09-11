@@ -13,12 +13,13 @@ from rest_framework_simplejwt.views import (TokenBlacklistView,
                                             TokenObtainPairView,
                                             TokenRefreshView, TokenVerifyView)
 
+from apps.common.utils.models import IPBlockedModel, WhiteListedIPModel
+
 from .api import (TokenBlacklistResponseSerializer,
                   TokenObtainPairResponseSerializer,
                   TokenRefreshResponseSerializer,
                   TokenVerifyResponseSerializer)
 from .backend import EmailOrUsernameModelBackend
-from .models import IPBlockedModel, WhiteListedIPModel
 
 logger = logging.getLogger(__name__)
 

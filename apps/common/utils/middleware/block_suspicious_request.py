@@ -3,12 +3,13 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.db import transaction
-from django.http import HttpResponsePermanentRedirect
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
-from ..models import IPBlockedModel
+from apps.common.utils.models import IPBlockedModel
+
+
 
 logger = logging.getLogger(__name__)
 
