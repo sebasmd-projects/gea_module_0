@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 12:50-0500\n"
-"PO-Revision-Date: 2025-08-27 12:50-0500\n"
+"POT-Creation-Date: 2025-09-11 02:21-0500\n"
+"PO-Revision-Date: 2025-09-11 02:33-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -40,3 +40,32 @@ msgstr "Confirmo la prueba de vida (POL)"
 #: .\apps\project\specific\documents\pol\models.py:34
 msgid "Proofs of life"
 msgstr "Pruebas de vida"
+
+#: .\apps\project\specific\documents\pol\templates\pol\pol_form.html:6
+#| msgid "Proof of life"
+msgid "Proof of Life"
+msgstr "Prueba de vida (POL)"
+
+#: .\apps\project\specific\documents\pol\templates\pol\pol_form.html:24
+msgid "POL"
+msgstr "POL"
+
+#: .\apps\project\specific\documents\pol\templates\pol\pol_form.html:67
+msgid "Send"
+msgstr "Enviar"
+
+#: .\apps\project\specific\documents\pol\templates\pol\pol_success.html:6
+msgid "Successful registration"
+msgstr "Registro exitoso"
+
+#: .\apps\project\specific\documents\pol\templates\pol\pol_success.html:40
+msgid "Thank you for confirming your POL!"
+msgstr "Gracias por confirmar tu POL!"
+
+#: .\apps\project\specific\documents\pol\templates\pol\pol_success.html:41
+msgid "Your information has been successfully registered."
+msgstr "Su información ha sido registrada exitosamente."
+
+#: .\apps\project\specific\documents\pol\templates\pol\pol_success.html:42
+msgid "You can now close this tab. "
+msgstr "Ahora puedes cerrar esta pestaña."

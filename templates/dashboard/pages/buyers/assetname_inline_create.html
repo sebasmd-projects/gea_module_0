@@ -2,9 +2,9 @@
 {% load i18n static custom_filters %}
 
 {% block icons %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"
-    crossorigin="anonymous"></script>
-<script src="https://kit.fontawesome.com/aa367a5aee.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/aa367a5aee.js" crossorigin="anonymous"></script>
 {% endblock icons %}
 
 
@@ -297,16 +297,6 @@
 </div>
 {% endblock %}
 
-{% block simple_datatables %}
-<link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-{% endblock simple_datatables %}
-
-{% block simple_datatables_js %}
-<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
-    crossorigin="anonymous"></script>
-<script src="{% static 'assets/js/dashboard/datatables/simple-datatable.js' %}"></script>
-{% endblock %}
-
 
 {% block body_custom_js %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -322,4 +312,13 @@
 {{ form.media.js }}
 {{ name_form.media.js }}
 {{ asset_form.media.js }}
+{% endblock %}
+
+{% block simple_datatables %}
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+{% endblock %}
+
+{% block simple_datatables_js %}
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+    <script src="{% static 'js/simple-datatable.js' %}"></script>
 {% endblock %}

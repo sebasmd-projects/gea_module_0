@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils.html import escape
+from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import override
 from django.views.generic import (CreateView, DetailView, TemplateView,
@@ -130,8 +131,12 @@ class PurchaseOrderCreateView(BuyerRequiredMixin, CreateView):
     def send_email_notification(self, cleaned_data, offer_instance):
         """Enviar correo con los datos de la orden de compra."""
         subject = _("New Purchase order Submitted for Verification")
-        hide_recipient_email = ["ceo@globalallianceusa.com"]
+        hide_recipient_email = [
+            "ceo@globalallianceusa.com", "support@globalallianceusa.com"]
         recipient_email = [self.request.user.email]
+        review_url = self.request.build_absolute_uri(
+            reverse("buyers:offer_details", kwargs={"id": offer_instance.id})
+        )
 
         safe_data = {
             "asset_es": escape(offer_instance.asset.asset_name.es_name or offer_instance.asset.asset_name.en_name or ""),
@@ -151,6 +156,7 @@ class PurchaseOrderCreateView(BuyerRequiredMixin, CreateView):
             "user_name": escape(self.request.user.get_full_name()),
             "user_email": escape(self.request.user.email),
             "user_username": escape(self.request.user.username),
+            "review_url": review_url,
         }
 
         html_content = render_to_string(
@@ -167,7 +173,8 @@ class PurchaseOrderCreateView(BuyerRequiredMixin, CreateView):
         )
         email.content_subtype = "html"
         pdf_bytes = generate_purchase_order_pdf(
-            offer_instance, self.request.user)
+            offer_instance, self.request.user
+        )
         email.attach(
             f"purchase_order_{offer_instance.id}.pdf",
             pdf_bytes,
@@ -197,5 +204,54 @@ class OfferDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'offer'
 
     def get_object(self, queryset=None):
-        """Fetch the OfferModel instance by the ID provided in the URL."""
         return get_object_or_404(OfferModel, id=self.kwargs.get('id'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        offer: OfferModel = context['offer']
+
+        # Idioma activo ('es' o 'en')
+        lang = (self.request.LANGUAGE_CODE or get_language() or 'en')[:2]
+
+        # Helpers seguros para extraer campos según idioma
+        def get_i18n(obj, base_name, default=""):
+            """
+            Lee obj.<lang>_<base_name> si existe, si no, intenta el alterno.
+            """
+            primary = f"{lang}_{base_name}"
+            alt = f"{'en' if lang == 'es' else 'es'}_{base_name}"
+            return getattr(obj, primary, None) or getattr(obj, alt, None) or default
+
+        # Oferta (detalles en el idioma)
+        context['offer_observation'] = get_i18n(offer, 'observation', "")
+        context['offer_description'] = get_i18n(offer, 'description', "")
+
+        # Activo (descripciones/observaciones en el idioma)
+        asset = offer.asset
+        context['asset_description'] = get_i18n(asset, 'description', "")
+        # Nota: en el modelo del asset el campo es *_observations (plural)
+        # ajustamos el base_name para coincidir:
+        context['asset_observation'] = get_i18n(asset, 'observations', "")
+
+        # País del comprador (string traducido)
+        buyer_country_name = ""
+        if offer.buyer_country:
+            # prueba atributos tipo es_country_name/en_country_name; si no, usa __str__ bajo override
+            attr_name = f"{lang}_country_name"
+            buyer_country_name = getattr(offer.buyer_country, attr_name, None)
+            if not buyer_country_name:
+                with override(lang):
+                    buyer_country_name = str(offer.buyer_country)
+        context['buyer_country_name'] = buyer_country_name
+
+        # Categoría (nombre traducido si existe es_name/en_name; fallback a __str__)
+        category_name = ""
+        if asset and asset.category:
+            attr_name = f"{lang}_name"
+            category_name = getattr(asset.category, attr_name, None)
+            if not category_name:
+                with override(lang):
+                    category_name = str(asset.category)
+        context['category_name'] = category_name
+
+        return context

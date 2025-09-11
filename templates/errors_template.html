@@ -32,6 +32,9 @@
                 <i class="ms-0 me-1" data-feather="arrow-left"></i>
                 {% trans 'HOME' %}
               </a>
+              {% if attempt_count %}
+                <p>{{ attempt_count }}</p>
+              {% endif %}
             </div>
           </div>
         </div>
@@ -39,7 +42,7 @@
     </main>
   </div>
   <div id="layoutError_footer">
-    {% include 'footer.html' %}
+    {% include 'partials/footer/footer.html' %}
   </div>
 </div>
 {% endblock layout %}

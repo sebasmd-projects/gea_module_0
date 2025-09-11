@@ -2,41 +2,47 @@
 
 {% load i18n static custom_filters %}
 
-{% block simple_datatables %}
-<link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-{% endblock simple_datatables %}
-
 {% block icons %}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"
+    crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/aa367a5aee.js" crossorigin="anonymous"></script>
 {% endblock icons %}
 
 {% block main_layout %}
 
-<header class="page-header page-header-dark pb-10"
-    style="background-image: linear-gradient(to bottom, #5e5751 0%, #5a554a 50%, #383630 100%);">
-    <div class="container-xl px-4">
-        <div class="page-header-content pt-4">
-            <div class="row align-items-center justify-content-between">
-                <div class="col-auto mt-4">
-                    <h1 class="page-header-title">
-                        <div class="page-header-icon">
-                            <i data-feather="activity"></i>
-                        </div>
-                        {% trans 'Dashboard' %}
-                    </h1>
-                    <div class="page-header-subtitle">{% trans 'Overview and content summary' %}</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
+    {% url 'buyers:buyer_index' as purchase_orders_url %}
+    {% url 'assets:create' as add_asset_url %}
+    {% url 'assets:add_category' as add_asset_category_url %}
+
+    {% static 'assets/imgs/illustrations/statistics.svg' as purchase_orders_image %}
+    {% static 'assets/imgs/illustrations/browser-stats.svg' as add_asset_image %}
+    {% static 'assets/imgs/illustrations/processing.svg' as add_category_image %}
+
+    {% trans 'Purchase Orders' as purchase_orders %}
+    {% trans 'Edit Purchase Order' as edit_purchase_order %}
+    {% trans 'Add New Asset' as add_new_asset %}
+    {% trans "Add New Asset Category" as add_new_asset_category %}
+
+    {% include 'dashboard/partials/header/_header.html' with  icon_class="me-2"  icon_data_feather="edit"  page_title=edit_purchase_order parent_title=purchase_orders parent_url=purchase_orders_url %}
 
 <div class="container-xl px-4 mt-n10">
     <div class="row">
+        {% comment %} <!-- Purchase Orders Card --> {% endcomment %}
+        {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="file-text" page_header_title=purchase_orders page_header_image=purchase_orders_image url=purchase_orders_url %}
+
+        {% comment %} <!-- Add New Asset Card --> {% endcomment %}
+        {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="archive" page_header_title=add_new_asset page_header_image=add_asset_image url=add_asset_url %}
+
+        {% comment %}<!-- Add New Asset Category Card -->{% endcomment %}
+        {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="list" page_header_title=add_new_asset_category page_header_image=add_category_image url=add_asset_category_url %}
+    </div>
+
+    <div class="row">
         <div class="col-12">
             <div class="card mb-4" id="create_offer">
-                <div class="card-header">
-                    <h2>{% trans 'Edit Purchase order' %}</h2>
+                <div class="card-header"
+                    style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
+                    <h2 style="color: black;">{% trans 'Edit Purchase Order' %}</h2>
                 </div>
                 <div class="card-body">
                     {% if messages %}
@@ -47,11 +53,11 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                     {% endif %}
-                    <form method="post" enctype="multipart/form-data">
+                    <form method="post" enctype="multipart/form-data" id="editPurchaseOrderForm">
                         {% csrf_token %}
                         {{ form.media.css }}
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="{{ form.asset.id_for_label }}" class="form-label">
                                         {% trans "Asset:" %}
@@ -60,7 +66,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="{{ form.offer_type.id_for_label }}" class="form-label">
                                         {% trans "Purchase order Type:" %}
@@ -69,25 +75,29 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="{{ form.quantity_type.id_for_label }}" class="form-label">
-                                        {% trans "Quantity Type:" %}
+                                    <label for="id_quantity_type" class="form-label">
+                                        <span class="fw-bold">
+                                            {% trans 'Quantity Type' %}*
+                                        </span>
                                     </label>
-                                    {{ form.quantity_type|add_class:"form-select" }}
+                                    {{ form.quantity_type|add_attrs:"class=form-select" }}
                                 </div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="{{ form.offer_amount.id_for_label }}" class="form-label">
-                                        {% trans "Total value of the offer USD:" %}
+                                    <label for="id_offer_amount" class="form-label">
+                                        <span class="fw-bold">
+                                            {% trans 'Total value of the offer ($ USD)' %}*
+                                        </span>
                                     </label>
                                     {{ form.offer_amount|add_class:"form-control" }}
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="{{ form.offer_quantity.id_for_label }}" class="form-label">
                                         {% trans "Quantity required:" %}
@@ -96,7 +106,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label for="{{ form.buyer_country.id_for_label }}" class="form-label">
                                         {% trans "Country of Purchase:" %}
@@ -145,11 +155,12 @@
                         </div>
 
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-outline-success">
-                                {% trans "Save Purchase Order" %}
+                            <button type="submit" class="btn btn-outline-success" id="saveBtn">
+                                <i class="fa-solid fa-floppy-disk mx-1"></i> {% trans 'Save Purchase Order' %}
                             </button>
-                            <a href="{% url 'buyers:buyer_index' %}" class="btn btn-warning">
-                                {% trans 'Go to my Purchase Orders' %}
+                            <a href="{% url 'buyers:buyer_index' %}" class="btn btn-outline-gold"
+                                rel="noopener noreferrer">
+                                <i class="fa-solid fa-arrow-left mx-1"></i> {% trans 'Go to my Purchase Orders' %}
                             </a>
                         </div>
                     </form>
@@ -159,16 +170,21 @@
     </div>
 </div>
 
-
 {% endblock %}
+
 
 {% block body_custom_js %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-{{ form.media.js }}
-{% endblock %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-{% block simple_datatables_js %}
-<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
-    crossorigin="anonymous"></script>
-<script src="{% static 'assets/js/dashboard/datatables/simple-datatable.js' %}"></script>
+{{ form.media.js }}
+
+<script>
+    $(document).ready(function () {
+        $("#editPurchaseOrderForm").on("submit", function () {
+            $(this).find("button, a").prop("disabled", true).addClass("disabled");
+            $("#saveBtn").html('<i class="fa-solid fa-spinner fa-spin mx-1"></i> {% trans "Saving and Translating..." %}');
+            return true;
+        });
+    });
+</script>
 {% endblock %}

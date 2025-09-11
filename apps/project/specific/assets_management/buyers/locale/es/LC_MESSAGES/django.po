@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-09 18:14-0500\n"
-"PO-Revision-Date: 2025-09-09 18:27-0500\n"
+"POT-Creation-Date: 2025-09-11 02:21-0500\n"
+"PO-Revision-Date: 2025-09-11 02:32-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -19,243 +19,402 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.0\n"
 
-#: .\apps\project\specific\assets_management\buyers\admin.py:83
+#: .\apps\project\specific\assets_management\buyers\admin.py:85
 msgid "Required Fields"
 msgstr "Campos obligatorios"
 
-#: .\apps\project\specific\assets_management\buyers\admin.py:96
+#: .\apps\project\specific\assets_management\buyers\admin.py:98
 msgid "Descriptions & Observations"
 msgstr "Descripciones y Observaciones"
 
-#: .\apps\project\specific\assets_management\buyers\admin.py:105
-#| msgid "Approval"
+#: .\apps\project\specific\assets_management\buyers\admin.py:107
 msgid "Approval & Review"
 msgstr "Aprobación y Revisión"
 
-#: .\apps\project\specific\assets_management\buyers\admin.py:115
+#: .\apps\project\specific\assets_management\buyers\admin.py:117
 msgid "Service Order"
 msgstr "Orden de Servicio"
 
-#: .\apps\project\specific\assets_management\buyers\admin.py:122
+#: .\apps\project\specific\assets_management\buyers\admin.py:126
 msgid "Payment Order"
 msgstr "Orden de Pago"
 
-#: .\apps\project\specific\assets_management\buyers\admin.py:131
+#: .\apps\project\specific\assets_management\buyers\admin.py:135
 msgid "Asset Movement"
 msgstr "Envío del Activo"
 
-#: .\apps\project\specific\assets_management\buyers\admin.py:140
+#: .\apps\project\specific\assets_management\buyers\admin.py:144
 msgid "Profitability"
 msgstr "Rentabilidad"
 
-#: .\apps\project\specific\assets_management\buyers\admin.py:149
+#: .\apps\project\specific\assets_management\buyers\admin.py:153
 msgid "Dates"
 msgstr "Fechas"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:30
+#: .\apps\project\specific\assets_management\buyers\models.py:31
 msgid "Units"
 msgstr "Unidades"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:31
+#: .\apps\project\specific\assets_management\buyers\models.py:32
 msgid "Boxes"
 msgstr "Cajas"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:63
-msgid "Official purchase of the United States"
-msgstr "Compra oficial de los Estados Unidos"
+#: .\apps\project\specific\assets_management\buyers\models.py:36
+msgid "Under review"
+msgstr "Bajo revisión"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:78
-msgid "Created By"
-msgstr "Creado por"
+#: .\apps\project\specific\assets_management\buyers\models.py:37
+msgid "Pending for Approval"
+msgstr "Pendiente de aprobación"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:86
-msgid "Asset"
-msgstr "Activo"
+#: .\apps\project\specific\assets_management\buyers\models.py:38
+#| msgid "Approved"
+msgid "NOT Approved"
+msgstr "NO Aprobado"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:90
-msgid "Purchase order Type"
-msgstr "Tipo de compra"
-
-#: .\apps\project\specific\assets_management\buyers\models.py:97
-msgid "quantity type"
-msgstr "tipo de cantidad"
-
-#: .\apps\project\specific\assets_management\buyers\models.py:104
-msgid "Total value of the offer ($ USD)"
-msgstr "Valor total de la oferta ($ USD)"
-
-#: .\apps\project\specific\assets_management\buyers\models.py:111
-msgid "Quantity needed"
-msgstr "Cantidad necesaria"
-
-#: .\apps\project\specific\assets_management\buyers\models.py:116
-msgid "Observation (EN)"
-msgstr "Observación (EN)"
-
-#: .\apps\project\specific\assets_management\buyers\models.py:121
-msgid "Observation (ES)"
-msgstr "Observación (ES)"
-
-#: .\apps\project\specific\assets_management\buyers\models.py:126
-msgid "Description (EN)"
-msgstr "Descripción (EN)"
-
-#: .\apps\project\specific\assets_management\buyers\models.py:131
-msgid "Description (ES)"
-msgstr "Descripción (ES)"
-
-#: .\apps\project\specific\assets_management\buyers\models.py:139
-msgid "Country"
-msgstr "País"
-
-#: .\apps\project\specific\assets_management\buyers\models.py:144
-msgid "Display"
-msgstr "Mostrar"
-
-#: .\apps\project\specific\assets_management\buyers\models.py:151
+#: .\apps\project\specific\assets_management\buyers\models.py:39
+#: .\apps\project\specific\assets_management\buyers\models.py:243
 msgid "Approved"
 msgstr "Aprobado"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:159
+#: .\apps\project\specific\assets_management\buyers\models.py:41
+#| msgid "Service Order"
+msgid "Service Order Created"
+msgstr "Orden de servicio creada"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:42
+#| msgid "Service Order Sent By"
+msgid "Service Order Sent"
+msgstr "Orden de servicio enviada"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:43
+#| msgid "Payment Order Created By"
+msgid "Payment Order Created"
+msgstr "Orden de pago creada"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:44
+#| msgid "Payment Order Sent By"
+msgid "Payment Order Sent"
+msgstr "Orden de pago enviada"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:45
+#| msgid "Asset In Possession By"
+msgid "Asset In Possession"
+msgstr "Activo en posesión"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:46
+#| msgid "Asset Sent By"
+msgid "Asset Sent"
+msgstr "Activo enviado"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:47
+#| msgid "Profitability Created By"
+msgid "Profitability Created"
+msgstr "Rentabilidad creada"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:48
+#| msgid "Profitability Paid By"
+msgid "Profitability Paid"
+msgstr "Rentabilidad pagada"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:49
+msgid "Completed"
+msgstr "Finalizado"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:155
+msgid "Official purchase of the United States"
+msgstr "Compra oficial de los Estados Unidos"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:170
+msgid "Created By"
+msgstr "Creado por"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:178
+msgid "Asset"
+msgstr "Activo"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:182
+msgid "Purchase order Type"
+msgstr "Tipo de compra"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:189
+msgid "quantity type"
+msgstr "tipo de cantidad"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:196
+msgid "Total value of the offer ($ USD)"
+msgstr "Valor total de la oferta ($ USD)"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:203
+msgid "Quantity needed"
+msgstr "Cantidad necesaria"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:208
+msgid "Observation (EN)"
+msgstr "Observación (EN)"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:213
+msgid "Observation (ES)"
+msgstr "Observación (ES)"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:218
+msgid "Description (EN)"
+msgstr "Descripción (EN)"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:223
+msgid "Description (ES)"
+msgstr "Descripción (ES)"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:231
+msgid "Country"
+msgstr "País"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:236
+msgid "Display"
+msgstr "Mostrar"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:251
 msgid "Approved By"
 msgstr "Aprobado por"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:165
+#: .\apps\project\specific\assets_management\buyers\models.py:257
 msgid "Approved By Timestamp"
 msgstr "Tiempo de aprobación"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:173
+#: .\apps\project\specific\assets_management\buyers\models.py:265
 msgid "Reviewed"
 msgstr "Revisado"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:181
+#: .\apps\project\specific\assets_management\buyers\models.py:273
 msgid "Reviewed By"
 msgstr "Revisado por"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:187
+#: .\apps\project\specific\assets_management\buyers\models.py:279
 msgid "Reviewed By Timestamp"
 msgstr "Marca de tiempo \"Revisado por\""
 
-#: .\apps\project\specific\assets_management\buyers\models.py:196
+#: .\apps\project\specific\assets_management\buyers\models.py:288
+#| msgid "Service Order Sent By"
+msgid "Service Order Created By"
+msgstr "Orden de servicio creada por"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:293
+#| msgid "Service Order Sent At"
+msgid "Service Order Created At"
+msgstr "Orden de servicio creada en"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:299
 msgid "Service Order Sent By"
 msgstr "Orden de servicio enviada por"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:201
+#: .\apps\project\specific\assets_management\buyers\models.py:304
 msgid "Service Order Sent At"
 msgstr "Orden de servicio enviada a las"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:208
+#: .\apps\project\specific\assets_management\buyers\models.py:311
 msgid "Payment Order Created By"
 msgstr "Orden de pago creada por"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:213
+#: .\apps\project\specific\assets_management\buyers\models.py:316
 msgid "Payment Order Created At"
 msgstr "Orden de pago creada a las"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:219
+#: .\apps\project\specific\assets_management\buyers\models.py:322
 msgid "Payment Order Sent By"
 msgstr "Orden de pago enviada por"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:224
+#: .\apps\project\specific\assets_management\buyers\models.py:327
 msgid "Payment Order Sent At"
 msgstr "Orden de pago enviada a las"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:231
+#: .\apps\project\specific\assets_management\buyers\models.py:334
 msgid "Asset In Possession By"
 msgstr "Activo en posesión de"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:236
+#: .\apps\project\specific\assets_management\buyers\models.py:339
 msgid "Asset In Possession At"
 msgstr "Activo en posesión a las"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:242
+#: .\apps\project\specific\assets_management\buyers\models.py:345
 msgid "Asset Sent By"
 msgstr "Activo enviado por"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:247
+#: .\apps\project\specific\assets_management\buyers\models.py:350
 msgid "Asset Sent At"
 msgstr "Activo enviado a las"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:254
+#: .\apps\project\specific\assets_management\buyers\models.py:357
 msgid "Profitability Created By"
 msgstr "Rentabilidad creada por"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:259
+#: .\apps\project\specific\assets_management\buyers\models.py:362
 msgid "Profitability Created At"
 msgstr "Rentabilidad creada a las"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:265
+#: .\apps\project\specific\assets_management\buyers\models.py:368
 msgid "Profitability Paid By"
 msgstr "Rentabilidad Pagada Por"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:270
+#: .\apps\project\specific\assets_management\buyers\models.py:373
 msgid "Profitability Paid At"
 msgstr "Rentabilidad pagada a las"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:360
+#: .\apps\project\specific\assets_management\buyers\models.py:387
+msgid "You cannot progress stages unless the offer is approved."
+msgstr "No podrás avanzar de etapa a menos que la oferta sea aprobada."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:393
+#: .\apps\project\specific\assets_management\buyers\models.py:501
+msgid "You cannot send a service order before it is created."
+msgstr "No se puede enviar una orden de servicio antes de crearla."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:404
+#: .\apps\project\specific\assets_management\buyers\models.py:506
+msgid "You cannot create a payment order before service order is sent."
+msgstr ""
+"No se puede crear una orden de pago antes de que se envíe la orden de "
+"servicio."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:415
+#: .\apps\project\specific\assets_management\buyers\models.py:511
+msgid "You cannot send a payment order before it is created."
+msgstr "No se puede enviar una orden de pago antes de que se cree."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:426
+#: .\apps\project\specific\assets_management\buyers\models.py:516
+msgid "You cannot mark asset in possession before payment order is sent."
+msgstr ""
+"No se puede marcar el activo en posesión antes de que se envíe la orden de "
+"pago."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:437
+#: .\apps\project\specific\assets_management\buyers\models.py:521
+#| msgid "Can set asset in possession"
+msgid "You cannot mark asset as sent before it is in possession."
+msgstr ""
+"No se puede marcar un activo como enviado antes de que esté en posesión del "
+"mismo."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:447
+#: .\apps\project\specific\assets_management\buyers\models.py:526
+msgid "You cannot create profitability before asset is sent."
+msgstr "No se puede crear rentabilidad antes de enviar el activo."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:458
+#: .\apps\project\specific\assets_management\buyers\models.py:531
+msgid "You cannot pay profitability before it is created."
+msgstr "No se puede pagar la rentabilidad antes de crearla."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:469
 msgid "An approver is required when marking as approved."
 msgstr "Se requiere un aprobador para marcar como aprobado."
 
-#: .\apps\project\specific\assets_management\buyers\models.py:363
+#: .\apps\project\specific\assets_management\buyers\models.py:472
 msgid "A reviewer is required when marking as reviewed."
 msgstr "Se requiere un revisor para marcar como revisado."
 
-#: .\apps\project\specific\assets_management\buyers\models.py:365
+#: .\apps\project\specific\assets_management\buyers\models.py:474
 msgid "An approved offer must also be reviewed."
 msgstr "Una oferta aprobada también debe ser revisada."
 
-#: .\apps\project\specific\assets_management\buyers\models.py:368
+#: .\apps\project\specific\assets_management\buyers\models.py:477
 msgid "If there is an approver, the offer must be marked as approved."
 msgstr "Si hay un aprobador, la oferta debe marcarse como aprobada."
 
-#: .\apps\project\specific\assets_management\buyers\models.py:371
+#: .\apps\project\specific\assets_management\buyers\models.py:480
 msgid "If there is an approver, the offer must be marked as reviewed."
 msgstr "Si hay un aprobador, la oferta debe marcarse como revisada."
 
-#: .\apps\project\specific\assets_management\buyers\models.py:435
+#: .\apps\project\specific\assets_management\buyers\models.py:486
+#| msgid "Can review purchase orders"
+msgid "You cannot review before the purchase order is created."
+msgstr "No se puede revisar antes de crear la orden de compra."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:491
+#| msgid "Can approve purchase orders"
+msgid "You cannot approve before the purchase order is reviewed."
+msgstr "No se puede aprobar antes de que se revise la orden de compra."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:496
+#| msgid "Offer must be reviewed before approval."
+msgid "Service order cannot be created before approval."
+msgstr "No se puede crear una orden de servicio antes de la aprobación."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:536
+#| msgid "Can send service orders"
+msgid "Cannot send service order before approval."
+msgstr "No se puede enviar la orden de servicio antes de la aprobación."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:538
+#| msgid "Can create payment orders"
+msgid "Cannot create payment order before approval."
+msgstr "No se puede crear una orden de pago antes de la aprobación."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:540
+#| msgid "Can send payment orders"
+msgid "Cannot send payment order before approval."
+msgstr "No se puede enviar la orden de pago antes de la aprobación."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:542
+#| msgid "Can set asset in possession"
+msgid "Cannot mark asset in possession before approval."
+msgstr "No se puede marcar el activo en posesión antes de la aprobación."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:543
+msgid "Cannot mark asset as sent before approval."
+msgstr "No se puede marcar el activo como enviado antes de la aprobación."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:545
+#| msgid "Can set profitability"
+msgid "Cannot create profitability before approval."
+msgstr "No se puede crear rentabilidad antes de la aprobación."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:547
+#| msgid "Can pay profitability"
+msgid "Cannot pay profitability before approval."
+msgstr "No se puede pagar rentabilidad antes de la aprobación."
+
+#: .\apps\project\specific\assets_management\buyers\models.py:688
 msgid "1. Purchase order"
 msgstr "1. Orden de compra"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:436
+#: .\apps\project\specific\assets_management\buyers\models.py:689
 msgid "1. Purchase orders"
 msgstr "1. Ordenes de compra"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:439
+#: .\apps\project\specific\assets_management\buyers\models.py:692
 msgid "Can approve purchase orders"
 msgstr "Puede aprobar órdenes de compra"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:440
+#: .\apps\project\specific\assets_management\buyers\models.py:693
 msgid "Can review purchase orders"
 msgstr "Puede revisar las órdenes de compra"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:441
-#| msgid "Can review purchase orders"
+#: .\apps\project\specific\assets_management\buyers\models.py:694
 msgid "Can send service orders"
 msgstr "Puede enviar órdenes de servicio"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:442
-#| msgid "Can review purchase orders"
+#: .\apps\project\specific\assets_management\buyers\models.py:695
 msgid "Can create payment orders"
 msgstr "Puede crear órdenes de pago"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:443
-#| msgid "Can review purchase orders"
+#: .\apps\project\specific\assets_management\buyers\models.py:696
 msgid "Can send payment orders"
 msgstr "Puede enviar órdenes de pago"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:444
+#: .\apps\project\specific\assets_management\buyers\models.py:697
 msgid "Can set asset in possession"
 msgstr "Puede fijar el activo en posesión"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:445
+#: .\apps\project\specific\assets_management\buyers\models.py:698
 msgid "Can send asset"
 msgstr "Puede enviar activos"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:446
+#: .\apps\project\specific\assets_management\buyers\models.py:699
 msgid "Can set profitability"
 msgstr "Puede establecer la rentabilidad"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:447
+#: .\apps\project\specific\assets_management\buyers\models.py:700
 msgid "Can pay profitability"
 msgstr "Puede pagar rentabilidad"
 
@@ -264,16 +423,13 @@ msgstr "Puede pagar rentabilidad"
 msgid "Error filling offer translation fields: {e}"
 msgstr "Error al rellenar los campos de traducción de la oferta: {e}"
 
-#: .\apps\project\specific\assets_management\buyers\views.py:107
+#: .\apps\project\specific\assets_management\buyers\views.py:108
 msgid "Your Purchase order has been sent for verification."
 msgstr "Su orden de compra ha sido enviada para verificación."
 
-#: .\apps\project\specific\assets_management\buyers\views.py:132
+#: .\apps\project\specific\assets_management\buyers\views.py:133
 msgid "New Purchase order Submitted for Verification"
 msgstr "Nueva orden de compra enviada para verificación"
-
-#~ msgid "Offer must be reviewed before approval."
-#~ msgstr "La oferta debe ser revisada antes de su aprobación."
 
 #~ msgid "Containers"
 #~ msgstr "Contenedores"

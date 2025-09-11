@@ -31,7 +31,7 @@
         {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="file-text" page_header_title=purchase_orders page_header_image=purchase_orders_image url=purchase_orders_url %}
 
         {% comment %} <!-- Add New Purchase Order Card --> {% endcomment %}
-        {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="file-plus" page_header_title=add_new_purchase_order page_header_image=purchase_orders_image url=add_purchase_order_url %}
+        {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="file-plus" page_header_title=add_new_purchase_order page_header_image=add_new_purchase_order_image url=add_purchase_order_url %}
 
         {% comment %}<!-- Add New Asset Card -->{% endcomment %}
         {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="archive" page_header_title=add_new_asset page_header_image=add_asset_image url=add_asset_url %}
@@ -181,16 +181,6 @@
 </div>
 {% endblock %}
 
-{% block simple_datatables %}
-<link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-{% endblock simple_datatables %}
-
-{% block simple_datatables_js %}
-<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
-    crossorigin="anonymous"></script>
-<script src="{% static 'assets/js/dashboard/datatables/simple-datatable.js' %}"></script>
-{% endblock %}
-
 
 {% block body_custom_js %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -204,4 +194,13 @@
         });
     });
 </script>
+{% endblock %}
+
+{% block simple_datatables %}
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+{% endblock %}
+
+{% block simple_datatables_js %}
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+    <script src="{% static 'js/simple-datatable.js' %}"></script>
 {% endblock %}

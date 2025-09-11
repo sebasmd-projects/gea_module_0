@@ -36,7 +36,8 @@ def add_attrs(field, attrs: str):
 def currency(value):
     try:
         value = float(value)
-        return f"$ {value:,.2f}"
+        entero, decimal = f"{value:,.2f}".split(".")
+        return mark_safe(f"$ {entero}.<span style='font-size: 12px;'>{decimal}</span>")
     except (ValueError, TypeError):
         return value
 

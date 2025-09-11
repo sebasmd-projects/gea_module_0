@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-09 18:14-0500\n"
-"PO-Revision-Date: 2025-09-04 12:56-0500\n"
+"POT-Creation-Date: 2025-09-11 02:28-0500\n"
+"PO-Revision-Date: 2025-09-11 02:29-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -90,11 +90,13 @@ msgstr "Nombre del activo (ES)"
 msgid "Asset name (EN)"
 msgstr "Nombre del activo (EN)"
 
-#: .\apps\project\specific\assets_management\assets\forms.py:106
-msgid "Both ES and EN names must be set (we auto-fill the hidden one)."
-msgstr ""
-"Se deben configurar los nombres ES y EN (completamos automáticamente el "
-"oculto)."
+#: .\apps\project\specific\assets_management\assets\forms.py:99
+msgid "The Spanish name is required."
+msgstr "Se requiere el nombre en español."
+
+#: .\apps\project\specific\assets_management\assets\forms.py:103
+msgid "The English name is required."
+msgstr "Se requiere el nombre en inglés."
 
 #: .\apps\project\specific\assets_management\assets\models.py:28
 msgid "category (ES)"
@@ -179,24 +181,30 @@ msgid "Error filling asset category translation fields: {e}"
 msgstr ""
 "Error al rellenar los campos de traducción de la categoría de activos: {e}"
 
-#: .\apps\project\specific\assets_management\assets\signals.py:121
+#: .\apps\project\specific\assets_management\assets\signals.py:124
 #, python-brace-format
 msgid "Error filling asset name translation fields: {e}"
-msgstr "Error al completar los campos de traducción del nombre del activo: {e}"
+msgstr ""
+"Error al completar los campos de traducción del nombre del activo: {e}"
 
-#: .\apps\project\specific\assets_management\assets\signals.py:165
+#: .\apps\project\specific\assets_management\assets\signals.py:168
 #, python-brace-format
 msgid "Error filling asset translation fields: {e}"
 msgstr "Error al rellenar los campos de traducción de activos: {e}"
 
-#: .\apps\project\specific\assets_management\assets\views.py:94
+#: .\apps\project\specific\assets_management\assets\views.py:96
 msgid "Asset and Asset Name created successfully."
 msgstr "Activo y nombre del activo creados exitosamente."
 
-#: .\apps\project\specific\assets_management\assets\views.py:97
+#: .\apps\project\specific\assets_management\assets\views.py:99
 msgid "Please fix the errors below."
 msgstr "Por favor corrija los errores a continuación."
 
-#: .\apps\project\specific\assets_management\assets\views.py:125
+#: .\apps\project\specific\assets_management\assets\views.py:127
 msgid "New category created successfully."
 msgstr "Nueva categoría creada exitosamente."
+
+#~ msgid "Both ES and EN names must be set (we auto-fill the hidden one)."
+#~ msgstr ""
+#~ "Se deben configurar los nombres ES y EN (completamos automáticamente el "
+#~ "oculto)."

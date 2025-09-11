@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-09 18:14-0500\n"
+"POT-Creation-Date: 2025-09-11 02:21-0500\n"
 "PO-Revision-Date: 2025-09-09 18:19-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,7 +61,6 @@ msgstr "Las contraseñas no coinciden"
 
 #: .\apps\project\common\account\forms.py:136
 #, python-brace-format
-#| msgid "Invalid Unique Code"
 msgid "Invalid Unique Code ({label})"
 msgstr "Código único no válido ({label})"
 

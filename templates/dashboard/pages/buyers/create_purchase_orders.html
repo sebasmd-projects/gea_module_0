@@ -36,6 +36,7 @@
         {% comment %}<!-- Add New Asset Category Card -->{% endcomment %}
         {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="list" page_header_title=add_new_asset_category page_header_image=add_category_image url=add_asset_category_url %}
     </div>
+    
     <div class="row">
         <div class="col-12">
             <div class="card mb-4" id="create_offer">
@@ -52,7 +53,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                     {% endif %}
-                    <form method="post" enctype="multipart/form-data">
+                    <form method="post" enctype="multipart/form-data" id="createPurchaseOrderForm">
                         {% csrf_token %}
                         {{ form.media.css }}
 
@@ -161,7 +162,7 @@
                         </div>
 
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-outline-success">
+                            <button type="submit" class="btn btn-outline-success" id="saveBtn">
                                 <i class="fa-solid fa-floppy-disk mx-1"></i> {% trans 'Submit Purchase Order' %}
                             </button>
                             <a href="{% url 'buyers:buyer_index' %}" class="btn btn-outline-gold"
@@ -220,4 +221,14 @@
     });
 </script>
 
+
+<script>
+    $(document).ready(function () {
+        $("#createPurchaseOrderForm").on("submit", function () {
+            $(this).find("button, a").prop("disabled", true).addClass("disabled");
+            $("#saveBtn").html('<i class="fa-solid fa-spinner fa-spin mx-1"></i> {% trans "Saving and Translating..." %}');
+            return true;
+        });
+    });
+</script>
 {% endblock %}

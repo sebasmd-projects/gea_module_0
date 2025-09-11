@@ -1,0 +1,113 @@
+{% load static i18n custom_filters %}
+
+<div class="card">
+  <div class="card-header" style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
+    <h4 class="text-center text-dark">{% trans 'Purchase Order Summary' %}</h4>
+  </div>
+
+  <div class="card-body">
+
+    {% if offer.asset.asset_img %}
+      <div class="text-center mb-3" style="max-height: 300px;">
+        <img src="{{ offer.asset.asset_img.url }}" alt="Asset Image" class="img-fluid" style="max-height: 300px;" />
+      </div>
+    {% endif %}
+
+    <!-- Sección: Información General -->
+    <h5 class="mt-3">{% trans "General Information" %}</h5>
+    <table class="table table-bordered table-sm">
+      <tbody>
+        <tr>
+          <th>{% trans 'Asset' %}</th>
+          <td>{{ offer.asset_display_name }}</td>
+        </tr>
+        <tr>
+          <th>{% trans 'Category' %}</th>
+          <td>{{ category_name }}</td>
+        </tr>
+        <tr>
+          <th>{% trans 'Offer Type' %}</th>
+          <td>{{ offer.get_offer_type_display }}</td>
+        </tr>
+        <tr>
+          <th>{% trans 'Quantity Type' %}</th>
+          <td>{{ offer.get_quantity_type_display }}</td>
+        </tr>
+        <tr>
+          <th>{% trans 'Offer Quantity' %}</th>
+          <td>{{ offer.offer_quantity }}</td>
+        </tr>
+        <tr>
+          <th>{% trans 'Country of Purchase' %}</th>
+          <td>{{ buyer_country_name }}</td>
+        </tr>
+
+        {% if offer.offer_amount and request.user.is_buyer %}
+        <tr>
+          <th>{% trans 'Total value of the offer ($ USD)' %}</th>
+          <td>{{ offer.offer_amount|currency }}</td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+
+    {% if request.user.is_buyer %}
+      <!-- Sección: Detalles de la Oferta (solo idioma activo) -->
+      {% if offer_observation or offer_description %}
+      <h5 class="mt-4">{% trans "Purchase Order Details" %}</h5>
+      <table class="table table-bordered table-sm">
+        <tbody>
+          {% if offer_observation %}
+          <tr>
+            <th>{% trans 'Observation' %}</th>
+            <td>{{ offer_observation }}</td>
+          </tr>
+          {% endif %}
+          {% if offer_description %}
+          <tr>
+            <th>{% trans 'Description' %}</th>
+            <td>{{ offer_description }}</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+      {% endif %}
+
+      <!-- Sección: Información del Activo (solo idioma activo) -->
+      {% if asset_description or asset_observation %}
+      <h5 class="mt-4">{% trans "Asset Information" %}</h5>
+      <table class="table table-bordered table-sm">
+        <tbody>
+          {% if asset_description %}
+          <tr>
+            <th>{% trans 'Description' %}</th>
+            <td>{{ asset_description }}</td>
+          </tr>
+          {% endif %}
+          {% if asset_observation %}
+          <tr>
+            <th>{% trans 'Observation' %}</th>
+            <td>{{ asset_observation }}</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+      {% endif %}
+    {% endif %}
+
+  </div>
+
+  <div class="card-footer">
+    <div class="d-grid gap-2">
+      {% if request.user.is_buyer %}
+        <a href="{% url 'buyers:buyer_index' %}" class="btn btn-outline-gold" rel="noopener noreferrer">
+          <i class="fa-solid fa-arrow-left mx-1"></i> {% trans 'Go to my Purchase Orders' %}
+        </a>
+      {% else %}
+        <a href="{% url 'assets:holder_index' %}" class="btn btn-outline-gold" rel="noopener noreferrer">
+          <i class="fa-solid fa-arrow-left mx-1"></i> {% trans 'Go to my Assets' %}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>

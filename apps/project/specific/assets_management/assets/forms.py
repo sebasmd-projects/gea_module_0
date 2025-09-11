@@ -92,18 +92,15 @@ class AssetNameInlineForm(forms.ModelForm):
         en = (cleaned.get("en_name") or "").strip()
 
         lang = getattr(self.request, "LANGUAGE_CODE", "en")
-        # Si uno falta, lo rellenamos con el otro
+        
         if lang == "es":
-            if not en and es:
-                cleaned["en_name"] = es
-        else:
-            if not es and en:
-                cleaned["es_name"] = en
-
-        # Asegurar ambos
-        if not cleaned.get("es_name") or not cleaned.get("en_name"):
-            raise forms.ValidationError(
-                _("Both ES and EN names must be set (we auto-fill the hidden one)."))
+            if not es:
+                from django.core.exceptions import ValidationError
+                raise ValidationError(_("The Spanish name is required."))
+        elif lang == "en":
+            if not en:
+                from django.core.exceptions import ValidationError
+                raise ValidationError(_("The English name is required."))
 
         return cleaned
 

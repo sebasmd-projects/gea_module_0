@@ -16,7 +16,7 @@
         }
 
         .container {
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
             background-color: #ffffff;
             padding: 20px;
@@ -92,31 +92,131 @@
 
         <!-- Body -->
         <div class="body">
-            <!-- English Version -->
-            <h2 class="section-title">Language: English</h2>
-            <p><strong>Asset:</strong> {{ asset_en }}</p>
-            <p><strong>Purchase order Type:</strong> {{ offer_type_en }}</p>
-            <p><strong>Quantity Type:</strong> {{ quantity_type_en }}</p>
-            <p><strong>Amount:</strong> $ {{ offer_amount }}</p>
-            <p><strong>Quantity:</strong> {{ offer_quantity }}</p>
-            <p><strong>Country:</strong> {{ buyer_country_en }}</p>
-            <p><strong>Observations:</strong> {{ en_observation }}</p>
-            <p><strong>Description:</strong> {{ en_description }}</p>
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+                style="border-collapse:collapse;">
+                <tr>
+                    <td width="40%" valign="top" style="padding:0;vertical-align:top;">
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+                            style="border-collapse:collapse;">
+                            <tr>
+                                <td style="font-size:18px;font-weight:bold;padding:8px 0;color:#007bff;">
+                                    Language: English
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px 0;">
+                                    <strong>Asset:</strong> {{ asset_en }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px 0;">
+                                    <strong>Purchase order Type:</strong> {{ offer_type_en }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px 0;">
+                                    <strong>Quantity Type:</strong> {{ quantity_type_en }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px 0;">
+                                    <strong>Amount:</strong> $ {{ offer_amount }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px 0;">
+                                    <strong>Quantity:</strong> {{ offer_quantity }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px 0;">
+                                    <strong>Country:</strong> {{ buyer_country_en }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px 0;">
+                                    <strong>Observations:</strong> {{ en_observation }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px 0;">
+                                    <strong>Description:</strong> {{ en_description }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding:12px 0;">
+                                    <a href="{{ review_url }}" style="display:inline-block;padding:10px 16px;border-radius:6px;text-decoration:none;">
+                                        View Purchase Order
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
 
-            <!-- Spanish Version -->
-            <h2 class="section-title">Idioma: Español</h2>
-            <p><strong>Activo:</strong> {{ asset_es }}</p>
-            <p><strong>Tipo de Orden de Compra:</strong> {{ offer_type_es }}</p>
-            <p><strong>Tipo de Cantidad:</strong> {{ quantity_type_es }}</p>
-            <p><strong>Monto:</strong> $ {{ offer_amount }}</p>
-            <p><strong>Cantidad:</strong> {{ offer_quantity }}</p>
-            <p><strong>País:</strong> {{ buyer_country_es }}</p>
-            <p><strong>Observaciones:</strong> {{ es_observation }}</p>
-            <p><strong>Descripción:</strong> {{ es_description }}</p>
+                    <td width="20%" valign="top" align="center" style="padding:0 8px;vertical-align:top;">
+                        <div style="font-weight:bold;margin-bottom:6px;"></div>
+                        <div style="height:100%;border-left:1px solid #e0e0e0;border-right:1px solid #e0e0e0;"></div>
+                    </td>
 
+                    <td width="40%" valign="top" style="padding:0;vertical-align:top;">
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+                            style="border-collapse:collapse;">
+                            <tr>
+                                <td style="font-size:18px;font-weight:bold;padding:8px 0;color:#007bff;">Idioma: Español
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px 0;">
+                                    <strong>Activo:</strong> {{ asset_es }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px 0;">
+                                    <strong>Tipo de Orden de Compra:</strong> {{ offer_type_es }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px 0;">
+                                    <strong>Tipo de Cantidad:</strong> {{ quantity_type_es }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px 0;">
+                                    <strong>Monto:</strong> $ {{ offer_amount }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px 0;">
+                                    <strong>Cantidad:</strong> {{ offer_quantity }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px 0;">
+                                    <strong>País:</strong> {{ buyer_country_es }}
+                                </td>
+                            <tr>
+                                <td style="padding:4px 0;">
+                                    <strong>Observaciones:</strong> {{ es_observation }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px 0;">
+                                    <strong>Descripción:</strong> {{ es_description }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding:12px 0;">
+                                    <a href="{{ review_url }}" style="display:inline-block;padding:10px 16px;border-radius:6px;text-decoration:none;">
+                                        Ver Orden de Compra
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
             <hr />
-
-            <p>{{ user_name }} | {{ user_email }}</p>
+            <p style="text-align:end;">{{ user_name }} | {{ user_email }}</p>
         </div>
 
         <!-- Footer -->

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-09 18:14-0500\n"
-"PO-Revision-Date: 2025-09-09 18:18-0500\n"
+"POT-Creation-Date: 2025-09-11 02:21-0500\n"
+"PO-Revision-Date: 2025-09-11 02:27-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -19,161 +19,198 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.0\n"
 
-#: .\apps\common\utils\admin.py:23
+#: .\apps\common\utils\admin.py:26
 #, python-brace-format
 msgid "Maximum allowed: {self.max_list_per_page} records."
 msgstr "Máximo permitido: {self.max_list_per_page} registros."
 
-#: .\apps\common\utils\admin.py:27
+#: .\apps\common\utils\admin.py:30
 msgid "Minimum allowed: 1 record."
 msgstr "Mínimo permitido: 1 registro."
 
-#: .\apps\common\utils\admin.py:31
+#: .\apps\common\utils\admin.py:34
 msgid "Please enter a valid number."
 msgstr "Por favor, introduzca un número válido."
+
+#: .\apps\common\utils\admin.py:59
+msgid "Information"
+msgstr "Información"
+
+#: .\apps\common\utils\admin.py:69
+msgid "Times"
+msgstr "Tiempos"
+
+#: .\apps\common\utils\admin.py:81
+msgid "Other"
+msgstr "Otros"
 
 #: .\apps\common\utils\functions\chatgpt_api.py:23
 msgid "CHAT_GPT_API_KEY not configured"
 msgstr "API KEY de CHAT GPT no establecida"
 
-#: .\apps\common\utils\models.py:19
-msgid "Spanish"
-msgstr "Español"
+#: .\apps\common\utils\middleware\block_suspicious_request.py:80
+msgid "This IP is temporarily blocked due to suspicious activity."
+msgstr "Esta IP está bloqueada temporalmente debido a actividad sospechosa."
 
-#: .\apps\common\utils\models.py:20
-msgid "English"
-msgstr "Ingles"
-
-#: .\apps\common\utils\models.py:24
-msgid "language"
-msgstr "idioma"
-
-#: .\apps\common\utils\models.py:33
-msgid "created"
-msgstr "creado"
-
-#: .\apps\common\utils\models.py:39
-msgid "updated"
-msgstr "actualizado"
-
-#: .\apps\common\utils\models.py:45
-msgid "is active"
-msgstr "está activo"
-
-#: .\apps\common\utils\models.py:50
-msgid "priority"
-msgstr "orden"
-
-#: .\apps\common\utils\models.py:97
-msgid "General"
-msgstr "General"
-
-#: .\apps\common\utils\models.py:98
-msgid "Buyer"
-msgstr "Compra"
-
-#: .\apps\common\utils\models.py:101
-msgid "valid on"
-msgstr "fecha válida"
-
-#: .\apps\common\utils\models.py:105
-msgid "kind"
-msgstr "Tipo"
-
-#: .\apps\common\utils\models.py:112
-msgid "code"
-msgstr "código"
-
-#: .\apps\common\utils\models.py:118
-msgid "sent to emails"
-msgstr "enviado a estos correos"
-
-#: .\apps\common\utils\models.py:124
-msgid "sent at"
-msgstr "enviado a"
-
-#: .\apps\common\utils\models.py:130
-msgid "last email message id"
-msgstr "ID del último mensaje de correo electrónico"
-
-#: .\apps\common\utils\models.py:140
-msgid "GEA daily unique code"
-msgstr "Código único diario de GEA"
-
-#: .\apps\common\utils\models.py:141
-msgid "GEA daily unique codes"
-msgstr "Códigos únicos diarios de GEA"
-
-#: .\apps\common\utils\views.py:41
-msgid "Error 400"
-msgstr "Error 400"
-
-#: .\apps\common\utils\views.py:42
-msgid "Bad Request"
-msgstr "Solicitud incorrecta"
-
-#: .\apps\common\utils\views.py:57
-#| msgid "Error 400"
-msgid "Error 401"
-msgstr "Error 401"
-
-#: .\apps\common\utils\views.py:58
-msgid "Unauthorized Access"
-msgstr "Acceso no Autorizado"
-
-#: .\apps\common\utils\views.py:73
+#: .\apps\common\utils\middleware\block_suspicious_request.py:81
+#: .\apps\common\utils\views.py:76
 msgid "Error 403"
 msgstr "Error 403"
 
-#: .\apps\common\utils\views.py:74
+#: .\apps\common\utils\middleware\block_suspicious_request.py:82
+msgid "Access denied due to suspicious activity."
+msgstr "Acceso denegado debido a actividad sospechosa."
+
+#: .\apps\common\utils\models.py:20
+msgid "Spanish"
+msgstr "Español"
+
+#: .\apps\common\utils\models.py:21
+msgid "English"
+msgstr "Ingles"
+
+#: .\apps\common\utils\models.py:25
+msgid "language"
+msgstr "idioma"
+
+#: .\apps\common\utils\models.py:34
+msgid "created"
+msgstr "creado"
+
+#: .\apps\common\utils\models.py:40
+msgid "updated"
+msgstr "actualizado"
+
+#: .\apps\common\utils\models.py:46
+msgid "is active"
+msgstr "está activo"
+
+#: .\apps\common\utils\models.py:51
+msgid "priority"
+msgstr "orden"
+
+#: .\apps\common\utils\models.py:98
+msgid "General"
+msgstr "General"
+
+#: .\apps\common\utils\models.py:99
+msgid "Buyer"
+msgstr "Compra"
+
+#: .\apps\common\utils\models.py:102
+msgid "valid on"
+msgstr "fecha válida"
+
+#: .\apps\common\utils\models.py:106
+msgid "kind"
+msgstr "Tipo"
+
+#: .\apps\common\utils\models.py:113
+msgid "code"
+msgstr "código"
+
+#: .\apps\common\utils\models.py:119
+msgid "sent to emails"
+msgstr "enviado a estos correos"
+
+#: .\apps\common\utils\models.py:125
+msgid "sent at"
+msgstr "enviado a"
+
+#: .\apps\common\utils\models.py:131
+msgid "last email message id"
+msgstr "ID del último mensaje de correo electrónico"
+
+#: .\apps\common\utils\models.py:141
+msgid "GEA daily unique code"
+msgstr "Código único diario de GEA"
+
+#: .\apps\common\utils\models.py:142
+msgid "GEA daily unique codes"
+msgstr "Códigos únicos diarios de GEA"
+
+#: .\apps\common\utils\models.py:210
+msgid "Attempts to obtain forbidden urls"
+msgstr "Intentos de obtener URL prohibidas"
+
+#: .\apps\common\utils\models.py:212
+msgid "Multiple failed security key entry attempts"
+msgstr "Múltiples intentos fallidos de ingreso de clave de seguridad"
+
+#: .\apps\common\utils\models.py:215
+msgid "is blocked"
+msgstr "está bloqueado"
+
+#: .\apps\common\utils\models.py:216 .\apps\common\utils\models.py:235
+msgid "current user IP"
+msgstr "IP del usuario actual"
+
+#: .\apps\common\utils\models.py:218 .\apps\common\utils\models.py:240
+msgid "reason"
+msgstr "razón"
+
+#: .\apps\common\utils\models.py:220
+msgid "blocked until"
+msgstr "bloqueado hasta"
+
+#: .\apps\common\utils\models.py:222
+msgid "session information"
+msgstr "información de la sesión"
+
+#: .\apps\common\utils\views.py:44
+msgid "Error 400"
+msgstr "Error 400"
+
+#: .\apps\common\utils\views.py:45
+msgid "Bad Request"
+msgstr "Solicitud incorrecta"
+
+#: .\apps\common\utils\views.py:60
+msgid "Error 401"
+msgstr "Error 401"
+
+#: .\apps\common\utils\views.py:61
+msgid "Unauthorized Access"
+msgstr "Acceso no Autorizado"
+
+#: .\apps\common\utils\views.py:77
 msgid "Forbidden Access"
 msgstr "Acceso Prohibido"
 
-#: .\apps\common\utils\views.py:89
+#: .\apps\common\utils\views.py:92
 msgid "Error 404"
 msgstr "Error 404"
 
-#: .\apps\common\utils\views.py:90
+#: .\apps\common\utils\views.py:93
 msgid "Page not found"
 msgstr "Página no encontrada"
 
-#: .\apps\common\utils\views.py:104
+#: .\apps\common\utils\views.py:107
 msgid "Error 500"
 msgstr "Error 500"
 
-#: .\apps\common\utils\views.py:105
+#: .\apps\common\utils\views.py:108
 msgid "Server error"
 msgstr "Error del servidor"
 
-#: .\apps\common\utils\views.py:119
-#| msgid "Error 500"
+#: .\apps\common\utils\views.py:122
 msgid "Error 503"
 msgstr "Error 503"
 
-#: .\apps\common\utils\views.py:120
+#: .\apps\common\utils\views.py:123
 msgid "Service Unavailable"
 msgstr "Servicio No Disponible"
 
-#: .\apps\common\utils\views.py:134
-#| msgid "Error 500"
+#: .\apps\common\utils\views.py:137
 msgid "Error 504"
 msgstr "Error 504"
 
-#: .\apps\common\utils\views.py:135
+#: .\apps\common\utils\views.py:138
 msgid "Gateway Timeout"
 msgstr "Tiempo de Espera Agotado del Gateway"
 
 #~ msgid "Prohibited Request"
 #~ msgstr "Solicitud Prohibida"
-
-#~ msgid "Information"
-#~ msgstr "Información"
-
-#~ msgid "Times"
-#~ msgstr "Tiempos"
-
-#~ msgid "Other"
-#~ msgstr "Otros"
 
 #~ msgid "group_required attribute not set"
 #~ msgstr "Atributo group_required no establecido"
@@ -183,27 +220,6 @@ msgstr "Tiempo de Espera Agotado del Gateway"
 
 #~ msgid "Security Key"
 #~ msgstr "Clave de seguridad"
-
-#~ msgid "Attempts to obtain forbidden urls"
-#~ msgstr "Intentos de obtener URL prohibidas"
-
-#~ msgid "Multiple failed security key entry attempts"
-#~ msgstr "Múltiples intentos fallidos de ingreso de clave de seguridad"
-
-#~ msgid "is blocked"
-#~ msgstr "está bloqueado"
-
-#~ msgid "current user IP"
-#~ msgstr "IP del usuario actual"
-
-#~ msgid "reason"
-#~ msgstr "razón"
-
-#~ msgid "blocked until"
-#~ msgstr "bloqueado hasta"
-
-#~ msgid "session information"
-#~ msgstr "información de la sesión"
 
 #~ msgid "requests"
 #~ msgstr "solicitudes"

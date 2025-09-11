@@ -37,9 +37,6 @@ else:
         ALLOWED_HOSTS = [os.getenv('DJANGO_ALLOWED_HOSTS')]
 
 
-
-
-
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -97,7 +94,6 @@ PROJECT_INTERNAL_APPS = [
 ]
 
 PROJECT_DOCUMENTS_APPS = [
-    'apps.project.specific.documents.certificates',
     'apps.project.specific.documents.pol',
 ]
 
@@ -157,14 +153,15 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'auditlog.middleware.AuditlogMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'auditlog.middleware.AuditlogMiddleware',
     'django_otp.middleware.OTPMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'apps.common.utils.middleware.RedirectWWWMiddleware',
     'apps.common.utils.middleware.RedirectAuthenticatedUserMiddleware',
     'apps.common.utils.middleware.BlockBadBotsMiddleware',
+    'apps.common.utils.middleware.DetectSuspiciousRequestMiddleware',
     'axes.middleware.AxesMiddleware',
 ]
 
@@ -322,3 +319,11 @@ CRONJOBS = [
 
 # ChatGPT API Key
 CHAT_GPT_API_KEY = os.getenv('CHAT_GPT_API_KEY')
+
+# Block suspicious request settings
+IP_BLOCKED_TIME_IN_MINUTES = int(os.getenv('IP_BLOCKED_TIME_IN_MINUTES'))
+
+COMMON_ATTACK_TERMS = [
+    term.strip() for term in os.getenv('COMMON_ATTACK_TERMS').split(',')
+]
+

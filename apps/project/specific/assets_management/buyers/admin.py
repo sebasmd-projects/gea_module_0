@@ -71,6 +71,8 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
         "reviewed_by_timestamp",
         # stage timestamps
         "service_order_sent_at",
+        "service_order_created_by",
+        "service_order_created_at",
         "payment_order_created_at",
         "payment_order_sent_at",
         "asset_in_possession_at",
@@ -114,6 +116,8 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
         }),
         (_("Service Order"), {
             "fields": (
+                "service_order_created_by",
+                "service_order_created_at",
                 "service_order_sent_by",
                 "service_order_sent_at",
             ),

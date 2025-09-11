@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 11:49-0500\n"
-"PO-Revision-Date: 2025-08-27 11:53-0500\n"
+"POT-Creation-Date: 2025-09-11 02:25-0500\n"
+"PO-Revision-Date: 2025-09-11 02:27-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -19,99 +19,132 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.0\n"
 
-#: .\apps\common\core\forms.py:13
-msgid "First name"
-msgstr "Nombres"
+#: .\apps\common\core\templates\core\index.html:13
+#: .\apps\common\core\templates\core\index.html:19
+msgid "Secure platform for historical assets"
+msgstr "Plataforma para los activos historicos"
 
-#: .\apps\common\core\forms.py:14
-msgid "Last name"
-msgstr "Apellidos"
+#: .\apps\common\core\templates\core\index.html:40
+msgid ""
+"Official and exclusive platform for the purchase and sale of US historical "
+"assets."
+msgstr ""
+"Plataforma completa, exclusiva y segura para la compra y venta de activos "
+"históricos. Plataforma de compras oficial de EE. UU."
 
-#: .\apps\common\core\forms.py:15
-msgid "Your Email"
-msgstr "Correo"
+#: .\apps\common\core\templates\core\index.html:54
+msgid ""
+"Exclusive and official platform for the secure purchase of US historical "
+"assets."
+msgstr ""
+"Plataforma exclusiva y oficial para la compra segura de activos históricos "
+"de EE. UU."
 
-#: .\apps\common\core\forms.py:16
-msgid "Subject"
-msgstr "Asunto"
+#: .\apps\common\core\templates\core\index.html:83
+msgid "Your browser does not support HTML5 video."
+msgstr "Su navegador no soporta vídeo HTML5."
 
-#: .\apps\common\core\forms.py:17
-msgid "Message"
-msgstr "Mensaje"
+#: .\apps\common\core\templates\core\partials\core_nav.html:16
+#: .\apps\common\core\templates\core\partials\core_nav.html:76
+msgid "Buyer"
+msgstr "Compra"
 
-#: .\apps\common\core\models.py:16
-msgid "name"
-msgstr "Nombres"
+#: .\apps\common\core\templates\core\partials\core_nav.html:19
+#: .\apps\common\core\templates\core\partials\core_nav.html:79
+msgid "Client Area"
+msgstr "Área de Clientes"
 
-#: .\apps\common\core\models.py:21
-msgid "last name"
-msgstr "Apellidos"
+#: .\apps\common\core\templates\core\partials\core_nav.html:33
+#: .\apps\common\core\templates\core\partials\core_nav.html:85
+msgid "Login"
+msgstr "Iniciar Sesión"
 
-#: .\apps\common\core\models.py:26
-msgid "email"
-msgstr "Correo"
+#: .\apps\common\core\templates\core\partials\core_nav.html:36
+#: .\apps\common\core\templates\core\partials\core_nav.html:86
+msgid "Register"
+msgstr "Registro"
 
-#: .\apps\common\core\models.py:31
-msgid "subject"
-msgstr "Asunto"
+#: .\apps\common\core\templates\core\partials\core_nav.html:50
+msgid "Menu"
+msgstr "Menú"
 
-#: .\apps\common\core\models.py:36
-msgid "message"
-msgstr "Mensaje"
+#: .\apps\common\core\templates\core\partials\core_nav.html:57
+msgid "Language"
+msgstr "Idioma"
 
-#: .\apps\common\core\models.py:41
-msgid "Contact"
-msgstr "Contacto"
+#: .\apps\common\core\templates\core\partials\core_nav.html:89
+msgid "Logout"
+msgstr "Cerrar Sesión"
 
-#: .\apps\common\core\models.py:42
-msgid "Contacts"
-msgstr "Contactos"
+#~ msgid "First name"
+#~ msgstr "Nombres"
 
-#: .\apps\common\core\models.py:49
-msgid "title"
-msgstr "Título"
+#~ msgid "Last name"
+#~ msgstr "Apellidos"
 
-#: .\apps\common\core\models.py:54
-msgid "title (English)"
-msgstr "Título (EN)"
+#~ msgid "Your Email"
+#~ msgstr "Correo"
 
-#: .\apps\common\core\models.py:61
-msgid "description"
-msgstr "Descripción"
+#~ msgid "Subject"
+#~ msgstr "Asunto"
 
-#: .\apps\common\core\models.py:66
-msgid "image file"
-msgstr "archivo de imagen"
+#~ msgid "Message"
+#~ msgstr "Mensaje"
 
-#: .\apps\common\core\models.py:71
-msgid "image file (English)"
-msgstr "archivo de imagen (EN)"
+#~ msgid "name"
+#~ msgstr "Nombres"
 
-#: .\apps\common\core\models.py:78
-msgid "link"
-msgstr "enlace"
+#~ msgid "last name"
+#~ msgstr "Apellidos"
 
-#: .\apps\common\core\models.py:85
-msgid "link (English)"
-msgstr "link (EN)"
+#~ msgid "email"
+#~ msgstr "Correo"
 
-#: .\apps\common\core\models.py:102
-msgid "Modal Banner"
-msgstr "Banner"
+#~ msgid "subject"
+#~ msgstr "Asunto"
 
-#: .\apps\common\core\models.py:103
-msgid "Modal Banners"
-msgstr "Banners"
+#~ msgid "message"
+#~ msgstr "Mensaje"
 
-#: .\apps\common\core\views.py:30
-msgid "This form has already been sent."
-msgstr "Este formulario ya ha sido enviado."
+#~ msgid "Contact"
+#~ msgstr "Contacto"
 
-#: .\apps\common\core\views.py:46
-msgid "Message Received! | GEA"
-msgstr "Mensaje recibido | GEA"
+#~ msgid "Contacts"
+#~ msgstr "Contactos"
 
-#: .\apps\common\core\views.py:48
+#~ msgid "title"
+#~ msgstr "Título"
+
+#~ msgid "title (English)"
+#~ msgstr "Título (EN)"
+
+#~ msgid "description"
+#~ msgstr "Descripción"
+
+#~ msgid "image file"
+#~ msgstr "archivo de imagen"
+
+#~ msgid "image file (English)"
+#~ msgstr "archivo de imagen (EN)"
+
+#~ msgid "link"
+#~ msgstr "enlace"
+
+#~ msgid "link (English)"
+#~ msgstr "link (EN)"
+
+#~ msgid "Modal Banner"
+#~ msgstr "Banner"
+
+#~ msgid "Modal Banners"
+#~ msgstr "Banners"
+
+#~ msgid "This form has already been sent."
+#~ msgstr "Este formulario ya ha sido enviado."
+
+#~ msgid "Message Received! | GEA"
+#~ msgstr "Mensaje recibido | GEA"
+
 #, python-format
-msgid "Thank you %(name)s for contacting us."
-msgstr "Gracias %(name)s por contactarnos."
+#~ msgid "Thank you %(name)s for contacting us."
+#~ msgstr "Gracias %(name)s por contactarnos."

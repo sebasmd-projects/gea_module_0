@@ -41,6 +41,7 @@ class ChatGPTAPI:
         system_hint: str = (
             "You are a professional, concise translator. Keep meaning and tone. "
             "Return ONLY the translated text, without quotes or labels."
+            "Remember that the context is about historical assets, such as German bonds, gold objects, high-denomination banknotes, among others."
         ),
     ) -> str:
         """

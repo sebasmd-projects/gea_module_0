@@ -4,21 +4,23 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views import View
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import CreateView, TemplateView
 
 from apps.project.specific.assets_management.assets_location.models import (
     AssetLocationModel, LocationModel)
 from apps.project.specific.assets_management.assets_location.views import \
     HolderRequiredMixin
 from apps.project.specific.assets_management.buyers.models import OfferModel
-from apps.project.specific.assets_management.buyers.views import BuyerRequiredMixin
+from apps.project.specific.assets_management.buyers.views import \
+    BuyerRequiredMixin
 
-from .forms import AssetAddNewCategoryForm, AssetInlineForm, AssetNameInlineForm
-from .models import AssetModel, AssetsNamesModel, AssetCategoryModel
+from .forms import (AssetAddNewCategoryForm, AssetInlineForm,
+                    AssetNameInlineForm)
+from .models import AssetCategoryModel, AssetModel, AssetsNamesModel
 
 
 class HolderTemplateview(HolderRequiredMixin, TemplateView):
-    template_name = 'dashboard/pages/assets_management/assets/holders/holder_dashboard.html'
+    template_name = 'dashboard/pages/holders/holder_dashboard.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -101,7 +103,7 @@ class AssetNameWithInlineAssetCreateView(BuyerRequiredMixin, View):
             .select_related("asset_name", "category")
             .order_by("-created")
         )
-        
+
         context = {
             "name_form": name_form,
             "asset_form": asset_form,
@@ -128,7 +130,7 @@ class AssetAddNewCategory(BuyerRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse("buyers:buyer_index")
-    
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx["categories"] = AssetCategoryModel.objects.all()

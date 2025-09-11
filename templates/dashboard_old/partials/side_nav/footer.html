@@ -1,9 +1,0 @@
-{% load i18n %}
-<!-- Sidenav Footer-->
-<div class="sidenav-footer">
-    <div class="sidenav-footer-content">
-        <div class="sidenav-footer-subtitle">{{ request.user.get_user_type_display }} | {% trans 'Logged in as:' %}</div>
-        <div class="sidenav-footer-title">{{ request.user.get_full_name }}</div>
-        <div class="sidenav-footer-subtitle">{{ request.user.email }}</div>
-    </div>
-</div>

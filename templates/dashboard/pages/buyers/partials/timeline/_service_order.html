@@ -1,0 +1,51 @@
+{% load static i18n %}
+
+<div class="timeline-item">
+  <div class="timeline-item-marker">
+    <div class="
+      timeline-item-marker-indicator
+      {% if offer.service_order_sent_at %}
+        bg-success-soft text-success
+      {% elif offer.service_order_created_at %}
+        bg-warning-soft text-warning
+      {% else %}
+        bg-danger-soft text-danger
+      {% endif %}
+    ">
+      <i data-feather="paperclip"></i>
+    </div>
+  </div>
+  <div class="timeline-item-content">
+    <p class="text-dark">{% trans 'Service Order' %}</p>
+
+    <div class="timeline timeline-xs">
+      {# Created (AUTO al aprobar) #}
+      <div class="timeline-item">
+        <div class="timeline-item-marker">
+          <div class="timeline-item-marker-indicator {{ offer.service_order_created_at|yesno:'bg-success,bg-danger' }}"></div>
+        </div>
+        <div class="timeline-item-content">
+          {% trans 'Service Order Created' %}<br />
+          {{ offer.service_order_created_at|date:'d/m/Y H:i'|default:'...' }}<br />
+          {% if offer.service_order_created_by %}
+            <small>@{{ offer.service_order_created_by.get_full_name|default:offer.service_order_created_by.username }}</small>
+          {% endif %}
+        </div>
+      </div>
+
+      {# Sent #}
+      <div class="timeline-item">
+        <div class="timeline-item-marker">
+          <div class="timeline-item-marker-indicator {{ offer.service_order_sent_at|yesno:'bg-success,bg-danger' }}"></div>
+        </div>
+        <div class="timeline-item-content">
+          {% trans 'Service Order Sent' %}<br />
+          {{ offer.service_order_sent_at|date:'d/m/Y H:i'|default:'...' }}<br />
+          {% if offer.service_order_sent_by %}
+            <small>@{{ offer.service_order_sent_by.get_full_name|default:offer.service_order_sent_by.username }}</small>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

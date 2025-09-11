@@ -45,29 +45,17 @@
                         style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
                         <h2 style="color: black;">{% trans 'Purchase Orders' %}</h2>
                     </div>
-                    <div class="card-body">
-                        <div class="my-3 row">
-                            <div class="col">
-                                <i class="fa-regular fa-circle-xmark mx-1" style="color: orange;"></i>
-                                {% trans 'Pending for Approval' %}
-                            </div>
-
-                            <div class="col">
-                                <i class="fa-solid fa-check-double mx-1" style="color: green;"></i>
-                                {% trans 'Approved' %}
-                            </div>
-
-                            <div class="col">
-                                <i class="fa-regular fa-circle-xmark mx-1" style="color: red;"></i>
-                                {% trans 'NOT Approved' %}
-                            </div>
-
-                            <div class="col">
-                                <i class="fa-regular fa-circle-xmark mx-1" style="color: grey;"></i>
-                                {% trans 'Under review' %}
+                    {% if messages %}
+                        <div class="card-body">
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {% for message in messages %}
+                                {{ message }}
+                                {% endfor %}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         </div>
-
+                    {% endif %}
+                    <div class="card-body">
                         <div id="alerts-container"></div>
                         <table id="offers_table">
                             <thead>
@@ -79,7 +67,7 @@
                                     <th>{% trans 'Quantity Needed' %}</th>
                                     <th>{% trans 'Country' %}</th>
                                     <th>{% trans 'Total value of the offer ($ USD)' %}</th>
-                                    <th>{% trans 'Approved' %}</th>
+                                    <th>{% trans 'Status' %}</th>
                                     <th>{% trans 'Actions' %}</th>
                                 </tr>
                             </thead>
@@ -97,22 +85,8 @@
                                         {{ offer.buyer_country.es_country_name }}</td>
                                     <td>{{ offer.offer_amount|currency }}</td>
                                     <td>
-                                        {% if offer.is_approved and offer.is_active and offer.reviewed %}
-                                        <i class="fa-solid fa-check-double" style="color: green;"
-                                            title="{% trans 'Approved' %}"></i>
-
-                                        {% elif not offer.is_approved and offer.reviewed %}
-                                        <i class="fa-regular fa-circle-xmark" style="color: red;"
-                                            title="{% trans 'NOT Approved' %}"></i>
-
-                                        {% elif not offer.is_approved and not offer.reviewed and offer.is_active %}
-                                        <i class="fa-regular fa-circle-xmark" style="color: orange;"
-                                            title="{% trans 'Pending for Approval' %}"></i>
-
-                                        {% else %}
-                                        <i class="fa-regular fa-circle-xmark" style="color: grey;"
-                                            title="{% trans 'Under review' %}"></i>
-                                        {% endif %}
+                                        <i class="{{ offer.status_icon }} mx-1" style="color: {{ offer.status_color }};" title="{{ offer.status_label }}"></i>
+                                        <span style="color: {{ offer.status_color }};">{{ offer.status_label }}</span>
                                     </td>
                                     <td>
                                         <a href="{% url 'buyers:offer_details' offer.id %}" type="button"
@@ -169,8 +143,10 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="card mb-4">
+                
+                
+                {% if assets and categories %}
+                    <div class="card mb-4">
                     <div class="card-header"
                         style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
                         <h2 style="color: black;">{% trans 'Tables of Asset Names and Categories' %}</h2>
@@ -287,7 +263,7 @@
                         </div>
                     </div>
                 </div>
-
+                {% endif %}
             </div>
         </div>
     </div>

@@ -1,0 +1,52 @@
+{% load static i18n %}
+
+<div class="timeline-item">
+  <div class="timeline-item-marker">
+    <div class="timeline-item-marker-indicator
+      {% if offer.payment_order_sent_at %}
+        bg-success-soft text-success
+      {% elif offer.payment_order_created_at %}
+        bg-warning-soft text-warning
+      {% else %}
+        bg-danger-soft text-danger
+      {% endif %}
+    ">
+      <i data-feather="dollar-sign"></i>
+    </div>
+  </div>
+  <div class="timeline-item-content">
+    <p class="text-dark">
+      {% trans 'Payment Order' %}
+    </p>
+
+    <div class="timeline timeline-xs">
+      {# Created #}
+      <div class="timeline-item">
+        <div class="timeline-item-marker">
+          <div class="timeline-item-marker-indicator {{ offer.payment_order_created_at|yesno:'bg-success,bg-danger' }}"></div>
+        </div>
+        <div class="timeline-item-content">
+          {% trans 'Payment Order Created' %}<br />
+          {{ offer.payment_order_created_at|date:'d/m/Y H:i'|default:'...' }}<br />
+          {% if offer.payment_order_created_by %}
+            <small>@{{ offer.payment_order_created_by.get_full_name|default:offer.payment_order_created_by.username }}</small>
+          {% endif %}
+        </div>
+      </div>
+
+      {# Sent #}
+      <div class="timeline-item">
+        <div class="timeline-item-marker">
+          <div class="timeline-item-marker-indicator {{ offer.payment_order_sent_at|yesno:'bg-success,bg-danger' }}"></div>
+        </div>
+        <div class="timeline-item-content">
+          {% trans 'Payment Order Sent' %}<br />
+          {{ offer.payment_order_sent_at|date:'d/m/Y H:i'|default:'...' }}<br />
+          {% if offer.payment_order_sent_by %}
+            <small>@{{ offer.payment_order_sent_by.get_full_name|default:offer.payment_order_sent_by.username }}</small>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
