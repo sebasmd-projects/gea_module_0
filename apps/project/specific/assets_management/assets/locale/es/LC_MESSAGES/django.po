@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-12 10:39-0500\n"
+"POT-Creation-Date: 2025-09-12 11:41-0500\n"
 "PO-Revision-Date: 2025-09-12 10:40-0500\n"
 "Last-Translator: Sebastian Morales <juan.sebasm2@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -116,12 +116,10 @@ msgid "created by"
 msgstr "creado por"
 
 #: .\apps\project\specific\assets_management\assets\models.py:74
-#| msgid "category"
 msgid "Category"
 msgstr "Categoría"
 
 #: .\apps\project\specific\assets_management\assets\models.py:75
-#| msgid "2. Categories"
 msgid "Categories"
 msgstr "Categorías"
 
@@ -134,12 +132,10 @@ msgid "asset (en)"
 msgstr "activo (EN)"
 
 #: .\apps\project\specific\assets_management\assets\models.py:107
-#| msgid "1. Asset Name"
 msgid "Asset Name"
 msgstr "Nombre del activo"
 
 #: .\apps\project\specific\assets_management\assets\models.py:108
-#| msgid "1. Asset Names"
 msgid "Asset Names"
 msgstr "Nombres de los activos"
 
@@ -172,12 +168,10 @@ msgid "observations (EN)"
 msgstr "observaciones (EN)"
 
 #: .\apps\project\specific\assets_management\assets\models.py:220
-#| msgid "asset"
 msgid "Asset"
 msgstr "Activo H."
 
 #: .\apps\project\specific\assets_management\assets\models.py:221
-#| msgid "3. Assets"
 msgid "Assets"
 msgstr "Activos H."
 
@@ -190,8 +184,7 @@ msgstr ""
 #: .\apps\project\specific\assets_management\assets\signals.py:124
 #, python-brace-format
 msgid "Error filling asset name translation fields: {e}"
-msgstr ""
-"Error al completar los campos de traducción del nombre del activo: {e}"
+msgstr "Error al completar los campos de traducción del nombre del activo: {e}"
 
 #: .\apps\project\specific\assets_management\assets\signals.py:168
 #, python-brace-format

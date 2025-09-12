@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-12 10:39-0500\n"
+"POT-Creation-Date: 2025-09-12 11:41-0500\n"
 "PO-Revision-Date: 2025-09-12 10:42-0500\n"
 "Last-Translator: Sebastian Morales <juan.sebasm2@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -118,7 +118,6 @@ msgid "Country Name (EN)"
 msgstr "Nombre del país (EN)"
 
 #: .\apps\project\specific\assets_management\assets_location\models.py:61
-#| msgid "3. Countries"
 msgid "Countries"
 msgstr "Países"
 
@@ -140,12 +139,10 @@ msgid "description (EN)"
 msgstr "descripción (EN)"
 
 #: .\apps\project\specific\assets_management\assets_location\models.py:128
-#| msgid "location"
 msgid "Location"
 msgstr "Ubicación"
 
 #: .\apps\project\specific\assets_management\assets_location\models.py:129
-#| msgid "2. Locations"
 msgid "Locations"
 msgstr "Ubicaciones"
 
@@ -186,12 +183,10 @@ msgid "No Location"
 msgstr "Sin Ubicación"
 
 #: .\apps\project\specific\assets_management\assets_location\models.py:206
-#| msgid "1. Location Registration"
 msgid "Location Registration"
 msgstr "Registro de ubicación"
 
 #: .\apps\project\specific\assets_management\assets_location\models.py:207
-#| msgid "1. Locations Registration"
 msgid "Locations Registration"
 msgstr "Registro de Ubicaciones"
 

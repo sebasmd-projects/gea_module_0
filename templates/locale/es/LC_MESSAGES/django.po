@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-12 10:39-0500\n"
-"PO-Revision-Date: 2025-09-12 11:39-0500\n"
+"POT-Creation-Date: 2025-09-12 11:41-0500\n"
+"PO-Revision-Date: 2025-09-12 11:43-0500\n"
 "Last-Translator: Sebastian Morales <juan.sebasm2@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -495,7 +495,7 @@ msgstr "Abrir el Asistente de Aprobación"
 
 #: .\templates\dashboard\pages\buyers\partials\timeline\_asset_sent.html:19
 #: .\templates\dashboard\pages\buyers\partials\timeline\_asset_sent.html:43
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:251
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:252
 msgid "Asset Sent"
 msgstr "Activo enviado"
 
@@ -504,14 +504,16 @@ msgid "Asset In Possession"
 msgstr "Activo en posesión"
 
 #: .\templates\dashboard\pages\buyers\partials\timeline\_end.html:18
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:53
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:335
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:54
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:282
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:336
 msgid "End"
 msgstr "Fin"
 
 #: .\templates\dashboard\pages\buyers\partials\timeline\_payment_order.html:19
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:29
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:170
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:30
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:124
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:171
 msgid "Payment Order"
 msgstr "Orden de pago"
 
@@ -524,24 +526,25 @@ msgid "Payment Order Sent"
 msgstr "Orden de pago enviada"
 
 #: .\templates\dashboard\pages\buyers\partials\timeline\_profitability.html:19
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:45
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:280
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:46
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:227
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:281
 msgid "Profitability"
 msgstr "Rentabilidad"
 
 #: .\templates\dashboard\pages\buyers\partials\timeline\_profitability.html:29
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:285
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:286
 msgid "Profitability Created"
 msgstr "Rentabilidad creada"
 
 #: .\templates\dashboard\pages\buyers\partials\timeline\_profitability.html:43
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:306
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:307
 msgid "Profitability Paid"
 msgstr "Rentabilidad Pagada"
 
 #: .\templates\dashboard\pages\buyers\partials\timeline\_purchase_order.html:20
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:13
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:66
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:14
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:67
 msgid "Purchase Order"
 msgstr "Orden de compra"
 
@@ -558,7 +561,8 @@ msgid "Purchase Order Approved"
 msgstr "Orden de compra aprobada"
 
 #: .\templates\dashboard\pages\buyers\partials\timeline\_service_order.html:19
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:21
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:22
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:68
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:123
 msgid "Service Order"
 msgstr "Orden de servicio"
@@ -616,7 +620,6 @@ msgid "There was a problem deleting the purchase order."
 msgstr "Hubo un problema al eliminar la orden de compra."
 
 #: .\templates\dashboard\pages\buyers\wizard\offer_wizard_page.html:28
-#| msgid "Approved"
 msgid "Approval Wizard"
 msgstr "Asistente de Aprobación"
 
@@ -634,42 +637,39 @@ msgstr "Asistente de carga…"
 msgid "Updated successfully"
 msgstr "Actualizado exitosamente"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:37
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:225
-#| msgid "Asset Sent"
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:38
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:172
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:226
 msgid "Asset sent"
 msgstr "Activo enviado"
 
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:68
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:72
 msgid "Review"
 msgstr "Revisar"
+
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:68
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:94
+msgid "Approve"
+msgstr "Aprobar"
 
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:74
 msgid "Reviewed at"
 msgstr "Revisado a las"
 
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:77
-#| msgid "Under review"
 msgid "Pending review"
 msgstr "Pendiente de revisión"
 
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:83
-#| msgid "Purchase Order Reviewed"
 msgid "Mark as reviewed"
 msgstr "Marcar como revisado"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:94
-#| msgid "Approved"
-msgid "Approve"
-msgstr "Aprobar"
-
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:96
-#| msgid "Approved"
 msgid "Approved at"
 msgstr "Aprobado a las"
 
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:99
-#| msgid "Pending for Approval"
 msgid "Pending approval"
 msgstr "Pendiente de aprobación"
 
@@ -678,109 +678,123 @@ msgid "Mark as approved"
 msgstr "Marcar como aprobado"
 
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:114
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:161
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:216
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:271
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:326
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:339
-msgid "Previous"
-msgstr "Previo"
-
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:115
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:162
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:217
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:272
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:327
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:340
+msgid "Previous"
+msgstr "Previo"
+
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:115
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:163
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:218
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:273
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:328
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:341
 #: .\templates\two_factor\_wizard_actions.html:13
 #: .\templates\two_factor\core\setup.html:59
 msgid "Next"
 msgstr "Siguiente"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:127
-#| msgid "Service Order Created"
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:124
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:172
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:282
+#| msgid "Created"
+msgid "Create"
+msgstr "Crear"
+
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:124
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:172
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:227
+msgid "Send"
+msgstr "Enviar"
+
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:128
 msgid "Service Order (auto-created on approve)"
 msgstr "Orden de servicio (creada automáticamente al aprobarse)"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:129
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:177
-#| msgid "Created"
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:130
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:178
 msgid "Created at"
 msgstr "Creado a las"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:132
-#| msgid "Created by"
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:133
 msgid "Not created yet"
 msgstr "Aún no creado"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:141
-#| msgid "Service Order"
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:142
 msgid "Send Service Order"
 msgstr "Enviar Orden de Servicio"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:143
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:198
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:144
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:199
 msgid "Sent at"
 msgstr "Enviado a las"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:146
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:201
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:147
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:202
 msgid "Pending to send"
 msgstr "Pendiente de envió"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:152
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:207
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:262
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:153
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:208
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:263
 msgid "Mark as sent"
 msgstr "Marcar como enviado"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:175
-#| msgid "Payment Order"
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:176
 msgid "Create Payment Order"
 msgstr "Crear Orden de Pago"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:180
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:235
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:256
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:290
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:311
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:181
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:236
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:257
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:291
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:312
 msgid "Pending"
 msgstr "Pendiente"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:186
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:296
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:187
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:297
 msgid "Mark as created"
 msgstr "Marcar como creado"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:196
-#| msgid "Payment Order"
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:197
 msgid "Send Payment Order"
 msgstr "Enviar Orden de Pago"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:230
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:227
 #| msgid "Asset In Possession"
+msgid "In Possession"
+msgstr "En Posesión"
+
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:231
 msgid "Asset in Possession"
 msgstr "Activo H. en posesión"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:232
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:253
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:287
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:308
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:233
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:254
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:288
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:309
 msgid "At"
 msgstr "En"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:241
-#| msgid "Asset In Possession"
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:242
 msgid "Mark as in possession"
 msgstr "Marcar como en posesión"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:317
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:282
+msgid "Paid"
+msgstr "Pagado"
+
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:318
 msgid "Mark as paid"
 msgstr "Marcar como pagado"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:336
-msgid "Process finished."
-msgstr "Proceso terminado."
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:337
+msgid "Completed."
+msgstr "Completado. "
 
 #: .\templates\dashboard\pages\holders\add_asset_location.html:28
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:23
@@ -1114,7 +1128,6 @@ msgstr ""
 "asistencia técnica:"
 
 #: .\templates\errors_template.html:43
-#| msgid "Thank you for trusting us!"
 msgid "Thank you for your understanding."
 msgstr "Gracias por su comprensión."
 
@@ -1371,6 +1384,9 @@ msgstr[1] "Tienes %(counter)s tokens de respaldo restantes."
 msgid "Show Codes"
 msgstr "Mostrar códigos"
 
+#~ msgid "Process finished."
+#~ msgstr "Proceso terminado."
+
 #~ msgid "Secure platform for historical assets"
 #~ msgstr "Plataforma segura de activos históricos"
 
@@ -1594,9 +1610,6 @@ msgstr "Mostrar códigos"
 
 #~ msgid "POL"
 #~ msgstr "Prueba de vida"
-
-#~ msgid "Send"
-#~ msgstr "Enviar"
 
 #~ msgid "Successful registration"
 #~ msgstr "Registro exitoso"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-12 10:39-0500\n"
+"POT-Creation-Date: 2025-09-12 11:41-0500\n"
 "PO-Revision-Date: 2025-09-12 10:43-0500\n"
 "Last-Translator: Sebastian Morales <juan.sebasm2@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -354,12 +354,10 @@ msgid "Cannot pay profitability before approval."
 msgstr "No se puede pagar rentabilidad antes de la aprobación."
 
 #: .\apps\project\specific\assets_management\buyers\models.py:688
-#| msgid "1. Purchase order"
 msgid "Purchase order"
 msgstr "Orden de compra"
 
 #: .\apps\project\specific\assets_management\buyers\models.py:689
-#| msgid "1. Purchase orders"
 msgid "Purchase orders"
 msgstr "Ordenes de compra"
 
