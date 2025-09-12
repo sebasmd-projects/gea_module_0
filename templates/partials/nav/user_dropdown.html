@@ -41,14 +41,16 @@
       {% trans 'Profile' %}
     </a>
     {% endcomment %}
-
-    <a class="dropdown-item" href="{% url 'admin:index' %}">
+    
+    {% if request.user.is_superadmin %}
+      <a class="dropdown-item" href="{% url 'admin:index' %}">
       <div class="dropdown-item-icon">
         <i data-feather="tool"></i>
       </div>
       {% trans 'Admin' %}
     </a>
-
+    {% endif %}
+      
     {% if request.user.is_buyer or request.user.is_superuser %}
       <a class="dropdown-item" href="{% url 'buyers:buyer_index' %}">
         <div class="dropdown-item-icon">

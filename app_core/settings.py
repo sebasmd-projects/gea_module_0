@@ -143,6 +143,7 @@ PARLER_LANGUAGES = {
 }
 
 UTILS_PATH = 'apps.common.utils'
+UTILS_DATA_PATH = f'{UTILS_PATH}.data'
 
 ADMIN_URL = os.getenv('DJANGO_ADMIN_URL')
 
