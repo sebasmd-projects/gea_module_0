@@ -215,13 +215,13 @@
                 </div>
             </div>
 
+            {% if assets %}
             {# --- LISTADO INLINE DE ASSETS --- #}
             <div class="card mb-4">
                 <div class="card-header"
                     style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
                     <h2 style="color:black;">{% trans 'Existing Assets' %}</h2>
                 </div>
-
                 <div class="card-body">
                     <table id="assetinline_table">
                         <thead>
@@ -291,7 +291,7 @@
                     </table>
                 </div>
             </div>
-
+            {% endif %}
         </div>
     </div>
 </div>
