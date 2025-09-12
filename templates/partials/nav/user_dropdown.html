@@ -42,7 +42,7 @@
     </a>
     {% endcomment %}
     
-    {% if request.user.is_superadmin %}
+    {% if request.user.is_superuser %}
       <a class="dropdown-item" href="{% url 'admin:index' %}">
       <div class="dropdown-item-icon">
         <i data-feather="tool"></i>
