@@ -1,7 +1,10 @@
 import logging
 from datetime import timedelta
+from ipaddress import ip_address
+from urllib.parse import urlparse
 
 from django.conf import settings
+from django.http import HttpRequest
 from django.shortcuts import redirect, render
 from django.utils import timezone, translation
 from django.utils.translation import gettext_lazy as _
@@ -144,14 +147,20 @@ def handler504(request, *args, **argv):
 
 
 def set_language(request):
-    lang_code = request.GET.get('lang', None)
+    lang_code = request.GET.get('lang')
     if lang_code and lang_code in dict(settings.LANGUAGES).keys():
         translation.activate(lang_code)
-        response = redirect(request.META.get('HTTP_REFERER'))
+        referer = request.META.get('HTTP_REFERER', '/')
+        parsed = urlparse(referer)
+
+        # Permitir solo redirecciones internas al dominio propio
+        if parsed.netloc and parsed.netloc != request.get_host():
+            referer = '/'
+
+        response = redirect(referer)
         response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang_code)
         return response
-    else:
-        return redirect(request.META.get('HTTP_REFERER'))
+    return redirect('/')
 
 
 class DecoratedTokenObtainPairView(TokenObtainPairView):
@@ -221,8 +230,23 @@ class HttpRequestAttakView(View):
         seconds=60 * settings.IP_BLOCKED_TIME_IN_MINUTES
     )
 
+    def get_client_ip(request: HttpRequest) -> str:
+        xff = request.META.get("HTTP_X_FORWARDED_FOR")
+        if xff:
+            # toma el primer hop (cliente original)
+            ip = xff.split(",")[0].strip()
+        else:
+            ip = request.META.get(
+                "HTTP_CF_CONNECTING_IP") or request.META.get("REMOTE_ADDR", "")
+        # valida formato
+        try:
+            return str(ip_address(ip))
+        except Exception:
+            return "0.0.0.0"
+
     def get(self, request, *args, **kwargs):
-        client_ip = request.META.get('REMOTE_ADDR')
+        client_ip = self.get_client_ip(
+            request) or request.META.get('REMOTE_ADDR')
 
         # Skip if IP is whitelisted
         if WhiteListedIPModel.objects.filter(current_ip=client_ip).exists():

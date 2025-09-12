@@ -49,7 +49,7 @@ class DetectSuspiciousRequestMiddleware:
         if blocked_entry:
             path = request.path or ''
             if any(path.startswith(p) for p in STATIC_PREFIXES):
-                return render(request, template_name, status=403, context={...})
+                return self.get_response(request)
             try:
                 with transaction.atomic():
                     si = blocked_entry.session_info or {}
@@ -90,6 +90,6 @@ class DetectSuspiciousRequestMiddleware:
         response = self.get_response(request)
 
         if 400 < response.status_code < 500:
-            logger.warning(f"Error {response.status_code} encountered for IP: {client_ip}")
+            logger.info(f"Error {response.status_code} encountered for IP: {client_ip}")
 
         return response

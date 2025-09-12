@@ -34,6 +34,13 @@
               </a>
               {% if attempt_count %}
                 <p>{{ attempt_count }}</p>
+                <p>
+                  {% trans "If you think this is an error, please contact support:" %}
+                  <a href="mailto:support&#64;globalallianceusa.com?subject=Blocked%20IP%20Issue&body=Hello%20Support%20Team,%0A%0AMy%20IP%20address%20appears%20to%20be%20blocked.%0A%0ADetails:%0A-%20User:%20{{ request.user.username|default:'Anonymous' }}%0A-%20Attempts:%20{{ attempt_count }}%0A-%20Error:%20{{ error }}%0A%0APlease%20assist%20in%20resolving%20this%20issue.%0A%0AThank%20you.">
+                    support<span style="display:none;">nospam</span>&#64;globalallianceusa.com
+                  </a>
+                </p>
+                <p>{% trans 'Thank you for your understanding.' %}</p>
               {% endif %}
             </div>
           </div>

@@ -13,6 +13,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
+from encrypted_model_fields.fields import EncryptedPositiveIntegerField
 
 from apps.common.utils.functions import generate_md5_or_sha256_hash
 from apps.common.utils.models import TimeStampedModel
@@ -192,11 +193,8 @@ class OfferModel(TimeStampedModel):
         default=QuantityTypeChoices.BOXES
     )
 
-    offer_amount = models.DecimalField(
+    offer_amount = EncryptedPositiveIntegerField(
         _("Total value of the offer ($ USD)"),
-        max_digits=20,
-        decimal_places=2,
-        default=0
     )
 
     offer_quantity = models.PositiveIntegerField(

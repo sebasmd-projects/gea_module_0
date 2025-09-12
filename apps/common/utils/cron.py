@@ -6,4 +6,5 @@ def generate_and_send_gea_code():
     Se ejecuta diariamente vía django-crontab.
     Genera (si no existe) el código y lo envía por correo.
     """
-    GeaDailyUniqueCode.send_today()
+    GeaDailyUniqueCode.send_today(kind=GeaDailyUniqueCode.KindChoices.GENERAL)
+    GeaDailyUniqueCode.send_today(kind=GeaDailyUniqueCode.KindChoices.BUYER)
