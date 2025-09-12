@@ -226,19 +226,14 @@ class DecoratedTokenBlacklistView(TokenBlacklistView):
 
 
 class HttpRequestAttakView(View):
-    time_in_minutes = timedelta(
-        seconds=60 * settings.IP_BLOCKED_TIME_IN_MINUTES
-    )
+    time_in_minutes = timedelta(minutes=settings.IP_BLOCKED_TIME_IN_MINUTES)  
 
-    def get_client_ip(request: HttpRequest) -> str:
+    def get_client_ip(self, request: HttpRequest) -> str:  # ← añade self
         xff = request.META.get("HTTP_X_FORWARDED_FOR")
         if xff:
-            # toma el primer hop (cliente original)
             ip = xff.split(",")[0].strip()
         else:
-            ip = request.META.get(
-                "HTTP_CF_CONNECTING_IP") or request.META.get("REMOTE_ADDR", "")
-        # valida formato
+            ip = request.META.get("HTTP_CF_CONNECTING_IP") or request.META.get("REMOTE_ADDR", "")
         try:
             return str(ip_address(ip))
         except Exception:
@@ -302,7 +297,7 @@ class HttpRequestAttakView(View):
 
             # Calculate block time
             if attempt_count > 2:
-                block_time = self.time_in_minutes * 3600 * attempt_count
+                block_time = self.time_in_minutes * attempt_count
             else:
                 block_time = self.time_in_minutes
 

@@ -3,13 +3,12 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.db import transaction
+from django.db.utils import OperationalError, ProgrammingError
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from apps.common.utils.models import IPBlockedModel
-
-
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +30,7 @@ STATIC_PREFIXES = (
     '/favicon.ico',
 )
 
+
 class DetectSuspiciousRequestMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
@@ -40,11 +40,14 @@ class DetectSuspiciousRequestMiddleware:
     def __call__(self, request):
         client_ip = request.META.get('REMOTE_ADDR')
 
-        blocked_entry = IPBlockedModel.objects.filter(
-            current_ip=client_ip,
-            is_active=True,
-            blocked_until__gte=timezone.now()
-        ).first()
+        try:
+            blocked_entry = IPBlockedModel.objects.filter(
+                current_ip=client_ip,
+                is_active=True,
+                blocked_until__gte=timezone.now()
+            ).first()
+        except (ProgrammingError, OperationalError):
+            return self.get_response(request)
 
         if blocked_entry:
             path = request.path or ''
@@ -67,12 +70,15 @@ class DetectSuspiciousRequestMiddleware:
                     blocked_entry.blocked_until = base + self.block_step
 
                     blocked_entry.session_info = si
-                    blocked_entry.save(update_fields=['session_info', 'blocked_until'])
+                    blocked_entry.save(
+                        update_fields=['session_info', 'blocked_until'])
 
             except Exception as e:
-                logger.exception("Error updating attempt_count while blocked: %s", e)
+                logger.exception(
+                    "Error updating attempt_count while blocked: %s", e)
 
-            logger.warning(f"Blocked IP {client_ip} attempted access. Returning 403.")
+            logger.warning(
+                f"Blocked IP {client_ip} attempted access. Returning 403.")
             return render(
                 request,
                 template_name,
@@ -90,6 +96,7 @@ class DetectSuspiciousRequestMiddleware:
         response = self.get_response(request)
 
         if 400 < response.status_code < 500:
-            logger.info(f"Error {response.status_code} encountered for IP: {client_ip}")
+            logger.info(
+                f"Error {response.status_code} encountered for IP: {client_ip}")
 
         return response
