@@ -71,8 +71,8 @@ class AssetCategoryModel(TimeStampedModel):
 
     class Meta:
         db_table = "apps_assets_assetcategory"
-        verbose_name = _("2. Category")
-        verbose_name_plural = _("2. Categories")
+        verbose_name = _("Category")
+        verbose_name_plural = _("Categories")
         ordering = ["default_order", "-created"]
 
 
@@ -104,8 +104,8 @@ class AssetsNamesModel(TimeStampedModel):
 
     class Meta:
         db_table = "apps_assets_assetsnames"
-        verbose_name = _("1. Asset Name")
-        verbose_name_plural = _("1. Asset Names")
+        verbose_name = _("Asset Name")
+        verbose_name_plural = _("Asset Names")
         ordering = ["default_order", "-created"]
 
 
@@ -217,8 +217,8 @@ class AssetModel(TimeStampedModel):
 
     class Meta:
         db_table = "apps_assets_asset"
-        verbose_name = _("3. Asset")
-        verbose_name_plural = _("3. Assets")
+        verbose_name = _("Asset")
+        verbose_name_plural = _("Assets")
         ordering = ["default_order", "-created"]
         unique_together = ['asset_name', 'category']
 

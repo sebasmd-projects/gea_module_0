@@ -57,8 +57,8 @@ class AssetCountryModel(TimeStampedModel):
     class Meta:
         db_table = 'apps_assets_location_country'
         unique_together = ['continent', 'es_country_name', 'en_country_name']
-        verbose_name = _('3. Country')
-        verbose_name_plural = _('3. Countries')
+        verbose_name = _('Country')
+        verbose_name_plural = _('Countries')
         ordering = ["default_order", "-created", 'continent']
 
 
@@ -125,8 +125,8 @@ class LocationModel(TimeStampedModel):
         db_table = "apps_assets_location_location"
         unique_together = ['reference', 'country', 'created_by',
                            'is_active', 'description_es', 'description_en']
-        verbose_name = _("2. Location")
-        verbose_name_plural = _("2. Locations")
+        verbose_name = _("Location")
+        verbose_name_plural = _("Locations")
         ordering = ["default_order", "-created"]
 
 
@@ -203,8 +203,8 @@ class AssetLocationModel(TimeStampedModel):
 
     class Meta:
         db_table = "apps_assets_location_assetlocation"
-        verbose_name = _("1. Location Registration")
-        verbose_name_plural = _("1. Locations Registration")
+        verbose_name = _("Location Registration")
+        verbose_name_plural = _("Locations Registration")
         ordering = ["default_order", "-created"]
         unique_together = [
             'asset',
