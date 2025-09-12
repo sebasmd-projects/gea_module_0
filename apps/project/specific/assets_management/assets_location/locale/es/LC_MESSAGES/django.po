@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-04 12:35-0500\n"
-"PO-Revision-Date: 2025-08-28 21:38-0500\n"
-"Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
+"POT-Creation-Date: 2025-09-12 10:39-0500\n"
+"PO-Revision-Date: 2025-09-12 10:42-0500\n"
+"Last-Translator: Sebastian Morales <juan.sebasm2@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -46,6 +46,7 @@ msgid "Reference"
 msgstr "Referencia"
 
 #: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:155
+#: .\apps\project\specific\assets_management\assets_location\models.py:60
 #: .\apps\project\specific\assets_management\assets_location\models.py:106
 msgid "Country"
 msgstr "País"
@@ -116,13 +117,10 @@ msgstr "Nombre del país (ES)"
 msgid "Country Name (EN)"
 msgstr "Nombre del país (EN)"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:60
-msgid "3. Country"
-msgstr "3. País"
-
 #: .\apps\project\specific\assets_management\assets_location\models.py:61
-msgid "3. Countries"
-msgstr "3. Países"
+#| msgid "3. Countries"
+msgid "Countries"
+msgstr "Países"
 
 #: .\apps\project\specific\assets_management\assets_location\models.py:79
 #: .\apps\project\specific\assets_management\assets_location\models.py:151
@@ -142,12 +140,14 @@ msgid "description (EN)"
 msgstr "descripción (EN)"
 
 #: .\apps\project\specific\assets_management\assets_location\models.py:128
-msgid "2. Location"
-msgstr "2. Ubicación"
+#| msgid "location"
+msgid "Location"
+msgstr "Ubicación"
 
 #: .\apps\project\specific\assets_management\assets_location\models.py:129
-msgid "2. Locations"
-msgstr "2. Ubicaciones"
+#| msgid "2. Locations"
+msgid "Locations"
+msgstr "Ubicaciones"
 
 #: .\apps\project\specific\assets_management\assets_location\models.py:135
 msgid "Units"
@@ -186,16 +186,24 @@ msgid "No Location"
 msgstr "Sin Ubicación"
 
 #: .\apps\project\specific\assets_management\assets_location\models.py:206
-msgid "1. Location Registration"
-msgstr "1. Registro de ubicación"
+#| msgid "1. Location Registration"
+msgid "Location Registration"
+msgstr "Registro de ubicación"
 
 #: .\apps\project\specific\assets_management\assets_location\models.py:207
-msgid "1. Locations Registration"
-msgstr "1. Registro de Ubicaciones"
+#| msgid "1. Locations Registration"
+msgid "Locations Registration"
+msgstr "Registro de Ubicaciones"
 
 #: .\apps\project\specific\assets_management\assets_location\views.py:107
 msgid "A location with the same details already exists."
 msgstr "Ya existe una ubicación con los mismos detalles."
+
+#~ msgid "3. Country"
+#~ msgstr "3. País"
+
+#~ msgid "2. Location"
+#~ msgstr "2. Ubicación"
 
 #~ msgid "Containers"
 #~ msgstr "Contenedores"

@@ -111,8 +111,8 @@
 
       {% url 'buyers:offer_wizard_page' offer.id as offer_wizard_url %}
       {% if request.user.is_superuser and request.path != offer_wizard_url %}
-        <a href="{{ offer_wizard_url }}">
-          {% trans "Open Approval Wizard" %}
+        <a href="{{ offer_wizard_url }}" class="btn btn-outline-gold" rel="noopener noreferrer">
+          {% trans "Open Approval Wizard" %} <i class="fa-regular fa-share-from-square mx-1"></i>
         </a>
       {% endif %}
         
