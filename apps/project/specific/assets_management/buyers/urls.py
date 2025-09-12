@@ -6,6 +6,9 @@ from apps.project.specific.assets_management.buyers.views import (
     OfferUpdateView,
     PurchaseOrderCreateView,
     PurchaseOrdersView,
+    OfferApprovalWizardPageView,
+    OfferApprovalWizardPartialView,
+    OfferApprovalWizardActionView,
 )
 
 app_name = "buyers"
@@ -35,5 +38,20 @@ urlpatterns = [
         'buyer/asset/purchase-order/add/',
         PurchaseOrderCreateView.as_view(),
         name='buyer_create'
+    ),
+    path(
+        "po/<uuid:id>/wizard/",
+        OfferApprovalWizardPageView.as_view(),
+        name="offer_wizard_page"
+    ),
+    path(
+        "po/<uuid:id>/wizard/partial/",
+        OfferApprovalWizardPartialView.as_view(),
+        name="offer_wizard_partial"
+    ),
+    path(
+        "po/<uuid:id>/wizard/action/",
+        OfferApprovalWizardActionView.as_view(),
+        name="offer_wizard_action"
     )
 ]

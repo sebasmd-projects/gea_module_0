@@ -27,7 +27,7 @@ else:
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
-    SECURE_HSTS_SECONDS = 31536000 # 1 year
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
@@ -77,30 +77,39 @@ COMMON_APPS = [
     'apps.common.utils',
 ]
 
-PROJECT_COMMON_APPS = [
-    'apps.project.common.account',
-    'apps.project.common.notifications',
-    'apps.project.common.users',
-]
-
 PROJECT_ASSETS_MANAGEMENT_APPS = [
     'apps.project.specific.assets_management.assets',
     'apps.project.specific.assets_management.assets_location',
     'apps.project.specific.assets_management.buyers'
 ]
 
+PROJECT_COMMON_APPS = [
+    'apps.project.common.account',
+    'apps.project.common.notifications',
+    'apps.project.common.users',
+]
+
+PROJECT_DOCUMENTS_APPS = [
+
+]
+
 PROJECT_INTERNAL_APPS = [
 
 ]
 
-PROJECT_DOCUMENTS_APPS = [
-    'apps.project.specific.documents.pol',
+ALL_CUSTOM_APPS = [
+    *COMMON_APPS,
+    *PROJECT_ASSETS_MANAGEMENT_APPS,
+    *PROJECT_COMMON_APPS,
+    *PROJECT_DOCUMENTS_APPS,
+    *PROJECT_INTERNAL_APPS,
 ]
 
-ALL_CUSTOM_APPS = PROJECT_ASSETS_MANAGEMENT_APPS + PROJECT_COMMON_APPS + \
-    PROJECT_INTERNAL_APPS + PROJECT_DOCUMENTS_APPS + COMMON_APPS
-
-INSTALLED_APPS = ALL_CUSTOM_APPS + THIRD_PARTY_APPS + DJANGO_APPS
+INSTALLED_APPS = [
+    *ALL_CUSTOM_APPS,
+    *DJANGO_APPS,
+    *THIRD_PARTY_APPS,
+]
 
 # import_export
 IMPORT_EXPORT_FORMATS = [CSV, HTML, JSON, TSV, XLS, XLSX]
@@ -293,15 +302,19 @@ EMAIL_PORT = int(os.getenv('DJANGO_EMAIL_PORT'))
 
 
 if ',' in os.getenv('GEA_DAILY_CODE_BUYER_RECIPIENTS'):
-    GEA_DAILY_CODE_BUYER_RECIPIENTS = os.getenv('GEA_DAILY_CODE_BUYER_RECIPIENTS').split(',')
+    GEA_DAILY_CODE_BUYER_RECIPIENTS = os.getenv(
+        'GEA_DAILY_CODE_BUYER_RECIPIENTS').split(',')
 else:
-    GEA_DAILY_CODE_BUYER_RECIPIENTS = [os.getenv('GEA_DAILY_CODE_BUYER_RECIPIENTS')]
+    GEA_DAILY_CODE_BUYER_RECIPIENTS = [
+        os.getenv('GEA_DAILY_CODE_BUYER_RECIPIENTS')]
 
 
 if ',' in os.getenv('GEA_DAILY_CODE_GENERAL_RECIPIENTS'):
-    GEA_DAILY_CODE_GENERAL_RECIPIENTS = os.getenv('GEA_DAILY_CODE_GENERAL_RECIPIENTS').split(',')
+    GEA_DAILY_CODE_GENERAL_RECIPIENTS = os.getenv(
+        'GEA_DAILY_CODE_GENERAL_RECIPIENTS').split(',')
 else:
-    GEA_DAILY_CODE_GENERAL_RECIPIENTS = [os.getenv('GEA_DAILY_CODE_GENERAL_RECIPIENTS')]
+    GEA_DAILY_CODE_GENERAL_RECIPIENTS = [
+        os.getenv('GEA_DAILY_CODE_GENERAL_RECIPIENTS')]
 
 
 CORS_ALLOWED_ORIGINS = list(os.getenv('CORS_ALLOWED_ORIGINS').split(','))
@@ -327,4 +340,3 @@ IP_BLOCKED_TIME_IN_MINUTES = int(os.getenv('IP_BLOCKED_TIME_IN_MINUTES'))
 COMMON_ATTACK_TERMS = [
     term.strip() for term in os.getenv('COMMON_ATTACK_TERMS').split(',')
 ]
-

@@ -108,6 +108,14 @@
           <i class="fa-solid fa-arrow-left mx-1"></i> {% trans 'Go to my Assets' %}
         </a>
       {% endif %}
+
+      {% url 'buyers:offer_wizard_page' offer.id as offer_wizard_url %}
+      {% if request.user.is_superuser and request.path != offer_wizard_url %}
+        <a href="{{ offer_wizard_url }}">
+          {% trans "Open Approval Wizard" %}
+        </a>
+      {% endif %}
+        
     </div>
   </div>
 </div>

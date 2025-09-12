@@ -1,8 +1,11 @@
+# apps.project.specific.assets_management.buyers.views.py
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ValidationError
 from django.core.mail import EmailMessage
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.middleware.csrf import get_token
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils.html import escape
@@ -255,3 +258,231 @@ class OfferDetailView(LoginRequiredMixin, DetailView):
         context['category_name'] = category_name
 
         return context
+
+
+# --- Helper compartido ---
+def build_wizard_context(request, offer):
+    # Aliases
+    so_created = offer.service_order_created_at
+    so_sent = offer.service_order_sent_at
+    pay_created = offer.payment_order_created_at
+    pay_sent = offer.payment_order_sent_at
+    possess = offer.asset_in_possession_at
+    asset_sent = offer.asset_sent_at
+    prof_created = offer.profitability_created_at
+    prof_paid = offer.profitability_paid_at
+
+    # Step 1: revisión y aprobación
+    if not offer.reviewed:
+        current_step = 1
+    elif not offer.is_approved:
+        current_step = 1
+        
+    # Step 2: orden de servicio
+    elif not so_created:
+        current_step = 2
+    elif not so_sent:
+        current_step = 2
+    
+    # Step 3: orden de pago
+    elif not pay_created:
+        current_step = 3
+    elif not pay_sent:
+        current_step = 3
+        
+    # Step 4: posesión y envío del activo
+    elif not possess:
+        current_step = 4
+    elif not asset_sent:
+        current_step = 4
+        
+    # Step 5: rentabilidad
+    elif not prof_created:
+        current_step = 5
+    elif not prof_paid:
+        current_step = 5
+    
+    # Completado
+    else:
+        current_step = 6
+
+    # Idioma
+    lang = (request.LANGUAGE_CODE or get_language() or 'en')[:2]
+
+    def get_i18n(obj, base_name, default=""):
+        primary = f"{lang}_{base_name}"
+        alt = f"{'en' if lang == 'es' else 'es'}_{base_name}"
+        return getattr(obj, primary, None) or getattr(obj, alt, None) or default
+
+    asset = offer.asset
+
+    # País comprador
+    buyer_country_name = ""
+    if offer.buyer_country:
+        attr_name = f"{lang}_country_name"
+        buyer_country_name = getattr(offer.buyer_country, attr_name, None)
+        if not buyer_country_name:
+            with override(lang):
+                buyer_country_name = str(offer.buyer_country)
+
+    # Categoría
+    category_name = ""
+    if asset and asset.category:
+        attr_name = f"{lang}_name"
+        category_name = getattr(asset.category, attr_name, None)
+        if not category_name:
+            with override(lang):
+                category_name = str(asset.category)
+
+    ctx = {
+        "offer": offer,
+        "so_created": so_created,
+        "so_sent": so_sent,
+        "pay_created": pay_created,
+        "pay_sent": pay_sent,
+        "possess": possess,
+        "asset_sent": asset_sent,
+        "prof_created": prof_created,
+        "prof_paid": prof_paid,
+        "current_step": current_step,
+        "offer_observation": get_i18n(offer, 'observation', ""),
+        "offer_description": get_i18n(offer, 'description', ""),
+        "asset_description": get_i18n(asset, 'description', ""),
+        "asset_observation": get_i18n(asset, 'observations', ""),
+        "buyer_country_name": buyer_country_name,
+        "category_name": category_name,
+    }
+    return ctx
+
+
+class OfferApprovalWizardPageView(LoginRequiredMixin, TemplateView):
+    """
+    Página contenedora: carga el shell y, vía JS, inyecta el parcial del wizard.
+    """
+    template_name = "dashboard/pages/buyers/wizard/offer_wizard_page.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        offer = get_object_or_404(OfferModel, id=self.kwargs.get("id"))
+        ctx["offer"] = offer
+
+        # Reutiliza tu helper para obtener los nombres localizados
+        wizard_ctx = build_wizard_context(self.request, offer)
+        ctx.update({
+            "buyer_country_name": wizard_ctx["buyer_country_name"],
+            "category_name": wizard_ctx["category_name"],
+            "offer_observation": wizard_ctx["offer_observation"],
+            "offer_description": wizard_ctx["offer_description"],
+            "asset_description": wizard_ctx["asset_description"],
+            "asset_observation": wizard_ctx["asset_observation"],
+        })
+        get_token(self.request)
+        return ctx
+
+
+class OfferApprovalWizardPartialView(LoginRequiredMixin, TemplateView):
+    """
+    Devuelve SOLO el HTML del wizard (parcial) para ser inyectado por fetch().
+    """
+    template_name = "dashboard/pages/buyers/wizard/partials/_offer_approval_wizard.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        offer = get_object_or_404(OfferModel, id=self.kwargs.get("id"))
+        return build_wizard_context(self.request, offer)
+
+
+class OfferApprovalWizardActionView(LoginRequiredMixin, View):
+    """
+    Recibe POST con {'step': '...'}; aplica la transición y retorna el parcial actualizado.
+    """
+    http_method_names = ["post"]
+
+    def post(self, request, *args, **kwargs):
+        offer = get_object_or_404(OfferModel, id=kwargs.get("id"))
+        step = (request.POST.get("step") or "").strip().upper()
+
+        try:
+            self._apply_step(offer, request.user, step)
+        except ValidationError as ve:
+            return JsonResponse({"ok": False, "errors": [str(e) for e in ve.error_list]}, status=400)
+        except PermissionError as pe:
+            return JsonResponse({"ok": False, "errors": [str(pe)]}, status=403)
+        except Exception as e:
+            return JsonResponse({"ok": False, "errors": [str(e)]}, status=400)
+        
+        # Re-render: wizard + timeline
+        ctx = build_wizard_context(request, offer)
+        wizard_html = render_to_string(
+            "dashboard/pages/buyers/wizard/partials/_offer_approval_wizard.html",
+            ctx,
+            request=request,
+        )
+        timeline_html = render_to_string(
+            "dashboard/pages/buyers/partials/timeline/_timeline_wrapper.html",
+            {"offer": offer},
+            request=request,
+        )
+        return JsonResponse({"ok": True, "html": wizard_html, "timeline_html": timeline_html})
+
+    # ---- Helpers de permisos y transición ----
+    def _require_perm(self, user, codename: str):
+        """
+        Acepta superusers/staff, o el permiso/grupo custom que ya definiste en Meta.permissions.
+        """
+        if user.is_superuser or user.is_staff:
+            return
+        if not user.has_perm(f"buyers.{codename}"):
+            raise PermissionError(
+                _("You don't have permission to perform this action.")
+            )
+
+    def _apply_step(self, offer: OfferModel, user, step: str):
+        """
+        Mapea el 'step' pedido desde el front con la transición del modelo.
+        """
+        step = step.upper()
+
+        if step == "REVIEW":
+            self._require_perm(user, "can_review_offer")
+            offer.reviewed = True
+            offer.reviewed_by = user
+            offer.save()
+
+        elif step == "APPROVE":
+            self._require_perm(user, "can_approve_offer")
+            # Requiere reviewed True (tu modelo ya lo valida)
+            offer.is_approved = True
+            offer.approved_by = user
+            offer.save()
+
+        elif step == "SO_SEND":
+            self._require_perm(user, "can_send_service_order")
+            offer.mark_service_order_sent(user)
+
+        elif step == "PAY_CREATE":
+            self._require_perm(user, "can_create_payment_order")
+            offer.mark_payment_order_created(user)
+
+        elif step == "PAY_SEND":
+            self._require_perm(user, "can_send_payment_order")
+            offer.mark_payment_order_sent(user)
+
+        elif step == "POSSESSION":
+            self._require_perm(user, "can_set_asset_possession")
+            offer.mark_asset_in_possession(user)
+
+        elif step == "ASSET_SEND":
+            self._require_perm(user, "can_send_asset")
+            offer.mark_asset_sent(user)
+
+        elif step == "PROFIT_CREATE":
+            self._require_perm(user, "can_set_profitability")
+            offer.mark_profitability_created(user)
+
+        elif step == "PROFIT_PAY":
+            self._require_perm(user, "can_pay_profitability")
+            offer.mark_profitability_paid(user)
+
+        else:
+            raise ValidationError(_("Unknown step."))

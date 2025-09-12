@@ -48,6 +48,9 @@ class ChatGPTAPI:
         Traduce un texto de src → dst usando el Responses API.
         Solo devuelve el texto traducido (sin extras).
         """
+        if settings.DEBUG:
+            return src
+
         if not text:
             return ""
 

@@ -146,29 +146,30 @@ def generate_service_order_pdf(offer, user):
     elements.append(Spacer(1, 20))
 
     # ---------------- OBSERVACIONES ----------------
-    obs_data = [["Observaciones - Descripción"]]
+    if offer.es_observation or offer.es_description:
+        obs_data = [["Observaciones - Descripción"]]
     
-    if offer.observation:
-        obs_text = ""
-        if offer.observation:
-            obs_text += f"{offer.observation}<br/>"
-        obs_data.append([Paragraph(obs_text, styles["Normal"])])
+        if offer.es_observation:
+            obs_text = ""
+            if offer.es_observation:
+                obs_text += f"{offer.es_observation}<br/>"
+            obs_data.append([Paragraph(obs_text, styles["Normal"])])
 
-    if offer.description:
-        desc_text = ""
-        if offer.description:
-            desc_text += f"{offer.description}<br/>"
-        obs_data.append([Paragraph(desc_text, styles["Normal"])])
+        if offer.es_description:
+            desc_text = ""
+            if offer.es_description:
+                desc_text += f"{offer.es_description}<br/>"
+            obs_data.append([Paragraph(desc_text, styles["Normal"])])
 
-    # Tabla Observations independiente
-    obs_table = Table(obs_data, colWidths=[550])  # ancho total
-    obs_table.setStyle(TableStyle([
-        ("GRID", (0, 0), (-1, -1), 0.5, colors.black),
-        ("VALIGN", (0, 0), (-1, -1), "TOP"),
-        ("FONTNAME", (0, 0), (0, 0), "Helvetica-Bold"),  # título en negrilla
-    ]))
-    elements.append(obs_table)
-    elements.append(Spacer(1, 10))
+        # Tabla Observations independiente
+        obs_table = Table(obs_data, colWidths=[550])  # ancho total
+        obs_table.setStyle(TableStyle([
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.black),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+            ("FONTNAME", (0, 0), (0, 0), "Helvetica-Bold"),  # título en negrilla
+        ]))
+        elements.append(obs_table)
+        elements.append(Spacer(1, 10))
 
     # ---------------- QUANTITY + TOTAL VALUE ----------------
     qt_data = [

@@ -13,8 +13,8 @@
 {% endblock %}
 
 {% block main_layout %}
-  {# ===== URLs y assets reutilizables ===== #}
-  {% url 'buyers:buyer_index' as purchase_orders_url %}
+    {# ===== URLs y assets reutilizables ===== #}
+    {% url 'buyers:buyer_index' as purchase_orders_url %}
     {% url 'buyers:buyer_create' as add_purchase_order_url %}
     {% url 'assets:create' as add_asset_url %}
 
@@ -73,6 +73,7 @@
           <div class="card-header" style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
             <h4 class="text-center text-dark">{% trans 'Timeline' %}</h4>
           </div>
+          
           <div class="card-body">
             <div class="timeline">
               {# ---- Purchase Order ---- #}
@@ -102,7 +103,7 @@
   </div>
 {% endblock %}
 
-{# ===== JS (si lo necesitas luego) ===== #}
+{# ===== JS ===== #}
 {% block body_custom_js %}
   <script>
     document.addEventListener('DOMContentLoaded', function () {

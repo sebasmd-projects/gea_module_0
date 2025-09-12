@@ -1,3 +1,4 @@
+# apps.project.specific.assets_management.buyers.models.py
 import logging
 import os
 import uuid
@@ -5,6 +6,7 @@ from datetime import date
 
 from auditlog.registry import auditlog
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.db.models import Q
@@ -683,8 +685,8 @@ class OfferModel(TimeStampedModel):
 
     class Meta:
         db_table = "apps_buyers_offer"
-        verbose_name = _("1. Purchase order")
-        verbose_name_plural = _("1. Purchase orders")
+        verbose_name = _("Purchase order")
+        verbose_name_plural = _("Purchase orders")
         ordering = ["default_order", "-created"]
         permissions = [
             ("can_approve_offer", _("Can approve purchase orders")),

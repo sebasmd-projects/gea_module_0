@@ -1,0 +1,11 @@
+{# templates/dashboard/pages/buyers/partials/timeline/_timeline_wrapper.html #}
+<div class="timeline">
+  {% include 'dashboard/pages/buyers/partials/timeline/_purchase_order.html' with offer=offer %}
+  {% include 'dashboard/pages/buyers/partials/timeline/_service_order.html' with offer=offer %}
+  {% if request.user.is_buyer or request.user.is_superuser %}
+    {% include 'dashboard/pages/buyers/partials/timeline/_payment_order.html' with offer=offer %}
+    {% include 'dashboard/pages/buyers/partials/timeline/_asset_sent.html' with offer=offer %}
+    {% include 'dashboard/pages/buyers/partials/timeline/_profitability.html' with offer=offer %}
+  {% endif %}
+  {% include 'dashboard/pages/buyers/partials/timeline/_end.html' with offer=offer %}
+</div>
