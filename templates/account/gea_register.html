@@ -68,16 +68,31 @@
           </div>
 
           <div class="col-12">
+            {# 1) Cuerpo del correo traducido y luego URL-encode #}
+            {% blocktrans asvar mail_body %}
+            Please complete the following information:
+
+            First Names*:
+            Last Names*:
+            Cellphone*:
+
+            If you do not provide this information, we will not be able to generate your unique code.
+            {% endblocktrans %}
+
+            {# 2) Asunto del correo (opcional usar asvar) #}
+            {% blocktrans asvar mail_subject %}Request for unique code – GEA{% endblocktrans %}
+
+            {# 3) Mensaje de WhatsApp en español (como pediste antes) y luego URL-encode #}
+            {% blocktrans asvar wa_body_es %}Hello, I would like to request the unique code to register with GEA.{% endblocktrans %}
+
             <small class="form-text text-muted">
               {% trans 'You must request your unique registration code through:' %}
-              <a href="https://wa.me/573012283818?text={% trans 'Hello,%20I%20would%20like%20to%20request%20the%20unique%20code%20to%20register%20in%20GEA.' %}" 
-                target="_blank">
+
+              <a href="https://wa.me/573012283818?text={{ wa_body_es|urlencode }}" target="_blank">
                 <i class="mx-1 fa-brands fa-whatsapp text-green"></i> +57 301 228 38 18
               </a>
               |
-              <a href="mailto:info@globalallianceusa.com
-                        ?subject={% trans 'Request for unique code – GEA' %}
-                        &body={% blocktrans %}Please complete the following information:%0A%0AFirst Names*:%0ALast Names*:%0ACellphone*:%0A%0AIf you do not provide this information, we will not be able to generate your unique code.{% endblocktrans %}">
+              <a href="mailto:info@globalallianceusa.com?subject={{ mail_subject|urlencode }}&body={{ mail_body|urlencode }}">
                 info@globalallianceusa.com
               </a>
             </small>

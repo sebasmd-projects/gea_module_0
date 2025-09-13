@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-13 03:36-0500\n"
-"PO-Revision-Date: 2025-09-13 03:38-0500\n"
+"POT-Creation-Date: 2025-09-13 11:49-0500\n"
+"PO-Revision-Date: 2025-09-13 11:51-0500\n"
 "Last-Translator: Sebastian Morales <juan.sebasm2@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -53,34 +53,49 @@ msgid "Unique Code"
 msgstr "Código Único"
 
 #: .\templates\account\gea_register.html:72
-msgid "You must request your unique registration code through:"
-msgstr "Debes solicitar tu código único de registro a través de:"
-
-#: .\templates\account\gea_register.html:73
-#, python-format
+#| msgid ""
+#| "Please complete the following information:%%0A%%0AFirst Names*:%%0ALast "
+#| "Names*:%%0ACellphone*:%%0A%%0AIf you do not provide this information, we "
+#| "will not be able to generate your unique code."
 msgid ""
-"Hello,%%20I%%20would%%20like%%20to%%20request%%20the%%20unique%%20code%%20to%%20register%%20in%%20GEA."
+"\n"
+"            Please complete the following information:\n"
+"\n"
+"            First Names*:\n"
+"            Last Names*:\n"
+"            Cellphone*:\n"
+"\n"
+"            If you do not provide this information, we will not be able to generate your unique code.\n"
+"            "
 msgstr ""
-"Hola,%20quisiera%20solicitar%20el%20código%20único%20para%20registrarme%20en%20GEA."
+"\n"
+"Por favor, complete la siguiente información:\n"
+"\n"
+"Nombre*:\n"
+"Apellidos*:\n"
+"Teléfono celular*:\n"
+"\n"
+"Si no proporciona esta información, no podremos generar su código único."
 
-#: .\templates\account\gea_register.html:79
+#: .\templates\account\gea_register.html:83
 msgid "Request for unique code – GEA"
 msgstr "Solicitud de código único – GEA"
 
-#: .\templates\account\gea_register.html:80
-#, python-format
-msgid ""
-"Please complete the following information:%%0A%%0AFirst Names*:%%0ALast "
-"Names*:%%0ACellphone*:%%0A%%0AIf you do not provide this information, we "
-"will not be able to generate your unique code."
-msgstr ""
-"Por%20favor%20complete%20la%20siguiente%20información:%0A%0ANombres*:%0AApellidos*:%0ACelular*:%0A%0ASi%20no%20proporciona%20esta%20información,%20no%20podremos%20generar%20su%20código%20único."
+#: .\templates\account\gea_register.html:86
+#| msgid ""
+#| "Hello,%%20I%%20would%%20like%%20to%%20request%%20the%%20unique%%20code%%20to%%20register%%20in%%20GEA."
+msgid "Hello, I would like to request the unique code to register with GEA."
+msgstr "Hello, I would like to request the unique code to register with GEA."
 
 #: .\templates\account\gea_register.html:89
+msgid "You must request your unique registration code through:"
+msgstr "Debes solicitar tu código único de registro a través de:"
+
+#: .\templates\account\gea_register.html:104
 msgid "Register"
 msgstr "Registro"
 
-#: .\templates\account\gea_register.html:91
+#: .\templates\account\gea_register.html:106
 msgid "Do you already have an account? Sign in"
 msgstr "¿Ya tienes una cuenta? Iniciar sesión"
 
@@ -898,17 +913,14 @@ msgid "Send notification"
 msgstr "Enviar notificación"
 
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:234
-#| msgid "Send"
 msgid "Send to"
 msgstr "Enviar a"
 
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:248
-#| msgid "Not created yet"
 msgid "No recipients yet"
 msgstr "Aún no hay destinatarios"
 
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:268
-#| msgid "Send Payment Order"
 msgid "Send Notification for Payment Order"
 msgstr "Enviar notificación de Orden de Pago"
 
@@ -918,7 +930,6 @@ msgid "Mark as created"
 msgstr "Marcar como creado"
 
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:289
-#| msgid "Payment Order"
 msgid "Payment Order Paid"
 msgstr "Orden de Pago Pagada"
 
@@ -1290,37 +1301,30 @@ msgid "Purchase Order Submitted"
 msgstr "Orden de compra Guardada"
 
 #: .\templates\email\service_order_email_template.html:80
-#| msgid "Service Order Created"
 msgid "Service Order Generated"
 msgstr "Orden de Servicio Generada"
 
 #: .\templates\email\service_order_email_template.html:85
-#| msgid "Sent at"
 msgid "Sent"
 msgstr "Enviado"
 
 #: .\templates\email\service_order_email_template.html:95
-#| msgid "Service Order Sent"
 msgid "Service Order Details"
 msgstr "Detalles de la Orden de Servicio"
 
 #: .\templates\email\service_order_email_template.html:103
-#| msgid "Quantity Type"
 msgid "Quantity"
 msgstr "Cantidad"
 
 #: .\templates\email\service_order_email_template.html:106
-#| msgid "Country of Purchase"
 msgid "Country of purchase"
 msgstr "País de compra"
 
 #: .\templates\email\service_order_email_template.html:111
-#| msgid "Observaciones y Descripción"
 msgid "Observations and Description"
 msgstr "Observaciones y Descripción"
 
 #: .\templates\email\service_order_email_template.html:116
-#| msgid "Description"
 msgid "Descriptions"
 msgstr "Descripciones"
 
