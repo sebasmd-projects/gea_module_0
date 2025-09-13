@@ -1,9 +1,14 @@
 from django import forms
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.utils.translation import get_language
 from django_select2 import forms as s2forms
 
-from .models import OfferModel
 from apps.project.specific.assets_management.assets.models import AssetModel
+
+from .models import OfferModel, ServiceOrderRecipient
+
+UserModel = get_user_model()
 
 
 class AssetNameWidget(s2forms.ModelSelect2Widget):
@@ -118,3 +123,23 @@ class OfferUpdateForm(forms.ModelForm):
         widgets = {
             "buyer_country": CountryWidget,
         }
+
+
+class ServiceOrderRecipientsForm(forms.Form):
+    users = forms.ModelMultipleChoiceField(
+        queryset=UserModel.objects.filter(is_active=True),
+        required=False
+    )
+    user_types = forms.MultipleChoiceField(
+        choices=UserModel.UserTypeChoices.choices,
+        required=False
+    )
+
+    def save(self, offer, added_by):
+        objs = []
+        for u in self.cleaned_data.get("users") or []:
+            objs.append(ServiceOrderRecipient(offer=offer, user=u, added_by=added_by))
+        for ut in self.cleaned_data.get("user_types") or []:
+            objs.append(ServiceOrderRecipient(offer=offer, user_type=ut, added_by=added_by))
+        if objs:
+            ServiceOrderRecipient.objects.bulk_create(objs, ignore_conflicts=True)

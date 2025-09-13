@@ -18,10 +18,10 @@ from apps.common.utils.models import TimeStampedModel
 
 class UserModel(TimeStampedModel, AbstractUser):
     class UserTypeChoices(models.TextChoices):
-        BUYER = 'B', _('Buyer')
-        HOLDER = 'H', _('Holder')
-        REPRESENTATIVE = 'R', _('Representative')
         INTERMEDIARY = 'I', _('Intermediary')
+        REPRESENTATIVE = 'R', _('Representative')
+        HOLDER = 'H', _('Holder')
+        BUYER = 'B', _('Buyer')
 
     NOT_INCLUDE_USER_TYPE_CHOICES = {UserTypeChoices.BUYER}
 
@@ -99,7 +99,7 @@ class UserModel(TimeStampedModel, AbstractUser):
         return self.user_type == type(self).UserTypeChoices.BUYER
 
     def __str__(self) -> str:
-        return f"{self.get_full_name()} ({self.username})"
+        return f"({self.user_type}) {self.get_full_name()} ({self.username})"
 
     def save(self, *args, **kwargs):
         email = self.email.lower().strip()

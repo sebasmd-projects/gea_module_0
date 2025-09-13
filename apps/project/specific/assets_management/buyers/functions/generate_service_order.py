@@ -148,7 +148,7 @@ def generate_service_order_pdf(offer, user):
     # ---------------- OBSERVACIONES ----------------
     if offer.es_observation or offer.es_description:
         obs_data = [["Observaciones - Descripción"]]
-    
+
         if offer.es_observation:
             obs_text = ""
             if offer.es_observation:

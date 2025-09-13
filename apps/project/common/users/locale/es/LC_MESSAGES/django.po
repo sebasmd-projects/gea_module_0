@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-09 18:14-0500\n"
+"POT-Creation-Date: 2025-09-13 03:23-0500\n"
 "PO-Revision-Date: 2025-08-27 12:15-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,20 +48,20 @@ msgid "Names"
 msgstr "Nombres"
 
 #: .\apps\project\common\users\models.py:21
-msgid "Buyer"
-msgstr "Compra"
+msgid "Intermediary"
+msgstr "Facilitador "
 
 #: .\apps\project\common\users\models.py:22
-msgid "Holder"
-msgstr "Tenedor"
-
-#: .\apps\project\common\users\models.py:23
 msgid "Representative"
 msgstr "Representante "
 
+#: .\apps\project\common\users\models.py:23
+msgid "Holder"
+msgstr "Tenedor"
+
 #: .\apps\project\common\users\models.py:24
-msgid "Intermediary"
-msgstr "Facilitador "
+msgid "Buyer"
+msgstr "Compra"
 
 #: .\apps\project\common\users\models.py:46
 msgid "names"

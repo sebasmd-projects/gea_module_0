@@ -61,12 +61,12 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>ID</th>
                                     <th>{% trans 'Asset' %}</th>
                                     <th>{% trans 'Purchase order Type' %}</th>
                                     <th>{% trans 'Quantity Type' %}</th>
                                     <th>{% trans 'Quantity Needed' %}</th>
                                     <th>{% trans 'Country' %}</th>
-                                    <th>{% trans 'Total value of the offer ($ USD)' %}</th>
                                     <th>{% trans 'Status' %}</th>
                                     <th>{% trans 'Actions' %}</th>
                                 </tr>
@@ -77,13 +77,21 @@
                                 {% if offer.display %}
                                 <tr data-offer-row="{{ offer.id }}">
                                     <td>{{ forloop.counter }}</td>
+                                    <td>
+                                        <button type="button"
+                                                class="btn btn-link p-0 uuid-toggle"
+                                                data-full="{{ offer.id|stringformat:'s' }}"
+                                                data-short="{{ offer.id|stringformat:'s'|slice:':8' }}"
+                                                aria-label="{% trans 'Show full ID' %}">
+                                            <code class="uuid-text">{{ offer.id|stringformat:'s'|slice:':8' }}</code>
+                                        </button>
+                                    </td>
                                     <td>{{ offer.asset_display_name }}</td>
                                     <td>{{ offer.get_offer_type_display }}</td>
                                     <td>{{ offer.get_quantity_type_display }}</td>
                                     <td>{{ offer.offer_quantity }}</td>
                                     <td>{{ offer.buyer_country.get_continent_display }} -
                                         {{ offer.buyer_country.es_country_name }}</td>
-                                    <td>{{ offer.offer_amount|currency }}</td>
                                     <td>
                                         <i class="{{ offer.status_icon }} mx-1" style="color: {{ offer.status_color }};" title="{{ offer.status_label }}"></i>
                                         <span style="color: {{ offer.status_color }};">{{ offer.status_label }}</span>
@@ -459,6 +467,26 @@
                 });
             });
         })();
+    </script>
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.uuid-toggle').forEach(function (btn) {
+            const code = btn.querySelector('.uuid-text');
+            const full = btn.getAttribute('data-full');
+            const shortV = btn.getAttribute('data-short');
+            let expanded = false;
+
+            btn.addEventListener('click', function () {
+                expanded = !expanded;
+                code.textContent = expanded ? full : shortV;
+                btn.setAttribute('aria-label', expanded ? "{{ _('Hide full ID')|default:'Hide full ID' }}" 
+                                                        : "{{ _('Show full ID')|default:'Show full ID' }}");
+            });
+            });
+        });
     </script>
 {% endblock %}
 

@@ -5,7 +5,8 @@ from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportActionModelAdmin
 
 from apps.project.common.users.models import UserModel
-from apps.project.specific.assets_management.buyers.models import OfferModel
+from apps.project.specific.assets_management.buyers.models import (
+    OfferModel, ServiceOrderRecipient)
 
 
 @admin.register(OfferModel)
@@ -23,8 +24,11 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
         "asset_sent_by",
         "profitability_created_by",
         "profitability_paid_by",
+        "recovery_repatriation_foundation_mark_by",
+        "am_pro_service_mark_by",
+        "propensiones_mark_by",
     )
-    
+
     list_display = (
         "created_by",
         "asset",
@@ -37,6 +41,10 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
         "display",
         "is_approved",
         "reviewed",
+        "profitability_all_paid",
+        "recovery_repatriation_foundation_paid",
+        "am_pro_service_paid",
+        "propensiones_paid",
     )
 
     list_filter = (
@@ -47,6 +55,9 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
         "offer_type",
         "quantity_type",
         "buyer_country",
+        "recovery_repatriation_foundation_paid",
+        "am_pro_service_paid",
+        "propensiones_paid",
         ("created", admin.DateFieldListFilter),
         ("updated", admin.DateFieldListFilter),
     )
@@ -80,6 +91,9 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
         "asset_sent_at",
         "profitability_created_at",
         "profitability_paid_at",
+        "recovery_repatriation_foundation_mark_at",
+        "am_pro_service_mark_at",
+        "propensiones_mark_at",
     )
 
     fieldsets = (
@@ -142,6 +156,23 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
             ),
             "classes": ("collapse",),
         }),
+        (_("Profitability - Sub Payments"), {
+            "fields": (
+                # Recovery Repatriation Foundation
+                "recovery_repatriation_foundation_paid",
+                "recovery_repatriation_foundation_mark_by",
+                "recovery_repatriation_foundation_mark_at",
+                # AM PRO Service
+                "am_pro_service_paid",
+                "am_pro_service_mark_by",
+                "am_pro_service_mark_at",
+                # Propensiones
+                "propensiones_paid",
+                "propensiones_mark_by",
+                "propensiones_mark_at",
+            ),
+            "classes": ("collapse",),
+        }),
         (_("Profitability"), {
             "fields": (
                 "profitability_created_by",
@@ -159,7 +190,7 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
             "classes": ("collapse",),
         }),
     )
-    
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         # Aprobación
         if db_field.name == "approved_by":
@@ -227,4 +258,43 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
                 models.Q(groups__permissions__codename="can_pay_profitability")
             ).distinct()
 
+        # --- NUEVOS: limitamos quién puede marcar subpagos ---
+        if db_field.name in {
+            "recovery_repatriation_foundation_mark_by",
+            "am_pro_service_mark_by",
+            "propensiones_mark_by",
+        }:
+            kwargs["queryset"] = UserModel.objects.filter(
+                models.Q(is_superuser=True) |
+                models.Q(user_permissions__codename="can_pay_profitability") |
+                models.Q(groups__permissions__codename="can_pay_profitability")
+            ).distinct()
+
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+@admin.register(ServiceOrderRecipient)
+class ServiceOrderRecipientAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
+    list_display = (
+        "id",
+        "offer",
+        "user",
+        "user_type",
+        "added_by",
+        "created",
+        "updated",
+    )
+
+    search_fields = (
+        "offer__id",
+        "offer__asset__asset_name__es_name",
+        "offer__asset__asset_name__en_name",
+        "user__username",
+        "user__email",
+        "added_by__username",
+        "added_by__email",
+    )
+
+    list_filter = (
+        "is_active",
+    )

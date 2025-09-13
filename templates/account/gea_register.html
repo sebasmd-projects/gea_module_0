@@ -10,10 +10,9 @@
 {% endblock %}
 
 {% block layout_content %}
-<div class="d-flex align-items-center justify-content-center container-xl px-5 min-vh-100">
+<div class="d-flex align-items-center justify-content-center container-xl min-vh-100">
   <div class="card mx-auto" style="max-width: 600px; width: 100%;">
-
-    <div class="card-header text-center my-2">
+    <div class="card-header text-center">
       <a href="{% url 'core:index' %}">
         <img src="https://globalallianceusa.com/gea/public/static/assets/imgs/logos/gea_logo_gold.webp"
           class="card-img-top img-fluid" alt="GEA" />
@@ -34,7 +33,7 @@
         </div>
         {% endif %}
 
-        <div class="row g-3">
+        <div class="row g-1">
           {% with "account/partials/_floating_input.html" as floating_input %}
           <div class="col-md-6">
             {% include floating_input with field=form.username label=_("Username") %}
@@ -68,23 +67,35 @@
             {% include floating_input with field=form.unique_code label=_("Unique Code") show_eye=True eye_target_id="register_unique_code" %}
           </div>
 
+          <div class="col-12">
+            <small class="form-text text-muted">
+              {% trans 'You must request your unique registration code through:' %}
+              <a href="https://wa.me/573012283818?text={% trans 'Hello,%20I%20would%20like%20to%20request%20the%20unique%20code%20to%20register%20in%20GEA.' %}" 
+                target="_blank">
+                <i class="mx-1 fa-brands fa-whatsapp text-green"></i> +57 301 228 38 18
+              </a>
+              |
+              <a href="mailto:info@globalallianceusa.com
+                        ?subject={% trans 'Request for unique code – GEA' %}
+                        &body={% blocktrans %}Please complete the following information:%0A%0AFirst Names*:%0ALast Names*:%0ACellphone*:%0A%0AIf you do not provide this information, we will not be able to generate your unique code.{% endblocktrans %}">
+                info@globalallianceusa.com
+              </a>
+            </small>
+          </div>
           {% endwith %}
         </div>
 
-        <div class="d-grid gap-2 mt-3">
+        <div class="d-grid gap-2 mt-2">
           <button type="submit" class="btn btn-success">{% trans 'Register' %}</button>
           <a class="btn btn-outline-dark" href="{% url 'two_factor:login' %}">
             {% trans 'Do you already have an account? Sign in' %}
           </a>
         </div>
-
       </form>
     </div>
-
   </div>
 </div>
 {% endblock %}
-
 
 {% block body_custom_js %}
 <script>

@@ -86,149 +86,368 @@
       try {
         if (window.feather && typeof window.feather.replace === 'function') {
           // Reemplaza íconos en el próximo frame para asegurar que el DOM ya está en su lugar
-          requestAnimationFrame(() => window.feather.replace({ 'stroke-width': 1.5, focusable: false }));
+          requestAnimationFrame(() => window.feather.replace({ 'stroke-width': 1.5, focusable: false }))
         } else {
           // Si aún no cargó feather, reintenta al próximo tick
-          setTimeout(mountFeather, 50);
+          setTimeout(mountFeather, 50)
         }
       } catch (e) {
         // Silencioso: no bloquees el flujo si falla
-        console.warn('Feather mount error:', e);
+        console.warn('Feather mount error:', e)
       }
     }
-
+    
     function getCookie(name) {
-      const v = `; ${document.cookie}`.split(`; ${name}=`);
-      if (v.length === 2) return v.pop().split(';').shift();
+      const v = `; ${document.cookie}`.split(`; ${name}=`)
+      if (v.length === 2) return v.pop().split(';').shift()
     }
-    const csrftoken = getCookie('csrftoken');
-
-    const PARTIAL_URL = "{% url 'buyers:offer_wizard_partial' offer.id %}";
-    const ACTION_URL = "{% url 'buyers:offer_wizard_action'  offer.id %}";
-
+    const csrftoken = getCookie('csrftoken')
+    
+    const PARTIAL_URL = "{% url 'buyers:offer_wizard_partial' offer.id %}"
+    const ACTION_URL = "{% url 'buyers:offer_wizard_action'  offer.id %}"
+    
     async function loadWizard() {
-      const shell = document.getElementById('wizard-shell');
+      const shell = document.getElementById('wizard-shell')
       try {
-        const resp = await fetch(PARTIAL_URL, { credentials: 'same-origin' });
-        const html = await resp.text();
-        shell.innerHTML = html;
-        wireWizard();
-        mountFeather(); // <-- monta feather después de inyectar el wizard
+        const resp = await fetch(PARTIAL_URL, { credentials: 'same-origin' })
+        const html = await resp.text()
+        shell.innerHTML = html
+        wireWizard()
+        mountFeather() // <-- monta feather después de inyectar el wizard
       } catch (e) {
-        shell.innerHTML = `<div class="alert alert-danger">Error loading wizard</div>`;
+        shell.innerHTML = `<div class="alert alert-danger">Error loading wizard</div>`
       }
     }
-
+    
     function wireWizard() {
       // Acciones (data-wizard-step)
       document.querySelectorAll('[data-wizard-step]').forEach((btn) => {
         btn.addEventListener('click', async (ev) => {
-          ev.preventDefault();
-          if (btn.classList.contains('disabled') || btn.disabled) return;
-          btn.disabled = true;
-
-          const fd = new FormData();
-          fd.append('step', btn.getAttribute('data-wizard-step'));
+          ev.preventDefault()
+          if (btn.classList.contains('disabled') || btn.disabled) return
+          btn.disabled = true
+    
+          const fd = new FormData()
+          fd.append('step', btn.getAttribute('data-wizard-step'))
           try {
             const resp = await fetch(ACTION_URL, {
               method: 'POST',
               body: fd,
               headers: { 'X-CSRFToken': csrftoken },
               credentials: 'same-origin'
-            });
-            const payload = await resp.json();
+            })
+            const payload = await resp.json()
             if (!resp.ok || !payload.ok) {
-              showToast(payload && payload.errors ? payload.errors.join('<br>') : 'Unknown error', 'danger');
+              showToast(payload && payload.errors ? payload.errors.join('<br>') : 'Unknown error', 'danger')
             } else {
               // Reemplaza el wizard HTML
-              document.getElementById('wizard-shell').innerHTML = payload.html;
-              wireWizard(); // reata eventos tras re-render
-              showToast("{{ _('Updated successfully') }}", 'success');
-
+              document.getElementById('wizard-shell').innerHTML = payload.html
+              wireWizard() // reata eventos tras re-render
+              showToast("{{ _('Updated successfully') }}", 'success')
+    
               // Refresca timeline si vino en la respuesta
               if (payload.timeline_html) {
-                const ts = document.getElementById('timeline-shell');
+                const ts = document.getElementById('timeline-shell')
                 if (ts) {
-                  ts.innerHTML = payload.timeline_html;
+                  ts.innerHTML = payload.timeline_html
                 }
               }
-
+    
               // Tras cualquier reemplazo de HTML, vuelve a montar feather
-              mountFeather();
+              mountFeather()
             }
           } catch (e) {
-            showToast('Network error', 'danger');
+            showToast('Network error', 'danger')
           } finally {
-            btn.disabled = false;
+            btn.disabled = false
           }
-        });
-      });
-
+        })
+      })
+    
       document.querySelectorAll('[data-wizard-next]').forEach((btn) => {
-        btn.addEventListener('click', () => moveTab(1));
-      });
+        btn.addEventListener('click', () => moveTab(1))
+      })
       document.querySelectorAll('[data-wizard-prev]').forEach((btn) => {
-        btn.addEventListener('click', () => moveTab(-1));
-      });
-
+        btn.addEventListener('click', () => moveTab(-1))
+      })
+    
       function moveTab(delta) {
-        const tabs = [...document.querySelectorAll('#wizardTab .step-item-link')];
-        let currentIdx = tabs.findIndex((t) => t.classList.contains('active'));
+        const tabs = [...document.querySelectorAll('#wizardTab .step-item-link')]
+        let currentIdx = tabs.findIndex((t) => t.classList.contains('active'))
         if (currentIdx === -1) {
-          const activePane = document.querySelector('#cardTabContent .tab-pane.active');
+          const activePane = document.querySelector('#cardTabContent .tab-pane.active')
           if (activePane) {
-            const id = activePane.getAttribute('id');
-            currentIdx = tabs.findIndex((t) => (t.getAttribute('href') || '').endsWith('#' + id));
+            const id = activePane.getAttribute('id')
+            currentIdx = tabs.findIndex((t) => (t.getAttribute('href') || '').endsWith('#' + id))
           }
         }
-        if (currentIdx === -1) return;
-
-        const target = currentIdx + delta;
-        if (target < 0 || target >= tabs.length) return;
-        if (tabs[target].classList.contains('disabled')) return;
-
-        bootstrap.Tab.getOrCreateInstance(tabs[target]).show();
-
+        if (currentIdx === -1) return
+    
+        const target = currentIdx + delta
+        if (target < 0 || target >= tabs.length) return
+        if (tabs[target].classList.contains('disabled')) return
+    
+        bootstrap.Tab.getOrCreateInstance(tabs[target]).show()
+    
         // Al cambiar de tab, vuelve a montar por si hay nuevos data-feather en el pane
-        mountFeather();
+        mountFeather()
       }
-
+    
       // Evita clic en steps .disabled
       document.querySelectorAll('#wizardTab .step-item-link').forEach((link) => {
         link.addEventListener('click', (ev) => {
           if (link.classList.contains('disabled')) {
-            ev.preventDefault();
-            ev.stopPropagation();
+            ev.preventDefault()
+            ev.stopPropagation()
           }
-        });
-      });
-
+        })
+      })
+    
       // Monta feather después de atar eventos (por si el partial trae íconos nuevos)
-      mountFeather();
+      mountFeather()
     }
-
+    
     function showToast(message, type = 'info') {
-      const el = document.createElement('div');
-      el.className = `alert alert-${type}`;
-      el.innerHTML = message;
-      document.getElementById('wizard-shell').prepend(el);
-      setTimeout(() => el.remove(), 3500);
+      const el = document.createElement('div')
+      el.className = `alert alert-${type}`
+      el.innerHTML = message
+      document.getElementById('wizard-shell').prepend(el)
+      setTimeout(() => el.remove(), 3500)
     }
-
+    
     // --- OBSERVADOR DEL TIMELINE ---
     document.addEventListener('DOMContentLoaded', () => {
       // Carga inicial del wizard
-      loadWizard();
-
+      loadWizard()
+    
       // Observa cambios en el timeline y re-monta feather en cuanto cambie
-      const timelineShell = document.getElementById('timeline-shell');
+      const timelineShell = document.getElementById('timeline-shell')
       if (timelineShell && 'MutationObserver' in window) {
-        const obs = new MutationObserver(() => mountFeather());
-        obs.observe(timelineShell, { childList: true, subtree: true });
+        const obs = new MutationObserver(() => mountFeather())
+        obs.observe(timelineShell, { childList: true, subtree: true })
       }
-
+    
       // Primera pasada para los íconos presentes en el HTML inicial
-      mountFeather();
-    });
+      mountFeather()
+    })
+  </script>
+
+  <script>
+    function recipOptionExists(selectEl, value) {
+      return [...selectEl.options].some((o) => o.value === value)
+    }
+    
+    // quita de "Available" lo que ya esté en "Picked" (utilízalo al cargar)
+    function recipSyncAvailable() {
+      const avail = document.getElementById('recipient-available')
+      const picked = document.getElementById('recipient-picked')
+      if (!avail || !picked) return
+    
+      const pickedVals = new Set([...picked.options].map((o) => o.value))
+      // recorremos de atrás hacia adelante para poder borrar
+      for (let i = avail.options.length - 1; i >= 0; i--) {
+        const opt = avail.options[i]
+        if (!opt.disabled && pickedVals.has(opt.value)) {
+          avail.remove(i)
+        }
+      }
+    }
+    
+    // mover seleccionados desde Available -> Picked (sin duplicar)
+    function recipAddSelected() {
+      const avail = document.getElementById('recipient-available')
+      const picked = document.getElementById('recipient-picked')
+      if (!avail || !picked) return
+    
+      for (let i = avail.options.length - 1; i >= 0; i--) {
+        const opt = avail.options[i]
+        if (opt.selected && !opt.disabled) {
+          if (!recipOptionExists(picked, opt.value)) {
+            picked.add(opt) // mover DOM option: lo saca de avail y lo mete en picked
+          } else {
+            opt.selected = false // ya estaba
+          }
+        }
+      }
+    }
+    
+    // mover seleccionados desde Picked -> Available
+    function recipRemoveSelected() {
+      const avail = document.getElementById('recipient-available')
+      const picked = document.getElementById('recipient-picked')
+      if (!avail || !picked) return
+    
+      // inserción “simple”: se devuelven al final (después de usuarios)
+      for (let i = picked.options.length - 1; i >= 0; i--) {
+        const opt = picked.options[i]
+        if (opt.selected) {
+          if (!recipOptionExists(avail, opt.value)) {
+            avail.add(opt)
+          } else {
+            picked.remove(i)
+          }
+        }
+      }
+    }
+    
+    function recipBuildHiddenFields() {
+      const container = document.getElementById('recipient-hidden-fields')
+      container.innerHTML = ''
+      const picked = document.getElementById('recipient-picked')
+    
+      const users = []
+      const types = []
+    
+      ;[...picked.options].forEach((opt) => {
+        const [kind, val] = opt.value.split(':')
+        if (kind === 'user') users.push(val)
+        if (kind === 'type') types.push(val)
+      })
+    
+      users.forEach((id) => {
+        const i = document.createElement('input')
+        i.type = 'hidden'
+        i.name = 'users'
+        i.value = id
+        container.appendChild(i)
+      })
+      types.forEach((code) => {
+        const i = document.createElement('input')
+        i.type = 'hidden'
+        i.name = 'user_types'
+        i.value = code
+        container.appendChild(i)
+      })
+    }
+    
+    // submit via fetch (tu ACTION_URL ya existe)
+    async function submitWizardRecipients(formEl) {
+      if (event) event.preventDefault()
+      recipBuildHiddenFields()
+    
+      const btn = formEl.querySelector('button[type="submit"]')
+      if (btn) btn.disabled = true
+    
+      try {
+        const fd = new FormData(formEl)
+        const resp = await fetch(ACTION_URL, {
+          method: 'POST',
+          body: fd,
+          headers: { 'X-CSRFToken': csrftoken },
+          credentials: 'same-origin'
+        })
+        const payload = await resp.json()
+        if (!resp.ok || !payload.ok) {
+          showToast(payload && payload.errors ? payload.errors.join('<br>') : 'Error', 'danger')
+          return false
+        }
+        // Re-render completo del wizard (ya viene depurado desde el servidor)
+        document.getElementById('wizard-shell').innerHTML = payload.html
+        if (payload.timeline_html) {
+          const ts = document.getElementById('timeline-shell')
+          if (ts) ts.innerHTML = payload.timeline_html
+        }
+        wireWizard()
+        mountFeather()
+        // por si el partial mantiene el dual list en el mismo tab:
+        recipSyncAvailable()
+    
+        showToast("{{ _('Recipients saved') }}", 'success')
+        return false
+      } catch (e) {
+        showToast('Network error', 'danger')
+        return false
+      } finally {
+        if (btn) btn.disabled = false
+      }
+    }
+    
+    // Llama a recipSyncAvailable() al cargar cada vez que se inyecte el partial
+    // (después de wireWizard/mountFeather)
+  </script>
+
+  <script>
+    async function recipRemovePersisted() {
+      const picked = document.getElementById('recipient-picked')
+      const selected = [...picked.options].filter((o) => o.selected)
+    
+      if (selected.length === 0) return
+    
+      const fd = new FormData()
+      fd.append('step', 'SO_REMOVE_RECIPIENTS')
+      selected.forEach((o) => fd.append('remove', o.value)) // "user:<id>" o "type:<code>"
+    
+      try {
+        const resp = await fetch(ACTION_URL, {
+          method: 'POST',
+          body: fd,
+          headers: { 'X-CSRFToken': csrftoken },
+          credentials: 'same-origin'
+        })
+        const payload = await resp.json()
+        if (!resp.ok || !payload.ok) {
+          showToast(payload && payload.errors ? payload.errors.join('<br>') : 'Error', 'danger')
+          return
+        }
+        document.getElementById('wizard-shell').innerHTML = payload.html
+        if (payload.timeline_html) {
+          const ts = document.getElementById('timeline-shell')
+          if (ts) ts.innerHTML = payload.timeline_html
+        }
+        wireWizard()
+        mountFeather()
+        showToast("{{ _('Recipients removed') }}", 'success')
+      } catch (e) {
+        showToast('Network error', 'danger')
+      }
+    }
+  </script>
+
+  <script>
+    async function soNotify() {
+      const btn = document.getElementById('soNotifyBtn')
+      if (btn) {
+        btn.disabled = true
+        btn.dataset.originalText = btn.innerText // store old label
+        btn.innerText = "{{ _('Sending emails...') }}"
+      }
+    
+      const fd = new FormData()
+      fd.append('step', 'SO_NOTIFY')
+    
+      try {
+        const resp = await fetch(ACTION_URL, {
+          method: 'POST',
+          body: fd,
+          headers: { 'X-CSRFToken': csrftoken },
+          credentials: 'same-origin'
+        })
+        const payload = await resp.json()
+    
+        if (!resp.ok || !payload.ok) {
+          showToast(payload && payload.errors ? payload.errors.join('<br>') : 'Error', 'danger')
+          if (btn) {
+            btn.disabled = false
+            btn.innerText = btn.dataset.originalText
+          }
+          return
+        }
+    
+        document.getElementById('wizard-shell').innerHTML = payload.html
+        if (payload.timeline_html) {
+          const ts = document.getElementById('timeline-shell')
+          if (ts) ts.innerHTML = payload.timeline_html
+        }
+        wireWizard()
+        mountFeather()
+        showToast("{{ _('Notification sent') }}", 'success')
+      } catch (e) {
+        showToast('Network error', 'danger')
+        if (btn) {
+          btn.disabled = false
+          btn.innerText = btn.dataset.originalText
+        }
+      }
+    }
   </script>
 {% endblock %}

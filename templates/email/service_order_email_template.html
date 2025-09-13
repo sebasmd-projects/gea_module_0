@@ -1,0 +1,139 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% trans 'Service Order' %}| GEA | GLOBAL ALLIANCE</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        text-align: center;
+      }
+      .header img {
+        height: 80px;
+      }
+      .header h1 {
+        margin: 10px 0 0 0;
+        font-size: 22px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .card {
+        border: 1px solid #eaeaea;
+        border-radius: 8px;
+        padding: 16px;
+        margin-top: 15px;
+      }
+      .section-title {
+        font-size: 16px;
+        margin: 0 0 10px 0;
+        color: #007bff;
+      }
+      .row {
+        margin: 6px 0;
+      }
+      .label {
+        font-weight: bold;
+      }
+      .footer {
+        text-align: center;
+        padding: 10px;
+        font-size: 12px;
+        color: #999;
+      }
+      .btn {
+        display: inline-block;
+        padding: 10px 16px;
+        border: 1px solid #007bff;
+        border-radius: 6px;
+        text-decoration: none;
+      }
+      hr {
+        border: none;
+        border-top: 1px solid #000;
+        margin: 2rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Encabezado -->
+      <div class="header">
+        <img src="cid:{{ logo_cid }}" alt="GEA Logo" style="height:80px;" />
+        <h1>{% trans 'Service Order Generated' %}</h1>
+        <div style="margin-top:6px;color:#666">
+          <small>
+            {{ po_short }} • {% trans 'Created' %}: {{ created_at|date:'d/m/Y H:i' }}
+            {% if sent_at %}
+              • {% trans 'Sent' %}: {{ sent_at|date:'d/m/Y H:i' }}
+            {% endif %}
+          </small>
+        </div>
+      </div>
+
+      <!-- Cuerpo -->
+      <div style="margin-top:20px">
+        <div class="grid">
+          <div class="card">
+            <h3 class="section-title">{% trans 'Service Order Details' %}</h3>
+            <div class="row">
+              <span class="label">{% trans 'Asset' %}:</span> {{ asset_es }}
+            </div>
+            <div class="row">
+              <span class="label">{% trans 'Quantity Type' %}:</span> {{ tipo_cantidad_es }}
+            </div>
+            <div class="row">
+              <span class="label">{% trans 'Quantity' %}:</span> {{ cantidad }}
+            </div>
+            <div class="row">
+              <span class="label">{% trans 'Country of purchase' %}:</span> {{ pais_comprador_es }}
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="section-title">{% trans 'Observations and Description' %}</h3>
+            <div class="row">
+              <span class="label">{% trans 'Observations' %}:</span> {{ obs_es|default:'—' }}
+            </div>
+            <div class="row">
+              <span class="label">{% trans 'Descriptions' %}:</span> {{ desc_es|default:'—' }}
+            </div>
+            <div class="row" style="margin-top:12px">
+              <a class="btn" href="{{ review_url }}">{% trans 'See details' %}</a>
+            </div>
+            <div class="row" style="margin-top:8px;color:#666">
+              <small>{% trans 'The PDF of the Service Order is attached.' %}</small>
+            </div>
+          </div>
+        </div>
+
+        <hr />
+        <p style="text-align:right">{{ user_name }} | {{ user_email }}</p>
+      </div>
+
+      <div class="footer">
+            <p>
+                {% trans "This email was sent from" %}
+                <a href="https://globalallianceusa.com/gea/">globalallianceusa.com</a>.
+            </p>
+        </div>
+    </div>
+  </body>
+</html>

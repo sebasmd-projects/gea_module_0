@@ -18,6 +18,10 @@
     <table class="table table-bordered table-sm">
       <tbody>
         <tr>
+          <th>{% trans 'Offer ID' %}</th>
+          <td>{{ offer.id }}</td>
+        </tr>
+        <tr>
           <th>{% trans 'Asset' %}</th>
           <td>{{ offer.asset_display_name }}</td>
         </tr>
@@ -41,13 +45,6 @@
           <th>{% trans 'Country of Purchase' %}</th>
           <td>{{ buyer_country_name }}</td>
         </tr>
-
-        {% if offer.offer_amount and request.user.is_buyer %}
-        <tr>
-          <th>{% trans 'Total value of the offer ($ USD)' %}</th>
-          <td>{{ offer.offer_amount|currency }}</td>
-        </tr>
-        {% endif %}
       </tbody>
     </table>
 
@@ -115,7 +112,16 @@
           {% trans "Open Approval Wizard" %} <i class="fa-regular fa-share-from-square mx-1"></i>
         </a>
       {% endif %}
-        
+      
+      {% url 'buyers:offer_wizard_page' offer.id as offer_wizard_url %}
+      {% if request.path == offer_wizard_url %}
+        {% if request.user.is_superuser or perms.buyers.can_see_profitability_page %}
+          <a href="{% url 'buyers:profitability_view' %}" class="btn btn-outline-gold">
+            <i class="fa-solid fa-eye mx-1"></i> {% trans "View Profitability" %}
+          </a>
+        {% endif %}
+      {% endif %}
+
     </div>
   </div>
 </div>

@@ -1,15 +1,20 @@
 # apps.project.specific.assets_management.buyers.views.py
+from email.mime.image import MIMEImage
+
+import requests
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.utils.html import escape
 from django.utils.translation import get_language
+from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import override
 from django.views.generic import (CreateView, DetailView, TemplateView,
@@ -19,9 +24,183 @@ from apps.project.common.users.models import UserModel
 from apps.project.specific.assets_management.assets.models import (
     AssetCategoryModel, AssetModel)
 
-from .form import OfferForm, OfferUpdateForm
-from .functions import generate_purchase_order_pdf
+from .form import OfferForm, OfferUpdateForm, ServiceOrderRecipientsForm
+from .functions import generate_purchase_order_pdf, generate_service_order_pdf
 from .models import OfferModel
+
+
+def _choice_label(instance, field_name: str, lang: str) -> str:
+    """
+    Devuelve el display label de un campo de choices en el idioma indicado.
+    """
+    with override(lang):
+        return getattr(instance, f"get_{field_name}_display")()
+
+
+def _localized_str(value, lang: str) -> str:
+    """
+    Convierte a str un valor potencialmente traducible (e.g. país) en un idioma dado.
+    """
+    with override(lang):
+        return str(value) if value is not None else ""
+
+
+def build_wizard_context(request, offer):
+    # Aliases
+    so_created = offer.service_order_created_at
+    so_sent = offer.service_order_sent_at
+    pay_created = offer.payment_order_created_at
+    pay_sent = offer.payment_order_sent_at
+    possess = offer.asset_in_possession_at
+    asset_sent = offer.asset_sent_at
+    prof_created = offer.profitability_created_at
+    prof_paid = offer.profitability_paid_at
+
+    # Step 1: revisión y aprobación
+    if not offer.reviewed:
+        current_step = 1
+    elif not offer.is_approved:
+        current_step = 1
+
+    # Step 2: orden de servicio
+    elif not so_created:
+        current_step = 2
+    elif not so_sent:
+        current_step = 2
+
+    # Step 3: orden de pago
+    elif not pay_created:
+        current_step = 3
+    elif not pay_sent:
+        current_step = 3
+
+    # Step 4: posesión y envío del activo
+    elif not possess:
+        current_step = 4
+    elif not asset_sent:
+        current_step = 4
+
+    # Step 5: rentabilidad
+    elif not prof_created:
+        current_step = 5
+    elif not prof_paid:
+        current_step = 5
+    elif not offer.recovery_repatriation_foundation_paid:
+        current_step = 5
+    elif not offer.am_pro_service_paid:
+        current_step = 5
+    elif not offer.propensiones_paid:
+        current_step = 5
+
+    # Completado
+    else:
+        current_step = 6
+
+    # Idioma
+    lang = (request.LANGUAGE_CODE or get_language() or 'en')[:2]
+
+    def get_i18n(obj, base_name, default=""):
+        primary = f"{lang}_{base_name}"
+        alt = f"{'en' if lang == 'es' else 'es'}_{base_name}"
+        return getattr(obj, primary, None) or getattr(obj, alt, None) or default
+
+    asset = offer.asset
+
+    # País comprador
+    buyer_country_name = ""
+    if offer.buyer_country:
+        attr_name = f"{lang}_country_name"
+        buyer_country_name = getattr(offer.buyer_country, attr_name, None)
+        if not buyer_country_name:
+            with override(lang):
+                buyer_country_name = str(offer.buyer_country)
+
+    # Categoría
+    category_name = ""
+    if asset and asset.category:
+        attr_name = f"{lang}_name"
+        category_name = getattr(asset.category, attr_name, None)
+        if not category_name:
+            with override(lang):
+                category_name = str(asset.category)
+
+    ctx = {
+        "offer": offer,
+        "so_created": so_created,
+        "so_sent": so_sent,
+        "pay_created": pay_created,
+        "pay_sent": pay_sent,
+        "possess": possess,
+        "asset_sent": asset_sent,
+        "prof_created": prof_created,
+        "prof_paid": prof_paid,
+        "rrf_paid": offer.recovery_repatriation_foundation_paid,
+        "rrf_paid_at": offer.recovery_repatriation_foundation_mark_at,
+        "rrf_paid_by": offer.recovery_repatriation_foundation_mark_by,
+        "ampro_paid": offer.am_pro_service_paid,
+        "ampro_paid_at": offer.am_pro_service_mark_at,
+        "ampro_paid_by": offer.am_pro_service_mark_by,
+        "propensiones_paid": offer.propensiones_paid,
+        "propensiones_paid_at": offer.propensiones_mark_at,
+        "propensiones_paid_by": offer.propensiones_mark_by,
+        "all_prof_subpaid": offer.profitability_all_paid,
+        "current_step": current_step,
+        "offer_observation": get_i18n(offer, 'observation', ""),
+        "offer_description": get_i18n(offer, 'description', ""),
+        "asset_description": get_i18n(asset, 'description', ""),
+        "asset_observation": get_i18n(asset, 'observations', ""),
+        "buyer_country_name": buyer_country_name,
+        "category_name": category_name,
+    }
+
+    selected_user_ids = set(
+        offer.so_recipients.filter(
+            user__isnull=False).values_list('user_id', flat=True)
+    )
+    selected_types = set(
+        offer.so_recipients.filter(
+            user_type__isnull=False).values_list('user_type', flat=True)
+    )
+
+    users_qs = (UserModel.objects
+                .filter(is_active=True, is_verified_holder=True)
+                .exclude(id__in=selected_user_ids)
+                .order_by("first_name", "last_name"))
+
+    ctx.update({
+        "users_queryset": users_qs,
+        "user_type_choices": UserModel.UserTypeChoices.choices,
+        "selected_types": selected_types,
+    })
+    return ctx
+
+
+def _resolve_so_emails(offer):
+    # Usuarios seleccionados explícitos
+    user_ids = list(
+        offer.so_recipients.filter(user__isnull=False)
+        .values_list('user_id', flat=True)
+    )
+    # Tipos seleccionados
+    type_codes = list(
+        offer.so_recipients.filter(user_type__isnull=False)
+             .values_list('user_type', flat=True)
+    )
+
+    qs_users = UserModel.objects.filter(is_active=True)
+    emails = set()
+
+    if user_ids:
+        for email in qs_users.filter(id__in=user_ids).values_list('email', flat=True):
+            if email:
+                emails.add(email)
+
+    if type_codes:
+        for email in qs_users.filter(user_type__in=type_codes).values_list('email', flat=True):
+            if email:
+                emails.add(email)
+
+    return sorted(set(emails))
 
 
 class BuyerRequiredMixin(LoginRequiredMixin):
@@ -56,30 +235,17 @@ class BuyerRequiredMixin(LoginRequiredMixin):
         return super().dispatch(request, *args, **kwargs)
 
 
-def _choice_label(instance, field_name: str, lang: str) -> str:
-    """
-    Devuelve el display label de un campo de choices en el idioma indicado.
-    """
-    with override(lang):
-        return getattr(instance, f"get_{field_name}_display")()
-
-
-def _localized_str(value, lang: str) -> str:
-    """
-    Convierte a str un valor potencialmente traducible (e.g. país) en un idioma dado.
-    """
-    with override(lang):
-        return str(value) if value is not None else ""
-
-
 class PurchaseOrdersView(BuyerRequiredMixin, TemplateView):
     template_name = 'dashboard/pages/buyers/purchase_orders.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['offers'] = OfferModel.objects.filter(
-            created_by=self.request.user)
+        offers = OfferModel.objects.filter(
+            created_by=self.request.user
+        )
+
+        context['offers'] = offers
 
         context['categories'] = AssetCategoryModel.objects.all().order_by('es_name')
 
@@ -160,6 +326,7 @@ class PurchaseOrderCreateView(BuyerRequiredMixin, CreateView):
             "user_email": escape(self.request.user.email),
             "user_username": escape(self.request.user.username),
             "review_url": review_url,
+            "logo_cid": "gea_logo",   # <-- añadido para el template
         }
 
         html_content = render_to_string(
@@ -167,14 +334,17 @@ class PurchaseOrderCreateView(BuyerRequiredMixin, CreateView):
             safe_data
         )
 
-        email = EmailMessage(
+        # Email con soporte para multipart/related
+        email = EmailMultiAlternatives(
             subject=subject,
-            body=html_content,
+            body="Orden de compra adjunta",
             from_email="no-reply@globalallianceusa.com",
             to=recipient_email,
-            bcc=hide_recipient_email
+            bcc=hide_recipient_email,
         )
-        email.content_subtype = "html"
+        email.attach_alternative(html_content, "text/html")
+
+        # Adjuntar PDF
         pdf_bytes = generate_purchase_order_pdf(
             offer_instance, self.request.user
         )
@@ -183,7 +353,19 @@ class PurchaseOrderCreateView(BuyerRequiredMixin, CreateView):
             pdf_bytes,
             "application/pdf"
         )
-        email.send()
+
+        # Adjuntar logo PNG inline
+        email.mixed_subtype = "related"
+        logo_url = "https://globalallianceusa.com/gea/public/static/assets/imgs/logos/gea_logo.png"
+        resp = requests.get(logo_url, timeout=10)
+        if resp.status_code == 200:
+            mime_img = MIMEImage(resp.content, _subtype="png")
+            mime_img.add_header("Content-ID", "<gea_logo>")
+            mime_img.add_header("Content-Disposition",
+                                "inline", filename="gea_logo.png")
+            email.attach(mime_img)
+
+        email.send(fail_silently=False)
 
 
 class OfferUpdateView(BuyerRequiredMixin, UpdateView):
@@ -260,101 +442,6 @@ class OfferDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-# --- Helper compartido ---
-def build_wizard_context(request, offer):
-    # Aliases
-    so_created = offer.service_order_created_at
-    so_sent = offer.service_order_sent_at
-    pay_created = offer.payment_order_created_at
-    pay_sent = offer.payment_order_sent_at
-    possess = offer.asset_in_possession_at
-    asset_sent = offer.asset_sent_at
-    prof_created = offer.profitability_created_at
-    prof_paid = offer.profitability_paid_at
-
-    # Step 1: revisión y aprobación
-    if not offer.reviewed:
-        current_step = 1
-    elif not offer.is_approved:
-        current_step = 1
-        
-    # Step 2: orden de servicio
-    elif not so_created:
-        current_step = 2
-    elif not so_sent:
-        current_step = 2
-    
-    # Step 3: orden de pago
-    elif not pay_created:
-        current_step = 3
-    elif not pay_sent:
-        current_step = 3
-        
-    # Step 4: posesión y envío del activo
-    elif not possess:
-        current_step = 4
-    elif not asset_sent:
-        current_step = 4
-        
-    # Step 5: rentabilidad
-    elif not prof_created:
-        current_step = 5
-    elif not prof_paid:
-        current_step = 5
-    
-    # Completado
-    else:
-        current_step = 6
-
-    # Idioma
-    lang = (request.LANGUAGE_CODE or get_language() or 'en')[:2]
-
-    def get_i18n(obj, base_name, default=""):
-        primary = f"{lang}_{base_name}"
-        alt = f"{'en' if lang == 'es' else 'es'}_{base_name}"
-        return getattr(obj, primary, None) or getattr(obj, alt, None) or default
-
-    asset = offer.asset
-
-    # País comprador
-    buyer_country_name = ""
-    if offer.buyer_country:
-        attr_name = f"{lang}_country_name"
-        buyer_country_name = getattr(offer.buyer_country, attr_name, None)
-        if not buyer_country_name:
-            with override(lang):
-                buyer_country_name = str(offer.buyer_country)
-
-    # Categoría
-    category_name = ""
-    if asset and asset.category:
-        attr_name = f"{lang}_name"
-        category_name = getattr(asset.category, attr_name, None)
-        if not category_name:
-            with override(lang):
-                category_name = str(asset.category)
-
-    ctx = {
-        "offer": offer,
-        "so_created": so_created,
-        "so_sent": so_sent,
-        "pay_created": pay_created,
-        "pay_sent": pay_sent,
-        "possess": possess,
-        "asset_sent": asset_sent,
-        "prof_created": prof_created,
-        "prof_paid": prof_paid,
-        "current_step": current_step,
-        "offer_observation": get_i18n(offer, 'observation', ""),
-        "offer_description": get_i18n(offer, 'description', ""),
-        "asset_description": get_i18n(asset, 'description', ""),
-        "asset_observation": get_i18n(asset, 'observations', ""),
-        "buyer_country_name": buyer_country_name,
-        "category_name": category_name,
-    }
-    return ctx
-
-
 class OfferApprovalWizardPageView(LoginRequiredMixin, TemplateView):
     """
     Página contenedora: carga el shell y, vía JS, inyecta el parcial del wizard.
@@ -393,15 +480,126 @@ class OfferApprovalWizardPartialView(LoginRequiredMixin, TemplateView):
 
 
 class OfferApprovalWizardActionView(LoginRequiredMixin, View):
-    """
-    Recibe POST con {'step': '...'}; aplica la transición y retorna el parcial actualizado.
-    """
     http_method_names = ["post"]
 
     def post(self, request, *args, **kwargs):
         offer = get_object_or_404(OfferModel, id=kwargs.get("id"))
         step = (request.POST.get("step") or "").strip().upper()
 
+        # --- recipients: remove ---
+        if step == "SO_REMOVE_RECIPIENTS":
+            to_remove = request.POST.getlist("remove")
+            from django.db.models import Q
+            q = Q(pk__isnull=True)
+            for token in to_remove:
+                try:
+                    kind, val = token.split(":", 1)
+                except ValueError:
+                    continue
+                if kind == "user":
+                    q |= Q(offer=offer, user_id=val)
+                elif kind == "type":
+                    q |= Q(offer=offer, user_type=val)
+            if q:
+                offer.so_recipients.filter(q).delete()
+
+            ctx = build_wizard_context(request, offer)
+            html = render_to_string(
+                "dashboard/pages/buyers/wizard/partials/_offer_approval_wizard.html",
+                ctx, request=request
+            )
+            return JsonResponse({"ok": True, "html": html})
+
+        # --- recipients: add ---
+        if step == "SO_ADD_RECIPIENTS":
+            form = ServiceOrderRecipientsForm(request.POST)
+            if form.is_valid():
+                form.save(offer, request.user)
+            else:
+                return JsonResponse({"ok": False, "errors": sum(form.errors.values(), [])}, status=400)
+
+            ctx = build_wizard_context(request, offer)
+            html = render_to_string(
+                "dashboard/pages/buyers/wizard/partials/_offer_approval_wizard.html",
+                ctx, request=request
+            )
+            return JsonResponse({"ok": True, "html": html})
+
+        # --- service order: notify (sends email + pdf) ---
+        if step == "SO_NOTIFY":
+            self._require_perm(request.user, "can_send_service_order")
+            recipients = _resolve_so_emails(offer)
+            if not recipients:
+                return JsonResponse(
+                    {"ok": False, "errors": [_("No recipients to notify.")]},
+                    status=400
+                )
+
+            review_url = request.build_absolute_uri(
+                reverse("buyers:offer_details", kwargs={"id": offer.id})
+            )
+            safe_data = {
+                "po_short": str(offer.id)[:8],
+                "asset_es": escape(getattr(offer.asset.asset_name, "es_name", "")),
+                "tipo_cantidad_es": escape(offer.get_quantity_type_display()),
+                "cantidad": offer.offer_quantity,
+                "pais_comprador_es": escape(str(offer.buyer_country or "")),
+                "obs_es": escape(offer.es_observation or ""),
+                "desc_es": escape(offer.es_description or ""),
+                "created_at": offer.service_order_created_at or offer.created,
+                "sent_at": offer.service_order_sent_at,
+                "review_url": review_url,
+                "user_name": escape(request.user.get_full_name()),
+                "user_email": escape(request.user.email),
+                "logo_cid": "gea_logo",
+            }
+
+            subject = _("Service Order Notification for OC: %(po)s") % {
+                "po": str(offer.id)}
+            html_content = render_to_string(
+                "email/service_order_email_template.html", safe_data)
+
+            email = EmailMultiAlternatives(
+                subject=subject,
+                body="Orden de Servicio adjunta",
+                from_email="no-reply@globalallianceusa.com",
+                to=[],
+                bcc=recipients,
+            )
+            email.attach_alternative(html_content, "text/html")
+
+            # Adjuntar PDF
+            pdf_bytes = generate_service_order_pdf(offer, request.user)
+            email.attach(
+                f"orden_servicio_{str(offer.id).upper()}.pdf", pdf_bytes, "application/pdf"
+            )
+
+            # Adjuntar logo PNG desde la URL
+            email.mixed_subtype = "related"  # importante para HTML + inline
+            logo_url = "https://globalallianceusa.com/gea/public/static/assets/imgs/logos/gea_logo.png"
+            resp = requests.get(logo_url, timeout=10)
+            if resp.status_code == 200:
+                mime_img = MIMEImage(resp.content, _subtype="png")
+                mime_img.add_header("Content-ID", "<gea_logo>")
+                mime_img.add_header("Content-Disposition",
+                                    "inline", filename="gea_logo.png")
+                email.attach(mime_img)
+
+            email.send(fail_silently=False)
+
+            if not offer.service_order_sent_at:
+                offer.service_order_sent_at = timezone.now()
+                offer.save(update_fields=["service_order_sent_at"])
+
+            ctx = build_wizard_context(request, offer)
+            html = render_to_string(
+                "dashboard/pages/buyers/wizard/partials/_offer_approval_wizard.html",
+                ctx,
+                request=request,
+            )
+            return JsonResponse({"ok": True, "html": html})
+
+        # --- DEFAULT: apply model transition for all other steps (REVIEW, APPROVE, SO_SEND, PAY_CREATE, ...) ---
         try:
             self._apply_step(offer, request.user, step)
         except ValidationError as ve:
@@ -410,7 +608,7 @@ class OfferApprovalWizardActionView(LoginRequiredMixin, View):
             return JsonResponse({"ok": False, "errors": [str(pe)]}, status=403)
         except Exception as e:
             return JsonResponse({"ok": False, "errors": [str(e)]}, status=400)
-        
+
         # Re-render: wizard + timeline
         ctx = build_wizard_context(request, offer)
         wizard_html = render_to_string(
@@ -426,6 +624,7 @@ class OfferApprovalWizardActionView(LoginRequiredMixin, View):
         return JsonResponse({"ok": True, "html": wizard_html, "timeline_html": timeline_html})
 
     # ---- Helpers de permisos y transición ----
+
     def _require_perm(self, user, codename: str):
         """
         Acepta superusers/staff, o el permiso/grupo custom que ya definiste en Meta.permissions.
@@ -451,7 +650,6 @@ class OfferApprovalWizardActionView(LoginRequiredMixin, View):
 
         elif step == "APPROVE":
             self._require_perm(user, "can_approve_offer")
-            # Requiere reviewed True (tu modelo ya lo valida)
             offer.is_approved = True
             offer.approved_by = user
             offer.save()
@@ -480,9 +678,54 @@ class OfferApprovalWizardActionView(LoginRequiredMixin, View):
             self._require_perm(user, "can_set_profitability")
             offer.mark_profitability_created(user)
 
+        elif step == "RRF_PAY":
+            offer.mark_rrf_paid(user)
+
+        elif step == "AMPRO_PAY":
+            offer.mark_ampro_paid(user)
+
+        elif step == "PROP_PAY":
+            offer.mark_prop_paid(user)
+
         elif step == "PROFIT_PAY":
             self._require_perm(user, "can_pay_profitability")
             offer.mark_profitability_paid(user)
 
         else:
             raise ValidationError(_("Unknown step."))
+
+
+class ProfitabilityTemplateView(BuyerRequiredMixin, TemplateView):
+    template_name = 'dashboard/pages/buyers/profitability.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        ctx['offers'] = OfferModel.objects.filter(
+            profitability_created_at__isnull=False
+        ).order_by('-created')
+
+        ctx['rrf_paid'] = OfferModel.objects.filter(
+            recovery_repatriation_foundation_paid=True
+        )
+        
+        ctx['ampro_paid'] = OfferModel.objects.filter(
+            am_pro_service_paid=True
+        )
+        
+        ctx['propensiones_paid'] = OfferModel.objects.filter(
+            propensiones_paid=True
+        )
+
+        ctx['in_progress_value'] = OfferModel.objects.exclude(
+            recovery_repatriation_foundation_paid=True,
+            am_pro_service_paid=True,
+            propensiones_paid=True
+        ).count()
+
+        ctx['paid_value'] = OfferModel.objects.filter(
+            recovery_repatriation_foundation_paid=True,
+            am_pro_service_paid=True,
+            propensiones_paid=True
+        ).count()
+        return ctx

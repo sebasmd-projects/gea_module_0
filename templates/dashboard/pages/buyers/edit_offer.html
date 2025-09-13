@@ -45,14 +45,6 @@
                     <h2 style="color: black;">{% trans 'Edit Purchase Order' %}</h2>
                 </div>
                 <div class="card-body">
-                    {% if messages %}
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {% for message in messages %}
-                        {{ message }}
-                        {% endfor %}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    {% endif %}
                     <form method="post" enctype="multipart/form-data" id="editPurchaseOrderForm">
                         {% csrf_token %}
                         {{ form.media.css }}

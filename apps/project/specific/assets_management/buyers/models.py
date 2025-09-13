@@ -51,108 +51,6 @@ class OfferModel(TimeStampedModel):
         PROFIT_PAID = "PROFIT_PAID",           _("Profitability Paid")
         COMPLETED = "COMPLETED",             _("Completed")
 
-    @property
-    def status_code(self) -> str:
-        # Del más avanzado al más básico
-        if self.profitability_paid_at:
-            return self.StatusChoices.PROFIT_PAID
-        if self.profitability_created_at:
-            return self.StatusChoices.PROFIT_CREATED
-        if self.asset_sent_at:
-            return self.StatusChoices.ASSET_SENT
-        if self.asset_in_possession_at:
-            return self.StatusChoices.POSSESSION
-        if self.payment_order_sent_at:
-            return self.StatusChoices.PAY_SENT
-        if self.payment_order_created_at:
-            return self.StatusChoices.PAY_CREATED
-        if self.service_order_sent_at:
-            return self.StatusChoices.SO_SENT
-        if self.service_order_created_at:
-            return self.StatusChoices.SO_CREATED
-        if self.is_approved and self.reviewed:
-            return self.StatusChoices.APPROVED
-        if (not self.is_approved) and self.reviewed:
-            return self.StatusChoices.NOT_APPROVED
-        if (not self.is_approved) and (not self.reviewed) and self.is_active:
-            return self.StatusChoices.PENDING_APPROVAL
-        return self.StatusChoices.UNDER_REVIEW
-
-    @property
-    def status_label(self) -> str:
-        return self.StatusChoices(self.status_code).label
-
-    @property
-    def status_icon(self) -> str:
-        mapping = {
-            # Pre-approval (tus íconos/colores originales)
-            self.StatusChoices.PENDING_APPROVAL: "fa-regular fa-circle-xmark",
-            self.StatusChoices.APPROVED:         "fa-solid fa-check-double",
-            self.StatusChoices.NOT_APPROVED:     "fa-regular fa-circle-xmark",
-            self.StatusChoices.UNDER_REVIEW:     "fa-regular fa-circle-xmark",
-            # Post-approval (elige los que prefieras)
-            self.StatusChoices.SO_CREATED:       "fa-solid fa-paperclip",
-            self.StatusChoices.SO_SENT:          "fa-solid fa-paper-plane",
-            self.StatusChoices.PAY_CREATED:      "fa-solid fa-file-invoice-dollar",
-            self.StatusChoices.PAY_SENT:         "fa-solid fa-paper-plane",
-            self.StatusChoices.POSSESSION:       "fa-solid fa-box-open",
-            self.StatusChoices.ASSET_SENT:       "fa-solid fa-truck-fast",
-            self.StatusChoices.PROFIT_CREATED:   "fa-solid fa-chart-line",
-            # o "fa-solid fa-circle-check"
-            self.StatusChoices.PROFIT_PAID:      "fa-solid fa-receipt",
-            self.StatusChoices.COMPLETED:        "fa-solid fa-lock",
-        }
-        return mapping[self.status_code]
-
-    @property
-    def status_color(self) -> str:
-        mapping = {
-            # Pre-approval
-            self.StatusChoices.PENDING_APPROVAL: "orange",
-            self.StatusChoices.APPROVED:         "green",
-            self.StatusChoices.NOT_APPROVED:     "red",
-            self.StatusChoices.UNDER_REVIEW:     "grey",
-            # Post-approval
-            self.StatusChoices.SO_CREATED:       "#0d6efd",
-            self.StatusChoices.SO_SENT:          "green",
-            self.StatusChoices.PAY_CREATED:      "#0d6efd",
-            self.StatusChoices.PAY_SENT:         "green",
-            self.StatusChoices.POSSESSION:       "#0d6efd",
-            self.StatusChoices.ASSET_SENT:       "green",
-            self.StatusChoices.PROFIT_CREATED:   "#0d6efd",
-            self.StatusChoices.PROFIT_PAID:      "green",
-            self.StatusChoices.COMPLETED:        "green",
-        }
-        return mapping[self.status_code]
-
-    def offers_directory_path(instance, filename) -> str:
-        """
-        Generate a file path for an offer image.
-        Path format: offer/{slugified_name}/img/YYYY/MM/DD/{hashed_filename}.{extension}
-        """
-        try:
-            name_src = (
-                getattr(instance.asset.asset_name, "es_name", None)
-                or getattr(instance.asset.asset_name, "en_name", "")
-                or "asset"
-            )
-            es_name = slugify(name_src)[:40]
-            base_filename, file_extension = os.path.splitext(filename)
-            filename_hash = generate_md5_or_sha256_hash(base_filename)
-            path = os.path.join(
-                "offer", es_name, "img",
-                str(date.today().year),
-                str(date.today().month),
-                str(date.today().day),
-                f"{filename_hash[:10]}{file_extension}"
-            )
-            return path
-        except Exception as e:
-            logger.error(
-                f"Error generating file path for {filename}: {e}"
-            )
-            raise e
-
     class OfferTypeChoices(models.TextChoices):
         OFFICIAL_PURCHASE_USA = "O", _(
             "Official purchase of the United States")
@@ -373,6 +271,57 @@ class OfferModel(TimeStampedModel):
         _("Profitability Paid At"), null=True, blank=True
     )
 
+    # ===== Profitability: subpagos =====
+    recovery_repatriation_foundation_paid = models.BooleanField(
+        default=False
+    )
+
+    recovery_repatriation_foundation_mark_by = models.ForeignKey(
+        UserModel,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="buyers_offer_rrf_paid_by"
+    )
+
+    recovery_repatriation_foundation_mark_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    am_pro_service_paid = models.BooleanField(
+        default=False
+    )
+
+    am_pro_service_mark_by = models.ForeignKey(
+        UserModel, on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="buyers_offer_ampro_paid_by"
+    )
+
+    am_pro_service_mark_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    propensiones_paid = models.BooleanField(
+        default=False
+    )
+
+    propensiones_mark_by = models.ForeignKey(
+        UserModel,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="buyers_offer_prop_paid_by"
+    )
+
+    propensiones_mark_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
     @property
     def asset_display_name(self):
         lang = get_language()
@@ -380,11 +329,98 @@ class OfferModel(TimeStampedModel):
             return self.asset.asset_name.es_name
         return self.asset.asset_name.en_name or self.asset.asset_name.es_name
 
-    def _ensure_can_progress(self):
-        # Solo permitir progreso si está aprobado (nota: ya exigiste reviewed cuando is_approved=True)
-        if not self.is_approved:
-            raise ValidationError(
-                _("You cannot progress stages unless the offer is approved."))
+    @property
+    def profitability_all_paid(self) -> bool:
+        return (
+            self.recovery_repatriation_foundation_paid and
+            self.am_pro_service_paid and
+            self.propensiones_paid
+        )
+
+    @property
+    def status_code(self) -> str:
+        # Del más avanzado al más básico
+        if self.profitability_paid_at and self.profitability_all_paid:
+            return self.StatusChoices.PROFIT_PAID
+
+        if self.profitability_created_at:
+            return self.StatusChoices.PROFIT_CREATED
+
+        if self.asset_sent_at:
+            return self.StatusChoices.ASSET_SENT
+
+        if self.asset_in_possession_at:
+            return self.StatusChoices.POSSESSION
+
+        if self.payment_order_sent_at:
+            return self.StatusChoices.PAY_SENT
+
+        if self.payment_order_created_at:
+            return self.StatusChoices.PAY_CREATED
+
+        if self.service_order_sent_at:
+            return self.StatusChoices.SO_SENT
+
+        if self.service_order_created_at:
+            return self.StatusChoices.SO_CREATED
+
+        if self.is_approved and self.reviewed:
+            return self.StatusChoices.APPROVED
+
+        if (not self.is_approved) and self.reviewed:
+            return self.StatusChoices.NOT_APPROVED
+
+        if (not self.is_approved) and (not self.reviewed) and self.is_active:
+            return self.StatusChoices.PENDING_APPROVAL
+
+        return self.StatusChoices.UNDER_REVIEW
+
+    @property
+    def status_label(self) -> str:
+        return self.StatusChoices(self.status_code).label
+
+    @property
+    def status_icon(self) -> str:
+        mapping = {
+            # Pre-approval (tus íconos/colores originales)
+            self.StatusChoices.PENDING_APPROVAL: "fa-regular fa-circle-xmark",
+            self.StatusChoices.APPROVED:         "fa-solid fa-check-double",
+            self.StatusChoices.NOT_APPROVED:     "fa-regular fa-circle-xmark",
+            self.StatusChoices.UNDER_REVIEW:     "fa-regular fa-circle-xmark",
+            # Post-approval (elige los que prefieras)
+            self.StatusChoices.SO_CREATED:       "fa-solid fa-paperclip",
+            self.StatusChoices.SO_SENT:          "fa-solid fa-paper-plane",
+            self.StatusChoices.PAY_CREATED:      "fa-solid fa-file-invoice-dollar",
+            self.StatusChoices.PAY_SENT:         "fa-solid fa-paper-plane",
+            self.StatusChoices.POSSESSION:       "fa-solid fa-box-open",
+            self.StatusChoices.ASSET_SENT:       "fa-solid fa-truck-fast",
+            self.StatusChoices.PROFIT_CREATED:   "fa-solid fa-chart-line",
+            # o "fa-solid fa-circle-check"
+            self.StatusChoices.PROFIT_PAID:      "fa-solid fa-receipt",
+            self.StatusChoices.COMPLETED:        "fa-solid fa-lock",
+        }
+        return mapping[self.status_code]
+
+    @property
+    def status_color(self) -> str:
+        mapping = {
+            # Pre-approval
+            self.StatusChoices.PENDING_APPROVAL: "orange",
+            self.StatusChoices.APPROVED:         "green",
+            self.StatusChoices.NOT_APPROVED:     "red",
+            self.StatusChoices.UNDER_REVIEW:     "grey",
+            # Post-approval
+            self.StatusChoices.SO_CREATED:       "#0d6efd",
+            self.StatusChoices.SO_SENT:          "green",
+            self.StatusChoices.PAY_CREATED:      "#0d6efd",
+            self.StatusChoices.PAY_SENT:         "green",
+            self.StatusChoices.POSSESSION:       "#0d6efd",
+            self.StatusChoices.ASSET_SENT:       "green",
+            self.StatusChoices.PROFIT_CREATED:   "#0d6efd",
+            self.StatusChoices.PROFIT_PAID:      "green",
+            self.StatusChoices.COMPLETED:        "green",
+        }
+        return mapping[self.status_code]
 
     @transaction.atomic
     def mark_service_order_sent(self, user):
@@ -452,15 +488,94 @@ class OfferModel(TimeStampedModel):
                   "profitability_created_by", "profitability_created_at"])
 
     @transaction.atomic
+    def mark_rrf_paid(self, user, *, paid: bool = True):
+        if not self.profitability_created_at:
+            raise ValidationError(
+                _("You cannot mark sub-payments before profitability is created."))
+        self.recovery_repatriation_foundation_paid = bool(paid)
+        self.recovery_repatriation_foundation_mark_by = user if paid else None
+        self.recovery_repatriation_foundation_mark_at = timezone.now() if paid else None
+        self.save(update_fields=[
+            "recovery_repatriation_foundation_paid",
+            "recovery_repatriation_foundation_mark_by",
+            "recovery_repatriation_foundation_mark_at",
+        ])
+
+    @transaction.atomic
+    def mark_ampro_paid(self, user, *, paid: bool = True):
+        if not self.profitability_created_at:
+            raise ValidationError(
+                _("You cannot mark sub-payments before profitability is created."))
+        self.am_pro_service_paid = bool(paid)
+        self.am_pro_service_mark_by = user if paid else None
+        self.am_pro_service_mark_at = timezone.now() if paid else None
+        self.save(update_fields=[
+            "am_pro_service_paid",
+            "am_pro_service_mark_by",
+            "am_pro_service_mark_at",
+        ])
+
+    @transaction.atomic
+    def mark_prop_paid(self, user, *, paid: bool = True):
+        if not self.profitability_created_at:
+            raise ValidationError(
+                _("You cannot mark sub-payments before profitability is created."))
+        self.propensiones_paid = bool(paid)
+        self.propensiones_mark_by = user if paid else None
+        self.propensiones_mark_at = timezone.now() if paid else None
+        self.save(update_fields=[
+            "propensiones_paid",
+            "propensiones_mark_by",
+            "propensiones_mark_at",
+        ])
+
+    @transaction.atomic
     def mark_profitability_paid(self, user):
         if not self.profitability_created_at:
             raise ValidationError(
                 _("You cannot pay profitability before it is created."))
+        if not self.profitability_all_paid:
+            raise ValidationError(
+                _("All profitability sub-payments must be marked as paid first."))
         self.profitability_paid_by = user
         if not self.profitability_paid_at:
             self.profitability_paid_at = timezone.now()
         self.save(update_fields=[
                   "profitability_paid_by", "profitability_paid_at"])
+
+    def offers_directory_path(instance, filename) -> str:
+        """
+        Generate a file path for an offer image.
+        Path format: offer/{slugified_name}/img/YYYY/MM/DD/{hashed_filename}.{extension}
+        """
+        try:
+            name_src = (
+                getattr(instance.asset.asset_name, "es_name", None)
+                or getattr(instance.asset.asset_name, "en_name", "")
+                or "asset"
+            )
+            es_name = slugify(name_src)[:40]
+            base_filename, file_extension = os.path.splitext(filename)
+            filename_hash = generate_md5_or_sha256_hash(base_filename)
+            path = os.path.join(
+                "offer", es_name, "img",
+                str(date.today().year),
+                str(date.today().month),
+                str(date.today().day),
+                f"{filename_hash[:10]}{file_extension}"
+            )
+            return path
+        except Exception as e:
+            logger.error(
+                f"Error generating file path for {filename}: {e}"
+            )
+            raise e
+
+    def _ensure_can_progress(self):
+        # Solo permitir progreso si está aprobado (nota: ya exigiste reviewed cuando is_approved=True)
+        if not self.is_approved:
+            raise ValidationError(
+                _("You cannot progress stages unless the offer is approved."))
 
     def clean(self):
         errors = []
@@ -530,6 +645,23 @@ class OfferModel(TimeStampedModel):
             errors.append(
                 _("You cannot pay profitability before it is created."))
 
+        if (self.profitability_paid_at or self.profitability_paid_by) and not self.profitability_all_paid:
+            errors.append(
+                _("Profitability cannot be closed until the three sub-payments are paid."))
+
+        # Si algún mark_by está seteado, su boolean debe ser True
+        tuple_checks = [
+            ("recovery_repatriation_foundation_paid",
+             "recovery_repatriation_foundation_mark_by"),
+            ("am_pro_service_paid", "am_pro_service_mark_by"),
+            ("propensiones_paid", "propensiones_mark_by"),
+        ]
+
+        for paid_field, by_field in tuple_checks:
+            if getattr(self, by_field) and not getattr(self, paid_field):
+                errors.append(
+                    _("Marked-by user requires the corresponding paid flag to be true."))
+
         if self.reviewed and not self.is_approved:
             blocked_fields = [
                 ("service_order_sent_by", _(
@@ -567,6 +699,9 @@ class OfferModel(TimeStampedModel):
                 "asset_sent_by", "asset_sent_at",
                 "profitability_created_by", "profitability_created_at",
                 "profitability_paid_by", "profitability_paid_at",
+                "recovery_repatriation_foundation_paid", "recovery_repatriation_foundation_mark_by",
+                "am_pro_service_paid", "am_pro_service_mark_by",
+                "propensiones_paid", "propensiones_mark_by",
             ).first()
 
         # -------- Normalización previa (auto y cascadas) --------
@@ -591,8 +726,41 @@ class OfferModel(TimeStampedModel):
                 "asset_sent_by", "asset_sent_at",
                 "profitability_created_by", "profitability_created_at",
                 "profitability_paid_by", "profitability_paid_at",
+                "profitability_created_by", "profitability_created_at",
+                "profitability_paid_by", "profitability_paid_at",
+            )
+            self.recovery_repatriation_foundation_paid = False
+            self.am_pro_service_paid = False
+            self.propensiones_paid = False
+            clear(
+                "recovery_repatriation_foundation_mark_by", "recovery_repatriation_foundation_mark_at",
+                "am_pro_service_mark_by", "am_pro_service_mark_at",
+                "propensiones_mark_by", "propensiones_mark_at",
             )
         else:
+            if not self.profitability_created_at:
+                self.recovery_repatriation_foundation_paid = False
+                self.am_pro_service_paid = False
+                self.propensiones_paid = False
+                clear(
+                    "recovery_repatriation_foundation_mark_by", "recovery_repatriation_foundation_mark_at",
+                    "am_pro_service_mark_by", "am_pro_service_mark_at",
+                    "propensiones_mark_by", "propensiones_mark_at",
+                    "profitability_paid_by", "profitability_paid_at",
+                )
+            else:
+                # Si algún subpago fue puesto en False de nuevo, borra suo marca/fecha
+                if not self.recovery_repatriation_foundation_paid:
+                    clear("recovery_repatriation_foundation_mark_by",
+                          "recovery_repatriation_foundation_mark_at")
+                if not self.am_pro_service_paid:
+                    clear("am_pro_service_mark_by", "am_pro_service_mark_at")
+                if not self.propensiones_paid:
+                    clear("propensiones_mark_by", "propensiones_mark_at")
+                # Si no están TODOS en True, no puede existir profitability_paid
+                if not self.profitability_all_paid:
+                    clear("profitability_paid_by", "profitability_paid_at")
+
             # (B) Aprobado => asegurar SO Created (auto)
             if not self.service_order_created_at:
                 # Si ya hay timestamp de aprobación úsalo; si no, ahora
@@ -677,6 +845,10 @@ class OfferModel(TimeStampedModel):
         auto_ts("asset_sent_by", "asset_sent_at")
         auto_ts("profitability_created_by", "profitability_created_at")
         auto_ts("profitability_paid_by", "profitability_paid_at")
+        auto_ts("recovery_repatriation_foundation_mark_by",
+                "recovery_repatriation_foundation_mark_at")
+        auto_ts("am_pro_service_mark_by", "am_pro_service_mark_at")
+        auto_ts("propensiones_mark_by", "propensiones_mark_at")
 
         super().save(*args, **kwargs)
 
@@ -698,6 +870,7 @@ class OfferModel(TimeStampedModel):
             ("can_send_asset", _("Can send asset")),
             ("can_set_profitability", _("Can set profitability")),
             ("can_pay_profitability", _("Can pay profitability")),
+            ("can_see_profitability_page", _("Can see profitability page")),
         ]
         constraints = [
             # Aprobado => Debe estar revisado
@@ -753,6 +926,50 @@ class OfferModel(TimeStampedModel):
                 check=Q(profitability_paid_at__isnull=True) | Q(
                     profitability_created_at__isnull=False),
             ),
+            # Profit Paid => 3 subpagos
+            models.CheckConstraint(
+                name="profit_paid_requires_3_subpaids",
+                check=Q(profitability_paid_at__isnull=True) |
+                (Q(recovery_repatriation_foundation_paid=True) &
+                 Q(am_pro_service_paid=True) &
+                 Q(propensiones_paid=True))
+            ),
+        ]
+
+
+class ServiceOrderRecipient(TimeStampedModel):
+    offer = models.ForeignKey(
+        OfferModel, on_delete=models.CASCADE, related_name="so_recipients")
+    user = models.ForeignKey(UserModel, null=True,
+                             blank=True, on_delete=models.CASCADE)
+    user_type = models.CharField(
+        max_length=2,
+        choices=UserModel.UserTypeChoices.choices,
+        null=True, blank=True
+    )
+    added_by = models.ForeignKey(
+        UserModel, on_delete=models.SET_NULL, null=True, related_name="so_recipient_added_by")
+
+    class Meta:
+        db_table = "apps_buyers_service_order_recipient"
+        verbose_name = _("Service Order Recipient")
+        verbose_name_plural = _("Service Order Recipients")
+        ordering = ["default_order", "-created"]
+        constraints = [
+            models.CheckConstraint(
+                name="so_recipient_user_or_type",
+                check=~(Q(user__isnull=True) & Q(user_type__isnull=True)),
+            ),
+            models.UniqueConstraint(
+                fields=["offer", "user"],
+                name="uniq_so_recipient_user",
+                condition=Q(user__isnull=False),
+            ),
+            models.UniqueConstraint(
+                fields=["offer", "user_type"],
+                name="uniq_so_recipient_type",
+                condition=Q(user_type__isnull=False),
+            ),
         ]
 
 
@@ -763,5 +980,10 @@ pre_save.connect(
 
 auditlog.register(
     OfferModel,
+    serialize_data=True
+)
+
+auditlog.register(
+    ServiceOrderRecipient,
     serialize_data=True
 )
