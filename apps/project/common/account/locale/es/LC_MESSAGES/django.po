@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-13 15:18-0500\n"
+"POT-Creation-Date: 2025-09-15 15:30-0500\n"
 "PO-Revision-Date: 2025-09-09 18:19-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,53 +19,66 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.0\n"
 
-#: .\apps\project\common\account\forms.py:13
+#: .\apps\project\common\account\forms.py:14
 msgid "User"
 msgstr "Usuario"
 
-#: .\apps\project\common\account\forms.py:14
+#: .\apps\project\common\account\forms.py:15
 msgid "Email"
 msgstr "Correo"
 
-#: .\apps\project\common\account\forms.py:15
+#: .\apps\project\common\account\forms.py:16
 msgid "Password"
 msgstr "Contraseña"
 
-#: .\apps\project\common\account\forms.py:51
-#: .\apps\project\common\account\forms.py:56
+#: .\apps\project\common\account\forms.py:63
+#: .\apps\project\common\account\forms.py:68
 msgid "Confirm Password"
 msgstr "Confirmar contraseña"
 
-#: .\apps\project\common\account\forms.py:61
-#: .\apps\project\common\account\forms.py:67
+#: .\apps\project\common\account\forms.py:73
+#: .\apps\project\common\account\forms.py:79
 msgid "Names"
 msgstr "Nombres"
 
-#: .\apps\project\common\account\forms.py:72
-#: .\apps\project\common\account\forms.py:78
+#: .\apps\project\common\account\forms.py:84
+#: .\apps\project\common\account\forms.py:90
 msgid "Last names"
 msgstr "Apellidos"
 
-#: .\apps\project\common\account\forms.py:84
-#: .\apps\project\common\account\forms.py:89
+#: .\apps\project\common\account\forms.py:95
+#: .\apps\project\common\account\forms.py:100
 msgid "Unique Code"
 msgstr "Código Único "
 
-#: .\apps\project\common\account\forms.py:102
+#: .\apps\project\common\account\forms.py:106
+#: .\apps\project\common\account\forms.py:114
+msgid "Cellphone"
+msgstr ""
+
+#: .\apps\project\common\account\forms.py:108
+msgid "Digits only, 7–15 digits."
+msgstr ""
+
+#: .\apps\project\common\account\forms.py:137
+msgid "Enter a valid phone number (7–15 digits)."
+msgstr ""
+
+#: .\apps\project\common\account\forms.py:143
 msgid "User Type"
 msgstr "Tipo de usuario"
 
-#: .\apps\project\common\account\forms.py:120
+#: .\apps\project\common\account\forms.py:161
 msgid "Passwords do not match"
 msgstr "Las contraseñas no coinciden"
 
-#: .\apps\project\common\account\forms.py:136
+#: .\apps\project\common\account\forms.py:177
 #, python-brace-format
 msgid "Invalid Unique Code ({label})"
 msgstr "Código único no válido ({label})"
 
-#: .\apps\project\common\account\forms.py:146
-#: .\apps\project\common\account\forms.py:152
+#: .\apps\project\common\account\forms.py:187
+#: .\apps\project\common\account\forms.py:193
 msgid "Citizenship Number"
 msgstr "Número de documento"
 

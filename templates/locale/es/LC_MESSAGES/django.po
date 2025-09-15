@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-15 12:55-0500\n"
+"POT-Creation-Date: 2025-09-15 15:30-0500\n"
 "PO-Revision-Date: 2025-09-15 12:44-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,40 +19,44 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.0\n"
 
-#: .\templates\account\gea_register.html:39
+#: .\templates\account\gea_register.html:41
 msgid "Username"
 msgstr "Usuario"
 
-#: .\templates\account\gea_register.html:43
+#: .\templates\account\gea_register.html:45
 msgid "Email"
 msgstr "Correo"
 
-#: .\templates\account\gea_register.html:47
+#: .\templates\account\gea_register.html:49
 #: .\templates\two_factor\core\login.html:73
 msgid "Password"
 msgstr "Contraseña"
 
-#: .\templates\account\gea_register.html:51
+#: .\templates\account\gea_register.html:53
 msgid "Confirm Password"
 msgstr "Confirmar Contraseña"
 
-#: .\templates\account\gea_register.html:55
+#: .\templates\account\gea_register.html:57
 msgid "First Names"
 msgstr "Nombres"
 
-#: .\templates\account\gea_register.html:59
+#: .\templates\account\gea_register.html:61
 msgid "Last Names"
 msgstr "Apellidos"
 
-#: .\templates\account\gea_register.html:63
+#: .\templates\account\gea_register.html:69
+msgid "Cellphone"
+msgstr ""
+
+#: .\templates\account\gea_register.html:73
 msgid "User Type"
 msgstr "Tipo de usuario"
 
-#: .\templates\account\gea_register.html:67
+#: .\templates\account\gea_register.html:77
 msgid "Unique Code"
 msgstr "Código Único"
 
-#: .\templates\account\gea_register.html:72
+#: .\templates\account\gea_register.html:82
 msgid ""
 "\n"
 "            Please complete the following information:\n"
@@ -74,23 +78,23 @@ msgstr ""
 "\n"
 "Si no proporciona esta información, no podremos generar su código único."
 
-#: .\templates\account\gea_register.html:83
+#: .\templates\account\gea_register.html:93
 msgid "Request for unique code – GEA"
 msgstr "Solicitud de código único – GEA"
 
-#: .\templates\account\gea_register.html:86
+#: .\templates\account\gea_register.html:96
 msgid "Hello, I would like to request the unique code to register with GEA."
 msgstr "Hello, I would like to request the unique code to register with GEA."
 
-#: .\templates\account\gea_register.html:89
+#: .\templates\account\gea_register.html:99
 msgid "You must request your unique registration code through"
 msgstr "Debe solicitar su código de registro único a través de"
 
-#: .\templates\account\gea_register.html:104
+#: .\templates\account\gea_register.html:114
 msgid "Register"
 msgstr "Registro"
 
-#: .\templates\account\gea_register.html:106
+#: .\templates\account\gea_register.html:116
 msgid "Do you already have an account? Sign in"
 msgstr "¿Ya tienes una cuenta? Iniciar sesión"
 
@@ -134,8 +138,8 @@ msgstr "Agregar nuevo activo"
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:222
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:29
 #: .\templates\dashboard\pages\buyers\profitability.html:187
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:176
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:244
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:175
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:243
 #: .\templates\dashboard\pages\holders\asset_location_base.html:75
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:95
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:109
@@ -158,7 +162,7 @@ msgstr "Categoría de activo (ES)*"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:76
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:136
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:133
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:121
 #: .\templates\dashboard\pages\holders\location\add_location.html:99
 #: .\templates\dashboard\pages\holders\location\edit_location.html:90
 msgid "Description (ES)"
@@ -170,7 +174,7 @@ msgstr "Categoría de activos (EN)*"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:101
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:161
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:135
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:123
 #: .\templates\dashboard\pages\holders\location\add_location.html:104
 #: .\templates\dashboard\pages\holders\location\edit_location.html:95
 msgid "Description (EN)"
@@ -187,8 +191,8 @@ msgstr "Agregar nuevo activo"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:125
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:200
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:165
-#: .\templates\dashboard\pages\buyers\edit_offer.html:158
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:153
+#: .\templates\dashboard\pages\buyers\edit_offer.html:147
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:101
 msgid "Go to my Purchase Orders"
 msgstr "Ir a mis órdenes de compra"
@@ -202,8 +206,8 @@ msgstr "Categorías"
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:65
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:80
 #: .\templates\dashboard\pages\buyers\profitability.html:199
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:177
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:245
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:176
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:244
 #: .\templates\dashboard\pages\holders\asset_location_base.html:76
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:201
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:212
@@ -217,14 +221,14 @@ msgid "Created"
 msgstr "Creado"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:174
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:270
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:269
 msgid "No categories found."
 msgstr "No se encontraron categorías."
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:196
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:297
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:224
-#: .\templates\dashboard\pages\buyers\edit_offer.html:180
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:175
+#: .\templates\dashboard\pages\buyers\edit_offer.html:169
 msgid "Saving and Translating..."
 msgstr "Guardando y traduciendo..."
 
@@ -249,7 +253,7 @@ msgstr "Registrar un nuevo nombre de activo y su categoría"
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:195
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:22
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:23
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:140
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:139
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:88
 msgid "Add New Purchase Order"
 msgstr "Agregar nueva orden de compra"
@@ -283,7 +287,7 @@ msgstr "Nuevo activo"
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:62
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:221
 #: .\templates\dashboard\pages\buyers\profitability.html:184
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:175
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:174
 #: .\templates\dashboard\pages\holders\asset_location_base.html:74
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:94
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:108
@@ -307,7 +311,7 @@ msgstr "Detalles del Activo"
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:100
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:220
 #: .\templates\dashboard\pages\buyers\profitability.html:227
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:174
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:173
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:93
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:107
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:291
@@ -321,12 +325,12 @@ msgid "Add New Category"
 msgstr "Añadir nueva categoría"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:148
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:148
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:136
 msgid "Observations (ES)"
 msgstr "Observaciones (ES)"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:173
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:150
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:138
 msgid "Observations (EN)"
 msgstr "Observaciones (EN)"
 
@@ -336,7 +340,7 @@ msgstr "Activos existentes"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:224
 #: .\templates\dashboard\pages\buyers\profitability.html:196
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:178
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:177
 #: .\templates\dashboard\pages\holders\add_asset_location.html:54
 #: .\templates\dashboard\pages\holders\asset_location_base.html:77
 #: .\templates\email\service_order_email_template.html:113
@@ -344,7 +348,7 @@ msgid "Observations"
 msgstr "Observaciones"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:276
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:230
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:229
 msgid "No assets found."
 msgstr "No se encontraron activos."
 
@@ -395,13 +399,7 @@ msgstr "Tipo de cantidad"
 msgid "Quantity required"
 msgstr "Cantidad requerida"
 
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:120
-#: .\templates\dashboard\pages\buyers\edit_offer.html:88
-#: .\templates\dashboard\pages\buyers\modals\delete_offer_modal.html:46
-msgid "Total value of the offer ($ USD)"
-msgstr "Valor total de la oferta ($ USD)"
-
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:161
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:149
 msgid "Submit Purchase Order"
 msgstr "Enviar orden de compra"
 
@@ -431,31 +429,31 @@ msgstr "Activo:"
 msgid "Purchase order Type:"
 msgstr "Tipo de orden de compra:"
 
-#: .\templates\dashboard\pages\buyers\edit_offer.html:98
+#: .\templates\dashboard\pages\buyers\edit_offer.html:87
 msgid "Quantity required:"
 msgstr "Cantidad requerida:"
 
-#: .\templates\dashboard\pages\buyers\edit_offer.html:107
+#: .\templates\dashboard\pages\buyers\edit_offer.html:96
 msgid "Country of Purchase:"
 msgstr "País de la compra"
 
-#: .\templates\dashboard\pages\buyers\edit_offer.html:118
+#: .\templates\dashboard\pages\buyers\edit_offer.html:107
 msgid "Description (ES):"
 msgstr "Descripción (ES)"
 
-#: .\templates\dashboard\pages\buyers\edit_offer.html:127
+#: .\templates\dashboard\pages\buyers\edit_offer.html:116
 msgid "Observations (ES):"
 msgstr "Observaciones (ES)"
 
-#: .\templates\dashboard\pages\buyers\edit_offer.html:136
+#: .\templates\dashboard\pages\buyers\edit_offer.html:125
 msgid "Description (EN):"
 msgstr "Descripción (EN)"
 
-#: .\templates\dashboard\pages\buyers\edit_offer.html:145
+#: .\templates\dashboard\pages\buyers\edit_offer.html:134
 msgid "Observations (EN):"
 msgstr "Observaciones (EN)"
 
-#: .\templates\dashboard\pages\buyers\edit_offer.html:154
+#: .\templates\dashboard\pages\buyers\edit_offer.html:143
 msgid "Save Purchase Order"
 msgstr "Guardar orden de compra"
 
@@ -464,7 +462,7 @@ msgid "Delete Purchase Order"
 msgstr "Borrar Orden de Compra"
 
 #: .\templates\dashboard\pages\buyers\modals\delete_offer_modal.html:11
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:297
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:296
 msgid "Close"
 msgstr "Cerrar"
 
@@ -487,6 +485,10 @@ msgstr "Tipo de orden de compra"
 #: .\templates\dashboard\pages\holders\location\edit_location.html:76
 msgid "Country"
 msgstr "País"
+
+#: .\templates\dashboard\pages\buyers\modals\delete_offer_modal.html:46
+msgid "Total value of the offer ($ USD)"
+msgstr "Valor total de la oferta ($ USD)"
 
 #: .\templates\dashboard\pages\buyers\modals\delete_offer_modal.html:50
 msgid "Approved"
@@ -683,7 +685,7 @@ msgstr "Pendiente"
 #: .\templates\dashboard\pages\buyers\profitability.html:83
 #: .\templates\dashboard\pages\buyers\profitability.html:394
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:89
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:480
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:444
 msgid "Show full ID"
 msgstr "Mostrar ID completo"
 
@@ -737,7 +739,7 @@ msgid "Closed"
 msgstr "Cerrado"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:393
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:481
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:445
 msgid "Hide full ID"
 msgstr "Esconder ID completo"
 
@@ -753,25 +755,25 @@ msgstr "Panel del comprador"
 msgid "Quantity Needed"
 msgstr "Cantidad necesaria"
 
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:125
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:124
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:250
 msgid "Yes"
 msgstr "Si"
 
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:125
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:124
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:252
 msgid "No"
 msgstr "No"
 
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:165
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:164
 msgid "Tables of Asset Names and Categories"
 msgstr "Tablas de nombres y categorías de activos"
 
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:296
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:295
 msgid "Purchase Order Successfully Deleted"
 msgstr "Orden de compra eliminada"
 
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:298
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:297
 msgid "There was a problem deleting the purchase order."
 msgstr "Hubo un problema al eliminar la orden de compra."
 
@@ -1326,7 +1328,7 @@ msgid "About Us"
 msgstr "Conócenos"
 
 #: .\templates\email\contact_email_template.html:131
-#: .\templates\email\purchase_order_email_template.html:225
+#: .\templates\email\purchase_order_email_template.html:217
 #: .\templates\email\service_order_email_template.html:133
 msgid "This email was sent from"
 msgstr "Este correo electrónico fue enviado desde"

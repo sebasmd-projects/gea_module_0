@@ -1,18 +1,30 @@
+import re
+
 from django import forms
 from django.contrib.auth.password_validation import validate_password
 from django.utils.translation import gettext_lazy as _
+from django_select2 import forms as s2forms
 
 from apps.common.utils.models import GeaDailyUniqueCode
 from apps.project.common.users.models import UserModel
-from apps.project.common.users.validators import (
-    UnicodeLastNameValidator,
-    UnicodeNameValidator,
-    UnicodeUsernameValidator
-)
+from apps.project.common.users.validators import (UnicodeLastNameValidator,
+                                                  UnicodeNameValidator,
+                                                  UnicodeUsernameValidator)
 
 USER_TXT = _('User')
 EMAIL_TXT = _('Email')
 PASSWORD_TXT = _('Password')
+
+
+class PhoneNumberCodeWidget(s2forms.Select2Widget):
+    def build_attrs(self, base_attrs, extra_attrs=None):
+        attrs = super().build_attrs(base_attrs, extra_attrs)
+        attrs['data-minimum-input-length'] = 1
+        attrs.update({
+            'data-width': '100%',     # Select2 usará 100%
+            'style': 'width:100%;',   # fallback para 'width:style'
+        })
+        return attrs
 
 
 class BaseUserForm(forms.ModelForm):
@@ -79,7 +91,6 @@ class BaseUserForm(forms.ModelForm):
             "class": "form-control",
         })
     )
-
     unique_code = forms.CharField(
         label=_("Unique Code"),
         required=True,
@@ -91,10 +102,40 @@ class BaseUserForm(forms.ModelForm):
             "autocomplete": "one-time-code"
         })
     )
+    phone_number = forms.CharField(
+        label=_("Cellphone"),
+        required=True,
+        help_text=_("Digits only, 7–15 digits."),
+        widget=forms.TextInput(attrs={
+            "id": "register_phone_number",
+            "type": "tel",
+            "inputmode": "numeric",
+            "pattern": r"\d{7,15}",
+            "placeholder": _("Cellphone"),
+            "class": "form-control",
+            "maxlength": "25",
+            "autocomplete": "tel",
+        })
+    )
 
     class Meta:
         model = UserModel
-        fields = ("username", "email", "first_name", "last_name")
+        fields = (
+            "username", "email", "first_name", "last_name",
+            "phone_number_code", "phone_number"
+        )
+        widgets = {
+            "phone_number_code": PhoneNumberCodeWidget,
+        }
+
+    # Normaliza/valida el número (solo dígitos, 7–15)
+    def clean_phone_number(self):
+        raw = (self.cleaned_data.get("phone_number") or "").strip()
+        digits = re.sub(r"\D+", "", raw)
+        if not (7 <= len(digits) <= 15):
+            raise forms.ValidationError(
+                _("Enter a valid phone number (7–15 digits)."))
+        return digits  # guardamos solo dígitos; el code va aparte
 
 
 class GeaUserRegisterForm(BaseUserForm):

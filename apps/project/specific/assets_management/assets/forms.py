@@ -92,7 +92,7 @@ class AssetNameInlineForm(forms.ModelForm):
         en = (cleaned.get("en_name") or "").strip()
 
         lang = getattr(self.request, "LANGUAGE_CODE", "en")
-        
+
         if lang == "es":
             if not es:
                 from django.core.exceptions import ValidationError

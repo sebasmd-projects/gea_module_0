@@ -100,10 +100,18 @@ class UserModelAdmin(UserAdmin, GeneralAdminModel):
                 'fields': (
                     'first_name',
                     'last_name',
-                    'email',
+                    
                 )
             }
         ),
+        ('Contact Information', {
+            'fields': (
+                'addresses',
+                'phone_number_code',
+                'phone_number',
+                'email',
+            )
+        }),
         (
             _('Permissions'), {
                 'fields': (
@@ -361,14 +369,7 @@ class UserPersonalInformationModelAdmin(GeneralAdminModel):
                 'passport_image',
                 'signature'
             )
-        }),
-        ('Contact Information', {
-            'fields': (
-                'addresses',
-                'phone_number_code',
-                'phone_number'
-            )
-        }),
+        })
     )
 
     filter_horizontal = (

@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block layout_content %}
-<div class="d-flex align-items-center justify-content-center container-xl min-vh-100">
+<div class="d-flex align-items-center justify-content-center container-xl vh-100">
   <div class="card mx-auto" style="max-width: 600px; width: 100%;">
     <div class="card-header text-center">
       <a href="{% url 'core:index' %}">
@@ -21,6 +21,8 @@
 
     <div class="card-body">
       <form method="POST">
+        {{ form.media.css }}
+        
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}" />
 
@@ -57,6 +59,14 @@
 
           <div class="col-md-6">
             {% include floating_input with field=form.last_name label=_("Last Names") %}
+          </div>
+
+          <div class="col-md-6">
+            {% include "account/partials/_floating_input.html" with field=form.phone_number_code %}
+          </div>
+          
+          <div class="col-md-6">
+            {% include "account/partials/_floating_input.html" with field=form.phone_number label=_("Cellphone") %}
           </div>
 
           <div class="col-md-6">
@@ -113,6 +123,8 @@
 {% endblock %}
 
 {% block body_custom_js %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
 <script>
   document.addEventListener('click', function (e) {
     const btn = e.target.closest('.toggle-visibility');
@@ -134,4 +146,6 @@
     }
   });
 </script>
+
+{{ form.media.js }}
 {% endblock body_custom_js %}
