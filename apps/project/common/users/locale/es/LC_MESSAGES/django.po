@@ -65,815 +65,815 @@ msgstr "Compra"
 
 #: .\apps\project\common\users\models.py:27
 msgid "+57 Colombia"
-msgstr ""
+msgstr "+57 Colombia"
 
 #: .\apps\project\common\users\models.py:28
 msgid "+1 United States"
-msgstr ""
+msgstr "+1 Estados Unidos"
 
 #: .\apps\project\common\users\models.py:29
 msgid "+1 American Samoa"
-msgstr ""
+msgstr "+1 Samoa Americana"
 
 #: .\apps\project\common\users\models.py:30
 msgid "+1 Anguilla"
-msgstr ""
+msgstr "+1 Anguila"
 
 #: .\apps\project\common\users\models.py:31
 msgid "+1 Antigua and Barbuda"
-msgstr ""
+msgstr "+1 Antigua y Barbuda"
 
 #: .\apps\project\common\users\models.py:32
 msgid "+54 Argentina"
-msgstr ""
+msgstr "+54 Argentina"
 
 #: .\apps\project\common\users\models.py:33
 msgid "+1 Bahamas"
-msgstr ""
+msgstr "+1 Bahamas"
 
 #: .\apps\project\common\users\models.py:34
 msgid "+1 Barbados"
-msgstr ""
+msgstr "+1 Barbados"
 
 #: .\apps\project\common\users\models.py:35
 msgid "+501 Belize"
-msgstr ""
+msgstr "+501 Belice"
 
 #: .\apps\project\common\users\models.py:36
 msgid "+1 Bermuda"
-msgstr ""
+msgstr "+1 Bermudas"
 
 #: .\apps\project\common\users\models.py:37
 msgid "+591 Bolivia"
-msgstr ""
+msgstr "+591 Bolivia"
 
 #: .\apps\project\common\users\models.py:38
 msgid "+55 Brazil"
-msgstr ""
+msgstr "+55 Brasil"
 
 #: .\apps\project\common\users\models.py:39
 msgid "+1 British Virgin Islands"
-msgstr ""
+msgstr "+1 Islas Vírgenes Británicas"
 
 #: .\apps\project\common\users\models.py:40
 msgid "+1 Canada"
-msgstr ""
+msgstr "+1 Canadá"
 
 #: .\apps\project\common\users\models.py:41
 msgid "+1 Cayman Islands"
-msgstr ""
+msgstr "+1 Islas Caimán"
 
 #: .\apps\project\common\users\models.py:42
 msgid "+56 Chile"
-msgstr ""
+msgstr "+56 Chile"
 
 #: .\apps\project\common\users\models.py:43
 msgid "+506 Costa Rica"
-msgstr ""
+msgstr "+506 Costa Rica"
 
 #: .\apps\project\common\users\models.py:44
 msgid "+1 Dominica"
-msgstr ""
+msgstr "+1 Dominica"
 
 #: .\apps\project\common\users\models.py:45
 msgid "+1 Dominican Republic"
-msgstr ""
+msgstr "+1 República Dominicana"
 
 #: .\apps\project\common\users\models.py:46
 msgid "+593 Ecuador"
-msgstr ""
+msgstr "+593 Ecuador"
 
 #: .\apps\project\common\users\models.py:47
 msgid "+503 El Salvador"
-msgstr ""
+msgstr "+503 El Salvador"
 
 #: .\apps\project\common\users\models.py:48
 msgid "+500 Falkland Islands"
-msgstr ""
+msgstr "+500 Islas Malvinas"
 
 #: .\apps\project\common\users\models.py:49
 msgid "+594 French Guiana"
-msgstr ""
+msgstr "+594 Guayana Francesa"
 
 #: .\apps\project\common\users\models.py:50
 msgid "+299 Greenland"
-msgstr ""
+msgstr "+299 Groenlandia"
 
 #: .\apps\project\common\users\models.py:51
 msgid "+1 Grenada"
-msgstr ""
+msgstr "+1 Granada"
 
 #: .\apps\project\common\users\models.py:52
 msgid "+1 Guam"
-msgstr ""
+msgstr "+1 Guam"
 
 #: .\apps\project\common\users\models.py:53
 msgid "+502 Guatemala"
-msgstr ""
+msgstr "+502 Guatemala"
 
 #: .\apps\project\common\users\models.py:54
 msgid "+592 Guyana"
-msgstr ""
+msgstr "+592 Guyana"
 
 #: .\apps\project\common\users\models.py:55
 msgid "+504 Honduras"
-msgstr ""
+msgstr "+504 Honduras"
 
 #: .\apps\project\common\users\models.py:56
 msgid "+1 Jamaica"
-msgstr ""
+msgstr "+1 Jamaica"
 
 #: .\apps\project\common\users\models.py:57
 msgid "+52 Mexico"
-msgstr ""
+msgstr "+52 México"
 
 #: .\apps\project\common\users\models.py:58
 msgid "+1 Montserrat"
-msgstr ""
+msgstr "+1 Montserrat"
 
 #: .\apps\project\common\users\models.py:59
 msgid "+505 Nicaragua"
-msgstr ""
+msgstr "+505 Nicaragua"
 
 #: .\apps\project\common\users\models.py:60
 msgid "+1 Northern Mariana Islands"
-msgstr ""
+msgstr "+1 Islas Marianas del Norte"
 
 #: .\apps\project\common\users\models.py:61
 msgid "+507 Panama"
-msgstr ""
+msgstr "+507 Panamá"
 
 #: .\apps\project\common\users\models.py:62
 msgid "+595 Paraguay"
-msgstr ""
+msgstr "+595 Paraguay"
 
 #: .\apps\project\common\users\models.py:63
 msgid "+51 Peru"
-msgstr ""
+msgstr "+51 Perú"
 
 #: .\apps\project\common\users\models.py:64
 msgid "+1 Puerto Rico"
-msgstr ""
+msgstr "+1 Puerto Rico"
 
 #: .\apps\project\common\users\models.py:65
 msgid "+1 Saint Kitts and Nevis"
-msgstr ""
+msgstr "+1 San Cristóbal y Nieves"
 
 #: .\apps\project\common\users\models.py:66
 msgid "+1 Saint Lucia"
-msgstr ""
+msgstr "+1 Santa Lucía"
 
 #: .\apps\project\common\users\models.py:67
 msgid "+1 Saint Vincent and the Grenadines"
-msgstr ""
+msgstr "+1 San Vicente y las Granadinas"
 
 #: .\apps\project\common\users\models.py:68
 msgid "+1 Sint Maarten (Dutch part)"
-msgstr ""
+msgstr "+1 Sint Maarten (parte neerlandesa)"
 
 #: .\apps\project\common\users\models.py:69
 msgid "+597 Suriname"
-msgstr ""
+msgstr "+597 Surinam"
 
 #: .\apps\project\common\users\models.py:70
 msgid "+1 Trinidad and Tobago"
-msgstr ""
+msgstr "+1 Trinidad y Tobago"
 
 #: .\apps\project\common\users\models.py:71
 msgid "+1 Turks and Caicos Islands"
-msgstr ""
+msgstr "+1 Islas Turcas y Caicos"
 
 #: .\apps\project\common\users\models.py:72
 msgid "+598 Uruguay"
-msgstr ""
+msgstr "+598 Uruguay"
 
 #: .\apps\project\common\users\models.py:73
 msgid "+1 United States Virgin Islands"
-msgstr ""
+msgstr "+1 Islas Vírgenes de los Estados Unidos"
 
 #: .\apps\project\common\users\models.py:74
 msgid "+58 Venezuela"
-msgstr ""
+msgstr "+58 Venezuela"
 
 #: .\apps\project\common\users\models.py:77
 msgid "+355 Albania"
-msgstr ""
+msgstr "+355 Albania"
 
 #: .\apps\project\common\users\models.py:78
 msgid "+376 Andorra"
-msgstr ""
+msgstr "+376 Andorra"
 
 #: .\apps\project\common\users\models.py:79
 msgid "+43 Austria"
-msgstr ""
+msgstr "+43 Austria"
 
 #: .\apps\project\common\users\models.py:80
 msgid "+375 Belarus"
-msgstr ""
+msgstr "+375 Bielorrusia"
 
 #: .\apps\project\common\users\models.py:81
 msgid "+32 Belgium"
-msgstr ""
+msgstr "+32 Bélgica"
 
 #: .\apps\project\common\users\models.py:82
 msgid "+387 Bosnia and Herzegovina"
-msgstr ""
+msgstr "+387 Bosnia y Herzegovina"
 
 #: .\apps\project\common\users\models.py:83
 msgid "+359 Bulgaria"
-msgstr ""
+msgstr "+359 Bulgaria"
 
 #: .\apps\project\common\users\models.py:84
 msgid "+385 Croatia"
-msgstr ""
+msgstr "+385 Croacia"
 
 #: .\apps\project\common\users\models.py:85
 msgid "+420 Czechia"
-msgstr ""
+msgstr "+420 Chequia"
 
 #: .\apps\project\common\users\models.py:86
 msgid "+45 Denmark"
-msgstr ""
+msgstr "+45 Dinamarca"
 
 #: .\apps\project\common\users\models.py:87
 msgid "+372 Estonia"
-msgstr ""
+msgstr "+372 Estonia"
 
 #: .\apps\project\common\users\models.py:88
 msgid "+358 Finland"
-msgstr ""
+msgstr "+358 Finlandia"
 
 #: .\apps\project\common\users\models.py:89
 msgid "+33 France"
-msgstr ""
+msgstr "+33 Francia"
 
 #: .\apps\project\common\users\models.py:90
 msgid "+49 Germany"
-msgstr ""
+msgstr "+49 Alemania"
 
 #: .\apps\project\common\users\models.py:91
 msgid "+30 Greece"
-msgstr ""
+msgstr "+30 Grecia"
 
 #: .\apps\project\common\users\models.py:92
 msgid "+44 Guernsey"
-msgstr ""
+msgstr "+44 Guernesey"
 
 #: .\apps\project\common\users\models.py:93
 msgid "+36 Hungary"
-msgstr ""
+msgstr "+36 Hungría"
 
 #: .\apps\project\common\users\models.py:94
 msgid "+354 Iceland"
-msgstr ""
+msgstr "+354 Islandia"
 
 #: .\apps\project\common\users\models.py:95
 msgid "+353 Ireland"
-msgstr ""
+msgstr "+353 Irlanda"
 
 #: .\apps\project\common\users\models.py:96
 msgid "+44 Isle of Man"
-msgstr ""
+msgstr "+44 Isla de Man"
 
 #: .\apps\project\common\users\models.py:97
 msgid "+39 Italy"
-msgstr ""
+msgstr "+39 Italia"
 
 #: .\apps\project\common\users\models.py:98
 msgid "+44 Jersey"
-msgstr ""
+msgstr "+44 Jersey"
 
 #: .\apps\project\common\users\models.py:99
 msgid "+383 Kosovo"
-msgstr ""
+msgstr "+383 Kosovo"
 
 #: .\apps\project\common\users\models.py:100
 msgid "+371 Latvia"
-msgstr ""
+msgstr "+371 Letonia"
 
 #: .\apps\project\common\users\models.py:101
 msgid "+423 Liechtenstein"
-msgstr ""
+msgstr "+423 Liechtenstein"
 
 #: .\apps\project\common\users\models.py:102
 msgid "+370 Lithuania"
-msgstr ""
+msgstr "+370 Lituania"
 
 #: .\apps\project\common\users\models.py:103
 msgid "+352 Luxembourg"
-msgstr ""
+msgstr "+352 Luxemburgo"
 
 #: .\apps\project\common\users\models.py:104
 msgid "+373 Moldova"
-msgstr ""
+msgstr "+373 Moldavia"
 
 #: .\apps\project\common\users\models.py:105
 msgid "+377 Monaco"
-msgstr ""
+msgstr "+377 Mónaco"
 
 #: .\apps\project\common\users\models.py:106
 msgid "+382 Montenegro"
-msgstr ""
+msgstr "+382 Montenegro"
 
 #: .\apps\project\common\users\models.py:107
 msgid "+31 Netherlands"
-msgstr ""
+msgstr "+31 Países Bajos"
 
 #: .\apps\project\common\users\models.py:108
 msgid "+389 North Macedonia"
-msgstr ""
+msgstr "+389 Macedonia del Norte"
 
 #: .\apps\project\common\users\models.py:109
 msgid "+47 Norway"
-msgstr ""
+msgstr "+47 Noruega"
 
 #: .\apps\project\common\users\models.py:110
 msgid "+48 Poland"
-msgstr ""
+msgstr "+48 Polonia"
 
 #: .\apps\project\common\users\models.py:111
 msgid "+351 Portugal"
-msgstr ""
+msgstr "+351 Portugal"
 
 #: .\apps\project\common\users\models.py:112
 msgid "+40 Romania"
-msgstr ""
+msgstr "+40 Rumanía"
 
 #: .\apps\project\common\users\models.py:113
 msgid "+378 San Marino"
-msgstr ""
+msgstr "+378 San Marino"
 
 #: .\apps\project\common\users\models.py:114
 msgid "+381 Serbia"
-msgstr ""
+msgstr "+381 Serbia"
 
 #: .\apps\project\common\users\models.py:115
 msgid "+421 Slovakia"
-msgstr ""
+msgstr "+421 Eslovaquia"
 
 #: .\apps\project\common\users\models.py:116
 msgid "+386 Slovenia"
-msgstr ""
+msgstr "+386 Eslovenia"
 
 #: .\apps\project\common\users\models.py:117
 msgid "+34 Spain"
-msgstr ""
+msgstr "+34 España"
 
 #: .\apps\project\common\users\models.py:118
 msgid "+46 Sweden"
-msgstr ""
+msgstr "+46 Suecia"
 
 #: .\apps\project\common\users\models.py:119
 msgid "+41 Switzerland"
-msgstr ""
+msgstr "+41 Suiza"
 
 #: .\apps\project\common\users\models.py:120
 msgid "+380 Ukraine"
-msgstr ""
+msgstr "+380 Ucrania"
 
 #: .\apps\project\common\users\models.py:121
 msgid "+44 United Kingdom"
-msgstr ""
+msgstr "+44 Reino Unido"
 
 #: .\apps\project\common\users\models.py:122
 msgid "+39 Vatican City"
-msgstr ""
+msgstr "+39 Ciudad del Vaticano"
 
 #: .\apps\project\common\users\models.py:124
 msgid "+7 Russia"
-msgstr ""
+msgstr "+7 Rusia"
 
 #: .\apps\project\common\users\models.py:125
 msgid "+7 Kazakhstan"
-msgstr ""
+msgstr "+7 Kazajistán"
 
 #: .\apps\project\common\users\models.py:128
 msgid "+213 Algeria"
-msgstr ""
+msgstr "+213 Argelia"
 
 #: .\apps\project\common\users\models.py:129
 msgid "+244 Angola"
-msgstr ""
+msgstr "+244 Angola"
 
 #: .\apps\project\common\users\models.py:130
 msgid "+229 Benin"
-msgstr ""
+msgstr "+229 Benín"
 
 #: .\apps\project\common\users\models.py:131
 msgid "+267 Botswana"
-msgstr ""
+msgstr "+267 Botsuana"
 
 #: .\apps\project\common\users\models.py:132
 msgid "+226 Burkina Faso"
-msgstr ""
+msgstr "+226 Burkina Faso"
 
 #: .\apps\project\common\users\models.py:133
 msgid "+257 Burundi"
-msgstr ""
+msgstr "+257 Burundi"
 
 #: .\apps\project\common\users\models.py:134
 msgid "+237 Cameroon"
-msgstr ""
+msgstr "+237 Camerún"
 
 #: .\apps\project\common\users\models.py:135
 msgid "+236 Central African Republic"
-msgstr ""
+msgstr "+236 República Centroafricana"
 
 #: .\apps\project\common\users\models.py:136
 msgid "+235 Chad"
-msgstr ""
+msgstr "+235 Chad"
 
 #: .\apps\project\common\users\models.py:137
 msgid "+269 Comoros"
-msgstr ""
+msgstr "+269 Comoras"
 
 #: .\apps\project\common\users\models.py:138
 msgid "+242 Republic of the Congo"
-msgstr ""
+msgstr "+242 República del Congo"
 
 #: .\apps\project\common\users\models.py:139
 msgid "+253 Djibouti"
-msgstr ""
+msgstr "+253 Yibuti"
 
 #: .\apps\project\common\users\models.py:140
 msgid "+243 Democratic Republic of the Congo"
-msgstr ""
+msgstr "+243 República Democrática del Congo"
 
 #: .\apps\project\common\users\models.py:141
 msgid "+20 Egypt"
-msgstr ""
+msgstr "+20 Egipto"
 
 #: .\apps\project\common\users\models.py:142
 msgid "+240 Equatorial Guinea"
-msgstr ""
+msgstr "+240 Guinea Ecuatorial"
 
 #: .\apps\project\common\users\models.py:143
 msgid "+291 Eritrea"
-msgstr ""
+msgstr "+291 Eritrea"
 
 #: .\apps\project\common\users\models.py:144
 msgid "+268 Eswatini"
-msgstr ""
+msgstr "+268 Esuatini"
 
 #: .\apps\project\common\users\models.py:145
 msgid "+251 Ethiopia"
-msgstr ""
+msgstr "+251 Etiopía"
 
 #: .\apps\project\common\users\models.py:146
 msgid "+241 Gabon"
-msgstr ""
+msgstr "+241 Gabón"
 
 #: .\apps\project\common\users\models.py:147
 msgid "+220 Gambia"
-msgstr ""
+msgstr "+220 Gambia"
 
 #: .\apps\project\common\users\models.py:148
 msgid "+233 Ghana"
-msgstr ""
+msgstr "+233 Ghana"
 
 #: .\apps\project\common\users\models.py:149
 msgid "+224 Guinea"
-msgstr ""
+msgstr "+224 Guinea"
 
 #: .\apps\project\common\users\models.py:150
 msgid "+245 Guinea-Bissau"
-msgstr ""
+msgstr "+245 Guinea-Bisáu"
 
 #: .\apps\project\common\users\models.py:151
 msgid "+225 Ivory Coast"
-msgstr ""
+msgstr "+225 Costa de Marfil"
 
 #: .\apps\project\common\users\models.py:152
 msgid "+254 Kenya"
-msgstr ""
+msgstr "+254 Kenia"
 
 #: .\apps\project\common\users\models.py:153
 msgid "+266 Lesotho"
-msgstr ""
+msgstr "+266 Lesoto"
 
 #: .\apps\project\common\users\models.py:154
 msgid "+231 Liberia"
-msgstr ""
+msgstr "+231 Liberia"
 
 #: .\apps\project\common\users\models.py:155
 msgid "+218 Libya"
-msgstr ""
+msgstr "+218 Libia"
 
 #: .\apps\project\common\users\models.py:156
 msgid "+261 Madagascar"
-msgstr ""
+msgstr "+261 Madagascar"
 
 #: .\apps\project\common\users\models.py:157
 msgid "+265 Malawi"
-msgstr ""
+msgstr "+265 Malaui"
 
 #: .\apps\project\common\users\models.py:158
 msgid "+223 Mali"
-msgstr ""
+msgstr "+223 Malí"
 
 #: .\apps\project\common\users\models.py:159
 msgid "+222 Mauritania"
-msgstr ""
+msgstr "+222 Mauritania"
 
 #: .\apps\project\common\users\models.py:160
 msgid "+230 Mauritius"
-msgstr ""
+msgstr "+230 Mauricio"
 
 #: .\apps\project\common\users\models.py:161
 msgid "+262 Mayotte"
-msgstr ""
+msgstr "+262 Mayotte"
 
 #: .\apps\project\common\users\models.py:162
 msgid "+212 Morocco"
-msgstr ""
+msgstr "+212 Marruecos"
 
 #: .\apps\project\common\users\models.py:163
 msgid "+258 Mozambique"
-msgstr ""
+msgstr "+258 Mozambique"
 
 #: .\apps\project\common\users\models.py:164
 msgid "+264 Namibia"
-msgstr ""
+msgstr "+264 Namibia"
 
 #: .\apps\project\common\users\models.py:165
 msgid "+227 Niger"
-msgstr ""
+msgstr "+227 Níger"
 
 #: .\apps\project\common\users\models.py:166
 msgid "+234 Nigeria"
-msgstr ""
+msgstr "+234 Nigeria"
 
 #: .\apps\project\common\users\models.py:167
 msgid "+262 Réunion"
-msgstr ""
+msgstr "+262 Reunión"
 
 #: .\apps\project\common\users\models.py:168
 msgid "+250 Rwanda"
-msgstr ""
+msgstr "+250 Ruanda"
 
 #: .\apps\project\common\users\models.py:169
 msgid "+221 Senegal"
-msgstr ""
+msgstr "+221 Senegal"
 
 #: .\apps\project\common\users\models.py:170
 msgid "+248 Seychelles"
-msgstr ""
+msgstr "+248 Seychelles"
 
 #: .\apps\project\common\users\models.py:171
 msgid "+232 Sierra Leone"
-msgstr ""
+msgstr "+232 Sierra Leona"
 
 #: .\apps\project\common\users\models.py:172
 msgid "+252 Somalia"
-msgstr ""
+msgstr "+252 Somalia"
 
 #: .\apps\project\common\users\models.py:173
 msgid "+27 South Africa"
-msgstr ""
+msgstr "+27 Sudáfrica"
 
 #: .\apps\project\common\users\models.py:174
 msgid "+211 South Sudan"
-msgstr ""
+msgstr "+211 Sudán del Sur"
 
 #: .\apps\project\common\users\models.py:175
 msgid "+249 Sudan"
-msgstr ""
+msgstr "+249 Sudán"
 
 #: .\apps\project\common\users\models.py:176
 msgid "+255 Tanzania"
-msgstr ""
+msgstr "+255 Tanzania"
 
 #: .\apps\project\common\users\models.py:177
 msgid "+228 Togo"
-msgstr ""
+msgstr "+228 Togo"
 
 #: .\apps\project\common\users\models.py:178
 msgid "+216 Tunisia"
-msgstr ""
+msgstr "+216 Túnez"
 
 #: .\apps\project\common\users\models.py:179
 msgid "+256 Uganda"
-msgstr ""
+msgstr "+256 Uganda"
 
 #: .\apps\project\common\users\models.py:180
 msgid "+212 Western Sahara"
-msgstr ""
+msgstr "+212 Sáhara Occidental"
 
 #: .\apps\project\common\users\models.py:181
 msgid "+260 Zambia"
-msgstr ""
+msgstr "+260 Zambia"
 
 #: .\apps\project\common\users\models.py:182
 msgid "+263 Zimbabwe"
-msgstr ""
+msgstr "+263 Zimbabue"
 
 #: .\apps\project\common\users\models.py:185
 msgid "+93 Afghanistan"
-msgstr ""
+msgstr "+93 Afganistán"
 
 #: .\apps\project\common\users\models.py:186
 msgid "+880 Bangladesh"
-msgstr ""
+msgstr "+880 Bangladés"
 
 #: .\apps\project\common\users\models.py:187
 msgid "+975 Bhutan"
-msgstr ""
+msgstr "+975 Bután"
 
 #: .\apps\project\common\users\models.py:188
 msgid "+673 Brunei"
-msgstr ""
+msgstr "+673 Brunéi"
 
 #: .\apps\project\common\users\models.py:189
 msgid "+855 Cambodia"
-msgstr ""
+msgstr "+855 Camboya"
 
 #: .\apps\project\common\users\models.py:190
 msgid "+86 China"
-msgstr ""
+msgstr "+86 China"
 
 #: .\apps\project\common\users\models.py:191
 msgid "+357 Cyprus"
-msgstr ""
+msgstr "+357 Chipre"
 
 #: .\apps\project\common\users\models.py:192
 msgid "+670 East Timor"
-msgstr ""
+msgstr "+670 Timor Oriental"
 
 #: .\apps\project\common\users\models.py:193
 msgid "+91 India"
-msgstr ""
+msgstr "+91 India"
 
 #: .\apps\project\common\users\models.py:194
 msgid "+62 Indonesia"
-msgstr ""
+msgstr "+62 Indonesia"
 
 #: .\apps\project\common\users\models.py:195
 msgid "+98 Iran"
-msgstr ""
+msgstr "+98 Irán"
 
 #: .\apps\project\common\users\models.py:196
 msgid "+964 Iraq"
-msgstr ""
+msgstr "+964 Irak"
 
 #: .\apps\project\common\users\models.py:197
 msgid "+972 Israel"
-msgstr ""
+msgstr "+972 Israel"
 
 #: .\apps\project\common\users\models.py:198
 msgid "+81 Japan"
-msgstr ""
+msgstr "+81 Japón"
 
 #: .\apps\project\common\users\models.py:199
 msgid "+962 Jordan"
-msgstr ""
+msgstr "+962 Jordania"
 
 #: .\apps\project\common\users\models.py:200
 msgid "+856 Laos"
-msgstr ""
+msgstr "+856 Laos"
 
 #: .\apps\project\common\users\models.py:201
 msgid "+961 Lebanon"
-msgstr ""
+msgstr "+961 Líbano"
 
 #: .\apps\project\common\users\models.py:202
 msgid "+60 Malaysia"
-msgstr ""
+msgstr "+60 Malasia"
 
 #: .\apps\project\common\users\models.py:203
 msgid "+960 Maldives"
-msgstr ""
+msgstr "+960 Maldivas"
 
 #: .\apps\project\common\users\models.py:204
 msgid "+976 Mongolia"
-msgstr ""
+msgstr "+976 Mongolia"
 
 #: .\apps\project\common\users\models.py:205
 msgid "+95 Myanmar"
-msgstr ""
+msgstr "+95 Myanmar"
 
 #: .\apps\project\common\users\models.py:206
 msgid "+977 Nepal"
-msgstr ""
+msgstr "+977 Nepal"
 
 #: .\apps\project\common\users\models.py:207
 msgid "+850 North Korea"
-msgstr ""
+msgstr "+850 Corea del Norte"
 
 #: .\apps\project\common\users\models.py:208
 msgid "+92 Pakistan"
-msgstr ""
+msgstr "+92 Pakistán"
 
 #: .\apps\project\common\users\models.py:209
 msgid "+970 Palestine"
-msgstr ""
+msgstr "+970 Palestina"
 
 #: .\apps\project\common\users\models.py:210
 msgid "+63 Philippines"
-msgstr ""
+msgstr "+63 Filipinas"
 
 #: .\apps\project\common\users\models.py:211
 msgid "+65 Singapore"
-msgstr ""
+msgstr "+65 Singapur"
 
 #: .\apps\project\common\users\models.py:212
 msgid "+82 South Korea"
-msgstr ""
+msgstr "+82 Corea del Sur"
 
 #: .\apps\project\common\users\models.py:213
 msgid "+94 Sri Lanka"
-msgstr ""
+msgstr "+94 Sri Lanka"
 
 #: .\apps\project\common\users\models.py:214
 msgid "+963 Syria"
-msgstr ""
+msgstr "+963 Siria"
 
 #: .\apps\project\common\users\models.py:215
 msgid "+66 Thailand"
-msgstr ""
+msgstr "+66 Tailandia"
 
 #: .\apps\project\common\users\models.py:216
 msgid "+90 Turkey"
-msgstr ""
+msgstr "+90 Turquía"
 
 #: .\apps\project\common\users\models.py:217
 msgid "+84 Vietnam"
-msgstr ""
+msgstr "+84 Vietnam"
 
 #: .\apps\project\common\users\models.py:220
 msgid "+61 Australia"
-msgstr ""
+msgstr "+61 Australia"
 
 #: .\apps\project\common\users\models.py:221
 msgid "+61 Christmas Island"
-msgstr ""
+msgstr "+61 Isla de Navidad"
 
 #: .\apps\project\common\users\models.py:222
 msgid "+61 Cocos (Keeling) Islands"
-msgstr ""
+msgstr "+61 Islas Cocos (Keeling)"
 
 #: .\apps\project\common\users\models.py:223
 msgid "+679 Fiji"
-msgstr ""
+msgstr "+679 Fiyi"
 
 #: .\apps\project\common\users\models.py:224
 msgid "+689 French Polynesia"
-msgstr ""
+msgstr "+689 Polinesia Francesa"
 
 #: .\apps\project\common\users\models.py:225
 msgid "+686 Kiribati"
-msgstr ""
+msgstr "+686 Kiribati"
 
 #: .\apps\project\common\users\models.py:226
 msgid "+692 Marshall Islands"
-msgstr ""
+msgstr "+692 Islas Marshall"
 
 #: .\apps\project\common\users\models.py:227
 msgid "+691 Micronesia (Federated States)"
-msgstr ""
+msgstr "+691 Micronesia (Estados Federados)"
 
 #: .\apps\project\common\users\models.py:228
 msgid "+674 Nauru"
-msgstr ""
+msgstr "+674 Nauru"
 
 #: .\apps\project\common\users\models.py:229
 msgid "+687 New Caledonia"
-msgstr ""
+msgstr "+687 Nueva Caledonia"
 
 #: .\apps\project\common\users\models.py:230
 msgid "+64 New Zealand"
-msgstr ""
+msgstr "+64 Nueva Zelanda"
 
 #: .\apps\project\common\users\models.py:231
 msgid "+680 Palau"
-msgstr ""
+msgstr "+680 Palaos"
 
 #: .\apps\project\common\users\models.py:232
 msgid "+675 Papua New Guinea"
-msgstr ""
+msgstr "+675 Papúa Nueva Guinea"
 
 #: .\apps\project\common\users\models.py:233
 msgid "+685 Samoa"
-msgstr ""
+msgstr "+685 Samoa"
 
 #: .\apps\project\common\users\models.py:234
 msgid "+677 Solomon Islands"
-msgstr ""
+msgstr "+677 Islas Salomón"
 
 #: .\apps\project\common\users\models.py:235
 msgid "+676 Tonga"
-msgstr ""
+msgstr "+676 Tonga"
 
 #: .\apps\project\common\users\models.py:236
 msgid "+688 Tuvalu"
-msgstr ""
+msgstr "+688 Tuvalu"
 
 #: .\apps\project\common\users\models.py:237
 msgid "+678 Vanuatu"
-msgstr ""
+msgstr "+678 Vanuatu"
 
 #: .\apps\project\common\users\models.py:238
 msgid "+681 Wallis and Futuna"
-msgstr ""
+msgstr "+681 Wallis y Futuna"
 
 #: .\apps\project\common\users\models.py:260
 msgid "names"

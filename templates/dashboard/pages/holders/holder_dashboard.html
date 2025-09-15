@@ -1,6 +1,6 @@
 {% extends 'dashboard/dashboard_layout_base.html' %}
 
-{% load i18n static %}
+{% load i18n static custom_filters %}
 
 {% block icons %}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
@@ -365,14 +365,24 @@
                     </td>
 
                     <td>
-                      <a href="{% url 'buyers:offer_details' field.id %}" type="button"
-                        class="btn btn-datatable btn-icon btn-outline-info">
+                      {# Botón ver detalle #}
+                      <a href="{% url 'buyers:offer_details' field.id %}"
+                        class="btn btn-datatable btn-icon btn-outline-info"
+                        aria-label="{% trans 'Details' %}">
                         <i class="fa-solid fa-circle-info"></i>
                       </a>
 
-                      <!-- <a href="https://wa.me/573012283818?text=Quiero aplicar a la postura {{ field.asset.asset_name.es_name }} {{ field.id }}" class="btn btn-datatable btn-icon btn-outline-success">
-                        <i class="fa-brands fa-whatsapp"></i>
-                      </a> -->
+                      {# Si ya se envió la orden de pago -> candado rojo #}
+                      {% if field.payment_order_sent_at %}
+                        <span class="btn btn-datatable btn-icon disabled"
+                              title="{% trans 'Payment order already sent' %}">
+                          <i class="fa-solid fa-lock" style="color:#dc3545;"></i>
+                        </span>
+                      {% else %}
+                        <a href="https://wa.me/573012283818?text=Quiero aplicar a la postura:%0A{{ field.asset.asset_name.es_name }}%0A      ID       | T. Cantidad | Cantidad%0A{{ field.id|stringformat:'s'|slice:':8' }} |         {{ field.quantity_type }}         | {{ field.offer_quantity }}" class="btn btn-datatable btn-icon btn-outline-success" target="_blank">
+                          <i class="fa-brands fa-whatsapp"></i>
+                        </a>
+                      {% endif %}
                     </td>
                   </tr>
                   {% empty %}

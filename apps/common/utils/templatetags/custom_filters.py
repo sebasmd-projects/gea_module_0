@@ -91,6 +91,7 @@ def aria_expanded(context, *pattern_names):
     """Devuelve 'true' si debe estar expandido; 'false' en caso contrario."""
     return 'true' if is_any_active(context, *pattern_names) else 'false'
 
+
 @register.filter
 def split(value, sep=' '):
     """
@@ -102,6 +103,7 @@ def split(value, sep=' '):
     # Garantiza str y evita separar por '' (vacío)
     s = str(value)
     return s.split(sep) if sep else [s]
+
 
 @register.filter
 def trim(value):

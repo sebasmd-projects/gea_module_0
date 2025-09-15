@@ -19,7 +19,11 @@
       {% endif %}
     </div>
   {% else %}
-    <div class="flex-grow-1 d-none d-md-block"></div>
+    <div class="d-none d-md-flex flex-grow-1 justify-content-center">
+      <a href="{% url 'assets:holder_index' %}" class="btn text-black fw-semibold gea_gradient">
+        {% trans 'On-demand offers' %}
+      </a>
+    </div>
   {% endif %}
 
   <!-- Navbar Items (derecha) -->

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-15 15:30-0500\n"
-"PO-Revision-Date: 2025-09-09 18:19-0500\n"
+"PO-Revision-Date: 2025-09-15 17:14-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -54,15 +54,15 @@ msgstr "Código Único "
 #: .\apps\project\common\account\forms.py:106
 #: .\apps\project\common\account\forms.py:114
 msgid "Cellphone"
-msgstr ""
+msgstr "Celular"
 
 #: .\apps\project\common\account\forms.py:108
 msgid "Digits only, 7–15 digits."
-msgstr ""
+msgstr "Sólo dígitos, 7–15 dígitos."
 
 #: .\apps\project\common\account\forms.py:137
 msgid "Enter a valid phone number (7–15 digits)."
-msgstr ""
+msgstr "Introduzca un número de teléfono válido (7–15 dígitos)."
 
 #: .\apps\project\common\account\forms.py:143
 msgid "User Type"

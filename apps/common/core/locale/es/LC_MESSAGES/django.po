@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-11 02:25-0500\n"
-"PO-Revision-Date: 2025-09-11 02:27-0500\n"
+"POT-Creation-Date: 2025-09-15 17:13-0500\n"
+"PO-Revision-Date: 2025-09-15 17:14-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -45,34 +45,38 @@ msgid "Your browser does not support HTML5 video."
 msgstr "Su navegador no soporta vídeo HTML5."
 
 #: .\apps\common\core\templates\core\partials\core_nav.html:16
-#: .\apps\common\core\templates\core\partials\core_nav.html:76
+#: .\apps\common\core\templates\core\partials\core_nav.html:80
 msgid "Buyer"
 msgstr "Compra"
 
 #: .\apps\common\core\templates\core\partials\core_nav.html:19
-#: .\apps\common\core\templates\core\partials\core_nav.html:79
+#: .\apps\common\core\templates\core\partials\core_nav.html:83
 msgid "Client Area"
 msgstr "Área de Clientes"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:33
-#: .\apps\common\core\templates\core\partials\core_nav.html:85
+#: .\apps\common\core\templates\core\partials\core_nav.html:25
+msgid "On-demand offers"
+msgstr "OFERTAS bajo demanda"
+
+#: .\apps\common\core\templates\core\partials\core_nav.html:37
+#: .\apps\common\core\templates\core\partials\core_nav.html:89
 msgid "Login"
 msgstr "Iniciar Sesión"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:36
-#: .\apps\common\core\templates\core\partials\core_nav.html:86
+#: .\apps\common\core\templates\core\partials\core_nav.html:40
+#: .\apps\common\core\templates\core\partials\core_nav.html:90
 msgid "Register"
 msgstr "Registro"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:50
+#: .\apps\common\core\templates\core\partials\core_nav.html:54
 msgid "Menu"
 msgstr "Menú"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:57
+#: .\apps\common\core\templates\core\partials\core_nav.html:61
 msgid "Language"
 msgstr "Idioma"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:89
+#: .\apps\common\core\templates\core\partials\core_nav.html:93
 msgid "Logout"
 msgstr "Cerrar Sesión"
 
