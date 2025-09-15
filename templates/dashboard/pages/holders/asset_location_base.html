@@ -1,4 +1,4 @@
-{% extends 'raw.html' %}
+{% extends 'dashboard/dashboard_layout_base.html' %}
 
 {% load i18n static %}
 
@@ -8,81 +8,39 @@
 <script src="https://kit.fontawesome.com/aa367a5aee.js" crossorigin="anonymous"></script>
 {% endblock icons %}
 
-{% block layout_main %}
-<header class="page-header page-header-dark pb-10"
-    style="background-image: linear-gradient(to bottom, #5e5751 0%, #5a554a 50%, #383630 100%);">
-    <div class="container-xl px-4">
-        <div class="page-header-content pt-4">
-            <div class="row align-items-center justify-content-between">
-                <div class="col-auto mt-4">
-                    <h1 class="page-header-title">
-                        <div class="page-header-icon">
-                            <i data-feather="activity"></i>
-                        </div>
-                        {% trans 'Dashboard' %}
-                    </h1>
-                    <div class="page-header-subtitle">{% trans 'Overview and content summary' %}</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
+{% block main_layout %}
+
+{% trans 'Client Dashboard' as page_title %}
+{% trans 'Create and manage your assets and view service orders' as page_description %}
+{% trans 'Assets and Service Orders' as page_header_title %}
+{% trans 'Add New Asset' as add_new_asset %}
+{% trans 'Do you need help?' as help_title %}
+
+{% static 'assets/imgs/illustrations/windows.svg' as page_header_image %}
+{% static 'assets/imgs/illustrations/browser-stats.svg' as add_asset_image %}
+{% static 'assets/imgs/illustrations/processing.svg' as help_image %}
+
+
+{% url 'assets:holder_index' as holder_url %}
+{% url 'assets_location:add_asset_location' as add_asset_location_url %}
+{% url 'assets:help_gea' as help_url %}
+
+{% include 'dashboard/partials/header/_header.html' with icon_class="me-2" icon_data_feather="bookmark" page_title=page_title page_description=page_description parent_title=page_title %}
 
 <div class="container-xl px-4 mt-n10">
     <div class="row">
-        <div class="col-md-4 mb-4">
-            <a class="card lift h-100" href="{% url 'assets:holder_index' %}">
-                <div class="card-body d-flex justify-content-center flex-column">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div class="me-3">
-                            <i class="feather-xl text-primary mb-3 fa-solid fa-table-list"></i>
-                            <h5>{% trans 'Assets and Service Orders' %}</h5>
-                        </div>
-                        <img src="{% static 'assets/img/illustrations/windows.svg' %}" alt="dashboard"
-                            style="width: 8rem" />
-                    </div>
-                </div>
-            </a>
-        </div>
+    {% comment %} <!-- Assets and Service Orders --> {% endcomment %}
+    {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="table" page_header_title=page_header_title page_header_image=page_header_image url=holder_url %}
+    
+    {% if request.user.is_verified_holder %}
+      {% comment %} <!-- Add New Asset --> {% endcomment %}
+      {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="folder-plus" page_header_title=add_new_asset page_header_image=add_asset_image url=add_asset_location_url %}
+    {% endif %}
 
-        {% if request.user.is_verified_holder %}
-        <div class="col-md-4 mb-4">
-            <a class="card lift h-100" href="{% url 'assets_location:add_asset_location' %}">
-                <div class="card-body d-flex justify-content-center flex-column">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div class="me-3">
-                            <i class="feather-xl text-green mb-3 fa-solid fa-folder-plus"></i>
-                            <h5>{% trans 'Add New Asset' %}</h5>
-                        </div>
-                        <img src="{% static 'assets/img/illustrations/browser-stats.svg' %}" alt="new historical asset"
-                            style="width: 8rem" />
-                    </div>
-                </div>
-            </a>
-        </div>
-        {% endif %}
 
-        <div class="col-md-4 mb-4">
-            <a class="card lift h-100"
-                href="https://wa.me/573012283818?text=Necesito soporte con la plataforma Gea, mi usuario es {{ request.user.username }}"
-                target="_blank" rel="noopener noreferrer">
-                <div class="card-body d-flex justify-content-center flex-column">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div class="me-3">
-                            <i class="feather-xl text-secondary mb-3" data-feather="headphones"></i>
-                            <h5>{% trans 'Booking' %}</h5>
-                            <div class="text-muted small">
-                                {% blocktrans %}Do you need help?{% endblocktrans %}
-                            </div>
-                        </div>
-                        <img src="{% static 'assets/img/illustrations/processing.svg' %}" alt="support"
-                            style="width: 8rem" />
-                    </div>
-                </div>
-            </a>
-        </div>
-
-    </div>
+    {% comment %} <!-- Help Section --> {% endcomment %}
+    {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="headphones" page_header_title=help_title page_header_image=help_image url=help_url %}
+  </div>
 
     <div class="row">
         <div class="col-12">
@@ -168,10 +126,10 @@
 
 {% block simple_datatables %}
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-{% endblock simple_datatables %}
+{% endblock %}
 
 {% block simple_datatables_js %}
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
     crossorigin="anonymous"></script>
-<script src="{% static 'assets/js/dashboard/datatables/simple-datatable.js' %}"></script>
+<script src="{% static 'js/simple-datatable.js' %}"></script>
 {% endblock %}

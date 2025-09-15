@@ -1,4 +1,8 @@
 # apps.project.specific.assets_management.buyers.views.py
+from django.db.models.functions import TruncMonth
+from django.db.models import Count
+from dateutil.relativedelta import relativedelta
+from datetime import date
 from email.mime.image import MIMEImage
 
 import requests
@@ -23,6 +27,7 @@ from django.views.generic import (CreateView, DetailView, TemplateView,
 from apps.project.common.users.models import UserModel
 from apps.project.specific.assets_management.assets.models import (
     AssetCategoryModel, AssetModel)
+from apps.project.specific.assets_management.assets_location.models import AssetLocationModel
 
 from .form import OfferForm, OfferUpdateForm, ServiceOrderRecipientsForm
 from .functions import generate_purchase_order_pdf, generate_service_order_pdf
@@ -314,7 +319,6 @@ class PurchaseOrderCreateView(BuyerRequiredMixin, CreateView):
             "offer_type_es": escape(_choice_label(offer_instance, "offer_type", "es")),
             "quantity_type_en": escape(_choice_label(offer_instance, "quantity_type", "en")),
             "quantity_type_es": escape(_choice_label(offer_instance, "quantity_type", "es")),
-            "offer_amount": offer_instance.offer_amount,
             "offer_quantity": offer_instance.offer_quantity,
             "buyer_country_en": escape(_localized_str(offer_instance.buyer_country, "en")),
             "buyer_country_es": escape(_localized_str(offer_instance.buyer_country, "es")),
@@ -701,21 +705,10 @@ class ProfitabilityTemplateView(BuyerRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
+        # === Lo que ya tienes ===
         ctx['offers'] = OfferModel.objects.filter(
             profitability_created_at__isnull=False
         ).order_by('-created')
-
-        ctx['rrf_paid'] = OfferModel.objects.filter(
-            recovery_repatriation_foundation_paid=True
-        )
-        
-        ctx['ampro_paid'] = OfferModel.objects.filter(
-            am_pro_service_paid=True
-        )
-        
-        ctx['propensiones_paid'] = OfferModel.objects.filter(
-            propensiones_paid=True
-        )
 
         ctx['in_progress_value'] = OfferModel.objects.exclude(
             recovery_repatriation_foundation_paid=True,
@@ -728,4 +721,124 @@ class ProfitabilityTemplateView(BuyerRequiredMixin, TemplateView):
             am_pro_service_paid=True,
             propensiones_paid=True
         ).count()
+
+        # === NUEVO: barras por mes (últimos 12 meses, incluyendo el mes actual) ===
+        tz_now = timezone.now()
+        end_month = date(tz_now.year, tz_now.month, 1)
+        start_month = (end_month - relativedelta(months=11))
+
+        # Eje de meses normalizado
+        months = []
+        cursor = start_month
+        while cursor <= end_month:
+            months.append(cursor)
+            cursor = (cursor + relativedelta(months=1))
+
+        # Creadas por mes (por campo created)
+        created_qs = (
+            OfferModel.objects
+            .filter(created__date__gte=start_month, created__date__lt=end_month + relativedelta(months=1))
+            .annotate(m=TruncMonth('created'))
+            .values('m')
+            .annotate(c=Count('id'))
+        )
+        created_map = {row['m'].date(): row['c'] for row in created_qs}
+
+        # Cerradas por mes (por campo profitability_paid_at)
+        closed_qs = (
+            OfferModel.objects
+            .filter(
+                profitability_paid_at__isnull=False,
+                profitability_paid_at__date__gte=start_month,
+                profitability_paid_at__date__lt=end_month + relativedelta(months=1),
+            )
+            .annotate(m=TruncMonth('profitability_paid_at'))
+            .values('m')
+            .annotate(c=Count('id'))
+        )
+        closed_map = {row['m'].date(): row['c'] for row in closed_qs}
+
+        labels = [m.strftime('%b %Y') for m in months]  # ej: "Sep 2025"
+        created_counts = [created_map.get(m, 0) for m in months]
+        closed_counts  = [closed_map.get(m, 0) for m in months]
+
+        ctx['po_month_labels'] = labels
+        ctx['po_created_counts'] = created_counts
+        ctx['po_closed_counts'] = closed_counts
+
+
+        # === Tabla de Activos con totales y tokens de filtro ===
+        lang = get_language()
+        assets_qs = (
+            AssetModel.objects
+            .select_related('asset_name', 'category')
+            .order_by('asset_name__es_name', 'asset_name__en_name')
+        )
+
+        asset_rows = []
+        for a in assets_qs:
+            # Localización de nombres
+            if lang == 'es':
+                asset_name = a.asset_name.es_name or a.asset_name.en_name or ''
+                category_name = (getattr(a.category, 'es_name', None)
+                                 or getattr(a.category, 'en_name', '') or '')
+                observations = (getattr(a, 'es_observations', None)
+                                or getattr(a, 'en_observations', '') or '')
+                description = (getattr(a, 'es_description', None)
+                               or getattr(a, 'en_description', '') or '')
+            else:
+                asset_name = a.asset_name.en_name or a.asset_name.es_name or ''
+                category_name = (getattr(a.category, 'en_name', None)
+                                 or getattr(a.category, 'es_name', '') or '')
+                observations = (getattr(a, 'en_observations', None)
+                                or getattr(a, 'es_observations', '') or '')
+                description = (getattr(a, 'en_description', None)
+                               or getattr(a, 'es_description', '') or '')
+
+            # Totales por tipo (intenta con claves comunes: 'B'/'U' o 'boxes'/'units')
+            totals = {}
+            if hasattr(a, 'asset_total_quantity_by_type'):
+                try:
+                    totals = a.asset_total_quantity_by_type() or {}
+                except Exception:
+                    totals = {}
+
+            total_boxes = (totals.get('B') or totals.get('boxes') or 0) or 0
+            total_units = (totals.get('U') or totals.get('units') or 0) or 0
+
+            # Tokens para filtros
+            zero_yes = (int(total_boxes) + int(total_units) == 0)
+            has_image = bool(getattr(a, 'asset_img', None))
+            
+            qty_tokens = []
+            if zero_yes:
+                qty_tokens.append('zero:yes')
+                
+            if total_units > 0:
+                qty_tokens.append('qty:U')
+                
+            if total_boxes > 0:
+                qty_tokens.append('qty:B')
+                
+            # Si no hay stock en ningún tipo, deja sin qty:* (los filtros funcionarán por zero:yes)
+
+            tokens = [
+                f"img:{'yes' if has_image else 'no'}",
+                *qty_tokens
+            ]
+            
+            asset_rows.append({
+                'name': asset_name,
+                'category': category_name,
+                'total_boxes': int(total_boxes),
+                'total_units': int(total_units),
+                'observations': observations,
+                'description': description,
+                'tokens': ' '.join(tokens),
+            })
+
+        ctx['asset_rows'] = asset_rows
+        # Opciones del filtro de tipo (código y etiqueta traducible desde Choices)
+        ctx['qty_choices'] = AssetLocationModel.QuantityTypeChoices.choices
+
         return ctx

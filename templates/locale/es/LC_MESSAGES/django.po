@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-13 11:49-0500\n"
-"PO-Revision-Date: 2025-09-13 11:51-0500\n"
-"Last-Translator: Sebastian Morales <juan.sebasm2@gmail.com>\n"
+"POT-Creation-Date: 2025-09-15 12:55-0500\n"
+"PO-Revision-Date: 2025-09-15 12:44-0500\n"
+"Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -53,10 +53,6 @@ msgid "Unique Code"
 msgstr "Código Único"
 
 #: .\templates\account\gea_register.html:72
-#| msgid ""
-#| "Please complete the following information:%%0A%%0AFirst Names*:%%0ALast "
-#| "Names*:%%0ACellphone*:%%0A%%0AIf you do not provide this information, we "
-#| "will not be able to generate your unique code."
 msgid ""
 "\n"
 "            Please complete the following information:\n"
@@ -65,7 +61,8 @@ msgid ""
 "            Last Names*:\n"
 "            Cellphone*:\n"
 "\n"
-"            If you do not provide this information, we will not be able to generate your unique code.\n"
+"            If you do not provide this information, we will not be able to "
+"generate your unique code.\n"
 "            "
 msgstr ""
 "\n"
@@ -82,14 +79,12 @@ msgid "Request for unique code – GEA"
 msgstr "Solicitud de código único – GEA"
 
 #: .\templates\account\gea_register.html:86
-#| msgid ""
-#| "Hello,%%20I%%20would%%20like%%20to%%20request%%20the%%20unique%%20code%%20to%%20register%%20in%%20GEA."
 msgid "Hello, I would like to request the unique code to register with GEA."
 msgstr "Hello, I would like to request the unique code to register with GEA."
 
 #: .\templates\account\gea_register.html:89
-msgid "You must request your unique registration code through:"
-msgstr "Debes solicitar tu código único de registro a través de:"
+msgid "You must request your unique registration code through"
+msgstr "Debe solicitar su código de registro único a través de"
 
 #: .\templates\account\gea_register.html:104
 msgid "Register"
@@ -138,13 +133,14 @@ msgstr "Agregar nuevo activo"
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:112
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:222
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:29
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:174
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:242
-#: .\templates\dashboard\pages\holders\asset_location_base.html:114
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:132
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:146
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:330
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:344
+#: .\templates\dashboard\pages\buyers\profitability.html:187
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:176
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:244
+#: .\templates\dashboard\pages\holders\asset_location_base.html:75
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:95
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:109
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:293
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:307
 msgid "Category"
 msgstr "Categoría"
 
@@ -163,8 +159,8 @@ msgstr "Categoría de activo (ES)*"
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:76
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:136
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:133
-#: .\templates\dashboard\pages\holders\location\add_location.html:137
-#: .\templates\dashboard\pages\holders\location\edit_location.html:129
+#: .\templates\dashboard\pages\holders\location\add_location.html:99
+#: .\templates\dashboard\pages\holders\location\edit_location.html:90
 msgid "Description (ES)"
 msgstr "Descripción (ES)"
 
@@ -175,8 +171,8 @@ msgstr "Categoría de activos (EN)*"
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:101
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:161
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:135
-#: .\templates\dashboard\pages\holders\location\add_location.html:142
-#: .\templates\dashboard\pages\holders\location\edit_location.html:134
+#: .\templates\dashboard\pages\holders\location\add_location.html:104
+#: .\templates\dashboard\pages\holders\location\edit_location.html:95
 msgid "Description (EN)"
 msgstr "Descripción (EN)"
 
@@ -205,21 +201,23 @@ msgstr "Categorías"
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:223
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:65
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:80
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:175
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:243
-#: .\templates\dashboard\pages\holders\asset_location_base.html:115
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:238
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:249
+#: .\templates\dashboard\pages\buyers\profitability.html:199
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:177
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:245
+#: .\templates\dashboard\pages\holders\asset_location_base.html:76
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:201
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:212
 msgid "Description"
 msgstr "Descripción"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:148
+#: .\templates\dashboard\pages\buyers\profitability.html:333
 #: .\templates\email\service_order_email_template.html:83
 msgid "Created"
 msgstr "Creado"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:174
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:268
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:270
 msgid "No categories found."
 msgstr "No se encontraron categorías."
 
@@ -233,8 +231,8 @@ msgstr "Guardando y traduciendo..."
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:20
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:21
 #: .\templates\dashboard\pages\buyers\edit_offer.html:21
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:21
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:49
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:22
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:51
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:84
 msgid "Purchase Orders"
 msgstr "Órdenes de compra"
@@ -250,8 +248,8 @@ msgstr "Registrar un nuevo nombre de activo y su categoría"
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:23
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:195
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:22
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:22
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:138
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:23
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:140
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:88
 msgid "Add New Purchase Order"
 msgstr "Agregar nueva orden de compra"
@@ -260,13 +258,13 @@ msgstr "Agregar nueva orden de compra"
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:23
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:68
 #: .\templates\dashboard\pages\buyers\edit_offer.html:23
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:23
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:24
 #: .\templates\dashboard\pages\holders\add_asset_location.html:5
-#: .\templates\dashboard\pages\holders\asset_location_base.html:55
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:56
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:122
-#: .\templates\dashboard\pages\holders\location\add_location.html:56
-#: .\templates\dashboard\pages\holders\location\edit_location.html:57
+#: .\templates\dashboard\pages\holders\asset_location_base.html:16
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:17
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:85
+#: .\templates\dashboard\pages\holders\location\add_location.html:16
+#: .\templates\dashboard\pages\holders\location\edit_location.html:17
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:92
 msgid "Add New Asset"
 msgstr "Agregar nuevo activo"
@@ -274,7 +272,7 @@ msgstr "Agregar nuevo activo"
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:25
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:24
 #: .\templates\dashboard\pages\buyers\edit_offer.html:24
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:25
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:26
 msgid "Add New Asset Category"
 msgstr "Agregar nueva categoría de activos"
 
@@ -284,12 +282,13 @@ msgstr "Nuevo activo"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:62
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:221
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:173
-#: .\templates\dashboard\pages\holders\asset_location_base.html:113
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:131
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:145
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:329
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:343
+#: .\templates\dashboard\pages\buyers\profitability.html:184
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:175
+#: .\templates\dashboard\pages\holders\asset_location_base.html:74
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:94
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:108
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:292
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:306
 msgid "Asset Name"
 msgstr "Nombre del activo"
 
@@ -307,11 +306,12 @@ msgstr "Detalles del Activo"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:100
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:220
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:172
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:130
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:144
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:328
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:342
+#: .\templates\dashboard\pages\buyers\profitability.html:227
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:174
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:93
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:107
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:291
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:305
 msgid "Image"
 msgstr "Imagen"
 
@@ -335,15 +335,16 @@ msgid "Existing Assets"
 msgstr "Activos existentes"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:224
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:176
+#: .\templates\dashboard\pages\buyers\profitability.html:196
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:178
 #: .\templates\dashboard\pages\holders\add_asset_location.html:54
-#: .\templates\dashboard\pages\holders\asset_location_base.html:116
+#: .\templates\dashboard\pages\holders\asset_location_base.html:77
 #: .\templates\email\service_order_email_template.html:113
 msgid "Observations"
 msgstr "Observaciones"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:276
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:228
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:230
 msgid "No assets found."
 msgstr "No se encontraron activos."
 
@@ -355,7 +356,7 @@ msgstr "Crear una nueva orden de compra"
 #: .\templates\dashboard\pages\buyers\modals\delete_offer_modal.html:26
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:25
 #: .\templates\dashboard\pages\buyers\profitability.html:60
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:68
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:70
 #: .\templates\dashboard\pages\holders\add_asset_location.html:16
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:16
 #: .\templates\email\service_order_email_template.html:97
@@ -369,8 +370,8 @@ msgstr "País de compra"
 
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:87
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:33
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:331
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:345
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:294
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:308
 msgid "Offer Type"
 msgstr "Tipo de orden"
 
@@ -378,13 +379,13 @@ msgstr "Tipo de orden"
 #: .\templates\dashboard\pages\buyers\edit_offer.html:77
 #: .\templates\dashboard\pages\buyers\modals\delete_offer_modal.html:34
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:37
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:70
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:72
 #: .\templates\dashboard\pages\holders\add_asset_location.html:40
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:35
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:137
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:151
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:332
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:346
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:100
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:114
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:295
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:309
 #: .\templates\email\service_order_email_template.html:100
 msgid "Quantity Type"
 msgstr "Tipo de cantidad"
@@ -463,7 +464,7 @@ msgid "Delete Purchase Order"
 msgstr "Borrar Orden de Compra"
 
 #: .\templates\dashboard\pages\buyers\modals\delete_offer_modal.html:11
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:295
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:297
 msgid "Close"
 msgstr "Cerrar"
 
@@ -472,18 +473,18 @@ msgid "Are you sure you want to delete this purchase order?"
 msgstr "¿Está seguro de que desea eliminar esta orden de compra?"
 
 #: .\templates\dashboard\pages\buyers\modals\delete_offer_modal.html:30
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:69
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:71
 msgid "Purchase order Type"
 msgstr "Tipo de orden de compra"
 
 #: .\templates\dashboard\pages\buyers\modals\delete_offer_modal.html:42
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:72
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:135
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:149
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:240
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:251
-#: .\templates\dashboard\pages\holders\location\add_location.html:123
-#: .\templates\dashboard\pages\holders\location\edit_location.html:115
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:74
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:98
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:112
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:203
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:214
+#: .\templates\dashboard\pages\holders\location\add_location.html:85
+#: .\templates\dashboard\pages\holders\location\edit_location.html:76
 msgid "Country"
 msgstr "País"
 
@@ -516,8 +517,8 @@ msgid "Offer ID"
 msgstr "Orden ID"
 
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:41
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:333
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:347
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:296
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:310
 msgid "Offer Quantity"
 msgstr "Cantidad requerida"
 
@@ -645,24 +646,24 @@ msgid "Quantity Type - Needed"
 msgstr "Tipo de cantidad - Necesaria"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:66
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:73
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:75
 msgid "Status"
 msgstr "Estado"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:72
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:74
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:138
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:152
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:242
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:253
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:336
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:350
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:76
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:101
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:115
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:205
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:216
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:299
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:313
 msgid "Actions"
 msgstr "Acciones"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:76
-#: .\templates\dashboard\pages\buyers\profitability.html:162
-#: .\templates\dashboard\pages\buyers\profitability.html:177
+#: .\templates\dashboard\pages\buyers\profitability.html:152
+#: .\templates\dashboard\pages\buyers\profitability.html:257
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:374
 msgid "Paid"
 msgstr "Pagado"
@@ -680,55 +681,97 @@ msgid "Pending"
 msgstr "Pendiente"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:83
-#: .\templates\dashboard\pages\buyers\profitability.html:245
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:88
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:489
+#: .\templates\dashboard\pages\buyers\profitability.html:394
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:89
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:480
 msgid "Show full ID"
 msgstr "Mostrar ID completo"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:101
+#: .\templates\dashboard\pages\buyers\profitability.html:96
+#: .\templates\dashboard\pages\buyers\profitability.html:103
 #: .\templates\dashboard\pages\buyers\profitability.html:110
-#: .\templates\dashboard\pages\buyers\profitability.html:119
 msgid "Paid,Pending"
 msgstr "Pagado,Pendiente"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:155
-#: .\templates\dashboard\pages\buyers\profitability.html:176
+#: .\templates\dashboard\pages\buyers\profitability.html:135
+msgid "Profitability Overview"
+msgstr "Descripción general de la rentabilidad"
+
+#: .\templates\dashboard\pages\buyers\profitability.html:145
+#: .\templates\dashboard\pages\buyers\profitability.html:256
 msgid "In Progress"
 msgstr "En curso"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:244
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:488
+#: .\templates\dashboard\pages\buyers\profitability.html:164
+msgid "Purchase orders by month"
+msgstr "Órdenes de compra por mes"
+
+#: .\templates\dashboard\pages\buyers\profitability.html:177
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:75
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:116
+msgid "Assets"
+msgstr "Activos"
+
+#: .\templates\dashboard\pages\buyers\profitability.html:177
+msgid "By total and type"
+msgstr "Por total y tipo"
+
+#: .\templates\dashboard\pages\buyers\profitability.html:190
+msgid "Total Quantity (boxes)"
+msgstr "Cantidad total (cajas)"
+
+#: .\templates\dashboard\pages\buyers\profitability.html:193
+msgid "Total Quantity (units)"
+msgstr "Cantidad total (unidades)"
+
+#: .\templates\dashboard\pages\buyers\profitability.html:224
+msgid "Zero QTY"
+msgstr "Cantidad cero"
+
+#: .\templates\dashboard\pages\buyers\profitability.html:230
+msgid "Units or Boxes"
+msgstr "Unidades o Cajas"
+
+#: .\templates\dashboard\pages\buyers\profitability.html:340
+msgid "Closed"
+msgstr "Cerrado"
+
+#: .\templates\dashboard\pages\buyers\profitability.html:393
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:481
 msgid "Hide full ID"
 msgstr "Esconder ID completo"
 
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:24
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:25
 msgid "Create and Manage your Purchase Orders."
 msgstr "Crea y gestiona tus órdenes de compra."
 
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:71
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:27
+msgid "Buyer Dashboard"
+msgstr "Panel del comprador"
+
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:73
 msgid "Quantity Needed"
 msgstr "Cantidad necesaria"
 
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:123
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:287
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:125
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:250
 msgid "Yes"
 msgstr "Si"
 
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:123
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:289
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:125
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:252
 msgid "No"
 msgstr "No"
 
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:163
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:165
 msgid "Tables of Asset Names and Categories"
 msgstr "Tablas de nombres y categorías de activos"
 
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:294
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:296
 msgid "Purchase Order Successfully Deleted"
 msgstr "Orden de compra eliminada"
 
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:296
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:298
 msgid "There was a problem deleting the purchase order."
 msgstr "Hubo un problema al eliminar la orden de compra."
 
@@ -739,8 +782,8 @@ msgstr "Asistente de Aprobación"
 #: .\templates\dashboard\pages\buyers\wizard\offer_wizard_page.html:29
 msgid "Track and advance the purchase order through the approval pipeline"
 msgstr ""
-"Realizar un seguimiento y avanzar la orden de compra a través del proceso de"
-" aprobación"
+"Realizar un seguimiento y avanzar la orden de compra a través del proceso de "
+"aprobación"
 
 #: .\templates\dashboard\pages\buyers\wizard\offer_wizard_page.html:52
 msgid "Loading wizard…"
@@ -990,8 +1033,8 @@ msgstr "+ Agregar ubicación"
 
 #: .\templates\dashboard\pages\holders\add_asset_location.html:47
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:42
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:136
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:150
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:99
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:113
 msgid "Amount"
 msgstr "Cantidad"
 
@@ -1000,51 +1043,45 @@ msgstr "Cantidad"
 msgid "Add Asset"
 msgstr "Añadir Activo"
 
-#: .\templates\dashboard\pages\holders\asset_location_base.html:22
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:24
-#: .\templates\dashboard\pages\holders\location\add_location.html:23
-#: .\templates\dashboard\pages\holders\location\edit_location.html:24
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:15
-msgid "Dashboard"
-msgstr "Panel"
+#: .\templates\dashboard\pages\holders\asset_location_base.html:13
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:14
+#: .\templates\dashboard\pages\holders\location\add_location.html:13
+#: .\templates\dashboard\pages\holders\location\edit_location.html:14
+msgid "Client Dashboard"
+msgstr "Panel del cliente"
 
-#: .\templates\dashboard\pages\holders\asset_location_base.html:24
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:26
-#: .\templates\dashboard\pages\holders\location\add_location.html:25
-#: .\templates\dashboard\pages\holders\location\edit_location.html:26
-msgid "Overview and content summary"
-msgstr "Descripción general y resumen del contenido"
+#: .\templates\dashboard\pages\holders\asset_location_base.html:14
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:15
+#: .\templates\dashboard\pages\holders\location\add_location.html:14
+#: .\templates\dashboard\pages\holders\location\edit_location.html:15
+msgid "Create and manage your assets and view service orders"
+msgstr "Cree y administre sus activos y visualice órdenes de servicio"
 
-#: .\templates\dashboard\pages\holders\asset_location_base.html:39
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:41
-#: .\templates\dashboard\pages\holders\location\add_location.html:40
-#: .\templates\dashboard\pages\holders\location\edit_location.html:41
+#: .\templates\dashboard\pages\holders\asset_location_base.html:15
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:16
+#: .\templates\dashboard\pages\holders\location\add_location.html:15
+#: .\templates\dashboard\pages\holders\location\edit_location.html:16
 msgid "Assets and Service Orders"
 msgstr "Activos y Órdenes de Servicio"
 
-#: .\templates\dashboard\pages\holders\asset_location_base.html:73
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:74
-#: .\templates\dashboard\pages\holders\location\add_location.html:74
-#: .\templates\dashboard\pages\holders\location\edit_location.html:75
-msgid "Booking"
-msgstr "Agenda"
-
-#: .\templates\dashboard\pages\holders\asset_location_base.html:75
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:76
-#: .\templates\dashboard\pages\holders\location\add_location.html:76
-#: .\templates\dashboard\pages\holders\location\edit_location.html:77
+#: .\templates\dashboard\pages\holders\asset_location_base.html:17
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:18
+#: .\templates\dashboard\pages\holders\location\add_location.html:17
+#: .\templates\dashboard\pages\holders\location\edit_location.html:18
 msgid "Do you need help?"
 msgstr "¿Necesitas ayuda?"
 
-#: .\templates\dashboard\pages\holders\asset_location_base.html:100
+#: .\templates\dashboard\pages\holders\asset_location_base.html:61
 msgid ""
 "\n"
-"                        The Asset Location ties a specific asset to a location, defining where and in what quantity the\n"
+"                        The Asset Location ties a specific asset to a "
+"location, defining where and in what quantity the\n"
 "                        asset is available.\n"
 "                        "
 msgstr ""
 "\n"
-"La ubicación del activo vincula un activo específico a una ubicación, definiendo dónde y en qué cantidad está disponible el activo."
+"La ubicación del activo vincula un activo específico a una ubicación, "
+"definiendo dónde y en qué cantidad está disponible el activo."
 
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:5
 msgid "Edit Asset"
@@ -1054,109 +1091,118 @@ msgstr "Editar activo"
 msgid "Add Location"
 msgstr "Agregar ubicación"
 
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:97
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:60
 msgid "My Historical Assets"
 msgstr "Mis activos históricos"
 
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:105
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:68
 msgid "Assets in Demand (Service Orders)"
 msgstr "Activos en demanda (Órdenes de Servicio)"
 
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:133
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:147
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:237
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:248
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:96
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:110
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:200
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:211
 msgid "Location Reference"
 msgstr "Referencia de ubicación"
 
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:134
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:148
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:239
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:250
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:97
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:111
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:202
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:213
 msgid "Continent"
 msgstr "Continente"
 
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:241
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:252
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:204
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:215
 msgid "Is Active"
 msgstr "Está activo"
 
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:321
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:284
 msgid "Total current offers:"
 msgstr "Total de ofertas actuales:"
 
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:334
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:348
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:297
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:311
 msgid "Continent Preference"
 msgstr "Preferencia de continente"
 
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:335
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:349
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:298
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:312
 msgid "Country Preference"
 msgstr "Preferencia de país"
 
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:430
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:393
 msgid "Your account is under verification process."
 msgstr "Su cuenta está bajo proceso de verificación."
 
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:432
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:395
 msgid ""
 "\n"
-"                    This process can take between 24 to 72 hours (1 to 3 business days), Please be patient while we\n"
+"                    This process can take between 24 to 72 hours (1 to 3 "
+"business days), Please be patient while we\n"
 "                    verify your account.\n"
 "                    "
 msgstr ""
 "\n"
-"Este proceso puede tardar entre 24 y 72 horas (1 a 3 días hábiles). Por favor, tenga paciencia mientras verificamos su cuenta."
+"Este proceso puede tardar entre 24 y 72 horas (1 a 3 días hábiles). Por "
+"favor, tenga paciencia mientras verificamos su cuenta."
 
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:438
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:401
 msgid ""
 "\n"
-"                    If you have any questions, please contact our support team.\n"
+"                    If you have any questions, please contact our support "
+"team.\n"
 "                    "
 msgstr ""
 "\n"
 "Si tiene alguna pregunta, comuníquese con nuestro equipo de soporte."
 
-#: .\templates\dashboard\pages\holders\location\add_location.html:91
+#: .\templates\dashboard\pages\holders\location\add_location.html:53
 msgid "Add New Location Reference"
 msgstr "Agregar nueva referencia de ubicación"
 
-#: .\templates\dashboard\pages\holders\location\add_location.html:111
-#: .\templates\dashboard\pages\holders\location\edit_location.html:103
+#: .\templates\dashboard\pages\holders\location\add_location.html:73
+#: .\templates\dashboard\pages\holders\location\edit_location.html:64
 msgid "Reference"
 msgstr "Referencia"
 
-#: .\templates\dashboard\pages\holders\location\add_location.html:148
-#: .\templates\dashboard\pages\holders\location\edit_location.html:140
+#: .\templates\dashboard\pages\holders\location\add_location.html:110
+#: .\templates\dashboard\pages\holders\location\edit_location.html:101
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:125
 msgid "Add Location Reference"
 msgstr "Agregar referencia de ubicación"
 
-#: .\templates\dashboard\pages\holders\location\add_location.html:156
-#: .\templates\dashboard\pages\holders\location\edit_location.html:148
+#: .\templates\dashboard\pages\holders\location\add_location.html:118
+#: .\templates\dashboard\pages\holders\location\edit_location.html:109
 msgid ""
 "\n"
-"                        The Location Reference serves as a unique identifier to manage inventory across various\n"
+"                        The Location Reference serves as a unique identifier "
+"to manage inventory across various\n"
 "                        locations.\n"
 "                        "
 msgstr ""
 "\n"
-"La referencia de ubicación sirve como un identificador único para administrar el inventario en varias ubicaciones."
+"La referencia de ubicación sirve como un identificador único para "
+"administrar el inventario en varias ubicaciones."
 
-#: .\templates\dashboard\pages\holders\location\add_location.html:163
-#: .\templates\dashboard\pages\holders\location\edit_location.html:155
+#: .\templates\dashboard\pages\holders\location\add_location.html:125
+#: .\templates\dashboard\pages\holders\location\edit_location.html:116
 msgid ""
 "\n"
-"                        It allows differentiation between inventory located in the same country but in different areas,\n"
-"                        inventory in different countries, or inventory in the same country as well as across multiple\n"
+"                        It allows differentiation between inventory located "
+"in the same country but in different areas,\n"
+"                        inventory in different countries, or inventory in "
+"the same country as well as across multiple\n"
 "                        countries.\n"
 "                        "
 msgstr ""
 "\n"
-"Permite diferenciar entre inventario ubicado en el mismo país pero en diferentes áreas, inventario en diferentes países o inventario en el mismo país y en varios países."
+"Permite diferenciar entre inventario ubicado en el mismo país pero en "
+"diferentes áreas, inventario en diferentes países o inventario en el mismo "
+"país y en varios países."
 
-#: .\templates\dashboard\pages\holders\location\edit_location.html:92
+#: .\templates\dashboard\pages\holders\location\edit_location.html:53
 msgid "Edit Location Reference"
 msgstr "Editar referencia de ubicación"
 
@@ -1210,6 +1256,10 @@ msgstr "Nuevo"
 msgid "Notifications"
 msgstr "Notificaciones"
 
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:15
+msgid "Dashboard"
+msgstr "Panel"
+
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:23
 #: .\templates\partials\nav\language_selector.html:7
 msgid "Language"
@@ -1226,11 +1276,6 @@ msgstr "Cuenta"
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:65
 msgid "Security"
 msgstr "Seguridad"
-
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:75
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:116
-msgid "Assets"
-msgstr "Activos"
 
 #: .\templates\email\contact_email_template.html:9
 msgid "Contact Confirmation"
@@ -1399,8 +1444,8 @@ msgid ""
 msgstr ""
 "Los tokens de respaldo se pueden usar cuando tu número principal y de "
 "respaldo no estén disponibles. Los tokens de respaldo a continuación se "
-"pueden usar para la verificación de inicio de sesión. Si ya usaste todos tus"
-" tokens de respaldo, puedes generar un nuevo conjunto. Solo los tokens de "
+"pueden usar para la verificación de inicio de sesión. Si ya usaste todos tus "
+"tokens de respaldo, puedes generar un nuevo conjunto. Solo los tokens de "
 "respaldo que se muestran a continuación serán válidos."
 
 #: .\templates\two_factor\core\backup_tokens.html:28
@@ -1429,8 +1474,8 @@ msgid ""
 msgstr ""
 "Usa este formulario para ingresar tokens de respaldo para iniciar sesión. "
 "Estos tokens han sido generados para que los imprimas y los mantengas "
-"seguros. Por favor, introduce uno de estos tokens de respaldo para acceder a"
-" tu cuenta."
+"seguros. Por favor, introduce uno de estos tokens de respaldo para acceder a "
+"tu cuenta."
 
 #: .\templates\two_factor\core\login.html:54
 msgid "Username or Email"
@@ -1477,8 +1522,8 @@ msgstr ""
 #: .\templates\two_factor\core\otp_required.html:12
 #: .\templates\two_factor\profile\profile.html:29
 msgid ""
-"Two-factor authentication is not enabled for your account. Enable two-factor"
-" authentication for enhanced account security."
+"Two-factor authentication is not enabled for your account. Enable two-factor "
+"authentication for enhanced account security."
 msgstr ""
 "La autenticación de dos factores no está habilitada en tu cuenta. Actívala "
 "para mejorar la seguridad de tu cuenta."
@@ -1508,12 +1553,12 @@ msgstr "Por favor, selecciona el método de autenticación que deseas usar."
 
 #: .\templates\two_factor\core\setup.html:27
 msgid ""
-"To set up a token generator, scan the QR code below using an app like Google"
-" Authenticator, Authenticator from Windows or a similar app."
+"To set up a token generator, scan the QR code below using an app like Google "
+"Authenticator, Authenticator from Windows or a similar app."
 msgstr ""
 "Para configurar un generador de tokens, escanea el código QR a continuación "
-"con una aplicación como Google Authenticator, Authenticator de Windows o una"
-" app similar."
+"con una aplicación como Google Authenticator, Authenticator de Windows o una "
+"app similar."
 
 #: .\templates\two_factor\core\setup.html:29
 msgid ""
@@ -1534,8 +1579,7 @@ msgstr ""
 "verificar la configuración."
 
 #: .\templates\two_factor\core\setup.html:34
-msgid ""
-"Token validated successfully. Two-factor authentication is now enabled."
+msgid "Token validated successfully. Two-factor authentication is now enabled."
 msgstr ""
 "Token validado exitosamente. La autenticación de dos factores ahora está "
 "habilitada."
@@ -1550,8 +1594,7 @@ msgid "Back to login"
 msgstr "Volver al inicio de sesión"
 
 #: .\templates\two_factor\core\setup_complete.html:15
-msgid ""
-"Congratulations, you've successfully enabled two-factor authentication."
+msgid "Congratulations, you've successfully enabled two-factor authentication."
 msgstr "¡Felicidades! Has habilitado la autenticación de dos factores."
 
 #: .\templates\two_factor\core\setup_complete.html:20
@@ -1595,6 +1638,12 @@ msgstr[1] "Tienes %(counter)s tokens de respaldo restantes."
 msgid "Show Codes"
 msgstr "Mostrar códigos"
 
+#~ msgid "Overview and content summary"
+#~ msgstr "Descripción general y resumen del contenido"
+
+#~ msgid "Booking"
+#~ msgstr "Agenda"
+
 #, fuzzy
 #~ msgid "Observaciones"
 #~ msgstr "Observaciones"
@@ -1621,18 +1670,18 @@ msgstr "Mostrar códigos"
 #~ msgstr "Plataforma segura de activos históricos"
 
 #~ msgid ""
-#~ "Comprehensive and secure platform for the purchase and sale of US historical"
-#~ " assets. Official, exclusive and trusted."
+#~ "Comprehensive and secure platform for the purchase and sale of US "
+#~ "historical assets. Official, exclusive and trusted."
 #~ msgstr ""
 #~ "Plataforma integral y segura para la compra y venta de activos históricos "
 #~ "EE. UU. Oficial, exclusiva y confiable."
 
 #~ msgid ""
-#~ "Official and exclusive platform for the purchase and sale of US historical "
-#~ "assets."
+#~ "Official and exclusive platform for the purchase and sale of US "
+#~ "historical assets."
 #~ msgstr ""
-#~ "Plataforma oficial y exclusiva para la compra y venta de activos históricos "
-#~ "de Estados Unidos."
+#~ "Plataforma oficial y exclusiva para la compra y venta de activos "
+#~ "históricos de Estados Unidos."
 
 #~ msgid ""
 #~ "Exclusive and official platform for the secure purchase of US historical "
@@ -1709,12 +1758,24 @@ msgstr "Mostrar códigos"
 
 #~ msgid ""
 #~ "\n"
-#~ "                                qualifies as a beneficiary, who has undergone a security screening and accreditation of judicial records in accordance with current regulations, criminal reports on social media, and Interpol databases. Consequently, they do <strong>NOT</strong> have any judicial or disciplinary records from the certifying entities authorized by international public consultation databases, which would affect their suitability.\n"
+#~ "                                qualifies as a beneficiary, who has "
+#~ "undergone a security screening and accreditation of judicial records in "
+#~ "accordance with current regulations, criminal reports on social media, "
+#~ "and Interpol databases. Consequently, they do <strong>NOT</strong> have "
+#~ "any judicial or disciplinary records from the certifying entities "
+#~ "authorized by international public consultation databases, which would "
+#~ "affect their suitability.\n"
 #~ "                                <br/>\n"
 #~ "                                For the record, this is signed on "
 #~ msgstr ""
 #~ "\n"
-#~ "Se considera beneficiario, quien ha sido sometido a una revisión de seguridad y acreditación de antecedentes judiciales de acuerdo con la normativa vigente, denuncias penales en redes sociales y bases de datos de Interpol. Por consiguiente, <strong>NO</strong> cuenta con antecedentes judiciales ni disciplinarios de las entidades certificadoras autorizadas por las bases de datos de consulta pública internacional, lo que afectaría su idoneidad.\n"
+#~ "Se considera beneficiario, quien ha sido sometido a una revisión de "
+#~ "seguridad y acreditación de antecedentes judiciales de acuerdo con la "
+#~ "normativa vigente, denuncias penales en redes sociales y bases de datos "
+#~ "de Interpol. Por consiguiente, <strong>NO</strong> cuenta con "
+#~ "antecedentes judiciales ni disciplinarios de las entidades certificadoras "
+#~ "autorizadas por las bases de datos de consulta pública internacional, lo "
+#~ "que afectaría su idoneidad.\n"
 #~ "<br/>\n"
 #~ "Para que conste, se firma el presente."
 
@@ -1723,25 +1784,30 @@ msgstr "Mostrar códigos"
 
 #~ msgid ""
 #~ "\n"
-#~ "                                we inform you that, after the evaluation conducted, your security study <span class=\"text-danger\">HAS NOT BEEN APPROVED</span> due to not meeting the suitability requirements according to the current security regulations.\n"
+#~ "                                we inform you that, after the evaluation "
+#~ "conducted, your security study <span class=\"text-danger\">HAS NOT BEEN "
+#~ "APPROVED</span> due to not meeting the suitability requirements according "
+#~ "to the current security regulations.\n"
 #~ "                            "
 #~ msgstr ""
 #~ "\n"
-#~ "Le informamos que, tras la evaluación realizada, su estudio de seguridad <span class=\"text-danger\">NO HA SIDO APROBADO</span> por no cumplir los requisitos de idoneidad según la normativa de seguridad vigente."
+#~ "Le informamos que, tras la evaluación realizada, su estudio de seguridad "
+#~ "<span class=\"text-danger\">NO HA SIDO APROBADO</span> por no cumplir los "
+#~ "requisitos de idoneidad según la normativa de seguridad vigente."
 
 #~ msgid ""
 #~ "We remind you that, in accordance with the provisions of the Habeas Data "
-#~ "Law, all your personal data has been treated with due confidentiality and is"
-#~ " protected under the strictest security standards, guaranteeing its "
+#~ "Law, all your personal data has been treated with due confidentiality and "
+#~ "is protected under the strictest security standards, guaranteeing its "
 #~ "integrity and privacy. Your data will be used exclusively for authorized "
 #~ "purposes and within the framework of current data protection regulations."
 #~ msgstr ""
-#~ "Le recordamos que, de conformidad con la Ley de Habeas Data, todos sus datos"
-#~ " personales han sido tratados con la debida confidencialidad y están "
-#~ "protegidos bajo los más estrictos estándares de seguridad, garantizando su "
-#~ "integridad y privacidad. Sus datos se utilizarán exclusivamente para los "
-#~ "fines autorizados y de conformidad con la normativa vigente en materia de "
-#~ "protección de datos."
+#~ "Le recordamos que, de conformidad con la Ley de Habeas Data, todos sus "
+#~ "datos personales han sido tratados con la debida confidencialidad y están "
+#~ "protegidos bajo los más estrictos estándares de seguridad, garantizando "
+#~ "su integridad y privacidad. Sus datos se utilizarán exclusivamente para "
+#~ "los fines autorizados y de conformidad con la normativa vigente en "
+#~ "materia de protección de datos."
 
 #~ msgid "Verify your Certificate"
 #~ msgstr "Verifique su certificado"
@@ -1761,35 +1827,67 @@ msgstr "Mostrar códigos"
 #, python-format
 #~ msgid ""
 #~ "\n"
-#~ "                                <strong>%(name)s %(last_name)s</strong> with document <strong>%(document_type)s</strong> and number <strong>%(masked_document_number)s</strong>\n"
-#~ "                                was duly registered to participate in the sovereign purchase of the United States after the corresponding verification,\n"
-#~ "                                it is declared that it fully complied with the requirements demanded by the process and demonstrated that it was suitable to belong to this operation.\n"
+#~ "                                <strong>%(name)s %(last_name)s</strong> "
+#~ "with document <strong>%(document_type)s</strong> and number <strong>"
+#~ "%(masked_document_number)s</strong>\n"
+#~ "                                was duly registered to participate in the "
+#~ "sovereign purchase of the United States after the corresponding "
+#~ "verification,\n"
+#~ "                                it is declared that it fully complied "
+#~ "with the requirements demanded by the process and demonstrated that it "
+#~ "was suitable to belong to this operation.\n"
 #~ "                                <br/>\n"
 #~ "                                For the record, this is signed on\n"
 #~ "                            "
 #~ msgstr ""
 #~ "\n"
-#~ "<strong>%(name)s %(last_name)s</strong> con documento <strong>%(document_type)s</strong> y número <strong>%(masked_document_number)s</strong>\n"
-#~ "se registró debidamente para participar en la compra de soberanía de los Estados Unidos tras la verificación correspondiente,\n"
-#~ "declara que cumplió plenamente con los requisitos exigidos por el proceso y demostró su idoneidad para participar en esta operación.\n"
+#~ "<strong>%(name)s %(last_name)s</strong> con documento <strong>"
+#~ "%(document_type)s</strong> y número <strong>%(masked_document_number)s</"
+#~ "strong>\n"
+#~ "se registró debidamente para participar en la compra de soberanía de los "
+#~ "Estados Unidos tras la verificación correspondiente,\n"
+#~ "declara que cumplió plenamente con los requisitos exigidos por el proceso "
+#~ "y demostró su idoneidad para participar en esta operación.\n"
 #~ "<br/>\n"
 #~ "Para que conste, se firma el presente."
 
 #~ msgid ""
 #~ "\n"
-#~ "                            We remind you that, in accordance with the provisions of the Habeas Data Law, all your personal data has been treated with due confidentiality and is protected under the strictest security standards, guaranteeing its integrity and privacy. Your data will be used exclusively for authorized purposes and within the framework of current data protection regulations.\n"
+#~ "                            We remind you that, in accordance with the "
+#~ "provisions of the Habeas Data Law, all your personal data has been "
+#~ "treated with due confidentiality and is protected under the strictest "
+#~ "security standards, guaranteeing its integrity and privacy. Your data "
+#~ "will be used exclusively for authorized purposes and within the framework "
+#~ "of current data protection regulations.\n"
 #~ "                            "
 #~ msgstr ""
 #~ "\n"
-#~ "Le recordamos que, de conformidad con la Ley de Habeas Data, todos sus datos personales han sido tratados con la debida confidencialidad y están protegidos bajo los más estrictos estándares de seguridad, garantizando su integridad y privacidad. Sus datos se utilizarán exclusivamente para los fines autorizados y de conformidad con la normativa vigente en materia de protección de datos."
+#~ "Le recordamos que, de conformidad con la Ley de Habeas Data, todos sus "
+#~ "datos personales han sido tratados con la debida confidencialidad y están "
+#~ "protegidos bajo los más estrictos estándares de seguridad, garantizando "
+#~ "su integridad y privacidad. Sus datos se utilizarán exclusivamente para "
+#~ "los fines autorizados y de conformidad con la normativa vigente en "
+#~ "materia de protección de datos."
 
 #~ msgid ""
 #~ "\n"
-#~ "                                The following clarification is made: the reproduction, publication, or any improper use of this certificate for requesting money or for fraudulent purposes will result in legal sanctions, in accordance with applicable national and international regulations. Furthermore, it is warned that such conduct will lead to immediate expulsion and total disqualification, both present and future, from any participation in programs, benefits, or related agreements.\n"
+#~ "                                The following clarification is made: the "
+#~ "reproduction, publication, or any improper use of this certificate for "
+#~ "requesting money or for fraudulent purposes will result in legal "
+#~ "sanctions, in accordance with applicable national and international "
+#~ "regulations. Furthermore, it is warned that such conduct will lead to "
+#~ "immediate expulsion and total disqualification, both present and future, "
+#~ "from any participation in programs, benefits, or related agreements.\n"
 #~ "                            "
 #~ msgstr ""
 #~ "\n"
-#~ "Se aclara lo siguiente: la reproducción, publicación o cualquier uso indebido de este certificado para solicitar dinero o con fines fraudulentos conllevará sanciones legales, de conformidad con la normativa nacional e internacional aplicable. Asimismo, se advierte que dicha conducta conllevará la expulsión inmediata y la inhabilitación total, presente y futura, de cualquier participación en programas, beneficios o acuerdos relacionados."
+#~ "Se aclara lo siguiente: la reproducción, publicación o cualquier uso "
+#~ "indebido de este certificado para solicitar dinero o con fines "
+#~ "fraudulentos conllevará sanciones legales, de conformidad con la "
+#~ "normativa nacional e internacional aplicable. Asimismo, se advierte que "
+#~ "dicha conducta conllevará la expulsión inmediata y la inhabilitación "
+#~ "total, presente y futura, de cualquier participación en programas, "
+#~ "beneficios o acuerdos relacionados."
 
 #~ msgid "Regulatory References:"
 #~ msgstr "Referencias regulatorias:"
@@ -1799,44 +1897,56 @@ msgstr "Mostrar códigos"
 
 #~ msgid ""
 #~ "\n"
-#~ "                                United Nations Convention against Corruption (UNCAC): Article 15 and subsequent provisions, applicable to acts of forgery and misuse of official documents.\n"
+#~ "                                United Nations Convention against "
+#~ "Corruption (UNCAC): Article 15 and subsequent provisions, applicable to "
+#~ "acts of forgery and misuse of official documents.\n"
 #~ "                                "
 #~ msgstr ""
 #~ "\n"
-#~ "Convención de las Naciones Unidas contra la Corrupción (CNUCC): Artículo 15 y disposiciones posteriores, aplicables a los actos de falsificación y uso indebido de documentos oficiales."
+#~ "Convención de las Naciones Unidas contra la Corrupción (CNUCC): Artículo "
+#~ "15 y disposiciones posteriores, aplicables a los actos de falsificación y "
+#~ "uso indebido de documentos oficiales."
 
 #~ msgid "International Criminal Code (Rome Statute): "
 #~ msgstr "Código Penal Internacional (Estatuto de Roma):"
 
 #~ msgid ""
 #~ "\n"
-#~ "                                Related to fraud, forgery, and violations of international ethical standards.\n"
+#~ "                                Related to fraud, forgery, and violations "
+#~ "of international ethical standards.\n"
 #~ "                                "
 #~ msgstr ""
 #~ "\n"
-#~ "Relacionado con fraude, falsificación y violaciones de estándares éticos internacionales."
+#~ "Relacionado con fraude, falsificación y violaciones de estándares éticos "
+#~ "internacionales."
 
 #~ msgid "Internal Regulations of the Fund/Organization: "
 #~ msgstr "Reglamento Interno del Fondo/Organización:"
 
 #~ msgid ""
 #~ "\n"
-#~ "                                In accordance with contractual clauses and specific regulations governing user relationships.\n"
+#~ "                                In accordance with contractual clauses "
+#~ "and specific regulations governing user relationships.\n"
 #~ "                                "
 #~ msgstr ""
 #~ "\n"
-#~ "De acuerdo con las cláusulas contractuales y la normativa específica que regula las relaciones con los usuarios."
+#~ "De acuerdo con las cláusulas contractuales y la normativa específica que "
+#~ "regula las relaciones con los usuarios."
 
 #~ msgid "Legal Warning: "
 #~ msgstr "Aviso legal:"
 
 #~ msgid ""
 #~ "\n"
-#~ "                            Any contrary act will result in the corresponding judicial actions, including reports to the competent authorities of the country and international organizations.\n"
+#~ "                            Any contrary act will result in the "
+#~ "corresponding judicial actions, including reports to the competent "
+#~ "authorities of the country and international organizations.\n"
 #~ "                            "
 #~ msgstr ""
 #~ "\n"
-#~ "Cualquier acto contrario dará lugar a las acciones judiciales correspondientes, incluyendo denuncias ante las autoridades competentes del país y organismos internacionales."
+#~ "Cualquier acto contrario dará lugar a las acciones judiciales "
+#~ "correspondientes, incluyendo denuncias ante las autoridades competentes "
+#~ "del país y organismos internacionales."
 
 #~ msgid "POL"
 #~ msgstr "Prueba de vida"
@@ -1863,17 +1973,20 @@ msgstr "Mostrar códigos"
 #~ "All-in-one suite for business management of historical assets safely and "
 #~ "easily"
 #~ msgstr ""
-#~ "Suite todo en uno para la gestión empresarial de activos históricos de forma"
-#~ " segura y sencilla"
+#~ "Suite todo en uno para la gestión empresarial de activos históricos de "
+#~ "forma segura y sencilla"
 
 #~ msgid ""
 #~ "\n"
-#~ "          This platform is governed by the USA PATRIOT Act (2001) and rejects any relationship\n"
+#~ "          This platform is governed by the USA PATRIOT Act (2001) and "
+#~ "rejects any relationship\n"
 #~ "          with terrorism, drug trafficking, and money laundering.\n"
 #~ "          "
 #~ msgstr ""
 #~ "\n"
-#~ "Esta plataforma se rige por la Ley Patriota de los Estados Unidos (2001) y rechaza cualquier relación con el terrorismo, el narcotráfico y el lavado de dinero."
+#~ "Esta plataforma se rige por la Ley Patriota de los Estados Unidos (2001) "
+#~ "y rechaza cualquier relación con el terrorismo, el narcotráfico y el "
+#~ "lavado de dinero."
 
 #~ msgid "Order of service"
 #~ msgstr "Orden de servicio"
@@ -1898,34 +2011,44 @@ msgstr "Mostrar códigos"
 
 #~ msgid ""
 #~ "\n"
-#~ "              PRIVATE ALLIANCE USA (RECOVERY REPATRIATION FOUNDATION, AM PRO HOLDINGS GROUP LLC AND\n"
-#~ "              PROPENSIONES ABOGADOS INTERNACIONAL). OFFICIAL APPOINTMENT #F991, 07 JULY 2025 SIGNED AND AUTHENTICATED IN\n"
-#~ "              FLORIDA, USA # F991, 07 JULY 2025 SIGNED AND AUTHENTICATED IN FLORIDA, USA\n"
+#~ "              PRIVATE ALLIANCE USA (RECOVERY REPATRIATION FOUNDATION, AM "
+#~ "PRO HOLDINGS GROUP LLC AND\n"
+#~ "              PROPENSIONES ABOGADOS INTERNACIONAL). OFFICIAL APPOINTMENT "
+#~ "#F991, 07 JULY 2025 SIGNED AND AUTHENTICATED IN\n"
+#~ "              FLORIDA, USA # F991, 07 JULY 2025 SIGNED AND AUTHENTICATED "
+#~ "IN FLORIDA, USA\n"
 #~ "              "
 #~ msgstr ""
 #~ "\n"
-#~ "Plataforma Exclusiva para la Gestión Estratégica de Activos Históricos de la Compra Oficial de EE. UU."
+#~ "Plataforma Exclusiva para la Gestión Estratégica de Activos Históricos de "
+#~ "la Compra Oficial de EE. UU."
 
 #~ msgid ""
 #~ "\n"
-#~ "              GLOBAL ALLIANCE (AM PRO HOLDINGS GROUP LLC AND PROPENSIONES ABOGADOS INTERNACIONAL).\n"
-#~ "              OFFICIAL APPOINTMENT #M9Q0, 04 AUGUST 2025 SIGNED AND AUTHENTICATED IN QUEENS SUPREME COURT IN NEW YORK,\n"
+#~ "              GLOBAL ALLIANCE (AM PRO HOLDINGS GROUP LLC AND PROPENSIONES "
+#~ "ABOGADOS INTERNACIONAL).\n"
+#~ "              OFFICIAL APPOINTMENT #M9Q0, 04 AUGUST 2025 SIGNED AND "
+#~ "AUTHENTICATED IN QUEENS SUPREME COURT IN NEW YORK,\n"
 #~ "              USA\n"
 #~ "              "
 #~ msgstr ""
 #~ "\n"
-#~ "Esta plataforma se rige por la Ley Patriota de los Estados Unidos (USA PATRIOT Act, 2001) y rechaza toda relación con terrorismo, narcotráfico y lavado de dinero o de activos."
+#~ "Esta plataforma se rige por la Ley Patriota de los Estados Unidos (USA "
+#~ "PATRIOT Act, 2001) y rechaza toda relación con terrorismo, narcotráfico y "
+#~ "lavado de dinero o de activos."
 
 #~ msgid "Legal Notice:"
 #~ msgstr "Aviso Legal:"
 
 #~ msgid ""
 #~ "\n"
-#~ "        Official Appointment #F991, 07 July 2025 Signed and Authenticated in Florida, USA\n"
+#~ "        Official Appointment #F991, 07 July 2025 Signed and Authenticated "
+#~ "in Florida, USA\n"
 #~ "        "
 #~ msgstr ""
 #~ "\n"
-#~ "Nombramiento oficial N.° F991, 7 de julio de 2025, firmado y autenticado en Florida, EE. UU."
+#~ "Nombramiento oficial N.° F991, 7 de julio de 2025, firmado y autenticado "
+#~ "en Florida, EE. UU."
 
 #~ msgid "Buyer Client Area"
 #~ msgstr "Área de Cliente Compra"

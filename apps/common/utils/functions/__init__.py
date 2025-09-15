@@ -1,1 +1,1 @@
-from .generate_hash import generate_md5_or_sha256_hash
+from .generate_hash import sha256_hex

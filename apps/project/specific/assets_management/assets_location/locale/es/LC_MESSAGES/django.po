@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-12 11:41-0500\n"
+"POT-Creation-Date: 2025-09-13 15:18-0500\n"
 "PO-Revision-Date: 2025-09-12 10:42-0500\n"
 "Last-Translator: Sebastian Morales <juan.sebasm2@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,8 +46,8 @@ msgid "Reference"
 msgstr "Referencia"
 
 #: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:155
-#: .\apps\project\specific\assets_management\assets_location\models.py:60
-#: .\apps\project\specific\assets_management\assets_location\models.py:106
+#: .\apps\project\specific\assets_management\assets_location\models.py:65
+#: .\apps\project\specific\assets_management\assets_location\models.py:111
 msgid "Country"
 msgstr "País"
 
@@ -73,120 +73,120 @@ msgstr "Ingrese aquí cualquier nota o detalle relevante (EN)"
 msgid "A similar asset location already exists."
 msgstr "Ya existe una ubicación de activos similar."
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:22
+#: .\apps\project\specific\assets_management\assets_location\models.py:24
 msgid "Africa"
 msgstr "África"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:23
+#: .\apps\project\specific\assets_management\assets_location\models.py:25
 msgid "Antarctica"
 msgstr "Antártida"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:24
+#: .\apps\project\specific\assets_management\assets_location\models.py:26
 msgid "Asia"
 msgstr "Asia"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:25
+#: .\apps\project\specific\assets_management\assets_location\models.py:27
 msgid "Central America"
 msgstr "América Central"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:26
+#: .\apps\project\specific\assets_management\assets_location\models.py:28
 msgid "Europe"
 msgstr "Europa"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:27
+#: .\apps\project\specific\assets_management\assets_location\models.py:29
 msgid "North America"
 msgstr "América del norte"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:28
+#: .\apps\project\specific\assets_management\assets_location\models.py:30
 msgid "Oceania"
 msgstr "Oceanía"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:29
+#: .\apps\project\specific\assets_management\assets_location\models.py:31
 msgid "South America"
 msgstr "Sudamérica"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:32
+#: .\apps\project\specific\assets_management\assets_location\models.py:34
 msgid "continent"
 msgstr "continente"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:39
+#: .\apps\project\specific\assets_management\assets_location\models.py:41
 msgid "Country Name (ES)"
 msgstr "Nombre del país (ES)"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:44
+#: .\apps\project\specific\assets_management\assets_location\models.py:46
 msgid "Country Name (EN)"
 msgstr "Nombre del país (EN)"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:61
+#: .\apps\project\specific\assets_management\assets_location\models.py:66
 msgid "Countries"
 msgstr "Países"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:79
-#: .\apps\project\specific\assets_management\assets_location\models.py:151
+#: .\apps\project\specific\assets_management\assets_location\models.py:84
+#: .\apps\project\specific\assets_management\assets_location\models.py:156
 msgid "Created By"
 msgstr "Creado por"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:84
+#: .\apps\project\specific\assets_management\assets_location\models.py:89
 msgid "location reference"
 msgstr "referencia de ubicación"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:91
+#: .\apps\project\specific\assets_management\assets_location\models.py:96
 msgid "description (ES)"
 msgstr "descripción (ES)"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:97
+#: .\apps\project\specific\assets_management\assets_location\models.py:102
 msgid "description (EN)"
 msgstr "descripción (EN)"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:128
+#: .\apps\project\specific\assets_management\assets_location\models.py:133
 msgid "Location"
 msgstr "Ubicación"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:129
+#: .\apps\project\specific\assets_management\assets_location\models.py:134
 msgid "Locations"
 msgstr "Ubicaciones"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:135
+#: .\apps\project\specific\assets_management\assets_location\models.py:140
 msgid "Units"
 msgstr "Unidades"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:136
+#: .\apps\project\specific\assets_management\assets_location\models.py:141
 msgid "Boxes"
 msgstr "Cajas"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:159
+#: .\apps\project\specific\assets_management\assets_location\models.py:164
 msgid "Asset"
 msgstr "Activo"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:166
+#: .\apps\project\specific\assets_management\assets_location\models.py:171
 msgid "location"
 msgstr "ubicación"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:172
+#: .\apps\project\specific\assets_management\assets_location\models.py:177
 msgid "quantity type"
 msgstr "tipo de cantidad"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:179
+#: .\apps\project\specific\assets_management\assets_location\models.py:184
 msgid "amount"
 msgstr "cantidad"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:183
+#: .\apps\project\specific\assets_management\assets_location\models.py:188
 msgid "observations (ES)"
 msgstr "observaciones (ES)"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:189
+#: .\apps\project\specific\assets_management\assets_location\models.py:194
 msgid "observations (EN)"
 msgstr "observaciones (EN)"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:195
+#: .\apps\project\specific\assets_management\assets_location\models.py:201
 msgid "No Location"
 msgstr "Sin Ubicación"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:206
+#: .\apps\project\specific\assets_management\assets_location\models.py:212
 msgid "Location Registration"
 msgstr "Registro de ubicación"
 
-#: .\apps\project\specific\assets_management\assets_location\models.py:207
+#: .\apps\project\specific\assets_management\assets_location\models.py:213
 msgid "Locations Registration"
 msgstr "Registro de Ubicaciones"
 

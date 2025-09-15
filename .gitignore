@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,django,node,nextjs
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,django,node,nextjs
 
+### DEVOPS ###
+sonar-project.properties
+
 ### Files ###
 database_schema.sql
 users.json

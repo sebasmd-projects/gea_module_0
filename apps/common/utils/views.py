@@ -5,8 +5,9 @@ from urllib.parse import urlparse
 
 from django.conf import settings
 from django.http import HttpRequest
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, resolve_url
 from django.utils import timezone, translation
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import View
 from drf_yasg.utils import swagger_auto_schema
@@ -147,20 +148,40 @@ def handler504(request, *args, **argv):
 
 
 def set_language(request):
-    lang_code = request.GET.get('lang')
-    if lang_code and lang_code in dict(settings.LANGUAGES).keys():
+    lang_code = (request.POST.get("lang") or request.GET.get("lang") or "").strip()
+    supported = dict(getattr(settings, "LANGUAGES", ()))
+
+    if lang_code in supported:
         translation.activate(lang_code)
-        referer = request.META.get('HTTP_REFERER', '/')
-        parsed = urlparse(referer)
 
-        # Permitir solo redirecciones internas al dominio propio
-        if parsed.netloc and parsed.netloc != request.get_host():
-            referer = '/'
+        # 1) Preferir "next" explícito (POST/GET). 2) Si no, usar HTTP_REFERER. 3) Fallback seguro.
+        next_url = request.POST.get("next") or request.GET.get("next") or request.META.get("HTTP_REFERER")
 
-        response = redirect(referer)
-        response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang_code)
+        if not next_url or not url_has_allowed_host_and_scheme(url=next_url, allowed_hosts={request.get_host()}, require_https=request.is_secure()):
+            try:
+                next_url = resolve_url("core:index")
+            except Exception:
+                next_url = "/"
+
+        response = redirect(next_url)
+
+        # Fijar cookie de idioma con opciones seguras
+        response.set_cookie(
+            settings.LANGUAGE_COOKIE_NAME,
+            lang_code,
+            max_age=getattr(settings, "LANGUAGE_COOKIE_AGE", None),
+            path=getattr(settings, "LANGUAGE_COOKIE_PATH", "/"),
+            domain=getattr(settings, "LANGUAGE_COOKIE_DOMAIN", None),
+            secure=getattr(settings, "SESSION_COOKIE_SECURE", False),
+            samesite=getattr(settings, "LANGUAGE_COOKIE_SAMESITE", "Lax"),
+        )
         return response
-    return redirect('/')
+
+    # Idioma inválido → redirección segura por defecto
+    try:
+        return redirect(resolve_url("core:index"))
+    except Exception:
+        return redirect("/")
 
 
 class DecoratedTokenObtainPairView(TokenObtainPairView):
@@ -226,14 +247,15 @@ class DecoratedTokenBlacklistView(TokenBlacklistView):
 
 
 class HttpRequestAttakView(View):
-    time_in_minutes = timedelta(minutes=settings.IP_BLOCKED_TIME_IN_MINUTES)  
+    time_in_minutes = timedelta(minutes=settings.IP_BLOCKED_TIME_IN_MINUTES)
 
     def get_client_ip(self, request: HttpRequest) -> str:  # ← añade self
         xff = request.META.get("HTTP_X_FORWARDED_FOR")
         if xff:
             ip = xff.split(",")[0].strip()
         else:
-            ip = request.META.get("HTTP_CF_CONNECTING_IP") or request.META.get("REMOTE_ADDR", "")
+            ip = request.META.get(
+                "HTTP_CF_CONNECTING_IP") or request.META.get("REMOTE_ADDR", "")
         try:
             return str(ip_address(ip))
         except Exception:

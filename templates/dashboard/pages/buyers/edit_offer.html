@@ -80,17 +80,6 @@
 
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="id_offer_amount" class="form-label">
-                                        <span class="fw-bold">
-                                            {% trans 'Total value of the offer ($ USD)' %}*
-                                        </span>
-                                    </label>
-                                    {{ form.offer_amount|add_class:"form-control" }}
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="mb-3">
                                     <label for="{{ form.offer_quantity.id_for_label }}" class="form-label">
                                         {% trans "Quantity required:" %}
                                     </label>

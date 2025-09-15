@@ -10,7 +10,7 @@ from django.db.models.signals import post_delete, pre_save
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
-from apps.common.utils.functions import generate_md5_or_sha256_hash
+from apps.common.utils.functions import sha256_hex
 from apps.common.utils.models import TimeStampedModel
 
 from .signals import (auto_delete_asset_img_on_change,
@@ -118,7 +118,7 @@ class AssetModel(TimeStampedModel):
         try:
             es_name = slugify(instance.asset_name.es_name)[:40]
             base_filename, file_extension = os.path.splitext(filename)
-            filename_hash = generate_md5_or_sha256_hash(base_filename)
+            filename_hash = sha256_hex(base_filename)
             path = os.path.join(
                 "asset", es_name, "img",
                 str(date.today().year),

@@ -9,7 +9,6 @@ class DummyOffer:
         self.created = datetime.datetime.now()
         self.asset_display_name = "Industrial Generator X200"
         self.offer_quantity = 5
-        self.offer_amount = 12500.75
         self._quantity_type = "Units"
         self.es_observation = "Requiere entrega en bodega central en Bogotá."
         self.en_observation = "Requires delivery to the main warehouse in Bogotá."

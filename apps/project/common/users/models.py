@@ -12,7 +12,7 @@ from encrypted_model_fields.fields import (EncryptedCharField,
                                            EncryptedEmailField)
 from functools import lru_cache
 
-from apps.common.utils.functions import generate_md5_or_sha256_hash
+from apps.common.utils.functions import sha256_hex
 from apps.common.utils.models import TimeStampedModel
 
 
@@ -107,7 +107,7 @@ class UserModel(TimeStampedModel, AbstractUser):
         self.last_name = self.last_name.title().strip()
         self.username = self.username.lower().strip()
         self.email = email
-        self.email_hash = generate_md5_or_sha256_hash(email)
+        self.email_hash = sha256_hex(email.strip().lower())
         if self.user_type == self.UserTypeChoices.BUYER:
             self.is_verified_holder = True
         super().save(*args, **kwargs)

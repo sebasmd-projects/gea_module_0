@@ -96,7 +96,7 @@ class AssetLocationMixin(HolderRequiredMixin):
 class AssetLocationCreateView(AssetLocationMixin, CreateView):
     model = AssetLocationModel
     form_class = AssetLocationModelForm
-    template_name = 'dashboard/pages/assets_management/asset_location/add_asset_location.html'
+    template_name = 'dashboard/pages/holders/add_asset_location.html'
     success_url = reverse_lazy('assets:holder_index')
 
     def form_valid(self, form):
@@ -117,7 +117,7 @@ class AssetLocationCreateView(AssetLocationMixin, CreateView):
 class AssetUpdateView(AssetLocationMixin, UpdateView):
     model = AssetLocationModel
     form_class = AssetUpdateLocationModelForm
-    template_name = 'dashboard/pages/assets_management/asset_location/edit_asset_location.html'
+    template_name = 'dashboard/pages/holders/asset_location/edit_asset_location.html'
     success_url = reverse_lazy('assets:holder_index')
 
 
@@ -147,7 +147,7 @@ Description
 class LocationCreateView(HolderRequiredMixin, CreateView):
     model = LocationModel
     form_class = LocationModelForm
-    template_name = 'dashboard/pages/assets_management/location/add_location.html'
+    template_name = 'dashboard/pages/holders/location/add_location.html'
     success_url = reverse_lazy('assets_location:add_asset_location')
 
     def form_valid(self, form):
@@ -158,7 +158,7 @@ class LocationCreateView(HolderRequiredMixin, CreateView):
 class LocationUpdateView(HolderRequiredMixin, UpdateView):
     model = LocationModel
     form_class = LocationModelForm
-    template_name = 'dashboard/pages/assets_management/location/edit_location.html'
+    template_name = 'dashboard/pages/holders/location/edit_location.html'
     success_url = reverse_lazy('assets:holder_index')
 
     def get_form_kwargs(self):

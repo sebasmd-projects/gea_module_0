@@ -1,4 +1,5 @@
-import random
+import secrets
+
 import string
 import uuid
 
@@ -13,8 +14,9 @@ from apps.project.specific.assets_management.assets.models import AssetModel
 UserModel = get_user_model()
 
 
-def generate_random_code(length=4):
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
+def generate_random_code(length=10):
+    alphabet = string.ascii_uppercase + string.digits
+    return "".join(secrets.choice(alphabet) for _ in range(length))
 
 
 class AssetCountryModel(TimeStampedModel):
@@ -45,6 +47,9 @@ class AssetCountryModel(TimeStampedModel):
         max_length=100,
         blank=True, null=True
     )
+    
+    def country_name(self):
+        return self.es_country_name if self.es_country_name else self.en_country_name
 
     def __str__(self) -> str:
         return f"{self.get_continent_display()} - {self.es_country_name} - {self.en_country_name}"
@@ -115,7 +120,7 @@ class LocationModel(TimeStampedModel):
 
         if not self.reference:
             self.reference = "{} - {}".format(
-                self.country.country_name,
+                self.country.country_name(),
                 generate_random_code()
             ).upper()
 
@@ -192,7 +197,8 @@ class AssetLocationModel(TimeStampedModel):
     )
 
     def __str__(self) -> str:
-        location_ref = self.location.reference if self.location else _("No Location")
+        location_ref = self.location.reference if self.location else _(
+            "No Location")
         return "{} - {} - {} - {} - {}".format(
             self.asset.asset_name.en_name,
             self.get_quantity_type_display(),

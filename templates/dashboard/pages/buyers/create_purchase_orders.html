@@ -110,18 +110,6 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    <label for="id_offer_amount" class="form-label">
-                                        <span class="fw-bold">
-                                            {% trans 'Total value of the offer ($ USD)' %}*
-                                        </span>
-                                    </label>
-                                    <input type="text" id="offer_amount_display" class="form-control" placeholder="0">
-                                    <input type="hidden" id="id_offer_amount" name="offer_amount">
-                                </div>
-                            </div>
-
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="id_description" class="form-label">
@@ -176,43 +164,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 {{ form.media.js }}
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const displayField = document.getElementById('offer_amount_display');
-        const hiddenField = document.getElementById('id_offer_amount');
-
-        displayField.addEventListener('input', function () {
-            let rawValue = displayField.value.replace(/[^0-9.]/g, '');
-            hiddenField.value = rawValue;
-            if (!isNaN(rawValue) && rawValue !== '') {
-                displayField.value = new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD',
-                    minimumFractionDigits: 0
-                }).format(rawValue);
-            } else {
-                displayField.value = '';
-            }
-        });
-
-        displayField.addEventListener('focus', function () {
-            displayField.value = hiddenField.value;
-        });
-
-        displayField.addEventListener('blur', function () {
-            let rawValue = hiddenField.value;
-            if (!isNaN(rawValue) && rawValue !== '') {
-                displayField.value = new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD',
-                    minimumFractionDigits: 0
-                }).format(rawValue);
-            }
-        });
-    });
-</script>
-
 
 <script>
     $(document).ready(function () {

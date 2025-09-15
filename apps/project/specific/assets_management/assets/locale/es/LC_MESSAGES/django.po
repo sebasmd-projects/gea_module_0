@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-12 11:41-0500\n"
+"POT-Creation-Date: 2025-09-13 15:18-0500\n"
 "PO-Revision-Date: 2025-09-12 10:40-0500\n"
 "Last-Translator: Sebastian Morales <juan.sebasm2@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,55 +30,49 @@ msgstr "Detalles"
 
 #: .\apps\project\specific\assets_management\assets\admin\__init__.py:121
 #: .\apps\project\specific\assets_management\assets\admin\__init__.py:189
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:289
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:288
 msgid "Dates"
 msgstr "Fechas"
 
 #: .\apps\project\specific\assets_management\assets\admin\__init__.py:131
 #: .\apps\project\specific\assets_management\assets\admin\__init__.py:199
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:300
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:299
 msgid "Priority"
 msgstr "Orden"
 
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:265
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:264
 msgid "Required Fields"
 msgstr "Campos requeridos"
 
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:277
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:276
 msgid "Optional Fields"
 msgstr "Campos opcionales"
 
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:313
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:312
 msgid "Asset Name (ES)"
 msgstr "Nombre del activo (ES)"
 
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:317
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:316
 msgid "Asset Name (EN)"
 msgstr "Nombre del activo (EN)"
 
-#: .\apps\project\specific\assets_management\assets\admin\__init__.py:323
+#: .\apps\project\specific\assets_management\assets\admin\__init__.py:322
 msgid "Total Quantity by Type"
 msgstr "Cantidad total por tipo"
 
-#: .\apps\project\specific\assets_management\assets\admin\filters.py:7
-msgid "Total Quantity Zero"
-msgstr "Cantidad total cero"
-
-#: .\apps\project\specific\assets_management\assets\admin\filters.py:12
-#: .\apps\project\specific\assets_management\assets\admin\filters.py:30
-msgid "Yes"
-msgstr "Si"
-
-#: .\apps\project\specific\assets_management\assets\admin\filters.py:13
-#: .\apps\project\specific\assets_management\assets\admin\filters.py:31
-msgid "No"
-msgstr "No"
-
-#: .\apps\project\specific\assets_management\assets\admin\filters.py:25
+#: .\apps\project\specific\assets_management\assets\admin\filters.py:6
 msgid "Has Image"
 msgstr "Tiene imagen"
 
-#: .\apps\project\specific\assets_management\assets\admin\filters.py:43
+#: .\apps\project\specific\assets_management\assets\admin\filters.py:11
+msgid "Yes"
+msgstr "Si"
+
+#: .\apps\project\specific\assets_management\assets\admin\filters.py:12
+msgid "No"
+msgstr "No"
+
+#: .\apps\project\specific\assets_management\assets\admin\filters.py:24
 msgid "Quantity Type"
 msgstr "Tipo de cantidad"
 
@@ -175,18 +169,18 @@ msgstr "Activo H."
 msgid "Assets"
 msgstr "Activos H."
 
-#: .\apps\project\specific\assets_management\assets\signals.py:93
+#: .\apps\project\specific\assets_management\assets\signals.py:96
 #, python-brace-format
 msgid "Error filling asset category translation fields: {e}"
 msgstr ""
 "Error al rellenar los campos de traducción de la categoría de activos: {e}"
 
-#: .\apps\project\specific\assets_management\assets\signals.py:124
+#: .\apps\project\specific\assets_management\assets\signals.py:127
 #, python-brace-format
 msgid "Error filling asset name translation fields: {e}"
 msgstr "Error al completar los campos de traducción del nombre del activo: {e}"
 
-#: .\apps\project\specific\assets_management\assets\signals.py:168
+#: .\apps\project\specific\assets_management\assets\signals.py:171
 #, python-brace-format
 msgid "Error filling asset translation fields: {e}"
 msgstr "Error al rellenar los campos de traducción de activos: {e}"
@@ -202,6 +196,9 @@ msgstr "Por favor corrija los errores a continuación."
 #: .\apps\project\specific\assets_management\assets\views.py:127
 msgid "New category created successfully."
 msgstr "Nueva categoría creada exitosamente."
+
+#~ msgid "Total Quantity Zero"
+#~ msgstr "Cantidad total cero"
 
 #~ msgid "2. Category"
 #~ msgstr "2. Categoría"

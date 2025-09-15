@@ -10,8 +10,8 @@ from import_export.widgets import ForeignKeyWidget
 from apps.common.utils.admin import GeneralAdminModel
 
 from ..models import AssetCategoryModel, AssetModel, AssetsNamesModel
-from .filters import (HasImageFilter, QuantityTypeFilter,
-                      ZeroTotalQuantityFilter)
+from .filters import (HasImageFilter, QuantityTypeFilter
+                      )
 
 
 class AssetCategoryResource(resources.ModelResource):
@@ -230,7 +230,6 @@ class AssetModelAdmin(ImportExportModelAdmin, GeneralAdminModel):
     list_filter = (
         'is_active',
         QuantityTypeFilter,
-        ZeroTotalQuantityFilter,
         HasImageFilter,
         'category',
     )

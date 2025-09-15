@@ -85,17 +85,17 @@
             {# 3) Mensaje de WhatsApp en español (como pediste antes) y luego URL-encode #}
             {% blocktrans asvar wa_body_es %}Hello, I would like to request the unique code to register with GEA.{% endblocktrans %}
 
-            <small class="form-text text-muted">
-              {% trans 'You must request your unique registration code through:' %}
-
+            <div class="form-text text-black size-14">
+              {% trans 'You must request your unique registration code through' %}<br/>
               <a href="https://wa.me/573012283818?text={{ wa_body_es|urlencode }}" target="_blank">
-                <i class="mx-1 fa-brands fa-whatsapp text-green"></i> +57 301 228 38 18
+                <i class="mx-1 fa-solid fa-headset"></i><i class="mx-1 fa-brands fa-whatsapp text-green"></i> 
+                <span style="font-size: 20px;">WhatsApp: +57 301 228 38 18</span>
               </a>
-              |
+              <br/>
               <a href="mailto:info@globalallianceusa.com?subject={{ mail_subject|urlencode }}&body={{ mail_body|urlencode }}">
-                info@globalallianceusa.com
+                <span style="font-size: 15px;">info@globalallianceusa.com</span>
               </a>
-            </small>
+            </div>
           </div>
           {% endwith %}
         </div>

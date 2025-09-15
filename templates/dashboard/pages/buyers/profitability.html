@@ -3,12 +3,12 @@
 {% load i18n static custom_filters %}
 
 {% block simple_datatables %}
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
 {% endblock %}
 
 {% block simple_datatables_js %}
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-    <script src="{% static 'js/simple-datatable.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+  <script src="{% static 'js/simple-datatable.js' %}"></script>
 {% endblock %}
 
 {% block icons %}
@@ -47,205 +47,408 @@
       <div class="col-12">
         <div class="card mb-4">
           <div class="card-header" style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
-            <h2 style="color: black;">{% trans 'Profitability PO' %}</h2>
+            <h2 class="text-black">{% trans 'Profitability PO' %}</h2>
           </div>
           <div class="card-body">
             <div id="alerts-container"></div>
             {% if offers %}
-            <table id="profitability_po_table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>
-                    {% trans 'Asset' %}
-                  </th>
-                  <th>
-                    {% trans 'Quantity Type - Needed' %}
-                  </th>
-                  <th>
-                    {% trans 'Status' %}
-                  </th>
-                  <th>
-                    {% trans 'Profitability' %}
-                  </th>
-                  <th>
-                    {% trans 'Actions' %}
-                  </th>
-                </tr>
-              </thead>
-              {% trans "Paid" as paid %}
-              {% trans "Pending" as pending %}
+              <table id="profitability_po_table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>
+                      {% trans 'Asset' %}
+                    </th>
+                    <th>
+                      {% trans 'Quantity Type - Needed' %}
+                    </th>
+                    <th>
+                      {% trans 'Status' %}
+                    </th>
+                    <th>
+                      {% trans 'Profitability' %}
+                    </th>
+                    <th>
+                      {% trans 'Actions' %}
+                    </th>
+                  </tr>
+                </thead>
+                {% trans 'Paid' as paid %}
+                {% trans 'Pending' as pending %}
 
-              <tbody>
-                {% for offer in offers %}
-                <tr data-offer-row="{{ offer.id }}">
-                    <td>
+                <tbody>
+                  {% for offer in offers %}
+                    <tr data-offer-row="{{ offer.id }}">
+                      <td>
                         <button type="button" class="btn btn-link p-0 uuid-toggle" data-full="{{ offer.id|stringformat:'s' }}" data-short="{{ offer.id|stringformat:'s'|slice:':8' }}" aria-label="{% trans 'Show full ID' %}"><code class="uuid-text">{{ offer.id|stringformat:'s'|slice:':8' }}</code></button>
-                    </td>
-                    <td>
-                        {{ offer.asset_display_name }}
-                    </td>
-                    <td>
-                        {{ offer.get_quantity_type_display }} - {{ offer.offer_quantity }}
-                    </td>
-                    <td>
+                      </td>
+                      <td>{{ offer.asset_display_name }}</td>
+                      <td>{{ offer.get_quantity_type_display }} - {{ offer.offer_quantity }}</td>
+                      <td>
                         <i class="{{ offer.status_icon }} mx-1" style="color: {{ offer.status_color }};" title="{{ offer.status_label }}"></i>
                         <span style="color: {{ offer.status_color }};">{{ offer.status_label }}</span>
-                    </td>
-                    <td class="w-100 my-2">
-                      <div class="row gx-3 gy-2">
-                        <div class="col-md-12">
-                          <div class="border rounded p-2 h-100 d-flex justify-content-between align-items-end">
-                            <span>Recovery Repatriation Foundation • 50%</span>
-                            <span class="badge rounded-pill {{ rrf_paid|yesno:'bg-success,bg-warning' }}">
-                              {{ rrf_paid|yesno:_("Paid,Pending") }}
-                            </span>
+                      </td>
+                      <td class="w-100 my-2">
+                        <div class="row gx-3 gy-2">
+                          <div class="col-md-12">
+                            <div class="border rounded p-2 h-100 d-flex justify-content-between align-items-end">
+                              <span>Recovery Repatriation Foundation • 50%</span>
+                              <span class="badge rounded-pill {{ offer.recovery_repatriation_foundation_paid|yesno:'bg-success,bg-warning' }}">{{ offer.recovery_repatriation_foundation_paid|yesno:_('Paid,Pending') }}</span>
+                            </div>
+                          </div>
+
+                          <div class="col-md-6">
+                            <div class="border rounded p-2 h-100 d-flex justify-content-between align-items-end">
+                              <span>AM PRO Service • 25%</span>
+                              <span class="badge rounded-pill {{ offer.am_pro_service_paid|yesno:'bg-success,bg-warning' }}">{{ offer.am_pro_service_paid|yesno:_('Paid,Pending') }}</span>
+                            </div>
+                          </div>
+
+                          <div class="col-md-6">
+                            <div class="border rounded p-2 h-100 d-flex justify-content-between align-items-end">
+                              <span>Propensiones • 25%</span>
+                              <span class="badge rounded-pill {{ offer.propensiones_paid|yesno:'bg-success,bg-warning' }}">{{ offer.propensiones_paid|yesno:_('Paid,Pending') }}</span>
+                            </div>
                           </div>
                         </div>
-
-                        <div class="col-md-6">
-                          <div class="border rounded p-2 h-100 d-flex justify-content-between align-items-end">
-                            <span>AM PRO Service • 25%</span>
-                            <span class="badge rounded-pill {{ ampro_paid|yesno:'bg-success,bg-warning' }}">
-                              {{ ampro_paid|yesno:_("Paid,Pending") }}
-                            </span>
-                          </div>
+                      </td>
+                      <td>
+                        <div class="text-center gap-2">
+                          <a href="{% url 'buyers:offer_wizard_page' offer.id %}" type="button" class="btn btn-datatable btn-icon btn-outline-success"><i class="fa-solid fa-eye"></i></a>
                         </div>
+                      </td>
+                    </tr>
+                  {% empty %}
 
-                        <div class="col-md-6">
-                          <div class="border rounded p-2 h-100 d-flex justify-content-between align-items-end">
-                            <span>Propensiones • 25%</span>
-                            <span class="badge rounded-pill {{ propensiones_paid|yesno:'bg-success,bg-warning' }}">
-                              {{ propensiones_paid|yesno:_("Paid,Pending") }}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="text-center gap-2">
-                        <a href="{% url 'buyers:offer_wizard_page' offer.id %}" 
-                          type="button" 
-                          class="btn btn-datatable btn-icon btn-outline-success">
-                          <i class="fa-solid fa-eye"></i>
-                        </a>
-                      </div>
-                    </td>
-                </tr>
-                {% empty %}
-
-                {% endfor %}
-              </tbody>
-            </table>
+                  {% endfor %}
+                </tbody>
+              </table>
             {% endif %}
           </div>
         </div>
       </div>
 
       <div class="col-xl-6 mb-4">
-          <!-- Pie chart with legend example-->
-          <div class="card h-100">
-              <div class="card-header">Profitability Overview</div>
-              <div class="card-body">
-                  <div class="chart-pie mb-4"><canvas id="myPieChart" width="100%" height="50"></canvas></div>
-                  <div class="list-group list-group-flush">
-                      <div class="list-group-item d-flex align-items-center justify-content-between small px-0 py-2">
-                          <div class="me-3">
-                              <i class="fas fa-circle fa-sm me-1 text-blue"></i>
-                              {% trans 'In Progress' %}
-                          </div>
-                          <div class="fw-500 text-dark">{{ in_progress_value }}</div>
-                      </div>
-                      <div class="list-group-item d-flex align-items-center justify-content-between small px-0 py-2">
-                          <div class="me-3">
-                              <i class="fas fa-circle fa-sm me-1 text-green"></i>
-                              {% trans 'Paid' %}
-                          </div>
-                          <div class="fw-500 text-dark">{{ paid_value }}</div>
-                      </div>
-                  </div>
-              </div>
+        <!-- Pie chart with legend example -->
+        <div class="card h-100">
+          <div class="card-header" style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
+            <h2 class="text-black">{% trans 'Profitability Overview' %}</h2>
           </div>
+          <div class="card-body">
+            <div class="chart-pie mb-4">
+              <canvas id="myPieChart" width="100%" height="50"></canvas>
+            </div>
+            <div class="list-group list-group-flush">
+              <div class="list-group-item d-flex align-items-center justify-content-between small px-0 py-2">
+                <div class="me-3">
+                  <i class="fas fa-circle fa-sm me-1 text-blue"></i>
+                  {% trans 'In Progress' %}
+                </div>
+                <div class="fw-500 text-dark">{{ in_progress_value }}</div>
+              </div>
+              <div class="list-group-item d-flex align-items-center justify-content-between small px-0 py-2">
+                <div class="me-3">
+                  <i class="fas fa-circle fa-sm me-1 text-green"></i>
+                  {% trans 'Paid' %}
+                </div>
+                <div class="fw-500 text-dark">{{ paid_value }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-6 mb-4">
+        <div class="card h-100">
+          <div class="card-header" style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
+            <h2 class="text-black">{% trans 'Purchase orders by month' %}</h2>
+          </div>
+          <div class="card-body">
+            <div class="chart-wrapper" style="position:relative;height:320px;">
+              <canvas id="poMonthlyChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="card mb-4">
+          <div class="card-header" style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
+            <h2 class="text-black">{% trans 'Assets' %}|{% trans 'By total and type' %}</h2>
+          </div>
+          <div class="card-body">
+            <table id="assets_table" class="table table-striped">
+              <thead>
+                <tr>
+                  <th>
+                    {% trans 'Asset Name' %}
+                  </th>
+                  <th>
+                    {% trans 'Category' %}
+                  </th>
+                  <th>
+                    {% trans 'Total Quantity (boxes)' %}
+                  </th>
+                  <th>
+                    {% trans 'Total Quantity (units)' %}
+                  </th>
+                  <th>
+                    {% trans 'Observations' %}
+                  </th>
+                  <th>
+                    {% trans 'Description' %}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in asset_rows %}
+                  <tr>
+                    <td>
+                      {{ r.name }} <span class="d-none">{{ r.tokens }}</span>
+                    </td>
+                    <td>{{ r.category }}</td>
+                    <td>{{ r.total_boxes }}</td>
+                    <td>{{ r.total_units }}</td>
+                    <td>{{ r.observations }}</td>
+                    <td>{{ r.description }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+            <div class="col-4">
+              <table class="table table-sm table-dark align-middle mt-5">
+                <thead class="table-dark">
+                  <tr>
+                    <th>
+                      {% trans 'Zero QTY' %}
+                    </th>
+                    <th>
+                      {% trans 'Image' %}
+                    </th>
+                    <th>
+                      {% trans 'Units or Boxes' %}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                  <tr class="table-light">
+                    <td>zero:yes</td>
+                    <td>img:yes</td>
+                    <td>qty:U</td>
+                  </tr>
+                  <tr class="table-light">
+                    <td>zero:no</td>
+                    <td>img:no</td>
+                    <td>qty:B</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 {% endblock %}
 
-
 {% block charts_js %}
   {% trans 'In Progress' as in_progress %}
   {% trans 'Paid' as paid %}
+  {{ po_month_labels|json_script:'po-month-labels' }}
+  {{ po_created_counts|json_script:'po-created-counts' }}
+  {{ po_closed_counts|json_script:'po-closed-counts' }}
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js" crossorigin="anonymous"></script>
   <script>
-      var ctx = document.getElementById("myPieChart");
-      var in_progress_txt = "{{ in_progress }}";
-      var paid_txt = "{{ paid }}";
-      var in_progress_value = {{ in_progress_value }};
-      var paid_value = {{ paid_value }};
+  var ctx = document.getElementById("myPieChart");
+  var in_progress_txt = "{{ in_progress }}";
+  var paid_txt = "{{ paid }}";
+  var in_progress_value = {{ in_progress_value }};
+  var paid_value = {{ paid_value }};
 
-      var myPieChart = new Chart(ctx, {
-          type: "pie",
-          data: {
-              labels: ["{{ in_progress }}", "{{ paid }}"],
-              datasets: [{
-                  data: [in_progress_value, paid_value],
-                  backgroundColor: [
-                      "rgba(0, 97, 242, 1)",
-                      "rgba(0, 172, 105, 1)",
-                  ],
-                  hoverBackgroundColor: [
-                      "rgba(0, 97, 242, 0.9)",
-                      "rgba(0, 172, 105, 0.9)",
-                  ],
-                  hoverBorderColor: "rgba(234, 236, 244, 1)"
-              }]
+  var myPieChart = new Chart(ctx, {
+    type: "pie",
+    data: {
+      labels: ["{{ in_progress }}", "{{ paid }}"],
+      datasets: [{
+        data: [in_progress_value, paid_value],
+        backgroundColor: [
+          "rgba(0, 97, 242, 1)",
+          "rgba(0, 172, 105, 1)",
+        ],
+        hoverBackgroundColor: [
+          "rgba(0, 97, 242, 0.9)",
+          "rgba(0, 172, 105, 0.9)",
+        ],
+        hoverBorderColor: "rgba(234, 236, 244, 1)"
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      tooltips: {
+        backgroundColor: "rgb(255,255,255)",
+        bodyFontColor: "#000000",
+        borderColor: "#dddfeb",
+        borderWidth: 2,
+        xPadding: 15,
+        yPadding: 15,
+        displayColors: false,
+        caretPadding: 10
+      },
+      legend: {
+        display: true
+      },
+      cutoutPercentage: 30,
+      title: {
+        display: false,
+        text: "Profitability Overview"
+      },
+    }
+  });
+</script>
+
+  <script>
+  (function () {
+    // Recuperar datos del DOM (json_script)
+    var labels = JSON.parse(document.getElementById('po-month-labels').textContent);
+    var created = JSON.parse(document.getElementById('po-created-counts').textContent);
+    var closed = JSON.parse(document.getElementById('po-closed-counts').textContent);
+
+    var ctx = document.getElementById('poMonthlyChart');
+
+    // Colores: azul creadas, verde cerradas (mismos que ya usas)
+    var BLUE = "rgba(0, 97, 242, 1)";
+    var BLUE_HOVER = "rgba(0, 97, 242, 0.9)";
+    var GREEN = "rgba(0, 172, 105, 1)";
+    var GREEN_HOVER = "rgba(0, 172, 105, 0.9)";
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "{{ _('Created')|default:'Created' }}",
+            data: created,
+            backgroundColor: BLUE,
+            hoverBackgroundColor: BLUE_HOVER,
+            borderWidth: 0
           },
-          options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              tooltips: {
-                  backgroundColor: "rgb(255,255,255)",
-                  bodyFontColor: "#000000",
-                  borderColor: "#dddfeb",
-                  borderWidth: 2,
-                  xPadding: 15,
-                  yPadding: 15,
-                  displayColors: false,
-                  caretPadding: 10
-              },
-              legend: {
-                  display: true
-              },
-              cutoutPercentage: 30,
-              title: {
-                  display: false,
-                  text: "Profitability Overview"
-              },
+          {
+            label: "{{ _('Closed')|default:'Closed' }}",
+            data: closed,
+            backgroundColor: GREEN,
+            hoverBackgroundColor: GREEN_HOVER,
+            borderWidth: 0
           }
-      });
-    </script>
-
-{% endblock charts_js %}
-  
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: { display: true },
+        title: { display: false },
+        tooltips: {
+          mode: 'index',
+          intersect: false,
+          backgroundColor: "rgb(255,255,255)",
+          bodyFontColor: "#000000",
+          borderColor: "#dddfeb",
+          borderWidth: 2,
+          xPadding: 15,
+          yPadding: 15,
+          displayColors: true,
+          caretPadding: 10
+        },
+        scales: {
+          xAxes: [{
+            stacked: false,
+            gridLines: { display: false }
+          }],
+          yAxes: [{
+            stacked: false,
+            ticks: { beginAtZero: true, precision: 0 }
+          }]
+        }
+      }
+    });
+  })();
+</script>
+{% endblock %}
 
 {% block body_custom_js %}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.uuid-toggle').forEach(function (btn) {
-            const code = btn.querySelector('.uuid-text');
-            const full = btn.getAttribute('data-full');
-            const shortV = btn.getAttribute('data-short');
-            let expanded = false;
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.uuid-toggle').forEach(function (btn) {
+      const code = btn.querySelector('.uuid-text');
+      const full = btn.getAttribute('data-full');
+      const shortV = btn.getAttribute('data-short');
+      let expanded = false;
 
-            btn.addEventListener('click', function () {
-                expanded = !expanded;
-                code.textContent = expanded ? full : shortV;
-                btn.setAttribute('aria-label', expanded ? "{{ _('Hide full ID')|default:'Hide full ID' }}" 
-                                                        : "{{ _('Show full ID')|default:'Show full ID' }}");
-            });
-            });
+      btn.addEventListener('click', function () {
+        expanded = !expanded;
+        code.textContent = expanded ? full : shortV;
+        btn.setAttribute('aria-label', expanded ? "{{ _('Hide full ID')|default:'Hide full ID' }}"
+          : "{{ _('Show full ID')|default:'Show full ID' }}");
+      });
+    });
+  });
+</script>
+
+  <script>
+  (function () {
+    function ready(fn) { if (document.readyState != 'loading') { fn() } else { document.addEventListener('DOMContentLoaded', fn) } }
+
+    ready(function () {
+      var assetsTableEl = document.getElementById('assets_table');
+      if (!assetsTableEl) return;
+
+      // Espera a que Simple-DataTables haya envuelto la tabla
+      function getWrapper() {
+        return assetsTableEl.closest('.dataTable-wrapper') || assetsTableEl.parentElement;
+      }
+
+      function getSearchInput() {
+        var w = getWrapper();
+        return w ? w.querySelector('input.dataTable-input') : null;
+      }
+
+      // Si tu inicializador genérico es asíncrono, intentamos varias veces
+      var tries = 0;
+      (function waitForInput() {
+        var input = getSearchInput();
+        if (!input && tries < 20) {
+          tries++; return setTimeout(waitForInput, 100);
+        }
+        if (!input) return; // no pudo encontrar buscador
+
+        // Controles
+        var fZero = document.getElementById('fZero');
+        var fImg = document.getElementById('fImg');
+        var fQty = document.getElementById('fQty');
+
+        function applyFilters() {
+          var terms = [];
+          if (fZero && fZero.value) terms.push('zero:' + fZero.value);
+          if (fImg && fImg.value) terms.push('img:' + fImg.value);
+          if (fQty && fQty.value) terms.push('qty:' + fQty.value);
+
+          // Aplica la búsqueda compuesta en el input del datatable
+          input.value = terms.join(' ');
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+
+        // Listeners
+        [fZero, fImg, fQty].forEach(function (sel) {
+          if (sel) sel.addEventListener('change', applyFilters);
         });
-    </script>
-{% endblock body_custom_js %}
-    
+
+        // Aplica al inicio (sin filtros = All)
+        applyFilters();
+      })();
+    });
+  })();
+</script>
+{% endblock %}

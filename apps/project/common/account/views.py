@@ -3,6 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import View
 from django.views.generic.edit import FormView
@@ -57,7 +58,6 @@ class GeaUserRegisterView(FormView):
 
     def get_success_url(self):
         next_url = self.request.GET.get('next')
-        if next_url:
+        if next_url and url_has_allowed_host_and_scheme(url=next_url, allowed_hosts={self.request.get_host()}, require_https=self.request.is_secure(),):
             return next_url
-        else:
-            return reverse('two_factor:login')
+        return reverse('two_factor:login')

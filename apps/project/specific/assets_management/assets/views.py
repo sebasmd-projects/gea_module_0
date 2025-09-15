@@ -135,3 +135,15 @@ class AssetAddNewCategory(BuyerRequiredMixin, CreateView):
         ctx = super().get_context_data(**kwargs)
         ctx["categories"] = AssetCategoryModel.objects.all()
         return ctx
+
+class WhatsAppRedirectView(View):
+    """
+    Redirect to WhatsApp with a pre-filled message.
+    https://wa.me/573012283818?text=I need help with GEA, my user: request.user.username
+    """
+
+    def get(self, request, *args, **kwargs):
+        phone_number = "573012283818"
+        message = f"{_('I need help with GEA, my user is')}: {request.user.username}"
+        whatsapp_url = f"https://wa.me/{phone_number}?text={message}"
+        return redirect(whatsapp_url)

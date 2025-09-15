@@ -15,8 +15,9 @@ def auto_delete_asset_img_on_delete(sender, instance, *args, **kwargs):
     """
     if instance.asset_img:
         try:
-            if os.path.isfile(instance.asset_img.path):
-                os.remove(instance.asset_img.path)
+            f = getattr(instance, "asset_img", None)
+            if f and f.name:
+                f.storage.delete(f.name)
         except Exception as e:
             logger.error(
                 f"Error deleting image {instance.asset_img.path}: {e}"
@@ -34,15 +35,17 @@ def auto_delete_asset_img_on_change(sender, instance, *args, **kwargs):
         old_instance = sender.objects.get(pk=instance.pk)
     except sender.DoesNotExist:
         return
+    
+    old_f = getattr(old_instance, "asset_img", None)
+    new_f = getattr(instance, "asset_img", None)
 
-    if old_instance.asset_img and old_instance.asset_img != instance.asset_img:
-        try:
-            if os.path.isfile(old_instance.asset_img.path):
-                os.remove(old_instance.asset_img.path)
-        except Exception as e:
-            logger.error(
-                f"Error deleting old image {old_instance.asset_img.path}: {e}"
-            )
+    try:
+        if old_f and old_f.name and (not new_f or old_f.name != getattr(new_f, "name", None)):
+            old_f.storage.delete(old_f.name)
+    except Exception as e:
+        logger.error(
+            f"Error deleting old image {old_instance.asset_img.path}: {e}"
+        )
 
 
 translator = ChatGPTAPI()

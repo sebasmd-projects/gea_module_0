@@ -3,499 +3,472 @@
 {% load i18n static custom_filters %}
 
 {% block icons %}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js" crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/aa367a5aee.js" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"
+    crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/aa367a5aee.js" crossorigin="anonymous"></script>
 {% endblock icons %}
 
 
 {% block main_layout %}
-    {% url 'buyers:buyer_create' as add_purchase_order_url %}
-    {% url 'assets:create' as add_asset_url %}
-    {% url 'assets:add_category' as add_asset_category_url %}
+{% url 'buyers:buyer_create' as add_purchase_order_url %}
+{% url 'assets:create' as add_asset_url %}
+{% url 'assets:add_category' as add_asset_category_url %}
 
-    {% static 'assets/imgs/illustrations/windows.svg' as purchase_orders_image %}
-    {% static 'assets/imgs/illustrations/browser-stats.svg' as add_asset_image %}
-    {% static 'assets/imgs/illustrations/processing.svg' as add_category_image %}
+{% static 'assets/imgs/illustrations/windows.svg' as purchase_orders_image %}
+{% static 'assets/imgs/illustrations/browser-stats.svg' as add_asset_image %}
+{% static 'assets/imgs/illustrations/processing.svg' as add_category_image %}
 
-    {% trans 'Purchase Orders' as purchase_orders %}
-    {% trans 'Add New Purchase Order' as add_new_purchase_order %}
-    {% trans "Add New Asset" as add_new_asset %}
-    {% trans 'Create and Manage your Purchase Orders.' as create_and_manage_your_po %}
-    {% trans "Add New Asset Category" as add_new_asset_category %}
+{% trans 'Purchase Orders' as purchase_orders %}
+{% trans 'Add New Purchase Order' as add_new_purchase_order %}
+{% trans "Add New Asset" as add_new_asset %}
+{% trans 'Create and Manage your Purchase Orders.' as create_and_manage_your_po %}
+{% trans "Add New Asset Category" as add_new_asset_category %}
+{% trans 'Buyer Dashboard' as buyer_dashboard %}
 
-    {% include 'dashboard/partials/header/_header.html' with icon_class="me-2" icon_data_feather="file-text" page_title=purchase_orders page_description=create_and_manage_your_po parent_title="Buyer Dashboard" %}
+{% include 'dashboard/partials/header/_header.html' with icon_class="me-2" icon_data_feather="file-text" page_title=purchase_orders page_description=create_and_manage_your_po parent_title=buyer_dashboard %}
 
-    <div class="container-xl px-4 mt-n10">
-        <div class="row">
-            {% comment %} <!-- Add New Purchase Order Card --> {% endcomment %}
-            {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="file-plus" page_header_title=add_new_purchase_order page_header_image=purchase_orders_image url=add_purchase_order_url %}
+<div class="container-xl px-4 mt-n10">
+    <div class="row">
+        {% comment %} <!-- Add New Purchase Order Card --> {% endcomment %}
+        {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="file-plus" page_header_title=add_new_purchase_order page_header_image=purchase_orders_image url=add_purchase_order_url %}
 
-            {% comment %}<!-- Add New Asset Card -->{% endcomment %}
-            {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="archive" page_header_title=add_new_asset page_header_image=add_asset_image url=add_asset_url %}
+        {% comment %}<!-- Add New Asset Card -->{% endcomment %}
+        {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="archive" page_header_title=add_new_asset page_header_image=add_asset_image url=add_asset_url %}
 
-            {% comment %}<!-- Add New Asset Category -->{% endcomment %}
-            {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="list" page_header_title=add_new_asset_category page_header_image=add_category_image url=add_asset_category_url %}
-        </div>
+        {% comment %}<!-- Add New Asset Category -->{% endcomment %}
+        {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="list" page_header_title=add_new_asset_category page_header_image=add_category_image url=add_asset_category_url %}
+    </div>
 
-        <div class="row">
-            <div class="col-12">
-                <div class="card mb-4" id="my_offers">
-                    <div class="card-header"
-                        style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
-                        <h2 style="color: black;">{% trans 'Purchase Orders' %}</h2>
-                    </div>
-                    {% if messages %}
-                        <div class="card-body">
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                {% for message in messages %}
-                                {{ message }}
-                                {% endfor %}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        </div>
-                    {% endif %}
-                    <div class="card-body">
-                        <div id="alerts-container"></div>
-                        <table id="offers_table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>ID</th>
-                                    <th>{% trans 'Asset' %}</th>
-                                    <th>{% trans 'Purchase order Type' %}</th>
-                                    <th>{% trans 'Quantity Type' %}</th>
-                                    <th>{% trans 'Quantity Needed' %}</th>
-                                    <th>{% trans 'Country' %}</th>
-                                    <th>{% trans 'Status' %}</th>
-                                    <th>{% trans 'Actions' %}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for offer in offers %}
-
-                                {% if offer.display %}
-                                <tr data-offer-row="{{ offer.id }}">
-                                    <td>{{ forloop.counter }}</td>
-                                    <td>
-                                        <button type="button"
-                                                class="btn btn-link p-0 uuid-toggle"
-                                                data-full="{{ offer.id|stringformat:'s' }}"
-                                                data-short="{{ offer.id|stringformat:'s'|slice:':8' }}"
-                                                aria-label="{% trans 'Show full ID' %}">
-                                            <code class="uuid-text">{{ offer.id|stringformat:'s'|slice:':8' }}</code>
-                                        </button>
-                                    </td>
-                                    <td>{{ offer.asset_display_name }}</td>
-                                    <td>{{ offer.get_offer_type_display }}</td>
-                                    <td>{{ offer.get_quantity_type_display }}</td>
-                                    <td>{{ offer.offer_quantity }}</td>
-                                    <td>{{ offer.buyer_country.get_continent_display }} -
-                                        {{ offer.buyer_country.es_country_name }}</td>
-                                    <td>
-                                        <i class="{{ offer.status_icon }} mx-1" style="color: {{ offer.status_color }};" title="{{ offer.status_label }}"></i>
-                                        <span style="color: {{ offer.status_color }};">{{ offer.status_label }}</span>
-                                    </td>
-                                    <td>
-                                        <a href="{% url 'buyers:offer_details' offer.id %}" type="button"
-                                            class="btn btn-datatable btn-icon btn-outline-success">
-                                            <i class="fa-solid fa-eye"></i>
-                                        </a>
-                                        {% if not offer.reviewed %}
-                                        <a href="{% url 'buyers:offer_update' offer.id %}"
-                                            class="btn btn-datatable btn-icon btn-outline-primary">
-                                            <i class="fa-regular fa-pen-to-square"></i>
-                                        </a>
-                                        {% endif %}
-                                        {% if not offer.is_approved %}
-                                        <button class="btn btn-datatable btn-icon btn-outline-danger"
-                                            data-offer-id="{{ offer.id }}"
-                                            data-delete-url="{% url 'buyers:offer_delete' offer.id %}"
-                                            data-asset="{{ offer.asset_display_name }}"
-                                            data-offer-type="{{ offer.get_offer_type_display }}"
-                                            data-quantity-type="{{ offer.get_quantity_type_display }}"
-                                            data-quantity="{{ offer.offer_quantity }}"
-                                            data-country="{{ offer.buyer_country.get_continent_display }} - {{ offer.buyer_country.es_country_name }}"
-                                            data-amount="{{ offer.offer_amount|currency }}"
-                                            data-approved="{% if offer.is_approved %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif %}"
-                                            data-bs-toggle="modal" data-bs-target="#confirmDeleteOfferModal">
-                                            <i class="fa-regular fa-trash-can"></i>
-                                        </button>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% empty %}
-                                {% endfor %}
-                            </tbody>
-                        </table>
-
-                        <div class="d-grid gap-2">
-                            <a class="btn btn-outline-success" href="{% url 'buyers:buyer_create' %}">
-                                <i class="fa-solid fa-plus mx-1"></i> {% trans 'Add New Purchase Order' %}
-                            </a>
-                            <div class="row">
-                                <div class="col-6 d-grid gap-2 mt-2">
-                                    <a href="{% url 'assets:add_category' %}" class="btn btn-outline-gold"
-                                        rel="noopener noreferrer">
-                                        <i class="fa-solid fa-plus mx-1"></i> {{ add_new_asset_category }}
-                                    </a>
-                                </div>
-                                <div class="col-6 d-grid gap-2 mt-2">
-                                    <a href="{% url 'assets:create' %}" class="btn btn-outline-gold"
-                                        rel="noopener noreferrer">
-                                        <i class="fa-solid fa-plus mx-1"></i> {{ add_new_asset }}
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4" id="my_offers">
+                <div class="card-header"
+                    style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
+                    <h2 style="color: black;">{% trans 'Purchase Orders' %}</h2>
                 </div>
-                
-                
-                {% if assets and categories %}
-                    <div class="card mb-4">
-                    <div class="card-header"
-                        style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
-                        <h2 style="color: black;">{% trans 'Tables of Asset Names and Categories' %}</h2>
-                    </div>
-                    <div class="list-group list-group-flush">
-                        {# --- LISTADO DE ACTIVOS --- #}
-                        <div class="list-group-item my-3">
-                            <table id="asset_and_category_table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>{% trans 'Image' %}</th>
-                                        <th>{% trans 'Asset Name' %}</th>
-                                        <th>{% trans 'Category' %}</th>
-                                        <th>{% trans 'Description' %}</th>
-                                        <th>{% trans 'Observations' %}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for a in assets %}
-                                    <tr>
-                                        <td>{{ forloop.counter }}</td>
-
-                                        <td>
-                                            {% if a.asset_img %}
-                                            <img src="{{ a.asset_img.url }}" alt="img"
-                                                style="width:48px;height:48px;object-fit:cover;border-radius:6px;">
-                                            {% else %}
-                                            <span class="text-muted">—</span>
-                                            {% endif %}
-                                        </td>
-
-                                        <td>
-                                            {% if request.LANGUAGE_CODE == 'es' %}
-                                            {{ a.asset_name.es_name|default:"—" }}
-                                            {% else %}
-                                            {{ a.asset_name.en_name|default:"—" }}
-                                            {% endif %}
-                                        </td>
-
-                                        <td>
-                                            {% if request.LANGUAGE_CODE == 'es' %}
-                                            {{ a.category.es_name|default:"—" }}
-                                            {% else %}
-                                            {{ a.category.en_name|default:"—" }}
-                                            {% endif %}
-                                        </td>
-
-                                        <td style="max-width: 320px;">
-                                            {% if request.LANGUAGE_CODE == 'es' %}
-                                            {{ a.es_description|default_if_none:""|truncatechars:160 }}
-                                            {% else %}
-                                            {{ a.en_description|default_if_none:""|truncatechars:160 }}
-                                            {% endif %}
-                                        </td>
-
-                                        <td style="max-width: 280px;">
-                                            {% if request.LANGUAGE_CODE == 'es' %}
-                                            {{ a.es_observations|default_if_none:""|truncatechars:120 }}
-                                            {% else %}
-                                            {{ a.en_observations|default_if_none:""|truncatechars:120 }}
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                    {% empty %}
-                                    <tr>
-                                        <td colspan="7" class="text-center text-muted">
-                                            {% trans 'No assets found.' %}
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        {# --- LISTADO DE CATEGORÍAS --- #}
-                        <div class="list-group-item my-3">
-                            <table id="categories_table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>{% trans 'Category' %}</th>
-                                        <th>{% trans 'Description' %}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for c in categories %}
-                                    <tr>
-                                        <td>{{ forloop.counter }}</td>
-                                        <td>
-                                            {% if request.LANGUAGE_CODE == 'es' %}
-                                            {{ c.es_name|default:"—" }}
-                                            {% else %}
-                                            {{ c.en_name|default:"—" }}
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            {% if request.LANGUAGE_CODE == 'es' %}
-                                            {{ c.es_description|default:"" }}
-                                            {% else %}
-                                            {{ c.en_description|default:"" }}
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                    {% empty %}
-                                    <tr>
-                                        <td colspan="4" class="text-center text-muted">
-                                            {% trans 'No categories found.' %}
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                {% if messages %}
+                <div class="card-body">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {% for message in messages %}
+                        {{ message }}
+                        {% endfor %}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 </div>
                 {% endif %}
+                <div class="card-body">
+                    <div id="alerts-container"></div>
+                    <table id="offers_table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>ID</th>
+                                <th>{% trans 'Asset' %}</th>
+                                <th>{% trans 'Purchase order Type' %}</th>
+                                <th>{% trans 'Quantity Type' %}</th>
+                                <th>{% trans 'Quantity Needed' %}</th>
+                                <th>{% trans 'Country' %}</th>
+                                <th>{% trans 'Status' %}</th>
+                                <th>{% trans 'Actions' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for offer in offers %}
+
+                            {% if offer.display %}
+                            <tr data-offer-row="{{ offer.id }}">
+                                <td>{{ forloop.counter }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-link p-0 uuid-toggle"
+                                        data-full="{{ offer.id|stringformat:'s' }}"
+                                        data-short="{{ offer.id|stringformat:'s'|slice:':8' }}"
+                                        aria-label="{% trans 'Show full ID' %}">
+                                        <code class="uuid-text">{{ offer.id|stringformat:'s'|slice:':8' }}</code>
+                                    </button>
+                                </td>
+                                <td>{{ offer.asset_display_name }}</td>
+                                <td>{{ offer.get_offer_type_display }}</td>
+                                <td>{{ offer.get_quantity_type_display }}</td>
+                                <td>{{ offer.offer_quantity }}</td>
+                                <td>{{ offer.buyer_country.get_continent_display }} -
+                                    {{ offer.buyer_country.es_country_name }}</td>
+                                <td>
+                                    <i class="{{ offer.status_icon }} mx-1" style="color: {{ offer.status_color }};"
+                                        title="{{ offer.status_label }}"></i>
+                                    <span style="color: {{ offer.status_color }};">{{ offer.status_label }}</span>
+                                </td>
+                                <td>
+                                    <a href="{% url 'buyers:offer_details' offer.id %}" type="button"
+                                        class="btn btn-datatable btn-icon btn-outline-success">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </a>
+                                    {% if not offer.reviewed %}
+                                    <a href="{% url 'buyers:offer_update' offer.id %}"
+                                        class="btn btn-datatable btn-icon btn-outline-primary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </a>
+                                    {% endif %}
+                                    {% if not offer.is_approved %}
+                                    <button class="btn btn-datatable btn-icon btn-outline-danger"
+                                        data-offer-id="{{ offer.id }}"
+                                        data-delete-url="{% url 'buyers:offer_delete' offer.id %}"
+                                        data-asset="{{ offer.asset_display_name }}"
+                                        data-offer-type="{{ offer.get_offer_type_display }}"
+                                        data-quantity-type="{{ offer.get_quantity_type_display }}"
+                                        data-quantity="{{ offer.offer_quantity }}"
+                                        data-country="{{ offer.buyer_country.get_continent_display }} - {{ offer.buyer_country.es_country_name }}"
+                                        data-approved="{% if offer.is_approved %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif %}"
+                                        data-bs-toggle="modal" data-bs-target="#confirmDeleteOfferModal">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% empty %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="d-grid gap-2">
+                        <a class="btn btn-outline-success" href="{% url 'buyers:buyer_create' %}">
+                            <i class="fa-solid fa-plus mx-1"></i> {% trans 'Add New Purchase Order' %}
+                        </a>
+                        <div class="row">
+                            <div class="col-6 d-grid gap-2 mt-2">
+                                <a href="{% url 'assets:add_category' %}" class="btn btn-outline-gold"
+                                    rel="noopener noreferrer">
+                                    <i class="fa-solid fa-plus mx-1"></i> {{ add_new_asset_category }}
+                                </a>
+                            </div>
+                            <div class="col-6 d-grid gap-2 mt-2">
+                                <a href="{% url 'assets:create' %}" class="btn btn-outline-gold"
+                                    rel="noopener noreferrer">
+                                    <i class="fa-solid fa-plus mx-1"></i> {{ add_new_asset }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+
+            {% if assets and categories %}
+            <div class="card mb-4">
+                <div class="card-header"
+                    style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
+                    <h2 style="color: black;">{% trans 'Tables of Asset Names and Categories' %}</h2>
+                </div>
+                <div class="list-group list-group-flush">
+                    {# --- LISTADO DE ACTIVOS --- #}
+                    <div class="list-group-item my-3">
+                        <table id="asset_and_category_table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>{% trans 'Image' %}</th>
+                                    <th>{% trans 'Asset Name' %}</th>
+                                    <th>{% trans 'Category' %}</th>
+                                    <th>{% trans 'Description' %}</th>
+                                    <th>{% trans 'Observations' %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for a in assets %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+
+                                    <td>
+                                        {% if a.asset_img %}
+                                        <img src="{{ a.asset_img.url }}" alt="img"
+                                            style="width:48px;height:48px;object-fit:cover;border-radius:6px;">
+                                        {% else %}
+                                        <span class="text-muted">—</span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {% if request.LANGUAGE_CODE == 'es' %}
+                                        {{ a.asset_name.es_name|default:"—" }}
+                                        {% else %}
+                                        {{ a.asset_name.en_name|default:"—" }}
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {% if request.LANGUAGE_CODE == 'es' %}
+                                        {{ a.category.es_name|default:"—" }}
+                                        {% else %}
+                                        {{ a.category.en_name|default:"—" }}
+                                        {% endif %}
+                                    </td>
+
+                                    <td style="max-width: 320px;">
+                                        {% if request.LANGUAGE_CODE == 'es' %}
+                                        {{ a.es_description|default_if_none:""|truncatechars:160 }}
+                                        {% else %}
+                                        {{ a.en_description|default_if_none:""|truncatechars:160 }}
+                                        {% endif %}
+                                    </td>
+
+                                    <td style="max-width: 280px;">
+                                        {% if request.LANGUAGE_CODE == 'es' %}
+                                        {{ a.es_observations|default_if_none:""|truncatechars:120 }}
+                                        {% else %}
+                                        {{ a.en_observations|default_if_none:""|truncatechars:120 }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted">
+                                        {% trans 'No assets found.' %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {# --- LISTADO DE CATEGORÍAS --- #}
+                    <div class="list-group-item my-3">
+                        <table id="categories_table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>{% trans 'Category' %}</th>
+                                    <th>{% trans 'Description' %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for c in categories %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>
+                                        {% if request.LANGUAGE_CODE == 'es' %}
+                                        {{ c.es_name|default:"—" }}
+                                        {% else %}
+                                        {{ c.en_name|default:"—" }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if request.LANGUAGE_CODE == 'es' %}
+                                        {{ c.es_description|default:"" }}
+                                        {% else %}
+                                        {{ c.en_description|default:"" }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">
+                                        {% trans 'No categories found.' %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
+</div>
 {% endblock %}
 
 
 {% block modals %}
-    {% include 'dashboard/pages/buyers/modals/delete_offer_modal.html' %}
+{% include 'dashboard/pages/buyers/modals/delete_offer_modal.html' %}
 {% endblock modals %}
 
 
 {% block body_custom_js %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-    {{ form.media.js }}
+{{ form.media.js }}
 
-    {% trans 'Purchase Order Successfully Deleted' as PurchaseOrderDeleted %}
-    {% trans 'Close' as CloseText %}
-    {% trans 'There was a problem deleting the purchase order.' as DeleteErrorText %}
+{% trans 'Purchase Order Successfully Deleted' as PurchaseOrderDeleted %}
+{% trans 'Close' as CloseText %}
+{% trans 'There was a problem deleting the purchase order.' as DeleteErrorText %}
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const displayField = document.getElementById('offer_amount_display');
-            const hiddenField = document.getElementById('id_offer_amount');
 
-            displayField.addEventListener('input', function () {
-                let rawValue = displayField.value.replace(/[^0-9.]/g, '');
-                hiddenField.value = rawValue;
-                if (!isNaN(rawValue) && rawValue !== '') {
-                    displayField.value = new Intl.NumberFormat('en-US', {
-                        style: 'currency',
-                        currency: 'USD',
-                        minimumFractionDigits: 0
-                    }).format(rawValue);
-                } else {
-                    displayField.value = '';
-                }
-            });
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var deleteModalEl = document.getElementById('confirmDeleteOfferModal');
+        if (!deleteModalEl) return;
 
-            displayField.addEventListener('focus', function () {
-                displayField.value = hiddenField.value;
-            });
+        deleteModalEl.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget; // Botón que abrió la modal
 
-            displayField.addEventListener('blur', function () {
-                let rawValue = hiddenField.value;
-                if (!isNaN(rawValue) && rawValue !== '') {
-                    displayField.value = new Intl.NumberFormat('en-US', {
-                        style: 'currency',
-                        currency: 'USD',
-                        minimumFractionDigits: 0
-                    }).format(rawValue);
-                }
-            });
+            // Leer dataset del botón
+            var offerId = button.getAttribute('data-offer-id');
+            var deleteUrl = button.getAttribute('data-delete-url');
+            var asset = button.getAttribute('data-asset');
+            var offerType = button.getAttribute('data-offer-type');
+            var qType = button.getAttribute('data-quantity-type');
+            var qty = button.getAttribute('data-quantity');
+            var country = button.getAttribute('data-country');
+            var amount = button.getAttribute('data-amount');
+            var approved = button.getAttribute('data-approved');
+
+            // Rellenar la tabla de la modal
+            deleteModalEl.querySelector('#del-asset').textContent = asset || '';
+            deleteModalEl.querySelector('#del-offer-type').textContent = offerType || '';
+            deleteModalEl.querySelector('#del-quantity-type').textContent = qType || '';
+            deleteModalEl.querySelector('#del-quantity').textContent = qty || '';
+            deleteModalEl.querySelector('#del-country').textContent = country || '';
+            deleteModalEl.querySelector('#del-amount').textContent = amount || '';
+            deleteModalEl.querySelector('#del-approved').textContent = approved || '';
+
+            // Configurar form
+            var form = deleteModalEl.querySelector('#deleteOfferForm');
+            form.setAttribute('action', deleteUrl);
+            deleteModalEl.querySelector('#del-offer-id').value = offerId;
         });
-    </script>
+    });
+</script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var deleteModalEl = document.getElementById('confirmDeleteOfferModal');
-            if (!deleteModalEl) return;
+<script>
+    (function () {
+        const successText = "{{ PurchaseOrderDeleted }}";
 
-            deleteModalEl.addEventListener('show.bs.modal', function (event) {
-                var button = event.relatedTarget; // Botón que abrió la modal
-
-                // Leer dataset del botón
-                var offerId = button.getAttribute('data-offer-id');
-                var deleteUrl = button.getAttribute('data-delete-url');
-                var asset = button.getAttribute('data-asset');
-                var offerType = button.getAttribute('data-offer-type');
-                var qType = button.getAttribute('data-quantity-type');
-                var qty = button.getAttribute('data-quantity');
-                var country = button.getAttribute('data-country');
-                var amount = button.getAttribute('data-amount');
-                var approved = button.getAttribute('data-approved');
-
-                // Rellenar la tabla de la modal
-                deleteModalEl.querySelector('#del-asset').textContent = asset || '';
-                deleteModalEl.querySelector('#del-offer-type').textContent = offerType || '';
-                deleteModalEl.querySelector('#del-quantity-type').textContent = qType || '';
-                deleteModalEl.querySelector('#del-quantity').textContent = qty || '';
-                deleteModalEl.querySelector('#del-country').textContent = country || '';
-                deleteModalEl.querySelector('#del-amount').textContent = amount || '';
-                deleteModalEl.querySelector('#del-approved').textContent = approved || '';
-
-                // Configurar form
-                var form = deleteModalEl.querySelector('#deleteOfferForm');
-                form.setAttribute('action', deleteUrl);
-                deleteModalEl.querySelector('#del-offer-id').value = offerId;
-            });
-        });
-    </script>
-
-    <script>
-        (function () {
-            const successText = "{{ PurchaseOrderDeleted }}";
-
-            function getCSRFToken() {
-                // Si usas cookies (setup típico de Django)
-                const name = 'csrftoken';
-                const cookies = document.cookie ? document.cookie.split('; ') : [];
-                for (let c of cookies) {
-                    if (c.startsWith(name + '=')) return decodeURIComponent(c.split('=').pop());
-                }
-                // Fallback: buscar en el form de la modal
-                const input = document.querySelector('#deleteOfferForm input[name=csrfmiddlewaretoken]');
-                return input ? input.value : '';
+        function getCSRFToken() {
+            // Si usas cookies (setup típico de Django)
+            const name = 'csrftoken';
+            const cookies = document.cookie ? document.cookie.split('; ') : [];
+            for (let c of cookies) {
+                if (c.startsWith(name + '=')) return decodeURIComponent(c.split('=').pop());
             }
+            // Fallback: buscar en el form de la modal
+            const input = document.querySelector('#deleteOfferForm input[name=csrfmiddlewaretoken]');
+            return input ? input.value : '';
+        }
 
-            function showAlert(message, type = 'success') {
-                const container = document.getElementById('alerts-container');
-                if (!container) return;
-                container.innerHTML = `
+        function showAlert(message, type = 'success') {
+            const container = document.getElementById('alerts-container');
+            if (!container) return;
+            container.innerHTML = `
             <div class="alert alert-${type} alert-dismissible fade show" role="alert">
             ${message}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ CloseText }}"></button>
             </div>`;
+        }
+
+        function reindexTableRows(tableEl) {
+            if (!tableEl) return;
+            // Recalcular la primera columna (#) manualmente
+            const rows = tableEl.querySelectorAll('tbody tr');
+            let i = 1;
+            rows.forEach(tr => {
+                const firstCell = tr.querySelector('td');
+                if (firstCell) firstCell.textContent = i++;
+            });
+        }
+
+        function removeRowFromTable(offerId) {
+            const tr = document.querySelector(`tr[data-offer-row="${offerId}"]`);
+            if (!tr) {
+                // Fallback: si no encontramos la fila, recarga
+                location.reload();
+                return;
             }
 
-            function reindexTableRows(tableEl) {
-                if (!tableEl) return;
-                // Recalcular la primera columna (#) manualmente
-                const rows = tableEl.querySelectorAll('tbody tr');
-                let i = 1;
-                rows.forEach(tr => {
-                    const firstCell = tr.querySelector('td');
-                    if (firstCell) firstCell.textContent = i++;
-                });
-            }
-
-            function removeRowFromTable(offerId) {
-                const tr = document.querySelector(`tr[data-offer-row="${offerId}"]`);
-                if (!tr) {
-                    // Fallback: si no encontramos la fila, recarga
-                    location.reload();
+            // Si usas Simple-DataTables y guardaste la instancia global, intenta usarla:
+            // window.offersDT = new simpleDatatables.DataTable(document.getElementById('offers_table'))
+            if (window.offersDT && typeof window.offersDT.rows?.remove === 'function') {
+                // Buscar índice de fila por elemento
+                const idx = Array.from(tr.parentElement.children).indexOf(tr);
+                if (idx >= 0) {
+                    window.offersDT.rows.remove(idx); // quita la fila del datatable
                     return;
                 }
-
-                // Si usas Simple-DataTables y guardaste la instancia global, intenta usarla:
-                // window.offersDT = new simpleDatatables.DataTable(document.getElementById('offers_table'))
-                if (window.offersDT && typeof window.offersDT.rows?.remove === 'function') {
-                    // Buscar índice de fila por elemento
-                    const idx = Array.from(tr.parentElement.children).indexOf(tr);
-                    if (idx >= 0) {
-                        window.offersDT.rows.remove(idx); // quita la fila del datatable
-                        return;
-                    }
-                }
-
-                // Sin instancia global: manipulación DOM pura
-                const table = document.getElementById('offers_table');
-                tr.parentElement.removeChild(tr);
-                reindexTableRows(table);
             }
 
-            document.addEventListener('DOMContentLoaded', function () {
-                const deleteModalEl = document.getElementById('confirmDeleteOfferModal');
-                if (!deleteModalEl) return;
+            // Sin instancia global: manipulación DOM pura
+            const table = document.getElementById('offers_table');
+            tr.parentElement.removeChild(tr);
+            reindexTableRows(table);
+        }
 
-                const form = deleteModalEl.querySelector('#deleteOfferForm');
-                form.addEventListener('submit', async function (e) {
-                    e.preventDefault();
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteModalEl = document.getElementById('confirmDeleteOfferModal');
+            if (!deleteModalEl) return;
 
-                    const action = form.getAttribute('action');
-                    const offerId = deleteModalEl.querySelector('#del-offer-id').value;
+            const form = deleteModalEl.querySelector('#deleteOfferForm');
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
 
-                    try {
-                        const resp = await fetch(action, {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRFToken': getCSRFToken(),
-                                'X-Requested-With': 'XMLHttpRequest',
-                            },
-                        });
-                        const data = await resp.json();
+                const action = form.getAttribute('action');
+                const offerId = deleteModalEl.querySelector('#del-offer-id').value;
 
-                        if (resp.ok && data && data.success) {
-                            // Cierra la modal
-                            const modal = bootstrap.Modal.getInstance(deleteModalEl) || new bootstrap.Modal(deleteModalEl);
-                            modal.hide();
+                try {
+                    const resp = await fetch(action, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCSRFToken(),
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                    });
+                    const data = await resp.json();
 
-                            // Mensaje de éxito
-                            showAlert(successText, 'success');
+                    if (resp.ok && data && data.success) {
+                        // Cierra la modal
+                        const modal = bootstrap.Modal.getInstance(deleteModalEl) || new bootstrap.Modal(deleteModalEl);
+                        modal.hide();
 
-                            // Refresca la tabla (quitar fila + reindexar)
-                            removeRowFromTable(offerId);
-                        } else {
-                            showAlert("{{ DeleteErrorText }}", 'danger');
-                        }
-                    } catch (err) {
-                        console.error(err);
+                        // Mensaje de éxito
+                        showAlert(successText, 'success');
+
+                        // Refresca la tabla (quitar fila + reindexar)
+                        removeRowFromTable(offerId);
+                    } else {
                         showAlert("{{ DeleteErrorText }}", 'danger');
                     }
-                });
-            });
-        })();
-    </script>
-
-
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.uuid-toggle').forEach(function (btn) {
-            const code = btn.querySelector('.uuid-text');
-            const full = btn.getAttribute('data-full');
-            const shortV = btn.getAttribute('data-short');
-            let expanded = false;
-
-            btn.addEventListener('click', function () {
-                expanded = !expanded;
-                code.textContent = expanded ? full : shortV;
-                btn.setAttribute('aria-label', expanded ? "{{ _('Hide full ID')|default:'Hide full ID' }}" 
-                                                        : "{{ _('Show full ID')|default:'Show full ID' }}");
-            });
+                } catch (err) {
+                    console.error(err);
+                    showAlert("{{ DeleteErrorText }}", 'danger');
+                }
             });
         });
-    </script>
+    })();
+</script>
+
+<script>
+    (function () {
+        // Textos accesibles (i18n)
+        const LABEL_SHOW = "{{ _('Show full ID')|default:'Show full ID' }}";
+        const LABEL_HIDE = "{{ _('Hide full ID')|default:'Hide full ID' }}";
+
+        function toggleUuid(btn) {
+            const full = btn.getAttribute('data-full') || '';
+            const shortV = btn.getAttribute('data-short') || '';
+            const codeEl = btn.querySelector('.uuid-text') || btn;
+            const expanded = btn.getAttribute('data-expanded') === '1';
+            const nextExpanded = !expanded;
+
+            codeEl.textContent = nextExpanded ? full : shortV;
+            btn.setAttribute('data-expanded', nextExpanded ? '1' : '0');
+            btn.setAttribute('aria-label', nextExpanded ? LABEL_HIDE : LABEL_SHOW);
+            btn.setAttribute('aria-expanded', String(nextExpanded));
+        }
+
+        // Delegación: funciona aunque la tabla se repinte
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.uuid-toggle');
+            if (!btn) return;
+            toggleUuid(btn);
+        });
+    })();
+</script>
 {% endblock %}
 
 {% block simple_datatables %}
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
 {% endblock %}
 
 {% block simple_datatables_js %}
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-    <script src="{% static 'js/simple-datatable.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+<script src="{% static 'js/simple-datatable.js' %}"></script>
 {% endblock %}
-

@@ -17,7 +17,7 @@ from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 from encrypted_model_fields.fields import EncryptedPositiveIntegerField
 
-from apps.common.utils.functions import generate_md5_or_sha256_hash
+from apps.common.utils.functions import sha256_hex
 from apps.common.utils.models import TimeStampedModel
 from apps.project.specific.assets_management.assets.models import AssetModel
 from apps.project.specific.assets_management.assets_location.models import \
@@ -91,10 +91,6 @@ class OfferModel(TimeStampedModel):
         max_length=255,
         choices=QuantityTypeChoices.choices,
         default=QuantityTypeChoices.BOXES
-    )
-
-    offer_amount = EncryptedPositiveIntegerField(
-        _("Total value of the offer ($ USD)"),
     )
 
     offer_quantity = models.PositiveIntegerField(
@@ -556,7 +552,7 @@ class OfferModel(TimeStampedModel):
             )
             es_name = slugify(name_src)[:40]
             base_filename, file_extension = os.path.splitext(filename)
-            filename_hash = generate_md5_or_sha256_hash(base_filename)
+            filename_hash = sha256_hex(base_filename)
             path = os.path.join(
                 "offer", es_name, "img",
                 str(date.today().year),
