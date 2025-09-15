@@ -40,7 +40,9 @@ class GeaUserRegisterView(FormView):
                 first_name=form.cleaned_data['first_name'],
                 last_name=form.cleaned_data['last_name'],
                 password=form.cleaned_data['password'],
-                user_type=form.cleaned_data['user_type']
+                user_type=form.cleaned_data['user_type'],
+                phone_number_code=form.cleaned_data['phone_number_code'],
+                phone_number=form.cleaned_data['phone_number'],
             )
         except IntegrityError as e:
             if "email_hash" in str(e):

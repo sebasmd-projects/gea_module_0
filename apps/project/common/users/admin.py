@@ -106,7 +106,6 @@ class UserModelAdmin(UserAdmin, GeneralAdminModel):
         ),
         ('Contact Information', {
             'fields': (
-                'addresses',
                 'phone_number_code',
                 'phone_number',
                 'email',

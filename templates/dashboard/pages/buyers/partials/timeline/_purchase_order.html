@@ -29,8 +29,10 @@
         <div class="timeline-item-content">
           {% trans 'Purchase Order Created' %}<br />
           {{ offer.created|date:'d/m/Y H:i'|default:'...' }}<br />
-          {% if offer.created_by %}
-            <small>@{{ offer.created_by.get_full_name|default:offer.created_by.username }}</small>
+          {% if request.user.is_buyer or request.user.is_superuser %}
+            {% if offer.created_by %}
+              <small>@{{ offer.created_by.get_full_name|default:offer.created_by.username }}</small>
+            {% endif %}
           {% endif %}
         </div>
       </div>
@@ -43,8 +45,10 @@
         <div class="timeline-item-content">
           {% trans 'Purchase Order Reviewed' %}<br />
           {{ offer.reviewed_by_timestamp|date:'d/m/Y H:i'|default:'...' }}<br />
-          {% if offer.reviewed_by %}
-            <small>@{{ offer.reviewed_by.get_full_name|default:offer.reviewed_by.username }}</small>
+          {% if request.user.is_buyer or request.user.is_superuser %}
+            {% if offer.reviewed_by %}
+              <small>@{{ offer.reviewed_by.get_full_name|default:offer.reviewed_by.username }}</small>
+            {% endif %}
           {% endif %}
         </div>
       </div>
@@ -57,8 +61,10 @@
         <div class="timeline-item-content">
           {% trans 'Purchase Order Approved' %}<br />
           {{ offer.approved_by_timestamp|date:'d/m/Y H:i'|default:'...' }}<br />
-          {% if offer.approved_by %}
-            <small>@{{ offer.approved_by.get_full_name|default:offer.approved_by.username }}</small>
+          {% if request.user.is_buyer or request.user.is_superuser %}
+            {% if offer.approved_by %}
+              <small>@{{ offer.approved_by.get_full_name|default:offer.approved_by.username }}</small>
+            {% endif %}
           {% endif %}
         </div>
       </div>

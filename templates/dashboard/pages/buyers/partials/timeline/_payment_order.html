@@ -28,8 +28,10 @@
         <div class="timeline-item-content">
           {% trans 'Payment Order Created' %}<br />
           {{ offer.payment_order_created_at|date:'d/m/Y H:i'|default:'...' }}<br />
-          {% if offer.payment_order_created_by %}
-            <small>@{{ offer.payment_order_created_by.get_full_name|default:offer.payment_order_created_by.username }}</small>
+          {% if request.user.is_buyer or request.user.is_superuser %}
+            {% if offer.payment_order_created_by %}
+              <small>@{{ offer.payment_order_created_by.get_full_name|default:offer.payment_order_created_by.username }}</small>
+            {% endif %}
           {% endif %}
         </div>
       </div>
@@ -42,8 +44,10 @@
         <div class="timeline-item-content">
           {% trans 'Payment Order Sent' %}<br />
           {{ offer.payment_order_sent_at|date:'d/m/Y H:i'|default:'...' }}<br />
-          {% if offer.payment_order_sent_by %}
-            <small>@{{ offer.payment_order_sent_by.get_full_name|default:offer.payment_order_sent_by.username }}</small>
+          {% if request.user.is_buyer or request.user.is_superuser %}
+            {% if offer.payment_order_sent_by %}
+              <small>@{{ offer.payment_order_sent_by.get_full_name|default:offer.payment_order_sent_by.username }}</small>
+            {% endif %}
           {% endif %}
         </div>
       </div>

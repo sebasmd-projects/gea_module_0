@@ -28,8 +28,10 @@
         <div class="timeline-item-content">
           {% trans 'Asset In Possession' %}<br />
           {{ offer.asset_in_possession_at|date:'d/m/Y H:i'|default:'...' }}<br />
-          {% if offer.asset_in_possession_by %}
-            <small>@{{ offer.asset_in_possession_by.get_full_name|default:offer.asset_in_possession_by.username }}</small>
+          {% if request.user.is_buyer or request.user.is_superuser %}
+            {% if offer.asset_in_possession_by %}
+              <small>@{{ offer.asset_in_possession_by.get_full_name|default:offer.asset_in_possession_by.username }}</small>
+            {% endif %}
           {% endif %}
         </div>
       </div>
@@ -42,8 +44,10 @@
         <div class="timeline-item-content">
           {% trans 'Asset Sent' %}<br />
           {{ offer.asset_sent_at|date:'d/m/Y H:i'|default:'...' }}<br />
-          {% if offer.asset_sent_by %}
-            <small>@{{ offer.asset_sent_by.get_full_name|default:offer.asset_sent_by.username }}</small>
+          {% if request.user.is_buyer or request.user.is_superuser %}
+            {% if offer.asset_sent_by %}
+              <small>@{{ offer.asset_sent_by.get_full_name|default:offer.asset_sent_by.username }}</small>
+            {% endif %}
           {% endif %}
         </div>
       </div>

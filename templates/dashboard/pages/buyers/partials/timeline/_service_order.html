@@ -27,12 +27,15 @@
         <div class="timeline-item-content">
           {% trans 'Service Order Created' %}<br />
           {{ offer.service_order_created_at|date:'d/m/Y H:i'|default:'...' }}<br />
-          {% if offer.service_order_created_by %}
-            <small>@{{ offer.service_order_created_by.get_full_name|default:offer.service_order_created_by.username }}</small>
+          {% if request.user.is_buyer or request.user.is_superuser %}
+            {% if offer.service_order_created_by %}
+              <small>@{{ offer.service_order_created_by.get_full_name|default:offer.service_order_created_by.username }}</small>
+            {% endif %}
           {% endif %}
         </div>
       </div>
 
+      {% if request.user.is_buyer or request.user.is_superuser %}
       {# Sent #}
       <div class="timeline-item">
         <div class="timeline-item-marker">
@@ -46,6 +49,7 @@
           {% endif %}
         </div>
       </div>
+      {% endif %}
     </div>
   </div>
 </div>
