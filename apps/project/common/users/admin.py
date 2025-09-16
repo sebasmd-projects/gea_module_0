@@ -48,6 +48,7 @@ class UserModelAdmin(UserAdmin, GeneralAdminModel):
         'get_full_name',
         'username',
         'email',
+        'full_code_and_phonenumber',
         'is_staff',
         'is_active',
         'is_superuser',
@@ -147,6 +148,9 @@ class UserModelAdmin(UserAdmin, GeneralAdminModel):
         )
     )
 
+    def full_code_and_phonenumber(self, obj):
+        return f"+{obj.phone_number_code.split('-')[0]}{obj.phone_number}"
+    
     def get_fieldsets(self, request, obj=None):
         """
         Restringe los campos visibles en el formulario de edición según el usuario.
@@ -174,6 +178,8 @@ class UserModelAdmin(UserAdmin, GeneralAdminModel):
     get_groups.short_description = _('Groups')
 
     get_full_name.short_description = _('Names')
+    
+    full_code_and_phonenumber.short_description = _('Phone Number')
 
 
 @admin.register(CountryModel)
