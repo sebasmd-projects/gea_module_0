@@ -204,7 +204,10 @@
                 {% for r in asset_rows %}
                   <tr>
                     <td>
-                      {{ r.name }} <span class="d-none">{{ r.tokens }}</span>
+                      {{ r.name }}
+                      {% for token in r.tokens %}
+                        <span class="d-none">{{ token }}</span>
+                      {% endfor %}
                     </td>
                     <td>{{ r.category }}</td>
                     <td>{{ r.total_boxes }}</td>
@@ -395,60 +398,5 @@
       });
     });
   });
-</script>
-
-  <script>
-  (function () {
-    function ready(fn) { if (document.readyState != 'loading') { fn() } else { document.addEventListener('DOMContentLoaded', fn) } }
-
-    ready(function () {
-      var assetsTableEl = document.getElementById('assets_table');
-      if (!assetsTableEl) return;
-
-      // Espera a que Simple-DataTables haya envuelto la tabla
-      function getWrapper() {
-        return assetsTableEl.closest('.dataTable-wrapper') || assetsTableEl.parentElement;
-      }
-
-      function getSearchInput() {
-        var w = getWrapper();
-        return w ? w.querySelector('input.dataTable-input') : null;
-      }
-
-      // Si tu inicializador genérico es asíncrono, intentamos varias veces
-      var tries = 0;
-      (function waitForInput() {
-        var input = getSearchInput();
-        if (!input && tries < 20) {
-          tries++; return setTimeout(waitForInput, 100);
-        }
-        if (!input) return; // no pudo encontrar buscador
-
-        // Controles
-        var fZero = document.getElementById('fZero');
-        var fImg = document.getElementById('fImg');
-        var fQty = document.getElementById('fQty');
-
-        function applyFilters() {
-          var terms = [];
-          if (fZero && fZero.value) terms.push('zero:' + fZero.value);
-          if (fImg && fImg.value) terms.push('img:' + fImg.value);
-          if (fQty && fQty.value) terms.push('qty:' + fQty.value);
-
-          // Aplica la búsqueda compuesta en el input del datatable
-          input.value = terms.join(' ');
-          input.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-
-        // Listeners
-        [fZero, fImg, fQty].forEach(function (sel) {
-          if (sel) sel.addEventListener('change', applyFilters);
-        });
-
-        // Aplica al inicio (sin filtros = All)
-        applyFilters();
-      })();
-    });
-  })();
 </script>
 {% endblock %}

@@ -49,11 +49,6 @@ class HolderTemplateview(HolderRequiredMixin, TemplateView):
 
 
 class AssetNameWithInlineAssetCreateView(BuyerRequiredMixin, View):
-    """
-    Crea un AssetsNamesModel dependiendo del idioma y, en el mismo submit,
-    registra su AssetModel (1–1) con categoría (Select2) + datos.
-    """
-
     template_name = "dashboard/pages/buyers/assetname_inline_create.html"
 
     def get(self, request, *args, **kwargs):

@@ -117,7 +117,7 @@ class AssetLocationCreateView(AssetLocationMixin, CreateView):
 class AssetUpdateView(AssetLocationMixin, UpdateView):
     model = AssetLocationModel
     form_class = AssetUpdateLocationModelForm
-    template_name = 'dashboard/pages/holders/asset_location/edit_asset_location.html'
+    template_name = 'dashboard/pages/holders/edit_asset_location.html'
     success_url = reverse_lazy('assets:holder_index')
 
 

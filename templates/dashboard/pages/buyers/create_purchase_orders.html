@@ -10,33 +10,40 @@
 
 {% block main_layout %}
 
-    {% url 'buyers:buyer_index' as purchase_orders_url %}
-    {% url 'assets:create' as add_asset_url %}
-    {% url 'assets:add_category' as add_asset_category_url %}
+{% url 'buyers:buyer_index' as purchase_orders_url %}
+{% url 'assets:create' as add_asset_url %}
+{% url 'assets:add_category' as add_asset_category_url %}
 
-    {% static 'assets/imgs/illustrations/statistics.svg' as purchase_orders_image %}
-    {% static 'assets/imgs/illustrations/browser-stats.svg' as add_asset_image %}
-    {% static 'assets/imgs/illustrations/processing.svg' as add_category_image %}
+{% static 'assets/imgs/illustrations/statistics.svg' as purchase_orders_image %}
+{% static 'assets/imgs/illustrations/browser-stats.svg' as add_asset_image %}
+{% static 'assets/imgs/illustrations/processing.svg' as add_category_image %}
 
-    {% trans 'Purchase Orders' as purchase_orders %}
-    {% trans 'Add New Purchase Order' as add_new_purchase_order %}
-    {% trans "Add New Asset" as add_new_asset %}
-    {% trans "Add New Asset Category" as add_new_asset_category %}
+{% trans 'Purchase Orders' as purchase_orders %}
+{% trans 'Add New Purchase Order' as add_new_purchase_order %}
+{% trans "Add New Asset" as add_new_asset %}
+{% trans "Add New Asset Category" as add_new_asset_category %}
 
-    {% include 'dashboard/partials/header/_header.html' with  icon_class="me-2"  icon_data_feather="file-plus"  page_title=add_new_purchase_order parent_title=purchase_orders parent_url=purchase_orders_url %}
+{% include 'dashboard/partials/header/_header.html' with icon_class="me-2" icon_data_feather="file-plus"
+page_title=add_new_purchase_order parent_title=purchase_orders parent_url=purchase_orders_url %}
 
 <div class="container-xl px-4 mt-n10">
     <div class="row">
         {% comment %} <!-- Purchase Orders Card --> {% endcomment %}
-        {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="file-text" page_header_title=purchase_orders page_header_image=purchase_orders_image url=purchase_orders_url %}
+        {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3"
+        icon_data_feather="file-text" page_header_title=purchase_orders page_header_image=purchase_orders_image
+        url=purchase_orders_url %}
 
         {% comment %} <!-- Add New Asset Card --> {% endcomment %}
-        {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="archive" page_header_title=add_new_asset page_header_image=add_asset_image url=add_asset_url %}
+        {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3"
+        icon_data_feather="archive" page_header_title=add_new_asset page_header_image=add_asset_image url=add_asset_url
+        %}
 
         {% comment %}<!-- Add New Asset Category Card -->{% endcomment %}
-        {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3" icon_data_feather="list" page_header_title=add_new_asset_category page_header_image=add_category_image url=add_asset_category_url %}
+        {% include 'dashboard/partials/header/_header_card.html' with icon_class="feather-xl text-green mb-3"
+        icon_data_feather="list" page_header_title=add_new_asset_category page_header_image=add_category_image
+        url=add_asset_category_url %}
     </div>
-    
+
     <div class="row">
         <div class="col-12">
             <div class="card mb-4" id="create_offer">

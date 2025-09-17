@@ -758,14 +758,13 @@ class ProfitabilityTemplateView(BuyerRequiredMixin, TemplateView):
         )
         closed_map = {row['m'].date(): row['c'] for row in closed_qs}
 
-        labels = [m.strftime('%b %Y') for m in months]  # ej: "Sep 2025"
+        labels = [m.strftime('%b %Y') for m in months]
         created_counts = [created_map.get(m, 0) for m in months]
         closed_counts  = [closed_map.get(m, 0) for m in months]
 
         ctx['po_month_labels'] = labels
         ctx['po_created_counts'] = created_counts
         ctx['po_closed_counts'] = closed_counts
-
 
         # === Tabla de Activos con totales y tokens de filtro ===
         lang = get_language()
@@ -796,23 +795,17 @@ class ProfitabilityTemplateView(BuyerRequiredMixin, TemplateView):
                                or getattr(a, 'es_description', '') or '')
 
             # Totales por tipo (intenta con claves comunes: 'B'/'U' o 'boxes'/'units')
-            totals = {}
-            if hasattr(a, 'asset_total_quantity_by_type'):
-                try:
-                    totals = a.asset_total_quantity_by_type() or {}
-                except Exception:
-                    totals = {}
-
-            total_boxes = (totals.get('B') or totals.get('boxes') or 0) or 0
-            total_units = (totals.get('U') or totals.get('units') or 0) or 0
-
+            qty_by_type  = a.asset_total_quantity_by_type()
+            total_boxes = qty_by_type.get("Boxes") or qty_by_type.get("Cajas") or 0
+            total_units = qty_by_type.get("Units") or qty_by_type.get("Unidades") or 0
+            
             # Tokens para filtros
             zero_yes = (int(total_boxes) + int(total_units) == 0)
             has_image = bool(getattr(a, 'asset_img', None))
             
             qty_tokens = []
-            if zero_yes:
-                qty_tokens.append('zero:yes')
+
+            qty_tokens.append('zero:yes') if zero_yes else qty_tokens.append('zero:no')
                 
             if total_units > 0:
                 qty_tokens.append('qty:U')
@@ -830,11 +823,11 @@ class ProfitabilityTemplateView(BuyerRequiredMixin, TemplateView):
             asset_rows.append({
                 'name': asset_name,
                 'category': category_name,
-                'total_boxes': int(total_boxes),
-                'total_units': int(total_units),
+                'total_boxes': total_boxes,
+                'total_units': total_units,
                 'observations': observations,
                 'description': description,
-                'tokens': ' '.join(tokens),
+                'tokens': tokens,
             })
 
         ctx['asset_rows'] = asset_rows

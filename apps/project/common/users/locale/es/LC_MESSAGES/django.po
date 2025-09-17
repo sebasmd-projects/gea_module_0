@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-15 15:30-0500\n"
+"POT-Creation-Date: 2025-09-16 13:27-0500\n"
 "PO-Revision-Date: 2025-08-27 12:15-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,11 +19,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.0\n"
 
-#: .\apps\project\common\users\admin.py:90
+#: .\apps\project\common\users\admin.py:91
 msgid "User Information"
 msgstr "Información de usuario"
 
-#: .\apps\project\common\users\admin.py:99
+#: .\apps\project\common\users\admin.py:100
 msgid "Personal Information"
 msgstr "Información personal"
 
@@ -39,13 +39,18 @@ msgstr "Fechas"
 msgid "Priority"
 msgstr "Orden"
 
-#: .\apps\project\common\users\admin.py:175
+#: .\apps\project\common\users\admin.py:178
 msgid "Groups"
 msgstr "Grupos"
 
-#: .\apps\project\common\users\admin.py:177
+#: .\apps\project\common\users\admin.py:180
 msgid "Names"
 msgstr "Nombres"
+
+#: .\apps\project\common\users\admin.py:182
+#: .\apps\project\common\users\models.py:307
+msgid "Phone Number"
+msgstr "Número de celular"
 
 #: .\apps\project\common\users\models.py:21
 msgid "Intermediary"
@@ -903,10 +908,6 @@ msgstr "Usuario verificado"
 #: .\apps\project\common\users\models.py:300
 msgid "Phone Number Code"
 msgstr "Código de número de celular"
-
-#: .\apps\project\common\users\models.py:307
-msgid "Phone Number"
-msgstr "Número de celular"
 
 #: .\apps\project\common\users\models.py:345
 msgid "The username cannot contain the \"@\" character."

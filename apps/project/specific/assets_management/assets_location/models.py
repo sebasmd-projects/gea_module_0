@@ -55,8 +55,10 @@ class AssetCountryModel(TimeStampedModel):
         return f"{self.get_continent_display()} - {self.es_country_name} - {self.en_country_name}"
 
     def save(self, *args, **kwargs):
-        self.es_country_name = self.es_country_name.title().strip()
-        self.en_country_name = self.en_country_name.title().strip()
+        if self.es_country_name:
+            self.es_country_name = self.es_country_name.title().strip()
+        if self.en_country_name:
+            self.en_country_name = self.en_country_name.title().strip()
         super().save(*args, **kwargs)
 
     class Meta:
@@ -196,6 +198,9 @@ class AssetLocationModel(TimeStampedModel):
         null=True
     )
 
+    def asset_name(self):
+        return self.asset.asset_name.es_name if self.asset and self.asset.asset_name else _("No Asset")
+    
     def __str__(self) -> str:
         location_ref = self.location.reference if self.location else _(
             "No Location")

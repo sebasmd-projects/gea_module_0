@@ -5,13 +5,13 @@ from django.forms.models import BaseInlineFormSet
 from django.utils.translation import gettext_lazy as _
 from import_export import fields, resources
 from import_export.admin import ImportExportModelAdmin
+from import_export.formats.base_formats import CSV
 from import_export.widgets import ForeignKeyWidget
 
 from apps.common.utils.admin import GeneralAdminModel
 
 from ..models import AssetCategoryModel, AssetModel, AssetsNamesModel
-from .filters import (HasImageFilter, QuantityTypeFilter
-                      )
+from .filters import HasImageFilter, QuantityTypeFilter
 
 
 class AssetCategoryResource(resources.ModelResource):
@@ -30,15 +30,13 @@ class AssetsNamesResource(resources.ModelResource):
 
 
 class AssetResource(resources.ModelResource):
-    # Para importar por ID directo (como viene en assets.csv) no hace falta widget especial
-    asset_name = fields.Field(attribute='asset_name', column_name='asset_name',
+    asset_name = fields.Field(attribute='asset_name', column_name='asset_id',
                               widget=ForeignKeyWidget(AssetsNamesModel, 'id'))
-    category = fields.Field(attribute='category', column_name='category',
+    category = fields.Field(attribute='category', column_name='category_id',
                             widget=ForeignKeyWidget(AssetCategoryModel, 'id'))
 
     class Meta:
         model = AssetModel
-        import_id_fields = ('id',)  # UUID (en CSV va vacío y se genera)
         fields = (
             'id',
             'is_active',
@@ -75,6 +73,11 @@ class AssetCategoryInline(admin.StackedInline):
 
 @admin.register(AssetsNamesModel)
 class AssetsNamesModelAdmin(ImportExportModelAdmin, GeneralAdminModel):
+    
+    def get_read_kwargs(self, encoding, **kwargs):
+        params = super().get_read_kwargs(encoding, **kwargs)
+        params["delimiter"] = ";"      # <- clave
+        return params
 
     resource_classes = [AssetsNamesResource]
 
