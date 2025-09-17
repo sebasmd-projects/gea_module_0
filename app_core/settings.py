@@ -221,6 +221,9 @@ DATABASES = {
 if not DEBUG and os.getenv('DB_ENGINE') == 'django.db.backends.postgresql':
     DATABASES['default']['OPTIONS'] = {'sslmode': os.getenv('DB_SSLMODE', 'prefer')}
 
+if not DEBUG and os.getenv('DB_ENGINE') == 'django.db.backends.mysql':
+    DATABASES['default']['OPTIONS'] = {"init_command": "SET SESSION time_zone = '+00:00', sql_mode='STRICT_TRANS_TABLES'"}
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.UserModel'
