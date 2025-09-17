@@ -1,4 +1,5 @@
 # apps.project.specific.assets_management.buyers.views.py
+from django.conf import settings
 from django.db.models.functions import TruncMonth
 from django.db.models import Count
 from dateutil.relativedelta import relativedelta
@@ -246,9 +247,7 @@ class PurchaseOrdersView(BuyerRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        offers = OfferModel.objects.filter(
-            created_by=self.request.user
-        )
+        offers = OfferModel.objects.all()
 
         context['offers'] = offers
 
@@ -368,8 +367,8 @@ class PurchaseOrderCreateView(BuyerRequiredMixin, CreateView):
             mime_img.add_header("Content-Disposition",
                                 "inline", filename="gea_logo.png")
             email.attach(mime_img)
-
-        email.send(fail_silently=False)
+        if not settings.DEBUG:
+            email.send(fail_silently=False)
 
 
 class OfferUpdateView(BuyerRequiredMixin, UpdateView):
@@ -750,7 +749,8 @@ class ProfitabilityTemplateView(BuyerRequiredMixin, TemplateView):
             .filter(
                 profitability_paid_at__isnull=False,
                 profitability_paid_at__date__gte=start_month,
-                profitability_paid_at__date__lt=end_month + relativedelta(months=1),
+                profitability_paid_at__date__lt=end_month +
+                relativedelta(months=1),
             )
             .annotate(m=TruncMonth('profitability_paid_at'))
             .values('m')
@@ -760,7 +760,7 @@ class ProfitabilityTemplateView(BuyerRequiredMixin, TemplateView):
 
         labels = [m.strftime('%b %Y') for m in months]
         created_counts = [created_map.get(m, 0) for m in months]
-        closed_counts  = [closed_map.get(m, 0) for m in months]
+        closed_counts = [closed_map.get(m, 0) for m in months]
 
         ctx['po_month_labels'] = labels
         ctx['po_created_counts'] = created_counts
@@ -795,31 +795,43 @@ class ProfitabilityTemplateView(BuyerRequiredMixin, TemplateView):
                                or getattr(a, 'es_description', '') or '')
 
             # Totales por tipo (intenta con claves comunes: 'B'/'U' o 'boxes'/'units')
-            qty_by_type  = a.asset_total_quantity_by_type()
-            total_boxes = qty_by_type.get("Boxes") or qty_by_type.get("Cajas") or 0
-            total_units = qty_by_type.get("Units") or qty_by_type.get("Unidades") or 0
-            
+            qty_by_type = a.asset_total_quantity_by_type() or {}
+
+            def pick(qmap, *keys, default=0):
+                for k in keys:
+                    if k in qmap and qmap[k] is not None:
+                        return qmap[k]
+                return default
+
+            total_boxes = pick(qty_by_type, "Boxes", "Box",
+                               "Cajas", "B", default=0)
+            total_units = pick(qty_by_type, "Units", "Unit",
+                               "Unidades", "U", default=0)
+
+            if (int(total_boxes) if total_boxes else 0) == 0 and (int(total_units) if total_units else 0) == 0:
+                continue
+
             # Tokens para filtros
             zero_yes = (int(total_boxes) + int(total_units) == 0)
             has_image = bool(getattr(a, 'asset_img', None))
-            
+
             qty_tokens = []
 
-            qty_tokens.append('zero:yes') if zero_yes else qty_tokens.append('zero:no')
-                
-            if total_units > 0:
+            qty_tokens.append(
+                'zero:yes') if zero_yes else qty_tokens.append('zero:no')
+
+            if int(total_units) > 0:
                 qty_tokens.append('qty:U')
-                
-            if total_boxes > 0:
+            if int(total_boxes) > 0:
                 qty_tokens.append('qty:B')
-                
+
             # Si no hay stock en ningún tipo, deja sin qty:* (los filtros funcionarán por zero:yes)
 
             tokens = [
                 f"img:{'yes' if has_image else 'no'}",
                 *qty_tokens
             ]
-            
+
             asset_rows.append({
                 'name': asset_name,
                 'category': category_name,

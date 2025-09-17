@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-15 15:30-0500\n"
+"POT-Creation-Date: 2025-09-16 21:22-0500\n"
 "PO-Revision-Date: 2025-09-13 03:26-0500\n"
 "Last-Translator: Sebastian Morales <juan.sebasm2@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -436,28 +436,28 @@ msgstr "Destinatarios de la orden de servicio"
 msgid "Error filling offer translation fields: {e}"
 msgstr "Error al rellenar los campos de traducción de la oferta: {e}"
 
-#: .\apps\project\specific\assets_management\buyers\views.py:282
+#: .\apps\project\specific\assets_management\buyers\views.py:281
 msgid "Your Purchase order has been sent for verification."
 msgstr "Su orden de compra ha sido enviada para verificación."
 
-#: .\apps\project\specific\assets_management\buyers\views.py:307
+#: .\apps\project\specific\assets_management\buyers\views.py:306
 msgid "New Purchase order Submitted for Verification"
 msgstr "Nueva orden de compra enviada para verificación"
 
-#: .\apps\project\specific\assets_management\buyers\views.py:538
+#: .\apps\project\specific\assets_management\buyers\views.py:537
 msgid "No recipients to notify."
 msgstr "No hay destinatarios a notificar."
 
-#: .\apps\project\specific\assets_management\buyers\views.py:561
+#: .\apps\project\specific\assets_management\buyers\views.py:560
 #, python-format
 msgid "Service Order Notification for OC: %(po)s"
 msgstr "Notificación de Orden de servicio para OC: %(po)s"
 
-#: .\apps\project\specific\assets_management\buyers\views.py:640
+#: .\apps\project\specific\assets_management\buyers\views.py:639
 msgid "You don't have permission to perform this action."
 msgstr "No tienes permisos para realizar esta acción."
 
-#: .\apps\project\specific\assets_management\buyers\views.py:699
+#: .\apps\project\specific\assets_management\buyers\views.py:698
 msgid "Unknown step."
 msgstr "Paso desconocido."
 
