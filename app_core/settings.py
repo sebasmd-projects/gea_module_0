@@ -218,6 +218,9 @@ DATABASES = {
     }
 }
 
+if not DEBUG:
+    DATABASES['default']['OPTIONS'] = {'sslmode': os.getenv('DB_SSLMODE', 'require')}
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.UserModel'
