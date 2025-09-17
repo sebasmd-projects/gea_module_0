@@ -319,6 +319,10 @@
     var created = JSON.parse(document.getElementById('po-created-counts').textContent);
     var closed = JSON.parse(document.getElementById('po-closed-counts').textContent);
 
+    console.log('Labels:', labels);
+    console.log('Created:', created);
+    console.log('Closed:', closed);
+
     var ctx = document.getElementById('poMonthlyChart');
 
     // Colores: azul creadas, verde cerradas (mismos que ya usas)
