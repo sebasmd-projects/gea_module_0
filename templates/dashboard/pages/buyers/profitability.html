@@ -1,6 +1,6 @@
 {% extends 'dashboard/dashboard_layout_base.html' %}
 
-{% load i18n static custom_filters humanize %}
+{% load i18n static custom_filters %}
 
 {% block simple_datatables %}
   <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
@@ -215,10 +215,10 @@
                     </td>
                     <td>{{ r.category }}</td>
                     <td>
-                      <span data-type="number">{{ r.total_boxes|intcomma }}</span>
+                      <span data-type="number">{{ r.total_boxes }}</span>
                     </td>
                     <td>
-                      <span data-type="number">{{ r.total_units|intcomma }}</span>
+                      <span data-type="number">{{ r.total_units }}</span>
                     </td>
                     <td>{{ r.observations }}</td>
                     <td>{{ r.description }}</td>
