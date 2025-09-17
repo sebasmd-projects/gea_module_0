@@ -16,6 +16,7 @@ class CountryWidget(s2forms.ModelSelect2Widget):
         attrs['data-minimum-input-length'] = 0
         return attrs
 
+
 class AssetWidget(s2forms.ModelSelect2Widget):
     search_fields = [
         "asset_name__es_name__icontains",
@@ -24,9 +25,9 @@ class AssetWidget(s2forms.ModelSelect2Widget):
 
     def build_attrs(self, base_attrs, extra_attrs=None):
         attrs = super().build_attrs(base_attrs, extra_attrs)
-        attrs['data-minimum-input-length'] = 0  # Sin longitud mínima para mostrar resultados
+        # Sin longitud mínima para mostrar resultados
+        attrs['data-minimum-input-length'] = 0
         return attrs
-    
 
 
 class LocationModelForm(forms.ModelForm):
@@ -36,7 +37,7 @@ class LocationModelForm(forms.ModelForm):
 
     class Meta:
         model = LocationModel
-        fields = ['reference', 'description_es', 'description_en','country']
+        fields = ['reference', 'description_es', 'description_en', 'country']
         widgets = {
             "country": CountryWidget,
         }
@@ -59,7 +60,7 @@ class AssetLocationModelForm(forms.ModelForm):
                 'placeholder': _('Enter any relevant notes or details here (English)')
             }
         )
-        
+
     def clean(self):
         cleaned_data = super().clean()
         asset = cleaned_data.get('asset')
@@ -75,7 +76,8 @@ class AssetLocationModelForm(forms.ModelForm):
             amount=amount,
             created_by=created_by,
         ).exists():
-            raise forms.ValidationError(_("A similar asset location already exists."))
+            raise forms.ValidationError(
+                _("A similar asset location already exists."))
 
         return cleaned_data
 
@@ -92,6 +94,7 @@ class AssetLocationModelForm(forms.ModelForm):
         widgets = {
             'asset': AssetWidget,
         }
+
 
 class AssetUpdateLocationModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

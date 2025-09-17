@@ -9,6 +9,9 @@ database_schema.sql
 users.json
 zz csv import/
 cambios.txt
+backups/
+backup.json
+users_backup.json
 
 ### Django ###
 *.log

@@ -866,7 +866,9 @@ class OfferModel(TimeStampedModel):
             ("can_send_asset", _("Can send asset")),
             ("can_set_profitability", _("Can set profitability")),
             ("can_pay_profitability", _("Can pay profitability")),
+            ("can_approve_pay_profitability", _("Can approve pay profitability")),
             ("can_see_profitability_page", _("Can see profitability page")),
+            ("can_see_wizard_page", _("Can see the offer workflow wizard page")),
         ]
         constraints = [
             # Aprobado => Debe estar revisado
@@ -969,10 +971,10 @@ class ServiceOrderRecipient(TimeStampedModel):
         ]
 
 
-pre_save.connect(
-    auto_fill_offer_translation,
-    sender=OfferModel
-)
+# pre_save.connect(
+#     auto_fill_offer_translation,
+#     sender=OfferModel
+# )
 
 auditlog.register(
     OfferModel,

@@ -256,8 +256,10 @@
                           <i class="fa-regular fa-pen-to-square"></i>
                         </a>
 
-                        <button class="btn btn-datatable btn-icon btn-outline-danger"
-                          id="btn-modal-delete-location-reference" data-location-id="{{ location.id }}">
+                        <button
+                          class="btn btn-datatable btn-icon btn-outline-danger btn-open-delete-location"
+                          data-location-id="{{ location.id }}"
+                          data-delete-url="{% url 'assets_location:delete_location' location.id %}">
                           <i class="fa-regular fa-trash-can"></i>
                         </button>
 

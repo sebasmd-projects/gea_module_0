@@ -80,7 +80,7 @@
                             {% if offer.display %}
                             <tr data-offer-row="{{ offer.id }}">
                                 <td>{{ forloop.counter }}</td>
-                                <td>{{ offer.created_by.username|upper }} {{ offer.created_by.get_full_name|upper }}</td>
+                                <td>{{ offer.created_by.get_full_name|upper }}</td>
                                 <td>
                                     <button type="button" class="btn btn-link p-0 uuid-toggle"
                                         data-full="{{ offer.id|stringformat:'s' }}"
@@ -125,6 +125,11 @@
                                         <i class="fa-regular fa-trash-can"></i>
                                     </button>
                                     {% endif %}
+                                    
+                                    {% if perms.buyers.can_see_wizard_page %}
+                                        <a href="{% url 'buyers:offer_wizard_page' offer.id %}" type="button" class="btn btn-datatable btn-icon btn-outline-success"><i class="fa-solid fa-wand-magic-sparkles"></i></a>
+                                    {% endif %}
+                                        
                                 </td>
                             </tr>
                             {% endif %}
@@ -471,6 +476,7 @@
 {% endblock %}
 
 {% block simple_datatables_js %}
-<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+    crossorigin="anonymous"></script>
 <script src="{% static 'js/simple-datatable.js' %}"></script>
 {% endblock %}

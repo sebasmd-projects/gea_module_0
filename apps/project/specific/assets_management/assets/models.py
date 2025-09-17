@@ -233,20 +233,20 @@ pre_save.connect(
     sender=AssetModel
 )
 
-pre_save.connect(
-    auto_fill_asset_category_translation,
-    sender=AssetCategoryModel
-)
+# pre_save.connect(
+#     auto_fill_asset_category_translation,
+#     sender=AssetCategoryModel
+# )
 
-pre_save.connect(
-    auto_fill_asset_name_translation,
-    sender=AssetsNamesModel
-)
+# pre_save.connect(
+#     auto_fill_asset_name_translation,
+#     sender=AssetsNamesModel
+# )
 
-pre_save.connect(
-    auto_fill_asset_translation_fields,
-    sender=AssetModel
-)
+# pre_save.connect(
+#     auto_fill_asset_translation_fields,
+#     sender=AssetModel
+# )
 
 auditlog.register(
     AssetCategoryModel,

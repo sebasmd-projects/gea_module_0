@@ -1,9 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
-from django.http import JsonResponse
-from django.shortcuts import redirect
+from django.http import Http404, JsonResponse
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
+from django.views import View
 from django.views.generic import CreateView, DeleteView, UpdateView
 
 from apps.project.common.users.models import UserModel
@@ -104,7 +105,8 @@ class AssetLocationCreateView(AssetLocationMixin, CreateView):
             return super().form_valid(form)
         except IntegrityError:
             # Agregar un error no relacionado a un campo
-            form.add_error(None, _("A location with the same details already exists."))
+            form.add_error(
+                None, _("A location with the same details already exists."))
             return self.form_invalid(form)
 
     def get_form_kwargs(self):
@@ -167,12 +169,9 @@ class LocationUpdateView(HolderRequiredMixin, UpdateView):
         return kwargs
 
 
-class LocationReferenceDeleteView(HolderRequiredMixin, DeleteView):
-    model = LocationModel
-    success_url = reverse_lazy('assets:holder_index')
-
-    def form_valid(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        self.object.is_active = False
-        self.object.save()
-        return JsonResponse({'success': True})
+class LocationReferenceDeleteView(HolderRequiredMixin, View):
+    def post(self, request, pk, *args, **kwargs):
+        obj = get_object_or_404(LocationModel, pk=pk, created_by=request.user)
+        obj.is_active = False
+        obj.save(update_fields=['is_active'])
+        return JsonResponse({'ok': True})

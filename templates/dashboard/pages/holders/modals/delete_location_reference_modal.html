@@ -1,78 +1,98 @@
 {% load i18n %}
 {% trans 'Confirm Delete' as confirm_delete %}
 
-<div class="modal" id="confirmDeleteLocationReferenceModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">{{ confirm_delete }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>{% trans 'Are you sure you want to delete this location reference?' %}</p>
-            </div>
-            <div class="modal-footer">
-                <form method="post">
-                    {% csrf_token %}
-                    <button type="button" class="btn btn-danger" id="confirmDeleteLocationReferenceButton" disabled>
-                        <span class="mx-1">{{ confirm_delete }}</span> <span id="confirmLocationButtonTimer">(3s)</span>
-                    </button>
-                    <button type="button" class="btn btn-outline-warning" id="cancelDeleteLocationReferenceButton" data-dismiss="modal">
-                        {% trans 'Cancel' %}
-                    </button>
-                </form>
-            </div>
-        </div>
+<div class="modal" id="confirmDeleteLocationReferenceModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ confirm_delete }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
+      </div>
+      <div class="modal-body">
+        <p>{% trans 'Are you sure you want to delete this location reference?' %}</p>
+      </div>
+      <div class="modal-footer">
+        <form method="post">
+          {% csrf_token %}
+          <button type="button" class="btn btn-danger" id="confirmDeleteLocationReferenceButton">
+            <span class="mx-1">{{ confirm_delete }}</span> <span id="confirmLocationButtonTimer">(3s)</span>
+          </button>
+          <button type="button" class="btn btn-outline-warning" id="cancelDeleteLocationReferenceButton" data-bs-dismiss="modal">
+            {% trans 'Cancel' %}
+          </button>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
 
+
 <script>
-    $(document).ready(function () {
-        $(document).on('click', '#btn-modal-delete-location-reference', function () {
-            const locationId = $(this).data('location-id');
-            $('#confirmDeleteLocationReferenceModal').modal('show');
+  document.addEventListener('DOMContentLoaded', function () {
+    const modalEl = document.getElementById('confirmDeleteLocationReferenceModal');
+    const bsModal = new bootstrap.Modal(modalEl);
+    const confirmBtn = document.getElementById('confirmDeleteLocationReferenceButton');
 
-            const confirmButtonLocation = $('#confirmDeleteLocationReferenceButton');
-            confirmButtonLocation.prop('disabled', true);
-            
-            // Restaurar el temporizador y el texto del botón
-            confirmButtonLocation.html('<span class="mx-1">{{ confirm_delete }}</span> <span id="confirmLocationButtonTimer">(3s)</span>');
-            const timerSpan = $('#confirmLocationButtonTimer');
-            let countdown = 3;
+    let currentDeleteUrl = null;
+    let timerId = null;
 
-            const interval = setInterval(() => {
-                countdown--;
-                if (countdown > 0) {
-                    timerSpan.text(`(${countdown}s)`);
-                } else {
-                    clearInterval(interval);
-                    timerSpan.remove();
-                    confirmButtonLocation.prop('disabled', false);
-                }
-            }, 1000);
+    // Delegación: abre modal
+    document.addEventListener('click', function (e) {
+      const opener = e.target.closest('.btn-open-delete-location');
+      if (!opener) return;
 
-            confirmButtonLocation.off('click').on('click', function () {
-                $.ajax({
-                    url: `/asset/delete/location/${locationId}/`,
-                    method: 'POST',
-                    data: {
-                        csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value
-                    },
-                    dataType: "json",
-                    success: function (response) {
-                        window.location.reload();
-                        $('#confirmDeleteLocationReferenceModal').modal('hide');
-                    },
-                    error: function (xhr, status, error) {
-                        window.location.reload();
-                        $('#confirmDeleteLocationReferenceModal').modal('hide');
-                    }
-                });
-            });
+      currentDeleteUrl = opener.getAttribute('data-delete-url');
 
-            $('#cancelDeleteLocationReferenceButton').off('click').on('click', function () {
-                $('#confirmDeleteLocationReferenceModal').modal('hide');
-            });
-        });
+      // reinicia botón + timer
+      confirmBtn.disabled = true;
+      confirmBtn.innerHTML = '<span class="mx-1">{{ confirm_delete }}</span> <span id="confirmLocationButtonTimer">(3s)</span>';
+
+      let countdown = 3;
+      const timerSpan = () => document.getElementById('confirmLocationButtonTimer');
+
+      timerId = setInterval(() => {
+        countdown--;
+        if (countdown > 0) {
+          if (timerSpan()) timerSpan().textContent = `(${countdown}s)`;
+        } else {
+          clearInterval(timerId);
+          if (timerSpan()) timerSpan().remove();
+          confirmBtn.disabled = false;
+        }
+      }, 1000);
+
+      bsModal.show();
     });
+
+    // Confirmar borrado (soft delete)
+    confirmBtn.addEventListener('click', function () {
+      if (!currentDeleteUrl) return;
+
+      // token CSRF desde el form del modal
+      const csrf = modalEl.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+      fetch(currentDeleteUrl, {
+        method: 'POST',
+        headers: { 'X-CSRFToken': csrf, 'X-Requested-With': 'XMLHttpRequest' }
+      })
+      .then(resp => resp.json())
+      .then(data => {
+        bsModal.hide();
+        // recarga o elimina la fila del DOM si quieres evitar reload total
+        window.location.reload();
+      })
+      .catch(() => {
+        bsModal.hide();
+        window.location.reload();
+      });
+    });
+
+    // Al cerrar modal, limpia temporizador
+    modalEl.addEventListener('hidden.bs.modal', function () {
+      if (timerId) clearInterval(timerId);
+      timerId = null;
+      currentDeleteUrl = null;
+    });
+  });
 </script>
+

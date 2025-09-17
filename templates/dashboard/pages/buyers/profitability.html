@@ -1,6 +1,6 @@
 {% extends 'dashboard/dashboard_layout_base.html' %}
 
-{% load i18n static custom_filters %}
+{% load i18n static custom_filters humanize %}
 
 {% block simple_datatables %}
   <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
@@ -112,9 +112,14 @@
                           </div>
                         </div>
                       </td>
+
                       <td>
                         <div class="text-center gap-2">
-                          <a href="{% url 'buyers:offer_wizard_page' offer.id %}" type="button" class="btn btn-datatable btn-icon btn-outline-success"><i class="fa-solid fa-eye"></i></a>
+                          {% if perms.buyers.can_see_wizard_page %}
+                            <a href="{% url 'buyers:offer_wizard_page' offer.id %}" type="button" class="btn btn-datatable btn-icon btn-outline-success"><i class="fa-solid fa-wand-magic-sparkles"></i></a>
+                          {% else %}
+                            <a href="{% url 'buyers:offer_details' offer.id %}" type="button" class="btn btn-datatable btn-icon btn-outline-success"><i class="fa-solid fa-eye"></i></a>
+                          {% endif %}
                         </div>
                       </td>
                     </tr>
@@ -129,7 +134,6 @@
       </div>
 
       <div class="col-xl-6 mb-4">
-        <!-- Pie chart with legend example -->
         <div class="card h-100">
           <div class="card-header" style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
             <h2 class="text-black">{% trans 'Profitability Overview' %}</h2>
@@ -174,7 +178,7 @@
       <div class="col-12">
         <div class="card mb-4">
           <div class="card-header" style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
-            <h2 class="text-black">{% trans 'Assets' %} | {% trans 'Inventory' %}</h2>
+            <h2 class="text-black">{% trans 'Assets' %}|{% trans 'Inventory' %}</h2>
           </div>
           <div class="card-body">
             <table id="assets_table" class="table table-striped">
@@ -210,8 +214,12 @@
                       {% endfor %}
                     </td>
                     <td>{{ r.category }}</td>
-                    <td>{{ r.total_boxes }}</td>
-                    <td>{{ r.total_units }}</td>
+                    <td>
+                      <span data-type="number">{{ r.total_boxes|intcomma }}</span>
+                    </td>
+                    <td>
+                      <span data-type="number">{{ r.total_units|intcomma }}</span>
+                    </td>
                     <td>{{ r.observations }}</td>
                     <td>{{ r.description }}</td>
                   </tr>

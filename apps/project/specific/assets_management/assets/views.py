@@ -38,6 +38,7 @@ class HolderTemplateview(HolderRequiredMixin, TemplateView):
         offers = OfferModel.objects.filter(
             is_active=True,
             is_approved=True,
+            payment_order_created_at__isnull=True,
         )
 
         context['assets'] = assets

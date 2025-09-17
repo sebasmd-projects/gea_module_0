@@ -77,7 +77,7 @@
                   <small class="text-muted">{% trans 'Pending review' %}</small>
                 {% endif %}
               </div>
-              {% if not offer.reviewed %}
+              {% if not offer.reviewed and perms.buyers.can_review_offer %}
               <div>
                 <button class="btn btn-sm btn-outline-success" data-wizard-step="REVIEW">
                   {% trans 'Mark as reviewed' %}
@@ -99,7 +99,7 @@
                   <small class="text-muted">{% trans 'Pending approval' %}</small>
                 {% endif %}
               </div>
-              {% if offer.reviewed and not offer.is_approved %}
+              {% if offer.reviewed and not offer.is_approved and perms.buyers.can_approve_offer %}
               <div>
                 <button class="btn btn-sm btn-outline-success" data-wizard-step="APPROVE" >
                   {% trans 'Mark as approved' %}
@@ -148,7 +148,7 @@
                   <small class="text-muted">{% trans 'Pending to send' %}</small>
                 {% endif %}
               </div>
-              {% if not so_sent %}
+              {% if not so_sent and perms.buyers.can_send_service_order %}
               <div>
                 <button class="btn btn-sm btn-outline-success" data-wizard-step="SO_SEND" >
                   {% trans 'Mark as sent' %}
@@ -158,8 +158,8 @@
             </div>
           </div>
 
-          
-          {% if so_created and not offer.service_order_sent_at %}
+
+          {% if so_created and not offer.service_order_sent_at and perms.buyers.can_send_service_order %}
             <form method="post" class="mt-3" onsubmit="return submitWizardRecipients(this);">
               {% csrf_token %}
               <input type="hidden" name="step" value="SO_ADD_RECIPIENTS">
@@ -273,7 +273,7 @@
                   <small class="text-muted">{% trans 'Pending' %}</small>
                 {% endif %}
               </div>
-              {% if not pay_created %}
+              {% if not pay_created and perms.buyers.can_create_payment_order %}
                 <div>
                   <button class="btn btn-sm btn-outline-success" data-wizard-step="PAY_CREATE">
                     {% trans 'Mark as created' %}
@@ -294,7 +294,7 @@
                   <small class="text-muted">{% trans 'Pending to send' %}</small>
                 {% endif %}
               </div>
-              {% if not pay_sent and pay_created %}
+              {% if not pay_sent and pay_created and perms.buyers.can_send_payment_order %}
               <div>
                 <button class="btn btn-sm btn-outline-success" data-wizard-step="PAY_SEND">
                   {% trans 'Mark as sent' %}
@@ -328,7 +328,7 @@
                   <small class="text-muted">{% trans 'Pending' %}</small>
                 {% endif %}
               </div>
-              {% if not possess %}
+              {% if not possess and perms.buyers.can_set_asset_possession %}
               <div>
                 <button class="btn btn-sm btn-outline-success" data-wizard-step="POSSESSION">
                   {% trans 'Mark as in possession' %}
@@ -349,7 +349,7 @@
                   <small class="text-muted">{% trans 'Pending' %}</small>
                 {% endif %}
               </div>
-              {% if not asset_sent and possess %}
+              {% if not asset_sent and possess and perms.buyers.can_send_asset %}
               <div>
                 <button class="btn btn-sm btn-outline-success" data-wizard-step="ASSET_SEND" >
                   {% trans 'Mark as sent' %}
@@ -384,7 +384,7 @@
                   <small class="text-muted">{% trans 'Pending' %}</small>
                 {% endif %}
               </div>
-              {% if not prof_created %}
+              {% if not prof_created and perms.buyers.can_set_profitability %}
               <div>
                 <button class="btn btn-sm btn-outline-success" data-wizard-step="PROFIT_CREATE" >
                   {% trans 'Mark as created' %}
@@ -405,7 +405,7 @@
                   <small class="text-muted">{% trans 'Pending' %}</small>
                 {% endif %}
               </div>
-              {% if prof_created and not rrf_paid %}
+              {% if prof_created and not rrf_paid and perms.buyers.can_pay_profitability %}
               <div>
                 <button class="btn btn-sm btn-outline-success" data-wizard-step="RRF_PAY">{% trans 'Mark as paid' %}</button>
               </div>
@@ -424,7 +424,7 @@
                   <small class="text-muted">{% trans 'Pending' %}</small>
                 {% endif %}
               </div>
-              {% if prof_created and not ampro_paid %}
+              {% if prof_created and not ampro_paid and perms.buyers.can_pay_profitability %}
               <div>
                 <button class="btn btn-sm btn-outline-success" data-wizard-step="AMPRO_PAY">{% trans 'Mark as paid' %}</button>
               </div>
@@ -443,7 +443,7 @@
                   <small class="text-muted">{% trans 'Pending' %}</small>
                 {% endif %}
               </div>
-              {% if prof_created and not propensiones_paid %}
+              {% if prof_created and not propensiones_paid and perms.buyers.can_pay_profitability %}
               <div>
                 <button class="btn btn-sm btn-outline-success" data-wizard-step="PROP_PAY">{% trans 'Mark as paid' %}</button>
               </div>
@@ -462,7 +462,7 @@
                   <small class="text-muted">{% trans 'Pending' %}</small>
                 {% endif %}
               </div>
-              {% if all_prof_subpaid and not prof_paid %}
+              {% if all_prof_subpaid and not prof_paid and perms.buyers.can_approve_pay_profitability %}
               <div>
                 <button class="btn btn-sm btn-outline-success" data-wizard-step="PROFIT_PAY" >
                   {% trans 'Mark as paid' %}
