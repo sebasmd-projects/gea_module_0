@@ -218,8 +218,8 @@ DATABASES = {
     }
 }
 
-if not DEBUG:
-    DATABASES['default']['OPTIONS'] = {'sslmode': os.getenv('DB_SSLMODE', 'require')}
+if not DEBUG and os.getenv('DB_ENGINE') == 'django.db.backends.postgresql':
+    DATABASES['default']['OPTIONS'] = {'sslmode': os.getenv('DB_SSLMODE', 'prefer')}
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
