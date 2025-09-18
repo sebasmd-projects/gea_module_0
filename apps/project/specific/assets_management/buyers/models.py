@@ -971,10 +971,10 @@ class ServiceOrderRecipient(TimeStampedModel):
         ]
 
 
-# pre_save.connect(
-#     auto_fill_offer_translation,
-#     sender=OfferModel
-# )
+pre_save.connect(
+    auto_fill_offer_translation,
+    sender=OfferModel
+)
 
 auditlog.register(
     OfferModel,
