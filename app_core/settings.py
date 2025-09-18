@@ -129,7 +129,7 @@ LOCALE_PATHS.append(str(BASE_DIR / 'templates' / 'locale'))
 
 LANGUAGE_CODE = 'en'
 
-TIME_ZONE = 'America/Bogota'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -206,14 +206,14 @@ ASGI_APPLICATION = 'app_core.asgi.application'
 
 DATABASES = {
     'default': {
-        'CONN_MAX_AGE': int(os.getenv('DB_CONN_MAX_AGE')),
+        'CONN_MAX_AGE': int(os.getenv('DB_CONN_MAX_AGE', 60)),
         'ENGINE': os.getenv('DB_ENGINE'),
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST'),
         'PORT': int(os.getenv('DB_PORT')),
-        'CHARSET': os.getenv('DB_CHARSET'),
+        'CHARSET': os.getenv('DB_CHARSET', 'utf8mb4'),
         'ATOMIC_REQUESTS': True,
     }
 }
@@ -221,7 +221,7 @@ DATABASES = {
 if not DEBUG and os.getenv('DB_ENGINE') == 'django.db.backends.postgresql':
     DATABASES['default']['OPTIONS'] = {'sslmode': os.getenv('DB_SSLMODE', 'prefer')}
 
-if not DEBUG and os.getenv('DB_ENGINE') == 'django.db.backends.mysql':
+if os.getenv('DB_ENGINE') == 'django.db.backends.mysql':
     DATABASES['default']['OPTIONS'] = {"init_command": "SET SESSION time_zone = '+00:00', sql_mode='STRICT_TRANS_TABLES'"}
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
