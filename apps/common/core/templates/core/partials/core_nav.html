@@ -62,7 +62,7 @@
           <ul class="dropdown-menu dropdown-menu-dark">
             {% for lang in LANGUAGES %}
               <li>
-                <a class="dropdown-item" href="{% url 'set_language' %}?lang={{ lang.0 }}"><i class="bi bi-globe-americas me-3"></i> {{ lang.1 }}</a>
+                <a class="dropdown-item" href="{% url 'utils:set_language' %}?lang={{ lang.0 }}"><i class="bi bi-globe-americas me-3"></i> {{ lang.1 }}</a>
               </li>
             {% endfor %}
           </ul>

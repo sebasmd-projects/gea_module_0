@@ -1,4 +1,5 @@
 import logging
+import re
 from datetime import timedelta
 from ipaddress import ip_address
 from urllib.parse import urlparse
@@ -10,20 +11,8 @@ from django.utils import timezone, translation
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import View
-from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status
-from rest_framework.permissions import AllowAny
-from rest_framework_simplejwt.views import (TokenBlacklistView,
-                                            TokenObtainPairView,
-                                            TokenRefreshView, TokenVerifyView)
 
 from apps.common.utils.models import IPBlockedModel, WhiteListedIPModel
-
-from .api import (TokenBlacklistResponseSerializer,
-                  TokenObtainPairResponseSerializer,
-                  TokenRefreshResponseSerializer,
-                  TokenVerifyResponseSerializer)
-from .backend import EmailOrUsernameModelBackend
 
 logger = logging.getLogger(__name__)
 
@@ -37,15 +26,46 @@ except Exception as e:
     logger.error(f"An unexpected error occurred: {e}")
     template_name = 'errors_template.html'
 
+SAFE_PATH_PREFIXES = [
+    'static',
+    'media',
+    'favicon.ico',
+    'api',
+]
+
+SAFE_PATH_REGEXES = [
+    r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}',
+    r'^(?!api/).*'
+]
+
+SAFE_PATH_EXTENSIONS = [
+    '.css', '.js', '.png',
+    '.jpg', '.jpeg', '.gif',
+    '.svg', '.ico', '.woff',
+    '.woff2', '.ttf', '.eot',
+    '.otf', '.mp4', '.webm',
+    '.ogg', '.mp3', '.wav'
+]
+
+_COMPILED_SAFE_REGEXES = [re.compile(r) for r in SAFE_PATH_REGEXES]
+
+
+def _msg_exception_for_staff(status: int, request: HttpRequest, exception: Exception) -> str:
+    if (request.user.is_staff or request.user.is_superuser) and exception:
+        logger.warning(f"{status}: {exception}")
+        return str(exception)
+    return ''
+
 
 def handler400(request, exception, *args, **argv):
     status = 400
+
     return render(
         request,
         template_name,
         status=status,
         context={
-            'exception': str(exception),
+            'exception': _msg_exception_for_staff(status, request, exception),
             'title': _('Error 400'),
             'error': _('Bad Request'),
             'status': status,
@@ -61,7 +81,7 @@ def handler401(request, exception, *args, **argv):
         template_name,
         status=status,
         context={
-            'exception': str(exception),
+            'exception': _msg_exception_for_staff(status, request, exception),
             'title': _('Error 401'),
             'error': _('Unauthorized Access'),
             'status': status,
@@ -77,7 +97,7 @@ def handler403(request, exception, *args, **argv):
         template_name,
         status=status,
         context={
-            'exception': str(exception),
+            'exception': _msg_exception_for_staff(status, request, exception),
             'title': _('Error 403'),
             'error': _('Forbidden Access'),
             'status': status,
@@ -93,7 +113,7 @@ def handler404(request, exception, *args, **argv):
         template_name,
         status=status,
         context={
-            'exception': str(exception),
+            'exception': _msg_exception_for_staff(status, request, exception),
             'title': _('Error 404'),
             'error': _('Page not found'),
             'status': status,
@@ -148,14 +168,20 @@ def handler504(request, *args, **argv):
 
 
 def set_language(request):
-    lang_code = (request.POST.get("lang") or request.GET.get("lang") or "").strip()
+    lang_code = (
+        request.POST.get("lang")
+        or request.GET.get("lang")
+        or ""
+    ).strip()
+
     supported = dict(getattr(settings, "LANGUAGES", ()))
 
     if lang_code in supported:
         translation.activate(lang_code)
 
         # 1) Preferir "next" explícito (POST/GET). 2) Si no, usar HTTP_REFERER. 3) Fallback seguro.
-        next_url = request.POST.get("next") or request.GET.get("next") or request.META.get("HTTP_REFERER")
+        next_url = request.POST.get("next") or request.GET.get(
+            "next") or request.META.get("HTTP_REFERER")
 
         if not next_url or not url_has_allowed_host_and_scheme(url=next_url, allowed_hosts={request.get_host()}, require_https=request.is_secure()):
             try:
@@ -184,72 +210,71 @@ def set_language(request):
         return redirect("/")
 
 
-class DecoratedTokenObtainPairView(TokenObtainPairView):
-    @swagger_auto_schema(
-        responses={
-            status.HTTP_200_OK: TokenObtainPairResponseSerializer,
-        }
-    )
-    def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-        username_or_email = request.data.get('username')
-        backend = EmailOrUsernameModelBackend()
-        user = backend.authenticate(
-            request,
-            username=username_or_email,
-            password=request.data.get(
-                'password'
-            )
-        )
-
-        if user:
-            response.data['user_id'] = user.id
-
-        return response
+def _normalize_request_path(path: str) -> str:
+    """
+    Extrae y normaliza la parte de path sin query ni slash inicial.
+    Ej: '/static/img/foo.png?x=1' -> 'static/img/foo.png'
+    """
+    if not path:
+        return ''
+    parsed = urlparse(path)
+    p = parsed.path or ''
+    # quitar slash inicial si existe
+    if p.startswith('/'):
+        p = p[1:]
+    return p
 
 
-class DecoratedTokenRefreshView(TokenRefreshView):
-    @swagger_auto_schema(
-        responses={
-            status.HTTP_200_OK: TokenRefreshResponseSerializer,
-        }
-    )
-    def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
+def is_safe_path(path: str) -> bool:
+    """
+    True si la ruta debe considerarse 'safe' (recursos estáticos, extensiones, uuid, etc).
+    Usar desde vistas y middleware.
+    """
+    if not path:
+        return False
+
+    p = _normalize_request_path(path)  # sin leading slash, sin query
+
+    # 1) prefijos (ej. static/, media/, favicon.ico)
+    for pref in SAFE_PATH_PREFIXES:
+        # aceptar coincidencia exacta de archivo (favicon.ico) o startswith para prefijos
+        if p == pref or p.startswith(pref + '/') or p.startswith(pref):
+            return True
+
+    # 2) extensiones
+    lower = p.lower()
+    for ext in SAFE_PATH_EXTENSIONS:
+        if lower.endswith(ext):
+            return True
+
+    # 3) regexes (buscar en todo el path)
+    for cre in _COMPILED_SAFE_REGEXES:
+        if cre.search(p):
+            return True
+
+    return False
 
 
-class DecoratedTokenVerifyView(TokenVerifyView):
-    permission_classes = [AllowAny]
-
-    @swagger_auto_schema(
-        responses={
-            status.HTTP_200_OK: TokenVerifyResponseSerializer,
-        }
-    )
-    def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-
-        if response.status_code == status.HTTP_200_OK:
-            response.data['detail'] = 'Token is valid'
-            response.data['code'] = 'token_is_valid'
-
-        return response
-
-
-class DecoratedTokenBlacklistView(TokenBlacklistView):
-    @swagger_auto_schema(
-        responses={
-            status.HTTP_200_OK: TokenBlacklistResponseSerializer,
-        }
-    )
-    def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
-
-
-class HttpRequestAttakView(View):
+class HttpRequestAttackView(View):
     time_in_minutes = timedelta(minutes=settings.IP_BLOCKED_TIME_IN_MINUTES)
 
-    def get_client_ip(self, request: HttpRequest) -> str:  # ← añade self
+    @classmethod
+    def is_safe_path(cls, path: str) -> bool:
+        return is_safe_path(path)
+
+    def get_client_ip(self, request):
+        xff = request.META.get("HTTP_X_FORWARDED_FOR")
+        if xff:
+            ip = xff.split(",")[0].strip()
+        else:
+            ip = request.META.get(
+                "HTTP_CF_CONNECTING_IP") or request.META.get("REMOTE_ADDR", "")
+        try:
+            return str(ip_address(ip))
+        except Exception:
+            return "0.0.0.0"
+
+    def get_client_ip(self, request):
         xff = request.META.get("HTTP_X_FORWARDED_FOR")
         if xff:
             ip = xff.split(",")[0].strip()
@@ -262,6 +287,9 @@ class HttpRequestAttakView(View):
             return "0.0.0.0"
 
     def get(self, request, *args, **kwargs):
+        if self.is_safe_path(request.get_full_path()):
+            return redirect('/')
+
         client_ip = self.get_client_ip(
             request) or request.META.get('REMOTE_ADDR')
 

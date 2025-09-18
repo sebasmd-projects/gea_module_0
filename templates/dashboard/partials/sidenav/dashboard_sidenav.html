@@ -28,7 +28,7 @@
       <div class="collapse" id="collapseLanguage" data-bs-parent="#accordionSidenav">
         <nav class="sidenav-menu-nested nav">
           {% for lang in LANGUAGES %}
-            <a class="nav-link text-capitalize" href="{% url 'set_language' %}?lang={{ lang.0 }}">{{ lang.1 }}</a>
+            <a class="nav-link text-capitalize" href="{% url 'utils:set_language' %}?lang={{ lang.0 }}">{{ lang.1 }}</a>
           {% endfor %}
         </nav>
       </div>

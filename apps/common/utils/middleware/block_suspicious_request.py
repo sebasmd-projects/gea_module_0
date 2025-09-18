@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from apps.common.utils.models import IPBlockedModel
+from apps.common.utils.views import is_safe_path
 
 logger = logging.getLogger(__name__)
 
@@ -24,12 +25,6 @@ except Exception as e:
 
 logger = logging.getLogger(__name__)
 
-STATIC_PREFIXES = (
-    getattr(settings, 'STATIC_URL', '/static/'),
-    getattr(settings, 'MEDIA_URL', '/media/'),
-    '/favicon.ico',
-)
-
 
 class DetectSuspiciousRequestMiddleware:
     def __init__(self, get_response):
@@ -39,7 +34,18 @@ class DetectSuspiciousRequestMiddleware:
 
     def __call__(self, request):
         client_ip = request.META.get('REMOTE_ADDR')
+        path = request.path or ''
 
+        # 1) Si la ruta es 'safe' (assets, uuid, extensiones, etc) no hacemos nada
+        # -> devolvemos la respuesta normal sin tocar la DB ni el contador
+        try:
+            if is_safe_path(path):
+                return self.get_response(request)
+        except Exception:
+            # si hay algún error en la detección, preferimos no bloquear por error
+            return self.get_response(request)
+
+        # 2) Si la IP está bloqueada, proceder como antes
         try:
             blocked_entry = IPBlockedModel.objects.filter(
                 current_ip=client_ip,
@@ -50,9 +56,7 @@ class DetectSuspiciousRequestMiddleware:
             return self.get_response(request)
 
         if blocked_entry:
-            path = request.path or ''
-            if any(path.startswith(p) for p in STATIC_PREFIXES):
-                return self.get_response(request)
+            # si está bloqueado, registramos intento (si no es safe — ya filtramos)
             try:
                 with transaction.atomic():
                     si = blocked_entry.session_info or {}
@@ -70,15 +74,12 @@ class DetectSuspiciousRequestMiddleware:
                     blocked_entry.blocked_until = base + self.block_step
 
                     blocked_entry.session_info = si
-                    blocked_entry.save(
-                        update_fields=['session_info', 'blocked_until'])
+                    blocked_entry.save(update_fields=['session_info', 'blocked_until'])
 
             except Exception as e:
-                logger.exception(
-                    "Error updating attempt_count while blocked: %s", e)
+                logger.exception("Error updating attempt_count while blocked: %s", e)
 
-            logger.warning(
-                f"Blocked IP {client_ip} attempted access. Returning 403.")
+            logger.warning(f"Blocked IP {client_ip} attempted access. Returning 403.")
             return render(
                 request,
                 template_name,
@@ -96,7 +97,6 @@ class DetectSuspiciousRequestMiddleware:
         response = self.get_response(request)
 
         if 400 < response.status_code < 500:
-            logger.info(
-                f"Error {response.status_code} encountered for IP: {client_ip}")
+            logger.info(f"Error {response.status_code} encountered for IP: {client_ip}")
 
         return response
