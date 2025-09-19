@@ -150,7 +150,7 @@ class GeaUserRegisterForm(BaseUserForm):
     )
     
     referred = forms.ModelChoiceField(
-        label=_("How did you hear about us?"),
+        label=_("Referred by"),
         required=False,
         queryset=UserModel.objects.filter(is_referred=True),
         widget=forms.Select(attrs={

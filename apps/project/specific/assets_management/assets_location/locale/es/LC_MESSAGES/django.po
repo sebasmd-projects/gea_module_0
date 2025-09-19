@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-16 21:22-0500\n"
+"POT-Creation-Date: 2025-09-19 12:12-0500\n"
 "PO-Revision-Date: 2025-09-16 21:23-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,17 +64,17 @@ msgstr "Campo de usuario"
 msgid "Optional Fields"
 msgstr "Campos opcionales"
 
-#: .\apps\project\specific\assets_management\assets_location\forms.py:54
-#: .\apps\project\specific\assets_management\assets_location\forms.py:106
+#: .\apps\project\specific\assets_management\assets_location\forms.py:55
+#: .\apps\project\specific\assets_management\assets_location\forms.py:109
 msgid "Enter any relevant notes or details here (Spanish)"
 msgstr "Ingrese aquí cualquier nota o detalle relevante (ES)"
 
-#: .\apps\project\specific\assets_management\assets_location\forms.py:59
-#: .\apps\project\specific\assets_management\assets_location\forms.py:111
+#: .\apps\project\specific\assets_management\assets_location\forms.py:60
+#: .\apps\project\specific\assets_management\assets_location\forms.py:114
 msgid "Enter any relevant notes or details here (English)"
 msgstr "Ingrese aquí cualquier nota o detalle relevante (EN)"
 
-#: .\apps\project\specific\assets_management\assets_location\forms.py:78
+#: .\apps\project\specific\assets_management\assets_location\forms.py:80
 msgid "A similar asset location already exists."
 msgstr "Ya existe una ubicación de activos similar."
 
@@ -184,7 +184,6 @@ msgid "observations (EN)"
 msgstr "observaciones (EN)"
 
 #: .\apps\project\specific\assets_management\assets_location\models.py:202
-#| msgid "Asset"
 msgid "No Asset"
 msgstr "Sin Activos"
 
@@ -200,7 +199,7 @@ msgstr "Registro de ubicación"
 msgid "Locations Registration"
 msgstr "Registro de Ubicaciones"
 
-#: .\apps\project\specific\assets_management\assets_location\views.py:107
+#: .\apps\project\specific\assets_management\assets_location\views.py:109
 msgid "A location with the same details already exists."
 msgstr "Ya existe una ubicación con los mismos detalles."
 

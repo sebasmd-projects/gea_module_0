@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-13 15:18-0500\n"
+"POT-Creation-Date: 2025-09-19 12:12-0500\n"
 "PO-Revision-Date: 2025-09-11 02:27-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,16 +48,16 @@ msgstr "Otros"
 msgid "CHAT_GPT_API_KEY not configured"
 msgstr "API KEY de CHAT GPT no establecida"
 
-#: .\apps\common\utils\middleware\block_suspicious_request.py:87
+#: .\apps\common\utils\middleware\block_suspicious_request.py:88
 msgid "This IP is temporarily blocked due to suspicious activity."
 msgstr "Esta IP está bloqueada temporalmente debido a actividad sospechosa."
 
-#: .\apps\common\utils\middleware\block_suspicious_request.py:88
-#: .\apps\common\utils\views.py:81
+#: .\apps\common\utils\middleware\block_suspicious_request.py:89
+#: .\apps\common\utils\views.py:101
 msgid "Error 403"
 msgstr "Error 403"
 
-#: .\apps\common\utils\middleware\block_suspicious_request.py:89
+#: .\apps\common\utils\middleware\block_suspicious_request.py:90
 msgid "Access denied due to suspicious activity."
 msgstr "Acceso denegado debido a actividad sospechosa."
 
@@ -157,55 +157,55 @@ msgstr "bloqueado hasta"
 msgid "session information"
 msgstr "información de la sesión"
 
-#: .\apps\common\utils\views.py:49
+#: .\apps\common\utils\views.py:69
 msgid "Error 400"
 msgstr "Error 400"
 
-#: .\apps\common\utils\views.py:50
+#: .\apps\common\utils\views.py:70
 msgid "Bad Request"
 msgstr "Solicitud incorrecta"
 
-#: .\apps\common\utils\views.py:65
+#: .\apps\common\utils\views.py:85
 msgid "Error 401"
 msgstr "Error 401"
 
-#: .\apps\common\utils\views.py:66
+#: .\apps\common\utils\views.py:86
 msgid "Unauthorized Access"
 msgstr "Acceso no Autorizado"
 
-#: .\apps\common\utils\views.py:82
+#: .\apps\common\utils\views.py:102
 msgid "Forbidden Access"
 msgstr "Acceso Prohibido"
 
-#: .\apps\common\utils\views.py:97
+#: .\apps\common\utils\views.py:117
 msgid "Error 404"
 msgstr "Error 404"
 
-#: .\apps\common\utils\views.py:98
+#: .\apps\common\utils\views.py:118
 msgid "Page not found"
 msgstr "Página no encontrada"
 
-#: .\apps\common\utils\views.py:112
+#: .\apps\common\utils\views.py:132
 msgid "Error 500"
 msgstr "Error 500"
 
-#: .\apps\common\utils\views.py:113
+#: .\apps\common\utils\views.py:133
 msgid "Server error"
 msgstr "Error del servidor"
 
-#: .\apps\common\utils\views.py:127
+#: .\apps\common\utils\views.py:147
 msgid "Error 503"
 msgstr "Error 503"
 
-#: .\apps\common\utils\views.py:128
+#: .\apps\common\utils\views.py:148
 msgid "Service Unavailable"
 msgstr "Servicio No Disponible"
 
-#: .\apps\common\utils\views.py:142
+#: .\apps\common\utils\views.py:162
 msgid "Error 504"
 msgstr "Error 504"
 
-#: .\apps\common\utils\views.py:143
+#: .\apps\common\utils\views.py:163
 msgid "Gateway Timeout"
 msgstr "Tiempo de Espera Agotado del Gateway"
 

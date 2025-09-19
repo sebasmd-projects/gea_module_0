@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-16 13:27-0500\n"
+"POT-Creation-Date: 2025-09-19 12:12-0500\n"
 "PO-Revision-Date: 2025-09-15 17:14-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,17 +68,21 @@ msgstr "Introduzca un número de teléfono válido (7–15 dígitos)."
 msgid "User Type"
 msgstr "Tipo de usuario"
 
-#: .\apps\project\common\account\forms.py:161
+#: .\apps\project\common\account\forms.py:153
+msgid "Referred by"
+msgstr "Referido por"
+
+#: .\apps\project\common\account\forms.py:175
 msgid "Passwords do not match"
 msgstr "Las contraseñas no coinciden"
 
-#: .\apps\project\common\account\forms.py:177
+#: .\apps\project\common\account\forms.py:191
 #, python-brace-format
 msgid "Invalid Unique Code ({label})"
 msgstr "Código único no válido ({label})"
 
-#: .\apps\project\common\account\forms.py:187
-#: .\apps\project\common\account\forms.py:193
+#: .\apps\project\common\account\forms.py:201
+#: .\apps\project\common\account\forms.py:207
 msgid "Citizenship Number"
 msgstr "Número de documento"
 

@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-16 21:22-0500\n"
-"PO-Revision-Date: 2025-09-16 21:23-0500\n"
-"Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
+"POT-Creation-Date: 2025-09-19 12:12-0500\n"
+"PO-Revision-Date: 2025-09-19 12:16+0000\n"
+"Last-Translator: Sebastian Morales <cto@globalallianceusa.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -20,43 +20,76 @@ msgstr ""
 "X-Translated-Using: django-rosetta 0.10.0\n"
 
 #: .\templates\account\gea_register.html:41
-msgid "Username"
-msgstr "Usuario"
+#| msgid "Asset Information"
+msgid "Account Information"
+msgstr "Información de la Cuenta"
 
-#: .\templates\account\gea_register.html:45
-msgid "Email"
-msgstr "Correo"
+#: .\templates\account\gea_register.html:43
+#| msgid "Username"
+msgid "Username*"
+msgstr "Usuario*"
 
-#: .\templates\account\gea_register.html:49
-#: .\templates\two_factor\core\login.html:73
-msgid "Password"
-msgstr "Contraseña"
+#: .\templates\account\gea_register.html:47
+#| msgid "First Names"
+msgid "First Names*"
+msgstr "Nombres*"
 
-#: .\templates\account\gea_register.html:53
-msgid "Confirm Password"
-msgstr "Confirmar Contraseña"
+#: .\templates\account\gea_register.html:51
+#| msgid "Last Names"
+msgid "Last Names*"
+msgstr "Apellidos*"
 
-#: .\templates\account\gea_register.html:57
-msgid "First Names"
-msgstr "Nombres"
+#: .\templates\account\gea_register.html:54
+#| msgid "Asset Information"
+msgid "Security Information"
+msgstr "Información de Seguridad"
 
-#: .\templates\account\gea_register.html:61
-msgid "Last Names"
-msgstr "Apellidos"
+#: .\templates\account\gea_register.html:56
+#| msgid "Password"
+msgid "Password*"
+msgstr "Contraseña*"
+
+#: .\templates\account\gea_register.html:60
+#| msgid "Confirm Password"
+msgid "Confirm Password*"
+msgstr "Confirmar Contraseña*"
+
+#: .\templates\account\gea_register.html:63
+#| msgid "Contact Confirmation"
+msgid "Contact Information"
+msgstr "Información de contacto "
 
 #: .\templates\account\gea_register.html:69
-msgid "Cellphone"
-msgstr "Celular"
+#| msgid "Cellphone"
+msgid "Cellphone*"
+msgstr "Celular*"
 
 #: .\templates\account\gea_register.html:73
-msgid "User Type"
-msgstr "Tipo de usuario"
+#| msgid "Email"
+msgid "Email*"
+msgstr "Correo*"
 
-#: .\templates\account\gea_register.html:77
-msgid "Unique Code"
-msgstr "Código Único"
+#: .\templates\account\gea_register.html:76
+#| msgid "Asset Information"
+msgid "User Information"
+msgstr "Información de Usuario"
+
+#: .\templates\account\gea_register.html:78
+#| msgid "User Type"
+msgid "User Type*"
+msgstr "Tipo de usuario*"
 
 #: .\templates\account\gea_register.html:82
+#| msgid "Reference"
+msgid "Referred By"
+msgstr "Referido por"
+
+#: .\templates\account\gea_register.html:86
+#| msgid "Unique Code"
+msgid "Unique Code*"
+msgstr "Código Único*"
+
+#: .\templates\account\gea_register.html:91
 msgid ""
 "\n"
 "            Please complete the following information:\n"
@@ -77,23 +110,23 @@ msgstr ""
 "\n"
 "Si no proporciona esta información, no podremos generar su código único."
 
-#: .\templates\account\gea_register.html:93
+#: .\templates\account\gea_register.html:102
 msgid "Request for unique code – GEA"
 msgstr "Solicitud de código único – GEA"
 
-#: .\templates\account\gea_register.html:96
+#: .\templates\account\gea_register.html:105
 msgid "Hello, I would like to request the unique code to register with GEA."
 msgstr "Hello, I would like to request the unique code to register with GEA."
 
-#: .\templates\account\gea_register.html:99
+#: .\templates\account\gea_register.html:108
 msgid "You must request your unique registration code through"
 msgstr "Debe solicitar su código de registro único a través de"
 
-#: .\templates\account\gea_register.html:114
+#: .\templates\account\gea_register.html:123
 msgid "Register"
 msgstr "Registro"
 
-#: .\templates\account\gea_register.html:116
+#: .\templates\account\gea_register.html:125
 msgid "Do you already have an account? Sign in"
 msgstr "¿Ya tienes una cuenta? Iniciar sesión"
 
@@ -136,14 +169,14 @@ msgstr "Agregar nuevo activo"
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:112
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:222
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:29
-#: .\templates\dashboard\pages\buyers\profitability.html:187
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:177
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:245
+#: .\templates\dashboard\pages\buyers\profitability.html:191
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:182
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:250
 #: .\templates\dashboard\pages\holders\asset_location_base.html:75
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:95
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:109
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:293
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:307
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:295
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:309
 msgid "Category"
 msgstr "Categoría"
 
@@ -204,9 +237,9 @@ msgstr "Categorías"
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:223
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:65
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:80
-#: .\templates\dashboard\pages\buyers\profitability.html:199
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:178
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:246
+#: .\templates\dashboard\pages\buyers\profitability.html:203
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:183
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:251
 #: .\templates\dashboard\pages\holders\asset_location_base.html:76
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:201
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:212
@@ -214,13 +247,13 @@ msgid "Description"
 msgstr "Descripción"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:148
-#: .\templates\dashboard\pages\buyers\profitability.html:336
+#: .\templates\dashboard\pages\buyers\profitability.html:348
 #: .\templates\email\service_order_email_template.html:83
 msgid "Created"
 msgstr "Creado"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:174
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:271
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:276
 msgid "No categories found."
 msgstr "No se encontraron categorías."
 
@@ -252,7 +285,7 @@ msgstr "Registrar un nuevo nombre de activo y su categoría"
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:195
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:20
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:23
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:141
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:146
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:88
 msgid "Add New Purchase Order"
 msgstr "Agregar nueva orden de compra"
@@ -285,13 +318,13 @@ msgstr "Nuevo activo"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:62
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:221
-#: .\templates\dashboard\pages\buyers\profitability.html:184
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:176
+#: .\templates\dashboard\pages\buyers\profitability.html:188
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:181
 #: .\templates\dashboard\pages\holders\asset_location_base.html:74
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:94
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:108
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:292
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:306
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:294
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:308
 msgid "Asset Name"
 msgstr "Nombre del activo"
 
@@ -309,12 +342,12 @@ msgstr "Detalles del Activo"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:100
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:220
-#: .\templates\dashboard\pages\buyers\profitability.html:230
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:175
+#: .\templates\dashboard\pages\buyers\profitability.html:238
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:180
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:93
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:107
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:291
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:305
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:293
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:307
 msgid "Image"
 msgstr "Imagen"
 
@@ -338,8 +371,8 @@ msgid "Existing Assets"
 msgstr "Activos existentes"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:224
-#: .\templates\dashboard\pages\buyers\profitability.html:196
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:179
+#: .\templates\dashboard\pages\buyers\profitability.html:200
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:184
 #: .\templates\dashboard\pages\holders\add_asset_location.html:54
 #: .\templates\dashboard\pages\holders\asset_location_base.html:77
 #: .\templates\email\service_order_email_template.html:113
@@ -347,7 +380,7 @@ msgid "Observations"
 msgstr "Observaciones"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:276
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:231
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:236
 msgid "No assets found."
 msgstr "No se encontraron activos."
 
@@ -373,8 +406,8 @@ msgstr "País de compra"
 
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:73
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:33
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:294
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:308
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:296
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:310
 msgid "Offer Type"
 msgstr "Tipo de orden"
 
@@ -387,8 +420,8 @@ msgstr "Tipo de orden"
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:35
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:100
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:114
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:295
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:309
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:297
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:311
 #: .\templates\email\service_order_email_template.html:100
 msgid "Quantity Type"
 msgstr "Tipo de cantidad"
@@ -461,7 +494,8 @@ msgid "Delete Purchase Order"
 msgstr "Borrar Orden de Compra"
 
 #: .\templates\dashboard\pages\buyers\modals\delete_offer_modal.html:11
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:298
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:303
+#: .\templates\dashboard\pages\holders\modals\delete_location_reference_modal.html:9
 msgid "Close"
 msgstr "Cerrar"
 
@@ -518,8 +552,8 @@ msgid "Offer ID"
 msgstr "Orden ID"
 
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:41
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:296
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:310
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:298
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:312
 msgid "Offer Quantity"
 msgstr "Cantidad requerida"
 
@@ -657,14 +691,14 @@ msgstr "Estado"
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:115
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:205
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:216
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:299
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:313
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:301
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:315
 msgid "Actions"
 msgstr "Acciones"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:76
-#: .\templates\dashboard\pages\buyers\profitability.html:152
-#: .\templates\dashboard\pages\buyers\profitability.html:260
+#: .\templates\dashboard\pages\buyers\profitability.html:156
+#: .\templates\dashboard\pages\buyers\profitability.html:268
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:374
 msgid "Paid"
 msgstr "Pagado"
@@ -682,9 +716,9 @@ msgid "Pending"
 msgstr "Pendiente"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:83
-#: .\templates\dashboard\pages\buyers\profitability.html:397
+#: .\templates\dashboard\pages\buyers\profitability.html:409
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:91
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:446
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:451
 msgid "Show full ID"
 msgstr "Mostrar ID completo"
 
@@ -694,51 +728,51 @@ msgstr "Mostrar ID completo"
 msgid "Paid,Pending"
 msgstr "Pagado,Pendiente"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:135
+#: .\templates\dashboard\pages\buyers\profitability.html:139
 msgid "Profitability Overview"
 msgstr "Descripción general de la rentabilidad"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:145
-#: .\templates\dashboard\pages\buyers\profitability.html:259
+#: .\templates\dashboard\pages\buyers\profitability.html:149
+#: .\templates\dashboard\pages\buyers\profitability.html:267
 msgid "In Progress"
 msgstr "En curso"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:164
+#: .\templates\dashboard\pages\buyers\profitability.html:168
 msgid "Purchase orders by month"
 msgstr "Órdenes de compra por mes"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:177
+#: .\templates\dashboard\pages\buyers\profitability.html:181
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:75
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:116
 msgid "Assets"
 msgstr "Activos"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:177
+#: .\templates\dashboard\pages\buyers\profitability.html:181
 msgid "Inventory"
 msgstr "Inventario"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:190
+#: .\templates\dashboard\pages\buyers\profitability.html:194
 msgid "Total Quantity (boxes)"
 msgstr "Cantidad total (cajas)"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:193
+#: .\templates\dashboard\pages\buyers\profitability.html:197
 msgid "Total Quantity (units)"
 msgstr "Cantidad total (unidades)"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:227
+#: .\templates\dashboard\pages\buyers\profitability.html:235
 msgid "Zero QTY"
 msgstr "Cantidad cero"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:233
+#: .\templates\dashboard\pages\buyers\profitability.html:241
 msgid "Units or Boxes"
 msgstr "Unidades o Cajas"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:343
+#: .\templates\dashboard\pages\buyers\profitability.html:355
 msgid "Closed"
 msgstr "Cerrado"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:396
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:447
+#: .\templates\dashboard\pages\buyers\profitability.html:408
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:452
 msgid "Hide full ID"
 msgstr "Esconder ID completo"
 
@@ -751,7 +785,6 @@ msgid "Buyer Dashboard"
 msgstr "Panel del comprador"
 
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:69
-#| msgid "Created by"
 msgid "Created By"
 msgstr "Creado por"
 
@@ -769,15 +802,15 @@ msgstr "Si"
 msgid "No"
 msgstr "No"
 
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:166
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:171
 msgid "Tables of Asset Names and Categories"
 msgstr "Tablas de nombres y categorías de activos"
 
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:297
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:302
 msgid "Purchase Order Successfully Deleted"
 msgstr "Orden de compra eliminada"
 
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:299
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:304
 msgid "There was a problem deleting the purchase order."
 msgstr "Hubo un problema al eliminar la orden de compra."
 
@@ -1045,7 +1078,7 @@ msgid "Amount"
 msgstr "Cantidad"
 
 #: .\templates\dashboard\pages\holders\add_asset_location.html:66
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:129
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:133
 msgid "Add Asset"
 msgstr "Añadir Activo"
 
@@ -1067,6 +1100,7 @@ msgstr "Cree y administre sus activos y visualice órdenes de servicio"
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:16
 #: .\templates\dashboard\pages\holders\location\add_location.html:15
 #: .\templates\dashboard\pages\holders\location\edit_location.html:16
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:125
 msgid "Assets and Service Orders"
 msgstr "Activos y Órdenes de Servicio"
 
@@ -1122,33 +1156,33 @@ msgstr "Continente"
 msgid "Is Active"
 msgstr "Está activo"
 
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:284
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:286
 msgid "Total current offers:"
 msgstr "Total de ofertas actuales:"
 
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:297
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:311
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:299
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:313
 msgid "Continent Preference"
 msgstr "Preferencia de continente"
 
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:298
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:312
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:300
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:314
 msgid "Country Preference"
 msgstr "Preferencia de país"
 
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:374
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:376
 msgid "Details"
 msgstr "Detalles"
 
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:381
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:383
 msgid "Payment order already sent"
 msgstr "Orden de pago ya enviada"
 
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:403
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:405
 msgid "Your account is under verification process."
 msgstr "Su cuenta está bajo proceso de verificación."
 
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:405
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:407
 msgid ""
 "\n"
 "                    This process can take between 24 to 72 hours (1 to 3 business days), Please be patient while we\n"
@@ -1158,7 +1192,7 @@ msgstr ""
 "\n"
 "Este proceso puede tardar entre 24 y 72 horas (1 a 3 días hábiles). Por favor, tenga paciencia mientras verificamos su cuenta."
 
-#: .\templates\dashboard\pages\holders\holder_dashboard.html:411
+#: .\templates\dashboard\pages\holders\holder_dashboard.html:413
 msgid ""
 "\n"
 "                    If you have any questions, please contact our support team.\n"
@@ -1178,7 +1212,7 @@ msgstr "Referencia"
 
 #: .\templates\dashboard\pages\holders\location\add_location.html:110
 #: .\templates\dashboard\pages\holders\location\edit_location.html:101
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:125
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:129
 msgid "Add Location Reference"
 msgstr "Agregar referencia de ubicación"
 
@@ -1483,6 +1517,10 @@ msgstr ""
 #: .\templates\two_factor\core\login.html:54
 msgid "Username or Email"
 msgstr "Usuario o Correo electrónico"
+
+#: .\templates\two_factor\core\login.html:73
+msgid "Password"
+msgstr "Contraseña"
 
 #: .\templates\two_factor\core\login.html:93
 msgid "Forgot your password?"
