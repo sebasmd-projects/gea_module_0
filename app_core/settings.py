@@ -316,7 +316,7 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 15000
 
 # Cron jobs
 CRONJOBS = [
-    ('0 1 * * *', 'apps.common.utils.cron.generate_and_send_gea_code')
+    ('0 19 * * *', 'apps.common.utils.cron.generate_and_send_gea_code')
 ]
 
 # ChatGPT API Key
