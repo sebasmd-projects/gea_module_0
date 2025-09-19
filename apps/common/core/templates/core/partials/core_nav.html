@@ -11,10 +11,11 @@
   {# ======== BOTONES CENTRALES en DESKTOP (MD+): ocultos en SM ======== #}
   {% if request.user.is_authenticated %}
     <div class="d-none d-md-flex flex-grow-1 justify-content-center gap-2">
-      {% if request.user.is_buyer or request.user.is_superuser %}
+      {% if request.user.is_buyer or request.user.is_superuser or perms.users.can_view_buyer %}
         <a href="{% url 'buyers:buyer_index' %}" class="btn text-black fw-semibold gea_gradient">{% trans 'Buyer' %}</a>
       {% endif %}
-      {% if request.user.is_asset_holder or request.user.is_superuser %}
+
+      {% if request.user.is_asset_holder or request.user.is_superuser or perms.users.can_view_holder %}
         <a href="{% url 'assets:holder_index' %}" class="btn text-black fw-semibold gea_gradient">{% trans 'Client Area' %}</a>
       {% endif %}
     </div>
@@ -75,10 +76,11 @@
       <div class="w-100 d-flex flex-column gap-2">
         {# ======== BOTONES CENTRALES (solo autenticado) para SM ======== #}
         {% if request.user.is_authenticated %}
-          {% if request.user.is_buyer or request.user.is_superuser %}
+          {% if request.user.is_buyer or request.user.is_superuser or perms.users.can_view_buyer %}
             <a href="{% url 'buyers:buyer_index' %}" class="btn btn-light text-black fw-semibold gea_gradient w-100">{% trans 'Buyer' %}</a>
           {% endif %}
-          {% if request.user.is_asset_holder or request.user.is_superuser %}
+
+          {% if request.user.is_asset_holder or request.user.is_superuser or perms.users.can_view_holder %}
             <a href="{% url 'assets:holder_index' %}" class="btn btn-light text-black fw-semibold gea_gradient w-100">{% trans 'Client Area' %}</a>
           {% endif %}
         {% endif %}
