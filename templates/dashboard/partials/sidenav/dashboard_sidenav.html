@@ -120,6 +120,10 @@
           </a>
           <div class="collapse {% collapse_open_class 'assets_location:add_location' 'assets_location:add_asset_location' %}" id="collapseAssets" data-bs-parent="#accordionSidenav">
             <nav class="sidenav-menu-nested nav">
+              <a class="nav-link {% active_class 'assets:holder_index' %}" href="{% url 'assets:holder_index' %}">
+                <div class="nav-link-icon"><i class="bi bi-table"></i></div>
+                {% trans 'Assets and Service Orders' %}
+              </a>
               <a class="nav-link {% active_class 'assets_location:add_location' %}" href="{% url 'assets_location:add_location' %}">
                 <div class="nav-link-icon"><i class="bi bi-geo-alt"></i></div>
                 {% trans 'Add Location Reference' %}
