@@ -308,6 +308,19 @@ class UserModel(TimeStampedModel, AbstractUser):
         max_length=25,
         default='',
     )
+    
+    referred = models.ForeignKey(
+        'self',
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name='referrals'
+    )
+    
+    is_referred = models.BooleanField(
+        _('Is Referred'),
+        default=False
+    )
 
     @classmethod
     @lru_cache(maxsize=1)

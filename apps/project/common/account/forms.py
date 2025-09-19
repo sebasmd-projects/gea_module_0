@@ -148,6 +148,20 @@ class GeaUserRegisterForm(BaseUserForm):
             "class": "form-select",
         })
     )
+    
+    referred = forms.ModelChoiceField(
+        label=_("How did you hear about us?"),
+        required=False,
+        queryset=UserModel.objects.filter(is_referred=True),
+        widget=forms.Select(attrs={
+            "id": "register_referred",
+            "class": "form-select",
+        })
+    )
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['referred'].label_from_instance = lambda obj: obj.get_full_name()
 
     def clean(self):
         cleaned = super().clean()

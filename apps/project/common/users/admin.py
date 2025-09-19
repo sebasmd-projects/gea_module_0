@@ -53,6 +53,8 @@ class UserModelAdmin(UserAdmin, GeneralAdminModel):
         'is_active',
         'is_superuser',
         'is_verified_holder',
+        'referred',
+        'is_referred',
         "user_type",
         'get_groups',
     )
@@ -62,6 +64,7 @@ class UserModelAdmin(UserAdmin, GeneralAdminModel):
         "is_superuser",
         "is_active",
         "is_verified_holder",
+        'is_referred',
         "user_type"
     )
 
@@ -110,6 +113,7 @@ class UserModelAdmin(UserAdmin, GeneralAdminModel):
                 'phone_number_code',
                 'phone_number',
                 'email',
+                'referred',
             )
         }),
         (
@@ -119,6 +123,7 @@ class UserModelAdmin(UserAdmin, GeneralAdminModel):
                     'is_active',
                     'is_staff',
                     'is_superuser',
+                    'is_referred',
                     'groups',
                     'user_permissions',
                 )

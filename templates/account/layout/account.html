@@ -14,12 +14,13 @@ style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4
 {% endblock body_properties %}
 
 {% block layout %}
-<div id="layoutAuthentication" class="d-flex flex-column">
-    <div id="layoutAuthentication_content" class="flex-grow-1">
-        <main class="m-1">
+<div id="layoutAuthentication">
+    <div id="layoutAuthentication_content">
+        <main>
             {% block layout_content %}{% endblock %}
         </main>
     </div>
+
     <div id="layoutAuthentication_footer" class="mt-auto">
         {% include 'partials/footer/footer.html' %}
     </div>
