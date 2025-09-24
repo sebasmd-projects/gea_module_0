@@ -11,30 +11,91 @@ from .models import (AddressModel, CityModel, CountryModel, StateModel,
 @admin.register(UserModel)
 class UserModelAdmin(UserAdmin, GeneralAdminModel):
 
+    @staticmethod
+    def _can_view_all(request):
+        u = request.user
+        return u.is_superuser or u.has_perm('users.can_view_all_users')
+
+    @staticmethod
+    def _can_view_buyers(request):
+        return request.user.has_perm('users.can_view_buyers')
+
+    @staticmethod
+    def _can_view_holders(request):
+        return request.user.has_perm('users.can_view_holders')
+
     def get_queryset(self, request):
-        """
-        Muestra solo al usuario autenticado su propio registro si no es superusuario.
-        """
+
         qs = super().get_queryset(request)
-        if request.user.is_superuser:
+
+        if self._can_view_all(request):
             return qs
+
+        if self._can_view_buyers(request):
+            return qs.filter(user_type=UserModel.UserTypeChoices.BUYER)
+
+        if self._can_view_holders(request):
+            return qs.filter(user_type__in=UserModel.asset_holder_values())
+
         return qs.filter(id=request.user.id)
 
-    def has_change_permission(self, request, obj=None):
-        """
-        Permite al usuario cambiar solo su propio registro.
-        """
-        if obj is None:  # Para las vistas generales de la lista
+    def _can_access_obj(self, request, obj):
+        if obj is None:
             return True
-        return obj == request.user or request.user.is_superuser
+        if self._can_view_all(request):
+            return True
+        if obj == request.user:
+            return True
+        if self._can_view_buyers(request):
+            return obj.user_type == UserModel.UserTypeChoices.BUYER
+        if self._can_view_holders(request):
+            return obj.user_type in UserModel.asset_holder_values()
+        return False
 
     def has_view_permission(self, request, obj=None):
+        return super().has_view_permission(request, obj) and self._can_access_obj(request, obj)
+
+    def has_change_permission(self, request, obj=None):
+        return super().has_change_permission(request, obj) and self._can_access_obj(request, obj)
+
+    def has_delete_permission(self, request, obj=None):
+        return super().has_delete_permission(request, obj) and self._can_access_obj(request, obj)
+
+    def get_readonly_fields(self, request, obj=None):
         """
-        Permite al usuario ver solo su propio registro.
+        Lock down specific fields based on custom perms.
         """
-        if obj is None:  # Para las vistas generales de la lista
-            return True
-        return obj == request.user or request.user.is_superuser
+        ro_fields = set(super().get_readonly_fields(request, obj))
+
+        # Passwords
+        if not (
+            request.user.is_superuser or
+            request.user.has_perm('users.can_change_all_passwords') or
+            (obj == request.user and request.user.has_perm('users.can_change_password'))
+        ):
+            ro_fields |= {'password'}
+
+        # Personal info
+        if not request.user.has_perm('users.can_change_users_personal_info'):
+            ro_fields |= {'first_name', 'last_name'}
+
+        # Contact info
+        if not request.user.has_perm('users.can_change_users_contact_info'):
+            ro_fields |= {'phone_number_code', 'phone_number', 'email'}
+
+        # Referred
+        if not request.user.has_perm('users.can_change_users_referred'):
+            ro_fields |= {'referred'}
+
+        # Verify holders
+        if not request.user.has_perm('users.can_verify_holders'):
+            ro_fields |= {'is_verified_holder'}
+
+        # Deactivate
+        if not request.user.has_perm('users.can_deactivate_users'):
+            ro_fields |= {'is_active'}
+
+        return tuple(ro_fields)
 
     search_fields = (
         'id',
@@ -104,18 +165,20 @@ class UserModelAdmin(UserAdmin, GeneralAdminModel):
                 'fields': (
                     'first_name',
                     'last_name',
-                    
+
                 )
             }
         ),
-        ('Contact Information', {
-            'fields': (
-                'phone_number_code',
-                'phone_number',
-                'email',
-                'referred',
-            )
-        }),
+        (
+            _('Contact Information'), {
+                'fields': (
+                    'phone_number_code',
+                    'phone_number',
+                    'email',
+                    'referred',
+                )
+            }
+        ),
         (
             _('Permissions'), {
                 'fields': (
@@ -155,7 +218,7 @@ class UserModelAdmin(UserAdmin, GeneralAdminModel):
 
     def full_code_and_phonenumber(self, obj):
         return f"+{obj.phone_number_code.split('-')[0]}{obj.phone_number}"
-    
+
     def get_fieldsets(self, request, obj=None):
         """
         Restringe los campos visibles en el formulario de edición según el usuario.
@@ -183,7 +246,7 @@ class UserModelAdmin(UserAdmin, GeneralAdminModel):
     get_groups.short_description = _('Groups')
 
     get_full_name.short_description = _('Names')
-    
+
     full_code_and_phonenumber.short_description = _('Phone Number')
 
 

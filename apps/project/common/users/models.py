@@ -363,6 +363,20 @@ class UserModel(TimeStampedModel, AbstractUser):
         verbose_name = _('User')
         verbose_name_plural = _('Users')
         unique_together = [['username', 'email']]
+        permissions = [
+            ('can_view_buyer', _('Can view Buyer dashboard')),
+            ('can_view_holder', _('Can view Client Area dashboard')),
+            ('can_view_all_users', _('Can view all users')),
+            ('can_view_buyers', _('Can view only buyers users')),
+            ('can_view_holders', _('Can view only holders users')),
+            ('can_change_password', _('Can change user password')),
+            ('can_change_all_passwords', _('Can change all users passwords')),
+            ('can_change_users_personal_info', _('Can change users personal information')),
+            ('can_change_users_contact_info', _('Can change users contact information')),
+            ('can_change_users_referred', _('Can change users referred by field')),
+            ('can_verify_holders', _('Can verify holders')),
+            ('can_deactivate_users', _('Can deactivate users')),
+        ]
 
 
 class CountryModel(TimeStampedModel):

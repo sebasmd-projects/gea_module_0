@@ -1,4 +1,4 @@
-from django.contrib.auth import logout
+from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
@@ -34,7 +34,7 @@ class GeaUserRegisterView(FormView):
 
     def form_valid(self, form):
         try:
-            UserModel.objects.create_user(
+            user = UserModel.objects.create_user(
                 username=form.cleaned_data['username'],
                 email=form.cleaned_data['email'],
                 first_name=form.cleaned_data['first_name'],
@@ -43,23 +43,47 @@ class GeaUserRegisterView(FormView):
                 user_type=form.cleaned_data['user_type'],
                 phone_number_code=form.cleaned_data['phone_number_code'],
                 phone_number=form.cleaned_data['phone_number'],
+                referred=form.cleaned_data['referred'],
             )
         except IntegrityError as e:
             if "email_hash" in str(e):
-                form.add_error(
-                    "email",
-                    _("A user with this email already exists.")
-                )
+                form.add_error("email", _(
+                    "A user with this email already exists."))
                 return self.form_invalid(form)
-            raise e
+            raise
 
-        return super(GeaUserRegisterView, self).form_valid(form)
+        # Autenticación e inicio de sesión inmediato
+        auth_user = authenticate(
+            self.request,
+            username=form.cleaned_data['username'],
+            password=form.cleaned_data['password'],
+        )
+        if auth_user is not None:
+            login(self.request, auth_user)
+
+        # 1) Priorizar next_url si viene en GET
+        next_url = self.request.GET.get('next')
+        if next_url and url_has_allowed_host_and_scheme(
+            url=next_url,
+            allowed_hosts={self.request.get_host()},
+            require_https=self.request.is_secure()
+        ):
+            return redirect(next_url)
+
+        # 2) Si no hay next, redirigir según rol
+        if getattr(user, "is_asset_holder", False):
+            return redirect('assets:holder_index')
+
+        if getattr(user, "is_buyer", False):
+            return redirect('buyers:buyer_index')
+
+        # 3) Fallback
+        return redirect('core:index')
 
     def form_invalid(self, form):
-        return super(GeaUserRegisterView, self).form_invalid(form)
+        return super().form_invalid(form)
 
     def get_success_url(self):
-        next_url = self.request.GET.get('next')
-        if next_url and url_has_allowed_host_and_scheme(url=next_url, allowed_hosts={self.request.get_host()}, require_https=self.request.is_secure(),):
-            return next_url
-        return reverse('two_factor:login')
+        # No se usará porque hacemos redirect en form_valid,
+        # pero lo dejamos por compatibilidad
+        return reverse('core:index')
