@@ -37,9 +37,9 @@ def human_size(num_bytes: int) -> str:
 
 def main():
     load_dotenv()
-    api_key = os.getenv("OPENAI_API_KEY", "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")
+    api_key = os.getenv("CHAT_GPT_API_KEY")
     if not api_key:
-        print("ERROR: falta OPENAI_API_KEY en .env o en variables de entorno.")
+        print("ERROR: falta CHAT_GPT_API_KEY en .env o en variables de entorno.")
         sys.exit(1)
 
     if len(sys.argv) < 2:
