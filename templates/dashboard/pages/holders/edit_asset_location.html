@@ -45,9 +45,21 @@
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-12">
+                {% if request.LANGUAGE_CODE == 'es' %}
+                    <label for="id_observations_es">{% trans 'Observations (ES)' %}</label>
+                {{ form.observations_es|add_attrs:"class=form-control" }}
+                {% else %}
+                    <label for="id_observations_en">{% trans 'Observations (EN)' %}</label>
+                    {{ form.observations_en|add_attrs:"class=form-control" }}
+                {% endif %}
+            </div>
+        </div>
+
         <div class="d-grid gap-2">
             <button type="submit" class="btn btn-outline-success">
-                {% trans 'Add Location' %}
+                {% trans 'Edit Asset' %}
             </button>
         </div>
     </form>
