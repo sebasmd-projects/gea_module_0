@@ -89,6 +89,7 @@ class AssetLocationAdmin(GeneralAdminModel):
         'created_by',
         'get_location_reference',
         'get_location_country',
+        'quantity_type',
         'amount',
         'get_asset_es_name',
         'is_active',
@@ -96,6 +97,14 @@ class AssetLocationAdmin(GeneralAdminModel):
         'observations_en',
     )
 
+    list_filter = (
+        'is_active',
+        'quantity_type',
+        'asset__category',
+        'location__country__continent',
+        'created_by',
+    )
+    
     list_display_links = list_display[:3]
 
     readonly_fields = (
