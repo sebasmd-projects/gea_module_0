@@ -81,6 +81,8 @@ class AssetLocationAdmin(GeneralAdminModel):
         'created_by__email',
         'created_by__first_name',
         'created_by__last_name',
+        'observations_es',
+        'observations_en',
     )
 
     list_display = (
@@ -90,6 +92,8 @@ class AssetLocationAdmin(GeneralAdminModel):
         'amount',
         'get_asset_es_name',
         'is_active',
+        'observations_es',
+        'observations_en',
     )
 
     list_display_links = list_display[:3]

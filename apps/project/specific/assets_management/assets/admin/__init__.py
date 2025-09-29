@@ -319,7 +319,8 @@ class AssetModelAdmin(ImportExportModelAdmin, GeneralAdminModel):
     get_asset_en_name.short_description = _('Asset Name (EN)')
 
     def get_asset_total_quantity_by_type(self, obj):
-        totals = obj.asset_total_quantity_by_type()
+        totals = obj.asset_total_quantity_by_type() or {}
         return ", ".join(f"{key}: {value}" for key, value in totals.items())
+    
     get_asset_total_quantity_by_type.short_description = _(
         'Total Quantity by Type')
