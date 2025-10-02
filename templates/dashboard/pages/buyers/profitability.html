@@ -202,6 +202,11 @@
                   <th>
                     {% trans 'Description' %}
                   </th>
+                  {% if request.user.is_staff %}
+                  <th>
+                    {% trans 'Filters' %}
+                  </th>
+                  {% endif %}
                 </tr>
               </thead>
               <tbody>
@@ -209,25 +214,27 @@
                   <tr>
                     <td>
                       {{ r.name }}
-                      {% for token in r.tokens %}
-                        <span class="d-none">{{ token }}</span>
-                      {% endfor %}
                     </td>
                     <td>{{ r.category }}</td>
                     <td>
-                      <span data-type="number">{{ r.total_boxes|intcomma }}</span>
+                      <span class="format_number" data-value="{{ r.total_boxes }}">{{ r.total_boxes }}</span>
                     </td>
                     <td>
-                      <span data-type="number">{{ r.total_units|intcomma }}</span>
+                      <span class="format_number" data-value="{{ r.total_units }}">{{ r.total_units }}</span>
                     </td>
                     <td>{{ r.observations }}</td>
                     <td>{{ r.description }}</td>
+                    {% if request.user.is_staff %}
+                    <td>
+                      {% for token in r.tokens %}
+                        {{ token }}
+                      {% endfor %}
+                    </td>
+                    {% endif %}
                   </tr>
                 {% endfor %}
               </tbody>
             </table>
-
-            
             {% if request.user.is_staff %}
               <div class="col-4">
               <table class="table table-sm table-dark align-middle mt-5">
@@ -259,10 +266,6 @@
               </table>
             </div>
             {% endif %}
-              
-
-            
-
           </div>
         </div>
       </div>
@@ -420,14 +423,16 @@
 </script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const formatter = new Intl.NumberFormat('es-ES'); // cambia 'es-ES', 'en-US', etc.
-  document.querySelectorAll("#assets_table span[data-type='number']").forEach(el => {
-    const num = parseInt(el.textContent.replace(/\s/g,''), 10);
-    if (!isNaN(num)) {
-      el.textContent = formatter.format(num);
+document.addEventListener('DOMContentLoaded', () => {
+  const locale = document.documentElement.lang || 'es'; // usa lang del <html> o fuerza es
+  document.querySelectorAll('span.format_number').forEach(el => {
+    const raw = el.dataset.value ?? el.textContent; // número crudo
+    const n = parseInt(raw, 10);
+    if (!Number.isNaN(n)) {
+      el.textContent = n.toLocaleString(locale);    // 50,671,566 (o 50.671.566 según el locale)
     }
   });
 });
 </script>
+
 {% endblock %}
