@@ -2,10 +2,10 @@
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.forms.models import BaseInlineFormSet
+from django.utils.formats import number_format
 from django.utils.translation import gettext_lazy as _
 from import_export import fields, resources
 from import_export.admin import ImportExportModelAdmin
-from import_export.formats.base_formats import CSV
 from import_export.widgets import ForeignKeyWidget
 
 from apps.common.utils.admin import GeneralAdminModel
@@ -73,7 +73,7 @@ class AssetCategoryInline(admin.StackedInline):
 
 @admin.register(AssetsNamesModel)
 class AssetsNamesModelAdmin(ImportExportModelAdmin, GeneralAdminModel):
-    
+
     def get_read_kwargs(self, encoding, **kwargs):
         params = super().get_read_kwargs(encoding, **kwargs)
         params["delimiter"] = ";"      # <- clave
@@ -214,6 +214,9 @@ class AssetCategoryModelAdmin(ImportExportModelAdmin, GeneralAdminModel):
 @admin.register(AssetModel)
 class AssetModelAdmin(ImportExportModelAdmin, GeneralAdminModel):
 
+    def _fmt_int(self, value):
+        return number_format(value, use_l10n=True, force_grouping=True)
+
     resource_classes = [AssetResource]
 
     autocomplete_fields = (
@@ -320,7 +323,19 @@ class AssetModelAdmin(ImportExportModelAdmin, GeneralAdminModel):
 
     def get_asset_total_quantity_by_type(self, obj):
         totals = obj.asset_total_quantity_by_type() or {}
-        return ", ".join(f"{key}: {value}" for key, value in totals.items())
-    
+        partes = []
+        for key, value in totals.items():
+            try:
+                partes.append(f"{key}: {self._fmt_int(int(value))}")
+            except (TypeError, ValueError):
+                partes.append(f"{key}: {value}")
+        return ", ".join(partes)
+
     get_asset_total_quantity_by_type.short_description = _(
         'Total Quantity by Type')
+
+    def default_order_fmt(self, obj):
+        return self._fmt_int(obj.default_order)
+
+    default_order_fmt.short_description = _('Priority')
+    default_order_fmt.admin_order_field = 'default_order'

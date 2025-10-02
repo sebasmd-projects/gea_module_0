@@ -424,12 +424,12 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  const locale = document.documentElement.lang || 'es'; // usa lang del <html> o fuerza es
+  const locale = 'es';
   document.querySelectorAll('span.format_number').forEach(el => {
-    const raw = el.dataset.value ?? el.textContent; // número crudo
+    const raw = el.dataset.value ?? el.textContent;
     const n = parseInt(raw, 10);
-    if (!Number.isNaN(n)) {
-      el.textContent = n.toLocaleString(locale);    // 50,671,566 (o 50.671.566 según el locale)
+    if (!Number.isNaN(n)) { 
+      el.textContent = n.toLocaleString(locale);
     }
   });
 });
