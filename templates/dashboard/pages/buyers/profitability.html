@@ -190,9 +190,9 @@
                   <th>
                     {% trans 'Category' %}
                   </th>
-                  <th>
+                  <th  data-type="number">
                     {% trans 'Total Quantity (boxes)' %}
-                  </th>
+                  </th  data-type="number">
                   <th>
                     {% trans 'Total Quantity (units)' %}
                   </th>
@@ -216,11 +216,11 @@
                       {{ r.name }}
                     </td>
                     <td>{{ r.category }}</td>
-                    <td>
-                      <span class="format_number" data-value="{{ r.total_boxes }}">{{ r.total_boxes }}</span>
+                    <td data-order="{{ r.total_boxes }}">
+                      <span class="format_number">{{ r.total_boxes }}</span>
                     </td>
-                    <td>
-                      <span class="format_number" data-value="{{ r.total_units }}">{{ r.total_units }}</span>
+                    <td data-order="{{ r.total_units }}">
+                      <span class="format_number">{{ r.total_units }}</span>
                     </td>
                     <td>{{ r.observations }}</td>
                     <td>{{ r.description }}</td>
