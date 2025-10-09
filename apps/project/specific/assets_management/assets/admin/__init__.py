@@ -29,28 +29,6 @@ class AssetsNamesResource(resources.ModelResource):
         fields = ('id', 'is_active', 'default_order', 'es_name', 'en_name')
 
 
-class AssetResource(resources.ModelResource):
-    asset_name = fields.Field(attribute='asset_name', column_name='asset_id',
-                              widget=ForeignKeyWidget(AssetsNamesModel, 'id'))
-    category = fields.Field(attribute='category', column_name='category_id',
-                            widget=ForeignKeyWidget(AssetCategoryModel, 'id'))
-
-    class Meta:
-        model = AssetModel
-        fields = (
-            'id',
-            'is_active',
-            'default_order',
-            'asset_img',
-            'asset_name',
-            'category',
-            'es_description',
-            'en_description',
-            'es_observations',
-            'en_observations',
-        )
-
-
 class RequiredInlineFormSet(BaseInlineFormSet):
     def clean(self):
         super().clean()
@@ -60,6 +38,128 @@ class RequiredInlineFormSet(BaseInlineFormSet):
         ):
             raise ValidationError(_("You must add at least one asset."))
 
+
+class AssetResource(resources.ModelResource):
+    # Campos “virtuales” para exportar nombres y categorías
+    asset_name_es = fields.Field(column_name='nombre_es')
+    asset_name_en = fields.Field(column_name='nombre_en')
+    category_es = fields.Field(column_name='categoria_es')
+    category_en = fields.Field(column_name='categoria_en')
+
+    # Reexpone descripciones/observaciones asegurando string vacío si son None
+    es_description = fields.Field(column_name='es_description')
+    en_description = fields.Field(column_name='en_description')
+    es_observations = fields.Field(column_name='es_observations')
+    en_observations = fields.Field(column_name='en_observations')
+    
+    # --- cantidades ---
+    qty_boxes  = fields.Field(column_name='cajas')
+    qty_units  = fields.Field(column_name='unidades')
+
+    class Meta:
+        model = AssetModel
+        # No incluimos 'id' ni los ForeignKey crudos
+        fields = (
+            'is_active',
+            'default_order',
+            # los 4 campos “virtuales”
+            'asset_name_es',
+            'asset_name_en',
+            
+            'qty_boxes',
+            'qty_units',
+            
+            'category_es',
+            'category_en',
+            # textos
+            'es_description',
+            'en_description',
+            'es_observations',
+            'en_observations',
+        )
+        export_order = (
+            'asset_name_es',
+            'asset_name_en',
+            'qty_boxes',
+            'qty_units',
+            'category_es',
+            'category_en',
+            'es_description',
+            'en_description',
+            'es_observations',
+            'en_observations',
+            'is_active',
+            'default_order',
+            
+        )
+
+    # ---- Dehydrate: cómo obtener el valor para cada columna “virtual” ----
+    def dehydrate_asset_name_es(self, obj):
+        return getattr(obj.asset_name, 'es_name', '') or ''
+
+    def dehydrate_asset_name_en(self, obj):
+        return getattr(obj.asset_name, 'en_name', '') or ''
+
+    def dehydrate_category_es(self, obj):
+        return getattr(obj.category, 'es_name', '') or ''
+
+    def dehydrate_category_en(self, obj):
+        return getattr(obj.category, 'en_name', '') or ''
+
+    # Asegurar cadenas vacías en lugar de None para textos
+    def dehydrate_es_description(self, obj):
+        return obj.es_description or ''
+
+    def dehydrate_en_description(self, obj):
+        return obj.en_description or ''
+
+    def dehydrate_es_observations(self, obj):
+        return obj.es_observations or ''
+
+    def dehydrate_en_observations(self, obj):
+        return obj.en_observations or ''
+    
+    # ----- Dehydrate: cantidades -----
+    @staticmethod
+    def _get_totals(obj):
+        """
+        Se espera que obj.asset_total_quantity_by_type() retorne un dict tipo:
+        {'Unidad': 12, 'Caja': 3} (clave/valor pueden variar en mayúsculas/plurales/inglés).
+        """
+        return (getattr(obj, 'asset_total_quantity_by_type', None) or (lambda: {}))() or {}
+    
+    @staticmethod
+    def _safe_int(value):
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return 0
+        
+    @classmethod
+    def _find_value_by_candidates(cls, totals, candidates):
+        """
+        Busca en `totals` por claves que coincidan con cualquiera en `candidates`
+        (insensible a mayúsculas y espacios). Devuelve el valor o 0 si no existe.
+        """
+        # normalizamos claves del dict una vez
+        normalized = {str(k).strip().lower(): v for k, v in totals.items()}
+        for cand in candidates:
+            if cand in normalized:
+                return cls._safe_int(normalized[cand])
+        return 0
+        
+    # ---------- Dehydrate: cantidades separadas ----------
+    def dehydrate_qty_boxes(self, obj):
+        totals = self._get_totals(obj)
+        # Soporta español/inglés y singular/plural
+        candidates = {'caja', 'cajas', 'box', 'boxes'}
+        return self._find_value_by_candidates(totals, candidates)
+
+    def dehydrate_qty_units(self, obj):
+        totals = self._get_totals(obj)
+        candidates = {'unidad', 'unidades', 'unit', 'units'}
+        return self._find_value_by_candidates(totals, candidates)
+   
 
 class AssetCategoryInline(admin.StackedInline):
     model = AssetModel  # Asume que AssetModel gestiona la relación con categoría
