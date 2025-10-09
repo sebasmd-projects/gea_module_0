@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-19 12:12-0500\n"
-"PO-Revision-Date: 2025-09-19 12:16+0000\n"
-"Last-Translator: Sebastian Morales <cto@globalallianceusa.com>\n"
+"POT-Creation-Date: 2025-10-09 14:02-0500\n"
+"PO-Revision-Date: 2025-10-09 14:04+0000\n"
+"Last-Translator: Admin Admin <admin@admin.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -20,72 +20,58 @@ msgstr ""
 "X-Translated-Using: django-rosetta 0.10.0\n"
 
 #: .\templates\account\gea_register.html:41
-#| msgid "Asset Information"
 msgid "Account Information"
 msgstr "Información de la Cuenta"
 
 #: .\templates\account\gea_register.html:43
-#| msgid "Username"
 msgid "Username*"
 msgstr "Usuario*"
 
 #: .\templates\account\gea_register.html:47
-#| msgid "First Names"
 msgid "First Names*"
 msgstr "Nombres*"
 
 #: .\templates\account\gea_register.html:51
-#| msgid "Last Names"
 msgid "Last Names*"
 msgstr "Apellidos*"
 
 #: .\templates\account\gea_register.html:54
-#| msgid "Asset Information"
 msgid "Security Information"
 msgstr "Información de Seguridad"
 
 #: .\templates\account\gea_register.html:56
-#| msgid "Password"
 msgid "Password*"
 msgstr "Contraseña*"
 
 #: .\templates\account\gea_register.html:60
-#| msgid "Confirm Password"
 msgid "Confirm Password*"
 msgstr "Confirmar Contraseña*"
 
 #: .\templates\account\gea_register.html:63
-#| msgid "Contact Confirmation"
 msgid "Contact Information"
 msgstr "Información de contacto "
 
 #: .\templates\account\gea_register.html:69
-#| msgid "Cellphone"
 msgid "Cellphone*"
 msgstr "Celular*"
 
 #: .\templates\account\gea_register.html:73
-#| msgid "Email"
 msgid "Email*"
 msgstr "Correo*"
 
 #: .\templates\account\gea_register.html:76
-#| msgid "Asset Information"
 msgid "User Information"
 msgstr "Información de Usuario"
 
 #: .\templates\account\gea_register.html:78
-#| msgid "User Type"
 msgid "User Type*"
 msgstr "Tipo de usuario*"
 
 #: .\templates\account\gea_register.html:82
-#| msgid "Reference"
 msgid "Referred By"
 msgstr "Referido por"
 
 #: .\templates\account\gea_register.html:86
-#| msgid "Unique Code"
 msgid "Unique Code*"
 msgstr "Código Único*"
 
@@ -194,7 +180,7 @@ msgstr "Categoría de activo (ES)*"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:76
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:136
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:97
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:113
 #: .\templates\dashboard\pages\holders\location\add_location.html:99
 #: .\templates\dashboard\pages\holders\location\edit_location.html:90
 msgid "Description (ES)"
@@ -206,7 +192,7 @@ msgstr "Categoría de activos (EN)*"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:101
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:161
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:99
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:115
 #: .\templates\dashboard\pages\holders\location\add_location.html:104
 #: .\templates\dashboard\pages\holders\location\edit_location.html:95
 msgid "Description (EN)"
@@ -223,9 +209,9 @@ msgstr "Agregar nuevo activo"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:125
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:200
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:125
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:141
 #: .\templates\dashboard\pages\buyers\edit_offer.html:147
-#: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:101
+#: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:108
 msgid "Go to my Purchase Orders"
 msgstr "Ir a mis órdenes de compra"
 
@@ -247,7 +233,7 @@ msgid "Description"
 msgstr "Descripción"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:148
-#: .\templates\dashboard\pages\buyers\profitability.html:348
+#: .\templates\dashboard\pages\buyers\profitability.html:358
 #: .\templates\email\service_order_email_template.html:83
 msgid "Created"
 msgstr "Creado"
@@ -259,7 +245,7 @@ msgstr "No se encontraron categorías."
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:196
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:297
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:144
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:160
 #: .\templates\dashboard\pages\buyers\edit_offer.html:169
 msgid "Saving and Translating..."
 msgstr "Guardando y traduciendo..."
@@ -342,7 +328,7 @@ msgstr "Detalles del Activo"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:100
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:220
-#: .\templates\dashboard\pages\buyers\profitability.html:238
+#: .\templates\dashboard\pages\buyers\profitability.html:247
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:180
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:93
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:107
@@ -357,12 +343,14 @@ msgid "Add New Category"
 msgstr "Añadir nueva categoría"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:148
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:112
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:128
+#: .\templates\dashboard\pages\holders\edit_asset_location.html:51
 msgid "Observations (ES)"
 msgstr "Observaciones (ES)"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:173
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:114
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:130
+#: .\templates\dashboard\pages\holders\edit_asset_location.html:54
 msgid "Observations (EN)"
 msgstr "Observaciones (EN)"
 
@@ -431,7 +419,12 @@ msgstr "Tipo de cantidad"
 msgid "Quantity required"
 msgstr "Cantidad requerida"
 
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:124
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:95
+#: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:96
+msgid "PO Requested Image"
+msgstr "Imagen de la OC pedida"
+
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:140
 msgid "Submit Purchase Order"
 msgstr "Enviar orden de compra"
 
@@ -570,15 +563,15 @@ msgstr "Observaciones"
 msgid "Asset Information"
 msgstr "Información de activos"
 
-#: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:105
+#: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:112
 msgid "Go to my Assets"
 msgstr "Ir a mis Activos Históricos"
 
-#: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:112
+#: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:119
 msgid "Open Approval Wizard"
 msgstr "Abrir el Asistente de Aprobación"
 
-#: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:120
+#: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:127
 msgid "View Profitability"
 msgstr "Ver rentabilidad"
 
@@ -698,7 +691,7 @@ msgstr "Acciones"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:76
 #: .\templates\dashboard\pages\buyers\profitability.html:156
-#: .\templates\dashboard\pages\buyers\profitability.html:268
+#: .\templates\dashboard\pages\buyers\profitability.html:278
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:374
 msgid "Paid"
 msgstr "Pagado"
@@ -716,7 +709,7 @@ msgid "Pending"
 msgstr "Pendiente"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:83
-#: .\templates\dashboard\pages\buyers\profitability.html:409
+#: .\templates\dashboard\pages\buyers\profitability.html:419
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:91
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:451
 msgid "Show full ID"
@@ -733,7 +726,7 @@ msgid "Profitability Overview"
 msgstr "Descripción general de la rentabilidad"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:149
-#: .\templates\dashboard\pages\buyers\profitability.html:267
+#: .\templates\dashboard\pages\buyers\profitability.html:277
 msgid "In Progress"
 msgstr "En curso"
 
@@ -759,19 +752,23 @@ msgstr "Cantidad total (cajas)"
 msgid "Total Quantity (units)"
 msgstr "Cantidad total (unidades)"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:235
+#: .\templates\dashboard\pages\buyers\profitability.html:207
+msgid "Filters"
+msgstr "Filtros"
+
+#: .\templates\dashboard\pages\buyers\profitability.html:244
 msgid "Zero QTY"
 msgstr "Cantidad cero"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:241
+#: .\templates\dashboard\pages\buyers\profitability.html:250
 msgid "Units or Boxes"
 msgstr "Unidades o Cajas"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:355
+#: .\templates\dashboard\pages\buyers\profitability.html:365
 msgid "Closed"
 msgstr "Cerrado"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:408
+#: .\templates\dashboard\pages\buyers\profitability.html:418
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:452
 msgid "Hide full ID"
 msgstr "Esconder ID completo"
@@ -1122,12 +1119,9 @@ msgstr ""
 "La ubicación del activo vincula un activo específico a una ubicación, definiendo dónde y en qué cantidad está disponible el activo."
 
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:5
+#: .\templates\dashboard\pages\holders\edit_asset_location.html:62
 msgid "Edit Asset"
 msgstr "Editar activo"
-
-#: .\templates\dashboard\pages\holders\edit_asset_location.html:50
-msgid "Add Location"
-msgstr "Agregar ubicación"
 
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:60
 msgid "My Historical Assets"
@@ -1680,6 +1674,13 @@ msgstr[1] "Tienes %(counter)s tokens de respaldo restantes."
 #: .\templates\two_factor\profile\profile.html:27
 msgid "Show Codes"
 msgstr "Mostrar códigos"
+
+#, fuzzy
+#~ msgid "Offer image"
+#~ msgstr "Tipo de orden"
+
+#~ msgid "Add Location"
+#~ msgstr "Agregar ubicación"
 
 #~ msgid "By total and type"
 #~ msgstr "Por total y tipo"

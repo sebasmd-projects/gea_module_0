@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-19 12:12-0500\n"
+"POT-Creation-Date: 2025-10-09 13:58-0500\n"
 "PO-Revision-Date: 2025-09-11 02:27-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,28 +19,28 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.0\n"
 
-#: .\apps\common\utils\admin.py:26
+#: .\apps\common\utils\admin.py:37
 #, python-brace-format
 msgid "Maximum allowed: {self.max_list_per_page} records."
 msgstr "Máximo permitido: {self.max_list_per_page} registros."
 
-#: .\apps\common\utils\admin.py:30
+#: .\apps\common\utils\admin.py:41
 msgid "Minimum allowed: 1 record."
 msgstr "Mínimo permitido: 1 registro."
 
-#: .\apps\common\utils\admin.py:34
+#: .\apps\common\utils\admin.py:45
 msgid "Please enter a valid number."
 msgstr "Por favor, introduzca un número válido."
 
-#: .\apps\common\utils\admin.py:59
+#: .\apps\common\utils\admin.py:70
 msgid "Information"
 msgstr "Información"
 
-#: .\apps\common\utils\admin.py:69
+#: .\apps\common\utils\admin.py:80
 msgid "Times"
 msgstr "Tiempos"
 
-#: .\apps\common\utils\admin.py:81
+#: .\apps\common\utils\admin.py:92
 msgid "Other"
 msgstr "Otros"
 

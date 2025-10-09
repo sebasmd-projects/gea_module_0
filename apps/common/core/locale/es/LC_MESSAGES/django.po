@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-15 17:13-0500\n"
+"POT-Creation-Date: 2025-10-09 13:58-0500\n"
 "PO-Revision-Date: 2025-09-15 17:14-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,38 +45,38 @@ msgid "Your browser does not support HTML5 video."
 msgstr "Su navegador no soporta vídeo HTML5."
 
 #: .\apps\common\core\templates\core\partials\core_nav.html:16
-#: .\apps\common\core\templates\core\partials\core_nav.html:80
+#: .\apps\common\core\templates\core\partials\core_nav.html:81
 msgid "Buyer"
 msgstr "Compra"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:19
-#: .\apps\common\core\templates\core\partials\core_nav.html:83
+#: .\apps\common\core\templates\core\partials\core_nav.html:20
+#: .\apps\common\core\templates\core\partials\core_nav.html:85
 msgid "Client Area"
 msgstr "Área de Clientes"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:25
+#: .\apps\common\core\templates\core\partials\core_nav.html:26
 msgid "On-demand offers"
 msgstr "OFERTAS bajo demanda"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:37
-#: .\apps\common\core\templates\core\partials\core_nav.html:89
+#: .\apps\common\core\templates\core\partials\core_nav.html:38
+#: .\apps\common\core\templates\core\partials\core_nav.html:91
 msgid "Login"
 msgstr "Iniciar Sesión"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:40
-#: .\apps\common\core\templates\core\partials\core_nav.html:90
+#: .\apps\common\core\templates\core\partials\core_nav.html:41
+#: .\apps\common\core\templates\core\partials\core_nav.html:92
 msgid "Register"
 msgstr "Registro"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:54
+#: .\apps\common\core\templates\core\partials\core_nav.html:55
 msgid "Menu"
 msgstr "Menú"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:61
+#: .\apps\common\core\templates\core\partials\core_nav.html:62
 msgid "Language"
 msgstr "Idioma"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:93
+#: .\apps\common\core\templates\core\partials\core_nav.html:95
 msgid "Logout"
 msgstr "Cerrar Sesión"
 

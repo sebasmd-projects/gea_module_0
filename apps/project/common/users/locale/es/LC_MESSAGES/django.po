@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-19 12:12-0500\n"
-"PO-Revision-Date: 2025-09-19 12:13+0000\n"
-"Last-Translator: Sebastian Morales <cto@globalallianceusa.com>\n"
+"POT-Creation-Date: 2025-10-09 13:58-0500\n"
+"PO-Revision-Date: 2025-10-09 14:03+0000\n"
+"Last-Translator: Admin Admin <admin@admin.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -19,35 +19,40 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.0\n"
 
-#: .\apps\project\common\users\admin.py:94
+#: .\apps\project\common\users\admin.py:155
 msgid "User Information"
 msgstr "Información de usuario"
 
-#: .\apps\project\common\users\admin.py:103
+#: .\apps\project\common\users\admin.py:164
 msgid "Personal Information"
 msgstr "Información personal"
 
-#: .\apps\project\common\users\admin.py:120
+#: .\apps\project\common\users\admin.py:173
+#| msgid "Personal Information"
+msgid "Contact Information"
+msgstr "Información de contacto"
+
+#: .\apps\project\common\users\admin.py:183
 msgid "Permissions"
 msgstr "Permisos"
 
-#: .\apps\project\common\users\admin.py:133
+#: .\apps\project\common\users\admin.py:196
 msgid "Dates"
 msgstr "Fechas"
 
-#: .\apps\project\common\users\admin.py:145
+#: .\apps\project\common\users\admin.py:208
 msgid "Priority"
 msgstr "Orden"
 
-#: .\apps\project\common\users\admin.py:183
+#: .\apps\project\common\users\admin.py:246
 msgid "Groups"
 msgstr "Grupos"
 
-#: .\apps\project\common\users\admin.py:185
+#: .\apps\project\common\users\admin.py:248
 msgid "Names"
 msgstr "Nombres"
 
-#: .\apps\project\common\users\admin.py:187
+#: .\apps\project\common\users\admin.py:250
 #: .\apps\project\common\users\models.py:307
 msgid "Phone Number"
 msgstr "Número de celular"
@@ -921,120 +926,174 @@ msgstr "El nombre de usuario no puede contener el carácter \"@\"."
 msgid "Users"
 msgstr "Usuarios"
 
+#: .\apps\project\common\users\models.py:367
+msgid "Can view Buyer dashboard"
+msgstr ""
+
+#: .\apps\project\common\users\models.py:368
+msgid "Can view Client Area dashboard"
+msgstr ""
+
+#: .\apps\project\common\users\models.py:369
+msgid "Can view all users"
+msgstr ""
+
 #: .\apps\project\common\users\models.py:370
+msgid "Can view only buyers users"
+msgstr ""
+
+#: .\apps\project\common\users\models.py:371
+msgid "Can view only holders users"
+msgstr ""
+
+#: .\apps\project\common\users\models.py:372
+msgid "Can change user password"
+msgstr ""
+
+#: .\apps\project\common\users\models.py:373
+msgid "Can change all users passwords"
+msgstr ""
+
+#: .\apps\project\common\users\models.py:374
+#, fuzzy
+#| msgid "User Personal Information"
+msgid "Can change users personal information"
+msgstr "Información personal del usuario"
+
+#: .\apps\project\common\users\models.py:375
+#, fuzzy
+#| msgid "User Personal Information"
+msgid "Can change users contact information"
+msgstr "Información personal del usuario"
+
+#: .\apps\project\common\users\models.py:376
+msgid "Can change users referred by field"
+msgstr ""
+
+#: .\apps\project\common\users\models.py:377
+#, fuzzy
+#| msgid "Verified Holder"
+msgid "Can verify holders"
+msgstr "Usuario verificado"
+
+#: .\apps\project\common\users\models.py:378
+msgid "Can deactivate users"
+msgstr ""
+
+#: .\apps\project\common\users\models.py:384
 msgid "Country Name"
 msgstr "País"
 
-#: .\apps\project\common\users\models.py:376
+#: .\apps\project\common\users\models.py:390
 msgid "Country Code"
 msgstr "Código de país"
 
-#: .\apps\project\common\users\models.py:390
+#: .\apps\project\common\users\models.py:404
 msgid "Country"
 msgstr "País"
 
-#: .\apps\project\common\users\models.py:391
+#: .\apps\project\common\users\models.py:405
 msgid "Countries"
 msgstr "Países "
 
-#: .\apps\project\common\users\models.py:396
+#: .\apps\project\common\users\models.py:410
 msgid "State Name"
 msgstr "Estado/Departamento"
 
-#: .\apps\project\common\users\models.py:416
+#: .\apps\project\common\users\models.py:430
 msgid "State"
 msgstr "Estado/Departamento"
 
-#: .\apps\project\common\users\models.py:417
+#: .\apps\project\common\users\models.py:431
 msgid "States"
 msgstr "Estados/Departamentos"
 
-#: .\apps\project\common\users\models.py:422
+#: .\apps\project\common\users\models.py:436
 msgid "City Name"
 msgstr "Ciudad"
 
-#: .\apps\project\common\users\models.py:442
+#: .\apps\project\common\users\models.py:456
 msgid "City"
 msgstr "Ciudad"
 
-#: .\apps\project\common\users\models.py:443
+#: .\apps\project\common\users\models.py:457
 msgid "Cities"
 msgstr "Ciudades"
 
-#: .\apps\project\common\users\models.py:469
+#: .\apps\project\common\users\models.py:483
 msgid "Address Line 1"
 msgstr "Dirección 1"
 
-#: .\apps\project\common\users\models.py:474
+#: .\apps\project\common\users\models.py:488
 msgid "Address Line 2 (Optional)"
 msgstr "Dirección 2 (opcional)"
 
-#: .\apps\project\common\users\models.py:481
+#: .\apps\project\common\users\models.py:495
 msgid "Postal/Zip Code"
 msgstr "Código postal"
 
-#: .\apps\project\common\users\models.py:492
+#: .\apps\project\common\users\models.py:506
 msgid "Address"
 msgstr "Dirección"
 
-#: .\apps\project\common\users\models.py:493
+#: .\apps\project\common\users\models.py:507
 msgid "Addresses"
 msgstr "Direcciones"
 
-#: .\apps\project\common\users\models.py:498
+#: .\apps\project\common\users\models.py:512
 msgid "Male"
 msgstr "Masculino"
 
-#: .\apps\project\common\users\models.py:499
+#: .\apps\project\common\users\models.py:513
 msgid "Female"
 msgstr "Femenino"
 
-#: .\apps\project\common\users\models.py:513
+#: .\apps\project\common\users\models.py:527
 msgid "The date of birth cannot be a future date."
 msgstr "La fecha de nacimiento no puede ser una fecha futura."
 
-#: .\apps\project\common\users\models.py:518
+#: .\apps\project\common\users\models.py:532
 msgid "User must be at least 18 years of age."
 msgstr "Debes tener al menos 18 años de edad."
 
-#: .\apps\project\common\users\models.py:543
+#: .\apps\project\common\users\models.py:557
 msgid "Birth Date"
 msgstr "Fecha de nacimiento"
 
-#: .\apps\project\common\users\models.py:549
+#: .\apps\project\common\users\models.py:563
 msgid "Gender"
 msgstr "Género"
 
-#: .\apps\project\common\users\models.py:556
+#: .\apps\project\common\users\models.py:570
 msgid "Citizenship"
 msgstr "Ciudadanía"
 
-#: .\apps\project\common\users\models.py:561
+#: .\apps\project\common\users\models.py:575
 msgid "Passport Identification"
 msgstr "Identificación del pasaporte"
 
-#: .\apps\project\common\users\models.py:566
+#: .\apps\project\common\users\models.py:580
 msgid "Date of Issue"
 msgstr "Fecha de emisión"
 
-#: .\apps\project\common\users\models.py:571
+#: .\apps\project\common\users\models.py:585
 msgid "Issuing Authority"
 msgstr "Autoridad emisora"
 
-#: .\apps\project\common\users\models.py:576
+#: .\apps\project\common\users\models.py:590
 msgid "Date of Expiry"
 msgstr "Fecha de vencimiento"
 
-#: .\apps\project\common\users\models.py:587
+#: .\apps\project\common\users\models.py:601
 msgid "Passport Image"
 msgstr "Imagen del pasaporte"
 
-#: .\apps\project\common\users\models.py:592
+#: .\apps\project\common\users\models.py:606
 msgid "Beneficiary signature"
 msgstr "Firma del beneficiario"
 
-#: .\apps\project\common\users\models.py:605
-#: .\apps\project\common\users\models.py:606
+#: .\apps\project\common\users\models.py:619
+#: .\apps\project\common\users\models.py:620
 msgid "User Personal Information"
 msgstr "Información personal del usuario"
 
