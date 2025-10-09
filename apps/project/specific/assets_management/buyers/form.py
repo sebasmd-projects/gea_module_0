@@ -76,6 +76,7 @@ class OfferForm(forms.ModelForm):
             'en_description',
             'es_description',
             'buyer_country',
+            'offer_img',
         ]
         widgets = {
             "buyer_country": CountryWidget,

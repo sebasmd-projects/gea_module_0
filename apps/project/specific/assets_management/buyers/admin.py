@@ -1,6 +1,7 @@
 # apps.project.specific.assets_management.buyers.admin.py
 from django.contrib import admin
 from django.db import models
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportActionModelAdmin
 
@@ -93,6 +94,8 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
         "recovery_repatriation_foundation_mark_at",
         "am_pro_service_mark_at",
         "propensiones_mark_at",
+        # thumb img
+        "image_thumb",
     )
 
     fieldsets = (
@@ -106,6 +109,11 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
                 "buyer_country",
                 "display",
                 "is_active",
+            ),
+        }),
+        (_("Thumbnail"), {
+            "fields": (
+                "image_thumb",
             ),
         }),
         (_("Descriptions & Observations"), {
@@ -269,6 +277,13 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
             ).distinct()
 
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def image_thumb(self, obj):
+        if obj.offer_img:
+            return mark_safe(f'<img src="{obj.offer_img.url}" style="max-width:180px; border-radius:8px;" />')
+        return "-"
+
+    image_thumb.short_description = "Preview"
 
 
 @admin.register(ServiceOrderRecipient)

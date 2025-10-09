@@ -6,16 +6,14 @@ from datetime import date
 
 from auditlog.registry import auditlog
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.db.models import Q
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_delete
 from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
-from encrypted_model_fields.fields import EncryptedPositiveIntegerField
 
 from apps.common.utils.functions import sha256_hex
 from apps.common.utils.models import TimeStampedModel
@@ -23,13 +21,41 @@ from apps.project.specific.assets_management.assets.models import AssetModel
 from apps.project.specific.assets_management.assets_location.models import \
     AssetCountryModel
 
-from .signals import auto_fill_offer_translation
+from .signals import (auto_delete_and_optimize_offer_img_on_change,
+                      auto_delete_offer_img_on_delete,
+                      auto_fill_offer_translation)
 
 logger = logging.getLogger(__name__)
+
 UserModel = get_user_model()
 
 
 class OfferModel(TimeStampedModel):
+    def offer_image_upload_path(instance, filename) -> str:
+        """
+        Generate a file path for an asset image.
+        Path format: offer/{slugified_name}/img/YYYY/MM/DD/{hashed_filename}.{extension}
+        """
+        try:
+            name_src = (
+                getattr(instance.asset.asset_name, "es_name", None)
+                or getattr(instance.asset.asset_name, "en_name", "")
+                or "asset"
+            )
+            slug = slugify(name_src)[:40] or "asset"
+            base, ext = os.path.splitext(filename)
+            hashed = sha256_hex(base)[:10]
+            return os.path.join(
+                "offer", slug, "img",
+                str(date.today().year),
+                str(date.today().month),
+                str(date.today().day),
+                f"{hashed}{ext.lower()}"
+            )
+        except Exception as e:
+            logger.error(f"Error generating file path for {filename}: {e}")
+            raise e
+
     class QuantityTypeChoices(models.TextChoices):
         UNITS = "U", _("Units")
         BOXES = "B", _("Boxes")
@@ -129,6 +155,15 @@ class OfferModel(TimeStampedModel):
     display = models.BooleanField(
         _("Display"),
         default=True
+    )
+
+    # Image
+    offer_img = models.ImageField(
+        "img",
+        max_length=255,
+        upload_to=offer_image_upload_path,
+        blank=True,
+        null=True
     )
 
     # Purchase order approval
@@ -973,6 +1008,16 @@ class ServiceOrderRecipient(TimeStampedModel):
 
 pre_save.connect(
     auto_fill_offer_translation,
+    sender=OfferModel
+)
+
+post_delete.connect(
+    auto_delete_offer_img_on_delete,
+    sender=OfferModel
+)
+
+pre_save.connect(
+    auto_delete_and_optimize_offer_img_on_change,
     sender=OfferModel
 )
 

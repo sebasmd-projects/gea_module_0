@@ -92,6 +92,13 @@
       {% endif %}
     {% endif %}
 
+    {% if offer.offer_img %}
+      <h5>{% trans "Offer Requested Image" %}</h5>
+      <div class="text-center mb-3" style="max-height: 300px;">
+        <img src="{{ offer.offer_img.url }}" alt="Offer Image" class="img-fluid" style="max-height: 300px;" />
+      </div>
+    {% endif %}
+
   </div>
 
   <div class="card-footer">
