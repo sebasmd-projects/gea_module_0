@@ -223,6 +223,8 @@ class AssetLocationModel(TimeStampedModel):
             'quantity_type',
             'amount',
             'created_by',
+            'observations_es',
+            'observations_en',
         ]
 
 
