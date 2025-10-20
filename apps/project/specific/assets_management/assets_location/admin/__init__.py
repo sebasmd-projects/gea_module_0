@@ -95,6 +95,8 @@ class AssetLocationAdmin(GeneralAdminModel):
         'is_active',
         'observations_es',
         'observations_en',
+        'created',
+        'updated',
     )
 
     list_filter = (
@@ -104,7 +106,7 @@ class AssetLocationAdmin(GeneralAdminModel):
         'location__country__continent',
         'created_by',
     )
-    
+
     list_display_links = list_display[:3]
 
     readonly_fields = (
@@ -158,7 +160,7 @@ class AssetLocationAdmin(GeneralAdminModel):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.select_related('asset__asset_name', 'location__country', 'created_by')
-    
+
     def get_asset_es_name(self, obj):
         return getattr(getattr(obj.asset, 'asset_name', None), 'es_name', '-') or '-'
 
@@ -174,10 +176,10 @@ class AssetLocationAdmin(GeneralAdminModel):
 
     get_asset_es_name.short_description = _("Asset Name (ES)")
     get_asset_es_name.admin_order_field = 'asset__asset_name__es_name'
-    
+
     get_location_reference.short_description = _("Reference")
     get_location_reference.admin_order_field = 'location__reference'
-    
+
     get_location_country.short_description = _("Country")
     get_location_country.admin_order_field = 'location__country__es_country_name'
 
@@ -195,6 +197,8 @@ class LocationModelAdmin(GeneralAdminModel):
         'country',
         'created_by',
         'is_active',
+        'updated',
+        'created',
     )
 
     search_fields = (
