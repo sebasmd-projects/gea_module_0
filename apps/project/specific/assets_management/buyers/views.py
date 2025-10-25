@@ -847,3 +847,7 @@ class ProfitabilityTemplateView(BuyerRequiredMixin, TemplateView):
         ctx['qty_choices'] = AssetLocationModel.QuantityTypeChoices.choices
 
         return ctx
+
+
+class InventoryTemplateView(BuyerRequiredMixin, TemplateView):
+    template_name = 'dashboard/pages/buyers/inventory.html'

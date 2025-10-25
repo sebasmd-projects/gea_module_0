@@ -1,8 +1,7 @@
 from django.conf import settings
 from django.http import HttpResponse
-from django.urls import include, path, re_path
+from django.urls import path
 
-from .api import urls as api_urls
 from .attack_patterns import common_attack_paths
 from .views import handler400 as error400
 from .views import handler401 as error401

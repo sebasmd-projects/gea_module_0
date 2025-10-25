@@ -1,0 +1,189 @@
+{% extends 'dashboard/dashboard_layout_base.html' %}
+
+{% load i18n static custom_filters humanize %}
+
+{% block simple_datatables %}
+  <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+{% endblock %}
+
+{% block simple_datatables_js %}
+  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+  <script src="{% static 'js/simple-datatable.js' %}"></script>
+{% endblock %}
+
+{% block icons %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/aa367a5aee.js" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block main_layout %}
+  {# ===== URLs y assets reutilizables ===== #}
+  {% url 'buyers:buyer_index' as purchase_orders_url %}
+  {% url 'buyers:buyer_create' as add_purchase_order_url %}
+  {% url 'assets:create' as add_asset_url %}
+
+  {% static 'assets/imgs/illustrations/statistics.svg' as purchase_orders_image %}
+  {% static 'assets/imgs/illustrations/windows.svg' as add_new_purchase_order_image %}
+  {% static 'assets/imgs/illustrations/browser-stats.svg' as add_asset_image %}
+
+  {% trans 'Purchase orders' as purchase_orders %}
+  {% trans 'Add new purchase order' as add_new_purchase_order %}
+  {% trans 'Add new asset' as add_new_asset %}
+  {% trans 'Profitability' as profitability %}
+  {% trans 'Summary of movements and states' as summary_movements_states %}
+
+  {% include 'dashboard/partials/header/_header.html' with icon_class='me-2 fa-solid fa-money-bill-trend-up' page_title=profitability page_description=summary_movements_states parent_title=purchase_orders parent_url=purchase_orders_url %}
+
+  <!-- Main page content -->
+  <div class="container-xl px-4 mt-n10">
+    <div class="row">
+      {% include 'dashboard/partials/header/_header_card.html' with icon_class='feather-xl text-green mb-3' icon_data_feather='file-text' page_header_title=purchase_orders page_header_image=purchase_orders_image url=purchase_orders_url %}
+      {% include 'dashboard/partials/header/_header_card.html' with icon_class='feather-xl text-green mb-3' icon_data_feather='file-plus' page_header_title=add_new_purchase_order page_header_image=add_new_purchase_order_image url=add_purchase_order_url %}
+      {% include 'dashboard/partials/header/_header_card.html' with icon_class='feather-xl text-green mb-3' icon_data_feather='archive' page_header_title=add_new_asset page_header_image=add_asset_image url=add_asset_url %}
+    </div>
+
+    <div class="row">
+      <div class="col-xl-6 mb-4">
+        <div class="card h-100">
+          <div class="card-header" style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
+            <h2 class="text-black">{% trans 'Purchase orders by month' %}</h2>
+          </div>
+          <div class="card-body">
+            <div class="chart-wrapper" style="position:relative;height:320px;">
+              <canvas id="poMonthlyChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="card mb-4">
+          <div class="card-header" style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
+            <h2 class="text-black">{% trans 'Assets' %}|{% trans 'Inventory' %}</h2>
+          </div>
+          <div class="card-body">
+            <table id="assets_table" class="table table-striped">
+              <thead>
+                <tr>
+                  <th>
+                    {% trans 'Asset Name' %}
+                  </th>
+                  <th>
+                    {% trans 'Category' %}
+                  </th>
+                  <th  data-type="number">
+                    {% trans 'Total Quantity (boxes)' %}
+                  </th  data-type="number">
+                  <th>
+                    {% trans 'Total Quantity (units)' %}
+                  </th>
+                  <th>
+                    {% trans 'Observations' %}
+                  </th>
+                  <th>
+                    {% trans 'Description' %}
+                  </th>
+                  {% if request.user.is_staff %}
+                  <th>
+                    {% trans 'Filters' %}
+                  </th>
+                  {% endif %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in asset_rows %}
+                  <tr>
+                    <td>
+                      {{ r.name }}
+                    </td>
+                    <td>{{ r.category }}</td>
+                    <td data-order="{{ r.total_boxes }}">
+                      <span class="format_number">{{ r.total_boxes }}</span>
+                    </td>
+                    <td data-order="{{ r.total_units }}">
+                      <span class="format_number">{{ r.total_units }}</span>
+                    </td>
+                    <td>{{ r.observations }}</td>
+                    <td>{{ r.description }}</td>
+                    {% if request.user.is_staff %}
+                    <td>
+                      {% for token in r.tokens %}
+                        {{ token }}
+                      {% endfor %}
+                    </td>
+                    {% endif %}
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            {% if request.user.is_staff %}
+              <div class="col-4">
+              <table class="table table-sm table-dark align-middle mt-5">
+                <thead class="table-dark">
+                  <tr>
+                    <th>
+                      {% trans 'Zero QTY' %}
+                    </th>
+                    <th>
+                      {% trans 'Image' %}
+                    </th>
+                    <th>
+                      {% trans 'Units or Boxes' %}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                  <tr class="table-light">
+                    <td>zero:yes</td>
+                    <td>img:yes</td>
+                    <td>qty:U</td>
+                  </tr>
+                  <tr class="table-light">
+                    <td>zero:no</td>
+                    <td>img:no</td>
+                    <td>qty:B</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block body_custom_js %}
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.uuid-toggle').forEach(function (btn) {
+      const code = btn.querySelector('.uuid-text');
+      const full = btn.getAttribute('data-full');
+      const shortV = btn.getAttribute('data-short');
+      let expanded = false;
+
+      btn.addEventListener('click', function () {
+        expanded = !expanded;
+        code.textContent = expanded ? full : shortV;
+        btn.setAttribute('aria-label', expanded ? "{{ _('Hide full ID')|default:'Hide full ID' }}"
+          : "{{ _('Show full ID')|default:'Show full ID' }}");
+      });
+    });
+  });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const locale = 'es';
+  document.querySelectorAll('span.format_number').forEach(el => {
+    const raw = el.dataset.value ?? el.textContent;
+    const n = parseInt(raw, 10);
+    if (!Number.isNaN(n)) { 
+      el.textContent = n.toLocaleString(locale);
+    }
+  });
+});
+</script>
+{% endblock %}

@@ -66,6 +66,7 @@ THIRD_PARTY_APPS = [
     'parler',
     'rosetta',
     'two_factor',
+    'impersonate',
 ]
 
 COMMON_APPS = [
@@ -169,6 +170,7 @@ MIDDLEWARE = [
     'apps.common.utils.middleware.BlockBadBotsMiddleware',
     'apps.common.utils.middleware.DetectSuspiciousRequestMiddleware',
     'axes.middleware.AxesMiddleware',
+    'impersonate.middleware.ImpersonateMiddleware',
 ]
 
 MIDDLEWARE_NOT_INCLUDE = [os.getenv('MIDDLEWARE_NOT_INCLUDE')]

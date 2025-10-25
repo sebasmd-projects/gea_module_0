@@ -8,21 +8,15 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import URLPattern, URLResolver, include, path
 from django.utils.translation import gettext_lazy as _
-
-from drf_yasg import openapi
-from drf_yasg.views import get_schema_view
-
 from two_factor.urls import urlpatterns as tf_urls
 
-from apps.common.utils.views import (
-    handler400 as h400,
-    handler401 as h401,
-    handler403 as h403,
-    handler404 as h404,
-    handler500 as h500,
-    handler503 as h503,
-    handler504 as h504,
-)
+from apps.common.utils.views import handler400 as h400
+from apps.common.utils.views import handler401 as h401
+from apps.common.utils.views import handler403 as h403
+from apps.common.utils.views import handler404 as h404
+from apps.common.utils.views import handler500 as h500
+from apps.common.utils.views import handler503 as h503
+from apps.common.utils.views import handler504 as h504
 
 # ==== Tipos útiles ====
 UrlItem = URLPattern | URLResolver
@@ -69,6 +63,7 @@ third_party_urls: List[UrlItem] = [
     path("rosetta/", include("rosetta.urls")),
     path("ckeditor5/", include("django_ckeditor_5.urls")),
     path("select2/", include("django_select2.urls")),
+    path("impersonate/", include("impersonate.urls")),
 ]
 
 # ==== Admin ====
