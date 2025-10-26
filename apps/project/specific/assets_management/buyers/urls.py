@@ -9,7 +9,8 @@ from apps.project.specific.assets_management.buyers.views import (
     OfferApprovalWizardPageView,
     OfferApprovalWizardPartialView,
     OfferApprovalWizardActionView,
-    ProfitabilityTemplateView
+    ProfitabilityTemplateView,
+    InventoryTemplateView
 )
 
 app_name = "buyers"
@@ -59,5 +60,10 @@ urlpatterns = [
         "profitability/",
         ProfitabilityTemplateView.as_view(),
         name="profitability_view"
-    )
+    ),
+    path(
+        "buyer/inventory/",
+        InventoryTemplateView.as_view(),
+        name="inventory_view"
+    ),
 ]

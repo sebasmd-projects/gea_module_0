@@ -1,16 +1,17 @@
 # apps.project.specific.assets_management.buyers.views.py
-from django.conf import settings
-from django.db.models.functions import TruncMonth
-from django.db.models import Count
-from dateutil.relativedelta import relativedelta
+from django.utils.translation import get_language, gettext as _
 from datetime import date
 from email.mime.image import MIMEImage
 
 import requests
+from dateutil.relativedelta import relativedelta
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
-from django.core.mail import EmailMessage, EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives
+from django.db.models import Count, Sum
+from django.db.models.functions import Coalesce, TruncMonth
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404, redirect
@@ -24,11 +25,11 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.translation import override
 from django.views.generic import (CreateView, DetailView, TemplateView,
                                   UpdateView, View)
-
 from apps.project.common.users.models import UserModel
 from apps.project.specific.assets_management.assets.models import (
     AssetCategoryModel, AssetModel)
-from apps.project.specific.assets_management.assets_location.models import AssetLocationModel
+from apps.project.specific.assets_management.assets_location.models import \
+    AssetLocationModel
 
 from .form import OfferForm, OfferUpdateForm, ServiceOrderRecipientsForm
 from .functions import generate_purchase_order_pdf, generate_service_order_pdf
@@ -851,3 +852,94 @@ class ProfitabilityTemplateView(BuyerRequiredMixin, TemplateView):
 
 class InventoryTemplateView(BuyerRequiredMixin, TemplateView):
     template_name = 'dashboard/pages/buyers/inventory.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        lang = get_language() or 'en'
+
+        # ===== Inventario por activo =====
+        assets_qs = (
+            AssetModel.objects
+            .select_related('asset_name', 'category')
+            .order_by('asset_name__es_name', 'asset_name__en_name')
+        )
+
+        asset_rows = []
+        for a in assets_qs:
+            # nombres/descr según idioma
+            if lang.startswith('es'):
+                asset_name = (
+                    a.asset_name.es_name or a.asset_name.en_name or '').strip()
+                category_name = (getattr(a.category, 'es_name', None) or getattr(
+                    a.category, 'en_name', '') or '').strip()
+                description = (getattr(a, 'es_description', None) or getattr(
+                    a, 'en_description', '') or '').strip()
+            else:
+                asset_name = (
+                    a.asset_name.en_name or a.asset_name.es_name or '').strip()
+                category_name = (getattr(a.category, 'en_name', None) or getattr(
+                    a.category, 'es_name', '') or '').strip()
+                description = (getattr(a, 'en_description', None) or getattr(
+                    a, 'es_description', '') or '').strip()
+
+            qty_by_type = a.asset_total_quantity_by_type() or {}
+            # intenta mapear ambas variantes
+            total_boxes = int(qty_by_type.get('Boxes') or qty_by_type.get(
+                'Box') or qty_by_type.get('Cajas') or qty_by_type.get('B') or 0)
+            total_units = int(qty_by_type.get('Units') or qty_by_type.get(
+                'Unit') or qty_by_type.get('Unidades') or qty_by_type.get('U') or 0)
+            total_all = total_boxes + total_units
+
+            # opcional: omitir activos sin stock
+            # if total_all == 0:
+            #     continue
+
+            asset_rows.append({
+                'name': asset_name,
+                'category': category_name,
+                'total': total_all,
+                'boxes': total_boxes,
+                'units': total_units,
+                'description': description,
+            })
+
+        ctx['asset_rows'] = asset_rows
+
+        # ===== Inventario por categoría (suma de todas las cantidades) =====
+        # Sumamos "amount" de AssetLocationModel agrupando por categoría
+        cat_qs = (
+            AssetLocationModel.objects.filter(
+                is_active=True, asset__is_active=True)
+            .values(
+                'asset__category',
+                'asset__category__es_name',
+                'asset__category__en_name',
+                'asset__category__es_description',
+                'asset__category__en_description',
+            )
+            .annotate(total_qty=Coalesce(Sum('amount'), 0))
+            .order_by('asset__category__es_name', 'asset__category__en_name')
+        )
+
+        cat_rows = []
+        for c in cat_qs:
+            if lang.startswith('es'):
+                cat_name = (c.get('asset__category__es_name') or c.get(
+                    'asset__category__en_name') or '').strip()
+                cat_desc = (c.get('asset__category__es_description') or c.get(
+                    'asset__category__en_description') or '').strip()
+            else:
+                cat_name = (c.get('asset__category__en_name') or c.get(
+                    'asset__category__es_name') or '').strip()
+                cat_desc = (c.get('asset__category__en_description') or c.get(
+                    'asset__category__es_description') or '').strip()
+
+            cat_rows.append({
+                'category': cat_name,
+                'total_qty': int(c['total_qty'] or 0),
+                'description': cat_desc,
+            })
+
+        ctx['category_rows'] = cat_rows
+
+        return ctx

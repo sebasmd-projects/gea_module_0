@@ -103,6 +103,12 @@
               <div class="nav-link-icon"><i class="fa-solid fa-money-bill-trend-up"></i></div>
               {% trans 'Profitability' %}
             </a>
+
+            <!-- Inventory -->
+            <a class="nav-link" href="{% url 'buyers:inventory_view' %}">
+              <div class="nav-link-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+              {% trans 'Inventory' %}
+            </a>
           {% endif %}
         </nav>
       </div>

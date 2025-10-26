@@ -28,6 +28,7 @@ django-environ==0.11.2
 django-filter==24.2
 django-formtools==2.5.1
 django-honeypot==1.2.1
+django-impersonate==1.9.5
 django-import-export==4.0.8
 django-otp==1.5.4
 django-parler==2.3
@@ -52,6 +53,7 @@ pypng==0.20220715.0
 python-barcode==0.15.1
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
+python-pptx==1.0.2
 pytz==2024.1
 qrcode==7.4.2
 reportlab==4.0.9
