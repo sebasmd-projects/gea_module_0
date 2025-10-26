@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-09 13:58-0500\n"
+"POT-Creation-Date: 2025-10-26 00:55-0500\n"
 "PO-Revision-Date: 2025-09-16 21:23-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,47 +20,47 @@ msgstr ""
 "X-Translated-Using: django-rosetta 0.10.0\n"
 
 #: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:31
-#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:123
-#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:229
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:125
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:233
 msgid "Required Fields"
 msgstr "Campos obligatorios"
 
 #: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:40
-#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:136
-#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:246
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:138
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:250
 msgid "Dates"
 msgstr "Fechas"
 
 #: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:50
-#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:146
-#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:256
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:148
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:260
 msgid "Priority"
 msgstr "Orden"
 
-#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:166
-#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:173
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:168
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:175
 msgid "-"
 msgstr "-"
 
-#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:175
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:177
 msgid "Asset Name (ES)"
 msgstr "Nombre del Activo (ES)"
 
-#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:178
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:180
 msgid "Reference"
 msgstr "Referencia"
 
-#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:181
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:183
 #: .\apps\project\specific\assets_management\assets_location\models.py:67
 #: .\apps\project\specific\assets_management\assets_location\models.py:113
 msgid "Country"
 msgstr "País"
 
-#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:224
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:228
 msgid "User Field"
 msgstr "Campo de usuario"
 
-#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:237
+#: .\apps\project\specific\assets_management\assets_location\admin\__init__.py:241
 msgid "Optional Fields"
 msgstr "Campos opcionales"
 

@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-09 14:05-0500\n"
-"PO-Revision-Date: 2025-10-09 14:03+0000\n"
-"Last-Translator: Admin Admin <admin@admin.com>\n"
+"PO-Revision-Date: 2025-10-26 00:58+0000\n"
+"Last-Translator: Sebastian Morales <cto@globalallianceusa.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -927,57 +927,54 @@ msgstr "Usuarios"
 
 #: .\apps\project\common\users\models.py:367
 msgid "Can view Buyer dashboard"
-msgstr ""
+msgstr "Puede ver el panel del comprador"
 
 #: .\apps\project\common\users\models.py:368
 msgid "Can view Client Area dashboard"
-msgstr ""
+msgstr "Puede ver el panel del Área del Cliente"
 
 #: .\apps\project\common\users\models.py:369
 msgid "Can view all users"
-msgstr ""
+msgstr "Puede ver todos los usuarios"
 
 #: .\apps\project\common\users\models.py:370
 msgid "Can view only buyers users"
-msgstr ""
+msgstr "Solo se pueden ver los usuarios compradores"
 
 #: .\apps\project\common\users\models.py:371
 msgid "Can view only holders users"
-msgstr ""
+msgstr "Solo se pueden ver los usuarios titulares"
 
 #: .\apps\project\common\users\models.py:372
 msgid "Can change user password"
-msgstr ""
+msgstr "Puede cambiar la contraseña del usuario"
 
 #: .\apps\project\common\users\models.py:373
 msgid "Can change all users passwords"
-msgstr ""
+msgstr "Puede cambiar las contraseñas de todos los usuarios"
 
 #: .\apps\project\common\users\models.py:374
-#, fuzzy
 #| msgid "User Personal Information"
 msgid "Can change users personal information"
-msgstr "Información personal del usuario"
+msgstr "Puede cambiar la información personal de los usuarios"
 
 #: .\apps\project\common\users\models.py:375
-#, fuzzy
 #| msgid "User Personal Information"
 msgid "Can change users contact information"
-msgstr "Información personal del usuario"
+msgstr "Puede cambiar la información de contacto de los usuarios"
 
 #: .\apps\project\common\users\models.py:376
 msgid "Can change users referred by field"
-msgstr ""
+msgstr "Puede cambiar los usuarios referidos"
 
 #: .\apps\project\common\users\models.py:377
-#, fuzzy
 #| msgid "Verified Holder"
 msgid "Can verify holders"
-msgstr "Usuario verificado"
+msgstr "Puede verificar los clientes o tenedores"
 
 #: .\apps\project\common\users\models.py:378
 msgid "Can deactivate users"
-msgstr ""
+msgstr "Puede desactivar usuarios"
 
 #: .\apps\project\common\users\models.py:384
 msgid "Country Name"

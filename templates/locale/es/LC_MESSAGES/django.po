@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-09 14:02-0500\n"
-"PO-Revision-Date: 2025-10-09 14:04+0000\n"
-"Last-Translator: Admin Admin <admin@admin.com>\n"
+"POT-Creation-Date: 2025-10-26 00:55-0500\n"
+"PO-Revision-Date: 2025-10-26 00:59+0000\n"
+"Last-Translator: Sebastian Morales <cto@globalallianceusa.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -130,6 +130,7 @@ msgstr "(Max: 2000)"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:20
 #: .\templates\dashboard\pages\buyers\detail_offer.html:25
+#: .\templates\dashboard\pages\buyers\inventory.html:30
 #: .\templates\dashboard\pages\buyers\profitability.html:30
 #: .\templates\dashboard\pages\buyers\wizard\offer_wizard_page.html:25
 msgid "Purchase orders"
@@ -137,6 +138,7 @@ msgstr "Órdenes de compra"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:21
 #: .\templates\dashboard\pages\buyers\detail_offer.html:26
+#: .\templates\dashboard\pages\buyers\inventory.html:31
 #: .\templates\dashboard\pages\buyers\profitability.html:31
 #: .\templates\dashboard\pages\buyers\wizard\offer_wizard_page.html:26
 msgid "Add new purchase order"
@@ -144,6 +146,7 @@ msgstr "Agregar nueva orden de compra"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:22
 #: .\templates\dashboard\pages\buyers\detail_offer.html:27
+#: .\templates\dashboard\pages\buyers\inventory.html:32
 #: .\templates\dashboard\pages\buyers\profitability.html:32
 #: .\templates\dashboard\pages\buyers\wizard\offer_wizard_page.html:27
 msgid "Add new asset"
@@ -154,6 +157,8 @@ msgstr "Agregar nuevo activo"
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:146
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:112
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:222
+#: .\templates\dashboard\pages\buyers\inventory.html:57
+#: .\templates\dashboard\pages\buyers\inventory.html:100
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:29
 #: .\templates\dashboard\pages\buyers\profitability.html:191
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:182
@@ -180,7 +185,7 @@ msgstr "Categoría de activo (ES)*"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:76
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:136
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:113
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:114
 #: .\templates\dashboard\pages\holders\location\add_location.html:99
 #: .\templates\dashboard\pages\holders\location\edit_location.html:90
 msgid "Description (ES)"
@@ -192,7 +197,7 @@ msgstr "Categoría de activos (EN)*"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:101
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:161
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:115
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:116
 #: .\templates\dashboard\pages\holders\location\add_location.html:104
 #: .\templates\dashboard\pages\holders\location\edit_location.html:95
 msgid "Description (EN)"
@@ -209,7 +214,7 @@ msgstr "Agregar nuevo activo"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:125
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:200
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:141
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:142
 #: .\templates\dashboard\pages\buyers\edit_offer.html:147
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:108
 msgid "Go to my Purchase Orders"
@@ -221,6 +226,8 @@ msgstr "Categorías"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:147
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:223
+#: .\templates\dashboard\pages\buyers\inventory.html:59
+#: .\templates\dashboard\pages\buyers\inventory.html:104
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:65
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:80
 #: .\templates\dashboard\pages\buyers\profitability.html:203
@@ -245,7 +252,7 @@ msgstr "No se encontraron categorías."
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:196
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:297
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:160
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:161
 #: .\templates\dashboard\pages\buyers\edit_offer.html:169
 msgid "Saving and Translating..."
 msgstr "Guardando y traduciendo..."
@@ -343,13 +350,13 @@ msgid "Add New Category"
 msgstr "Añadir nueva categoría"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:148
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:128
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:129
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:51
 msgid "Observations (ES)"
 msgstr "Observaciones (ES)"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:173
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:130
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:131
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:54
 msgid "Observations (EN)"
 msgstr "Observaciones (EN)"
@@ -377,6 +384,7 @@ msgid "Create a New Purchase Order"
 msgstr "Crear una nueva orden de compra"
 
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:57
+#: .\templates\dashboard\pages\buyers\inventory.html:99
 #: .\templates\dashboard\pages\buyers\modals\delete_offer_modal.html:26
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:25
 #: .\templates\dashboard\pages\buyers\profitability.html:60
@@ -424,7 +432,7 @@ msgstr "Cantidad requerida"
 msgid "PO Requested Image"
 msgstr "Imagen de la OC pedida"
 
-#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:140
+#: .\templates\dashboard\pages\buyers\create_purchase_orders.html:141
 msgid "Submit Purchase Order"
 msgstr "Enviar orden de compra"
 
@@ -481,6 +489,60 @@ msgstr "Observaciones (EN)"
 #: .\templates\dashboard\pages\buyers\edit_offer.html:143
 msgid "Save Purchase Order"
 msgstr "Guardar orden de compra"
+
+#: .\templates\dashboard\pages\buyers\inventory.html:33
+#: .\templates\dashboard\pages\buyers\inventory.html:92
+#: .\templates\dashboard\pages\buyers\profitability.html:181
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:110
+msgid "Inventory"
+msgstr "Inventario"
+
+#: .\templates\dashboard\pages\buyers\inventory.html:34
+#: .\templates\dashboard\pages\buyers\profitability.html:34
+msgid "Summary of movements and states"
+msgstr "Resumen de movimientos y estados"
+
+#: .\templates\dashboard\pages\buyers\inventory.html:50
+#| msgid "New Category"
+msgid "Inventory by Category"
+msgstr "Inventario por Categoría"
+
+#: .\templates\dashboard\pages\buyers\inventory.html:58
+#| msgid "Total Quantity (boxes)"
+msgid "Total quantity"
+msgstr "Cantidad total"
+
+#: .\templates\dashboard\pages\buyers\inventory.html:70
+#: .\templates\dashboard\pages\buyers\inventory.html:118
+msgid "No data available"
+msgstr "No hay datos disponibles"
+
+#: .\templates\dashboard\pages\buyers\inventory.html:79
+#: .\templates\dashboard\pages\buyers\inventory.html:127
+#| msgid "Download Offer"
+msgid "Download Report"
+msgstr "Descargar Informe"
+
+#: .\templates\dashboard\pages\buyers\inventory.html:82
+msgid "Download Inventory by Category"
+msgstr "Descargar Inventario por Categoría"
+
+#: .\templates\dashboard\pages\buyers\inventory.html:101
+msgid "Units"
+msgstr "Unidades"
+
+#: .\templates\dashboard\pages\buyers\inventory.html:102
+msgid "Boxes"
+msgstr "Cajas"
+
+#: .\templates\dashboard\pages\buyers\inventory.html:103
+msgid "Total"
+msgstr "Total"
+
+#: .\templates\dashboard\pages\buyers\inventory.html:130
+#| msgid "Download Offer"
+msgid "Download Inventory"
+msgstr "Descargar Inventario"
 
 #: .\templates\dashboard\pages\buyers\modals\delete_offer_modal.html:9
 msgid "Delete Purchase Order"
@@ -661,10 +723,6 @@ msgstr "Orden de servicio creada"
 msgid "Service Order Sent"
 msgstr "Orden de servicio enviada"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:34
-msgid "Summary of movements and states"
-msgstr "Resumen de movimientos y estados"
-
 #: .\templates\dashboard\pages\buyers\profitability.html:50
 msgid "Profitability PO"
 msgstr "OC de rentabilidad"
@@ -736,13 +794,9 @@ msgstr "Órdenes de compra por mes"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:181
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:75
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:116
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:122
 msgid "Assets"
 msgstr "Activos"
-
-#: .\templates\dashboard\pages\buyers\profitability.html:181
-msgid "Inventory"
-msgstr "Inventario"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:194
 msgid "Total Quantity (boxes)"
@@ -1075,7 +1129,7 @@ msgid "Amount"
 msgstr "Cantidad"
 
 #: .\templates\dashboard\pages\holders\add_asset_location.html:66
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:133
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:139
 msgid "Add Asset"
 msgstr "Añadir Activo"
 
@@ -1097,7 +1151,7 @@ msgstr "Cree y administre sus activos y visualice órdenes de servicio"
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:16
 #: .\templates\dashboard\pages\holders\location\add_location.html:15
 #: .\templates\dashboard\pages\holders\location\edit_location.html:16
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:125
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:131
 msgid "Assets and Service Orders"
 msgstr "Activos y Órdenes de Servicio"
 
@@ -1206,7 +1260,7 @@ msgstr "Referencia"
 
 #: .\templates\dashboard\pages\holders\location\add_location.html:110
 #: .\templates\dashboard\pages\holders\location\edit_location.html:101
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:129
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:135
 msgid "Add Location Reference"
 msgstr "Agregar referencia de ubicación"
 
@@ -2043,6 +2097,3 @@ msgstr "Mostrar códigos"
 
 #~ msgid "Apply to this position/offer"
 #~ msgstr "Aplicar a esta oferta"
-
-#~ msgid "Download Offer"
-#~ msgstr "Descargar oferta"
