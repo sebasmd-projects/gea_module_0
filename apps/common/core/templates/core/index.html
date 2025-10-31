@@ -62,6 +62,11 @@
 <meta name="apple-mobile-web-app-title" content="GEA" />
 {% endblock %}
 
+{% block prefetch_preconnect %}
+<link rel="preconnect" href="https://propensionesabogados.com" crossorigin>
+<link rel="dns-prefetch" href="//propensionesabogados.com">
+{% endblock prefetch_preconnect %}
+
 {% block body_properties %}
 class="nav-fixed"
 {% endblock %}
@@ -70,7 +75,10 @@ class="nav-fixed"
 {% include 'core/partials/core_nav.html' %}
 {% endblock %}
 
+
+
 {% block main %}
+{% include 'core/partials/whatsapp.html' %}
 <main class="main">
   <!-- Hero Section -->
   <div id="hero" class="hero">
@@ -96,4 +104,46 @@ class="nav-fixed"
 
 {% block custom_js %}
 <script src="{% static 'js/scripts.js' %}"></script>
+<script>
+  (function () {
+    const HREF = "https://propensionesabogados.com/";
+    let injected = false;
+    function injectPrefetch() {
+      if (injected) return;
+      injected = true;
+      try {
+        const l = document.createElement('link');
+        l.rel = 'prefetch';
+        l.href = HREF;
+        l.as = 'document';
+        document.head.appendChild(l);
+      } catch (e) { /* noop */ }
+    }
+    // guarda la función para llamar al hacer hover en el botón
+    window.__prefetchPropensiones = injectPrefetch;
+    // prefetch en idle del navegador
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(injectPrefetch, { timeout: 2500 });
+    } else {
+      setTimeout(injectPrefetch, 2000);
+    }
+  })();
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const whatsappButton = document.getElementById("whatsapp-button");
+
+    function toggleWhatsappText() {
+      if (window.scrollY > 100) {
+        whatsappButton.classList.add("scrolled");
+      } else {
+        whatsappButton.classList.remove("scrolled");
+      }
+    }
+
+    // Escuchar eventos de scroll
+    document.addEventListener("scroll", toggleWhatsappText);
+    window.addEventListener("load", toggleWhatsappText);
+  });
+</script>
 {% endblock %}

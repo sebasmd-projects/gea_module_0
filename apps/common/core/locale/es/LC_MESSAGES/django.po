@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-09 13:58-0500\n"
-"PO-Revision-Date: 2025-09-15 17:14-0500\n"
-"Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
+"POT-Creation-Date: 2025-10-30 22:43-0500\n"
+"PO-Revision-Date: 2025-10-30 22:44+0000\n"
+"Last-Translator: Sebastian Morales <cto@globalallianceusa.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -40,45 +40,59 @@ msgstr ""
 "Plataforma exclusiva y oficial para la compra segura de activos históricos "
 "de EE. UU."
 
-#: .\apps\common\core\templates\core\index.html:83
+#: .\apps\common\core\templates\core\index.html:91
 msgid "Your browser does not support HTML5 video."
 msgstr "Su navegador no soporta vídeo HTML5."
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:16
-#: .\apps\common\core\templates\core\partials\core_nav.html:81
-msgid "Buyer"
-msgstr "Compra"
+#: .\apps\common\core\templates\core\partials\core_nav.html:22
+#: .\apps\common\core\templates\core\partials\core_nav.html:165
+#| msgid "Buyer"
+msgid "Buyers"
+msgstr "Compradores"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:20
-#: .\apps\common\core\templates\core\partials\core_nav.html:85
+#: .\apps\common\core\templates\core\partials\core_nav.html:34
+#: .\apps\common\core\templates\core\partials\core_nav.html:168
 msgid "Client Area"
 msgstr "Área de Clientes"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:26
-msgid "On-demand offers"
-msgstr "OFERTAS bajo demanda"
+#: .\apps\common\core\templates\core\partials\core_nav.html:82
+#: .\apps\common\core\templates\core\partials\core_nav.html:159
+msgid "Portfolio"
+msgstr "Portafolio"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:38
-#: .\apps\common\core\templates\core\partials\core_nav.html:91
+#: .\apps\common\core\templates\core\partials\core_nav.html:94
+#: .\apps\common\core\templates\core\partials\core_nav.html:173
 msgid "Login"
 msgstr "Iniciar Sesión"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:41
-#: .\apps\common\core\templates\core\partials\core_nav.html:92
+#: .\apps\common\core\templates\core\partials\core_nav.html:97
+#: .\apps\common\core\templates\core\partials\core_nav.html:174
 msgid "Register"
 msgstr "Registro"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:55
+#: .\apps\common\core\templates\core\partials\core_nav.html:111
 msgid "Menu"
 msgstr "Menú"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:62
+#: .\apps\common\core\templates\core\partials\core_nav.html:118
 msgid "Language"
 msgstr "Idioma"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:95
+#: .\apps\common\core\templates\core\partials\core_nav.html:176
 msgid "Logout"
 msgstr "Cerrar Sesión"
+
+#: .\apps\common\core\templates\core\partials\whatsapp.html:51
+#| msgid "Contacts"
+msgid "Contact Us Now"
+msgstr "Contáctanos"
+
+#, fuzzy
+#~ msgid "Contact Us"
+#~ msgstr "Contactos"
+
+#~ msgid "On-demand offers"
+#~ msgstr "OFERTAS bajo demanda"
 
 #~ msgid "First name"
 #~ msgstr "Nombres"
@@ -112,9 +126,6 @@ msgstr "Cerrar Sesión"
 
 #~ msgid "Contact"
 #~ msgstr "Contacto"
-
-#~ msgid "Contacts"
-#~ msgstr "Contactos"
 
 #~ msgid "title"
 #~ msgstr "Título"

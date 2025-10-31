@@ -1,0 +1,54 @@
+{% load i18n %}
+
+<style>
+/* Estilos del botón de WhatsApp */
+.whatsapp-button {
+  position: fixed;
+  bottom: 15px;
+  right: 20px;
+  background-color: #ff0000; /* 🔴 Inicia en rojo */
+  color: white;
+  padding: 10px 15px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  z-index: 1050;
+}
+
+/* Hover: cambia a verde */
+.whatsapp-button:hover {
+  background-color: #25d366; /* 🟢 Verde WhatsApp */
+  transform: scale(1.05);
+}
+
+/* Ícono de WhatsApp */
+.whatsapp-button i {
+  font-size: 24px;
+}
+
+/* Si el usuario hace scroll, oculta el texto y cambia el tamaño del botón */
+.whatsapp-button.scrolled {
+  width: 45px;
+  height: 45px;
+  padding: 0;
+  border-radius: 50%;
+  justify-content: center;
+}
+
+/* Ocultar el texto cuando el usuario hace scroll */
+.whatsapp-button.scrolled span {
+  display: none;
+}
+</style>
+
+<div class="action-buttons">
+  <a href="https://wa.me/573012283818" target="_blank" id="whatsapp-button" class="whatsapp-button">
+    <span id="whatsapp-text">{% trans 'Contact Us Now' %}</span>
+    <i class="bi bi-whatsapp"></i>
+  </a>
+</div>

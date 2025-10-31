@@ -9,29 +9,84 @@
   {% include 'partials/nav/logo.html' %}
 
   {# ======== BOTONES CENTRALES en DESKTOP (MD+): ocultos en SM ======== #}
-  {% if request.user.is_authenticated %}
-    <div class="d-none d-md-flex flex-grow-1 justify-content-center gap-2">
+  <div class="d-none d-md-flex flex-grow-1 justify-content-center gap-2">
+    {% if request.user.is_authenticated %}
       {% if request.user.is_buyer or request.user.is_superuser or perms.users.can_view_buyer %}
-        <a href="{% url 'buyers:buyer_index' %}" class="btn text-black fw-semibold gea_gradient">{% trans 'Buyer' %}</a>
+      <div class="d-flex align-items-center">
+        <a href="{% url 'buyers:buyer_index' %}" class="btn text-black fw-semibold gea_gradient"
+          onmouseover="window.__prefetchPropensiones && window.__prefetchPropensiones(); this.style.transform='scale(1.03)';"
+          onmouseout="this.style.transform='scale(1)';"
+          style="width: auto; height: 40px; margin-left: 4px;"
+        >
+          {% trans 'Buyers' %}
+        </a>
+      </div>
       {% endif %}
 
       {% if request.user.is_asset_holder or request.user.is_superuser or perms.users.can_view_holder %}
-        <a href="{% url 'assets:holder_index' %}" class="btn text-black fw-semibold gea_gradient">{% trans 'Client Area' %}</a>
+      <div class="d-flex align-items-center">
+        <a href="{% url 'assets:holder_index' %}" class="btn text-black fw-semibold gea_gradient"
+        onmouseover="window.__prefetchPropensiones && window.__prefetchPropensiones(); this.style.transform='scale(1.03)';"
+        onmouseout="this.style.transform='scale(1)';"
+        style="width: auto; height: 40px; margin-left: 4px;"
+        >
+          {% trans 'Client Area' %}
+        </a>
+      </div>
       {% endif %}
-    </div>
-  {% else %}
-    <div class="d-none d-md-flex flex-grow-1 justify-content-center">
-      <a href="{% url 'assets:holder_index' %}" class="btn text-black fw-semibold gea_gradient">
-        {% trans 'On-demand offers' %}
-      </a>
-    </div>
-  {% endif %}
+    {% endif %}
+
+    {# 1) Propensiones Abogados #}
+    <a
+      href="https://propensionesabogados.com/"
+      target="_blank" rel="noopener"
+      onmouseover="window.__prefetchPropensiones && window.__prefetchPropensiones(); this.style.transform='scale(1.03)';"
+      onmouseout="this.style.transform='scale(1)';"
+    >
+      <img src="https://globalallianceusa.com/gea/public/static/assets/imgs/logos/propensiones_h.png" alt="Logo Propensiones" style="width: auto; height: 55px; margin-left: 4px;" />
+    </a>
+
+    {# 2) Fundación Attlas #}
+    <a
+      href="https://fundacionattlas.org/"
+      target="_blank" rel="noopener"
+      onmouseover="window.__prefetchPropensiones && window.__prefetchPropensiones(); this.style.transform='scale(1.03)';"
+          onmouseout="this.style.transform='scale(1)';"
+    >
+      <img src="https://fundacionattlas.org/assets/imgs/page/logo h fundacion attlas.webp" alt="Logo Fundación Attlas" style="width: auto; height: 55px; margin-left: 4px;" />
+    </a>
+    
+    
+    {% comment %}
+    <!-- TODO: Enable when the contact page is ready -->
+    {% if not request.user.is_authenticated %}
+      {# 3) Contáctanos #}
+      <div class="d-flex align-items-center">
+        <a href="{% url 'core:contact' %}"
+          class="btn btn-outline-dark fw-semibold"
+          style="width: auto; height: 55px; margin-left: 4px;">
+          {% trans 'Contact Us' %}
+        </a>
+      </div>
+    {% endif %}
+    {% endcomment %}
+      
+    
+      
+    {% if request.user.is_buyer and request.user.is_authenticated %}
+      {# 4) Portafolio (ajusta el URL name si es distinto en tu proyecto) #}
+      <div class="d-flex align-items-center">
+        <a href="https://globalallianceusa.com/gea/portfolio.pdf" class="btn btn-outline-dark" target="_blank">
+          {% trans 'Portfolio' %}
+        </a>
+      </div>
+    {% endif %}
+  </div>
 
   <!-- Navbar Items (derecha) -->
   <ul class="navbar-nav align-items-center ms-auto">
     {% include 'partials/nav/language_selector.html' %}
 
-    {# ======== BOTONES LOGIN / REGISTER en DESKTOP (MD+): ocultos en SM ======== #}
     {% if not request.user.is_authenticated %}
       <li class="nav-item me-2 d-none d-md-block">
         <a class="btn btn-outline-success text-capitalize" href="{% url 'two_factor:login' %}">{% trans 'Login' %}</a>
@@ -47,7 +102,7 @@
   </ul>
 </nav>
 
-{# ======== COLLAPSE SM: aquí aparecen los botones que en MD+ van fuera ======== #}
+{# ======== COLLAPSE SM: aquí aparecen los botones en móvil ======== #}
 <nav class="navbar navbar-dark bg-dark d-md-none">
   <div class="offcanvas offcanvas-end text-bg-dark" id="offcanvasDarkNavbar" tabindex="-1">
     <div class="offcanvas-header">
@@ -59,12 +114,9 @@
       <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-translate mx-1"></i> {% trans 'Language' %}</a>
-
           <ul class="dropdown-menu dropdown-menu-dark">
             {% for lang in LANGUAGES %}
-              <li>
-                <a class="dropdown-item" href="{% url 'utils:set_language' %}?lang={{ lang.0 }}"><i class="bi bi-globe-americas me-3"></i> {{ lang.1 }}</a>
-              </li>
+              <li><a class="dropdown-item" href="{% url 'utils:set_language' %}?lang={{ lang.0 }}"><i class="bi bi-globe-americas me-3"></i> {{ lang.1 }}</a></li>
             {% endfor %}
           </ul>
         </li>
@@ -72,25 +124,52 @@
     </div>
 
     <div class="offcanvas-body">
-      {# ======== LANGUAGE SELECTOR para SM ======== #}
       <div class="w-100 d-flex flex-column gap-2">
-        {# ======== BOTONES CENTRALES (solo autenticado) para SM ======== #}
+        {# Botones pedidos en móvil #}
+        <a
+          href="https://propensionesabogados.com/"
+          target="_blank" rel="noopener"
+          class="btn fw-semibold w-100"
+          style="background: linear-gradient(90deg, rgb(255, 223, 64) 0%, rgb(254, 209, 0) 50%, rgb(212, 169, 0) 100%); transition: transform 0.3s; border: none; color: black; transform: scale(1);"
+          onmouseover="window.__prefetchPropensiones && window.__prefetchPropensiones(); this.style.transform='scale(1.03)';"
+          onmouseout="this.style.transform='scale(1)';"
+        >Propensiones Abogados</a>
+
+        <a
+          href="https://fundacionattlas.org/"
+          target="_blank" rel="noopener"
+          class="btn fw-semibold w-100"
+          style="background: linear-gradient(90deg, rgb(127, 210, 203) 0%, rgb(34, 99, 245) 50%, rgb(14, 54, 146) 100%); transition: transform 0.3s; border: none; color: black; transform: scale(1);"
+          onmouseover="this.style.transform='scale(1.03)';"
+          onmouseout="this.style.transform='scale(1)';"
+        >Fundación Attlas</a>
+
+        
+        {% comment %}
+        <!-- TODO: Enable when the contact page is ready -->
+        <a href="{% url 'core:contact' %}" class="btn btn-outline-light fw-semibold w-100">{% trans 'Contact Us' %}</a>
+        {% endcomment %}
+          
+        
+        
+        {% if request.user.is_authenticated and request.user.is_buyer%}
+          <a href="https://globalallianceusa.com/gea/portfolio.pdf" class="btn btn-outline-secondary fw-semibold w-100 text-white border-light" target="_blank">{% trans 'Portfolio' %}</a>
+        {% endif %}
+
+        {# (Opcionales existentes para roles) #}
         {% if request.user.is_authenticated %}
           {% if request.user.is_buyer or request.user.is_superuser or perms.users.can_view_buyer %}
-            <a href="{% url 'buyers:buyer_index' %}" class="btn btn-light text-black fw-semibold gea_gradient w-100">{% trans 'Buyer' %}</a>
+            <a href="{% url 'buyers:buyer_index' %}" class="btn btn-light text-black fw-semibold gea_gradient w-100">{% trans 'Buyers' %}</a>
           {% endif %}
-
           {% if request.user.is_asset_holder or request.user.is_superuser or perms.users.can_view_holder %}
             <a href="{% url 'assets:holder_index' %}" class="btn btn-light text-black fw-semibold gea_gradient w-100">{% trans 'Client Area' %}</a>
           {% endif %}
         {% endif %}
 
-        {# ======== BOTONES LOGIN / REGISTER (solo NO autenticado) para SM ======== #}
         {% if not request.user.is_authenticated %}
           <a class="btn btn-outline-success text-capitalize w-100" href="{% url 'two_factor:login' %}">{% trans 'Login' %}</a>
           <a class="btn btn-outline-warning text-capitalize w-100" href="{% url 'account:register' %}">{% trans 'Register' %}</a>
         {% else %}
-          {# ======== BOTÓN LOGOUT (solo autenticado) para SM ======== #}
           <a class="btn btn-outline-danger text-capitalize w-100" href="{% url 'account:logout' %}">{% trans 'Logout' %}</a>
         {% endif %}
       </div>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-09 14:05-0500\n"
+"POT-Creation-Date: 2025-10-30 10:47-0500\n"
 "PO-Revision-Date: 2025-10-26 00:58+0000\n"
 "Last-Translator: Sebastian Morales <cto@globalallianceusa.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -954,12 +954,10 @@ msgid "Can change all users passwords"
 msgstr "Puede cambiar las contraseñas de todos los usuarios"
 
 #: .\apps\project\common\users\models.py:374
-#| msgid "User Personal Information"
 msgid "Can change users personal information"
 msgstr "Puede cambiar la información personal de los usuarios"
 
 #: .\apps\project\common\users\models.py:375
-#| msgid "User Personal Information"
 msgid "Can change users contact information"
 msgstr "Puede cambiar la información de contacto de los usuarios"
 
@@ -968,7 +966,6 @@ msgid "Can change users referred by field"
 msgstr "Puede cambiar los usuarios referidos"
 
 #: .\apps\project\common\users\models.py:377
-#| msgid "Verified Holder"
 msgid "Can verify holders"
 msgstr "Puede verificar los clientes o tenedores"
 
