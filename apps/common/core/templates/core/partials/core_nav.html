@@ -56,7 +56,6 @@
       <img src="https://fundacionattlas.org/assets/imgs/page/logo h fundacion attlas.webp" alt="Logo Fundación Attlas" style="width: auto; height: 55px; margin-left: 4px;" />
     </a>
     
-    
     {% comment %}
     <!-- TODO: Enable when the contact page is ready -->
     {% if not request.user.is_authenticated %}
@@ -71,13 +70,29 @@
     {% endif %}
     {% endcomment %}
       
-    
-      
-    {% if request.user.is_buyer and request.user.is_authenticated %}
-      {# 4) Portafolio (ajusta el URL name si es distinto en tu proyecto) #}
+    {% if request.user.is_authenticated and request.user.is_buyer %}
+      {# 4) Portfolio (mismo estilo que Buyers/Clients) #}
       <div class="d-flex align-items-center">
-        <a href="https://globalallianceusa.com/gea/portfolio.pdf" class="btn btn-outline-dark" target="_blank">
+        <a href="https://globalallianceusa.com/gea/portfolio.pdf"
+           class="btn text-black fw-semibold gea_gradient"
+           target="_blank"
+           onmouseover="this.style.transform='scale(1.03)';"
+           onmouseout="this.style.transform='scale(1)';"
+           style="width: auto; height: 40px; margin-left: 4px;">
           {% trans 'Portfolio' %}
+        </a>
+      </div>
+
+      {# 5) Aegis - Certification (nuevo, visible solo para compradores) #}
+      <div class="d-flex align-items-center">
+        {# Usa tu URL real: por ejemplo una ruta en buyers o externa #}
+        <a href="https://globalallianceusa.com/gea/aegis_certification_international_system_of_legal_verification.pdf"
+           target="_blank"   
+           class="btn text-black fw-semibold gea_gradient"
+           onmouseover="this.style.transform='scale(1.03)';"
+           onmouseout="this.style.transform='scale(1)';"
+           style="width: auto; height: 40px; margin-left: 4px;">
+          {% trans 'Aegis - Certification' %}
         </a>
       </div>
     {% endif %}
@@ -144,19 +159,22 @@
           onmouseout="this.style.transform='scale(1)';"
         >Fundación Attlas</a>
 
-        
-        {% comment %}
-        <!-- TODO: Enable when the contact page is ready -->
-        <a href="{% url 'core:contact' %}" class="btn btn-outline-light fw-semibold w-100">{% trans 'Contact Us' %}</a>
-        {% endcomment %}
-          
-        
-        
-        {% if request.user.is_authenticated and request.user.is_buyer%}
-          <a href="https://globalallianceusa.com/gea/portfolio.pdf" class="btn btn-outline-secondary fw-semibold w-100 text-white border-light" target="_blank">{% trans 'Portfolio' %}</a>
+        {% if request.user.is_authenticated and request.user.is_buyer %}
+          {# Portfolio #}
+          <a href="https://globalallianceusa.com/gea/portfolio.pdf"
+             class="btn text-black fw-semibold gea_gradient w-100"
+             target="_blank">
+            {% trans 'Portfolio' %}
+          </a>
+
+          {# Aegis - Certification #}
+          <a href="https://globalallianceusa.com/gea/aegis_certification_international_system_of_legal_verification.pdf"
+             class="btn text-black fw-semibold gea_gradient w-100"
+             target="_blank">
+            {% trans 'Aegis - Certification' %}
+          </a>
         {% endif %}
 
-        {# (Opcionales existentes para roles) #}
         {% if request.user.is_authenticated %}
           {% if request.user.is_buyer or request.user.is_superuser or perms.users.can_view_buyer %}
             <a href="{% url 'buyers:buyer_index' %}" class="btn btn-light text-black fw-semibold gea_gradient w-100">{% trans 'Buyers' %}</a>
