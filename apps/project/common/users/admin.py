@@ -1,11 +1,28 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import Group, Permission
+from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext_lazy as _
+from django.utils.text import capfirst
 
 from apps.common.utils.admin import GeneralAdminModel
 
 from .models import (AddressModel, CityModel, CountryModel, StateModel,
                      UserModel, UserPersonalInformationModel)
+
+admin.site.unregister(Group)
+
+def _normalize_perm_text(name: str) -> str:
+    """
+    Normaliza el texto 'humano' del Permission.name:
+    - Colapsa espacios.
+    - Lo deja en estilo oración (primera letra en mayúscula).
+    """
+    if not name:
+        return ""
+    lowered = name.strip()
+    lowered = " ".join(lowered.split())
+    return capfirst(lowered.lower())
 
 
 @admin.register(UserModel)
@@ -71,7 +88,8 @@ class UserModelAdmin(UserAdmin, GeneralAdminModel):
         if not (
             request.user.is_superuser or
             request.user.has_perm('users.can_change_all_passwords') or
-            (obj == request.user and request.user.has_perm('users.can_change_password'))
+            (obj == request.user and request.user.has_perm(
+                'users.can_change_password'))
         ):
             ro_fields |= {'password'}
 
@@ -448,3 +466,56 @@ class UserPersonalInformationModelAdmin(GeneralAdminModel):
     filter_horizontal = (
         'addresses',
     )
+
+
+@admin.register(Group)
+class GroupAdmin(GeneralAdminModel):
+    list_display = ("name", "perms_labels", "perms_human")
+
+    list_filter = ("permissions__content_type__app_label",)
+
+    search_fields = (
+        "name",
+        "permissions__codename",
+        "permissions__name",
+        "permissions__content_type__app_label",
+    )
+
+    filter_horizontal = ("permissions",)
+
+    def get_queryset(self, request):
+        # Optimiza N+1: precarga permisos y su content_type
+        qs = super().get_queryset(request)
+        return qs.prefetch_related("permissions__content_type")
+
+    @admin.display(description="Permisos (app.perm)", ordering=None)
+    def perms_labels(self, obj: Group):
+        """
+        Muestra permisos como app_label.codename en <ul>.
+        """
+        perms = obj.permissions.all()
+        if not perms:
+            return "—"
+        # Ordena por app_label y codename
+        items = sorted(
+            (f"{p.content_type.app_label}.{p.codename}" for p in perms),
+            key=lambda s: (s.split(".", 1)[0], s.split(".", 1)[1]),
+        )
+        return format_html(
+            "<ul style='margin:0;padding-left:1.25rem'>{}</ul>",
+            format_html_join("", "<li>{}</li>", ((it,) for it in items)),
+        )
+        
+    @admin.display(description="Permisos", ordering=None)
+    def perms_human(self, obj: Group):
+        """
+        Muestra permisos con su nombre 'humano' normalizado en <ul>.
+        """
+        perms = obj.permissions.all()
+        if not perms:
+            return "—"
+        items = sorted((_normalize_perm_text(p.name) for p in perms))
+        return format_html(
+            "<ul style='margin:0;padding-left:1.25rem'>{}</ul>",
+            format_html_join("", "<li>{}</li>", ((it,) for it in items)),
+        )
