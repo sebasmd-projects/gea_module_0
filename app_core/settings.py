@@ -202,25 +202,27 @@ WSGI_APPLICATION = 'app_core.wsgi.application'
 
 ASGI_APPLICATION = 'app_core.asgi.application'
 
+ENV_DB_ENGINE = os.getenv('DB_ENGINE')
+
 DATABASES = {
     'default': {
-        'CONN_MAX_AGE': int(os.getenv('DB_CONN_MAX_AGE', 60)),
-        'ENGINE': os.getenv('DB_ENGINE'),
+        'ENGINE': ENV_DB_ENGINE,
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST'),
         'PORT': int(os.getenv('DB_PORT')),
-        'CHARSET': os.getenv('DB_CHARSET', 'utf8mb4'),
+        'CONN_MAX_AGE': int(os.getenv('DB_CONN_MAX_AGE', 60)),
         'ATOMIC_REQUESTS': True,
     }
 }
 
-if not DEBUG and os.getenv('DB_ENGINE') == 'django.db.backends.postgresql':
-    DATABASES['default']['OPTIONS'] = {'sslmode': os.getenv('DB_SSLMODE', 'prefer')}
-
-if os.getenv('DB_ENGINE') == 'django.db.backends.mysql':
+if ENV_DB_ENGINE == 'django.db.backends.mysql':
+    DATABASES['default']['CHARSET'] = os.getenv('DB_CHARSET', 'utf8mb4')
     DATABASES['default']['OPTIONS'] = {"init_command": "SET SESSION time_zone = '+00:00', sql_mode='STRICT_TRANS_TABLES'"}
+    
+if not DEBUG and ENV_DB_ENGINE == 'django.db.backends.postgresql':
+    DATABASES['default']['OPTIONS'] = {'sslmode': os.getenv('DB_SSLMODE', 'prefer')}
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
