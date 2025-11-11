@@ -892,19 +892,32 @@ class OfferModel(TimeStampedModel):
         verbose_name_plural = _("Purchase orders")
         ordering = ["default_order", "-created"]
         permissions = [
-            ("can_approve_offer", _("Can approve purchase orders")),
-            ("can_review_offer", _("Can review purchase orders")),
-            ("can_send_service_order", _("Can send service orders")),
-            ("can_create_payment_order", _("Can create payment orders")),
-            ("can_send_payment_order", _("Can send payment orders")),
-            ("can_set_asset_possession", _("Can set asset in possession")),
-            ("can_send_asset", _("Can send asset")),
-            ("can_set_profitability", _("Can set profitability")),
-            ("can_pay_profitability", _("Can pay profitability")),
+            ("can_approve_offer",             _("Can approve purchase orders")),
+            ("can_review_offer",              _("Can review purchase orders")),
+            ("can_send_service_order",        _("Can send service orders")),
+            ("can_create_payment_order",      _("Can create payment orders")),
+            ("can_send_payment_order",        _("Can send payment orders")),
+            ("can_set_asset_possession",      _("Can set asset in possession")),
+            ("can_send_asset",                _("Can send asset")),
+            ("can_set_profitability",         _("Can set profitability")),
+            ("can_pay_profitability",         _("Can pay profitability")),
             ("can_approve_pay_profitability", _("Can approve pay profitability")),
-            ("can_see_profitability_page", _("Can see profitability page")),
-            ("can_see_wizard_page", _("Can see the offer workflow wizard page")),
+            ("can_see_profitability_page",    _("Can see profitability page")),
+            ("can_see_wizard_page",           _("Can see the offer workflow wizard page")),
+            
+            ("recovery_repatriation_foundation_paid",    _("Mark Recovery Repatriation Foundation as paid")),
+            ("recovery_repatriation_foundation_mark_by", _("Set user who marked Recovery Repatriation Foundation as paid")),
+            ("recovery_repatriation_foundation_mark_at", _("Set timestamp when Recovery Repatriation Foundation was marked as paid")),
+
+            ("am_pro_service_paid",    _("Mark AM PRO service as paid")),
+            ("am_pro_service_mark_by", _("Set user who marked AM PRO as paid")),
+            ("am_pro_service_mark_at", _("Set timestamp when AM PRO was marked as paid")),
+
+            ("propensiones_paid",    _("Mark Propensiones as paid")),
+            ("propensiones_mark_by", _("Set user who marked Propensiones as paid")),
+            ("propensiones_mark_at", _("Set timestamp when Propensiones was marked as paid")),
         ]
+        
         constraints = [
             # Aprobado => Debe estar revisado
             models.CheckConstraint(
@@ -973,7 +986,8 @@ class OfferModel(TimeStampedModel):
 class ServiceOrderRecipient(TimeStampedModel):
     offer = models.ForeignKey(
         OfferModel, on_delete=models.CASCADE, related_name="so_recipients")
-    user = models.ForeignKey(UserModel, null=True,
+    user = models.ForeignKey(
+        UserModel, null=True,
                              blank=True, on_delete=models.CASCADE)
     user_type = models.CharField(
         max_length=2,

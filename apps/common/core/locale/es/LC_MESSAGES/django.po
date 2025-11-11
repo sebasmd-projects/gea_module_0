@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-30 22:43-0500\n"
-"PO-Revision-Date: 2025-10-30 22:44+0000\n"
+"POT-Creation-Date: 2025-11-10 21:42-0500\n"
+"PO-Revision-Date: 2025-11-10 21:43+0000\n"
 "Last-Translator: Sebastian Morales <cto@globalallianceusa.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -45,45 +45,48 @@ msgid "Your browser does not support HTML5 video."
 msgstr "Su navegador no soporta vídeo HTML5."
 
 #: .\apps\common\core\templates\core\partials\core_nav.html:22
-#: .\apps\common\core\templates\core\partials\core_nav.html:165
-#| msgid "Buyer"
+#: .\apps\common\core\templates\core\partials\core_nav.html:182
 msgid "Buyers"
 msgstr "Compradores"
 
 #: .\apps\common\core\templates\core\partials\core_nav.html:34
-#: .\apps\common\core\templates\core\partials\core_nav.html:168
+#: .\apps\common\core\templates\core\partials\core_nav.html:185
 msgid "Client Area"
 msgstr "Área de Clientes"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:82
-#: .\apps\common\core\templates\core\partials\core_nav.html:159
+#: .\apps\common\core\templates\core\partials\core_nav.html:84
+#: .\apps\common\core\templates\core\partials\core_nav.html:169
 msgid "Portfolio"
 msgstr "Portafolio"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:94
-#: .\apps\common\core\templates\core\partials\core_nav.html:173
+#: .\apps\common\core\templates\core\partials\core_nav.html:97
+#: .\apps\common\core\templates\core\partials\core_nav.html:176
+msgid "Aegis - Certification"
+msgstr "Aegis - Certificación"
+
+#: .\apps\common\core\templates\core\partials\core_nav.html:109
+#: .\apps\common\core\templates\core\partials\core_nav.html:190
 msgid "Login"
 msgstr "Iniciar Sesión"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:97
-#: .\apps\common\core\templates\core\partials\core_nav.html:174
+#: .\apps\common\core\templates\core\partials\core_nav.html:112
+#: .\apps\common\core\templates\core\partials\core_nav.html:191
 msgid "Register"
 msgstr "Registro"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:111
+#: .\apps\common\core\templates\core\partials\core_nav.html:126
 msgid "Menu"
 msgstr "Menú"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:118
+#: .\apps\common\core\templates\core\partials\core_nav.html:133
 msgid "Language"
 msgstr "Idioma"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:176
+#: .\apps\common\core\templates\core\partials\core_nav.html:193
 msgid "Logout"
 msgstr "Cerrar Sesión"
 
 #: .\apps\common\core\templates\core\partials\whatsapp.html:51
-#| msgid "Contacts"
 msgid "Contact Us Now"
 msgstr "Contáctanos"
 

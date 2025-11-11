@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-30 10:47-0500\n"
+"POT-Creation-Date: 2025-11-10 21:42-0500\n"
 "PO-Revision-Date: 2025-10-26 00:59+0000\n"
 "Last-Translator: Sebastian Morales <cto@globalallianceusa.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -161,7 +161,6 @@ msgstr "Agregar nuevo activo"
 #: .\templates\dashboard\pages\buyers\inventory.html:57
 #: .\templates\dashboard\pages\buyers\inventory.html:100
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:29
-#: .\templates\dashboard\pages\buyers\profitability.html:191
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:182
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:250
 #: .\templates\dashboard\pages\holders\asset_location_base.html:75
@@ -231,7 +230,6 @@ msgstr "Categorías"
 #: .\templates\dashboard\pages\buyers\inventory.html:104
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:65
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:80
-#: .\templates\dashboard\pages\buyers\profitability.html:203
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:183
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:251
 #: .\templates\dashboard\pages\holders\asset_location_base.html:76
@@ -241,7 +239,7 @@ msgid "Description"
 msgstr "Descripción"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:148
-#: .\templates\dashboard\pages\buyers\profitability.html:358
+#: .\templates\dashboard\pages\buyers\profitability.html:264
 #: .\templates\email\service_order_email_template.html:83
 msgid "Created"
 msgstr "Creado"
@@ -312,7 +310,6 @@ msgstr "Nuevo activo"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:62
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:221
-#: .\templates\dashboard\pages\buyers\profitability.html:188
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:181
 #: .\templates\dashboard\pages\holders\asset_location_base.html:74
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:94
@@ -336,7 +333,6 @@ msgstr "Detalles del Activo"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:100
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:220
-#: .\templates\dashboard\pages\buyers\profitability.html:247
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:180
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:93
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:107
@@ -367,7 +363,6 @@ msgid "Existing Assets"
 msgstr "Activos existentes"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:224
-#: .\templates\dashboard\pages\buyers\profitability.html:200
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:184
 #: .\templates\dashboard\pages\holders\add_asset_location.html:54
 #: .\templates\dashboard\pages\holders\asset_location_base.html:77
@@ -493,7 +488,6 @@ msgstr "Guardar orden de compra"
 
 #: .\templates\dashboard\pages\buyers\inventory.html:33
 #: .\templates\dashboard\pages\buyers\inventory.html:92
-#: .\templates\dashboard\pages\buyers\profitability.html:181
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:110
 msgid "Inventory"
 msgstr "Inventario"
@@ -647,7 +641,7 @@ msgstr "Activo en posesión"
 #: .\templates\dashboard\pages\buyers\partials\timeline\_end.html:18
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:54
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:374
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:490
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:496
 msgid "End"
 msgstr "Fin"
 
@@ -677,12 +671,12 @@ msgid "Profitability"
 msgstr "Rentabilidad"
 
 #: .\templates\dashboard\pages\buyers\partials\timeline\_profitability.html:29
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:379
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:380
 msgid "Profitability Created"
 msgstr "Rentabilidad creada"
 
 #: .\templates\dashboard\pages\buyers\partials\timeline\_profitability.html:45
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:457
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:462
 msgid "Profitability Paid"
 msgstr "Rentabilidad Pagada"
 
@@ -746,7 +740,7 @@ msgstr "Acciones"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:76
 #: .\templates\dashboard\pages\buyers\profitability.html:156
-#: .\templates\dashboard\pages\buyers\profitability.html:278
+#: .\templates\dashboard\pages\buyers\profitability.html:184
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:374
 msgid "Paid"
 msgstr "Pagado"
@@ -755,16 +749,16 @@ msgstr "Pagado"
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:273
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:328
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:349
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:384
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:405
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:424
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:443
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:462
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:385
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:407
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:427
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:447
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:467
 msgid "Pending"
 msgstr "Pendiente"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:83
-#: .\templates\dashboard\pages\buyers\profitability.html:419
+#: .\templates\dashboard\pages\buyers\profitability.html:325
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:91
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:451
 msgid "Show full ID"
@@ -781,7 +775,7 @@ msgid "Profitability Overview"
 msgstr "Descripción general de la rentabilidad"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:149
-#: .\templates\dashboard\pages\buyers\profitability.html:277
+#: .\templates\dashboard\pages\buyers\profitability.html:183
 msgid "In Progress"
 msgstr "En curso"
 
@@ -789,37 +783,11 @@ msgstr "En curso"
 msgid "Purchase orders by month"
 msgstr "Órdenes de compra por mes"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:181
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:75
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:122
-msgid "Assets"
-msgstr "Activos"
-
-#: .\templates\dashboard\pages\buyers\profitability.html:194
-msgid "Total Quantity (boxes)"
-msgstr "Cantidad total (cajas)"
-
-#: .\templates\dashboard\pages\buyers\profitability.html:197
-msgid "Total Quantity (units)"
-msgstr "Cantidad total (unidades)"
-
-#: .\templates\dashboard\pages\buyers\profitability.html:207
-msgid "Filters"
-msgstr "Filtros"
-
-#: .\templates\dashboard\pages\buyers\profitability.html:244
-msgid "Zero QTY"
-msgstr "Cantidad cero"
-
-#: .\templates\dashboard\pages\buyers\profitability.html:250
-msgid "Units or Boxes"
-msgstr "Unidades o Cajas"
-
-#: .\templates\dashboard\pages\buyers\profitability.html:365
+#: .\templates\dashboard\pages\buyers\profitability.html:271
 msgid "Closed"
 msgstr "Cerrado"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:418
+#: .\templates\dashboard\pages\buyers\profitability.html:324
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:452
 msgid "Hide full ID"
 msgstr "Esconder ID completo"
@@ -940,8 +908,8 @@ msgstr "Marcar como aprobado"
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:254
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:309
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:364
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:477
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:494
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:482
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:500
 msgid "Previous"
 msgstr "Previo"
 
@@ -949,8 +917,8 @@ msgstr "Previo"
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:255
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:310
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:365
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:481
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:495
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:486
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:501
 #: .\templates\two_factor\_wizard_actions.html:13
 #: .\templates\two_factor\core\setup.html:59
 msgid "Next"
@@ -1055,7 +1023,7 @@ msgid "Send Notification for Payment Order"
 msgstr "Enviar notificación de Orden de Pago"
 
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:279
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:390
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:391
 msgid "Mark as created"
 msgstr "Marcar como creado"
 
@@ -1073,11 +1041,11 @@ msgstr "Activo H. en posesión"
 
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:325
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:346
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:381
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:402
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:421
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:440
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:459
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:382
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:404
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:424
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:444
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:464
 msgid "At"
 msgstr "En"
 
@@ -1085,26 +1053,26 @@ msgstr "En"
 msgid "Mark as in possession"
 msgstr "Marcar como en posesión"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:400
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:402
 msgid "Recovery Repatriation Foundation Paid"
 msgstr "Recovery Repatriation Foundation Pagado"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:410
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:429
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:448
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:468
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:412
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:432
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:452
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:473
 msgid "Mark as paid"
 msgstr "Marcar como pagado"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:419
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:422
 msgid "AM PRO Service Paid"
 msgstr "AM PRO Service Pagado"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:438
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:442
 msgid "Propensiones International Paid"
 msgstr "Propensiones International Pagado"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:491
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:497
 msgid "Completed."
 msgstr "Completado. "
 
@@ -1323,12 +1291,10 @@ msgid "Created by"
 msgstr "Creado por"
 
 #: .\templates\dashboard\partials\layout_footer.html:13
-#: .\templates\partials\footer\footer.html:13
 msgid "Privacy Policy"
 msgstr "Política de Privacidad"
 
 #: .\templates\dashboard\partials\layout_footer.html:15
-#: .\templates\partials\footer\footer.html:15
 msgid "Terms & Conditions"
 msgstr "Términos y Condiciones"
 
@@ -1369,6 +1335,11 @@ msgstr "Cuenta"
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:65
 msgid "Security"
 msgstr "Seguridad"
+
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:75
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:122
+msgid "Assets"
+msgstr "Activos"
 
 #: .\templates\email\contact_email_template.html:9
 msgid "Contact Confirmation"
@@ -1734,6 +1705,21 @@ msgstr[1] "Tienes %(counter)s tokens de respaldo restantes."
 #: .\templates\two_factor\profile\profile.html:27
 msgid "Show Codes"
 msgstr "Mostrar códigos"
+
+#~ msgid "Total Quantity (boxes)"
+#~ msgstr "Cantidad total (cajas)"
+
+#~ msgid "Total Quantity (units)"
+#~ msgstr "Cantidad total (unidades)"
+
+#~ msgid "Filters"
+#~ msgstr "Filtros"
+
+#~ msgid "Zero QTY"
+#~ msgstr "Cantidad cero"
+
+#~ msgid "Units or Boxes"
+#~ msgstr "Unidades o Cajas"
 
 #, fuzzy
 #~ msgid "Offer image"

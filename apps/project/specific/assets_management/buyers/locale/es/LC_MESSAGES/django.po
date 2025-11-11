@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-26 00:55-0500\n"
-"PO-Revision-Date: 2025-10-09 14:04+0000\n"
-"Last-Translator: Admin Admin <admin@admin.com>\n"
+"POT-Creation-Date: 2025-11-10 21:42-0500\n"
+"PO-Revision-Date: 2025-11-10 21:47+0000\n"
+"Last-Translator: Sebastian Morales <cto@globalallianceusa.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -435,11 +435,48 @@ msgstr "Puede ver la página de rentabilidad"
 msgid "Can see the offer workflow wizard page"
 msgstr "Puede ver la página del asistente de flujo de trabajo de ofertas"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:988
+#: .\apps\project\specific\assets_management\buyers\models.py:908
+msgid "Mark Recovery Repatriation Foundation as paid"
+msgstr "Marcar como pago a Fundación Recovery Repatriation"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:909
+msgid "Set user who marked Recovery Repatriation Foundation as paid"
+msgstr "Usuario que marcó como pagada la Fundación Recovery Repatriation"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:910
+msgid "Set timestamp when Recovery Repatriation Foundation was marked as paid"
+msgstr ""
+"Fecha y hora en que se marcó como pagada la Fundación Recovery Repatriation"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:912
+msgid "Mark AM PRO service as paid"
+msgstr "Marcar como pago a AM PRO"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:913
+msgid "Set user who marked AM PRO as paid"
+msgstr "Usuario que marcó como pagada a AM PRO"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:914
+msgid "Set timestamp when AM PRO was marked as paid"
+msgstr "Fecha y hora en que se marcó como pagado a AM PRO"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:916
+msgid "Mark Propensiones as paid"
+msgstr "Marcar como pago a Propensiones"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:917
+msgid "Set user who marked Propensiones as paid"
+msgstr "Usuario que marcó como pagada a Propensiones"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:918
+msgid "Set timestamp when Propensiones was marked as paid"
+msgstr "Fecha y hora en que se marcó como pagada a Propensiones"
+
+#: .\apps\project\specific\assets_management\buyers\models.py:1002
 msgid "Service Order Recipient"
 msgstr "Destinatario de la orden de servicio"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:989
+#: .\apps\project\specific\assets_management\buyers\models.py:1003
 msgid "Service Order Recipients"
 msgstr "Destinatarios de la orden de servicio"
 
@@ -469,7 +506,7 @@ msgstr "Notificación de Orden de servicio para OC: %(po)s"
 msgid "You don't have permission to perform this action."
 msgstr "No tienes permisos para realizar esta acción."
 
-#: .\apps\project\specific\assets_management\buyers\views.py:699
+#: .\apps\project\specific\assets_management\buyers\views.py:711
 msgid "Unknown step."
 msgstr "Paso desconocido."
 

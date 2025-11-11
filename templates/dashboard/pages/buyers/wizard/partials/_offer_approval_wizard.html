@@ -39,13 +39,15 @@
           </a>
         </div>
         {# 5. Profitability #}
-        <div class="step-item {% if current_step >= 5 %}active{% endif %}">
-          <a class="step-item-link text-black {% if current_step >= 5 %}{% else %}disabled{% endif %} {% if current_step == 5 %}active{% endif %}"
-             id="wizard5-tab" data-bs-toggle="tab" href="#wizard5" role="tab" aria-controls="wizard5"
-             aria-selected="{% if current_step == 5 %}true{% else %}false{% endif %}">
-            {% trans 'Profitability' %}
-          </a>
-        </div>
+        {% if perms.buyers.can_see_profitability_page %}
+          <div class="step-item {% if current_step >= 5 %}active{% endif %}">
+            <a class="step-item-link text-black {% if current_step >= 5 %}{% else %}disabled{% endif %} {% if current_step == 5 %}active{% endif %}"
+              id="wizard5-tab" data-bs-toggle="tab" href="#wizard5" role="tab" aria-controls="wizard5"
+              aria-selected="{% if current_step == 5 %}true{% else %}false{% endif %}">
+              {% trans 'Profitability' %}
+            </a>
+          </div>
+        {% endif %}
         {# 6. End #}
         <div class="step-item {% if current_step >= 6 %}active{% endif %}">
           <a class="step-item-link text-black {% if current_step >= 6 %}{% else %}disabled{% endif %} {% if current_step == 6 %}active{% endif %}"
@@ -220,7 +222,7 @@
             </form>
 
             {% with total_recipients=offer.so_recipients.count %}
-              {% if total_recipients > 0 and not offer.service_order_sent_at %}
+              {% if total_recipients > 0 and not offer.service_order_sent_at and perms.buyers.can_send_service_order %}
                 <div class="mt-2 d-flex justify-content-end">
                   <button id="soNotifyBtn" type="button" class="btn btn-sm btn-warning" onclick="soNotify()">
                     {% trans 'Send notification' %}
@@ -368,121 +370,127 @@
       </div>
 
       {# ======= TAB 5: Profitability ======= #}
-      <div class="tab-pane fade {% if current_step == 5 %}show active{% endif %}" id="wizard5" role="tabpanel" aria-labelledby="wizard5-tab">
-        <div class="row justify-content-center">
-          <h3 class="text-dark">{% trans 'Profitability' %}</h3>
-          <h5 class="card-title">{% trans 'Create' %} &gt; {% trans 'Paid' %} &gt; {% trans 'End' %}</h5>
+    <div class="tab-pane fade {% if current_step == 5 %}show active{% endif %}" id="wizard5" role="tabpanel" aria-labelledby="wizard5-tab">
+      <div class="row justify-content-center">
+        <h3 class="text-dark">{% trans 'Profitability' %}</h3>
+        <h5 class="card-title">{% trans 'Create' %} &gt; {% trans 'Paid' %} &gt; {% trans 'End' %}</h5>
 
-          <div class="border rounded p-3 h-100 my-2 {% if prof_created %}border-green{% endif %}">
-            <div class="d-flex justify-content-between align-items-center">
+        {# Profitability Created #}
+        <div class="border rounded p-3 h-100 my-2 {% if prof_created %}border-green{% endif %}">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{% trans 'Profitability Created' %}</strong><br />
+              {% if prof_created %}
+                {% trans 'At' %} {{ offer.profitability_created_at|date:'d/m/Y H:i' }}<br />
+                {% if offer.profitability_created_by %}<small class="text-muted">@{{ offer.profitability_created_by.get_full_name|default:offer.profitability_created_by.username }}</small>{% endif %}
+              {% else %}
+                <small class="text-muted">{% trans 'Pending' %}</small>
+              {% endif %}
+            </div>
+            {% if not prof_created and perms.buyers.can_set_profitability %}
               <div>
-                <strong>{% trans 'Profitability Created' %}</strong><br />
-                {% if prof_created %}
-                  {% trans 'At' %} {{ offer.profitability_created_at|date:'d/m/Y H:i' }}<br />
-                  {% if offer.profitability_created_by %}<small class="text-muted">@{{ offer.profitability_created_by.get_full_name|default:offer.profitability_created_by.username }}</small>{% endif %}
-                {% else %}
-                  <small class="text-muted">{% trans 'Pending' %}</small>
-                {% endif %}
-              </div>
-              {% if not prof_created and perms.buyers.can_set_profitability %}
-              <div>
-                <button class="btn btn-sm btn-outline-success" data-wizard-step="PROFIT_CREATE" >
+                <button class="btn btn-sm btn-outline-success" data-wizard-step="PROFIT_CREATE">
                   {% trans 'Mark as created' %}
                 </button>
               </div>
+            {% endif %}
+          </div>
+        </div>
+
+        {# RRF sub-pago #}
+        <div class="border rounded p-3 h-100 my-2 {% if rrf_paid %}border-green{% endif %}">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{% trans "Recovery Repatriation Foundation Paid" %}</strong><br>
+              {% if rrf_paid %}
+                {% trans 'At' %} {{ rrf_paid_at|date:'d/m/Y H:i' }}<br>
+                {% if rrf_paid_by %}<small class="text-muted">@{{ rrf_paid_by.get_full_name|default:rrf_paid_by.username }}</small>{% endif %}
+              {% else %}
+                <small class="text-muted">{% trans 'Pending' %}</small>
               {% endif %}
             </div>
-          </div>
-
-          <div class="border rounded p-3 h-100 my-2 {% if rrf_paid %}border-green{% endif %}">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <strong>{% trans "Recovery Repatriation Foundation Paid" %}</strong><br>
-                {% if rrf_paid %}
-                  {% trans 'At' %} {{ rrf_paid_at|date:'d/m/Y H:i' }}<br>
-                  {% if rrf_paid_by %}<small class="text-muted">@{{ rrf_paid_by.get_full_name|default:rrf_paid_by.username }}</small>{% endif %}
-                {% else %}
-                  <small class="text-muted">{% trans 'Pending' %}</small>
-                {% endif %}
-              </div>
-              {% if prof_created and not rrf_paid and perms.buyers.can_pay_profitability %}
+            {% if prof_created and not rrf_paid and perms.buyers.recovery_repatriation_foundation_paid %}
               <div>
                 <button class="btn btn-sm btn-outline-success" data-wizard-step="RRF_PAY">{% trans 'Mark as paid' %}</button>
               </div>
+            {% endif %}
+          </div>
+        </div>
+
+        {# AM PRO sub-pago #}
+        <div class="border rounded p-3 h-100 my-2 {% if ampro_paid %}border-green{% endif %}">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{% trans "AM PRO Service Paid" %}</strong><br>
+              {% if ampro_paid %}
+                {% trans 'At' %} {{ ampro_paid_at|date:'d/m/Y H:i' }}<br>
+                {% if ampro_paid_by %}<small class="text-muted">@{{ ampro_paid_by.get_full_name|default:ampro_paid_by.username }}</small>{% endif %}
+              {% else %}
+                <small class="text-muted">{% trans 'Pending' %}</small>
               {% endif %}
             </div>
-          </div>
-
-          <div class="border rounded p-3 h-100 my-2 {% if ampro_paid %}border-green{% endif %}">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <strong>{% trans "AM PRO Service Paid" %}</strong><br>
-                {% if ampro_paid %}
-                  {% trans 'At' %} {{ ampro_paid_at|date:'d/m/Y H:i' }}<br>
-                  {% if ampro_paid_by %}<small class="text-muted">@{{ ampro_paid_by.get_full_name|default:ampro_paid_by.username }}</small>{% endif %}
-                {% else %}
-                  <small class="text-muted">{% trans 'Pending' %}</small>
-                {% endif %}
-              </div>
-              {% if prof_created and not ampro_paid and perms.buyers.can_pay_profitability %}
+            {% if prof_created and not ampro_paid and perms.buyers.am_pro_service_paid %}
               <div>
                 <button class="btn btn-sm btn-outline-success" data-wizard-step="AMPRO_PAY">{% trans 'Mark as paid' %}</button>
               </div>
+            {% endif %}
+          </div>
+        </div>
+
+        {# Propensiones sub-pago #}
+        <div class="border rounded p-3 h-100 my-2 {% if propensiones_paid %}border-green{% endif %}">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{% trans "Propensiones International Paid" %}</strong><br>
+              {% if propensiones_paid %}
+                {% trans 'At' %} {{ propensiones_paid_at|date:'d/m/Y H:i' }}<br>
+                {% if propensiones_paid_by %}<small class="text-muted">@{{ propensiones_paid_by.get_full_name|default:propensiones_paid_by.username }}</small>{% endif %}
+              {% else %}
+                <small class="text-muted">{% trans 'Pending' %}</small>
               {% endif %}
             </div>
-          </div>
-
-          <div class="border rounded p-3 h-100 my-2 {% if propensiones_paid %}border-green{% endif %}">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <strong>{% trans "Propensiones International Paid" %}</strong><br>
-                {% if propensiones_paid %}
-                  {% trans 'At' %} {{ propensiones_paid_at|date:'d/m/Y H:i' }}<br>
-                  {% if propensiones_paid_by %}<small class="text-muted">@{{ propensiones_paid_by.get_full_name|default:propensiones_paid_by.username }}</small>{% endif %}
-                {% else %}
-                  <small class="text-muted">{% trans 'Pending' %}</small>
-                {% endif %}
-              </div>
-              {% if prof_created and not propensiones_paid and perms.buyers.can_pay_profitability %}
+            {% if prof_created and not propensiones_paid and perms.buyers.propensiones_paid %}
               <div>
                 <button class="btn btn-sm btn-outline-success" data-wizard-step="PROP_PAY">{% trans 'Mark as paid' %}</button>
               </div>
+            {% endif %}
+          </div>
+        </div>
+
+        {# Profitability Paid (cierre) #}
+        <div class="border rounded p-3 h-100 my-2 {% if prof_paid %}border-green{% endif %}">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{% trans 'Profitability Paid' %}</strong><br />
+              {% if prof_paid %}
+                {% trans 'At' %} {{ offer.profitability_paid_at|date:'d/m/Y H:i' }}<br />
+                {% if offer.profitability_paid_by %}<small class="text-muted">@{{ offer.profitability_paid_by.get_full_name|default:offer.profitability_paid_by.username }}</small>{% endif %}
+              {% else %}
+                <small class="text-muted">{% trans 'Pending' %}</small>
               {% endif %}
             </div>
-          </div>
-
-          <div class="border rounded p-3 h-100 my-2 {% if prof_paid %}border-green{% endif %}">
-            <div class="d-flex justify-content-between align-items-center">
+            {% if all_prof_subpaid and not prof_paid and perms.buyers.can_approve_pay_profitability %}
               <div>
-                <strong>{% trans 'Profitability Paid' %}</strong><br />
-                {% if prof_paid %}
-                  {% trans 'At' %} {{ offer.profitability_paid_at|date:'d/m/Y H:i' }}<br />
-                  {% if offer.profitability_paid_by %}<small class="text-muted">@{{ offer.profitability_paid_by.get_full_name|default:offer.profitability_paid_by.username }}</small>{% endif %}
-                {% else %}
-                  <small class="text-muted">{% trans 'Pending' %}</small>
-                {% endif %}
-              </div>
-              {% if all_prof_subpaid and not prof_paid and perms.buyers.can_approve_pay_profitability %}
-              <div>
-                <button class="btn btn-sm btn-outline-success" data-wizard-step="PROFIT_PAY" >
+                <button class="btn btn-sm btn-outline-success" data-wizard-step="PROFIT_PAY">
                   {% trans 'Mark as paid' %}
                 </button>
               </div>
-              {% endif %}
-            </div>
-          </div>
-
-          <hr class="my-4" />
-          <div class="d-flex justify-content-between">
-            <button class="btn btn-light" type="button" data-wizard-prev>{% trans 'Previous' %}</button>
-            <button class="btn btn-primary {% if not all_prof_subpaid %}disabled{% endif %}" type="button" 
-              {% if not all_prof_subpaid %}disabled{% endif %}
-              data-wizard-next>
-              {% trans 'Next' %}
-            </button>
+            {% endif %}
           </div>
         </div>
+
+        <hr class="my-4" />
+        <div class="d-flex justify-content-between">
+          <button class="btn btn-light" type="button" data-wizard-prev>{% trans 'Previous' %}</button>
+          <button class="btn btn-primary {% if not all_prof_subpaid %}disabled{% endif %}" type="button"
+                  {% if not all_prof_subpaid %}disabled{% endif %}
+                  data-wizard-next>
+            {% trans 'Next' %}
+          </button>
+        </div>
       </div>
+    </div>
+
 
       {# ======= TAB 6: End ======= #}
       <div class="tab-pane fade {% if current_step == 6 %}show active{% endif %}" id="wizard6" role="tabpanel" aria-labelledby="wizard6-tab">

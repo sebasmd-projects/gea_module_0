@@ -1,5 +1,4 @@
 # apps.project.specific.assets_management.buyers.views.py
-from django.utils.translation import get_language, gettext as _
 from datetime import date
 from email.mime.image import MIMEImage
 
@@ -7,7 +6,8 @@ import requests
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import (LoginRequiredMixin,
+                                        PermissionRequiredMixin)
 from django.core.exceptions import ValidationError
 from django.core.mail import EmailMultiAlternatives
 from django.db.models import Count, Sum
@@ -25,6 +25,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.translation import override
 from django.views.generic import (CreateView, DetailView, TemplateView,
                                   UpdateView, View)
+
 from apps.project.common.users.models import UserModel
 from apps.project.specific.assets_management.assets.models import (
     AssetCategoryModel, AssetModel)
@@ -446,11 +447,12 @@ class OfferDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class OfferApprovalWizardPageView(LoginRequiredMixin, TemplateView):
+class OfferApprovalWizardPageView(BuyerRequiredMixin, PermissionRequiredMixin, TemplateView):
     """
     Página contenedora: carga el shell y, vía JS, inyecta el parcial del wizard.
     """
     template_name = "dashboard/pages/buyers/wizard/offer_wizard_page.html"
+    permission_required = ("buyers.can_see_wizard_page",)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -471,11 +473,12 @@ class OfferApprovalWizardPageView(LoginRequiredMixin, TemplateView):
         return ctx
 
 
-class OfferApprovalWizardPartialView(LoginRequiredMixin, TemplateView):
+class OfferApprovalWizardPartialView(BuyerRequiredMixin, PermissionRequiredMixin, TemplateView):
     """
     Devuelve SOLO el HTML del wizard (parcial) para ser inyectado por fetch().
     """
     template_name = "dashboard/pages/buyers/wizard/partials/_offer_approval_wizard.html"
+    permission_required = ("buyers.can_see_wizard_page",)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -483,8 +486,9 @@ class OfferApprovalWizardPartialView(LoginRequiredMixin, TemplateView):
         return build_wizard_context(self.request, offer)
 
 
-class OfferApprovalWizardActionView(LoginRequiredMixin, View):
+class OfferApprovalWizardActionView(BuyerRequiredMixin, PermissionRequiredMixin, View):
     http_method_names = ["post"]
+    permission_required = ("buyers.can_see_wizard_page",)
 
     def post(self, request, *args, **kwargs):
         offer = get_object_or_404(OfferModel, id=kwargs.get("id"))
@@ -492,6 +496,7 @@ class OfferApprovalWizardActionView(LoginRequiredMixin, View):
 
         # --- recipients: remove ---
         if step == "SO_REMOVE_RECIPIENTS":
+            self._require_perm(request.user, "can_send_service_order")
             to_remove = request.POST.getlist("remove")
             from django.db.models import Q
             q = Q(pk__isnull=True)
@@ -516,6 +521,7 @@ class OfferApprovalWizardActionView(LoginRequiredMixin, View):
 
         # --- recipients: add ---
         if step == "SO_ADD_RECIPIENTS":
+            self._require_perm(request.user, "can_send_service_order")
             form = ServiceOrderRecipientsForm(request.POST)
             if form.is_valid():
                 form.save(offer, request.user)
@@ -683,16 +689,19 @@ class OfferApprovalWizardActionView(LoginRequiredMixin, View):
             offer.mark_profitability_created(user)
 
         elif step == "RRF_PAY":
+            self._require_perm(user, "recovery_repatriation_foundation_paid")
             offer.mark_rrf_paid(user)
 
         elif step == "AMPRO_PAY":
+            self._require_perm(user, "am_pro_service_paid")
             offer.mark_ampro_paid(user)
 
         elif step == "PROP_PAY":
+            self._require_perm(user, "propensiones_paid")
             offer.mark_prop_paid(user)
 
         elif step == "PROFIT_PAY":
-            self._require_perm(user, "can_pay_profitability")
+            self._require_perm(user, "can_approve_pay_profitability")
             offer.mark_profitability_paid(user)
 
         else:
