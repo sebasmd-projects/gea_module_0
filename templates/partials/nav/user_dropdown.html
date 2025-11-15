@@ -5,9 +5,9 @@
   <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     {% with pi=request.user.personal_information %}
       {% if pi.gender == 'M' %}
-        <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/profile-5.png' %}" alt="{% trans 'Male avatar' %}" />
+        <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/profile-5.webp' %}" alt="{% trans 'Male avatar' %}" />
       {% elif pi.gender == 'F' %}
-        <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/profile-2.png' %}" alt="{% trans 'Female avatar' %}" />
+        <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/profile-2.webp' %}" alt="{% trans 'Female avatar' %}" />
       {% else %}
         <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/demo_profile.svg' %}" alt="{% trans 'Default avatar' %}" />
       {% endif %}
@@ -18,9 +18,9 @@
     <h6 class="dropdown-header d-flex align-items-center">
       {% with pi=request.user.personal_information %}
         {% if pi.gender == 'M' %}
-          <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/profile-5.png' %}" alt="{% trans 'Male avatar' %}" />
+          <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/profile-5.webp' %}" alt="{% trans 'Male avatar' %}" />
         {% elif pi.gender == 'F' %}
-          <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/profile-2.png' %}" alt="{% trans 'Female avatar' %}" />
+          <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/profile-2.webp' %}" alt="{% trans 'Female avatar' %}" />
         {% else %}
           <img class="dropdown-user-img" src="{% static 'assets/imgs/demo_profiles/demo_profile.svg' %}" alt="{% trans 'Default avatar' %}" />
         {% endif %}

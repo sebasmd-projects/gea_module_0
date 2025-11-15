@@ -361,13 +361,13 @@ class PurchaseOrderCreateView(BuyerRequiredMixin, CreateView):
 
         # Adjuntar logo PNG inline
         email.mixed_subtype = "related"
-        logo_url = "https://globalallianceusa.com/gea/public/static/assets/imgs/logos/gea_logo.png"
+        logo_url = "https://globalallianceusa.com/gea/public/static/assets/imgs/logos/gea_logo.webp"
         resp = requests.get(logo_url, timeout=10)
         if resp.status_code == 200:
-            mime_img = MIMEImage(resp.content, _subtype="png")
+            mime_img = MIMEImage(resp.content, _subtype="webp")
             mime_img.add_header("Content-ID", "<gea_logo>")
             mime_img.add_header("Content-Disposition",
-                                "inline", filename="gea_logo.png")
+                                "inline", filename="gea_logo.webp")
             email.attach(mime_img)
         if not settings.DEBUG:
             email.send(fail_silently=False)
@@ -586,13 +586,13 @@ class OfferApprovalWizardActionView(BuyerRequiredMixin, PermissionRequiredMixin,
 
             # Adjuntar logo PNG desde la URL
             email.mixed_subtype = "related"  # importante para HTML + inline
-            logo_url = "https://globalallianceusa.com/gea/public/static/assets/imgs/logos/gea_logo.png"
+            logo_url = "https://globalallianceusa.com/gea/public/static/assets/imgs/logos/gea_logo.webp"
             resp = requests.get(logo_url, timeout=10)
             if resp.status_code == 200:
-                mime_img = MIMEImage(resp.content, _subtype="png")
+                mime_img = MIMEImage(resp.content, _subtype="webp")
                 mime_img.add_header("Content-ID", "<gea_logo>")
                 mime_img.add_header("Content-Disposition",
-                                    "inline", filename="gea_logo.png")
+                                    "inline", filename="gea_logo.webp")
                 email.attach(mime_img)
 
             email.send(fail_silently=False)
