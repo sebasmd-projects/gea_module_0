@@ -35,15 +35,6 @@ else:
         ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',')
     else:
         ALLOWED_HOSTS = [os.getenv('DJANGO_ALLOWED_HOSTS')]
-        
-startup_logger = logging.getLogger("startup")
-startup_logger.warning(
-    "Django settings cargados (PID=%s, DEBUG=%s)",
-    os.getpid(),
-    DEBUG,
-)
-
-
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -327,7 +318,8 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 15000
 
 # Cron jobs
 CRONJOBS = [
-    ('0 19 * * *', 'apps.common.utils.cron.generate_and_send_gea_code')
+    ('0 19 * * *', 'apps.common.utils.cron.generate_and_send_gea_code'),
+    ('*/3 * * * *', 'apps.common.utils.cron.warm_gea_app'),
 ]
 
 # ChatGPT API Key

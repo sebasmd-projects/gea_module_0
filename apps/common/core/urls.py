@@ -1,10 +1,16 @@
 from django.urls import path
 
-from apps.common.core.views import IndexTemplateView, PrivacyTemplateView, TermsTemplateView
+from apps.common.core.views import (HealthCheckView, IndexTemplateView,
+                                    PrivacyTemplateView, TermsTemplateView)
 
 app_name = 'core'
 
 urlpatterns = [
+    path(
+        'health/',
+        HealthCheckView.as_view(),
+        name='health_check'
+    ),
     path(
         '',
         IndexTemplateView.as_view(),
