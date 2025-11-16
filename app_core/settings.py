@@ -35,6 +35,13 @@ else:
         ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',')
     else:
         ALLOWED_HOSTS = [os.getenv('DJANGO_ALLOWED_HOSTS')]
+        
+startup_logger = logging.getLogger("startup")
+startup_logger.warning(
+    "Django settings cargados (PID=%s, DEBUG=%s)",
+    os.getpid(),
+    DEBUG,
+)
 
 
 DJANGO_APPS = [
