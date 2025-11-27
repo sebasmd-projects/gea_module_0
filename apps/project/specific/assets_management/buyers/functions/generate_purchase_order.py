@@ -8,6 +8,8 @@ from reportlab.lib.units import mm
 from reportlab.platypus import (Image, Paragraph, SimpleDocTemplate, Spacer,
                                 Table, TableStyle)
 
+from .generate_pdf_helper import build_offer_image_story
+
 
 def generate_purchase_order_pdf(offer, user):
     buffer = io.BytesIO()
@@ -24,7 +26,7 @@ def generate_purchase_order_pdf(offer, user):
 
     # ---------------- LOGOS ----------------
     logo_header = Image(
-        "https://globalallianceusa.com/gea/public/static/assets/imgs/logos/alliance_ampro_repatriation_propensiones.webp",
+        "https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/alliance_ampro_repatriation_propensiones.webp",
         width=doc.width,
         height=80
     )
@@ -33,10 +35,13 @@ def generate_purchase_order_pdf(offer, user):
     elements.append(logo_header)
     elements.append(Spacer(1, 20))
 
+    # --------- OFFER IMAGE (si existe) ----------
+    elements.extend(build_offer_image_story(offer, doc))
+
     # ---------------- BARCODE ----------------
     codigo_unico = f"PO-{str(offer.id)[:8].upper()}"
     fecha_str = offer.created.strftime("%d%m%Y")
-    barcode_value = f"PURCHASE ORDER PRIVATE ALLIANCE USA {fecha_str} F991 {codigo_unico}"
+    barcode_value = f"PURCHASE ORDER IPCON {fecha_str} F991 {codigo_unico}"
     barcode = code128.Code128(barcode_value, barHeight=25 * mm, barWidth=0.85)
 
     # Envolver barcode en una tabla de una celda para centrarlo y darle ancho total
@@ -107,7 +112,7 @@ def generate_purchase_order_pdf(offer, user):
             ["AUTHORIZES:", "OFFICIAL'S POSITION:"],
             [user.get_full_name().upper(), "OFFICIAL PURCHASE AND LIAISON"],
             ["ADDRESSED TO:", "OFFICIAL'S POSITION:"],
-            ["GLOBAL ALLIANCE", "OFFICIAL PURCHASE DELEGATES"],
+            ["IPCON", "OFFICIAL PURCHASE DELEGATES"],
         ],
         colWidths=[275, 275],
     )
@@ -205,7 +210,7 @@ def generate_purchase_order_pdf(offer, user):
 
     # ---------------- FOOTER ----------------
     footer_img = Image(
-        "https://globalallianceusa.com/gea/public/static/assets/imgs/purchase_order/stamp_mitch.webp",
+        "https://geausa.propensionesabogados.com/public/static/assets/imgs/purchase_order/stamp_mitch.webp",
         width=80,
         height=80
     )

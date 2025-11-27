@@ -1,4 +1,6 @@
 # apps.project.specific.assets_management.buyers.views.py
+import logging
+import os
 from datetime import date
 from email.mime.image import MIMEImage
 
@@ -35,6 +37,8 @@ from apps.project.specific.assets_management.assets_location.models import \
 from .form import OfferForm, OfferUpdateForm, ServiceOrderRecipientsForm
 from .functions import generate_purchase_order_pdf, generate_service_order_pdf
 from .models import OfferModel
+
+logger = logging.getLogger(__name__)
 
 
 def _choice_label(instance, field_name: str, lang: str) -> str:
@@ -307,11 +311,14 @@ class PurchaseOrderCreateView(BuyerRequiredMixin, CreateView):
         """Enviar correo con los datos de la orden de compra."""
         subject = _("New Purchase order Submitted for Verification")
         hide_recipient_email = [
-            "ceo@globalallianceusa.com", "support@globalallianceusa.com"]
+            "director@propensionesabogados.com", "support@propensionesabogados.com"
+        ]
         recipient_email = [self.request.user.email]
         review_url = self.request.build_absolute_uri(
             reverse("buyers:offer_details", kwargs={"id": offer_instance.id})
         )
+
+        offer_img_cid = f"offer_img_{offer_instance.id}"
 
         safe_data = {
             "asset_es": escape(offer_instance.asset.asset_name.es_name or offer_instance.asset.asset_name.en_name or ""),
@@ -331,7 +338,8 @@ class PurchaseOrderCreateView(BuyerRequiredMixin, CreateView):
             "user_email": escape(self.request.user.email),
             "user_username": escape(self.request.user.username),
             "review_url": review_url,
-            "logo_cid": "gea_logo",   # <-- añadido para el template
+            "logo_cid": "gea_logo",
+            "offer_img_cid": offer_img_cid
         }
 
         html_content = render_to_string(
@@ -343,7 +351,7 @@ class PurchaseOrderCreateView(BuyerRequiredMixin, CreateView):
         email = EmailMultiAlternatives(
             subject=subject,
             body="Orden de compra adjunta",
-            from_email="no-reply@globalallianceusa.com",
+            from_email="no-reply@propensionesabogados.com",
             to=recipient_email,
             bcc=hide_recipient_email,
         )
@@ -361,7 +369,7 @@ class PurchaseOrderCreateView(BuyerRequiredMixin, CreateView):
 
         # Adjuntar logo PNG inline
         email.mixed_subtype = "related"
-        logo_url = "https://globalallianceusa.com/gea/public/static/assets/imgs/logos/gea_logo.webp"
+        logo_url = "https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/gea_logo.webp"
         resp = requests.get(logo_url, timeout=10)
         if resp.status_code == 200:
             mime_img = MIMEImage(resp.content, _subtype="webp")
@@ -369,6 +377,35 @@ class PurchaseOrderCreateView(BuyerRequiredMixin, CreateView):
             mime_img.add_header("Content-Disposition",
                                 "inline", filename="gea_logo.webp")
             email.attach(mime_img)
+        
+        # Adjuntar imagen de la oferta (desde el storage) como inline + attachment
+        if offer_instance.offer_img and offer_instance.offer_img.name:
+            try:
+                offer_instance.offer_img.open('rb')
+                img_data = offer_instance.offer_img.read()
+
+                # inline para que se muestre dentro del HTML (CID)
+                mime_offer_inline = MIMEImage(img_data)
+                mime_offer_inline.add_header(
+                    "Content-ID", f"<{offer_img_cid}>")
+                mime_offer_inline.add_header(
+                    "Content-Disposition",
+                    "inline",
+                    filename=os.path.basename(offer_instance.offer_img.name)
+                )
+                email.attach(mime_offer_inline)
+
+                mime_offer_attach = MIMEImage(img_data)
+                mime_offer_attach.add_header(
+                    "Content-Disposition",
+                    "attachment",
+                    filename=os.path.basename(offer_instance.offer_img.name)
+                )
+                email.attach(mime_offer_attach)
+
+            except Exception as e:
+                logger.error(f"Error attaching offer image to email: {e}")
+
         if not settings.DEBUG:
             email.send(fail_silently=False)
 
@@ -572,7 +609,7 @@ class OfferApprovalWizardActionView(BuyerRequiredMixin, PermissionRequiredMixin,
             email = EmailMultiAlternatives(
                 subject=subject,
                 body="Orden de Servicio adjunta",
-                from_email="no-reply@globalallianceusa.com",
+                from_email="no-reply@propensionesabogados.com",
                 to=[],
                 bcc=recipients,
             )
@@ -586,7 +623,7 @@ class OfferApprovalWizardActionView(BuyerRequiredMixin, PermissionRequiredMixin,
 
             # Adjuntar logo PNG desde la URL
             email.mixed_subtype = "related"  # importante para HTML + inline
-            logo_url = "https://globalallianceusa.com/gea/public/static/assets/imgs/logos/gea_logo.webp"
+            logo_url = "https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/gea_logo.webp"
             resp = requests.get(logo_url, timeout=10)
             if resp.status_code == 200:
                 mime_img = MIMEImage(resp.content, _subtype="webp")

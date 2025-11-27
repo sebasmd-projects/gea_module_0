@@ -8,6 +8,8 @@ from reportlab.lib.units import mm
 from reportlab.platypus import (Image, Paragraph, SimpleDocTemplate, Spacer,
                                 Table, TableStyle)
 
+from .generate_pdf_helper import build_offer_image_story
+
 
 def generate_service_order_pdf(offer, user):
     buffer = io.BytesIO()
@@ -24,7 +26,7 @@ def generate_service_order_pdf(offer, user):
 
     # ---------------- LOGOS ----------------
     logo_header = Image(
-        "https://globalallianceusa.com/gea/public/static/assets/imgs/logos/alliance_ampro_repatriation_propensiones.webp",
+        "https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/alliance_ampro_repatriation_propensiones.webp",
         width=doc.width,
         height=80
     )
@@ -32,6 +34,9 @@ def generate_service_order_pdf(offer, user):
 
     elements.append(logo_header)
     elements.append(Spacer(1, 20))
+    
+    # --------- OFFER IMAGE (si existe) ----------
+    elements.extend(build_offer_image_story(offer, doc))
 
     # ---------------- BARCODE ----------------
     codigo_unico = f"OS-{str(offer.id)[:8].upper()}"
@@ -203,12 +208,12 @@ def generate_service_order_pdf(offer, user):
 
     # ---------------- FOOTER ----------------
     footer_img = Image(
-        "https://globalallianceusa.com/gea/public/static/assets/imgs/purchase_order/stamp_propensiones.webp",
+        "https://geausa.propensionesabogados.com/public/static/assets/imgs/purchase_order/stamp_propensiones.webp",
         width=80,
         height=80
     )
 
-    contacto = "\nceo@globalallianceusa.com\n+57 318 328 01 76"
+    contacto = "\ndirector@propensionesabogados.com\n+57 318 328 01 76"
 
     # Columna izquierda: imagen centrada sobre el texto
     contacto_table = Table(
