@@ -11,13 +11,13 @@
   "background_color": "#ffffff",
   "icons": [
     {
-      "src": "https://globalallianceusa.com/gea/public/static/assets/imgs/favicons/web-app-manifest-192x192.webp",
+      "src": "https://geausa.propensionesabogados.com/public/static/assets/imgs/favicons/web-app-manifest-192x192.webp",
       "sizes": "192x192",
       "type": "image/webp",
       "purpose": "maskable"
     },
     {
-      "src": "https://globalallianceusa.com/gea/public/static/assets/imgs/favicons/web-app-manifest-512x512.webp",
+      "src": "https://geausa.propensionesabogados.com/public/static/assets/imgs/favicons/web-app-manifest-512x512.webp",
       "sizes": "512x512",
       "type": "image/webp",
       "purpose": "maskable"

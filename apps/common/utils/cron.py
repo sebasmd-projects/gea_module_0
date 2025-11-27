@@ -18,7 +18,7 @@ def generate_and_send_gea_code():
 
 
 def warm_gea_app():
-    url = os.getenv("GEA_WARMUP_URL", "https://globalallianceusa.com/gea/health/")
+    url = os.getenv("GEA_WARMUP_URL", "https://geausa.propensionesabogados.com/health/")
 
     try:
         with urlopen(url, timeout=20) as response:

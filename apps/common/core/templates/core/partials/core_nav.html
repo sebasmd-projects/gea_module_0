@@ -43,7 +43,7 @@
       onmouseover="window.__prefetchPropensiones && window.__prefetchPropensiones(); this.style.transform='scale(1.03)';"
       onmouseout="this.style.transform='scale(1)';"
     >
-      <img src="https://globalallianceusa.com/gea/public/static/assets/imgs/logos/propensiones_h.webp" alt="Logo Propensiones" style="width: auto; height: 55px; margin-left: 4px;" />
+      <img src="https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/propensiones_h.webp" alt="Logo Propensiones" style="width: auto; height: 55px; margin-left: 4px;" />
     </a>
 
     {# 2) Fundación Attlas #}
@@ -73,7 +73,7 @@
     {% if request.user.is_authenticated and request.user.is_buyer %}
       {# 4) Portfolio (mismo estilo que Buyers/Clients) #}
       <div class="d-flex align-items-center">
-        <a href="https://globalallianceusa.com/gea/portfolio.pdf"
+        <a href="https://geausa.propensionesabogados.com/portfolio.pdf"
            class="btn text-black fw-semibold gea_gradient"
            target="_blank"
            onmouseover="this.style.transform='scale(1.03)';"
@@ -86,7 +86,7 @@
       {# 5) Aegis - Certification (nuevo, visible solo para compradores) #}
       <div class="d-flex align-items-center">
         {# Usa tu URL real: por ejemplo una ruta en buyers o externa #}
-        <a href="https://globalallianceusa.com/gea/aegis_certification_international_system_of_legal_verification.pdf"
+        <a href="https://geausa.propensionesabogados.com/aegis_certification_international_system_of_legal_verification.pdf"
            target="_blank"   
            class="btn text-black fw-semibold gea_gradient"
            onmouseover="this.style.transform='scale(1.03)';"
@@ -161,14 +161,14 @@
 
         {% if request.user.is_authenticated and request.user.is_buyer %}
           {# Portfolio #}
-          <a href="https://globalallianceusa.com/gea/portfolio.pdf"
+          <a href="https://geausa.propensionesabogados.com/portfolio.pdf"
              class="btn text-black fw-semibold gea_gradient w-100"
              target="_blank">
             {% trans 'Portfolio' %}
           </a>
 
           {# Aegis - Certification #}
-          <a href="https://globalallianceusa.com/gea/aegis_certification_international_system_of_legal_verification.pdf"
+          <a href="https://geausa.propensionesabogados.com/aegis_certification_international_system_of_legal_verification.pdf"
              class="btn text-black fw-semibold gea_gradient w-100"
              target="_blank">
             {% trans 'Aegis - Certification' %}

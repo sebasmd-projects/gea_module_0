@@ -69,7 +69,7 @@ def handler400(request, exception, *args, **argv):
             'title': _('Error 400'),
             'error': _('Bad Request'),
             'status': status,
-            'error_image': 'https://globalallianceusa.com/gea/public/static/assets/imgs/status_errors/400-error-bad-request.svg',
+            'error_image': 'https://geausa.propensionesabogados.com/public/static/assets/imgs/status_errors/400-error-bad-request.svg',
         }
     )
 
@@ -85,7 +85,7 @@ def handler401(request, exception, *args, **argv):
             'title': _('Error 401'),
             'error': _('Unauthorized Access'),
             'status': status,
-            'error_image': 'https://globalallianceusa.com/gea/public/static/assets/imgs/status_errors/401-error-unauthorized.svg',
+            'error_image': 'https://geausa.propensionesabogados.com/public/static/assets/imgs/status_errors/401-error-unauthorized.svg',
         }
     )
 
@@ -101,7 +101,7 @@ def handler403(request, exception, *args, **argv):
             'title': _('Error 403'),
             'error': _('Forbidden Access'),
             'status': status,
-            'error_image': 'https://globalallianceusa.com/gea/public/static/assets/imgs/status_errors/403-error-forbidden.svg',
+            'error_image': 'https://geausa.propensionesabogados.com/public/static/assets/imgs/status_errors/403-error-forbidden.svg',
         }
     )
 
@@ -117,7 +117,7 @@ def handler404(request, exception, *args, **argv):
             'title': _('Error 404'),
             'error': _('Page not found'),
             'status': status,
-            'error_image': 'https://globalallianceusa.com/gea/public/static/assets/imgs/status_errors/404-error.svg',
+            'error_image': 'https://geausa.propensionesabogados.com/public/static/assets/imgs/status_errors/404-error.svg',
         }
     )
 
@@ -132,7 +132,7 @@ def handler500(request, *args, **argv):
             'title': _('Error 500'),
             'error': _('Server error'),
             'status': status,
-            'error_image': 'https://globalallianceusa.com/gea/public/static/assets/imgs/status_errors/500-internal-server-error.svg',
+            'error_image': 'https://geausa.propensionesabogados.com/public/static/assets/imgs/status_errors/500-internal-server-error.svg',
         }
     )
 
@@ -147,7 +147,7 @@ def handler503(request, *args, **argv):
             'title': _('Error 503'),
             'error': _('Service Unavailable'),
             'status': status,
-            'error_image': 'https://globalallianceusa.com/gea/public/static/assets/imgs/status_errors/503-error-service-unavailable.svg',
+            'error_image': 'https://geausa.propensionesabogados.com/public/static/assets/imgs/status_errors/503-error-service-unavailable.svg',
         }
     )
 
@@ -162,7 +162,7 @@ def handler504(request, *args, **argv):
             'title': _('Error 504'),
             'error': _('Gateway Timeout'),
             'status': status,
-            'error_image': 'https://globalallianceusa.com/gea/public/static/assets/imgs/status_errors/504-error-gateway-timeout.svg',
+            'error_image': 'https://geausa.propensionesabogados.com/public/static/assets/imgs/status_errors/504-error-gateway-timeout.svg',
         }
     )
 

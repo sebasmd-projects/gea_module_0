@@ -89,7 +89,7 @@ class DetectSuspiciousRequestMiddleware:
                     'title': _('Error 403'),
                     'error': _('Access denied due to suspicious activity.'),
                     'status': 403,
-                    'error_image': 'https://globalallianceusa.com/gea/public/static/assets/imgs/status_errors/403-error-forbidden.svg',
+                    'error_image': 'https://geausa.propensionesabogados.com/public/static/assets/imgs/status_errors/403-error-forbidden.svg',
                     'attempt_count': blocked_entry.session_info.get('attempt_count', 1),
                 }
             )
