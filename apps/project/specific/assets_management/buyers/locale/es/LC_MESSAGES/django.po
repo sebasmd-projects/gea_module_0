@@ -449,16 +449,16 @@ msgstr ""
 "Fecha y hora en que se marcó como pagada la Fundación Recovery Repatriation"
 
 #: .\apps\project\specific\assets_management\buyers\models.py:912
-msgid "Mark AM PRO service as paid"
-msgstr "Marcar como pago a AM PRO"
+msgid "Mark PAY MASTER service as paid"
+msgstr "Marcar como pago a PAY MASTER"
 
 #: .\apps\project\specific\assets_management\buyers\models.py:913
-msgid "Set user who marked AM PRO as paid"
-msgstr "Usuario que marcó como pagada a AM PRO"
+msgid "Set user who marked PAY MASTER as paid"
+msgstr "Usuario que marcó como pagada a PAY MASTER"
 
 #: .\apps\project\specific\assets_management\buyers\models.py:914
-msgid "Set timestamp when AM PRO was marked as paid"
-msgstr "Fecha y hora en que se marcó como pagado a AM PRO"
+msgid "Set timestamp when PAY MASTER was marked as paid"
+msgstr "Fecha y hora en que se marcó como pagado a PAY MASTER"
 
 #: .\apps\project\specific\assets_management\buyers\models.py:916
 msgid "Mark Propensiones as paid"

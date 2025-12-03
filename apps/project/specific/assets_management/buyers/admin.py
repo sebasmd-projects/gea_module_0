@@ -26,7 +26,7 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
         "profitability_created_by",
         "profitability_paid_by",
         "recovery_repatriation_foundation_mark_by",
-        "am_pro_service_mark_by",
+        "pay_master_service_mark_by",
         "propensiones_mark_by",
     )
 
@@ -43,7 +43,7 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
         "reviewed",
         "profitability_all_paid",
         "recovery_repatriation_foundation_paid",
-        "am_pro_service_paid",
+        "pay_master_service_paid",
         "propensiones_paid",
     )
 
@@ -56,7 +56,7 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
         "quantity_type",
         "buyer_country",
         "recovery_repatriation_foundation_paid",
-        "am_pro_service_paid",
+        "pay_master_service_paid",
         "propensiones_paid",
         ("created", admin.DateFieldListFilter),
         ("updated", admin.DateFieldListFilter),
@@ -92,7 +92,7 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
         "profitability_created_at",
         "profitability_paid_at",
         "recovery_repatriation_foundation_mark_at",
-        "am_pro_service_mark_at",
+        "pay_master_service_mark_at",
         "propensiones_mark_at",
         # thumb img
         "image_thumb",
@@ -168,10 +168,10 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
                 "recovery_repatriation_foundation_paid",
                 "recovery_repatriation_foundation_mark_by",
                 "recovery_repatriation_foundation_mark_at",
-                # AM PRO Service
-                "am_pro_service_paid",
-                "am_pro_service_mark_by",
-                "am_pro_service_mark_at",
+                # PAY MASTER Service
+                "pay_master_service_paid",
+                "pay_master_service_mark_by",
+                "pay_master_service_mark_at",
                 # Propensiones
                 "propensiones_paid",
                 "propensiones_mark_by",
@@ -267,7 +267,7 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
         # --- NUEVOS: limitamos quién puede marcar subpagos ---
         if db_field.name in {
             "recovery_repatriation_foundation_mark_by",
-            "am_pro_service_mark_by",
+            "pay_master_service_mark_by",
             "propensiones_mark_by",
         }:
             kwargs["queryset"] = UserModel.objects.filter(

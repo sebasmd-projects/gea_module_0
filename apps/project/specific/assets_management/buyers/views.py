@@ -99,7 +99,7 @@ def build_wizard_context(request, offer):
         current_step = 5
     elif not offer.recovery_repatriation_foundation_paid:
         current_step = 5
-    elif not offer.am_pro_service_paid:
+    elif not offer.pay_master_service_paid:
         current_step = 5
     elif not offer.propensiones_paid:
         current_step = 5
@@ -149,9 +149,9 @@ def build_wizard_context(request, offer):
         "rrf_paid": offer.recovery_repatriation_foundation_paid,
         "rrf_paid_at": offer.recovery_repatriation_foundation_mark_at,
         "rrf_paid_by": offer.recovery_repatriation_foundation_mark_by,
-        "ampro_paid": offer.am_pro_service_paid,
-        "ampro_paid_at": offer.am_pro_service_mark_at,
-        "ampro_paid_by": offer.am_pro_service_mark_by,
+        "paymaster_paid": offer.pay_master_service_paid,
+        "paymaster_paid_at": offer.pay_master_service_mark_at,
+        "paymaster_paid_by": offer.pay_master_service_mark_by,
         "propensiones_paid": offer.propensiones_paid,
         "propensiones_paid_at": offer.propensiones_mark_at,
         "propensiones_paid_by": offer.propensiones_mark_by,
@@ -377,7 +377,7 @@ class PurchaseOrderCreateView(BuyerRequiredMixin, CreateView):
             mime_img.add_header("Content-Disposition",
                                 "inline", filename="gea_logo.webp")
             email.attach(mime_img)
-        
+
         # Adjuntar imagen de la oferta (desde el storage) como inline + attachment
         if offer_instance.offer_img and offer_instance.offer_img.name:
             try:
@@ -730,8 +730,8 @@ class OfferApprovalWizardActionView(BuyerRequiredMixin, PermissionRequiredMixin,
             offer.mark_rrf_paid(user)
 
         elif step == "AMPRO_PAY":
-            self._require_perm(user, "am_pro_service_paid")
-            offer.mark_ampro_paid(user)
+            self._require_perm(user, "pay_master_service_paid")
+            offer.mark_paymaster_paid(user)
 
         elif step == "PROP_PAY":
             self._require_perm(user, "propensiones_paid")
@@ -758,13 +758,13 @@ class ProfitabilityTemplateView(BuyerRequiredMixin, TemplateView):
 
         ctx['in_progress_value'] = OfferModel.objects.exclude(
             recovery_repatriation_foundation_paid=True,
-            am_pro_service_paid=True,
+            pay_master_service_paid=True,
             propensiones_paid=True
         ).count()
 
         ctx['paid_value'] = OfferModel.objects.filter(
             recovery_repatriation_foundation_paid=True,
-            am_pro_service_paid=True,
+            pay_master_service_paid=True,
             propensiones_paid=True
         ).count()
 

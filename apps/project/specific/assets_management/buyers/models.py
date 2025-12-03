@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.db.models import Q
-from django.db.models.signals import pre_save, post_delete
+from django.db.models.signals import post_delete, pre_save
 from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import get_language
@@ -320,18 +320,18 @@ class OfferModel(TimeStampedModel):
         blank=True
     )
 
-    am_pro_service_paid = models.BooleanField(
+    pay_master_service_paid = models.BooleanField(
         default=False
     )
 
-    am_pro_service_mark_by = models.ForeignKey(
+    pay_master_service_mark_by = models.ForeignKey(
         UserModel, on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="buyers_offer_ampro_paid_by"
+        related_name="buyers_offer_paymaster_paid_by"
     )
 
-    am_pro_service_mark_at = models.DateTimeField(
+    pay_master_service_mark_at = models.DateTimeField(
         null=True,
         blank=True
     )
@@ -364,7 +364,7 @@ class OfferModel(TimeStampedModel):
     def profitability_all_paid(self) -> bool:
         return (
             self.recovery_repatriation_foundation_paid and
-            self.am_pro_service_paid and
+            self.pay_master_service_paid and
             self.propensiones_paid
         )
 
@@ -533,17 +533,17 @@ class OfferModel(TimeStampedModel):
         ])
 
     @transaction.atomic
-    def mark_ampro_paid(self, user, *, paid: bool = True):
+    def mark_paymaster_paid(self, user, *, paid: bool = True):
         if not self.profitability_created_at:
             raise ValidationError(
                 _("You cannot mark sub-payments before profitability is created."))
-        self.am_pro_service_paid = bool(paid)
-        self.am_pro_service_mark_by = user if paid else None
-        self.am_pro_service_mark_at = timezone.now() if paid else None
+        self.pay_master_service_paid = bool(paid)
+        self.pay_master_service_mark_by = user if paid else None
+        self.pay_master_service_mark_at = timezone.now() if paid else None
         self.save(update_fields=[
-            "am_pro_service_paid",
-            "am_pro_service_mark_by",
-            "am_pro_service_mark_at",
+            "pay_master_service_paid",
+            "pay_master_service_mark_by",
+            "pay_master_service_mark_at",
         ])
 
     @transaction.atomic
@@ -684,7 +684,7 @@ class OfferModel(TimeStampedModel):
         tuple_checks = [
             ("recovery_repatriation_foundation_paid",
              "recovery_repatriation_foundation_mark_by"),
-            ("am_pro_service_paid", "am_pro_service_mark_by"),
+            ("pay_master_service_paid", "pay_master_service_mark_by"),
             ("propensiones_paid", "propensiones_mark_by"),
         ]
 
@@ -731,7 +731,7 @@ class OfferModel(TimeStampedModel):
                 "profitability_created_by", "profitability_created_at",
                 "profitability_paid_by", "profitability_paid_at",
                 "recovery_repatriation_foundation_paid", "recovery_repatriation_foundation_mark_by",
-                "am_pro_service_paid", "am_pro_service_mark_by",
+                "pay_master_service_paid", "pay_master_service_mark_by",
                 "propensiones_paid", "propensiones_mark_by",
             ).first()
 
@@ -761,21 +761,21 @@ class OfferModel(TimeStampedModel):
                 "profitability_paid_by", "profitability_paid_at",
             )
             self.recovery_repatriation_foundation_paid = False
-            self.am_pro_service_paid = False
+            self.pay_master_service_paid = False
             self.propensiones_paid = False
             clear(
                 "recovery_repatriation_foundation_mark_by", "recovery_repatriation_foundation_mark_at",
-                "am_pro_service_mark_by", "am_pro_service_mark_at",
+                "pay_master_service_mark_by", "pay_master_service_mark_at",
                 "propensiones_mark_by", "propensiones_mark_at",
             )
         else:
             if not self.profitability_created_at:
                 self.recovery_repatriation_foundation_paid = False
-                self.am_pro_service_paid = False
+                self.pay_master_service_paid = False
                 self.propensiones_paid = False
                 clear(
                     "recovery_repatriation_foundation_mark_by", "recovery_repatriation_foundation_mark_at",
-                    "am_pro_service_mark_by", "am_pro_service_mark_at",
+                    "pay_master_service_mark_by", "pay_master_service_mark_at",
                     "propensiones_mark_by", "propensiones_mark_at",
                     "profitability_paid_by", "profitability_paid_at",
                 )
@@ -784,8 +784,9 @@ class OfferModel(TimeStampedModel):
                 if not self.recovery_repatriation_foundation_paid:
                     clear("recovery_repatriation_foundation_mark_by",
                           "recovery_repatriation_foundation_mark_at")
-                if not self.am_pro_service_paid:
-                    clear("am_pro_service_mark_by", "am_pro_service_mark_at")
+                if not self.pay_master_service_paid:
+                    clear("pay_master_service_mark_by",
+                          "pay_master_service_mark_at")
                 if not self.propensiones_paid:
                     clear("propensiones_mark_by", "propensiones_mark_at")
                 # Si no están TODOS en True, no puede existir profitability_paid
@@ -878,7 +879,7 @@ class OfferModel(TimeStampedModel):
         auto_ts("profitability_paid_by", "profitability_paid_at")
         auto_ts("recovery_repatriation_foundation_mark_by",
                 "recovery_repatriation_foundation_mark_at")
-        auto_ts("am_pro_service_mark_by", "am_pro_service_mark_at")
+        auto_ts("pay_master_service_mark_by", "pay_master_service_mark_at")
         auto_ts("propensiones_mark_by", "propensiones_mark_at")
 
         super().save(*args, **kwargs)
@@ -903,21 +904,28 @@ class OfferModel(TimeStampedModel):
             ("can_pay_profitability",         _("Can pay profitability")),
             ("can_approve_pay_profitability", _("Can approve pay profitability")),
             ("can_see_profitability_page",    _("Can see profitability page")),
-            ("can_see_wizard_page",           _("Can see the offer workflow wizard page")),
-            
-            ("recovery_repatriation_foundation_paid",    _("Mark Recovery Repatriation Foundation as paid")),
-            ("recovery_repatriation_foundation_mark_by", _("Set user who marked Recovery Repatriation Foundation as paid")),
-            ("recovery_repatriation_foundation_mark_at", _("Set timestamp when Recovery Repatriation Foundation was marked as paid")),
+            ("can_see_wizard_page",           _(
+                "Can see the offer workflow wizard page")),
 
-            ("am_pro_service_paid",    _("Mark AM PRO service as paid")),
-            ("am_pro_service_mark_by", _("Set user who marked AM PRO as paid")),
-            ("am_pro_service_mark_at", _("Set timestamp when AM PRO was marked as paid")),
+            ("recovery_repatriation_foundation_paid",    _(
+                "Mark Recovery Repatriation Foundation as paid")),
+            ("recovery_repatriation_foundation_mark_by", _(
+                "Set user who marked Recovery Repatriation Foundation as paid")),
+            ("recovery_repatriation_foundation_mark_at", _(
+                "Set timestamp when Recovery Repatriation Foundation was marked as paid")),
+
+            ("pay_master_service_paid",    _("Mark PAY MASTER service as paid")),
+            ("pay_master_service_mark_by", _(
+                "Set user who marked PAY MASTER as paid")),
+            ("pay_master_service_mark_at", _(
+                "Set timestamp when PAY MASTER was marked as paid")),
 
             ("propensiones_paid",    _("Mark Propensiones as paid")),
             ("propensiones_mark_by", _("Set user who marked Propensiones as paid")),
-            ("propensiones_mark_at", _("Set timestamp when Propensiones was marked as paid")),
+            ("propensiones_mark_at", _(
+                "Set timestamp when Propensiones was marked as paid")),
         ]
-        
+
         constraints = [
             # Aprobado => Debe estar revisado
             models.CheckConstraint(
@@ -977,7 +985,7 @@ class OfferModel(TimeStampedModel):
                 name="profit_paid_requires_3_subpaids",
                 check=Q(profitability_paid_at__isnull=True) |
                 (Q(recovery_repatriation_foundation_paid=True) &
-                 Q(am_pro_service_paid=True) &
+                 Q(pay_master_service_paid=True) &
                  Q(propensiones_paid=True))
             ),
         ]
@@ -988,7 +996,7 @@ class ServiceOrderRecipient(TimeStampedModel):
         OfferModel, on_delete=models.CASCADE, related_name="so_recipients")
     user = models.ForeignKey(
         UserModel, null=True,
-                             blank=True, on_delete=models.CASCADE)
+        blank=True, on_delete=models.CASCADE)
     user_type = models.CharField(
         max_length=2,
         choices=UserModel.UserTypeChoices.choices,

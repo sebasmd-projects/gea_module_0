@@ -3,56 +3,56 @@
 <div class="card mb-4" id="create_offer">
 
   <div class="card-header border-bottom d-none d-md-block"
-       style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
+    style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
     <div class="nav nav-pills nav-justified flex-column flex-xl-row" id="wizardTab" role="tablist">
       <div class="step step-black mb-3 mb-xl-0 w-100">
         {# 1. Purchase Order #}
         <div class="step-item {% if current_step >= 1 %}active{% endif %}">
           <a class="step-item-link text-black {% if current_step >= 1 %}{% else %}disabled{% endif %} {% if current_step == 1 %}active{% endif %}"
-             id="wizard1-tab" data-bs-toggle="tab" href="#wizard1" role="tab" aria-controls="wizard1"
-             aria-selected="{% if current_step == 1 %}true{% else %}false{% endif %}">
+            id="wizard1-tab" data-bs-toggle="tab" href="#wizard1" role="tab" aria-controls="wizard1"
+            aria-selected="{% if current_step == 1 %}true{% else %}false{% endif %}">
             {% trans 'Purchase Order' %}
           </a>
         </div>
         {# 2. Service Order #}
         <div class="step-item {% if current_step >= 2 %}active{% endif %}">
           <a class="step-item-link text-black {% if current_step >= 2 %}{% else %}disabled{% endif %} {% if current_step == 2 %}active{% endif %}"
-             id="wizard2-tab" data-bs-toggle="tab" href="#wizard2" role="tab" aria-controls="wizard2"
-             aria-selected="{% if current_step == 2 %}true{% else %}false{% endif %}">
+            id="wizard2-tab" data-bs-toggle="tab" href="#wizard2" role="tab" aria-controls="wizard2"
+            aria-selected="{% if current_step == 2 %}true{% else %}false{% endif %}">
             {% trans 'Service Order' %}
           </a>
         </div>
         {# 3. Payment Order #}
         <div class="step-item {% if current_step >= 3 %}active{% endif %}">
           <a class="step-item-link text-black {% if current_step >= 3 %}{% else %}disabled{% endif %} {% if current_step == 3 %}active{% endif %}"
-             id="wizard3-tab" data-bs-toggle="tab" href="#wizard3" role="tab" aria-controls="wizard3"
-             aria-selected="{% if current_step == 3 %}true{% else %}false{% endif %}">
+            id="wizard3-tab" data-bs-toggle="tab" href="#wizard3" role="tab" aria-controls="wizard3"
+            aria-selected="{% if current_step == 3 %}true{% else %}false{% endif %}">
             {% trans 'Payment Order' %}
           </a>
         </div>
         {# 4. Asset sent #}
         <div class="step-item {% if current_step >= 4 %}active{% endif %}">
           <a class="step-item-link text-black {% if current_step >= 4 %}{% else %}disabled{% endif %} {% if current_step == 4 %}active{% endif %}"
-             id="wizard4-tab" data-bs-toggle="tab" href="#wizard4" role="tab" aria-controls="wizard4"
-             aria-selected="{% if current_step == 4 %}true{% else %}false{% endif %}">
+            id="wizard4-tab" data-bs-toggle="tab" href="#wizard4" role="tab" aria-controls="wizard4"
+            aria-selected="{% if current_step == 4 %}true{% else %}false{% endif %}">
             {% trans 'Asset sent' %}
           </a>
         </div>
         {# 5. Profitability #}
         {% if perms.buyers.can_see_profitability_page %}
-          <div class="step-item {% if current_step >= 5 %}active{% endif %}">
-            <a class="step-item-link text-black {% if current_step >= 5 %}{% else %}disabled{% endif %} {% if current_step == 5 %}active{% endif %}"
-              id="wizard5-tab" data-bs-toggle="tab" href="#wizard5" role="tab" aria-controls="wizard5"
-              aria-selected="{% if current_step == 5 %}true{% else %}false{% endif %}">
-              {% trans 'Profitability' %}
-            </a>
-          </div>
+        <div class="step-item {% if current_step >= 5 %}active{% endif %}">
+          <a class="step-item-link text-black {% if current_step >= 5 %}{% else %}disabled{% endif %} {% if current_step == 5 %}active{% endif %}"
+            id="wizard5-tab" data-bs-toggle="tab" href="#wizard5" role="tab" aria-controls="wizard5"
+            aria-selected="{% if current_step == 5 %}true{% else %}false{% endif %}">
+            {% trans 'Profitability' %}
+          </a>
+        </div>
         {% endif %}
         {# 6. End #}
         <div class="step-item {% if current_step >= 6 %}active{% endif %}">
           <a class="step-item-link text-black {% if current_step >= 6 %}{% else %}disabled{% endif %} {% if current_step == 6 %}active{% endif %}"
-             id="wizard6-tab" data-bs-toggle="tab" href="#wizard6" role="tab" aria-controls="wizard6"
-             aria-selected="{% if current_step == 6 %}true{% else %}false{% endif %}">
+            id="wizard6-tab" data-bs-toggle="tab" href="#wizard6" role="tab" aria-controls="wizard6"
+            aria-selected="{% if current_step == 6 %}true{% else %}false{% endif %}">
             {% trans 'End' %}
           </a>
         </div>
@@ -64,7 +64,8 @@
     <div class="tab-content" id="cardTabContent">
 
       {# ======= TAB 1: Purchase Order ======= #}
-      <div class="tab-pane fade {% if current_step == 1 %}show active{% endif %}" id="wizard1" role="tabpanel" aria-labelledby="wizard1-tab">
+      <div class="tab-pane fade {% if current_step == 1 %}show active{% endif %}" id="wizard1" role="tabpanel"
+        aria-labelledby="wizard1-tab">
         <div class="row justify-content-center">
           <h3 class="text-dark">{% trans 'Purchase Order' %}</h3>
           <h5 class="card-title">{% trans 'Review' %} &gt; {% trans 'Approve' %} &gt; {% trans 'Service Order' %}</h5>
@@ -73,10 +74,11 @@
               <div>
                 <strong>{% trans 'Review' %}</strong><br />
                 {% if offer.reviewed_by_timestamp %}
-                  {% trans 'Reviewed at' %} {{ offer.reviewed_by_timestamp|date:'d/m/Y H:i' }}<br />
-                  {% if offer.reviewed_by %}<small class="text-muted">@{{ offer.reviewed_by.get_full_name|default:offer.reviewed_by.username }}</small>{% endif %}
+                {% trans 'Reviewed at' %} {{ offer.reviewed_by_timestamp|date:'d/m/Y H:i' }}<br />
+                {% if offer.reviewed_by %}<small class="text-muted">@{{
+                  offer.reviewed_by.get_full_name|default:offer.reviewed_by.username }}</small>{% endif %}
                 {% else %}
-                  <small class="text-muted">{% trans 'Pending review' %}</small>
+                <small class="text-muted">{% trans 'Pending review' %}</small>
                 {% endif %}
               </div>
               {% if not offer.reviewed and perms.buyers.can_review_offer %}
@@ -95,15 +97,16 @@
               <div>
                 <strong>{% trans 'Approve' %}</strong><br />
                 {% if offer.approved_by_timestamp %}
-                  {% trans 'Approved at' %} {{ offer.approved_by_timestamp|date:'d/m/Y H:i' }}<br />
-                  {% if offer.approved_by %}<small class="text-muted">@{{ offer.approved_by.get_full_name|default:offer.approved_by.username }}</small>{% endif %}
+                {% trans 'Approved at' %} {{ offer.approved_by_timestamp|date:'d/m/Y H:i' }}<br />
+                {% if offer.approved_by %}<small class="text-muted">@{{
+                  offer.approved_by.get_full_name|default:offer.approved_by.username }}</small>{% endif %}
                 {% else %}
-                  <small class="text-muted">{% trans 'Pending approval' %}</small>
+                <small class="text-muted">{% trans 'Pending approval' %}</small>
                 {% endif %}
               </div>
               {% if offer.reviewed and not offer.is_approved and perms.buyers.can_approve_offer %}
               <div>
-                <button class="btn btn-sm btn-outline-success" data-wizard-step="APPROVE" >
+                <button class="btn btn-sm btn-outline-success" data-wizard-step="APPROVE">
                   {% trans 'Mark as approved' %}
                 </button>
               </div>
@@ -113,14 +116,17 @@
 
           <hr class="my-4" />
           <div class="d-flex justify-content-between">
-            <button class="btn btn-light disabled" type="button" disabled data-wizard-prev>{% trans 'Previous' %}</button>
-            <button class="btn btn-primary {% if current_step < 2 %}disabled{% endif %}" type="button" {% if current_step < 2 %}disabled{% endif %} data-wizard-next>{% trans 'Next' %}</button>
+            <button class="btn btn-light disabled" type="button" disabled data-wizard-prev>{% trans 'Previous'
+              %}</button>
+            <button class="btn btn-primary {% if current_step < 2 %}disabled{% endif %}" type="button" {% if
+              current_step < 2 %}disabled{% endif %} data-wizard-next>{% trans 'Next' %}</button>
           </div>
         </div>
       </div>
 
       {# ======= TAB 2: Service Order ======= #}
-      <div class="tab-pane fade {% if current_step == 2 %}show active{% endif %}" id="wizard2" role="tabpanel" aria-labelledby="wizard2-tab">
+      <div class="tab-pane fade {% if current_step == 2 %}show active{% endif %}" id="wizard2" role="tabpanel"
+        aria-labelledby="wizard2-tab">
         <div class="row justify-content-center">
           <h3 class="text-dark">{% trans 'Service Order' %}</h3>
           <h5 class="card-title">{% trans 'Create' %} &gt; {% trans 'Send' %} &gt; {% trans 'Payment Order' %}</h5>
@@ -130,10 +136,12 @@
               <div>
                 <strong>{% trans 'Service Order (auto-created on approve)' %}</strong><br />
                 {% if so_created %}
-                  {% trans 'Created at' %} {{ offer.service_order_created_at|date:'d/m/Y H:i' }}<br />
-                  {% if offer.service_order_created_by %}<small class="text-muted">@{{ offer.service_order_created_by.get_full_name|default:offer.service_order_created_by.username }}</small>{% endif %}
+                {% trans 'Created at' %} {{ offer.service_order_created_at|date:'d/m/Y H:i' }}<br />
+                {% if offer.service_order_created_by %}<small class="text-muted">@{{
+                  offer.service_order_created_by.get_full_name|default:offer.service_order_created_by.username
+                  }}</small>{% endif %}
                 {% else %}
-                  <small class="text-muted">{% trans 'Not created yet' %}</small>
+                <small class="text-muted">{% trans 'Not created yet' %}</small>
                 {% endif %}
               </div>
             </div>
@@ -144,15 +152,17 @@
               <div>
                 <strong>{% trans 'Send Service Order' %}</strong><br />
                 {% if so_sent %}
-                  {% trans 'Sent at' %} {{ offer.service_order_sent_at|date:'d/m/Y H:i' }}<br />
-                  {% if offer.service_order_sent_by %}<small class="text-muted">@{{ offer.service_order_sent_by.get_full_name|default:offer.service_order_sent_by.username }}</small>{% endif %}
+                {% trans 'Sent at' %} {{ offer.service_order_sent_at|date:'d/m/Y H:i' }}<br />
+                {% if offer.service_order_sent_by %}<small class="text-muted">@{{
+                  offer.service_order_sent_by.get_full_name|default:offer.service_order_sent_by.username }}</small>{%
+                endif %}
                 {% else %}
-                  <small class="text-muted">{% trans 'Pending to send' %}</small>
+                <small class="text-muted">{% trans 'Pending to send' %}</small>
                 {% endif %}
               </div>
               {% if not so_sent and perms.buyers.can_send_service_order %}
               <div>
-                <button class="btn btn-sm btn-outline-success" data-wizard-step="SO_SEND" >
+                <button class="btn btn-sm btn-outline-success" data-wizard-step="SO_SEND">
                   {% trans 'Mark as sent' %}
                 </button>
               </div>
@@ -162,105 +172,110 @@
 
 
           {% if so_created and not offer.service_order_sent_at and perms.buyers.can_send_service_order %}
-            <form method="post" class="mt-3" onsubmit="return submitWizardRecipients(this);">
-              {% csrf_token %}
-              <input type="hidden" name="step" value="SO_ADD_RECIPIENTS">
+          <form method="post" class="mt-3" onsubmit="return submitWizardRecipients(this);">
+            {% csrf_token %}
+            <input type="hidden" name="step" value="SO_ADD_RECIPIENTS">
 
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label class="form-label">{% trans 'Available (Roles & Users)' %}</label>
-                  <select id="recipient-available" class="form-select" multiple size="12" style="height: 260px;">
-                    <option value="type:B" {% if 'B' in selected_types %}hidden{% endif %}>{% trans 'Buyer' %}</option>
-                    <option value="type:H" {% if 'H' in selected_types %}hidden{% endif %}>{% trans 'Holder' %}</option>
-                    <option value="type:R" {% if 'R' in selected_types %}hidden{% endif %}>{% trans 'Representative' %}</option>
-                    <option value="type:I" {% if 'I' in selected_types %}hidden{% endif %}>{% trans 'Intermediary' %}</option>
-                    
-                    <option value="" disabled>────────────────────────────</option>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">{% trans 'Available (Roles & Users)' %}</label>
+                <select id="recipient-available" class="form-select" multiple size="12" style="height: 260px;">
+                  <option value="type:B" {% if 'B' in selected_types %}hidden{% endif %}>{% trans 'Buyer' %}</option>
+                  <option value="type:H" {% if 'H' in selected_types %}hidden{% endif %}>{% trans 'Holder' %}</option>
+                  <option value="type:R" {% if 'R' in selected_types %}hidden{% endif %}>{% trans 'Representative' %}
+                  </option>
+                  <option value="type:I" {% if 'I' in selected_types %}hidden{% endif %}>{% trans 'Intermediary' %}
+                  </option>
 
-                    {% for u in users_queryset %}
-                      <option value="user:{{ u.id }}">{{ u.get_user_type_display }} | {{ u.get_full_name|default:u.username }}</option>
-                    {% endfor %}
-                  </select>
+                  <option value="" disabled>────────────────────────────</option>
 
-                  <div class="mt-2 d-flex gap-2">
-                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="recipAddSelected()">
-                        {% trans 'Add' %}
-                    </button>
-                  </div>
-                </div>
+                  {% for u in users_queryset %}
+                  <option value="user:{{ u.id }}">{{ u.get_user_type_display }} | {{ u.get_full_name|default:u.username
+                    }}</option>
+                  {% endfor %}
+                </select>
 
-                <div class="col-md-6">
-                  <label class="form-label">{% trans 'Selected recipients' %}</label>
-                  <select id="recipient-picked" class="form-select" multiple size="12" style="height: 260px;">
-                    {% for r in offer.so_recipients.all %}
-                      {% if r.user %}
-                        <option value="user:{{ r.user_id }}">
-                          {{ r.user.get_user_type_display }} | {{ r.user.get_full_name|default:r.user.username }}
-                        </option>
-                      {% elif r.user_type %}
-                        <option value="type:{{ r.user_type }}">
-                          {{ r.get_user_type_display }}
-                        </option>
-                      {% endif %}
-                    {% endfor %}
-                  </select>
-
-                  <!-- Contenedor de inputs hidden que se generan antes de enviar -->
-                  <div id="recipient-hidden-fields"></div>
-
-                  <div class="mt-2 d-flex justify-content-between gap-1">
-                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="recipRemovePersisted()">
-                      {% trans 'Remove' %}
-                    </button>
-
-                    <button type="submit" class="btn btn-sm btn-outline-success">
-                      {% trans 'Save recipients' %}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </form>
-
-            {% with total_recipients=offer.so_recipients.count %}
-              {% if total_recipients > 0 and not offer.service_order_sent_at and perms.buyers.can_send_service_order %}
-                <div class="mt-2 d-flex justify-content-end">
-                  <button id="soNotifyBtn" type="button" class="btn btn-sm btn-warning" onclick="soNotify()">
-                    {% trans 'Send notification' %}
+                <div class="mt-2 d-flex gap-2">
+                  <button type="button" class="btn btn-sm btn-outline-primary" onclick="recipAddSelected()">
+                    {% trans 'Add' %}
                   </button>
                 </div>
-              {% endif %}
-            {% endwith %}
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">{% trans 'Selected recipients' %}</label>
+                <select id="recipient-picked" class="form-select" multiple size="12" style="height: 260px;">
+                  {% for r in offer.so_recipients.all %}
+                  {% if r.user %}
+                  <option value="user:{{ r.user_id }}">
+                    {{ r.user.get_user_type_display }} | {{ r.user.get_full_name|default:r.user.username }}
+                  </option>
+                  {% elif r.user_type %}
+                  <option value="type:{{ r.user_type }}">
+                    {{ r.get_user_type_display }}
+                  </option>
+                  {% endif %}
+                  {% endfor %}
+                </select>
+
+                <!-- Contenedor de inputs hidden que se generan antes de enviar -->
+                <div id="recipient-hidden-fields"></div>
+
+                <div class="mt-2 d-flex justify-content-between gap-1">
+                  <button type="button" class="btn btn-sm btn-outline-secondary" onclick="recipRemovePersisted()">
+                    {% trans 'Remove' %}
+                  </button>
+
+                  <button type="submit" class="btn btn-sm btn-outline-success">
+                    {% trans 'Save recipients' %}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          {% with total_recipients=offer.so_recipients.count %}
+          {% if total_recipients > 0 and not offer.service_order_sent_at and perms.buyers.can_send_service_order %}
+          <div class="mt-2 d-flex justify-content-end">
+            <button id="soNotifyBtn" type="button" class="btn btn-sm btn-warning" onclick="soNotify()">
+              {% trans 'Send notification' %}
+            </button>
+          </div>
           {% endif %}
-          
+          {% endwith %}
+          {% endif %}
+
           <div>
             <small class="text-muted">{% trans 'Send to' %}:</small>
           </div>
 
           <ul class="mt-2 small">
             {% for r in offer.so_recipients.all %}
-              <li>
-                {% if r.user %}
-                  {{ r.user.get_user_type_display }} | {{ r.user.get_full_name|default:r.user.username }}
-                {% elif r.user_type %}
-                  {{ r.get_user_type_display }}
-                {% endif %}
-                <span class="text-muted">· {{ r.added_at|date:"d/m/Y H:i" }}</span>
-              </li>
+            <li>
+              {% if r.user %}
+              {{ r.user.get_user_type_display }} | {{ r.user.get_full_name|default:r.user.username }}
+              {% elif r.user_type %}
+              {{ r.get_user_type_display }}
+              {% endif %}
+              <span class="text-muted">· {{ r.added_at|date:"d/m/Y H:i" }}</span>
+            </li>
             {% empty %}
-              <li class="text-muted">{% trans 'No recipients yet' %}</li>
+            <li class="text-muted">{% trans 'No recipients yet' %}</li>
             {% endfor %}
           </ul>
 
           <hr class="my-4" />
           <div class="d-flex justify-content-between">
             <button class="btn btn-light" type="button" data-wizard-prev>{% trans 'Previous' %}</button>
-            <button class="btn btn-primary {% if current_step < 3 %}disabled{% endif %}" type="button" {% if current_step < 3 %}disabled{% endif %} data-wizard-next>{% trans 'Next' %}</button>
+            <button class="btn btn-primary {% if current_step < 3 %}disabled{% endif %}" type="button" {% if
+              current_step < 3 %}disabled{% endif %} data-wizard-next>{% trans 'Next' %}</button>
           </div>
         </div>
       </div>
 
       {# ======= TAB 3: Payment Order ======= #}
-      <div class="tab-pane fade {% if current_step == 3 %}show active{% endif %}" id="wizard3" role="tabpanel" aria-labelledby="wizard3-tab">
+      <div class="tab-pane fade {% if current_step == 3 %}show active{% endif %}" id="wizard3" role="tabpanel"
+        aria-labelledby="wizard3-tab">
         <div class="row justify-content-center">
           <h3 class="text-dark">{% trans 'Payment Order' %}</h3>
           <h5 class="card-title">{% trans 'Create' %} &gt; {% trans 'Send' %} &gt; {% trans 'Asset sent' %}</h5>
@@ -269,18 +284,20 @@
               <div>
                 <strong>{% trans 'Send Notification for Payment Order' %}</strong><br />
                 {% if pay_created %}
-                  {% trans 'Created at' %} {{ offer.payment_order_created_at|date:'d/m/Y H:i' }}<br />
-                  {% if offer.payment_order_created_by %}<small class="text-muted">@{{ offer.payment_order_created_by.get_full_name|default:offer.payment_order_created_by.username }}</small>{% endif %}
+                {% trans 'Created at' %} {{ offer.payment_order_created_at|date:'d/m/Y H:i' }}<br />
+                {% if offer.payment_order_created_by %}<small class="text-muted">@{{
+                  offer.payment_order_created_by.get_full_name|default:offer.payment_order_created_by.username
+                  }}</small>{% endif %}
                 {% else %}
-                  <small class="text-muted">{% trans 'Pending' %}</small>
+                <small class="text-muted">{% trans 'Pending' %}</small>
                 {% endif %}
               </div>
               {% if not pay_created and perms.buyers.can_create_payment_order %}
-                <div>
-                  <button class="btn btn-sm btn-outline-success" data-wizard-step="PAY_CREATE">
-                    {% trans 'Mark as created' %}
-                  </button>
-                </div>
+              <div>
+                <button class="btn btn-sm btn-outline-success" data-wizard-step="PAY_CREATE">
+                  {% trans 'Mark as created' %}
+                </button>
+              </div>
               {% endif %}
             </div>
           </div>
@@ -290,10 +307,12 @@
               <div>
                 <strong>{% trans 'Payment Order Paid' %}</strong><br />
                 {% if pay_sent %}
-                  {% trans 'Sent at' %} {{ offer.payment_order_sent_at|date:'d/m/Y H:i' }}<br />
-                  {% if offer.payment_order_sent_by %}<small class="text-muted">@{{ offer.payment_order_sent_by.get_full_name|default:offer.payment_order_sent_by.username }}</small>{% endif %}
+                {% trans 'Sent at' %} {{ offer.payment_order_sent_at|date:'d/m/Y H:i' }}<br />
+                {% if offer.payment_order_sent_by %}<small class="text-muted">@{{
+                  offer.payment_order_sent_by.get_full_name|default:offer.payment_order_sent_by.username }}</small>{%
+                endif %}
                 {% else %}
-                  <small class="text-muted">{% trans 'Pending to send' %}</small>
+                <small class="text-muted">{% trans 'Pending to send' %}</small>
                 {% endif %}
               </div>
               {% if not pay_sent and pay_created and perms.buyers.can_send_payment_order %}
@@ -309,25 +328,30 @@
           <hr class="my-4" />
           <div class="d-flex justify-content-between">
             <button class="btn btn-light" type="button" data-wizard-prev>{% trans 'Previous' %}</button>
-            <button class="btn btn-primary {% if current_step < 4 %}disabled{% endif %}" type="button" {% if current_step < 4 %}disabled{% endif %} data-wizard-next>{% trans 'Next' %}</button>
+            <button class="btn btn-primary {% if current_step < 4 %}disabled{% endif %}" type="button" {% if
+              current_step < 4 %}disabled{% endif %} data-wizard-next>{% trans 'Next' %}</button>
           </div>
         </div>
       </div>
 
       {# ======= TAB 4: Asset movement ======= #}
-      <div class="tab-pane fade {% if current_step == 4 %}show active{% endif %}" id="wizard4" role="tabpanel" aria-labelledby="wizard4-tab">
+      <div class="tab-pane fade {% if current_step == 4 %}show active{% endif %}" id="wizard4" role="tabpanel"
+        aria-labelledby="wizard4-tab">
         <div class="row justify-content-center">
           <h3 class="text-dark">{% trans 'Asset sent' %}</h3>
-          <h5 class="card-title">{% trans 'In Possession' %} &gt; {% trans 'Send' %} &gt; {% trans 'Profitability' %}</h5>
+          <h5 class="card-title">{% trans 'In Possession' %} &gt; {% trans 'Send' %} &gt; {% trans 'Profitability' %}
+          </h5>
           <div class="border rounded p-3 h-100 my-2 {% if possess %}border-green{% endif %}">
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <strong>{% trans 'Asset in Possession' %}</strong><br />
                 {% if possess %}
-                  {% trans 'At' %} {{ offer.asset_in_possession_at|date:'d/m/Y H:i' }}<br />
-                  {% if offer.asset_in_possession_by %}<small class="text-muted">@{{ offer.asset_in_possession_by.get_full_name|default:offer.asset_in_possession_by.username }}</small>{% endif %}
+                {% trans 'At' %} {{ offer.asset_in_possession_at|date:'d/m/Y H:i' }}<br />
+                {% if offer.asset_in_possession_by %}<small class="text-muted">@{{
+                  offer.asset_in_possession_by.get_full_name|default:offer.asset_in_possession_by.username }}</small>{%
+                endif %}
                 {% else %}
-                  <small class="text-muted">{% trans 'Pending' %}</small>
+                <small class="text-muted">{% trans 'Pending' %}</small>
                 {% endif %}
               </div>
               {% if not possess and perms.buyers.can_set_asset_possession %}
@@ -345,15 +369,16 @@
               <div>
                 <strong>{% trans 'Asset Sent' %}</strong><br />
                 {% if asset_sent %}
-                  {% trans 'At' %} {{ offer.asset_sent_at|date:'d/m/Y H:i' }}<br />
-                  {% if offer.asset_sent_by %}<small class="text-muted">@{{ offer.asset_sent_by.get_full_name|default:offer.asset_sent_by.username }}</small>{% endif %}
+                {% trans 'At' %} {{ offer.asset_sent_at|date:'d/m/Y H:i' }}<br />
+                {% if offer.asset_sent_by %}<small class="text-muted">@{{
+                  offer.asset_sent_by.get_full_name|default:offer.asset_sent_by.username }}</small>{% endif %}
                 {% else %}
-                  <small class="text-muted">{% trans 'Pending' %}</small>
+                <small class="text-muted">{% trans 'Pending' %}</small>
                 {% endif %}
               </div>
               {% if not asset_sent and possess and perms.buyers.can_send_asset %}
               <div>
-                <button class="btn btn-sm btn-outline-success" data-wizard-step="ASSET_SEND" >
+                <button class="btn btn-sm btn-outline-success" data-wizard-step="ASSET_SEND">
                   {% trans 'Mark as sent' %}
                 </button>
               </div>
@@ -364,136 +389,148 @@
           <hr class="my-4" />
           <div class="d-flex justify-content-between">
             <button class="btn btn-light" type="button" data-wizard-prev>{% trans 'Previous' %}</button>
-            <button class="btn btn-primary {% if current_step < 5 %}disabled{% endif %}" type="button" {% if current_step < 5 %}disabled{% endif %} data-wizard-next>{% trans 'Next' %}</button>
+            <button class="btn btn-primary {% if current_step < 5 %}disabled{% endif %}" type="button" {% if
+              current_step < 5 %}disabled{% endif %} data-wizard-next>{% trans 'Next' %}</button>
           </div>
         </div>
       </div>
 
       {# ======= TAB 5: Profitability ======= #}
-    <div class="tab-pane fade {% if current_step == 5 %}show active{% endif %}" id="wizard5" role="tabpanel" aria-labelledby="wizard5-tab">
-      <div class="row justify-content-center">
-        <h3 class="text-dark">{% trans 'Profitability' %}</h3>
-        <h5 class="card-title">{% trans 'Create' %} &gt; {% trans 'Paid' %} &gt; {% trans 'End' %}</h5>
+      <div class="tab-pane fade {% if current_step == 5 %}show active{% endif %}" id="wizard5" role="tabpanel"
+        aria-labelledby="wizard5-tab">
+        <div class="row justify-content-center">
+          <h3 class="text-dark">{% trans 'Profitability' %}</h3>
+          <h5 class="card-title">{% trans 'Create' %} &gt; {% trans 'Paid' %} &gt; {% trans 'End' %}</h5>
 
-        {# Profitability Created #}
-        <div class="border rounded p-3 h-100 my-2 {% if prof_created %}border-green{% endif %}">
-          <div class="d-flex justify-content-between align-items-center">
-            <div>
-              <strong>{% trans 'Profitability Created' %}</strong><br />
-              {% if prof_created %}
+          {# Profitability Created #}
+          <div class="border rounded p-3 h-100 my-2 {% if prof_created %}border-green{% endif %}">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <strong>{% trans 'Profitability Created' %}</strong><br />
+                {% if prof_created %}
                 {% trans 'At' %} {{ offer.profitability_created_at|date:'d/m/Y H:i' }}<br />
-                {% if offer.profitability_created_by %}<small class="text-muted">@{{ offer.profitability_created_by.get_full_name|default:offer.profitability_created_by.username }}</small>{% endif %}
-              {% else %}
+                {% if offer.profitability_created_by %}<small class="text-muted">@{{
+                  offer.profitability_created_by.get_full_name|default:offer.profitability_created_by.username
+                  }}</small>{% endif %}
+                {% else %}
                 <small class="text-muted">{% trans 'Pending' %}</small>
-              {% endif %}
-            </div>
-            {% if not prof_created and perms.buyers.can_set_profitability %}
+                {% endif %}
+              </div>
+              {% if not prof_created and perms.buyers.can_set_profitability %}
               <div>
                 <button class="btn btn-sm btn-outline-success" data-wizard-step="PROFIT_CREATE">
                   {% trans 'Mark as created' %}
                 </button>
               </div>
-            {% endif %}
+              {% endif %}
+            </div>
           </div>
-        </div>
 
-        {# RRF sub-pago #}
-        <div class="border rounded p-3 h-100 my-2 {% if rrf_paid %}border-green{% endif %}">
-          <div class="d-flex justify-content-between align-items-center">
-            <div>
-              <strong>{% trans "Recovery Repatriation Foundation Paid" %}</strong><br>
-              {% if rrf_paid %}
+          {# RRF sub-pago #}
+          <div class="border rounded p-3 h-100 my-2 {% if rrf_paid %}border-green{% endif %}">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <strong>{% trans "Recovery Repatriation Foundation Paid" %}</strong><br>
+                {% if rrf_paid %}
                 {% trans 'At' %} {{ rrf_paid_at|date:'d/m/Y H:i' }}<br>
-                {% if rrf_paid_by %}<small class="text-muted">@{{ rrf_paid_by.get_full_name|default:rrf_paid_by.username }}</small>{% endif %}
-              {% else %}
+                {% if rrf_paid_by %}<small class="text-muted">@{{ rrf_paid_by.get_full_name|default:rrf_paid_by.username
+                  }}</small>{% endif %}
+                {% else %}
                 <small class="text-muted">{% trans 'Pending' %}</small>
+                {% endif %}
+              </div>
+              {% if prof_created and not rrf_paid and perms.buyers.recovery_repatriation_foundation_paid %}
+              <div>
+                <button class="btn btn-sm btn-outline-success" data-wizard-step="RRF_PAY">{% trans 'Mark as paid'
+                  %}</button>
+              </div>
               {% endif %}
             </div>
-            {% if prof_created and not rrf_paid and perms.buyers.recovery_repatriation_foundation_paid %}
-              <div>
-                <button class="btn btn-sm btn-outline-success" data-wizard-step="RRF_PAY">{% trans 'Mark as paid' %}</button>
-              </div>
-            {% endif %}
           </div>
-        </div>
 
-        {# AM PRO sub-pago #}
-        <div class="border rounded p-3 h-100 my-2 {% if ampro_paid %}border-green{% endif %}">
-          <div class="d-flex justify-content-between align-items-center">
-            <div>
-              <strong>{% trans "AM PRO Service Paid" %}</strong><br>
-              {% if ampro_paid %}
-                {% trans 'At' %} {{ ampro_paid_at|date:'d/m/Y H:i' }}<br>
-                {% if ampro_paid_by %}<small class="text-muted">@{{ ampro_paid_by.get_full_name|default:ampro_paid_by.username }}</small>{% endif %}
-              {% else %}
+          {# pay master sub-pago #}
+          <div class="border rounded p-3 h-100 my-2 {% if paymaster_paid %}border-green{% endif %}">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <strong>{% trans "pay master Service Paid" %}</strong><br>
+                {% if paymaster_paid %}
+                {% trans 'At' %} {{ paymaster_paid_at|date:'d/m/Y H:i' }}<br>
+                {% if paymaster_paid_by %}<small class="text-muted">@{{
+                  paymaster_paid_by.get_full_name|default:paymaster_paid_by.username }}</small>{% endif %}
+                {% else %}
                 <small class="text-muted">{% trans 'Pending' %}</small>
+                {% endif %}
+              </div>
+              {% if prof_created and not paymaster_paid and perms.buyers.pay_master_service_paid %}
+              <div>
+                <button class="btn btn-sm btn-outline-success" data-wizard-step="AMPRO_PAY">{% trans 'Mark as paid'
+                  %}</button>
+              </div>
               {% endif %}
             </div>
-            {% if prof_created and not ampro_paid and perms.buyers.am_pro_service_paid %}
-              <div>
-                <button class="btn btn-sm btn-outline-success" data-wizard-step="AMPRO_PAY">{% trans 'Mark as paid' %}</button>
-              </div>
-            {% endif %}
           </div>
-        </div>
 
-        {# Propensiones sub-pago #}
-        <div class="border rounded p-3 h-100 my-2 {% if propensiones_paid %}border-green{% endif %}">
-          <div class="d-flex justify-content-between align-items-center">
-            <div>
-              <strong>{% trans "Propensiones International Paid" %}</strong><br>
-              {% if propensiones_paid %}
+          {# Propensiones sub-pago #}
+          <div class="border rounded p-3 h-100 my-2 {% if propensiones_paid %}border-green{% endif %}">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <strong>{% trans "Propensiones International Paid" %}</strong><br>
+                {% if propensiones_paid %}
                 {% trans 'At' %} {{ propensiones_paid_at|date:'d/m/Y H:i' }}<br>
-                {% if propensiones_paid_by %}<small class="text-muted">@{{ propensiones_paid_by.get_full_name|default:propensiones_paid_by.username }}</small>{% endif %}
-              {% else %}
+                {% if propensiones_paid_by %}<small class="text-muted">@{{
+                  propensiones_paid_by.get_full_name|default:propensiones_paid_by.username }}</small>{% endif %}
+                {% else %}
                 <small class="text-muted">{% trans 'Pending' %}</small>
-              {% endif %}
-            </div>
-            {% if prof_created and not propensiones_paid and perms.buyers.propensiones_paid %}
-              <div>
-                <button class="btn btn-sm btn-outline-success" data-wizard-step="PROP_PAY">{% trans 'Mark as paid' %}</button>
+                {% endif %}
               </div>
-            {% endif %}
-          </div>
-        </div>
-
-        {# Profitability Paid (cierre) #}
-        <div class="border rounded p-3 h-100 my-2 {% if prof_paid %}border-green{% endif %}">
-          <div class="d-flex justify-content-between align-items-center">
-            <div>
-              <strong>{% trans 'Profitability Paid' %}</strong><br />
-              {% if prof_paid %}
-                {% trans 'At' %} {{ offer.profitability_paid_at|date:'d/m/Y H:i' }}<br />
-                {% if offer.profitability_paid_by %}<small class="text-muted">@{{ offer.profitability_paid_by.get_full_name|default:offer.profitability_paid_by.username }}</small>{% endif %}
-              {% else %}
-                <small class="text-muted">{% trans 'Pending' %}</small>
+              {% if prof_created and not propensiones_paid and perms.buyers.propensiones_paid %}
+              <div>
+                <button class="btn btn-sm btn-outline-success" data-wizard-step="PROP_PAY">{% trans 'Mark as paid'
+                  %}</button>
+              </div>
               {% endif %}
             </div>
-            {% if all_prof_subpaid and not prof_paid and perms.buyers.can_approve_pay_profitability %}
+          </div>
+
+          {# Profitability Paid (cierre) #}
+          <div class="border rounded p-3 h-100 my-2 {% if prof_paid %}border-green{% endif %}">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <strong>{% trans 'Profitability Paid' %}</strong><br />
+                {% if prof_paid %}
+                {% trans 'At' %} {{ offer.profitability_paid_at|date:'d/m/Y H:i' }}<br />
+                {% if offer.profitability_paid_by %}<small class="text-muted">@{{
+                  offer.profitability_paid_by.get_full_name|default:offer.profitability_paid_by.username }}</small>{%
+                endif %}
+                {% else %}
+                <small class="text-muted">{% trans 'Pending' %}</small>
+                {% endif %}
+              </div>
+              {% if all_prof_subpaid and not prof_paid and perms.buyers.can_approve_pay_profitability %}
               <div>
                 <button class="btn btn-sm btn-outline-success" data-wizard-step="PROFIT_PAY">
                   {% trans 'Mark as paid' %}
                 </button>
               </div>
-            {% endif %}
+              {% endif %}
+            </div>
+          </div>
+
+          <hr class="my-4" />
+          <div class="d-flex justify-content-between">
+            <button class="btn btn-light" type="button" data-wizard-prev>{% trans 'Previous' %}</button>
+            <button class="btn btn-primary {% if not all_prof_subpaid %}disabled{% endif %}" type="button" {% if not
+              all_prof_subpaid %}disabled{% endif %} data-wizard-next>
+              {% trans 'Next' %}
+            </button>
           </div>
         </div>
-
-        <hr class="my-4" />
-        <div class="d-flex justify-content-between">
-          <button class="btn btn-light" type="button" data-wizard-prev>{% trans 'Previous' %}</button>
-          <button class="btn btn-primary {% if not all_prof_subpaid %}disabled{% endif %}" type="button"
-                  {% if not all_prof_subpaid %}disabled{% endif %}
-                  data-wizard-next>
-            {% trans 'Next' %}
-          </button>
-        </div>
       </div>
-    </div>
 
 
       {# ======= TAB 6: End ======= #}
-      <div class="tab-pane fade {% if current_step == 6 %}show active{% endif %}" id="wizard6" role="tabpanel" aria-labelledby="wizard6-tab">
+      <div class="tab-pane fade {% if current_step == 6 %}show active{% endif %}" id="wizard6" role="tabpanel"
+        aria-labelledby="wizard6-tab">
         <div class="row justify-content-center">
           <h3 class="text-dark">{% trans 'End' %}</h3>
           <p class="text-muted">{% trans 'Completed.' %}</p>
