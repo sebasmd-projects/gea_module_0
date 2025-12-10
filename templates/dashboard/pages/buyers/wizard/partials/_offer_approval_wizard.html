@@ -75,8 +75,7 @@
                 <strong>{% trans 'Review' %}</strong><br />
                 {% if offer.reviewed_by_timestamp %}
                 {% trans 'Reviewed at' %} {{ offer.reviewed_by_timestamp|date:'d/m/Y H:i' }}<br />
-                {% if offer.reviewed_by %}<small class="text-muted">@{{
-                  offer.reviewed_by.get_full_name|default:offer.reviewed_by.username }}</small>{% endif %}
+                {% if offer.reviewed_by %}<small class="text-muted">@{{ offer.reviewed_by.get_full_name|default:offer.reviewed_by.username }}</small>{% endif %}
                 {% else %}
                 <small class="text-muted">{% trans 'Pending review' %}</small>
                 {% endif %}
@@ -98,8 +97,7 @@
                 <strong>{% trans 'Approve' %}</strong><br />
                 {% if offer.approved_by_timestamp %}
                 {% trans 'Approved at' %} {{ offer.approved_by_timestamp|date:'d/m/Y H:i' }}<br />
-                {% if offer.approved_by %}<small class="text-muted">@{{
-                  offer.approved_by.get_full_name|default:offer.approved_by.username }}</small>{% endif %}
+                {% if offer.approved_by %}<small class="text-muted">@{{ offer.approved_by.get_full_name|default:offer.approved_by.username }}</small>{% endif %}
                 {% else %}
                 <small class="text-muted">{% trans 'Pending approval' %}</small>
                 {% endif %}
@@ -116,10 +114,12 @@
 
           <hr class="my-4" />
           <div class="d-flex justify-content-between">
-            <button class="btn btn-light disabled" type="button" disabled data-wizard-prev>{% trans 'Previous'
-              %}</button>
-            <button class="btn btn-primary {% if current_step < 2 %}disabled{% endif %}" type="button" {% if
-              current_step < 2 %}disabled{% endif %} data-wizard-next>{% trans 'Next' %}</button>
+            <button class="btn btn-light disabled" type="button" disabled data-wizard-prev>
+              {% trans 'Previous' %}
+            </button>
+            <button class="btn btn-primary {% if current_step < 2 %}disabled{% endif %}" type="button" 
+              {% if current_step < 2 %}disabled{% endif %} data-wizard-next>{% trans 'Next' %}
+            </button>
           </div>
         </div>
       </div>
@@ -136,12 +136,11 @@
               <div>
                 <strong>{% trans 'Service Order (auto-created on approve)' %}</strong><br />
                 {% if so_created %}
-                {% trans 'Created at' %} {{ offer.service_order_created_at|date:'d/m/Y H:i' }}<br />
-                {% if offer.service_order_created_by %}<small class="text-muted">@{{
-                  offer.service_order_created_by.get_full_name|default:offer.service_order_created_by.username
-                  }}</small>{% endif %}
+                  {% trans 'Created at' %} {{ offer.service_order_created_at|date:'d/m/Y H:i' }}<br />
+                  {% if offer.service_order_created_by %}<small class="text-muted">@{{ offer.service_order_created_by.get_full_name|default:offer.service_order_created_by.username }}</small>
+                  {% endif %}
                 {% else %}
-                <small class="text-muted">{% trans 'Not created yet' %}</small>
+                  <small class="text-muted">{% trans 'Not created yet' %}</small>
                 {% endif %}
               </div>
             </div>
@@ -153,9 +152,8 @@
                 <strong>{% trans 'Send Service Order' %}</strong><br />
                 {% if so_sent %}
                 {% trans 'Sent at' %} {{ offer.service_order_sent_at|date:'d/m/Y H:i' }}<br />
-                {% if offer.service_order_sent_by %}<small class="text-muted">@{{
-                  offer.service_order_sent_by.get_full_name|default:offer.service_order_sent_by.username }}</small>{%
-                endif %}
+                {% if offer.service_order_sent_by %}<small class="text-muted">@{{ offer.service_order_sent_by.get_full_name|default:offer.service_order_sent_by.username }}</small>
+                {% endif %}
                 {% else %}
                 <small class="text-muted">{% trans 'Pending to send' %}</small>
                 {% endif %}
@@ -190,8 +188,7 @@
                   <option value="" disabled>────────────────────────────</option>
 
                   {% for u in users_queryset %}
-                  <option value="user:{{ u.id }}">{{ u.get_user_type_display }} | {{ u.get_full_name|default:u.username
-                    }}</option>
+                    <option value="user:{{ u.id }}">{{ u.get_user_type_display }} | {{ u.get_full_name|default:u.username }}</option>
                   {% endfor %}
                 </select>
 
@@ -267,8 +264,7 @@
           <hr class="my-4" />
           <div class="d-flex justify-content-between">
             <button class="btn btn-light" type="button" data-wizard-prev>{% trans 'Previous' %}</button>
-            <button class="btn btn-primary {% if current_step < 3 %}disabled{% endif %}" type="button" {% if
-              current_step < 3 %}disabled{% endif %} data-wizard-next>{% trans 'Next' %}</button>
+            <button class="btn btn-primary {% if current_step < 3 %}disabled{% endif %}" type="button" {% if current_step < 3 %}disabled{% endif %} data-wizard-next>{% trans 'Next' %}</button>
           </div>
         </div>
       </div>
@@ -285,9 +281,7 @@
                 <strong>{% trans 'Send Notification for Payment Order' %}</strong><br />
                 {% if pay_created %}
                 {% trans 'Created at' %} {{ offer.payment_order_created_at|date:'d/m/Y H:i' }}<br />
-                {% if offer.payment_order_created_by %}<small class="text-muted">@{{
-                  offer.payment_order_created_by.get_full_name|default:offer.payment_order_created_by.username
-                  }}</small>{% endif %}
+                {% if offer.payment_order_created_by %}<small class="text-muted">@{{ offer.payment_order_created_by.get_full_name|default:offer.payment_order_created_by.username }}</small>{% endif %}
                 {% else %}
                 <small class="text-muted">{% trans 'Pending' %}</small>
                 {% endif %}
@@ -308,9 +302,8 @@
                 <strong>{% trans 'Payment Order Paid' %}</strong><br />
                 {% if pay_sent %}
                 {% trans 'Sent at' %} {{ offer.payment_order_sent_at|date:'d/m/Y H:i' }}<br />
-                {% if offer.payment_order_sent_by %}<small class="text-muted">@{{
-                  offer.payment_order_sent_by.get_full_name|default:offer.payment_order_sent_by.username }}</small>{%
-                endif %}
+                {% if offer.payment_order_sent_by %}<small class="text-muted">@{{ offer.payment_order_sent_by.get_full_name|default:offer.payment_order_sent_by.username }}</small>
+                {% endif %}
                 {% else %}
                 <small class="text-muted">{% trans 'Pending to send' %}</small>
                 {% endif %}
@@ -328,8 +321,7 @@
           <hr class="my-4" />
           <div class="d-flex justify-content-between">
             <button class="btn btn-light" type="button" data-wizard-prev>{% trans 'Previous' %}</button>
-            <button class="btn btn-primary {% if current_step < 4 %}disabled{% endif %}" type="button" {% if
-              current_step < 4 %}disabled{% endif %} data-wizard-next>{% trans 'Next' %}</button>
+            <button class="btn btn-primary {% if current_step < 4 %}disabled{% endif %}" type="button" {% if current_step < 4 %}disabled{% endif %} data-wizard-next>{% trans 'Next' %}</button>
           </div>
         </div>
       </div>
@@ -347,9 +339,7 @@
                 <strong>{% trans 'Asset in Possession' %}</strong><br />
                 {% if possess %}
                 {% trans 'At' %} {{ offer.asset_in_possession_at|date:'d/m/Y H:i' }}<br />
-                {% if offer.asset_in_possession_by %}<small class="text-muted">@{{
-                  offer.asset_in_possession_by.get_full_name|default:offer.asset_in_possession_by.username }}</small>{%
-                endif %}
+                {% if offer.asset_in_possession_by %}<small class="text-muted">@{{ offer.asset_in_possession_by.get_full_name|default:offer.asset_in_possession_by.username }}</small>{% endif %}
                 {% else %}
                 <small class="text-muted">{% trans 'Pending' %}</small>
                 {% endif %}
@@ -370,8 +360,7 @@
                 <strong>{% trans 'Asset Sent' %}</strong><br />
                 {% if asset_sent %}
                 {% trans 'At' %} {{ offer.asset_sent_at|date:'d/m/Y H:i' }}<br />
-                {% if offer.asset_sent_by %}<small class="text-muted">@{{
-                  offer.asset_sent_by.get_full_name|default:offer.asset_sent_by.username }}</small>{% endif %}
+                {% if offer.asset_sent_by %}<small class="text-muted">@{{ offer.asset_sent_by.get_full_name|default:offer.asset_sent_by.username }}</small>{% endif %}
                 {% else %}
                 <small class="text-muted">{% trans 'Pending' %}</small>
                 {% endif %}
@@ -389,8 +378,7 @@
           <hr class="my-4" />
           <div class="d-flex justify-content-between">
             <button class="btn btn-light" type="button" data-wizard-prev>{% trans 'Previous' %}</button>
-            <button class="btn btn-primary {% if current_step < 5 %}disabled{% endif %}" type="button" {% if
-              current_step < 5 %}disabled{% endif %} data-wizard-next>{% trans 'Next' %}</button>
+            <button class="btn btn-primary {% if current_step < 5 %}disabled{% endif %}" type="button" {% if current_step < 5 %}disabled{% endif %} data-wizard-next>{% trans 'Next' %}</button>
           </div>
         </div>
       </div>
@@ -409,9 +397,7 @@
                 <strong>{% trans 'Profitability Created' %}</strong><br />
                 {% if prof_created %}
                 {% trans 'At' %} {{ offer.profitability_created_at|date:'d/m/Y H:i' }}<br />
-                {% if offer.profitability_created_by %}<small class="text-muted">@{{
-                  offer.profitability_created_by.get_full_name|default:offer.profitability_created_by.username
-                  }}</small>{% endif %}
+                {% if offer.profitability_created_by %}<small class="text-muted">@{{ offer.profitability_created_by.get_full_name|default:offer.profitability_created_by.username }}</small>{% endif %}
                 {% else %}
                 <small class="text-muted">{% trans 'Pending' %}</small>
                 {% endif %}
@@ -433,16 +419,14 @@
                 <strong>{% trans "Recovery Repatriation Foundation Paid" %}</strong><br>
                 {% if rrf_paid %}
                 {% trans 'At' %} {{ rrf_paid_at|date:'d/m/Y H:i' }}<br>
-                {% if rrf_paid_by %}<small class="text-muted">@{{ rrf_paid_by.get_full_name|default:rrf_paid_by.username
-                  }}</small>{% endif %}
+                {% if rrf_paid_by %}<small class="text-muted">@{{ rrf_paid_by.get_full_name|default:rrf_paid_by.username }}</small>{% endif %}
                 {% else %}
                 <small class="text-muted">{% trans 'Pending' %}</small>
                 {% endif %}
               </div>
               {% if prof_created and not rrf_paid and perms.buyers.recovery_repatriation_foundation_paid %}
               <div>
-                <button class="btn btn-sm btn-outline-success" data-wizard-step="RRF_PAY">{% trans 'Mark as paid'
-                  %}</button>
+                <button class="btn btn-sm btn-outline-success" data-wizard-step="RRF_PAY">{% trans 'Mark as paid' %}</button>
               </div>
               {% endif %}
             </div>
@@ -455,16 +439,14 @@
                 <strong>{% trans "pay master Service Paid" %}</strong><br>
                 {% if paymaster_paid %}
                 {% trans 'At' %} {{ paymaster_paid_at|date:'d/m/Y H:i' }}<br>
-                {% if paymaster_paid_by %}<small class="text-muted">@{{
-                  paymaster_paid_by.get_full_name|default:paymaster_paid_by.username }}</small>{% endif %}
+                {% if paymaster_paid_by %}<small class="text-muted">@{{ paymaster_paid_by.get_full_name|default:paymaster_paid_by.username }}</small>{% endif %}
                 {% else %}
                 <small class="text-muted">{% trans 'Pending' %}</small>
                 {% endif %}
               </div>
               {% if prof_created and not paymaster_paid and perms.buyers.pay_master_service_paid %}
               <div>
-                <button class="btn btn-sm btn-outline-success" data-wizard-step="AMPRO_PAY">{% trans 'Mark as paid'
-                  %}</button>
+                <button class="btn btn-sm btn-outline-success" data-wizard-step="AMPRO_PAY">{% trans 'Mark as paid' %}</button>
               </div>
               {% endif %}
             </div>
@@ -477,16 +459,14 @@
                 <strong>{% trans "Propensiones International Paid" %}</strong><br>
                 {% if propensiones_paid %}
                 {% trans 'At' %} {{ propensiones_paid_at|date:'d/m/Y H:i' }}<br>
-                {% if propensiones_paid_by %}<small class="text-muted">@{{
-                  propensiones_paid_by.get_full_name|default:propensiones_paid_by.username }}</small>{% endif %}
+                {% if propensiones_paid_by %}<small class="text-muted">@{{ propensiones_paid_by.get_full_name|default:propensiones_paid_by.username }}</small>{% endif %}
                 {% else %}
                 <small class="text-muted">{% trans 'Pending' %}</small>
                 {% endif %}
               </div>
               {% if prof_created and not propensiones_paid and perms.buyers.propensiones_paid %}
               <div>
-                <button class="btn btn-sm btn-outline-success" data-wizard-step="PROP_PAY">{% trans 'Mark as paid'
-                  %}</button>
+                <button class="btn btn-sm btn-outline-success" data-wizard-step="PROP_PAY">{% trans 'Mark as paid' %}</button>
               </div>
               {% endif %}
             </div>
@@ -499,9 +479,7 @@
                 <strong>{% trans 'Profitability Paid' %}</strong><br />
                 {% if prof_paid %}
                 {% trans 'At' %} {{ offer.profitability_paid_at|date:'d/m/Y H:i' }}<br />
-                {% if offer.profitability_paid_by %}<small class="text-muted">@{{
-                  offer.profitability_paid_by.get_full_name|default:offer.profitability_paid_by.username }}</small>{%
-                endif %}
+                {% if offer.profitability_paid_by %}<small class="text-muted">@{{ offer.profitability_paid_by.get_full_name|default:offer.profitability_paid_by.username }}</small>{% endif %}
                 {% else %}
                 <small class="text-muted">{% trans 'Pending' %}</small>
                 {% endif %}
@@ -519,8 +497,7 @@
           <hr class="my-4" />
           <div class="d-flex justify-content-between">
             <button class="btn btn-light" type="button" data-wizard-prev>{% trans 'Previous' %}</button>
-            <button class="btn btn-primary {% if not all_prof_subpaid %}disabled{% endif %}" type="button" {% if not
-              all_prof_subpaid %}disabled{% endif %} data-wizard-next>
+            <button class="btn btn-primary {% if not all_prof_subpaid %}disabled{% endif %}" type="button" {% if not all_prof_subpaid %}disabled{% endif %} data-wizard-next>
               {% trans 'Next' %}
             </button>
           </div>
