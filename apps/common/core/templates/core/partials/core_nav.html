@@ -30,7 +30,7 @@
         onmouseout="this.style.transform='scale(1)';"
         style="width: auto; height: 40px; margin-left: 4px;"
         >
-          {% trans 'Client Area' %}
+          {% trans 'Suppliers' %}
         </a>
       </div>
       {% endif %}
@@ -180,7 +180,7 @@
             <a href="{% url 'buyers:buyer_index' %}" class="btn btn-light text-black fw-semibold gea_gradient w-100">{% trans 'Buyers' %}</a>
           {% endif %}
           {% if request.user.is_asset_holder or request.user.is_superuser or perms.users.can_view_holder %}
-            <a href="{% url 'assets:holder_index' %}" class="btn btn-light text-black fw-semibold gea_gradient w-100">{% trans 'Client Area' %}</a>
+            <a href="{% url 'assets:holder_index' %}" class="btn btn-light text-black fw-semibold gea_gradient w-100">{% trans 'Suppliers' %}</a>
           {% endif %}
         {% endif %}
 

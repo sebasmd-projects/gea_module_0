@@ -365,7 +365,7 @@ class UserModel(TimeStampedModel, AbstractUser):
         unique_together = [['username', 'email']]
         permissions = [
             ('can_view_buyer', _('Can view Buyer dashboard')),
-            ('can_view_holder', _('Can view Client Area dashboard')),
+            ('can_view_holder', _('Can view Suppliers Area dashboard')),
             ('can_view_all_users', _('Can view all users')),
             ('can_view_buyers', _('Can view only buyers users')),
             ('can_view_holders', _('Can view only holders users')),
