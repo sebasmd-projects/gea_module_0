@@ -9,7 +9,6 @@
 <nav class="sidenav shadow-right sidenav-light">
   <div class="sidenav-menu">
     <div class="nav accordion" id="accordionSidenav">
-
       <!-- Encabezado -->
       <div class="sidenav-menu-heading">
         {% trans 'Dashboard' %}
@@ -46,7 +45,6 @@
       </a>
       <div class="collapse {% collapse_open_class 'two_factor:profile' 'buyers:buyer_index' 'buyers:buyer_create' 'assets:create' 'assets:add_category' %}" id="collapsePages" data-bs-parent="#accordionSidenav">
         <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPagesMenu">
-
           <!-- Account -->
           {% is_any_active 'two_factor:profile' as account_open %}
           <a class="nav-link {% link_collapsed_class 'two_factor:profile' %}" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAccount" aria-expanded="{% aria_expanded 'two_factor:profile' %}" aria-controls="pagesCollapseAccount">
@@ -61,7 +59,9 @@
           <div class="collapse {% collapse_open_class 'two_factor:profile' %}" id="pagesCollapseAccount" data-bs-parent="#accordionSidenavPagesMenu">
             <nav class="sidenav-menu-nested nav">
               <a class="nav-link {% active_class 'two_factor:profile' %}" href="{% url 'two_factor:profile' %}">
-                <div class="nav-link-icon"><i class="bi bi-shield-lock"></i></div>
+                <div class="nav-link-icon">
+                  <i class="bi bi-shield-lock"></i>
+                </div>
                 {% trans 'Security' %}
               </a>
             </nav>
@@ -71,7 +71,9 @@
           {% if request.user.is_buyer or request.user.is_superadmin %}
             {% is_any_active 'buyers:buyer_index' 'buyers:buyer_create' 'assets:create' 'assets:add_category' as assets_open %}
             <a class="nav-link {% link_collapsed_class 'buyers:buyer_index' 'buyers:buyer_create' 'assets:create' 'assets:add_category' %}" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAssets" aria-expanded="{% aria_expanded 'buyers:buyer_index' 'buyers:buyer_create' 'assets:create' 'assets:add_category' %}" aria-controls="pagesCollapseAssets">
-              <div class="nav-link-icon"><i class="fa-solid fa-box-archive"></i></div>
+              <div class="nav-link-icon">
+                <i class="fa-solid fa-box-archive"></i>
+              </div>
               {% trans 'Assets' %}
               <div class="sidenav-collapse-arrow">
                 <i class="fas fa-angle-down"></i>
@@ -80,19 +82,27 @@
             <div class="collapse {% collapse_open_class 'buyers:buyer_index' 'buyers:buyer_create' 'assets:create' 'assets:add_category' %}" id="pagesCollapseAssets" data-bs-parent="#accordionSidenavPagesMenu">
               <nav class="sidenav-menu-nested nav">
                 <a class="nav-link {% active_class 'buyers:buyer_index' %}" href="{% url 'buyers:buyer_index' %}">
-                  <div class="nav-link-icon"><i class="fa-solid fa-file-invoice"></i></div>
+                  <div class="nav-link-icon">
+                    <i class="fa-solid fa-file-invoice"></i>
+                  </div>
                   {% trans 'Purchase Orders' %}
                 </a>
                 <a class="nav-link {% active_class 'buyers:buyer_create' %}" href="{% url 'buyers:buyer_create' %}">
-                  <div class="nav-link-icon"><i class="fa-solid fa-file-circle-plus"></i></div>
+                  <div class="nav-link-icon">
+                    <i class="fa-solid fa-file-circle-plus"></i>
+                  </div>
                   {% trans 'Add New Purchase Order' %}
                 </a>
                 <a class="nav-link {% active_class 'assets:create' %}" href="{% url 'assets:create' %}">
-                  <div class="nav-link-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+                  <div class="nav-link-icon">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                  </div>
                   {% trans 'Add New Asset' %}
                 </a>
                 <a class="nav-link {% active_class 'assets:add_category' %}" href="{% url 'assets:add_category' %}">
-                  <div class="nav-link-icon"><i class="bi bi-folder-plus"></i></div>
+                  <div class="nav-link-icon">
+                    <i class="bi bi-folder-plus"></i>
+                  </div>
                   {% trans 'Add New Category' %}
                 </a>
               </nav>
@@ -100,13 +110,17 @@
 
             <!-- Profitability -->
             <a class="nav-link" href="{% url 'buyers:profitability_view' %}">
-              <div class="nav-link-icon"><i class="fa-solid fa-money-bill-trend-up"></i></div>
+              <div class="nav-link-icon">
+                <i class="fa-solid fa-money-bill-trend-up"></i>
+              </div>
               {% trans 'Profitability' %}
             </a>
 
             <!-- Inventory -->
             <a class="nav-link" href="{% url 'buyers:inventory_view' %}">
-              <div class="nav-link-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+              <div class="nav-link-icon">
+                <i class="fa-solid fa-boxes-stacked"></i>
+              </div>
               {% trans 'Inventory' %}
             </a>
           {% endif %}
@@ -118,7 +132,9 @@
         {% if request.user.is_verified_holder or request.user.is_superuser %}
           {% is_any_active 'assets_location:add_location' 'assets_location:add_asset_location' as holder_assets_open %}
           <a class="nav-link {% link_collapsed_class 'assets_location:add_location' 'assets_location:add_asset_location' %}" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseAssets" aria-expanded="{% aria_expanded 'assets_location:add_location' 'assets_location:add_asset_location' %}" aria-controls="collapseAssets">
-            <div class="nav-link-icon"><i data-feather="box"></i></div>
+            <div class="nav-link-icon">
+              <i data-feather="box"></i>
+            </div>
             {% trans 'Assets' %}
             <div class="sidenav-collapse-arrow">
               <i class="fas fa-angle-down"></i>
@@ -128,31 +144,35 @@
           <div class="collapse {% collapse_open_class 'assets_location:add_location' 'assets_location:add_asset_location' %}" id="collapseAssets" data-bs-parent="#accordionSidenav">
             <nav class="sidenav-menu-nested nav">
               <a class="nav-link {% active_class 'assets:holder_index' %}" href="{% url 'assets:holder_index' %}">
-                <div class="nav-link-icon"><i class="bi bi-table"></i></div>
+                <div class="nav-link-icon">
+                  <i class="bi bi-table"></i>
+                </div>
                 {% trans 'Assets and Service Orders' %}
               </a>
               <a class="nav-link {% active_class 'assets_location:add_location' %}" href="{% url 'assets_location:add_location' %}">
-                <div class="nav-link-icon"><i class="bi bi-geo-alt"></i></div>
+                <div class="nav-link-icon">
+                  <i class="bi bi-geo-alt"></i>
+                </div>
                 {% trans 'Add Location Reference' %}
               </a>
               <a class="nav-link {% active_class 'assets_location:add_asset_location' %}" href="{% url 'assets_location:add_asset_location' %}">
-                <div class="nav-link-icon"><i class="bi bi-plus-square"></i></div>
+                <div class="nav-link-icon">
+                  <i class="bi bi-plus-square"></i>
+                </div>
                 {% trans 'Add Asset' %}
               </a>
             </nav>
           </div>
         {% endif %}
       {% endif %}
-      
-      {% if request.user.is_buyer or request.user.is_superadmin %}
-      <a class="nav-link" href="https://assetcredit.propensionesabogados.com" target="_blank">
-        <div class="nav-link-icon">
-          <i class="fa-regular fa-credit-card"></i>
-        </div>
-        AssetCredit - Hermes
-      </a>
-      {% endif %}
 
+      {% if request.user.is_buyer or request.user.is_superadmin %}
+        <a class="nav-link" href="{% url 'buyers:hermes_form' %}">
+          <div class="nav-link-icon">
+            <i class="fa-regular fa-credit-card"></i>
+          </div>AssetCredit - Hermes
+        </a>
+      {% endif %}
     </div>
   </div>
 
