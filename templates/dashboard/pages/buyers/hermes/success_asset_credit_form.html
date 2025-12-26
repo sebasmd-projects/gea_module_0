@@ -1,0 +1,74 @@
+{% extends 'dashboard/dashboard_layout_base.html' %}
+
+{% load i18n static %}
+
+{% block main_layout %}
+  {# ===== URLs y assets reutilizables ===== #}
+  {% url 'buyers:buyer_index' as purchase_orders_url %}
+  {% url 'buyers:buyer_create' as add_purchase_order_url %}
+  {% url 'assets:create' as add_asset_url %}
+
+  {% static 'assets/imgs/illustrations/statistics.svg' as purchase_orders_image %}
+  {% static 'assets/imgs/illustrations/windows.svg' as add_new_purchase_order_image %}
+  {% static 'assets/imgs/illustrations/browser-stats.svg' as add_asset_image %}
+
+  {% trans 'Purchase orders' as purchase_orders %}
+  {% trans 'Add new purchase order' as add_new_purchase_order %}
+  {% trans 'Add new asset' as add_new_asset %}
+  {% trans 'Success Form Send' as success_send %}
+  {% trans 'Summary of movements and states' as summary_movements_states %}
+
+  {% include 'dashboard/partials/header/_header.html' with icon_class='me-2 fa-solid fa-boxes-stacked' page_title=success_send page_description=summary_movements_states parent_title=purchase_orders parent_url=purchase_orders_url %}
+
+  <!-- Main page content -->
+  <div class="container-xl px-4 mt-n10">
+    <div class="row">
+      {% include 'dashboard/partials/header/_header_card.html' with icon_class='feather-xl text-green mb-3' icon_data_feather='file-text' page_header_title=purchase_orders page_header_image=purchase_orders_image url=purchase_orders_url %}
+      {% include 'dashboard/partials/header/_header_card.html' with icon_class='feather-xl text-green mb-3' icon_data_feather='file-plus' page_header_title=add_new_purchase_order page_header_image=add_new_purchase_order_image url=add_purchase_order_url %}
+      {% include 'dashboard/partials/header/_header_card.html' with icon_class='feather-xl text-green mb-3' icon_data_feather='archive' page_header_title=add_new_asset page_header_image=add_asset_image url=add_asset_url %}
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 mb-4">
+        <div class="card">
+          <div class="card-header" style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
+            <h2 class="text-black">{% trans 'Success Form Send' %}</h2>
+          </div>
+          <div class="card-body">
+            <div class="text-center py-5">
+              <!-- Success Icon -->
+              <div class="mb-4">
+                <div class="rounded-circle bg-success-subtle d-inline-flex align-items-center justify-content-center" style="width:90px; height:90px;">
+                  <i class="fa-solid fa-circle-check text-success fa-3x"></i>
+                </div>
+              </div>
+
+              <!-- Title -->
+              <h2 class="fw-bold text-success mb-2">{% trans 'Form submitted successfully!' %}</h2>
+
+              <!-- Description -->
+              <p class="text-muted mb-4">
+                {% trans 'Your information has been received and processed correctly.' %}
+                <br />
+                {% trans 'You can continue managing your purchase orders or create a new one.' %}
+              </p>
+
+              <!-- Action Buttons -->
+              <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center mt-4">
+                <a href="{{ purchase_orders_url }}" class="btn btn-outline-primary btn-lg px-4">
+                  <i class="fa-solid fa-list me-2"></i>
+                  {% trans 'View purchase orders' %}
+                </a>
+
+                <a href="{{ add_purchase_order_url }}" class="btn btn-success btn-lg px-4">
+                  <i class="fa-solid fa-plus me-2"></i>
+                  {% trans 'Create new purchase order' %}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

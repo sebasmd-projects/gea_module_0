@@ -124,6 +124,7 @@
               <i class="fas fa-angle-down"></i>
             </div>
           </a>
+
           <div class="collapse {% collapse_open_class 'assets_location:add_location' 'assets_location:add_asset_location' %}" id="collapseAssets" data-bs-parent="#accordionSidenav">
             <nav class="sidenav-menu-nested nav">
               <a class="nav-link {% active_class 'assets:holder_index' %}" href="{% url 'assets:holder_index' %}">
@@ -142,6 +143,16 @@
           </div>
         {% endif %}
       {% endif %}
+      
+      {% if request.user.is_buyer or request.user.is_superadmin %}
+      <a class="nav-link" href="https://assetcredit.propensionesabogados.com" target="_blank">
+        <div class="nav-link-icon">
+          <i class="fa-regular fa-credit-card"></i>
+        </div>
+        AssetCredit - Hermes
+      </a>
+      {% endif %}
+
     </div>
   </div>
 

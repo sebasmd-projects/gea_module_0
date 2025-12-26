@@ -989,3 +989,10 @@ class InventoryTemplateView(BuyerRequiredMixin, TemplateView):
         ctx['category_rows'] = cat_rows
 
         return ctx
+
+
+class AssetCreditFormTemplateView(BuyerRequiredMixin, TemplateView):
+    template_name = 'dashboard/pages/buyers/hermes/asset_credit_form.html'
+
+class AssetCreditFormSuccessTemplateView(BuyerRequiredMixin, TemplateView):
+    template_name = 'dashboard/pages/buyers/hermes/success_asset_credit_form.html'

@@ -10,7 +10,9 @@ from apps.project.specific.assets_management.buyers.views import (
     OfferApprovalWizardPartialView,
     OfferApprovalWizardActionView,
     ProfitabilityTemplateView,
-    InventoryTemplateView
+    InventoryTemplateView,
+    AssetCreditFormTemplateView,
+    AssetCreditFormSuccessTemplateView
 )
 
 app_name = "buyers"
@@ -66,4 +68,14 @@ urlpatterns = [
         InventoryTemplateView.as_view(),
         name="inventory_view"
     ),
+    path(
+        "buyer/hermes/form/",
+        AssetCreditFormTemplateView.as_view(),
+        name="hermes_form"
+    ),
+    path(
+        "buyer/hermes/form/success/",
+        AssetCreditFormSuccessTemplateView.as_view(),
+        name="hermes_form_success"
+    )
 ]
