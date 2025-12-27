@@ -12,9 +12,9 @@
   <script>
     window.enableEventObserver = true
   </script>
-  <!--        [if lt IE 9]>
+  <!--       [if lt IE 9]>
 <script src="https://cdn.jotfor.ms/s/static/1959c121e31/js/vendor/flashcanvas.js" type="text/javascript"></script>
-<![endif]        -->
+<![endif]       -->
   <script src="https://cdn.jotfor.ms/s/static/1959c121e31/js/vendor/jquery-3.7.1.min.js" type="text/javascript"></script>
   <script src="https://cdn.jotfor.ms/s/static/1959c121e31/js/vendor/jSignature/jSignature.js" type="text/javascript"></script>
   <script src="https://cdn.jotfor.ms/s/static/1959c121e31/js/vendor/jSignature/jSignature.CompressorBase30.js" type="text/javascript"></script>
@@ -2318,33 +2318,34 @@
 
 {% block body_custom_js %}
   <script>
-    (function () {
+      (function () {
       const input = document.getElementById('input_116')
       if (!input) return
     
-      const THOUSAND_SEP = '.'
-      const DECIMAL_SEP = ','
-    
-      const formatter = new Intl.NumberFormat('de-DE', {
+      const formatter = new Intl.NumberFormat(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2
       })
     
+      // Detectar separadores reales del locale
+      const parts = formatter.formatToParts(12345.6)
+      const thousandSep = parts.find((p) => p.type === 'group')?.value || ','
+      const decimalSep = parts.find((p) => p.type === 'decimal')?.value || '.'
+    
       function normalize(value) {
         if (!value) return ''
     
-        let v = value
-          .split(THOUSAND_SEP)
-          .join('') // quita miles
-          .replace(DECIMAL_SEP, '.') // decimal a punto
+        // elimina separadores de miles
+        let v = value.split(thousandSep).join('')
     
-        // solo números y un punto decimal
+        // convierte decimal local a "."
+        v = v.replace(decimalSep, '.')
+    
+        // solo números y un punto
         v = v.replace(/[^0-9.]/g, '')
-    
-        // un solo decimal
-        const parts = v.split('.')
-        if (parts.length > 2) {
-          v = parts[0] + '.' + parts.slice(1).join('')
+        const split = v.split('.')
+        if (split.length > 2) {
+          v = split[0] + '.' + split.slice(1).join('')
         }
     
         return v
@@ -2353,34 +2354,40 @@
       function format(value) {
         if (!value) return ''
     
-        const isTypingDecimal = value.endsWith(DECIMAL_SEP) || value.match(/,\d{0,2}$/)
-    
+        const hasDecimal = value.includes(decimalSep) || value.includes('.')
         const numeric = Number(normalize(value))
+    
         if (isNaN(numeric)) return value
     
         let formatted = formatter.format(numeric)
     
-        // mantener coma si el usuario está escribiendo decimales
-        if (isTypingDecimal && !formatted.includes(DECIMAL_SEP)) {
-          formatted += DECIMAL_SEP
+        // Si el usuario está escribiendo decimales incompletos
+        if (hasDecimal && value.endsWith(decimalSep)) {
+          formatted += decimalSep
         }
     
         return formatted
       }
     
-      // INPUT → formatea en vivo
+      // 👉 INPUT: permite escribir decimales
       input.addEventListener('input', () => {
         const cursor = input.selectionStart
-        input.value = format(input.value)
+        const before = input.value
+    
+        const formatted = format(before)
+        input.value = formatted
+    
         input.setSelectionRange(cursor, cursor)
       })
     
-      // FOCUS → muestra formateado
+      // 👉 FOCUS: formato visible
       input.addEventListener('focus', () => {
-        if (input.value) input.value = format(input.value)
+        if (input.value) {
+          input.value = format(input.value)
+        }
       })
     
-      // BLUR → valor limpio (para backend/Jotform)
+      // 👉 BLUR: valor limpio
       input.addEventListener('blur', () => {
         input.value = normalize(input.value)
       })
