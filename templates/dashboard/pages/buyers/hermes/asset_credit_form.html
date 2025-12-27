@@ -2317,3 +2317,62 @@
     JotForm.isNewSACL = true
   </script>
 {% endblock %}
+
+{% block body_custom_js %}
+<script>
+(function () {
+  const input = document.getElementById("input_116");
+  if (!input) return;
+
+  // Formatter basado en locale (mismo criterio Jotform/navegador)
+  const formatter = new Intl.NumberFormat(undefined, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2
+  });
+
+  // Detecta separadores reales del locale
+  const parts = formatter.formatToParts(12345.6);
+  const thousandSep = parts.find(p => p.type === "group")?.value || ",";
+  const decimalSep  = parts.find(p => p.type === "decimal")?.value || ".";
+
+  function cleanValue(value) {
+    if (!value) return "";
+    return value
+      .split(thousandSep).join("")
+      .replace(decimalSep, ".");
+  }
+
+  function formatValue(value) {
+    if (!value) return "";
+    const numeric = Number(cleanValue(value));
+    if (isNaN(numeric)) return "";
+    return formatter.format(numeric);
+  }
+
+  // 👉 Al escribir → formatea
+  input.addEventListener("input", () => {
+    const start = input.selectionStart;
+    const oldLength = input.value.length;
+
+    input.value = formatValue(input.value);
+
+    const newLength = input.value.length;
+    input.setSelectionRange(
+      start + (newLength - oldLength),
+      start + (newLength - oldLength)
+    );
+  });
+
+  // 👉 Al entrar → formatea
+  input.addEventListener("focus", () => {
+    input.value = formatValue(input.value);
+  });
+
+  // 👉 Al salir → limpia (ideal para submit / backend)
+  input.addEventListener("blur", () => {
+    input.value = cleanValue(input.value);
+  });
+
+})();
+</script>
+{% endblock body_custom_js %}
