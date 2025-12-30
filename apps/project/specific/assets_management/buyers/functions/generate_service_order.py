@@ -26,7 +26,7 @@ def generate_service_order_pdf(offer, user):
 
     # ---------------- LOGOS ----------------
     logo_header = Image(
-        "https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/alliance_ampro_repatriation_propensiones.webp",
+        "https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/ipcon_brands.webp",
         width=doc.width,
         height=80
     )

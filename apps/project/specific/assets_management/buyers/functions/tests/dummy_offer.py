@@ -3,6 +3,13 @@ import datetime
 from ..generate_purchase_order import generate_purchase_order_pdf
 from ..generate_service_order import generate_service_order_pdf
 
+class DummyImage:
+    def open(self, mode="rb"): pass
+    def read(self): return open("test_img.png", "rb").read()
+
+
+
+
 class DummyOffer:
     def __init__(self):
         self.id = 1
@@ -16,6 +23,7 @@ class DummyOffer:
         self.en_description = "High-capacity industrial generator."
         self.description = "Generador industrial de alta capacidad."
         self.observation = "Requiere entrega en bodega central en Bogotá."
+        self.offer_img = DummyImage()
 
     def get_quantity_type_display(self):
         return self._quantity_type
