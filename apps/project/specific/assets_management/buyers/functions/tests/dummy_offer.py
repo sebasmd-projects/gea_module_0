@@ -27,7 +27,7 @@ class DummyUser:
 
     @property
     def email(self):
-        return "sebastian@example.com"
+        return "sebastian.morales@sebasmoralesd.com"
 
     @property
     def username(self):
