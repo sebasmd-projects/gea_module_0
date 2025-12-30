@@ -35,9 +35,6 @@ def generate_purchase_order_pdf(offer, user):
     elements.append(logo_header)
     elements.append(Spacer(1, 20))
 
-    # --------- OFFER IMAGE (si existe) ----------
-    elements.extend(build_offer_image_story(offer, doc))
-
     # ---------------- BARCODE ----------------
     codigo_unico = f"PO-{str(offer.id)[:8].upper()}"
     fecha_str = offer.created.strftime("%d%m%Y")
@@ -252,6 +249,9 @@ def generate_purchase_order_pdf(offer, user):
     ]))
 
     elements.append(footer_table)
+
+    # --------- OFFER IMAGE (si existe) ----------
+    elements.extend(build_offer_image_story(offer, doc))
 
     # Build PDF
     doc.build(elements)

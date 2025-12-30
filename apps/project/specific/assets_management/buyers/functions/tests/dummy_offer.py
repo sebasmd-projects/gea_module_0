@@ -1,11 +1,19 @@
 import datetime
+from pathlib import Path
 
 from ..generate_purchase_order import generate_purchase_order_pdf
 from ..generate_service_order import generate_service_order_pdf
 
 class DummyImage:
-    def open(self, mode="rb"): pass
-    def read(self): return open("test_img.png", "rb").read()
+    def __init__(self):
+        base_dir = Path(__file__).resolve().parent
+        self.path = base_dir / "test_img.png"
+
+    def open(self, mode="rb"):
+        self._fh = open(self.path, mode)
+
+    def read(self):
+        return self._fh.read()
 
 
 
