@@ -26,7 +26,7 @@ def generate_service_order_pdf(offer, user):
 
     # ---------------- LOGOS ----------------
     logo_header = Image(
-        "https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/ipcon_brands.webp",
+        "https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/ipcon_brands_po_so.webp",
         width=doc.width,
         height=80
     )
@@ -38,7 +38,7 @@ def generate_service_order_pdf(offer, user):
     # ---------------- BARCODE ----------------
     codigo_unico = f"OS-{str(offer.id)[:8].upper()}"
     fecha_str = offer.created.strftime("%d%m%Y")
-    barcode_value = f"ORDEN DE SERVICIO {fecha_str} M9Q0 {codigo_unico}"
+    barcode_value = f"ORDEN DE SERVICIO {fecha_str} RRF7P9 {codigo_unico}"
     barcode = code128.Code128(barcode_value, barHeight=25 * mm, barWidth=0.85)
 
     # Envolver barcode en una tabla de una celda para centrarlo y darle ancho total
@@ -206,47 +206,37 @@ def generate_service_order_pdf(offer, user):
     # ---------------- FOOTER ----------------
     footer_img = Image(
         "https://geausa.propensionesabogados.com/public/static/assets/imgs/purchase_order/stamp_propensiones.webp",
-        width=80,
-        height=80
+        width=90,
+        height=90
+    )
+    
+    centered_text = ParagraphStyle(
+        name="CenteredText",
+        parent=styles["Normal"],
+        alignment=1
     )
 
-    contacto = "\ndirector@propensionesabogados.com\n+57 318 328 01 76"
-
-    # Columna izquierda: imagen centrada sobre el texto
-    contacto_table = Table(
-        [
-            [footer_img],
-            [contacto],
-        ],
-        colWidths=[200],  # ancho fijo para alinear
+    contacto = Paragraph(
+        "director@propensionesabogados.com<br/>+57 318 328 01 76",
+        centered_text
     )
-    contacto_table.setStyle(TableStyle([
-        ("ALIGN", (0, 0), (0, 0), "CENTER"),  # centrar imagen
-        ("ALIGN", (0, 1), (0, 1), "LEFT"),  # centrar texto bajo la imagen
-        ("VALIGN", (0, 0), (-1, -1), "TOP"),
-    ]))
 
-    # Footer completo: bloque contacto a la izquierda + firma a la derecha
     footer_table = Table(
         [
-            [
-                contacto_table,
-                "AUTHORIZES:\n\n\n\n\n\n\n\n_____________________________",
-            ],
-            [
-                "",
-                f"{user.get_full_name().upper()}\n{user.email}"
-            ],
+            [footer_img],
+            [Spacer(1, 6)],
+            [contacto],
         ],
-        colWidths=[350, 200],
+        colWidths=[doc.width],
     )
 
     footer_table.setStyle(TableStyle([
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
-        ("ALIGN", (1, 0), (1, 0), "LEFT"),
     ]))
 
     elements.append(footer_table)
+
 
     # --------- OFFER IMAGE (si existe) ----------
     elements.extend(build_offer_image_story(offer, doc))

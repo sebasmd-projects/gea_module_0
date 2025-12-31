@@ -26,7 +26,7 @@ def generate_purchase_order_pdf(offer, user):
 
     # ---------------- LOGOS ----------------
     logo_header = Image(
-        "https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/ipcon_brands.webp",
+        "https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/ipcon_brands_po_so.webp",
         width=doc.width,
         height=80
     )
@@ -38,7 +38,7 @@ def generate_purchase_order_pdf(offer, user):
     # ---------------- BARCODE ----------------
     codigo_unico = f"PO-{str(offer.id)[:8].upper()}"
     fecha_str = offer.created.strftime("%d%m%Y")
-    barcode_value = f"PURCHASE ORDER IPCON {fecha_str} F991 {codigo_unico}"
+    barcode_value = f"PURCHASE ORDER IPCON {fecha_str} RRF7P9 {codigo_unico}"
     barcode = code128.Code128(barcode_value, barHeight=25 * mm, barWidth=0.85)
 
     # Envolver barcode en una tabla de una celda para centrarlo y darle ancho total
@@ -229,23 +229,68 @@ def generate_purchase_order_pdf(offer, user):
     ]))
 
     # Footer completo: bloque contacto a la izquierda + firma a la derecha
-    footer_table = Table(
+    # Sello izquierdo (Mitch)
+    stamp_left = Image(
+        "https://geausa.propensionesabogados.com/public/static/assets/imgs/purchase_order/stamp_mitch.webp",
+        width=80,
+        height=80
+    )
+
+    contacto_left = Paragraph(
+        "mitch@recoveryrepatriationfoundation.com<br/>+1 609 342 71 06",
+        styles["Normal"]
+    )
+
+    left_table = Table(
         [
-            [
-                contacto_table,
-                "AUTHORIZES:\n\n\n\n\n\n\n\n_____________________________",
-            ],
-            [
-                "",
-                f"{user.get_full_name().upper()}\n{user.email}"
-            ],
+            [stamp_left],
+            [Spacer(1, 6)],
+            [contacto_left],
         ],
-        colWidths=[350, 200],
+        colWidths=[200],
+    )
+
+    left_table.setStyle(TableStyle([
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+    ]))
+
+
+    # Sello derecho (Propensiones)
+    stamp_right = Image(
+        "https://geausa.propensionesabogados.com/public/static/assets/imgs/purchase_order/stamp_propensiones.webp",
+        width=80,
+        height=80
+    )
+
+    contacto_right = Paragraph(
+        "director@propensionesabogados.com<br/>+57 3012283818",
+        styles["Normal"]
+    )
+
+    right_table = Table(
+        [
+            [stamp_right],
+            [Spacer(1, 6)],
+            [contacto_right],
+        ],
+        colWidths=[200],
+    )
+
+    right_table.setStyle(TableStyle([
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+    ]))
+
+
+    # Footer final con dos sellos
+    footer_table = Table(
+        [[left_table, right_table]],
+        colWidths=[doc.width / 2, doc.width / 2],
     )
 
     footer_table.setStyle(TableStyle([
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
-        ("ALIGN", (1, 0), (1, 0), "LEFT"),
     ]))
 
     elements.append(footer_table)
