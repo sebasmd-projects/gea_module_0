@@ -109,7 +109,7 @@ def generate_service_order_pdf(offer, user):
             ["AUTORIZA:", "CARGO:"],
             ["DR. JORGE URIEL VEGA L.", "DELEGADO OFICIAL COMPRA EE. UU."],
             ["DIRIGIDO A:", "OFFICIAL'S POSITION:"],
-            ["JOSÉ HENRY RIVAS", "ESPECIALISTA EN CAPTACIÓN DE ACTIVOS"],
+            ["JOSÉ HENRY RIVAS", "ESPECIALISTA EN LOGÍSTICA DE ACTIVOS"],
         ],
         colWidths=[275, 275],
     )
