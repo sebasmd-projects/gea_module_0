@@ -66,6 +66,8 @@
                                 <th>{% trans 'Created By' %}</th>
                                 <th>ID</th>
                                 <th>{% trans 'Asset' %}</th>
+                                <th>{% trans 'Description' %}</th>
+                                <th>{% trans 'Observations' %}</th>
                                 <th>{% trans 'Purchase order Type' %}</th>
                                 <th>{% trans 'Quantity Type' %}</th>
                                 <th>{% trans 'Quantity Needed' %}</th>
@@ -90,6 +92,13 @@
                                     </button>
                                 </td>
                                 <td>{{ offer.asset_display_name }}</td>
+                                {% if request.LANGUAGE_CODE == 'es' %}
+                                    <td>{{ offer.es_description }}</td>
+                                    <td>{{ offer.es_observations }}</td>
+                                {% else %}
+                                    <td>{{ offer.en_description }}</td>
+                                    <td>{{ offer.en_observations }}</td>
+                                {% endif %}
                                 <td>{{ offer.get_offer_type_display }}</td>
                                 <td>{{ offer.get_quantity_type_display }}</td>
                                 <td>{{ offer.offer_quantity }}</td>
