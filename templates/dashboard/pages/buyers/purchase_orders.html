@@ -67,11 +67,11 @@
                                 <th>ID</th>
                                 <th>{% trans 'Asset' %}</th>
                                 <th>{% trans 'Description' %}</th>
-                                <th>{% trans 'Observations' %}</th>
-                                <th>{% trans 'Purchase order Type' %}</th>
                                 <th>{% trans 'Quantity Type' %}</th>
                                 <th>{% trans 'Quantity Needed' %}</th>
+                                <th>{% trans 'Created' %}</th>
                                 <th>{% trans 'Country' %}</th>
+                                <th>{% trans 'Purchase order Type' %}</th>
                                 <th>{% trans 'Status' %}</th>
                                 <th>{% trans 'Actions' %}</th>
                             </tr>
@@ -81,8 +81,11 @@
 
                             {% if offer.display %}
                             <tr data-offer-row="{{ offer.id }}">
-                                <td>{{ forloop.counter }}</td>
+                                {% comment %} # {% endcomment %}
+                                <td>{{ forloop.counter }}</td> 
+                                {% comment %} Created By {% endcomment %}
                                 <td>{{ offer.created_by.get_full_name|upper }}</td>
+                                {% comment %} id {% endcomment %}
                                 <td>
                                     <button type="button" class="btn btn-link p-0 uuid-toggle"
                                         data-full="{{ offer.id|stringformat:'s' }}"
@@ -91,24 +94,32 @@
                                         <code class="uuid-text">{{ offer.id|stringformat:'s'|slice:':8' }}</code>
                                     </button>
                                 </td>
+                                {% comment %} Asset {% endcomment %}
                                 <td>{{ offer.asset_display_name }}</td>
+                                {% comment %} Description {% endcomment %}
                                 {% if request.LANGUAGE_CODE == 'es' %}
                                     <td>{{ offer.es_description }}</td>
-                                    <td>{{ offer.es_observations }}</td>
                                 {% else %}
                                     <td>{{ offer.en_description }}</td>
-                                    <td>{{ offer.en_observations }}</td>
                                 {% endif %}
-                                <td>{{ offer.get_offer_type_display }}</td>
+                                {% comment %} Quantity Type {% endcomment %}
                                 <td>{{ offer.get_quantity_type_display }}</td>
+                                {% comment %} Quantity Needed {% endcomment %}
                                 <td>{{ offer.offer_quantity }}</td>
+                                {% comment %} Created {% endcomment %}
+                                <td>{{ offer.created }}</td>
+                                {% comment %} Country {% endcomment %}
                                 <td>{{ offer.buyer_country.get_continent_display }} -
                                     {{ offer.buyer_country.es_country_name }}</td>
+                                {% comment %} Purchase order Type {% endcomment %}
+                                <td>{{ offer.get_offer_type_display }}</td>
+                                {% comment %} Status {% endcomment %}
                                 <td>
                                     <i class="{{ offer.status_icon }} mx-1" style="color: {{ offer.status_color }};"
                                         title="{{ offer.status_label }}"></i>
                                     <span style="color: {{ offer.status_color }};">{{ offer.status_label }}</span>
                                 </td>
+                                {% comment %} Actions {% endcomment %}
                                 <td>
                                     <a href="{% url 'buyers:offer_details' offer.id %}" type="button"
                                         class="btn btn-datatable btn-icon btn-outline-success">
