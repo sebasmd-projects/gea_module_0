@@ -8,23 +8,31 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-10 21:42-0500\n"
-"PO-Revision-Date: 2025-11-10 21:43+0000\n"
-"Last-Translator: Sebastian Morales <support@propensionesabogados.com>\n"
+"POT-Creation-Date: 2026-01-06 23:15-0500\n"
+"PO-Revision-Date: 2026-01-06 23:16+0000\n"
+"Last-Translator: Sebastian Morales <cto@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Translated-Using: django-rosetta 0.10.0\n"
+"X-Translated-Using: django-rosetta 0.10.3\n"
 
-#: .\apps\common\core\templates\core\index.html:13
-#: .\apps\common\core\templates\core\index.html:19
+#: .\apps\common\core\templates\core\index.html:24
+#: .\apps\common\core\templates\core\index.html:30
 msgid "Secure platform for historical assets"
 msgstr "Plataforma para los activos historicos"
 
-#: .\apps\common\core\templates\core\index.html:40
+#: .\apps\common\core\templates\core\index.html:39
+msgid ""
+"Comprehensive, exclusive and secure platform for buying and selling "
+"historical assets. Official U.S. purchasing platform."
+msgstr ""
+"Plataforma exclusiva y segura para la compraventa de activos históricos. "
+"Plataforma de compras oficial de EE. UU."
+
+#: .\apps\common\core\templates\core\index.html:50
 msgid ""
 "Official and exclusive platform for the purchase and sale of US historical "
 "assets."
@@ -32,7 +40,7 @@ msgstr ""
 "Plataforma completa, exclusiva y segura para la compra y venta de activos "
 "históricos. Plataforma de compras oficial de EE. UU."
 
-#: .\apps\common\core\templates\core\index.html:54
+#: .\apps\common\core\templates\core\index.html:64
 msgid ""
 "Exclusive and official platform for the secure purchase of US historical "
 "assets."
@@ -40,7 +48,7 @@ msgstr ""
 "Plataforma exclusiva y oficial para la compra segura de activos históricos "
 "de EE. UU."
 
-#: .\apps\common\core\templates\core\index.html:91
+#: .\apps\common\core\templates\core\index.html:112
 msgid "Your browser does not support HTML5 video."
 msgstr "Su navegador no soporta vídeo HTML5."
 
@@ -51,8 +59,8 @@ msgstr "Compradores"
 
 #: .\apps\common\core\templates\core\partials\core_nav.html:34
 #: .\apps\common\core\templates\core\partials\core_nav.html:185
-msgid "Client Area"
-msgstr "Área de Clientes"
+msgid "Suppliers"
+msgstr "Proveedores"
 
 #: .\apps\common\core\templates\core\partials\core_nav.html:84
 #: .\apps\common\core\templates\core\partials\core_nav.html:169
@@ -89,6 +97,9 @@ msgstr "Cerrar Sesión"
 #: .\apps\common\core\templates\core\partials\whatsapp.html:51
 msgid "Contact Us Now"
 msgstr "Contáctanos"
+
+#~ msgid "Client Area"
+#~ msgstr "Área de Clientes"
 
 #, fuzzy
 #~ msgid "Contact Us"

@@ -611,10 +611,6 @@
 
     <div class="row">
       <div class="col-md-12 mb-4">
-        <div class="card">
-          <div class="card-header" style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
-            <h2 class="text-black">{% trans 'Asset Credit Form - Hermes APP' %}</h2>
-          </div>
           <form class="jotform-form" onsubmit="return typeof testSubmitFunction !== 'undefined' && testSubmitFunction();" action="https://submit.jotform.com/submit/253550047688060" method="post" enctype="multipart/form-data" name="form_253550047688060" id="253550047688060" accept-charset="utf-8" autocomplete="on">
             <input type="hidden" name="formID" value="253550047688060" />
             <input type="hidden" id="JWTContainer" value="" />
@@ -625,12 +621,17 @@
             <input type="hidden" id="buildDate" name="buildDate" value="1766793509916" />
             <input type="hidden" name="uploadServerUrl" value="https://upload.jotform.com/upload" />
             <input type="hidden" name="eventObserver" value="1" />
-            <div id="formCoverLogo" style="margin-bottom:32px" class="form-cover-wrapper form-has-cover form-page-cover-image-align-center">
-              <div class="form-page-cover-image-wrapper" style="max-width:900px">
-                <img src="https://www.jotform.com/uploads/sebasmoralesd/form_files/favicon-horizontal.6949a0e7c35632.47292231.webp" class="form-page-cover-image" width="240" height="53" alt="Credit application form for historical assets Logo" style="aspect-ratio:240/53" />
+            <div id="formCoverLogo" class="form-has-cover form-page-cover-image-align-center" style="
+    padding-top: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: all .33s ease;
+  " >
+              <div class="form-page-cover-image-wrapper" style="max-width:100%">
+                <img src="{% static "assets/imgs/brands/hermes_asset_credit_form.webp" %}" class="form-page-cover-image" alt="Credit application form for historical assets Logo" style="aspect-ratio:240/53" />
               </div>
             </div>
-            <div role="main" class="form-all">
+            <div role="main" style="background-color:white;">
               <ul class="form-section page-section" role="presentation">
                 <li id="cid_1" class="form-input-wide" data-type="control_head">
                   <div class="form-header-group header-large">
@@ -2303,7 +2304,6 @@
               }
             </script>
           </form>
-        </div>
       </div>
     </div>
   </div>

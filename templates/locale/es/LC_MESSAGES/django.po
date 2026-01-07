@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-10 21:42-0500\n"
-"PO-Revision-Date: 2025-10-26 00:59+0000\n"
-"Last-Translator: Sebastian Morales <support@propensionesabogados.com>\n"
+"POT-Creation-Date: 2026-01-06 23:11-0500\n"
+"PO-Revision-Date: 2026-01-06 23:51+0000\n"
+"Last-Translator: Sebastian Morales <cto@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Translated-Using: django-rosetta 0.10.0\n"
+"X-Translated-Using: django-rosetta 0.10.3\n"
 
 #: .\templates\account\gea_register.html:41
 msgid "Account Information"
@@ -84,8 +84,7 @@ msgid ""
 "            Last Names*:\n"
 "            Cellphone*:\n"
 "\n"
-"            If you do not provide this information, we will not be able to "
-"generate your unique code.\n"
+"            If you do not provide this information, we will not be able to generate your unique code.\n"
 "            "
 msgstr ""
 "\n"
@@ -131,6 +130,8 @@ msgstr "(Max: 2000)"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:20
 #: .\templates\dashboard\pages\buyers\detail_offer.html:25
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:596
+#: .\templates\dashboard\pages\buyers\hermes\success_asset_credit_form.html:15
 #: .\templates\dashboard\pages\buyers\inventory.html:30
 #: .\templates\dashboard\pages\buyers\profitability.html:30
 #: .\templates\dashboard\pages\buyers\wizard\offer_wizard_page.html:25
@@ -139,6 +140,8 @@ msgstr "Órdenes de compra"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:21
 #: .\templates\dashboard\pages\buyers\detail_offer.html:26
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:597
+#: .\templates\dashboard\pages\buyers\hermes\success_asset_credit_form.html:16
 #: .\templates\dashboard\pages\buyers\inventory.html:31
 #: .\templates\dashboard\pages\buyers\profitability.html:31
 #: .\templates\dashboard\pages\buyers\wizard\offer_wizard_page.html:26
@@ -147,6 +150,8 @@ msgstr "Agregar nueva orden de compra"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:22
 #: .\templates\dashboard\pages\buyers\detail_offer.html:27
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:598
+#: .\templates\dashboard\pages\buyers\hermes\success_asset_credit_form.html:17
 #: .\templates\dashboard\pages\buyers\inventory.html:32
 #: .\templates\dashboard\pages\buyers\profitability.html:32
 #: .\templates\dashboard\pages\buyers\wizard\offer_wizard_page.html:27
@@ -161,8 +166,8 @@ msgstr "Agregar nuevo activo"
 #: .\templates\dashboard\pages\buyers\inventory.html:57
 #: .\templates\dashboard\pages\buyers\inventory.html:100
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:29
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:182
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:250
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:214
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:282
 #: .\templates\dashboard\pages\holders\asset_location_base.html:75
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:95
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:109
@@ -230,8 +235,9 @@ msgstr "Categorías"
 #: .\templates\dashboard\pages\buyers\inventory.html:104
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:65
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:80
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:183
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:251
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:72
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:215
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:283
 #: .\templates\dashboard\pages\holders\asset_location_base.html:76
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:201
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:212
@@ -239,13 +245,14 @@ msgid "Description"
 msgstr "Descripción"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:148
-#: .\templates\dashboard\pages\buyers\profitability.html:264
+#: .\templates\dashboard\pages\buyers\profitability.html:257
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:75
 #: .\templates\email\service_order_email_template.html:83
 msgid "Created"
 msgstr "Creado"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:174
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:276
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:308
 msgid "No categories found."
 msgstr "No se encontraron categorías."
 
@@ -261,7 +268,7 @@ msgstr "Guardando y traduciendo..."
 #: .\templates\dashboard\pages\buyers\edit_offer.html:21
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:22
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:51
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:84
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:88
 msgid "Purchase Orders"
 msgstr "Órdenes de compra"
 
@@ -277,8 +284,8 @@ msgstr "Registrar un nuevo nombre de activo y su categoría"
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:195
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:20
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:23
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:146
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:88
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:178
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:94
 msgid "Add New Purchase Order"
 msgstr "Agregar nueva orden de compra"
 
@@ -293,7 +300,7 @@ msgstr "Agregar nueva orden de compra"
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:85
 #: .\templates\dashboard\pages\holders\location\add_location.html:16
 #: .\templates\dashboard\pages\holders\location\edit_location.html:17
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:92
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:100
 msgid "Add New Asset"
 msgstr "Agregar nuevo activo"
 
@@ -310,7 +317,7 @@ msgstr "Nuevo activo"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:62
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:221
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:181
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:213
 #: .\templates\dashboard\pages\holders\asset_location_base.html:74
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:94
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:108
@@ -333,7 +340,7 @@ msgstr "Detalles del Activo"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:100
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:220
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:180
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:212
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:93
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:107
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:293
@@ -342,7 +349,7 @@ msgid "Image"
 msgstr "Imagen"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:126
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:96
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:106
 msgid "Add New Category"
 msgstr "Añadir nueva categoría"
 
@@ -363,7 +370,7 @@ msgid "Existing Assets"
 msgstr "Activos existentes"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:224
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:184
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:216
 #: .\templates\dashboard\pages\holders\add_asset_location.html:54
 #: .\templates\dashboard\pages\holders\asset_location_base.html:77
 #: .\templates\email\service_order_email_template.html:113
@@ -371,7 +378,7 @@ msgid "Observations"
 msgstr "Observaciones"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:276
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:236
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:268
 msgid "No assets found."
 msgstr "No se encontraron activos."
 
@@ -486,16 +493,55 @@ msgstr "Observaciones (EN)"
 msgid "Save Purchase Order"
 msgstr "Guardar orden de compra"
 
-#: .\templates\dashboard\pages\buyers\inventory.html:33
-#: .\templates\dashboard\pages\buyers\inventory.html:92
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:110
-msgid "Inventory"
-msgstr "Inventario"
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:599
+msgid "Asset Credit Form"
+msgstr "Formulario AssetCredit"
 
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:600
+#: .\templates\dashboard\pages\buyers\hermes\success_asset_credit_form.html:19
 #: .\templates\dashboard\pages\buyers\inventory.html:34
 #: .\templates\dashboard\pages\buyers\profitability.html:34
 msgid "Summary of movements and states"
 msgstr "Resumen de movimientos y estados"
+
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:616
+msgid "Asset Credit Form - Hermes APP"
+msgstr "Formulario AssetCredit - Hermes APP"
+
+#: .\templates\dashboard\pages\buyers\hermes\success_asset_credit_form.html:18
+#: .\templates\dashboard\pages\buyers\hermes\success_asset_credit_form.html:35
+msgid "Success Form Send"
+msgstr "Formulario Enviado"
+
+#: .\templates\dashboard\pages\buyers\hermes\success_asset_credit_form.html:47
+#| msgid "Updated successfully"
+msgid "Form submitted successfully!"
+msgstr "¡Formulario enviado exitosamente!"
+
+#: .\templates\dashboard\pages\buyers\hermes\success_asset_credit_form.html:51
+#| msgid "Your information has been successfully registered."
+msgid "Your information has been received and processed correctly."
+msgstr "Su información ha sido recibida y procesada correctamente."
+
+#: .\templates\dashboard\pages\buyers\hermes\success_asset_credit_form.html:53
+msgid "You can continue managing your purchase orders or create a new one."
+msgstr "Podrás continuar gestionando tus órdenes de compra o crear una nueva."
+
+#: .\templates\dashboard\pages\buyers\hermes\success_asset_credit_form.html:60
+#| msgid "Add new purchase order"
+msgid "View purchase orders"
+msgstr "Ver órdenes de compra"
+
+#: .\templates\dashboard\pages\buyers\hermes\success_asset_credit_form.html:65
+#| msgid "Create a New Purchase Order"
+msgid "Create new purchase order"
+msgstr "Crear nueva orden de compra"
+
+#: .\templates\dashboard\pages\buyers\inventory.html:33
+#: .\templates\dashboard\pages\buyers\inventory.html:92
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:124
+msgid "Inventory"
+msgstr "Inventario"
 
 #: .\templates\dashboard\pages\buyers\inventory.html:50
 msgid "Inventory by Category"
@@ -540,7 +586,7 @@ msgid "Delete Purchase Order"
 msgstr "Borrar Orden de Compra"
 
 #: .\templates\dashboard\pages\buyers\modals\delete_offer_modal.html:11
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:303
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:335
 #: .\templates\dashboard\pages\holders\modals\delete_location_reference_modal.html:9
 msgid "Close"
 msgstr "Cerrar"
@@ -550,12 +596,12 @@ msgid "Are you sure you want to delete this purchase order?"
 msgstr "¿Está seguro de que desea eliminar esta orden de compra?"
 
 #: .\templates\dashboard\pages\buyers\modals\delete_offer_modal.html:30
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:72
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:77
 msgid "Purchase order Type"
 msgstr "Tipo de orden de compra"
 
 #: .\templates\dashboard\pages\buyers\modals\delete_offer_modal.html:42
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:75
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:76
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:98
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:112
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:203
@@ -630,7 +676,7 @@ msgstr "Ver rentabilidad"
 
 #: .\templates\dashboard\pages\buyers\partials\timeline\_asset_sent.html:19
 #: .\templates\dashboard\pages\buyers\partials\timeline\_asset_sent.html:45
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:344
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:360
 msgid "Asset Sent"
 msgstr "Activo enviado"
 
@@ -639,16 +685,16 @@ msgid "Asset In Possession"
 msgstr "Activo en posesión"
 
 #: .\templates\dashboard\pages\buyers\partials\timeline\_end.html:18
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:54
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:374
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:496
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:56
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:391
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:512
 msgid "End"
 msgstr "Fin"
 
 #: .\templates\dashboard\pages\buyers\partials\timeline\_payment_order.html:19
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:30
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:124
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:263
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:132
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:276
 msgid "Payment Order"
 msgstr "Orden de pago"
 
@@ -663,26 +709,26 @@ msgstr "Orden de pago enviada"
 #: .\templates\dashboard\pages\buyers\partials\timeline\_profitability.html:19
 #: .\templates\dashboard\pages\buyers\profitability.html:33
 #: .\templates\dashboard\pages\buyers\profitability.html:69
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:46
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:319
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:373
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:104
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:47
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:334
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:390
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:116
 msgid "Profitability"
 msgstr "Rentabilidad"
 
 #: .\templates\dashboard\pages\buyers\partials\timeline\_profitability.html:29
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:380
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:397
 msgid "Profitability Created"
 msgstr "Rentabilidad creada"
 
 #: .\templates\dashboard\pages\buyers\partials\timeline\_profitability.html:45
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:462
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:479
 msgid "Profitability Paid"
 msgstr "Rentabilidad Pagada"
 
 #: .\templates\dashboard\pages\buyers\partials\timeline\_purchase_order.html:20
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:14
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:67
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:70
 msgid "Purchase Order"
 msgstr "Orden de compra"
 
@@ -700,8 +746,8 @@ msgstr "Orden de compra aprobada"
 
 #: .\templates\dashboard\pages\buyers\partials\timeline\_service_order.html:19
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:22
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:68
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:123
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:71
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:131
 #: .\templates\email\service_order_email_template.html:6
 msgid "Service Order"
 msgstr "Orden de servicio"
@@ -723,12 +769,12 @@ msgid "Quantity Type - Needed"
 msgstr "Tipo de cantidad - Necesaria"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:66
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:76
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:78
 msgid "Status"
 msgstr "Estado"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:72
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:77
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:79
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:101
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:115
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:205
@@ -739,56 +785,55 @@ msgid "Actions"
 msgstr "Acciones"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:76
-#: .\templates\dashboard\pages\buyers\profitability.html:156
-#: .\templates\dashboard\pages\buyers\profitability.html:184
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:374
+#: .\templates\dashboard\pages\buyers\profitability.html:149
+#: .\templates\dashboard\pages\buyers\profitability.html:177
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:391
 msgid "Paid"
 msgstr "Pagado"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:77
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:273
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:328
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:349
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:385
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:407
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:427
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:447
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:467
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:286
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:344
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:365
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:402
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:424
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:444
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:464
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:484
 msgid "Pending"
 msgstr "Pendiente"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:83
-#: .\templates\dashboard\pages\buyers\profitability.html:325
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:91
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:451
+#: .\templates\dashboard\pages\buyers\profitability.html:318
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:99
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:483
 msgid "Show full ID"
 msgstr "Mostrar ID completo"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:96
 #: .\templates\dashboard\pages\buyers\profitability.html:103
-#: .\templates\dashboard\pages\buyers\profitability.html:110
 msgid "Paid,Pending"
 msgstr "Pagado,Pendiente"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:139
+#: .\templates\dashboard\pages\buyers\profitability.html:132
 msgid "Profitability Overview"
 msgstr "Descripción general de la rentabilidad"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:149
-#: .\templates\dashboard\pages\buyers\profitability.html:183
+#: .\templates\dashboard\pages\buyers\profitability.html:142
+#: .\templates\dashboard\pages\buyers\profitability.html:176
 msgid "In Progress"
 msgstr "En curso"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:168
+#: .\templates\dashboard\pages\buyers\profitability.html:161
 msgid "Purchase orders by month"
 msgstr "Órdenes de compra por mes"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:271
+#: .\templates\dashboard\pages\buyers\profitability.html:264
 msgid "Closed"
 msgstr "Cerrado"
 
-#: .\templates\dashboard\pages\buyers\profitability.html:324
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:452
+#: .\templates\dashboard\pages\buyers\profitability.html:317
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:484
 msgid "Hide full ID"
 msgstr "Esconder ID completo"
 
@@ -808,25 +853,25 @@ msgstr "Creado por"
 msgid "Quantity Needed"
 msgstr "Cantidad necesaria"
 
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:126
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:158
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:250
 msgid "Yes"
 msgstr "Si"
 
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:126
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:158
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:252
 msgid "No"
 msgstr "No"
 
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:171
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:203
 msgid "Tables of Asset Names and Categories"
 msgstr "Tablas de nombres y categorías de activos"
 
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:302
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:334
 msgid "Purchase Order Successfully Deleted"
 msgstr "Orden de compra eliminada"
 
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:304
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:336
 msgid "There was a problem deleting the purchase order."
 msgstr "Hubo un problema al eliminar la orden de compra."
 
@@ -837,8 +882,8 @@ msgstr "Asistente de Aprobación"
 #: .\templates\dashboard\pages\buyers\wizard\offer_wizard_page.html:29
 msgid "Track and advance the purchase order through the approval pipeline"
 msgstr ""
-"Realizar un seguimiento y avanzar la orden de compra a través del proceso de "
-"aprobación"
+"Realizar un seguimiento y avanzar la orden de compra a través del proceso de"
+" aprobación"
 
 #: .\templates\dashboard\pages\buyers\wizard\offer_wizard_page.html:52
 msgid "Loading wizard…"
@@ -865,214 +910,215 @@ msgid "Notification sent"
 msgstr "Notificación enviada"
 
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:38
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:264
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:318
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:277
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:333
 msgid "Asset sent"
 msgstr "Activo enviado"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:68
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:72
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:71
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:75
 msgid "Review"
 msgstr "Revisar"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:68
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:94
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:71
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:97
 msgid "Approve"
 msgstr "Aprobar"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:74
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:77
 msgid "Reviewed at"
 msgstr "Revisado a las"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:77
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:80
 msgid "Pending review"
 msgstr "Pendiente de revisión"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:83
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:86
 msgid "Mark as reviewed"
 msgstr "Marcar como revisado"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:96
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:99
 msgid "Approved at"
 msgstr "Aprobado a las"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:99
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:102
 msgid "Pending approval"
 msgstr "Pendiente de aprobación"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:105
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:108
 msgid "Mark as approved"
 msgstr "Marcar como aprobado"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:114
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:254
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:309
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:364
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:482
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:500
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:118
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:266
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:323
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:380
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:499
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:516
 msgid "Previous"
 msgstr "Previo"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:115
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:255
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:310
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:365
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:486
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:121
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:267
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:324
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:381
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:501
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:517
 #: .\templates\two_factor\_wizard_actions.html:13
 #: .\templates\two_factor\core\setup.html:59
 msgid "Next"
 msgstr "Siguiente"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:124
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:264
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:374
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:132
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:277
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:391
 msgid "Create"
 msgstr "Crear"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:124
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:264
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:319
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:132
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:277
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:334
 msgid "Send"
 msgstr "Enviar"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:129
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:137
 msgid "Service Order (auto-created on approve)"
 msgstr "Orden de servicio (creada automáticamente al aprobarse)"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:131
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:270
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:139
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:283
 msgid "Created at"
 msgstr "Creado a las"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:134
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:143
 msgid "Not created yet"
 msgstr "Aún no creado"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:143
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:152
 msgid "Send Service Order"
 msgstr "Enviar Orden de Servicio"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:145
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:291
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:154
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:304
 msgid "Sent at"
 msgstr "Enviado a las"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:148
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:294
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:158
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:308
 msgid "Pending to send"
 msgstr "Pendiente de envió"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:154
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:300
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:355
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:164
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:314
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:371
 msgid "Mark as sent"
 msgstr "Marcar como enviado"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:169
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:179
 msgid "Available (Roles & Users)"
 msgstr "Disponible (roles y usuarios)"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:171
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:181
 #: .\templates\partials\nav\user_dropdown.html:60
 msgid "Buyer"
 msgstr "Compra"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:172
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:182
 msgid "Holder"
 msgstr "Titular"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:173
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:183
 msgid "Representative"
 msgstr "Representante"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:174
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:185
 msgid "Intermediary"
 msgstr "Facilitador"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:185
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:197
 msgid "Add"
 msgstr "Agregar"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:191
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:203
 msgid "Selected recipients"
 msgstr "Destinatarios seleccionados"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:211
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:223
 msgid "Remove"
 msgstr "Remover"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:215
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:227
 msgid "Save recipients"
 msgstr "Guardar destinatarios"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:226
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:238
 msgid "Send notification"
 msgstr "Enviar notificación"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:234
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:246
 msgid "Send to"
 msgstr "Enviar a"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:248
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:260
 msgid "No recipients yet"
 msgstr "Aún no hay destinatarios"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:268
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:281
 msgid "Send Notification for Payment Order"
 msgstr "Enviar notificación de Orden de Pago"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:279
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:391
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:292
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:408
 msgid "Mark as created"
 msgstr "Marcar como creado"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:289
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:302
 msgid "Payment Order Paid"
 msgstr "Orden de Pago Pagada"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:319
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:334
 msgid "In Possession"
 msgstr "En Posesión"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:323
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:339
 msgid "Asset in Possession"
 msgstr "Activo H. en posesión"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:325
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:346
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:382
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:404
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:424
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:444
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:464
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:341
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:362
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:399
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:421
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:441
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:461
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:481
 msgid "At"
 msgstr "En"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:334
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:350
 msgid "Mark as in possession"
 msgstr "Marcar como en posesión"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:402
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:419
 msgid "Recovery Repatriation Foundation Paid"
 msgstr "Recovery Repatriation Foundation Pagado"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:412
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:432
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:452
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:473
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:429
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:449
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:469
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:490
 msgid "Mark as paid"
 msgstr "Marcar como pagado"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:422
-msgid "AM PRO Service Paid"
-msgstr "AM PRO Service Pagado"
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:439
+#| msgid "AM PRO Service Paid"
+msgid "pay master Service Paid"
+msgstr "Servicio de pay master pagado"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:442
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:459
 msgid "Propensiones International Paid"
 msgstr "Propensiones International Pagado"
 
-#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:497
+#: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:513
 msgid "Completed."
 msgstr "Completado. "
 
@@ -1094,7 +1140,7 @@ msgid "Amount"
 msgstr "Cantidad"
 
 #: .\templates\dashboard\pages\holders\add_asset_location.html:66
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:139
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:162
 msgid "Add Asset"
 msgstr "Añadir Activo"
 
@@ -1116,7 +1162,7 @@ msgstr "Cree y administre sus activos y visualice órdenes de servicio"
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:16
 #: .\templates\dashboard\pages\holders\location\add_location.html:15
 #: .\templates\dashboard\pages\holders\location\edit_location.html:16
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:131
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:150
 msgid "Assets and Service Orders"
 msgstr "Activos y Órdenes de Servicio"
 
@@ -1130,14 +1176,12 @@ msgstr "¿Necesitas ayuda?"
 #: .\templates\dashboard\pages\holders\asset_location_base.html:61
 msgid ""
 "\n"
-"                        The Asset Location ties a specific asset to a "
-"location, defining where and in what quantity the\n"
+"                        The Asset Location ties a specific asset to a location, defining where and in what quantity the\n"
 "                        asset is available.\n"
 "                        "
 msgstr ""
 "\n"
-"La ubicación del activo vincula un activo específico a una ubicación, "
-"definiendo dónde y en qué cantidad está disponible el activo."
+"La ubicación del activo vincula un activo específico a una ubicación, definiendo dónde y en qué cantidad está disponible el activo."
 
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:5
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:62
@@ -1200,20 +1244,17 @@ msgstr "Su cuenta está bajo proceso de verificación."
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:407
 msgid ""
 "\n"
-"                    This process can take between 24 to 72 hours (1 to 3 "
-"business days), Please be patient while we\n"
+"                    This process can take between 24 to 72 hours (1 to 3 business days), Please be patient while we\n"
 "                    verify your account.\n"
 "                    "
 msgstr ""
 "\n"
-"Este proceso puede tardar entre 24 y 72 horas (1 a 3 días hábiles). Por "
-"favor, tenga paciencia mientras verificamos su cuenta."
+"Este proceso puede tardar entre 24 y 72 horas (1 a 3 días hábiles). Por favor, tenga paciencia mientras verificamos su cuenta."
 
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:413
 msgid ""
 "\n"
-"                    If you have any questions, please contact our support "
-"team.\n"
+"                    If you have any questions, please contact our support team.\n"
 "                    "
 msgstr ""
 "\n"
@@ -1230,7 +1271,7 @@ msgstr "Referencia"
 
 #: .\templates\dashboard\pages\holders\location\add_location.html:110
 #: .\templates\dashboard\pages\holders\location\edit_location.html:101
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:135
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:156
 msgid "Add Location Reference"
 msgstr "Agregar referencia de ubicación"
 
@@ -1238,30 +1279,24 @@ msgstr "Agregar referencia de ubicación"
 #: .\templates\dashboard\pages\holders\location\edit_location.html:109
 msgid ""
 "\n"
-"                        The Location Reference serves as a unique identifier "
-"to manage inventory across various\n"
+"                        The Location Reference serves as a unique identifier to manage inventory across various\n"
 "                        locations.\n"
 "                        "
 msgstr ""
 "\n"
-"La referencia de ubicación sirve como un identificador único para "
-"administrar el inventario en varias ubicaciones."
+"La referencia de ubicación sirve como un identificador único para administrar el inventario en varias ubicaciones."
 
 #: .\templates\dashboard\pages\holders\location\add_location.html:125
 #: .\templates\dashboard\pages\holders\location\edit_location.html:116
 msgid ""
 "\n"
-"                        It allows differentiation between inventory located "
-"in the same country but in different areas,\n"
-"                        inventory in different countries, or inventory in "
-"the same country as well as across multiple\n"
+"                        It allows differentiation between inventory located in the same country but in different areas,\n"
+"                        inventory in different countries, or inventory in the same country as well as across multiple\n"
 "                        countries.\n"
 "                        "
 msgstr ""
 "\n"
-"Permite diferenciar entre inventario ubicado en el mismo país pero en "
-"diferentes áreas, inventario en diferentes países o inventario en el mismo "
-"país y en varios países."
+"Permite diferenciar entre inventario ubicado en el mismo país pero en diferentes áreas, inventario en diferentes países o inventario en el mismo país y en varios países."
 
 #: .\templates\dashboard\pages\holders\location\edit_location.html:53
 msgid "Edit Location Reference"
@@ -1290,14 +1325,6 @@ msgstr "Tu aliado incondicional. Todos los derechos reservados."
 msgid "Created by"
 msgstr "Creado por"
 
-#: .\templates\dashboard\partials\layout_footer.html:13
-msgid "Privacy Policy"
-msgstr "Política de Privacidad"
-
-#: .\templates\dashboard\partials\layout_footer.html:15
-msgid "Terms & Conditions"
-msgstr "Términos y Condiciones"
-
 #: .\templates\dashboard\partials\sidenav\components\footer.html:6
 msgid "Logged in as:"
 msgstr "Conectado como:"
@@ -1315,20 +1342,20 @@ msgstr "Nuevo"
 msgid "Notifications"
 msgstr "Notificaciones"
 
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:15
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:14
 msgid "Dashboard"
 msgstr "Panel"
 
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:23
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:22
 #: .\templates\partials\nav\language_selector.html:7
 msgid "Language"
 msgstr "Idioma"
 
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:42
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:41
 msgid "Pages"
 msgstr "Páginas"
 
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:56
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:54
 msgid "Account"
 msgstr "Cuenta"
 
@@ -1336,8 +1363,8 @@ msgstr "Cuenta"
 msgid "Security"
 msgstr "Seguridad"
 
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:75
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:122
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:77
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:138
 msgid "Assets"
 msgstr "Activos"
 
@@ -1479,8 +1506,8 @@ msgid "Admin"
 msgstr "Administrador"
 
 #: .\templates\partials\nav\user_dropdown.html:69
-msgid "Client Area"
-msgstr "Área de Cliente"
+msgid "Suppliers"
+msgstr "Proveedores"
 
 #: .\templates\partials\nav\user_dropdown.html:77
 msgid "Two Factor Authentication"
@@ -1508,8 +1535,8 @@ msgid ""
 msgstr ""
 "Los tokens de respaldo se pueden usar cuando tu número principal y de "
 "respaldo no estén disponibles. Los tokens de respaldo a continuación se "
-"pueden usar para la verificación de inicio de sesión. Si ya usaste todos tus "
-"tokens de respaldo, puedes generar un nuevo conjunto. Solo los tokens de "
+"pueden usar para la verificación de inicio de sesión. Si ya usaste todos tus"
+" tokens de respaldo, puedes generar un nuevo conjunto. Solo los tokens de "
 "respaldo que se muestran a continuación serán válidos."
 
 #: .\templates\two_factor\core\backup_tokens.html:28
@@ -1538,8 +1565,8 @@ msgid ""
 msgstr ""
 "Usa este formulario para ingresar tokens de respaldo para iniciar sesión. "
 "Estos tokens han sido generados para que los imprimas y los mantengas "
-"seguros. Por favor, introduce uno de estos tokens de respaldo para acceder a "
-"tu cuenta."
+"seguros. Por favor, introduce uno de estos tokens de respaldo para acceder a"
+" tu cuenta."
 
 #: .\templates\two_factor\core\login.html:54
 msgid "Username or Email"
@@ -1590,8 +1617,8 @@ msgstr ""
 #: .\templates\two_factor\core\otp_required.html:12
 #: .\templates\two_factor\profile\profile.html:29
 msgid ""
-"Two-factor authentication is not enabled for your account. Enable two-factor "
-"authentication for enhanced account security."
+"Two-factor authentication is not enabled for your account. Enable two-factor"
+" authentication for enhanced account security."
 msgstr ""
 "La autenticación de dos factores no está habilitada en tu cuenta. Actívala "
 "para mejorar la seguridad de tu cuenta."
@@ -1621,12 +1648,12 @@ msgstr "Por favor, selecciona el método de autenticación que deseas usar."
 
 #: .\templates\two_factor\core\setup.html:27
 msgid ""
-"To set up a token generator, scan the QR code below using an app like Google "
-"Authenticator, Authenticator from Windows or a similar app."
+"To set up a token generator, scan the QR code below using an app like Google"
+" Authenticator, Authenticator from Windows or a similar app."
 msgstr ""
 "Para configurar un generador de tokens, escanea el código QR a continuación "
-"con una aplicación como Google Authenticator, Authenticator de Windows o una "
-"app similar."
+"con una aplicación como Google Authenticator, Authenticator de Windows o una"
+" app similar."
 
 #: .\templates\two_factor\core\setup.html:29
 msgid ""
@@ -1647,7 +1674,8 @@ msgstr ""
 "verificar la configuración."
 
 #: .\templates\two_factor\core\setup.html:34
-msgid "Token validated successfully. Two-factor authentication is now enabled."
+msgid ""
+"Token validated successfully. Two-factor authentication is now enabled."
 msgstr ""
 "Token validado exitosamente. La autenticación de dos factores ahora está "
 "habilitada."
@@ -1662,7 +1690,8 @@ msgid "Back to login"
 msgstr "Volver al inicio de sesión"
 
 #: .\templates\two_factor\core\setup_complete.html:15
-msgid "Congratulations, you've successfully enabled two-factor authentication."
+msgid ""
+"Congratulations, you've successfully enabled two-factor authentication."
 msgstr "¡Felicidades! Has habilitado la autenticación de dos factores."
 
 #: .\templates\two_factor\core\setup_complete.html:20
@@ -1705,6 +1734,15 @@ msgstr[1] "Tienes %(counter)s tokens de respaldo restantes."
 #: .\templates\two_factor\profile\profile.html:27
 msgid "Show Codes"
 msgstr "Mostrar códigos"
+
+#~ msgid "Privacy Policy"
+#~ msgstr "Política de Privacidad"
+
+#~ msgid "Terms & Conditions"
+#~ msgstr "Términos y Condiciones"
+
+#~ msgid "Client Area"
+#~ msgstr "Área de Cliente"
 
 #~ msgid "Total Quantity (boxes)"
 #~ msgstr "Cantidad total (cajas)"
@@ -1763,18 +1801,18 @@ msgstr "Mostrar códigos"
 #~ msgstr "Plataforma segura de activos históricos"
 
 #~ msgid ""
-#~ "Comprehensive and secure platform for the purchase and sale of US "
-#~ "historical assets. Official, exclusive and trusted."
+#~ "Comprehensive and secure platform for the purchase and sale of US historical"
+#~ " assets. Official, exclusive and trusted."
 #~ msgstr ""
 #~ "Plataforma integral y segura para la compra y venta de activos históricos "
 #~ "EE. UU. Oficial, exclusiva y confiable."
 
 #~ msgid ""
-#~ "Official and exclusive platform for the purchase and sale of US "
-#~ "historical assets."
+#~ "Official and exclusive platform for the purchase and sale of US historical "
+#~ "assets."
 #~ msgstr ""
-#~ "Plataforma oficial y exclusiva para la compra y venta de activos "
-#~ "históricos de Estados Unidos."
+#~ "Plataforma oficial y exclusiva para la compra y venta de activos históricos "
+#~ "de Estados Unidos."
 
 #~ msgid ""
 #~ "Exclusive and official platform for the secure purchase of US historical "
@@ -1851,24 +1889,12 @@ msgstr "Mostrar códigos"
 
 #~ msgid ""
 #~ "\n"
-#~ "                                qualifies as a beneficiary, who has "
-#~ "undergone a security screening and accreditation of judicial records in "
-#~ "accordance with current regulations, criminal reports on social media, "
-#~ "and Interpol databases. Consequently, they do <strong>NOT</strong> have "
-#~ "any judicial or disciplinary records from the certifying entities "
-#~ "authorized by international public consultation databases, which would "
-#~ "affect their suitability.\n"
+#~ "                                qualifies as a beneficiary, who has undergone a security screening and accreditation of judicial records in accordance with current regulations, criminal reports on social media, and Interpol databases. Consequently, they do <strong>NOT</strong> have any judicial or disciplinary records from the certifying entities authorized by international public consultation databases, which would affect their suitability.\n"
 #~ "                                <br/>\n"
 #~ "                                For the record, this is signed on "
 #~ msgstr ""
 #~ "\n"
-#~ "Se considera beneficiario, quien ha sido sometido a una revisión de "
-#~ "seguridad y acreditación de antecedentes judiciales de acuerdo con la "
-#~ "normativa vigente, denuncias penales en redes sociales y bases de datos "
-#~ "de Interpol. Por consiguiente, <strong>NO</strong> cuenta con "
-#~ "antecedentes judiciales ni disciplinarios de las entidades certificadoras "
-#~ "autorizadas por las bases de datos de consulta pública internacional, lo "
-#~ "que afectaría su idoneidad.\n"
+#~ "Se considera beneficiario, quien ha sido sometido a una revisión de seguridad y acreditación de antecedentes judiciales de acuerdo con la normativa vigente, denuncias penales en redes sociales y bases de datos de Interpol. Por consiguiente, <strong>NO</strong> cuenta con antecedentes judiciales ni disciplinarios de las entidades certificadoras autorizadas por las bases de datos de consulta pública internacional, lo que afectaría su idoneidad.\n"
 #~ "<br/>\n"
 #~ "Para que conste, se firma el presente."
 
@@ -1877,30 +1903,25 @@ msgstr "Mostrar códigos"
 
 #~ msgid ""
 #~ "\n"
-#~ "                                we inform you that, after the evaluation "
-#~ "conducted, your security study <span class=\"text-danger\">HAS NOT BEEN "
-#~ "APPROVED</span> due to not meeting the suitability requirements according "
-#~ "to the current security regulations.\n"
+#~ "                                we inform you that, after the evaluation conducted, your security study <span class=\"text-danger\">HAS NOT BEEN APPROVED</span> due to not meeting the suitability requirements according to the current security regulations.\n"
 #~ "                            "
 #~ msgstr ""
 #~ "\n"
-#~ "Le informamos que, tras la evaluación realizada, su estudio de seguridad "
-#~ "<span class=\"text-danger\">NO HA SIDO APROBADO</span> por no cumplir los "
-#~ "requisitos de idoneidad según la normativa de seguridad vigente."
+#~ "Le informamos que, tras la evaluación realizada, su estudio de seguridad <span class=\"text-danger\">NO HA SIDO APROBADO</span> por no cumplir los requisitos de idoneidad según la normativa de seguridad vigente."
 
 #~ msgid ""
 #~ "We remind you that, in accordance with the provisions of the Habeas Data "
-#~ "Law, all your personal data has been treated with due confidentiality and "
-#~ "is protected under the strictest security standards, guaranteeing its "
+#~ "Law, all your personal data has been treated with due confidentiality and is"
+#~ " protected under the strictest security standards, guaranteeing its "
 #~ "integrity and privacy. Your data will be used exclusively for authorized "
 #~ "purposes and within the framework of current data protection regulations."
 #~ msgstr ""
-#~ "Le recordamos que, de conformidad con la Ley de Habeas Data, todos sus "
-#~ "datos personales han sido tratados con la debida confidencialidad y están "
-#~ "protegidos bajo los más estrictos estándares de seguridad, garantizando "
-#~ "su integridad y privacidad. Sus datos se utilizarán exclusivamente para "
-#~ "los fines autorizados y de conformidad con la normativa vigente en "
-#~ "materia de protección de datos."
+#~ "Le recordamos que, de conformidad con la Ley de Habeas Data, todos sus datos"
+#~ " personales han sido tratados con la debida confidencialidad y están "
+#~ "protegidos bajo los más estrictos estándares de seguridad, garantizando su "
+#~ "integridad y privacidad. Sus datos se utilizarán exclusivamente para los "
+#~ "fines autorizados y de conformidad con la normativa vigente en materia de "
+#~ "protección de datos."
 
 #~ msgid "Verify your Certificate"
 #~ msgstr "Verifique su certificado"
@@ -1920,67 +1941,35 @@ msgstr "Mostrar códigos"
 #, python-format
 #~ msgid ""
 #~ "\n"
-#~ "                                <strong>%(name)s %(last_name)s</strong> "
-#~ "with document <strong>%(document_type)s</strong> and number <strong>"
-#~ "%(masked_document_number)s</strong>\n"
-#~ "                                was duly registered to participate in the "
-#~ "sovereign purchase of the United States after the corresponding "
-#~ "verification,\n"
-#~ "                                it is declared that it fully complied "
-#~ "with the requirements demanded by the process and demonstrated that it "
-#~ "was suitable to belong to this operation.\n"
+#~ "                                <strong>%(name)s %(last_name)s</strong> with document <strong>%(document_type)s</strong> and number <strong>%(masked_document_number)s</strong>\n"
+#~ "                                was duly registered to participate in the sovereign purchase of the United States after the corresponding verification,\n"
+#~ "                                it is declared that it fully complied with the requirements demanded by the process and demonstrated that it was suitable to belong to this operation.\n"
 #~ "                                <br/>\n"
 #~ "                                For the record, this is signed on\n"
 #~ "                            "
 #~ msgstr ""
 #~ "\n"
-#~ "<strong>%(name)s %(last_name)s</strong> con documento <strong>"
-#~ "%(document_type)s</strong> y número <strong>%(masked_document_number)s</"
-#~ "strong>\n"
-#~ "se registró debidamente para participar en la compra de soberanía de los "
-#~ "Estados Unidos tras la verificación correspondiente,\n"
-#~ "declara que cumplió plenamente con los requisitos exigidos por el proceso "
-#~ "y demostró su idoneidad para participar en esta operación.\n"
+#~ "<strong>%(name)s %(last_name)s</strong> con documento <strong>%(document_type)s</strong> y número <strong>%(masked_document_number)s</strong>\n"
+#~ "se registró debidamente para participar en la compra de soberanía de los Estados Unidos tras la verificación correspondiente,\n"
+#~ "declara que cumplió plenamente con los requisitos exigidos por el proceso y demostró su idoneidad para participar en esta operación.\n"
 #~ "<br/>\n"
 #~ "Para que conste, se firma el presente."
 
 #~ msgid ""
 #~ "\n"
-#~ "                            We remind you that, in accordance with the "
-#~ "provisions of the Habeas Data Law, all your personal data has been "
-#~ "treated with due confidentiality and is protected under the strictest "
-#~ "security standards, guaranteeing its integrity and privacy. Your data "
-#~ "will be used exclusively for authorized purposes and within the framework "
-#~ "of current data protection regulations.\n"
+#~ "                            We remind you that, in accordance with the provisions of the Habeas Data Law, all your personal data has been treated with due confidentiality and is protected under the strictest security standards, guaranteeing its integrity and privacy. Your data will be used exclusively for authorized purposes and within the framework of current data protection regulations.\n"
 #~ "                            "
 #~ msgstr ""
 #~ "\n"
-#~ "Le recordamos que, de conformidad con la Ley de Habeas Data, todos sus "
-#~ "datos personales han sido tratados con la debida confidencialidad y están "
-#~ "protegidos bajo los más estrictos estándares de seguridad, garantizando "
-#~ "su integridad y privacidad. Sus datos se utilizarán exclusivamente para "
-#~ "los fines autorizados y de conformidad con la normativa vigente en "
-#~ "materia de protección de datos."
+#~ "Le recordamos que, de conformidad con la Ley de Habeas Data, todos sus datos personales han sido tratados con la debida confidencialidad y están protegidos bajo los más estrictos estándares de seguridad, garantizando su integridad y privacidad. Sus datos se utilizarán exclusivamente para los fines autorizados y de conformidad con la normativa vigente en materia de protección de datos."
 
 #~ msgid ""
 #~ "\n"
-#~ "                                The following clarification is made: the "
-#~ "reproduction, publication, or any improper use of this certificate for "
-#~ "requesting money or for fraudulent purposes will result in legal "
-#~ "sanctions, in accordance with applicable national and international "
-#~ "regulations. Furthermore, it is warned that such conduct will lead to "
-#~ "immediate expulsion and total disqualification, both present and future, "
-#~ "from any participation in programs, benefits, or related agreements.\n"
+#~ "                                The following clarification is made: the reproduction, publication, or any improper use of this certificate for requesting money or for fraudulent purposes will result in legal sanctions, in accordance with applicable national and international regulations. Furthermore, it is warned that such conduct will lead to immediate expulsion and total disqualification, both present and future, from any participation in programs, benefits, or related agreements.\n"
 #~ "                            "
 #~ msgstr ""
 #~ "\n"
-#~ "Se aclara lo siguiente: la reproducción, publicación o cualquier uso "
-#~ "indebido de este certificado para solicitar dinero o con fines "
-#~ "fraudulentos conllevará sanciones legales, de conformidad con la "
-#~ "normativa nacional e internacional aplicable. Asimismo, se advierte que "
-#~ "dicha conducta conllevará la expulsión inmediata y la inhabilitación "
-#~ "total, presente y futura, de cualquier participación en programas, "
-#~ "beneficios o acuerdos relacionados."
+#~ "Se aclara lo siguiente: la reproducción, publicación o cualquier uso indebido de este certificado para solicitar dinero o con fines fraudulentos conllevará sanciones legales, de conformidad con la normativa nacional e internacional aplicable. Asimismo, se advierte que dicha conducta conllevará la expulsión inmediata y la inhabilitación total, presente y futura, de cualquier participación en programas, beneficios o acuerdos relacionados."
 
 #~ msgid "Regulatory References:"
 #~ msgstr "Referencias regulatorias:"
@@ -1990,56 +1979,44 @@ msgstr "Mostrar códigos"
 
 #~ msgid ""
 #~ "\n"
-#~ "                                United Nations Convention against "
-#~ "Corruption (UNCAC): Article 15 and subsequent provisions, applicable to "
-#~ "acts of forgery and misuse of official documents.\n"
+#~ "                                United Nations Convention against Corruption (UNCAC): Article 15 and subsequent provisions, applicable to acts of forgery and misuse of official documents.\n"
 #~ "                                "
 #~ msgstr ""
 #~ "\n"
-#~ "Convención de las Naciones Unidas contra la Corrupción (CNUCC): Artículo "
-#~ "15 y disposiciones posteriores, aplicables a los actos de falsificación y "
-#~ "uso indebido de documentos oficiales."
+#~ "Convención de las Naciones Unidas contra la Corrupción (CNUCC): Artículo 15 y disposiciones posteriores, aplicables a los actos de falsificación y uso indebido de documentos oficiales."
 
 #~ msgid "International Criminal Code (Rome Statute): "
 #~ msgstr "Código Penal Internacional (Estatuto de Roma):"
 
 #~ msgid ""
 #~ "\n"
-#~ "                                Related to fraud, forgery, and violations "
-#~ "of international ethical standards.\n"
+#~ "                                Related to fraud, forgery, and violations of international ethical standards.\n"
 #~ "                                "
 #~ msgstr ""
 #~ "\n"
-#~ "Relacionado con fraude, falsificación y violaciones de estándares éticos "
-#~ "internacionales."
+#~ "Relacionado con fraude, falsificación y violaciones de estándares éticos internacionales."
 
 #~ msgid "Internal Regulations of the Fund/Organization: "
 #~ msgstr "Reglamento Interno del Fondo/Organización:"
 
 #~ msgid ""
 #~ "\n"
-#~ "                                In accordance with contractual clauses "
-#~ "and specific regulations governing user relationships.\n"
+#~ "                                In accordance with contractual clauses and specific regulations governing user relationships.\n"
 #~ "                                "
 #~ msgstr ""
 #~ "\n"
-#~ "De acuerdo con las cláusulas contractuales y la normativa específica que "
-#~ "regula las relaciones con los usuarios."
+#~ "De acuerdo con las cláusulas contractuales y la normativa específica que regula las relaciones con los usuarios."
 
 #~ msgid "Legal Warning: "
 #~ msgstr "Aviso legal:"
 
 #~ msgid ""
 #~ "\n"
-#~ "                            Any contrary act will result in the "
-#~ "corresponding judicial actions, including reports to the competent "
-#~ "authorities of the country and international organizations.\n"
+#~ "                            Any contrary act will result in the corresponding judicial actions, including reports to the competent authorities of the country and international organizations.\n"
 #~ "                            "
 #~ msgstr ""
 #~ "\n"
-#~ "Cualquier acto contrario dará lugar a las acciones judiciales "
-#~ "correspondientes, incluyendo denuncias ante las autoridades competentes "
-#~ "del país y organismos internacionales."
+#~ "Cualquier acto contrario dará lugar a las acciones judiciales correspondientes, incluyendo denuncias ante las autoridades competentes del país y organismos internacionales."
 
 #~ msgid "POL"
 #~ msgstr "Prueba de vida"
@@ -2049,9 +2026,6 @@ msgstr "Mostrar códigos"
 
 #~ msgid "Thank you for confirming your POL!"
 #~ msgstr "Gracias por confirmar la POL"
-
-#~ msgid "Your information has been successfully registered."
-#~ msgstr "Tu información ha sido registrada con éxito"
 
 #~ msgid "You can now close this tab. "
 #~ msgstr "Ya puedes cerrar esta pestaña."
@@ -2066,20 +2040,17 @@ msgstr "Mostrar códigos"
 #~ "All-in-one suite for business management of historical assets safely and "
 #~ "easily"
 #~ msgstr ""
-#~ "Suite todo en uno para la gestión empresarial de activos históricos de "
-#~ "forma segura y sencilla"
+#~ "Suite todo en uno para la gestión empresarial de activos históricos de forma"
+#~ " segura y sencilla"
 
 #~ msgid ""
 #~ "\n"
-#~ "          This platform is governed by the USA PATRIOT Act (2001) and "
-#~ "rejects any relationship\n"
+#~ "          This platform is governed by the USA PATRIOT Act (2001) and rejects any relationship\n"
 #~ "          with terrorism, drug trafficking, and money laundering.\n"
 #~ "          "
 #~ msgstr ""
 #~ "\n"
-#~ "Esta plataforma se rige por la Ley Patriota de los Estados Unidos (2001) "
-#~ "y rechaza cualquier relación con el terrorismo, el narcotráfico y el "
-#~ "lavado de dinero."
+#~ "Esta plataforma se rige por la Ley Patriota de los Estados Unidos (2001) y rechaza cualquier relación con el terrorismo, el narcotráfico y el lavado de dinero."
 
 #~ msgid "Order of service"
 #~ msgstr "Orden de servicio"
@@ -2104,44 +2075,34 @@ msgstr "Mostrar códigos"
 
 #~ msgid ""
 #~ "\n"
-#~ "              PRIVATE ALLIANCE USA (RECOVERY REPATRIATION FOUNDATION, AM "
-#~ "PRO HOLDINGS GROUP LLC AND\n"
-#~ "              PROPENSIONES ABOGADOS INTERNACIONAL). OFFICIAL APPOINTMENT "
-#~ "#F991, 07 JULY 2025 SIGNED AND AUTHENTICATED IN\n"
-#~ "              FLORIDA, USA # F991, 07 JULY 2025 SIGNED AND AUTHENTICATED "
-#~ "IN FLORIDA, USA\n"
+#~ "              PRIVATE ALLIANCE USA (RECOVERY REPATRIATION FOUNDATION, AM PRO HOLDINGS GROUP LLC AND\n"
+#~ "              PROPENSIONES ABOGADOS INTERNACIONAL). OFFICIAL APPOINTMENT #F991, 07 JULY 2025 SIGNED AND AUTHENTICATED IN\n"
+#~ "              FLORIDA, USA # F991, 07 JULY 2025 SIGNED AND AUTHENTICATED IN FLORIDA, USA\n"
 #~ "              "
 #~ msgstr ""
 #~ "\n"
-#~ "Plataforma Exclusiva para la Gestión Estratégica de Activos Históricos de "
-#~ "la Compra Oficial de EE. UU."
+#~ "Plataforma Exclusiva para la Gestión Estratégica de Activos Históricos de la Compra Oficial de EE. UU."
 
 #~ msgid ""
 #~ "\n"
-#~ "              GLOBAL ALLIANCE (AM PRO HOLDINGS GROUP LLC AND PROPENSIONES "
-#~ "ABOGADOS INTERNACIONAL).\n"
-#~ "              OFFICIAL APPOINTMENT #M9Q0, 04 AUGUST 2025 SIGNED AND "
-#~ "AUTHENTICATED IN QUEENS SUPREME COURT IN NEW YORK,\n"
+#~ "              GLOBAL ALLIANCE (AM PRO HOLDINGS GROUP LLC AND PROPENSIONES ABOGADOS INTERNACIONAL).\n"
+#~ "              OFFICIAL APPOINTMENT #M9Q0, 04 AUGUST 2025 SIGNED AND AUTHENTICATED IN QUEENS SUPREME COURT IN NEW YORK,\n"
 #~ "              USA\n"
 #~ "              "
 #~ msgstr ""
 #~ "\n"
-#~ "Esta plataforma se rige por la Ley Patriota de los Estados Unidos (USA "
-#~ "PATRIOT Act, 2001) y rechaza toda relación con terrorismo, narcotráfico y "
-#~ "lavado de dinero o de activos."
+#~ "Esta plataforma se rige por la Ley Patriota de los Estados Unidos (USA PATRIOT Act, 2001) y rechaza toda relación con terrorismo, narcotráfico y lavado de dinero o de activos."
 
 #~ msgid "Legal Notice:"
 #~ msgstr "Aviso Legal:"
 
 #~ msgid ""
 #~ "\n"
-#~ "        Official Appointment #F991, 07 July 2025 Signed and Authenticated "
-#~ "in Florida, USA\n"
+#~ "        Official Appointment #F991, 07 July 2025 Signed and Authenticated in Florida, USA\n"
 #~ "        "
 #~ msgstr ""
 #~ "\n"
-#~ "Nombramiento oficial N.° F991, 7 de julio de 2025, firmado y autenticado "
-#~ "en Florida, EE. UU."
+#~ "Nombramiento oficial N.° F991, 7 de julio de 2025, firmado y autenticado en Florida, EE. UU."
 
 #~ msgid "Buyer Client Area"
 #~ msgstr "Área de Cliente Compra"

@@ -1,71 +1,82 @@
-Django==4.2.13
-MarkupPy==1.14
-PyJWT==2.8.0
-PyYAML==6.0.1
-Unidecode==1.3.8
-argon2-cffi-bindings==21.2.0
-argon2-cffi==23.1.0
-asgiref==3.8.1
-certifi==2024.6.2
-cffi==1.16.0
-charset-normalizer==3.3.2
-colorama==0.4.6
-cryptography==43.0.0
-diff-match-patch==20230430
-django-admin-sortable2==2.2.1
-django-auditlog==3.0.0
-django-axes==7.0.0
-django-betterforms==2.0.0
-django-ckeditor-5==0.2.13
-django-cleanup==8.1.0
-django-compressor==4.4
-django-cors-headers==4.3.1
-django-countries==7.6.1
-django-crontab==0.7.1
-django-debug-toolbar==4.4.2
-django-encrypted-model-fields==0.6.5
-django-environ==0.11.2
-django-filter==24.2
-django-formtools==2.5.1
-django-honeypot==1.2.1
-django-impersonate==1.9.5
-django-import-export==4.0.8
-django-otp==1.5.4
-django-parler==2.3
-django-phonenumber-field==8.0.0
-django-recaptcha==4.0.0
-django-rosetta==0.10.0
-django-select2==8.2.1
-django-two-factor-auth==1.17.0
-et_xmlfile==2.0.0
-idna==3.7
-inflection==0.5.1
-mysqlclient==2.2.4
-openai==1.72.0
-openpyxl==3.1.2
-packaging==24.1
-phonenumbers==8.13.49
-pillow==10.3.0
-polib==1.2.0
-psycopg2-binary==2.9.9
-pycparser==2.22
-pypng==0.20220715.0
-python-barcode==0.15.1
-python-dateutil==2.9.0.post0
-python-dotenv==1.0.1
-python-pptx==1.0.2
-pytz==2024.1
-qrcode==7.4.2
-reportlab==4.0.9
-requests==2.32.3
-rosetta==0.3
-setuptools==75.6.0
-six==1.16.0
-sqlparse==0.5.0
-tablib==3.5.0
-typing_extensions==4.12.2
-tzdata==2024.2
-uritemplate==4.1.1
-urllib3==2.2.2
-xlrd==2.0.1
-xlwt==1.3.0
+# =========================
+# CORE (DJANGO LTS)
+# =========================
+Django>=4.2,<5.0
+
+# =========================
+# DATABASE / BASE INFRA
+# =========================
+mysqlclient>=2.2
+psycopg2-binary>=2.9,<3.0
+cryptography>=42
+pillow>=10
+
+# =========================
+# SECURITY / AUTH / AUDIT
+# =========================
+django-two-factor-auth>=1.17       # two_factor
+django-otp>=1.5                    # django_otp
+django-axes>=7.0                   # axes
+django-cors-headers>=4.3           # corsheaders
+PyJWT>=2.8
+argon2-cffi>=23.1
+django-auditlog>=3.0               # auditlog
+django-encrypted-model-fields>=0.6 # encrypted_model_fields
+
+# =========================
+# ADMIN / FORMS / UX
+# =========================
+django-betterforms>=2.0            # betterforms
+django-import-export>=4.0          # import_export
+django-admin-sortable2>=2.2
+django-ckeditor-5>=0.2
+django-select2>=8.2                # django_select2
+django-debug-toolbar>=4.4
+django-impersonate>=1.9            # impersonate
+django-formtools>=2.5              # formtools
+
+# =========================
+# TASKS / ASYNC / CRON
+# =========================
+django-crontab>=0.7                # django_crontab
+
+# =========================
+# STATIC FILES / ASSETS
+# =========================
+django-compressor>=4.4             # compressor
+
+# =========================
+# FILTERS / QUERYING
+# =========================
+django-filter>=24.2                # django_filters
+
+# =========================
+# I18N / CONTENT
+# =========================
+django-parler>=2.3                 # parler
+django-rosetta>=0.10               # rosetta
+django-countries>=7.6
+
+# =========================
+# API / HTTP
+# =========================
+requests>=2.32
+urllib3>=2.2
+
+# =========================
+# AI / EXTERNAL SERVICES
+# =========================
+openai>=1.72
+
+# =========================
+# FILES / EXPORTS / REPORTS
+# =========================
+openpyxl>=3.1
+reportlab>=4.0
+python-pptx>=1.0
+
+# =========================
+# CONFIG / ENV
+# =========================
+django-environ>=0.11
+python-dotenv>=1.0

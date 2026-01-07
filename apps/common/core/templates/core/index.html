@@ -36,8 +36,7 @@
 <meta name="title" content="GEA | {{ gea_title }}" />
 
 <!-- Description (155 160 caracteres) -->
-<meta name="description"
-  content="{% trans 'Comprehensive, exclusive and secure platform for buying and selling historical assets. Official U.S. purchasing platform." />
+<meta name="description" content="{% trans 'Comprehensive, exclusive and secure platform for buying and selling historical assets. Official U.S. purchasing platform.' %}" />
 
 <!-- Keywords (no muy usado, opcional) -->
 <meta name="keywords" content="GEA, historical assets, secure platform, legal, US assets" />
@@ -82,18 +81,16 @@
 class="nav-fixed"
 {% endblock %}
 
-{% comment %}
+
 {% block header %}
-{% include 'core/partials/core_nav.html' %}
+  {% include 'core/partials/core_nav.html' %}
 {% endblock %}
-{% endcomment %}
 
 
 {% block main %}
 {% include 'core/partials/whatsapp.html' %}
 <main class="main">
 <!-- Hero Section -->
-{% comment %}
 <div id="hero" class="hero">
   <div class="hero-video">
     <video id="hero-video"
@@ -116,73 +113,6 @@ class="nav-fixed"
     </video>
   </div>
   <h1>{{ page_title }}</h1>
-</div>
-{% endcomment %}
-
-<div class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-10">
-
-      <!-- Card: Operational Inactivity Notice -->
-      <div class="card border-warning shadow-sm mb-4">
-        <div class="card-header bg-warning text-dark fw-bold">
-          {% trans "Operational Inactivity Certificate" %}
-        </div>
-        <div class="card-body">
-          <p class="card-text">
-            {% trans "All operational platforms, systems, and channels of the GEA, AEGIS, CALMA, and ASSETCREDIT departments are hereby formally and expressly declared inactive, without exception, until explicit authorization for reactivation is received from the corporate executive authorities of the United States." %}
-          </p>
-
-          <p class="card-text">
-            {% trans "This measure strictly complies with regulatory requirements, legal control standards, and institutional alignment, ensuring that no operation, validation, custody, reservation, or release will be executed without the corresponding authorization." %}
-          </p>
-        </div>
-      </div>
-
-      <!-- Card: Contact Information -->
-      <div class="card border-info shadow-sm mb-4">
-        <div class="card-header bg-info text-white fw-bold">
-          {% trans "Institutional Contact Channel" %}
-        </div>
-        <div class="card-body">
-          <p class="card-text">
-            {% trans "For any inquiries, requests, or exceptional situations, the following institutional communication channel of the law firm Propensiones Abogados is exclusively enabled:" %}
-          </p>
-
-          <ul class="list-unstyled mb-0">
-            <li class="mb-2">
-              <i class="bi bi-envelope-fill me-2"></i>
-              <strong>{% trans "Institutional Email:" %}</strong>
-              <a href="mailto:notificaciones@propensionesabogados.com">
-                notificaciones@propensionesabogados.com
-              </a>
-            </li>
-            <li>
-              <i class="bi bi-telephone-fill me-2"></i>
-              <strong>{% trans "Customer Service Line:" %}</strong>
-              <a href="tel:+573012283818">+57 301 228 3818</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Card: Signature -->
-      <div class="card border-secondary shadow-sm">
-        <div class="card-body text-center">
-          <p class="mb-1 fw-semibold">
-            {% trans "Sincerely," %}
-          </p>
-          <p class="mb-0 fw-bold">
-            {% trans "PROPENSIONES ABOGADOS INTERNATIONAL LAW FIRM" %}
-          </p>
-          <p class="mb-0 text-muted">
-            {% trans "INTERNATIONAL CONSORTIUM IPCON" %}
-          </p>
-        </div>
-      </div>
-
-    </div>
-  </div>
 </div>
 <!-- /Hero Section -->
 

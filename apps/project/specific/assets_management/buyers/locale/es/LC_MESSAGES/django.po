@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-10 21:42-0500\n"
+"POT-Creation-Date: 2026-01-06 23:11-0500\n"
 "PO-Revision-Date: 2025-11-10 21:47+0000\n"
 "Last-Translator: Sebastian Morales <support@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -379,136 +379,135 @@ msgstr "No se puede crear rentabilidad antes de la aprobación."
 msgid "Cannot pay profitability before approval."
 msgstr "No se puede pagar rentabilidad antes de la aprobación."
 
-#: .\apps\project\specific\assets_management\buyers\models.py:891
+#: .\apps\project\specific\assets_management\buyers\models.py:892
 msgid "Purchase order"
 msgstr "Orden de compra"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:892
+#: .\apps\project\specific\assets_management\buyers\models.py:893
 msgid "Purchase orders"
 msgstr "Ordenes de compra"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:895
+#: .\apps\project\specific\assets_management\buyers\models.py:896
 msgid "Can approve purchase orders"
 msgstr "Puede aprobar órdenes de compra"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:896
+#: .\apps\project\specific\assets_management\buyers\models.py:897
 msgid "Can review purchase orders"
 msgstr "Puede revisar las órdenes de compra"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:897
+#: .\apps\project\specific\assets_management\buyers\models.py:898
 msgid "Can send service orders"
 msgstr "Puede enviar órdenes de servicio"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:898
+#: .\apps\project\specific\assets_management\buyers\models.py:899
 msgid "Can create payment orders"
 msgstr "Puede crear órdenes de pago"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:899
+#: .\apps\project\specific\assets_management\buyers\models.py:900
 msgid "Can send payment orders"
 msgstr "Puede enviar órdenes de pago"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:900
+#: .\apps\project\specific\assets_management\buyers\models.py:901
 msgid "Can set asset in possession"
 msgstr "Puede fijar el activo en posesión"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:901
+#: .\apps\project\specific\assets_management\buyers\models.py:902
 msgid "Can send asset"
 msgstr "Puede enviar activos"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:902
+#: .\apps\project\specific\assets_management\buyers\models.py:903
 msgid "Can set profitability"
 msgstr "Puede establecer la rentabilidad"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:903
+#: .\apps\project\specific\assets_management\buyers\models.py:904
 msgid "Can pay profitability"
 msgstr "Puede pagar rentabilidad"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:904
+#: .\apps\project\specific\assets_management\buyers\models.py:905
 msgid "Can approve pay profitability"
 msgstr "Puede aprobar el pago de rentabilidad"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:905
+#: .\apps\project\specific\assets_management\buyers\models.py:906
 msgid "Can see profitability page"
 msgstr "Puede ver la página de rentabilidad"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:906
+#: .\apps\project\specific\assets_management\buyers\models.py:908
 msgid "Can see the offer workflow wizard page"
 msgstr "Puede ver la página del asistente de flujo de trabajo de ofertas"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:908
+#: .\apps\project\specific\assets_management\buyers\models.py:911
 msgid "Mark Recovery Repatriation Foundation as paid"
 msgstr "Marcar como pago a Fundación Recovery Repatriation"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:909
+#: .\apps\project\specific\assets_management\buyers\models.py:913
 msgid "Set user who marked Recovery Repatriation Foundation as paid"
 msgstr "Usuario que marcó como pagada la Fundación Recovery Repatriation"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:910
+#: .\apps\project\specific\assets_management\buyers\models.py:915
 msgid "Set timestamp when Recovery Repatriation Foundation was marked as paid"
 msgstr ""
 "Fecha y hora en que se marcó como pagada la Fundación Recovery Repatriation"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:912
+#: .\apps\project\specific\assets_management\buyers\models.py:917
 msgid "Mark PAY MASTER service as paid"
 msgstr "Marcar como pago a PAY MASTER"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:913
+#: .\apps\project\specific\assets_management\buyers\models.py:919
 msgid "Set user who marked PAY MASTER as paid"
 msgstr "Usuario que marcó como pagada a PAY MASTER"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:914
+#: .\apps\project\specific\assets_management\buyers\models.py:921
 msgid "Set timestamp when PAY MASTER was marked as paid"
 msgstr "Fecha y hora en que se marcó como pagado a PAY MASTER"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:916
+#: .\apps\project\specific\assets_management\buyers\models.py:923
 msgid "Mark Propensiones as paid"
 msgstr "Marcar como pago a Propensiones"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:917
+#: .\apps\project\specific\assets_management\buyers\models.py:924
 msgid "Set user who marked Propensiones as paid"
 msgstr "Usuario que marcó como pagada a Propensiones"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:918
+#: .\apps\project\specific\assets_management\buyers\models.py:926
 msgid "Set timestamp when Propensiones was marked as paid"
 msgstr "Fecha y hora en que se marcó como pagada a Propensiones"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:1002
+#: .\apps\project\specific\assets_management\buyers\models.py:1010
 msgid "Service Order Recipient"
 msgstr "Destinatario de la orden de servicio"
 
-#: .\apps\project\specific\assets_management\buyers\models.py:1003
+#: .\apps\project\specific\assets_management\buyers\models.py:1011
 msgid "Service Order Recipients"
 msgstr "Destinatarios de la orden de servicio"
 
-#: .\apps\project\specific\assets_management\buyers\signals.py:183
-#, python-brace-format
-msgid "Error filling offer translation fields: {e}"
-msgstr "Error al rellenar los campos de traducción de la oferta: {e}"
-
-#: .\apps\project\specific\assets_management\buyers\views.py:282
+#: .\apps\project\specific\assets_management\buyers\views.py:287
 msgid "Your Purchase order has been sent for verification."
 msgstr "Su orden de compra ha sido enviada para verificación."
 
-#: .\apps\project\specific\assets_management\buyers\views.py:307
+#: .\apps\project\specific\assets_management\buyers\views.py:312
 msgid "New Purchase order Submitted for Verification"
 msgstr "Nueva orden de compra enviada para verificación"
 
-#: .\apps\project\specific\assets_management\buyers\views.py:538
+#: .\apps\project\specific\assets_management\buyers\views.py:581
 msgid "No recipients to notify."
 msgstr "No hay destinatarios a notificar."
 
-#: .\apps\project\specific\assets_management\buyers\views.py:561
+#: .\apps\project\specific\assets_management\buyers\views.py:604
 #, python-format
 msgid "Service Order Notification for OC: %(po)s"
 msgstr "Notificación de Orden de servicio para OC: %(po)s"
 
-#: .\apps\project\specific\assets_management\buyers\views.py:640
+#: .\apps\project\specific\assets_management\buyers\views.py:683
 msgid "You don't have permission to perform this action."
 msgstr "No tienes permisos para realizar esta acción."
 
-#: .\apps\project\specific\assets_management\buyers\views.py:711
+#: .\apps\project\specific\assets_management\buyers\views.py:745
 msgid "Unknown step."
 msgstr "Paso desconocido."
+
+#, python-brace-format
+#~ msgid "Error filling offer translation fields: {e}"
+#~ msgstr "Error al rellenar los campos de traducción de la oferta: {e}"
 
 #~ msgid "Total value of the offer ($ USD)"
 #~ msgstr "Valor total de la oferta ($ USD)"
