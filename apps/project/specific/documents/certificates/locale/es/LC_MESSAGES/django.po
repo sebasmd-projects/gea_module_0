@@ -1,0 +1,170 @@
+# Gestión de certificados: administración, modelos y vistas de documentos de certificados.
+# Copyright (C) 2024 GEAUSA
+# This file is distributed under the same license as the GEAUSA package.
+# Sebastián Morales <sebastian.morales@propensionesabogados.com>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: GEAUSA 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-10 20:12-0500\n"
+"PO-Revision-Date: 2025-01-10 12:22-0500\n"
+"Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
+"Language-Team: Spanish <es@li.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Translated-Using: django-rosetta 0.10.0\n"
+
+#: .\apps\project\specific\documents\certificates\admin.py:17
+#, python-brace-format
+msgid "Updated {num_actualizados} certificates to IDONEITY."
+msgstr "Se actualizaron {num_actualizados} certificados a IDONEIDAD."
+
+#: .\apps\project\specific\documents\certificates\admin.py:22
+msgid "Certificate type IDONEITY not found."
+msgstr "Tipo de Certificado IDONEIDAD no encontrado."
+
+#: .\apps\project\specific\documents\certificates\admin.py:25
+msgid "Assign certificate type to 'IDONEITY'"
+msgstr "Tipo de Certificado a IDONEIDAD."
+
+#: .\apps\project\specific\documents\certificates\admin.py:39
+#: .\apps\project\specific\documents\certificates\models.py:30
+msgid "Certificate Type"
+msgstr "Tipo de Certificado"
+
+#: .\apps\project\specific\documents\certificates\admin.py:42
+#: .\apps\project\specific\documents\certificates\admin.py:100
+msgid "Dates"
+msgstr "Fechas"
+
+#: .\apps\project\specific\documents\certificates\admin.py:46
+#: .\apps\project\specific\documents\certificates\admin.py:104
+msgid "Priority"
+msgstr "Prioridad"
+
+#: .\apps\project\specific\documents\certificates\admin.py:88
+#: .\apps\project\specific\documents\certificates\apps.py:8
+#: .\apps\project\specific\documents\certificates\models.py:148
+msgid "Certificate"
+msgstr "Certificado"
+
+#: .\apps\project\specific\documents\certificates\apps.py:9
+#: .\apps\project\specific\documents\certificates\models.py:149
+msgid "Certificates"
+msgstr "Certificados"
+
+#: .\apps\project\specific\documents\certificates\forms.py:12
+#: .\apps\project\specific\documents\certificates\forms.py:25
+msgid "Document Type"
+msgstr "Tipo de Documento"
+
+#: .\apps\project\specific\documents\certificates\forms.py:18
+#: .\apps\project\specific\documents\certificates\forms.py:31
+msgid "Document Number"
+msgstr "Número de Documento"
+
+#: .\apps\project\specific\documents\certificates\models.py:16
+msgid "Idoneity"
+msgstr "Idoneidad"
+
+#: .\apps\project\specific\documents\certificates\models.py:17
+msgid "Sovereign Purchase"
+msgstr "Compra Soberana"
+
+#: .\apps\project\specific\documents\certificates\models.py:20
+msgid "Name"
+msgstr "Nombres"
+
+#: .\apps\project\specific\documents\certificates\models.py:31
+msgid "Certificate Types"
+msgstr "Tipos de Certificados"
+
+#: .\apps\project\specific\documents\certificates\models.py:37
+#: .\apps\project\specific\documents\certificates\models.py:49
+msgid "Citizen ID (CC)"
+msgstr "Cédula de Ciudadanía (CC)"
+
+#: .\apps\project\specific\documents\certificates\models.py:38
+msgid "Foreigner ID (CE)"
+msgstr "Cédula de Extranjería (CE)"
+
+#: .\apps\project\specific\documents\certificates\models.py:39
+msgid "Special Residence Permit (PPT)"
+msgstr "Permiso Especial de Permanencia (PPT)"
+
+#: .\apps\project\specific\documents\certificates\models.py:40
+msgid "Identity Card (TI)"
+msgstr "Tarjeta de Identidad (TI)"
+
+#: .\apps\project\specific\documents\certificates\models.py:41
+#: .\apps\project\specific\documents\certificates\models.py:48
+msgid "Passport (PA)"
+msgstr "Pasaporte (PA)"
+
+#: .\apps\project\specific\documents\certificates\models.py:42
+msgid "Civil Registry (RC)"
+msgstr "Registro Civil (RC)"
+
+#: .\apps\project\specific\documents\certificates\models.py:43
+msgid "Tax Identification Number (NIT)"
+msgstr "Número de Identificación Tributaria (NIT)"
+
+#: .\apps\project\specific\documents\certificates\models.py:44
+msgid "Single Tax Registry (RUT)"
+msgstr "Registro Único Tributario (RUT)"
+
+#: .\apps\project\specific\documents\certificates\models.py:45
+msgid "Diplomatic ID Card (CD)"
+msgstr "Carné Diplomático (CD)"
+
+#: .\apps\project\specific\documents\certificates\models.py:63
+msgid "User"
+msgstr "Usuario"
+
+#: .\apps\project\specific\documents\certificates\models.py:70
+msgid "Names"
+msgstr "Nombres"
+
+#: .\apps\project\specific\documents\certificates\models.py:75
+msgid "Last name"
+msgstr "Apellido"
+
+#: .\apps\project\specific\documents\certificates\models.py:81
+msgid "Document type"
+msgstr "Tipo de documento"
+
+#: .\apps\project\specific\documents\certificates\models.py:88
+msgid "Document number"
+msgstr "Número de documento"
+
+#: .\apps\project\specific\documents\certificates\models.py:99
+msgid "Approved"
+msgstr "Aprobado"
+
+#: .\apps\project\specific\documents\certificates\models.py:106
+msgid "Approved by"
+msgstr "Aprobado por"
+
+#: .\apps\project\specific\documents\certificates\models.py:113
+msgid "Approval date"
+msgstr "Fecha de aprobación"
+
+#: .\apps\project\specific\documents\certificates\models.py:121
+msgid "Certificate type"
+msgstr "Tipo de Certificado"
+
+#: .\apps\project\specific\documents\certificates\views.py:101
+#: .\apps\project\specific\documents\certificates\views.py:133
+#: .\apps\project\specific\documents\certificates\views.py:185
+#: .\apps\project\specific\documents\certificates\views.py:216
+msgid "Too many failed attempts."
+msgstr "Demasiados intentos fallidos."
+
+#: .\apps\project\specific\documents\certificates\views.py:137
+#: .\apps\project\specific\documents\certificates\views.py:220
+msgid "ID Number not found."
+msgstr "Número de identificación no encontrado."

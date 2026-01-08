@@ -35,6 +35,7 @@ else:
         ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',')
     else:
         ALLOWED_HOSTS = [os.getenv('DJANGO_ALLOWED_HOSTS')]
+
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -85,7 +86,7 @@ PROJECT_COMMON_APPS = [
 ]
 
 PROJECT_DOCUMENTS_APPS = [
-
+    'apps.project.specific.documents.certificates',
 ]
 
 PROJECT_INTERNAL_APPS = [
@@ -93,10 +94,10 @@ PROJECT_INTERNAL_APPS = [
 ]
 
 ALL_CUSTOM_APPS = [
+    *PROJECT_DOCUMENTS_APPS,
     *COMMON_APPS,
     *PROJECT_ASSETS_MANAGEMENT_APPS,
     *PROJECT_COMMON_APPS,
-    *PROJECT_DOCUMENTS_APPS,
     *PROJECT_INTERNAL_APPS,
 ]
 
@@ -217,10 +218,12 @@ DATABASES = {
 
 if ENV_DB_ENGINE == 'django.db.backends.mysql':
     DATABASES['default']['CHARSET'] = os.getenv('DB_CHARSET', 'utf8mb4')
-    DATABASES['default']['OPTIONS'] = {"init_command": "SET SESSION time_zone = '+00:00', sql_mode='STRICT_TRANS_TABLES'"}
-    
+    DATABASES['default']['OPTIONS'] = {
+        "init_command": "SET SESSION time_zone = '+00:00', sql_mode='STRICT_TRANS_TABLES'"}
+
 if not DEBUG and ENV_DB_ENGINE == 'django.db.backends.postgresql':
-    DATABASES['default']['OPTIONS'] = {'sslmode': os.getenv('DB_SSLMODE', 'prefer')}
+    DATABASES['default']['OPTIONS'] = {
+        'sslmode': os.getenv('DB_SSLMODE', 'prefer')}
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

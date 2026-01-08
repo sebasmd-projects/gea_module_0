@@ -100,8 +100,6 @@ def auto_fill_asset_name_translation(sender, instance, *args, **kwargs):
     """
     Automatically fill the asset name translation fields when a new AssetModel instance is created.
     """
-    print("Filling asset name translation fields...")
-    print("The current text:", instance.en_name, instance.es_name)
     try:
         # Name
         if instance.es_name and not instance.en_name:
@@ -120,8 +118,6 @@ def auto_fill_asset_name_translation(sender, instance, *args, **kwargs):
                 max_chars=50
             )
         
-        print("The new text:", instance.en_name, instance.es_name)
-
     except Exception as e:
         logger.exception(
             _(f"Error filling asset name translation fields: {e}"))

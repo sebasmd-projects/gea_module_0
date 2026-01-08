@@ -1,0 +1,75 @@
+{% extends 'raw.html' %}
+
+{% load static i18n %}
+
+{% block title %}<title>{% trans 'Certificate Details' %}</title>{% endblock title %}
+
+{% block main %}
+<div class="container mt-5 min-vh-100">
+    <div class="mx-auto">
+        <div class="text-center mb-4">
+            <h1>{% trans 'Suitability Verification' %}</h1>
+        </div>
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <div class="row text-center">
+                    <div class="col-sm-6 col-md-12 text-center">
+                        <img src="{% static 'assets/imgs/brands/aegis_logo.webp' %}" alt="Certificate Badge" class="mb-4" style="max-width: 150px;">
+                    </div>
+                    <div class="col-sm-6 col-md-12">
+                        <img id="qr-code" src="{{ qr_code }}" alt="QR Code" class="img-fluid" style="max-width: 150px;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div>
+                    <h2>{{ certificate.name }} {{ certificate.last_name }}</h2>
+                    <p class="mb-1"><strong>{% trans 'ID Number:' %}</strong> {{ certificate.masked_document_number }}</p>
+                    <p class="mb-1"><strong>{% trans 'Certificate ID:' %}</strong> {{ certificate.id }}</p>
+                    {% if certificate.approved %}
+                        <h3 class="text-success">{% trans 'Approved' %}</h3>
+                    {% else %}
+                        <h3 class="text-danger">{% trans 'Not Approved' %}</h3>
+                    {% endif %}
+                    <hr>
+                    {% if certificate.approved %}
+                        <p class="text-justify">
+                                <strong>{{ certificate.name }} {{ certificate.last_name }}</strong>
+                                {% trans 'with document number' %} {{ certificate.document_type }} {{ certificate.masked_document_number }}
+                                {% blocktrans %}
+                                qualifies as a beneficiary, who has undergone a security screening and accreditation of judicial records in accordance with current regulations, criminal reports on social media, and Interpol databases. Consequently, they do <strong>NOT</strong> have any judicial or disciplinary records from the certifying entities authorized by international public consultation databases, which would affect their suitability.
+                                <br/>
+                                For the record, this is signed on {% endblocktrans %} {{ certificate.approval_date|date:"d/m/Y" }} {% trans 'in Quindío, Republic of Colombia.' %}
+                        </p>
+                    {% else %}
+                        <p class="text-justify">
+                            <strong>{{ certificate.name }} {{ certificate.last_name }}</strong>
+                            {% trans 'with document number' %} {{ certificate.document_type }} {{ certificate.masked_document_number }}
+                            {% blocktrans %}
+                                we inform you that, after the evaluation conducted, your security study <span class="text-danger">HAS NOT BEEN APPROVED</span> due to not meeting the suitability requirements according to the current security regulations.
+                            {% endblocktrans %}
+                        </p>
+                    {% endif %}
+                    <p>
+                        <small>
+                            {% trans 'We remind you that, in accordance with the provisions of the Habeas Data Law, all your personal data has been treated with due confidentiality and is protected under the strictest security standards, guaranteeing its integrity and privacy. Your data will be used exclusively for authorized purposes and within the framework of current data protection regulations.' %}
+                        </small>
+                    </p>
+                    <p>
+                        {% trans 'Status:' %}
+                        {% if certificate.approved %}
+                            <i class="bi bi-check-circle text-success"></i>
+                        {% else %}
+                            <i class="bi bi-x-circle text-danger"></i>
+                        {% endif %}
+                    </p>
+                    <div class="text-center">
+                        <img id="barcode" src="{{ barcode }}" alt="Barcode" style="max-width: 100%;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}

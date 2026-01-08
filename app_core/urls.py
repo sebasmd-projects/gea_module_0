@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+import logging
 from importlib import import_module
 from typing import Final, Iterable, List
-
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -17,6 +17,8 @@ from apps.common.utils.views import handler404 as h404
 from apps.common.utils.views import handler500 as h500
 from apps.common.utils.views import handler503 as h503
 from apps.common.utils.views import handler504 as h504
+
+logger = logging.getLogger(__name__)
 
 # ==== Tipos útiles ====
 UrlItem = URLPattern | URLResolver
@@ -45,9 +47,18 @@ def include_if_present(dotted_path: str) -> list[URLResolver]:
     Evita fallos en despliegues parciales o entornos de CI.
     """
     try:
-        # Validación rápida de import
         import_module(dotted_path)
-    except Exception:
+    except Exception as exc:
+        logger.exception(
+            "Failed to import URLs module: %s",
+            dotted_path,
+            extra={
+                "urls_module": dotted_path,
+                "exception_type": exc.__class__.__name__,
+            }
+        )
+        if settings.DEBUG:
+            raise
         return []
     return [path("", include(dotted_path))]
 
