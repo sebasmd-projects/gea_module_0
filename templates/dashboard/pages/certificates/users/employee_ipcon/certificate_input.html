@@ -8,11 +8,7 @@
 <div class="container min-vh-100 d-flex justify-content-center align-items-center">
     <div class="card">
 
-        <div class="card-header text-center">
-            <a href="{% url 'core:index' %}">
-                <img src="{% static 'assets/imgs/brands/aegis_header.webp' %}" alt="" class="img-fluid"/>
-            </a>
-        </div>
+        {% include 'dashboard/pages/certificates/includes/header.html' %}
 
         <div class="card-body">
             <h1 class="text-center">{% trans 'Verify IPCON Badge' %}</h1>

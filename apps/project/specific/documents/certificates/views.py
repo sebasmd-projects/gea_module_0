@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import DetailView, FormView
+from django.views.generic import DetailView, FormView, TemplateView
 
 from .forms import (AnonymousEmailOTPForm, AnonymousOTPVerifyForm,
                     CertificateUserForm, DocumentVerificationForm)
@@ -14,10 +14,12 @@ from .mixins import OTPProtectedDocumentMixin, OTPSessionMixin
 from .models import (DocumentTypeChoices, DocumentVerificationModel,
                      UserCertificateTypeChoices, UserVerificationModel)
 from .utils import send_otp_email, track_certificate_view, track_document_view
+from django.urls import reverse_lazy
 
 
 class InputEmployeeIPCONFormView(FormView):
-    template_name = 'dashboard/pages/documents/certificates/employee_ipcon/certificate_input.html'
+    template_name = 'dashboard/pages/certificates/users/employee_ipcon/certificate_input.html'
+
     form_class = CertificateUserForm
 
     def form_valid(self, form):
@@ -60,7 +62,8 @@ class InputEmployeeIPCONFormView(FormView):
 
 class EmployeeIPCONDetailView(DetailView):
     model = UserVerificationModel
-    template_name = 'dashboard/pages/documents/certificates/employee_ipcon/certificate_detail.html'
+    template_name = 'dashboard/pages/certificates/users/employee_ipcon/certificate_detail.html'
+
     context_object_name = 'certificate'
 
     def get(self, request, *args, **kwargs):
@@ -91,7 +94,8 @@ class EmployeeIPCONDetailView(DetailView):
 
 class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
 
-    template_name = 'dashboard/pages/documents/certificates/aegis_documents/certificate_input.html'
+    template_name = 'dashboard/pages/certificates/documents/aegis_documents/certificate_input.html'
+
     form_class = DocumentVerificationForm
 
     def get_form_class(self):
@@ -171,7 +175,6 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
 
         return context
 
-    
     def _handle_email_step(self, form):
         if not form.is_valid():
             return self.form_invalid(form)
@@ -222,7 +225,9 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
 
 class DocumentVerificationDetailView(OTPProtectedDocumentMixin, DetailView):
     model = DocumentVerificationModel
-    template_name = 'dashboard/pages/documents/certificates/aegis_documents/certificate_detail.html'
+
+    template_name = 'dashboard/pages/certificates/documents/aegis_documents/certificate_detail.html'
+
     context_object_name = 'document'
 
     def get(self, request, *args, **kwargs):
@@ -260,4 +265,56 @@ class DocumentVerificationDetailView(OTPProtectedDocumentMixin, DetailView):
         context['barcode'] = mark_safe(
             generate_barcode(absolute_url)
         )
+        return context
+
+class CertificatesLandingTemplateView(TemplateView):
+    template_name = 'dashboard/pages/certificates/certificates_landing.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["certificates"] = [
+            {
+                "title": _("AEGIS Documents Certificates"),
+                "description": _(
+                    "Verify documents protected and issued through the AEGIS certification system."
+                ),
+                "icon": "bi-shield-lock",
+                "icon_color": "text-success",
+                "button_class": "btn-outline-success",
+                "url": reverse_lazy("certificates:input_document_verification_aegis"),
+            },
+            {
+                "title": _("IPCON Employee Certificate"),
+                "description": _(
+                    "Validate employment and institutional certificates issued by IPCON."
+                ),
+                "icon": "bi-building-check",
+                "icon_color": "text-success",
+                "button_class": "btn-outline-success",
+                "url": reverse_lazy("certificates:input_employee_verification_ipcon"),
+            },
+            
+            # {
+            #     "title": _("Propensiones Employee Certificate"),
+            #     "description": _(
+            #         "Verify employment certificates issued by Propensiones Abogados."
+            #     ),
+            #     "icon": "bi-briefcase-check",
+            #     "icon_color": "text-warning",
+            #     "button_class": "btn-outline-warning text-dark",
+            #     "url": reverse_lazy("certificates:employee_propensiones_input"),
+            # },
+            # {
+            #     "title": _("Professional Idoneity"),
+            #     "description": _(
+            #         "Validate professional suitability and idoneity certificates."
+            #     ),
+            #     "icon": "bi-patch-check",
+            #     "icon_color": "text-info",
+            #     "button_class": "btn-outline-info",
+            #     "url": reverse_lazy("certificates:idoneity_input"),
+            # },
+        ]
+
         return context

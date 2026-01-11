@@ -1,12 +1,20 @@
 from django.urls import path
 
-from .views import (DocumentVerificationDetailView, EmployeeIPCONDetailView,
+from .views import (CertificatesLandingTemplateView,
+                    DocumentVerificationDetailView, EmployeeIPCONDetailView,
                     InputDocumentVerificationFormView,
                     InputEmployeeIPCONFormView)
 
 app_name = 'certificates'
 
 urlpatterns = [
+    path(
+        'certificates/',
+        CertificatesLandingTemplateView.as_view(),
+        name='certificates_landing'
+    ),
+
+    # Users
     path(
         'ipcon/verify/',
         InputEmployeeIPCONFormView.as_view(),
@@ -17,6 +25,8 @@ urlpatterns = [
         EmployeeIPCONDetailView.as_view(),
         name='detail_employee_verification_ipcon'
     ),
+
+    # Documents
     path(
         'verify/aegis/asset/certification/',
         InputDocumentVerificationFormView.as_view(),

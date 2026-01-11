@@ -1,0 +1,50 @@
+{% extends 'raw.html' %}
+
+{% load static i18n %}
+
+{% block title %}
+  <title>{% trans 'Certifications' %}</title>
+{% endblock %}
+
+{% block main %}
+<style>
+.hover-card {
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+.hover-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.15);
+}
+</style>
+
+<div class="container py-5">
+
+    <div class="card shadow-sm">
+
+        {# ================= HEADER ================= #}
+        {% include 'dashboard/pages/certificates/includes/header.html' %}
+
+        <div class="card-body">
+
+            {# ================= TITLE ================= #}
+            <div class="text-center mb-5">
+                <h1 class="fw-bold">
+                    {% trans 'Available Certifications' %}
+                </h1>
+                <p class="text-muted">
+                    {% trans 'Select the type of certification you wish to verify.' %}
+                </p>
+            </div>
+
+            {# ================= GRID ================= #}
+            <div class="row g-4">
+
+                {% for cert in certificates %}
+                    {% include "dashboard/pages/certificates/partials/_certificate_card.html" with title=cert.title description=cert.description icon=cert.icon icon_color=cert.icon_color button_class=cert.button_class url=cert.url %}
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

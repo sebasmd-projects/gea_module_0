@@ -1,4 +1,5 @@
 {% extends 'raw.html' %}
+
 {% load static i18n %}
 
 {% block title %}
@@ -143,9 +144,9 @@
             <img src="{{ barcode }}" alt="{% trans 'Verification Barcode' %}" style="max-width:100%;" />
           </div>
 
-          {% include 'dashboard/pages/documents/certificates/partials/habeas_data.html' %}
+          {% include 'dashboard/pages/certificates/includes/habeas_data.html' %}
         </div>
       </div>
     </div>
   </div>
-{% endblock %}
+{% endblock main %}
