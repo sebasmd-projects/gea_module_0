@@ -1698,7 +1698,7 @@ msgstr "Verificación de documentos"
 #: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_detail.html:23
 msgid "Institutional Certificate of Authenticity and Legal Validity"
 msgstr ""
-"CCERTIFICACIÓN INSTITUCIONAL DE AUTENTICIDAD, ORIGINALIDAD Y VALIDEZ JURÍDICA"
+"CERTIFICACIÓN INSTITUCIONAL DE AUTENTICIDAD, ORIGINALIDAD Y VALIDEZ JURÍDICA"
 
 #: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_detail.html:45
 msgid "QR Code"
