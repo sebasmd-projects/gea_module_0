@@ -16,12 +16,12 @@ urlpatterns = [
 
     # Users
     path(
-        'ipcon/verify/',
+        'verify/ipcon/',
         InputEmployeeIPCONFormView.as_view(),
         name='input_employee_verification_ipcon'
     ),
     path(
-        'ipcon/verify/<uuid:pk>/',
+        'verify/ipcon/<uuid:pk>/',
         EmployeeIPCONDetailView.as_view(),
         name='detail_employee_verification_ipcon'
     ),
