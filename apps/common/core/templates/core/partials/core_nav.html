@@ -1,195 +1,206 @@
 {% comment %} templates/core/partials/core_nav.html {% endcomment %}
-
 {% load static i18n %}
 
-<nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white container rounded mt-5" id="sidenavAccordion">
-  <!-- Sidenav Toggle Button (SM only) -->
-  <button data-bs-target="#offcanvasDarkNavbar" data-bs-toggle="offcanvas" id="sidebarToggle" type="button" aria-controls="offcanvasDarkNavbar" aria-expanded="false" aria-label="Toggle navigation" class="btn btn-icon btn-transparent-dark order-1 order-lg-0 me-2 ms-lg-2 me-lg-0 d-md-none"><i data-feather="menu"></i></button>
+{# ====================== DESKTOP NAV ====================== #}
+<nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white container rounded mt-5"
+     id="sidenavAccordion">
+
+  <!-- Toggle (SM only) -->
+  <button
+    data-bs-target="#offcanvasDarkNavbar"
+    data-bs-toggle="offcanvas"
+    id="sidebarToggle"
+    type="button"
+    class="btn btn-icon btn-transparent-dark order-1 order-lg-0 me-2 ms-lg-2 me-lg-0 d-md-none"
+    aria-controls="offcanvasDarkNavbar"
+    aria-expanded="false"
+    aria-label="{% trans 'Toggle navigation' %}">
+    <i data-feather="menu"></i>
+  </button>
 
   {% include 'partials/nav/logo.html' %}
 
-  {# ======== BOTONES CENTRALES en DESKTOP (MD+): ocultos en SM ======== #}
-  <div class="d-none d-md-flex flex-grow-1 justify-content-center gap-2">
+  {# ======== CENTER BUTTONS (MD+) ======== #}
+  <div class="d-none d-md-flex flex-grow-1 justify-content-center align-items-center gap-2">
+
+    {# ===== Buyers / Suppliers ===== #}
     {% if request.user.is_authenticated %}
       {% if request.user.is_buyer or request.user.is_superuser or perms.users.can_view_buyer %}
-      <div class="d-flex align-items-center">
-        <a href="{% url 'buyers:buyer_index' %}" class="btn text-black fw-semibold gea_gradient"
-          onmouseover="window.__prefetchPropensiones && window.__prefetchPropensiones(); this.style.transform='scale(1.03)';"
-          onmouseout="this.style.transform='scale(1)';"
-          style="width: auto; height: 40px; margin-left: 4px;"
-        >
+        <a href="{% url 'buyers:buyer_index' %}"
+           class="btn text-black fw-semibold gea_gradient"
+           style="height: 40px;">
           {% trans 'Buyers' %}
         </a>
-      </div>
       {% endif %}
 
       {% if request.user.is_asset_holder or request.user.is_superuser or perms.users.can_view_holder %}
-      <div class="d-flex align-items-center">
-        <a href="{% url 'assets:holder_index' %}" class="btn text-black fw-semibold gea_gradient"
-        onmouseover="window.__prefetchPropensiones && window.__prefetchPropensiones(); this.style.transform='scale(1.03)';"
-        onmouseout="this.style.transform='scale(1)';"
-        style="width: auto; height: 40px; margin-left: 4px;"
-        >
+        <a href="{% url 'assets:holder_index' %}"
+           class="btn text-black fw-semibold gea_gradient"
+           style="height: 40px;">
           {% trans 'Suppliers' %}
         </a>
-      </div>
       {% endif %}
     {% endif %}
 
-    {# 1) Propensiones Abogados #}
-    <a
-      href="https://propensionesabogados.com/"
-      target="_blank" rel="noopener"
-      onmouseover="window.__prefetchPropensiones && window.__prefetchPropensiones(); this.style.transform='scale(1.03)';"
-      onmouseout="this.style.transform='scale(1)';"
-    >
-      <img src="https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/propensiones_h.webp" alt="Logo Propensiones" style="width: auto; height: 55px; margin-left: 4px;" />
+    {# ===== Certificates Dropdown (PUBLIC) ===== #}
+    <div class="dropdown d-flex align-items-center">
+      <button
+        class="btn btn-outline-dark fw-semibold dropdown-toggle"
+        type="button"
+        id="certificatesDropdown"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+        style="height: 40px;">
+        {% trans 'Certificates' %}
+      </button>
+
+      <ul class="dropdown-menu shadow-sm" aria-labelledby="certificatesDropdown">
+        <li>
+          <a class="dropdown-item"
+             href="{% url 'certificates:certificates_landing' %}">
+            <i class="bi bi-grid me-2"></i>
+            {% trans 'Certificates' %}
+          </a>
+        </li>
+
+        {% if request.user.is_authenticated and request.user.is_buyer %}
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item"
+               href="https://geausa.propensionesabogados.com/aegis_certification_international_system_of_legal_verification.pdf"
+               target="_blank" rel="noopener">
+              <i class="bi bi-file-earmark-pdf me-2 text-danger"></i>
+              {% trans 'AEGIS Certification (PDF)' %}
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+
+    {# ===== External Logos ===== #}
+    <a href="https://propensionesabogados.com/" target="_blank" rel="noopener">
+      <img src="https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/propensiones_h.webp"
+           alt="Propensiones Abogados"
+           style="height: 55px;" />
     </a>
 
-    {# 2) Fundación Attlas #}
-    <a
-      href="https://fundacionattlas.org/"
-      target="_blank" rel="noopener"
-      onmouseover="window.__prefetchPropensiones && window.__prefetchPropensiones(); this.style.transform='scale(1.03)';"
-          onmouseout="this.style.transform='scale(1)';"
-    >
-      <img src="https://fundacionattlas.org/assets/imgs/page/logo h fundacion attlas.webp" alt="Logo Fundación Attlas" style="width: auto; height: 55px; margin-left: 4px;" />
+    <a href="https://fundacionattlas.org/" target="_blank" rel="noopener">
+      <img src="https://fundacionattlas.org/assets/imgs/page/logo h fundacion attlas.webp"
+           alt="Fundación Attlas"
+           style="height: 55px;" />
     </a>
-    
-    {% comment %}
-    <!-- TODO: Enable when the contact page is ready -->
-    {% if not request.user.is_authenticated %}
-      {# 3) Contáctanos #}
-      <div class="d-flex align-items-center">
-        <a href="{% url 'core:contact' %}"
-          class="btn btn-outline-dark fw-semibold"
-          style="width: auto; height: 55px; margin-left: 4px;">
-          {% trans 'Contact Us' %}
-        </a>
-      </div>
-    {% endif %}
-    {% endcomment %}
-      
-    {% if request.user.is_authenticated and request.user.is_buyer %}
-      {# 4) Portfolio (mismo estilo que Buyers/Clients) #}
-      <div class="d-flex align-items-center">
-        <a href="https://geausa.propensionesabogados.com/portfolio.pdf"
-           class="btn text-black fw-semibold gea_gradient"
-           target="_blank"
-           onmouseover="this.style.transform='scale(1.03)';"
-           onmouseout="this.style.transform='scale(1)';"
-           style="width: auto; height: 40px; margin-left: 4px;">
-          {% trans 'Portfolio' %}
-        </a>
-      </div>
 
-      {# 5) Aegis - Certification (nuevo, visible solo para compradores) #}
-      <div class="d-flex align-items-center">
-        {# Usa tu URL real: por ejemplo una ruta en buyers o externa #}
-        <a href="https://geausa.propensionesabogados.com/aegis_certification_international_system_of_legal_verification.pdf"
-           target="_blank"   
-           class="btn text-black fw-semibold gea_gradient"
-           onmouseover="this.style.transform='scale(1.03)';"
-           onmouseout="this.style.transform='scale(1)';"
-           style="width: auto; height: 40px; margin-left: 4px;">
-          {% trans 'Aegis - Certification' %}
-        </a>
-      </div>
-    {% endif %}
   </div>
 
-  <!-- Navbar Items (derecha) -->
+  {# ===== RIGHT SIDE ===== #}
   <ul class="navbar-nav align-items-center ms-auto">
     {% include 'partials/nav/language_selector.html' %}
 
     {% if not request.user.is_authenticated %}
       <li class="nav-item me-2 d-none d-md-block">
-        <a class="btn btn-outline-success text-capitalize" href="{% url 'two_factor:login' %}">{% trans 'Login' %}</a>
+        <a class="btn btn-outline-success" href="{% url 'two_factor:login' %}">
+          {% trans 'Login' %}
+        </a>
       </li>
       <li class="nav-item me-3 d-none d-md-block">
-        <a class="btn btn-outline-warning text-capitalize" href="{% url 'account:register' %}">{% trans 'Register' %}</a>
+        <a class="btn btn-outline-warning" href="{% url 'account:register' %}">
+          {% trans 'Register' %}
+        </a>
       </li>
-    {% endif %}
-
-    {% if request.user.is_authenticated %}
+    {% else %}
       {% include 'partials/nav/user_dropdown.html' %}
     {% endif %}
   </ul>
 </nav>
 
-{# ======== COLLAPSE SM: aquí aparecen los botones en móvil ======== #}
+{# ====================== MOBILE OFFCANVAS ====================== #}
 <nav class="navbar navbar-dark bg-dark d-md-none">
   <div class="offcanvas offcanvas-end text-bg-dark" id="offcanvasDarkNavbar" tabindex="-1">
+
     <div class="offcanvas-header">
-      <h5 class="offcanvas-title text-white" id="offcanvasDarkNavbarLabel">{% trans 'Menu' %}</h5>
-      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      <h5 class="offcanvas-title">{% trans 'Menu' %}</h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
     </div>
 
     <div class="offcanvas-body">
-      <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+
+      <ul class="navbar-nav mb-3">
+
+        {# Language #}
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-translate mx-1"></i> {% trans 'Language' %}</a>
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+            <i class="bi bi-translate me-1"></i> {% trans 'Language' %}
+          </a>
           <ul class="dropdown-menu dropdown-menu-dark">
             {% for lang in LANGUAGES %}
-              <li><a class="dropdown-item" href="{% url 'utils:set_language' %}?lang={{ lang.0 }}"><i class="bi bi-globe-americas me-3"></i> {{ lang.1 }}</a></li>
+              <li>
+                <a class="dropdown-item" href="{% url 'utils:set_language' %}?lang={{ lang.0 }}">
+                  {{ lang.1 }}
+                </a>
+              </li>
             {% endfor %}
           </ul>
         </li>
+
+        {# Certificates (PUBLIC) #}
+        <li class="nav-item dropdown mt-2">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+            <i class="bi bi-award me-1"></i> {% trans 'Certificates' %}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li>
+              <a class="dropdown-item" href="{% url 'certificates:certificates_landing' %}">
+                {% trans 'Certificates' %}
+              </a>
+            </li>
+            {% if request.user.is_authenticated and request.user.is_buyer %}
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item"
+                   href="https://geausa.propensionesabogados.com/aegis_certification_international_system_of_legal_verification.pdf"
+                   target="_blank">
+                  {% trans 'AEGIS Certification (PDF)' %}
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+        </li>
+
       </ul>
-    </div>
 
-    <div class="offcanvas-body">
-      <div class="w-100 d-flex flex-column gap-2">
-        {# Botones pedidos en móvil #}
-        <a
-          href="https://propensionesabogados.com/"
-          target="_blank" rel="noopener"
-          class="btn fw-semibold w-100"
-          style="background: linear-gradient(90deg, rgb(255, 223, 64) 0%, rgb(254, 209, 0) 50%, rgb(212, 169, 0) 100%); transition: transform 0.3s; border: none; color: black; transform: scale(1);"
-          onmouseover="window.__prefetchPropensiones && window.__prefetchPropensiones(); this.style.transform='scale(1.03)';"
-          onmouseout="this.style.transform='scale(1)';"
-        >Propensiones Abogados</a>
+      <div class="d-flex flex-column gap-2">
 
-        <a
-          href="https://fundacionattlas.org/"
-          target="_blank" rel="noopener"
-          class="btn fw-semibold w-100"
-          style="background: linear-gradient(90deg, rgb(127, 210, 203) 0%, rgb(34, 99, 245) 50%, rgb(14, 54, 146) 100%); transition: transform 0.3s; border: none; color: black; transform: scale(1);"
-          onmouseover="this.style.transform='scale(1.03)';"
-          onmouseout="this.style.transform='scale(1)';"
-        >Fundación Attlas</a>
+        <a href="https://propensionesabogados.com/" target="_blank" class="btn btn-warning">
+          Propensiones Abogados
+        </a>
 
-        {% if request.user.is_authenticated and request.user.is_buyer %}
-          {# Portfolio #}
-          <a href="https://geausa.propensionesabogados.com/portfolio.pdf"
-             class="btn text-black fw-semibold gea_gradient w-100"
-             target="_blank">
-            {% trans 'Portfolio' %}
-          </a>
-
-          {# Aegis - Certification #}
-          <a href="https://geausa.propensionesabogados.com/aegis_certification_international_system_of_legal_verification.pdf"
-             class="btn text-black fw-semibold gea_gradient w-100"
-             target="_blank">
-            {% trans 'Aegis - Certification' %}
-          </a>
-        {% endif %}
+        <a href="https://fundacionattlas.org/" target="_blank" class="btn btn-info">
+          Fundación Attlas
+        </a>
 
         {% if request.user.is_authenticated %}
-          {% if request.user.is_buyer or request.user.is_superuser or perms.users.can_view_buyer %}
-            <a href="{% url 'buyers:buyer_index' %}" class="btn btn-light text-black fw-semibold gea_gradient w-100">{% trans 'Buyers' %}</a>
+          {% if request.user.is_buyer %}
+            <a href="{% url 'buyers:buyer_index' %}" class="btn btn-light">
+              {% trans 'Buyers' %}
+            </a>
           {% endif %}
-          {% if request.user.is_asset_holder or request.user.is_superuser or perms.users.can_view_holder %}
-            <a href="{% url 'assets:holder_index' %}" class="btn btn-light text-black fw-semibold gea_gradient w-100">{% trans 'Suppliers' %}</a>
+          {% if request.user.is_asset_holder %}
+            <a href="{% url 'assets:holder_index' %}" class="btn btn-light">
+              {% trans 'Suppliers' %}
+            </a>
           {% endif %}
+          <a href="{% url 'account:logout' %}" class="btn btn-outline-danger">
+            {% trans 'Logout' %}
+          </a>
+        {% else %}
+          <a href="{% url 'two_factor:login' %}" class="btn btn-outline-success">
+            {% trans 'Login' %}
+          </a>
+          <a href="{% url 'account:register' %}" class="btn btn-outline-warning">
+            {% trans 'Register' %}
+          </a>
         {% endif %}
 
-        {% if not request.user.is_authenticated %}
-          <a class="btn btn-outline-success text-capitalize w-100" href="{% url 'two_factor:login' %}">{% trans 'Login' %}</a>
-          <a class="btn btn-outline-warning text-capitalize w-100" href="{% url 'account:register' %}">{% trans 'Register' %}</a>
-        {% else %}
-          <a class="btn btn-outline-danger text-capitalize w-100" href="{% url 'account:logout' %}">{% trans 'Logout' %}</a>
-        {% endif %}
       </div>
     </div>
   </div>
