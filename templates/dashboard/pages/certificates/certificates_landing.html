@@ -21,8 +21,8 @@
 
     <div class="card shadow-sm">
 
-        {# ================= HEADER ================= #}
-        {% include 'dashboard/pages/certificates/includes/header.html' %}
+        {% url 'core:index' as landing_url %}
+        {% include 'dashboard/pages/certificates/includes/aegis_header.html' with url=input_url %}
 
         <div class="card-body">
 

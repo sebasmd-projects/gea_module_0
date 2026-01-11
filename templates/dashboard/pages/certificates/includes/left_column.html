@@ -1,0 +1,21 @@
+
+{% load static i18n %}
+
+<div class="row align-items-center">
+
+    <!-- LOGO PRINCIPAL -->
+    <div class="col-4 col-md-4 col-lg-12 mb-3 text-center">
+        <img src="{% static 'assets/imgs/brands/propensiones_h.webp' %}" alt="PROPENSIONES ABOGADOS" class="img-fluid" style="max-width:180px;" />
+    </div>
+
+    <!-- LOGO AEGIS -->
+    <div class="col-4 col-lg-12 mb-3 d-flex justify-content-center">
+        <img src="{% static 'assets/imgs/brands/aegis_logo.webp' %}" alt="AEGIS" class="img-fluid" style="max-width:100px;" />
+    </div>
+
+    <!-- QR -->
+    <div class="col-4 col-lg-12 mb-3 d-flex justify-content-center">
+        <img src="{{ qr_code }}" alt="{% trans 'QR Code' %}" class="img-fluid" style="max-width:100px;" />
+    </div>
+
+</div>
