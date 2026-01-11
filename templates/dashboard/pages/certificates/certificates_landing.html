@@ -22,7 +22,7 @@
     <div class="card shadow-sm">
 
         {% url 'core:index' as landing_url %}
-        {% include 'dashboard/pages/certificates/includes/aegis_header.html' with url=input_url %}
+        {% include 'dashboard/pages/certificates/includes/aegis_header.html' with url=landing_url %}
 
         <div class="card-body">
 
