@@ -66,6 +66,7 @@ THIRD_PARTY_APPS = [
     'rosetta',
     'two_factor',
     'impersonate',
+    'django_countries',
 ]
 
 COMMON_APPS = [
@@ -213,6 +214,11 @@ DATABASES = {
         'PORT': int(os.getenv('DB_PORT')),
         'CONN_MAX_AGE': int(os.getenv('DB_CONN_MAX_AGE', 60)),
         'ATOMIC_REQUESTS': True,
+        "OPTIONS": {
+            "charset": "utf8mb4",
+            "init_command": "SET NAMES utf8mb4 COLLATE utf8mb4_bin",
+        }
+        
     }
 }
 

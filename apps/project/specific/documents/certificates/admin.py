@@ -5,111 +5,142 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.common.utils.admin import GeneralAdminModel
 
-from .models import CertificateUserModel, CertificateTypesModel
+from .models import (CertificateViewLogModel, DocumentCertificateTypeChoices,
+                     DocumentVerificationModel, UserCertificateTypeChoices,
+                     UserVerificationModel)
+
+
+def action_set_certificate_type(request, queryset, certificate_type, model):
+    try:
+        num_actualizados = queryset.update(certificate_type=certificate_type)
+        messages.success(
+            request,
+            _(f"Updated {num_actualizados} certificates to {certificate_type.name}.")
+        )
+    except model.DoesNotExist:
+        messages.error(
+            request,
+            _(f"Certificate type {certificate_type.name} not found.")
+        )
 
 
 def action_set_idoneity(modeladmin, request, queryset):
-    try:
-        tipo_idoneity = CertificateTypesModel.objects.get(name=CertificateTypesModel.CertificateTypeChoices.IDONEITY)
-        num_actualizados = queryset.update(certificate_type=tipo_idoneity)
-        messages.success(
-            request,
-            _(f"Updated {num_actualizados} certificates to IDONEITY.")
-        )
-    except CertificateTypesModel.DoesNotExist:
-        messages.error(
-            request,
-            _("Certificate type IDONEITY not found.")
-        )
+    action_set_certificate_type(
+        request, queryset, UserCertificateTypeChoices.IDONEITY, UserCertificateTypeChoices)
 
-action_set_idoneity.short_description = _("Assign certificate type to 'IDONEITY'")
+
+def action_set_em_ipcon(modeladmin, request, queryset):
+    action_set_certificate_type(
+        request, queryset, UserCertificateTypeChoices.EM_IPCON, UserCertificateTypeChoices)
+
+
+def action_set_em_propensiones(modeladmin, request, queryset):
+    action_set_certificate_type(
+        request, queryset, UserCertificateTypeChoices.EM_PROPENSIONES, UserCertificateTypeChoices)
+
 
 def action_set_aegis(modeladmin, request, queryset):
-    try:
-        tipo_idoneity = CertificateTypesModel.objects.get(name=CertificateTypesModel.CertificateTypeChoices.AEGIS)
-        num_actualizados = queryset.update(certificate_type=tipo_idoneity)
-        messages.success(
-            request,
-            _(f"Updated {num_actualizados} certificates to AEGIS.")
-        )
-    except CertificateTypesModel.DoesNotExist:
-        messages.error(
-            request,
-            _("Certificate type AEGIS not found.")
-        )
+    action_set_certificate_type(
+        request, queryset, DocumentCertificateTypeChoices.AEGIS, DocumentVerificationModel)
 
-action_set_aegis.short_description = _("Assign certificate type to 'AEGIS'")
 
-class CertificateTypesModelAdmin(GeneralAdminModel):
-    
+def action_set_generic(modeladmin, request, queryset):
+    action_set_certificate_type(
+        request, queryset, DocumentCertificateTypeChoices.GENERIC, DocumentVerificationModel)
+
+
+action_set_idoneity.short_description = _(
+    "Assign user certificate type to 'IDONEITY'")
+action_set_em_ipcon.short_description = _(
+    "Assign user certificate type to 'EM_IPCON'")
+action_set_em_propensiones.short_description = _(
+    "Assign user certificate type to 'EM_PROPENSIONES'")
+action_set_aegis.short_description = _(
+    "Assign document certificate type to 'AEGIS'")
+action_set_generic.short_description = _(
+    "Assign document certificate type to 'GENERIC'")
+
+
+class UserVerificationModelAdmin(GeneralAdminModel):
+    actions = [action_set_idoneity, action_set_em_ipcon,
+               action_set_em_propensiones, action_set_aegis, action_set_generic]
+
     list_display = (
-        'name',
-        'created',
-        'updated'
-    )
-    search_fields = (
-        'name',
-    )
-    fieldsets = (
-        (_('Certificate Type'), {'fields': (
-            'name',
-        )}),
-        (_('Dates'), {'fields': (
-            'created',
-            'updated'
-        )}),
-        (_('Priority'), {'fields': (
-            'default_order',
-        )}),
-    )
-    readonly_fields = (
-        'created',
-        'updated'
-    )
-
-
-class CertificateAdmin(GeneralAdminModel):
-    actions = [action_set_idoneity, action_set_aegis]
-    
-    list_display = (
-        'user',
-        'name',
-        'last_name',
+        'id',
         'certificate_type',
-        'document_type',
-        'document_number',
-        'approved',
-        'approval_date',
         'detail_link',
-        'created',
-        'updated'
+        'uuid_prefix'
     )
-    list_display_links = list_display[:4]
+
     search_fields = (
         'id',
         'name',
         'last_name',
-        'document_type',
-        'document_number',
-        'document_number_hash',
     )
+
     list_filter = (
         "is_active",
-        "approved",
-        "document_type",
-        'certificate_type',
+        "approved"
     )
-    
+
     readonly_fields = (
         'created',
         'updated',
-        'document_number_hash',
     )
 
     def detail_link(self, obj):
-        url = reverse('certificates:detail_employee_verification_ipcon', args=[obj.pk])
+        url = reverse(
+            'certificates:detail_employee_verification_ipcon', args=[obj.pk])
         return format_html('<a href="{}">{}</a>', url, obj.pk)
 
 
-admin.site.register(CertificateUserModel, CertificateAdmin)
-admin.site.register(CertificateTypesModel, CertificateTypesModelAdmin)
+class DocumentVerificationModelAdmin(GeneralAdminModel):
+    actions = [action_set_aegis, action_set_generic]
+
+    list_display = (
+        'id',
+        'certificate_type',
+        # 'detail_link',
+    )
+
+    search_fields = (
+        'id',
+        'document_name',
+    )
+
+    list_filter = (
+        "is_active",
+    )
+
+    readonly_fields = (
+        'created',
+        'updated',
+    )
+
+    # def detail_link(self, obj):
+    #     url = reverse('certificates:detail_document_verification_ipcon', args=[obj.pk])
+    #     return format_html('<a href="{}">{}</a>', url, obj.pk)
+
+
+class CertificateViewLogModelAdmin(GeneralAdminModel):
+
+    search_fields = (
+        'id',
+        'user_verification__name',
+        'user_verification__last_name',
+        'document_verification__document_name',
+    )
+
+    list_filter = (
+        "viewed_at",
+    )
+
+    readonly_fields = (
+        'created',
+        'updated',
+    )
+
+
+admin.site.register(UserVerificationModel, UserVerificationModelAdmin)
+admin.site.register(DocumentVerificationModel, DocumentVerificationModelAdmin)
+admin.site.register(CertificateViewLogModel, CertificateViewLogModelAdmin)

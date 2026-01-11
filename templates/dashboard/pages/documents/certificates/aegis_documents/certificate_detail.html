@@ -1,0 +1,151 @@
+{% extends 'raw.html' %}
+{% load static i18n %}
+
+{% block title %}
+  <title>{% trans 'Document Verification Details' %}</title>
+{% endblock %}
+
+{% block icons %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+{% endblock %}
+
+{% block main %}
+  <div class="container mt-5 min-vh-100">
+    <div class="mx-auto">
+      <a href="{% url 'certificates:input_document_verification_aegis' %}">
+        <img src="{% static 'assets/imgs/brands/aegis_header.webp' %}" alt="" class="img-fluid"/>
+      </a>
+
+      {# ================== HEADER ================== #}
+      <div class="text-center my-4">
+        <h1>{% trans 'Document Verification' %}</h1>
+        <p class="text-muted">
+          {% trans 'Institutional Certificate of Authenticity and Legal Validity' %}
+        </p>
+        
+      </div>
+
+      <div class="row">
+        {# ================== LEFT COLUMN ================== #}
+        <div class="col-md-4 text-center">
+          <div class="row align-items-center">
+
+            <!-- LOGO PRINCIPAL -->
+            <div class="col-12 col-md-4 col-lg-12 mb-3 text-center">
+              <img src="{% static 'assets/imgs/brands/propensiones_h.webp' %}" alt="PROPENSIONES ABOGADOS" class="img-fluid" style="max-width:180px;" />
+            </div>
+
+            <!-- LOGO AEGIS -->
+            <div class="col-6 col-lg-12 mb-3 d-flex justify-content-center">
+              <img src="{% static 'assets/imgs/brands/aegis_logo.webp' %}" alt="AEGIS" class="img-fluid" style="max-width:120px;" />
+            </div>
+
+            <!-- QR -->
+            <div class="col-6 col-lg-12 mb-3 d-flex justify-content-center">
+              <img src="{{ qr_code }}" alt="{% trans 'QR Code' %}" class="img-fluid" style="max-width:120px;" />
+            </div>
+
+          </div>
+        </div>
+
+        {# ================== RIGHT COLUMN ================== #}
+        <div class="col-md-8" style=" background-image: url('{% static 'assets/imgs/brands/background_propensiones.webp' %}'); background-position: center; background-repeat: no-repeat; background-size: contain;">
+
+          {# ================== DOCUMENT METADATA ================== #}
+          <h2 class="mb-3">{% trans 'Verified Document' %}</h2>
+
+          <p class="mb-1">
+            <strong>{% trans 'Certificate Type:' %}</strong>
+            {{ document.get_certificate_type_display }}
+          </p>
+
+          <p class="mb-1">
+            <strong>{% trans "Document Title:" %}</strong>
+            {{ document.document_title }}
+          </p>
+
+          <p class="mb-1">
+            <strong>{% trans 'Verification ID:' %}</strong>
+            {{ document.id }}
+          </p>
+
+          <p class="mb-1">
+            <strong>{% trans 'Public Verification Code:' %}</strong>
+            {{ document.public_code }}
+          </p>
+
+          <p class="mb-1">
+            <strong>{% trans 'Issued at:' %}</strong>
+            {{ document.issued_at|date:'F d, Y' }}
+          </p>
+
+          {% if document.expires_at %}
+            <p class="mb-3">
+              <strong>{% trans 'Expires at:' %}</strong>
+              {{ document.expires_at|date:'F d, Y' }}
+            </p>
+          {% endif %}
+        
+          {% if document.document_file %}
+          <p class="mb-1">
+            <strong>{% trans 'Download Original Document:' %}</strong>
+            <a href="{{ document.document_file.url }}" target="_blank" rel="noopener noreferrer">{% trans "Download " %}: {{ document.document_title }}</a>
+          </p>
+          {% endif %}
+
+          <hr />
+
+          {# ================== LEGAL CERTIFICATION TEXT ================== #}
+          <div style="text-align: justify;">
+            {% blocktrans trimmed %}INSTITUTIONAL CERTIFICATION OF AUTHENTICITY, ORIGINALITY AND LEGAL VALIDITY
+            PROPENSIONES ABOGADOS INTERNACIONAL S.A.S., a legally constituted entity identified with Tax ID (NIT) 901409813-7, duly incorporated and in full legal capacity under the laws of the Republic of Colombia, acting within the scope of its institutional authority,
+            HEREBY CERTIFIES, DECLARES AND ATTESTS, with full legal and doctrinal effect, that:
+            The document to which this certification is attached is original, authentic and legally effective, having been issued under formal procedures of control, verification and due diligence. It constitutes the primary, prevailing and determinative instrument to evidence the legitimacy, origin and legal backing of the act, right, asset or legal situation contained therein.
+            This certification consolidates, reaffirms and ratifies the originality of the certified document, conferring upon it full legal effectiveness, sufficient evidentiary force and institutional validity. It serves as the governing and interpretative instrument of authenticity, not subject to informal or extrajuridical challenge.
+            Likewise, it is expressly stated that the document has been issued in accordance with the foundational principles of the legal system, including legality, objective good faith, legal certainty and regulatory compliance, incorporating international compliance standards, anti-money laundering (AML) and counter-terrorist financing (CFT) frameworks, in accordance with the applicable regulatory regimes.{% endblocktrans %}
+          </div>
+
+          <hr />
+
+          {# ================== SCOPE ================== #}
+          <div style="text-align: justify;">
+            {% blocktrans trimmed %}SCOPE OF VALIDATION AND APPLICABLE LEGAL EFFECTS
+            This certification and the document it authenticates produce full, enforceable and opposable legal effects. Its legal effectiveness is appropriate and sufficient within verification processes, due diligence, risk analysis, custody, assurance or institutional validation, without implying any waiver, substitution or limitation of the controls that each entity must carry out in accordance with its applicable legal regime.
+            Accordingly, the document may be validly accepted, incorporated and used as sufficient legal support under the corresponding legal framework.{% endblocktrans %}
+          </div>
+
+          <hr />
+
+          {# ================== LEGAL REGIME ================== #}
+          <div style="text-align: justify;">
+            {% blocktrans trimmed %}APPLICABLE LEGAL REGIME
+            Private International Law, General Principles of International Law, Vienna Convention on the Law of Treaties (1969), UNIDROIT Principles of International Commercial Contracts, international compliance standards, international AML/CFT regulations, Financial Action Task Force (FATF/GAFI) recommendations, and applicable provisions of the USA PATRIOT Act.{% endblocktrans %}
+          </div>
+
+          <hr />
+
+          {# ================== SIGNATURE ================== #}
+          <div class="mt-4">
+            
+            <img src="{% static 'assets/imgs/firma_jorge.webp' %}" alt="" class="img-fluid" style="max-height: 90px;" />
+
+            <p class="mb-0">
+              
+              <strong>JORGE U. VEGA LONDOÑO</strong><br />
+              {% trans 'Legal Representative – International Attorney' %}<br />
+              <strong>PROPENSIONES ABOGADOS INTERNACIONAL S.A.S.</strong><br />
+              NIT 901409813-7
+            </p>
+          </div>
+
+          {# ================== BARCODE ================== #}
+          <div class="text-center my-4">
+            <img src="{{ barcode }}" alt="{% trans 'Verification Barcode' %}" style="max-width:100%;" />
+          </div>
+
+          {% include 'dashboard/pages/documents/certificates/partials/habeas_data.html' %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

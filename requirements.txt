@@ -1,83 +1,83 @@
 # =========================
 # CORE (DJANGO LTS)
 # =========================
-Django>=4.2,<5.0
+Django>=4.2,<5.0                    #                           https://docs.djangoproject.com/en/5.2/
 
 # =========================
 # DATABASE / BASE INFRA
 # =========================
-mysqlclient>=2.2
-psycopg2-binary>=2.9,<3.0
-cryptography>=42
-pillow>=10
-python-barcode>=0.16.1
+mysqlclient>=2.2                    #                           https://pypi.org/project/mysqlclient/
+psycopg2-binary>=2.9,<3.0           #                           https://www.psycopg.org/docs/
+cryptography>=42                    #                           https://cryptography.io/en/latest/
+pillow>=10                          #                           https://pillow.readthedocs.io/
+python-barcode>=0.16.1              #                           https://pypi.org/project/python-barcode/
 
 # =========================
 # SECURITY / AUTH / AUDIT
 # =========================
-django-two-factor-auth>=1.17       # two_factor
-django-otp>=1.5                    # django_otp
-django-axes>=7.0                   # axes
-django-cors-headers>=4.3           # corsheaders
-PyJWT>=2.8
-argon2-cffi>=23.1
-django-auditlog>=3.0               # auditlog
-django-encrypted-model-fields>=0.6 # encrypted_model_fields
+django-two-factor-auth>=1.17        # two_factor                https://django-two-factor-auth.readthedocs.io/
+django-otp>=1.5                     # django_otp                https://django-otp-official.readthedocs.io/
+django-axes>=7.0                    # axes                      https://django-axes.readthedocs.io/
+django-cors-headers>=4.3            # corsheaders               https://github.com/adamchainz/django-cors-headers
+PyJWT>=2.8                          #                           https://pyjwt.readthedocs.io/
+argon2-cffi>=23.1                   #                           https://argon2-cffi.readthedocs.io/
+django-auditlog>=3.0                # auditlog                  https://django-auditlog.readthedocs.io/
+django-encrypted-model-fields>=0.6  # encrypted_model_fields    https://pypi.org/project/django-encrypted-model-fields/
 
 # =========================
 # ADMIN / FORMS / UX
 # =========================
-django-betterforms>=2.0            # betterforms
-django-import-export>=4.0          # import_export
-django-admin-sortable2>=2.2
-django-ckeditor-5>=0.2
-django-select2>=8.2                # django_select2
-django-debug-toolbar>=4.4
-django-impersonate>=1.9            # impersonate
-django-formtools>=2.5              # formtools
+django-betterforms>=2.0             # betterforms               https://django-betterforms.readthedocs.io/
+django-import-export>=4.0           # import_export             https://django-import-export.readthedocs.io/
+django-admin-sortable2>=2.2         #                           https://github.com/jrief/django-admin-sortable2
+django-ckeditor-5>=0.2              #                           https://github.com/hvlads/django-ckeditor-5
+django-select2>=8.2                 # django_select2            https://django-select2.readthedocs.io/
+django-debug-toolbar>=4.4           #                           https://django-debug-toolbar.readthedocs.io/
+django-impersonate>=1.9             # impersonate               https://django-impersonate.readthedocs.io/
+django-formtools>=2.5               # formtools                 https://docs.djangoproject.com/en/5.2/ref/contrib/formtools/
 
 # =========================
 # TASKS / ASYNC / CRON
 # =========================
-django-crontab>=0.7                # django_crontab
+django-crontab>=0.7                 # django_crontab            https://github.com/kraiz/django-crontab
 
 # =========================
 # STATIC FILES / ASSETS
 # =========================
-django-compressor>=4.4             # compressor
+django-compressor>=4.4              # compressor                https://django-compressor.readthedocs.io/
 
 # =========================
 # FILTERS / QUERYING
 # =========================
-django-filter>=24.2                # django_filters
+django-filter>=24.2                 # django_filters            https://django-filter.readthedocs.io/
 
 # =========================
 # I18N / CONTENT
 # =========================
-django-parler>=2.3                 # parler
-django-rosetta>=0.10               # rosetta
-django-countries>=7.6
+django-parler>=2.3                  # parler                    https://django-parler.readthedocs.io/
+django-rosetta>=0.10                # rosetta                   https://django-rosetta.readthedocs.io/
+django-countries>=7.6               # django_countries          https://pypi.org/project/django-countries/
 
 # =========================
 # API / HTTP
 # =========================
-requests>=2.32
-urllib3>=2.2
+requests>=2.32                      #                           https://requests.readthedocs.io/
+urllib3>=2.2                        #                           https://urllib3.readthedocs.io/
 
 # =========================
 # AI / EXTERNAL SERVICES
 # =========================
-openai>=1.72
+openai>=1.72                        #                           https://platform.openai.com/docs/
 
 # =========================
 # FILES / EXPORTS / REPORTS
 # =========================
-openpyxl>=3.1
-reportlab>=4.0
-python-pptx>=1.0
+openpyxl>=3.1                       #                           https://openpyxl.readthedocs.io/
+reportlab>=4.0                      #                           https://www.reportlab.com/documentation/
+python-pptx>=1.0                    #                           https://python-pptx.readthedocs.io/
 
 # =========================
 # CONFIG / ENV
 # =========================
-django-environ>=0.11
-python-dotenv>=1.0
+django-environ>=0.11                #                           https://django-environ.readthedocs.io/
+python-dotenv>=1.0                  #                           https://saurabh-kumar.com/python-dotenv/

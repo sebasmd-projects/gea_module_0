@@ -1,0 +1,157 @@
+{% extends 'raw.html' %}
+
+{% load static i18n %}
+
+{% block title %}
+  <title>{% trans 'Certificate Details' %}</title>
+{% endblock %}
+
+{% block icons %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+{% endblock %}
+
+{% block main %}
+  <div class="container mt-5 min-vh-100">
+    <div class="mx-auto">
+      {# ================== HEADER ================== #}
+      <div class="text-center mb-4">
+        <h1>{% trans 'Verify IPCON Badge' %}</h1>
+      </div>
+
+      <div class="row">
+        {# ================== LEFT COLUMN ================== #}
+        <div class="col-md-4 text-center">
+          <div class="row text-center">
+            <div class="col-sm-6 col-md-12 mb-3">
+              <img src="{% static 'assets/imgs/brands/aegis_logo.webp' %}" alt="Certificate Badge" style="max-width:150px;" />
+            </div>
+
+            <div class="col-sm-6 col-md-12 mb-3">
+              <img id="qr-code" src="{{ qr_code }}" alt="QR Code" class="img-fluid" style="max-width:150px;" />
+            </div>
+          </div>
+        </div>
+
+        {# ================== RIGHT COLUMN ================== #}
+        <div class="col-md-8">
+          {# ================== CERTIFICATE DATA ================== #}
+          <h2>{{ certificate.name }} {{ certificate.last_name }}</h2>
+
+          <p class="mb-1">
+            <strong>{% trans 'Document Number:' %}</strong>
+            {{ certificate.cc_masked|default:certificate.pa_masked }}
+          </p>
+
+          <p class="mb-1">
+            <strong>{% trans 'Certificate ID:' %}</strong>
+            {{ certificate.id }}
+          </p>
+
+          {% if certificate.approval_date %}
+            <p class="mb-1">
+              <strong>{% trans 'Approval date:' %}</strong>
+              {{ certificate.approval_date|date:'d/m/Y' }}
+            </p>
+          {% endif %}
+
+          {% if certificate.expires_at %}
+            <p class="mb-3">
+              <strong>{% trans 'Expires at:' %}</strong>
+              {{ certificate.expires_at|date:'d/m/Y' }}
+            </p>
+          {% endif %}
+
+          <hr />
+
+          {# ================== LEGAL TEXT ================== #}
+          {% if certificate.approved and not certificate.is_revoked %}
+            <p style="text-align: justify;">
+              {% trans 'This document certifies that' %}
+              <strong>{{ certificate.name }} {{ certificate.last_name }}</strong>
+              {% blocktrans %}is currently verified as a member, employee, or authorized collaborator of
+              <strong>Propensiones</strong> and <strong>IPCON (International Private Consortium)</strong> the new financial era.{% endblocktrans %}
+            </p>
+
+            <p style="text-align: justify;">
+              {% blocktrans %}This verification confirms that the holder is duly registered within the organization's internal systems and is authorized to act on its behalf in accordance with current regulations and internal compliance policies according to their role and responsibilities.{% endblocktrans %}
+            </p>
+          {% endif %}
+
+          {# ================== BARCODE ================== #}
+          <div class="text-center my-4">
+            <img id="barcode" src="{{ barcode }}" alt="Barcode" style="max-width:100%;" />
+          </div>
+
+          {# ================== STATUS BLOCK ================== #}
+          {% if certificate.is_revoked %}
+            <div class="alert alert-danger text-center">
+              <h3 class="mb-1">
+                <i class="bi bi-slash-circle"></i>
+                {% trans 'Certificate Revoked' %}
+              </h3>
+              <p>
+                {% trans 'This verification has been revoked and is no longer valid.' %}
+              </p>
+
+              {% if certificate.revocation_reason %}
+                <p class="mb-0">
+                  <strong>{% trans 'Reason:' %}</strong>
+                  {{ certificate.revocation_reason }}
+                </p>
+              {% endif %}
+            </div>
+          {% elif not certificate.approved %}
+            <div class="alert alert-danger text-center">
+              <h3 class="mb-1">
+                <i class="bi bi-x-circle"></i>
+                {% trans 'Not Approved' %}
+              </h3>
+              <p>
+                {% trans 'This verification has not been approved by the issuing authority.' %}
+              </p>
+            </div>
+          {% elif certificate.is_expired %}
+            <div class="alert alert-warning text-center">
+              <h3 class="mb-1">
+                <i class="bi bi-exclamation-triangle"></i>
+                {% trans 'Expired Certificate' %}
+              </h3>
+              <p>
+                {% trans 'This verification was valid but has expired.' %}
+              </p>
+
+              {% if certificate.expires_at %}
+                <small>
+                  {% trans 'Expiration date:' %}
+                  {{ certificate.expires_at|date:'d/m/Y' }}
+                </small>
+              {% endif %}
+            </div>
+          {% elif certificate.is_passport_expired %}
+            <div class="alert alert-warning text-center">
+              <h3 class="mb-1">
+                <i class="bi bi-passport"></i>
+                {% trans 'Passport Expired' %}
+              </h3>
+              <p>
+                {% trans 'The passport associated with this verification has expired.' %}
+              </p>
+            </div>
+          {% else %}
+            <div class="alert alert-success text-center">
+              <h3 class="mb-1">
+                <i class="bi bi-check-circle"></i>
+                {% trans 'Approved and Valid' %}
+              </h3>
+              <p>
+                {% trans 'This verification is valid and currently active.' %}
+              </p>
+            </div>
+          {% endif %}
+
+          {% include "dashboard/pages/documents/certificates/partials/habeas_data.html" %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

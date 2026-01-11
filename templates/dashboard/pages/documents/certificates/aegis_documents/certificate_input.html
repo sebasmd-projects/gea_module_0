@@ -1,0 +1,207 @@
+{% extends 'raw.html' %}
+
+{% load static i18n custom_filters %}
+
+{% block title %}
+<title>{% trans 'Verify Document Certificate' %}</title>
+{% endblock title %}
+
+{% block main %}
+<div class="container min-vh-100 d-flex justify-content-center align-items-center">
+    
+    <div class="card">
+
+        <div class="card-header text-center">
+            <a href="{% url 'core:index' %}">
+                <img src="{% static 'assets/imgs/brands/aegis_header.webp' %}" alt="" class="img-fluid"/>
+            </a>
+        </div>
+
+        <div class="card-body">
+            <h1 class="text-center"> {% trans 'Verify Document Certificate' %} </h1>
+
+            {# ================= CONTEXT MESSAGE ================= #}
+            {% if not request.user.is_authenticated %}
+                {% if form.email %}
+                    <p class="text-muted text-center small">
+                        {% trans 'Enter your email to receive a verification code.' %}
+                    </p>
+                {% elif form.otp %}
+                    <p class="text-muted text-center small">
+                        {% trans 'Enter the verification code sent to your email.' %}
+                    </p>
+                {% else %}
+                    <p class="text-muted text-center small">
+                        {% trans 'You may now verify the document.' %}
+                    </p>
+                {% endif %}
+            {% else %}
+                <p class="text-muted text-center small">
+                    {% trans 'Enter the document details to verify.' %}
+                </p>
+            {% endif %}
+
+            {# ================= FORM ================= #}
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            {# -------- NON FIELD ERRORS -------- #}
+                            {% if form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    {{ form.non_field_errors }}
+                                </div>
+                            {% endif %}
+
+                            {# ================= MANUAL SELECT (SOLO SI EXISTE) ================= #}
+                            {% if form.document_type %}
+                                <div class="form-floating mb-3">
+                                    <select
+                                        name="{{ form.document_type.name }}"
+                                        id="floatingDocumentType"
+                                        class="form-select{% if form.document_type.errors %} is-invalid{% endif %}"
+                                        required
+                                    >
+                                        {% for value, label in form.document_type.field.choices %}
+                                            <option value="{{ value }}"
+                                                    {% if value == form.document_type.value %}selected{% endif %}>
+                                                {{ label }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+
+                                    <label for="floatingDocumentType">
+                                        {{ form.document_type.label }}
+                                    </label>
+
+                                    {% for error in form.document_type.errors %}
+                                        <div class="invalid-feedback">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            {# ================= OTHER FIELDS ================= #}
+                            {% for field in form %}
+                                {% if field.name != 'document_type' %}
+                                    <div class="mb-3">
+                                        <label class="form-label" for="{{ field.id_for_label }}">
+                                            {{ field.label }}
+                                        </label>
+
+                                        {{ field|add_class:"form-control" }}
+
+                                        {% if field.help_text %}
+                                            <div class="form-text">
+                                                {{ field.help_text }}
+                                            </div>
+                                        {% endif %}
+
+                                        {% for error in field.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            {# ================= SUBMIT ================= #}
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">
+                                    {% if form.email %}
+                                        {% trans 'Send verification code' %}
+                                    {% elif form.otp %}
+                                        {% trans 'Verify code' %}
+                                    {% else %}
+                                        {% trans 'Verify document' %}
+                                    {% endif %}
+                                </button>
+
+                                <div class="mt-3">
+                                    {% if form.otp %}
+                                        {# ================= RESEND OTP BUTTON ================= #}
+                                        <button
+                                            type="submit"
+                                            name="resend_otp"
+                                            value="1"
+                                            id="resendOtpBtn"
+                                            formnovalidate
+                                            class="btn btn-outline-warning btn-sm text-black"
+                                        >
+                                            {% trans "Resend verification code" %}
+                                        </button>
+                                        <p id="resendOtpTimer" class="text-muted small mt-2" style="display: none;"></p>
+
+                                        {# ================= CHANGE EMAIL BUTTON ================= #}
+                                        <button
+                                            type="submit"
+                                            name="change_email"
+                                            value="1"
+                                            formnovalidate
+                                            class="btn btn-outline-warning btn-sm text-black"
+                                        >
+                                            {% trans "Change email address" %}
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </form>
+
+            {# ================= SECURITY FOOTER ================= #}
+            {% if form.otp %}
+                <p class="text-muted small mt-3 text-center">
+                    {% trans 'The code expires in a few minutes.' %}
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock main %}
+
+{% block body_custom_js %}
+{% if form.otp and otp_resend_remaining %}
+<script>
+(function () {
+    const resendBtn = document.getElementById('resendOtpBtn');
+    const timerText = document.getElementById('resendOtpTimer');
+
+    if (!resendBtn || !timerText) return;
+
+    let remaining = {{ otp_resend_remaining|default:0 }};
+
+    if (remaining <= 0) return;
+
+    resendBtn.disabled = true;
+    timerText.style.display = 'block';
+
+    function updateTimer() {
+        if (remaining <= 0) {
+            resendBtn.disabled = false;
+            timerText.style.display = 'none';
+            return;
+        }
+
+        timerText.textContent =
+            "{{ _('You can request a new code in') }} " + remaining + "s";
+
+        remaining--;
+    }
+
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+})();
+</script>
+{% endif %}
+{% endblock body_custom_js %}

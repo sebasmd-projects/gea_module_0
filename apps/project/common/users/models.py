@@ -541,10 +541,9 @@ class UserPersonalInformationModel(TimeStampedModel):
     id = models.UUIDField(
         'ID',
         default=uuid.uuid4,
-        unique=True,
         primary_key=True,
-        serialize=False,
-        editable=False
+        editable=False,
+        max_length=36,
     )
 
     user = models.OneToOneField(
