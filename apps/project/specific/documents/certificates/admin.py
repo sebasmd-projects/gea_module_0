@@ -99,13 +99,17 @@ class DocumentVerificationModelAdmin(GeneralAdminModel):
 
     list_display = (
         'id',
-        'certificate_type',
-        # 'detail_link',
+        'document_title',
+        'public_code',
+        'uuid_prefix',
+        'certificate_type'
     )
 
     search_fields = (
         'id',
-        'document_name',
+        'document_title',
+        'public_code',
+        'uuid_prefix',
     )
 
     list_filter = (
