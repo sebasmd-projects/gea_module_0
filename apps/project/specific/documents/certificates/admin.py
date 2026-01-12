@@ -63,13 +63,15 @@ action_set_generic.short_description = _(
 
 class UserVerificationModelAdmin(GeneralAdminModel):
     actions = [action_set_idoneity, action_set_em_ipcon,
-               action_set_em_propensiones, action_set_aegis, action_set_generic]
+               action_set_em_propensiones]
 
     list_display = (
-        'id',
+        'name',
+        'last_name',
         'certificate_type',
         'detail_link',
-        'uuid_prefix'
+        'uuid_prefix',
+        'id',
     )
 
     search_fields = (
