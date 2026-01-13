@@ -394,6 +394,9 @@ class DocumentVerificationModel(TimeStampedModel):
             .distinct()
             .count()
         )
+        
+    def __str__(self):
+        return f"{self.document_title} [{self.public_code}]"
 
     def save(self, *args, **kwargs):
         if not self.public_code:
