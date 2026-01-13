@@ -73,11 +73,11 @@ class UserVerificationModelAdmin(GeneralAdminModel):
         'uuid_prefix',
         'full_name',
         'certificate_type',
+        'total_views',
         'approved',
         'is_expired',
         'is_revoked',
         'expires_at',
-        'total_views',
         'detail_link',
     )
 
@@ -193,10 +193,10 @@ class DocumentVerificationModelAdmin(GeneralAdminModel):
         'uuid_prefix',
         'document_title',
         'certificate_type',
+        'total_views',
         'delivery_method',
         'is_expired',
         'expires_at',
-        'total_views',
     )
 
     list_display_links = ('uuid_prefix', 'document_title')
