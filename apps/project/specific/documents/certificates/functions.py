@@ -206,8 +206,3 @@ def is_ipcon_email(email:str) -> bool:
     
     domain = email.split('@')[-1].lower()
     return domain in IPCON_EMAIL_DOMAINS
-
-print(is_ipcon_email('sebastian@recoveryrepatriationfoundation.com'))
-print(is_ipcon_email('sebastian@propensionesabogados.com'))
-print(is_ipcon_email('sebastian@sebasmd.com'))
-print(is_ipcon_email('sebastian@gmail.com'))
