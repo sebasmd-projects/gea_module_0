@@ -40,6 +40,12 @@ TEMP_EMAIL_DOMAINS = {
     'trashmail.com',
 }
 
+IPCON_EMAIL_DOMAINS = {
+    'propensionesabogados.com',
+    'bradbauhof.com',
+    'gyllton.com',
+    'recoveryrepatriationfoundation.com'
+}
 
 EMAIL_REGEX = re.compile(
     r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
@@ -185,17 +191,23 @@ def normalize_identifier(value: str) -> str:
 
 
 def is_temporary_email(email: str) -> bool:
-    """
-    Basic protection against disposable email addresses.
 
-    Parameters:
-        email (str)
-
-    Returns:
-        bool
-    """
     if not EMAIL_REGEX.match(email):
         return True
 
     domain = email.split('@')[-1].lower()
     return domain in TEMP_EMAIL_DOMAINS
+
+
+def is_ipcon_email(email:str) -> bool:
+
+    if not EMAIL_REGEX.match(email):
+        return True
+    
+    domain = email.split('@')[-1].lower()
+    return domain in IPCON_EMAIL_DOMAINS
+
+print(is_ipcon_email('sebastian@recoveryrepatriationfoundation.com'))
+print(is_ipcon_email('sebastian@propensionesabogados.com'))
+print(is_ipcon_email('sebastian@sebasmd.com'))
+print(is_ipcon_email('sebastian@gmail.com'))
