@@ -1,0 +1,44 @@
+[project]
+name = "gea-module-0"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "argon2-cffi>=23.1",
+    "cryptography>=42",
+    "django>=4.2,<5.0",
+    "django-admin-sortable2>=2.2",
+    "django-auditlog>=3.0",
+    "django-axes>=7.0",
+    "django-betterforms>=2.0",
+    "django-ckeditor-5>=0.2",
+    "django-compressor>=4.4",
+    "django-cors-headers>=4.3",
+    "django-countries>=7.6",
+    "django-crontab>=0.7",
+    "django-debug-toolbar>=4.4",
+    "django-encrypted-model-fields>=0.6",
+    "django-environ>=0.11",
+    "django-filter>=24.2",
+    "django-formtools>=2.5",
+    "django-impersonate>=1.9",
+    "django-import-export>=4.0",
+    "django-otp>=1.5",
+    "django-parler>=2.3",
+    "django-rosetta>=0.10",
+    "django-select2>=8.2",
+    "django-two-factor-auth>=1.17",
+    "mysqlclient>=2.2",
+    "openai>=1.72",
+    "openpyxl>=3.1",
+    "pillow>=10",
+    "psycopg2-binary>=2.9,<3.0",
+    "pyjwt>=2.8",
+    "python-barcode>=0.16.1",
+    "python-dotenv>=1.0",
+    "python-pptx>=1.0",
+    "reportlab>=4.0",
+    "requests>=2.32",
+    "urllib3>=2.2",
+]
