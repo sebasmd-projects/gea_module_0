@@ -10,6 +10,7 @@
 100%);"{% endblock body_properties %}
 
 {% block layout_content %}
+
 <div class="min-vh-100 d-flex align-items-center justify-content-center container-xl px-5">
   <div class="card mx-auto" style="max-width: 400px; width: 100%;">
 
@@ -88,8 +89,7 @@
 
         <!-- Form Group (forgot password link)-->
         <div class="mb-3">
-          <a class="small" href="https://wa.me/573012283818?text=contraseña%20olvidada!" target="_blank"
-            rel="noopener noreferrer">
+          <a class="small" href="{% url 'account:forgot_password' %}" rel="noopener noreferrer">
             {% trans 'Forgot your password?' %}
           </a>
         </div>

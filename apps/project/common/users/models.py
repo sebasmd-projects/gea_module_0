@@ -1,3 +1,5 @@
+# apps/project/common/users/models.py
+
 import uuid
 from datetime import date, timedelta
 
@@ -22,7 +24,7 @@ class UserModel(TimeStampedModel, AbstractUser):
         REPRESENTATIVE = 'R', _('Representative')
         HOLDER = 'H', _('Holder')
         BUYER = 'B', _('Buyer')
-    
+
     class PhoneCodeChoices(models.TextChoices):
         COLOMBIA = "57-CO", _("+57 Colombia")
         UNITED_STATES = "1-US", _("+1 United States")
@@ -64,7 +66,8 @@ class UserModel(TimeStampedModel, AbstractUser):
         PUERTO_RICO = "1-PR", _("+1 Puerto Rico")
         SAINT_KITTS_AND_NEVIS = "1-KN", _("+1 Saint Kitts and Nevis")
         SAINT_LUCIA = "1-LC", _("+1 Saint Lucia")
-        SAINT_VINCENT_AND_THE_GRENADINES = "1-VC", _("+1 Saint Vincent and the Grenadines")
+        SAINT_VINCENT_AND_THE_GRENADINES = "1-VC", _(
+            "+1 Saint Vincent and the Grenadines")
         SINT_MAARTEN = "1-SX", _("+1 Sint Maarten (Dutch part)")
         SURINAME = "597-SR", _("+597 Suriname")
         TRINIDAD_AND_TOBAGO = "1-TT", _("+1 Trinidad and Tobago")
@@ -72,7 +75,7 @@ class UserModel(TimeStampedModel, AbstractUser):
         URUGUAY = "598-UY", _("+598 Uruguay")
         US_VIRGIN_ISLANDS = "1-VI", _("+1 United States Virgin Islands")
         VENEZUELA = "58-VE", _("+58 Venezuela")
-        
+
         # --- Europa ---
         ALBANIA = "355-AL", _("+355 Albania")
         ANDORRA = "376-AD", _("+376 Andorra")
@@ -123,8 +126,8 @@ class UserModel(TimeStampedModel, AbstractUser):
         # Rusia y Kazajistán comparten +7
         RUSSIA = "7-RU", _("+7 Russia")
         KAZAKHSTAN = "7-KZ", _("+7 Kazakhstan")
-        
-            # --- África ---
+
+        # --- África ---
         ALGERIA = "213-DZ", _("+213 Algeria")
         ANGOLA = "244-AO", _("+244 Angola")
         BENIN = "229-BJ", _("+229 Benin")
@@ -180,7 +183,7 @@ class UserModel(TimeStampedModel, AbstractUser):
         WESTERN_SAHARA = "212-EH", _("+212 Western Sahara")
         ZAMBIA = "260-ZM", _("+260 Zambia")
         ZIMBABWE = "263-ZW", _("+263 Zimbabwe")
-        
+
         # --- Asia ---
         AFGHANISTAN = "93-AF", _("+93 Afghanistan")
         BANGLADESH = "880-BD", _("+880 Bangladesh")
@@ -215,7 +218,7 @@ class UserModel(TimeStampedModel, AbstractUser):
         THAILAND = "66-TH", _("+66 Thailand")
         TURKEY = "90-TR", _("+90 Turkey")
         VIETNAM = "84-VN", _("+84 Vietnam")
-        
+
         # --- Oceanía ---
         AUSTRALIA = "61-AU", _("+61 Australia")
         CHRISTMAS_ISLAND = "61-CX", _("+61 Christmas Island")
@@ -295,7 +298,7 @@ class UserModel(TimeStampedModel, AbstractUser):
         _('Verified Holder'),
         default=False
     )
-    
+
     phone_number_code = models.CharField(
         _('Phone Number Code'),
         max_length=7,
@@ -308,7 +311,7 @@ class UserModel(TimeStampedModel, AbstractUser):
         max_length=25,
         default='',
     )
-    
+
     referred = models.ForeignKey(
         'self',
         on_delete=models.SET_NULL,
@@ -316,7 +319,7 @@ class UserModel(TimeStampedModel, AbstractUser):
         null=True,
         related_name='referrals'
     )
-    
+
     is_referred = models.BooleanField(
         _('Is Referred'),
         default=False
@@ -371,8 +374,10 @@ class UserModel(TimeStampedModel, AbstractUser):
             ('can_view_holders', _('Can view only holders users')),
             ('can_change_password', _('Can change user password')),
             ('can_change_all_passwords', _('Can change all users passwords')),
-            ('can_change_users_personal_info', _('Can change users personal information')),
-            ('can_change_users_contact_info', _('Can change users contact information')),
+            ('can_change_users_personal_info', _(
+                'Can change users personal information')),
+            ('can_change_users_contact_info', _(
+                'Can change users contact information')),
             ('can_change_users_referred', _('Can change users referred by field')),
             ('can_verify_holders', _('Can verify holders')),
             ('can_deactivate_users', _('Can deactivate users')),

@@ -1,16 +1,24 @@
-from django.contrib.auth import authenticate, login, logout
+# apps/project/common/account/views.py
+
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import send_mail
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode, url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import View
 from django.views.generic.edit import FormView
+from django.contrib import messages
 
 from apps.project.common.users.models import UserModel
 
-from .forms import GeaUserRegisterForm
+from .forms import GeaUserRegisterForm, ForgotPasswordStep1Form, ForgotPasswordStep2Form, ChangePasswordForm
 
 
 class UserLogoutView(View):
@@ -87,3 +95,232 @@ class GeaUserRegisterView(FormView):
         # No se usará porque hacemos redirect en form_valid,
         # pero lo dejamos por compatibilidad
         return reverse('core:index')
+
+
+class ForgotPasswordFormView(View):
+    """Two-step forgot password process in one URL"""
+    template_name = "account/forgot_password.html"
+    token_generator = default_token_generator
+
+    def get(self, request, *args, **kwargs):
+        """Handle both steps based on URL parameters"""
+        uidb64 = request.GET.get('uidb64')
+        token = request.GET.get('token')
+
+        # Step 2: If token and uid provided, show password reset form
+        if uidb64 and token:
+            return self._handle_step2_get(request, uidb64, token)
+
+        # Step 1: Show email/username form
+        return self._handle_step1_get(request)
+
+    def post(self, request, *args, **kwargs):
+        """Handle form submissions for both steps"""
+        uidb64 = request.GET.get('uidb64')
+        token = request.GET.get('token')
+
+        # Step 2: Password reset form submission
+        if uidb64 and token:
+            return self._handle_step2_post(request, uidb64, token)
+
+        # Step 1: Email/username form submission
+        return self._handle_step1_post(request)
+
+    def _handle_step1_get(self, request):
+        """Display step 1 form"""
+        form = ForgotPasswordStep1Form()
+        return render(request, self.template_name, {
+            'form': form,
+            'step': 1,
+            'title': _('Reset Your Password'),
+        })
+
+    def _handle_step1_post(self, request):
+        """Process step 1 form"""
+        form = ForgotPasswordStep1Form(request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            if user:
+                # Generate password reset token and send email
+                self._send_password_reset_email(request, user)
+
+                # Show success message (but don't reveal if user exists for security)
+                messages.success(request, _(
+                    "If an account exists with the provided email/username, "
+                    "you will receive password reset instructions shortly."
+                ))
+
+                # Show success page instead of redirecting immediately
+                return render(request, self.template_name, {
+                    'step': 'success',
+                    'title': _('Check Your Email'),
+                    'message': _(
+                        "We've sent password reset instructions to your email. "
+                        "Please check your inbox and follow the link to reset your password."
+                    ),
+                })
+
+        # Form invalid, show errors
+        return render(request, self.template_name, {
+            'form': form,
+            'step': 1,
+            'title': _('Reset Your Password'),
+        })
+
+    def _handle_step2_get(self, request, uidb64, token):
+        """Display step 2 form if token is valid"""
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = UserModel.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
+            user = None
+
+        if user is not None and self.token_generator.check_token(user, token):
+            form = ForgotPasswordStep2Form(user)
+            return render(request, self.template_name, {
+                'form': form,
+                'step': 2,
+                'uidb64': uidb64,
+                'token': token,
+                'title': _('Set New Password'),
+            })
+        else:
+            # Invalid token
+            messages.error(request, _(
+                "The password reset link is invalid or has expired. "
+                "Please request a new password reset."
+            ))
+            return redirect('account:forgot_password')
+
+    def _handle_step2_post(self, request, uidb64, token):
+        """Process step 2 form"""
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = UserModel.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
+            user = None
+
+        if user is None or not self.token_generator.check_token(user, token):
+            messages.error(request, _(
+                "The password reset link is invalid or has expired. "
+                "Please request a new password reset."
+            ))
+            return redirect('account:forgot_password')
+
+        form = ForgotPasswordStep2Form(user, request.POST)
+        if form.is_valid():
+            form.save()
+
+            # Update session if the user who changed password is logged in
+            if request.user.is_authenticated and request.user.pk == user.pk:
+                update_session_auth_hash(request, user)
+
+            messages.success(request, _(
+                "Your password has been reset successfully. "
+                "You can now log in with your new password."
+            ))
+
+            # Redirect to login page
+            return redirect('two_factor:login')
+
+        # Form invalid, show errors
+        return render(request, self.template_name, {
+            'form': form,
+            'step': 2,
+            'uidb64': uidb64,
+            'token': token,
+            'title': _('Set New Password'),
+        })
+
+    def _send_password_reset_email(self, request, user):
+        """Send password reset email to user"""
+        current_site = get_current_site(request)
+        site_name = current_site.name
+        domain = current_site.domain
+
+        # Use HTTPS if request is secure
+        protocol = 'https' if request.is_secure() else 'http'
+
+        # Generate token and uid
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = self.token_generator.make_token(user)
+
+        # Build reset URL
+        reset_url = reverse('account:forgot_password') + \
+            f'?uidb64={uid}&token={token}'
+        reset_url = f"{protocol}://{domain}{reset_url}"
+
+        # Email context
+        context = {
+            'email': user.email,
+            'domain': domain,
+            'site_name': site_name,
+            'uid': uid,
+            'user': user,
+            'token': token,
+            'protocol': protocol,
+            'reset_url': reset_url,
+        }
+
+        # Render email content
+        subject = render_to_string(_("Password Reset Request for {}").format(site_name), context)
+        
+        # Remove newlines from subject
+        subject = ''.join(subject.splitlines())
+
+        message = render_to_string(
+            'account/password_reset_email.html', context)
+
+        # Send email
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=None,  # Use DEFAULT_FROM_EMAIL
+            recipient_list=[user.email],
+            html_message=message,
+            fail_silently=False,
+        )
+
+
+class ChangePasswordFormView(FormView):
+    """Change password view for logged-in users"""
+    template_name = "account/change_password.html"
+    form_class = ChangePasswordForm
+
+    def dispatch(self, request, *args, **kwargs):
+        # Ensure user is logged in
+        if not request.user.is_authenticated:
+            messages.error(request, _(
+                "You must be logged in to change your password."))
+            return redirect('two_factor:login')
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        """Pass the current user to the form"""
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        # Save the new password
+        user = form.save()
+
+        # Update session to prevent logout
+        update_session_auth_hash(self.request, user)
+
+        messages.success(self.request, _(
+            "Your password has been changed successfully!"))
+
+        # Redirect based on user type
+        if getattr(user, "is_asset_holder", False):
+            return redirect('assets:holder_index')
+
+        if getattr(user, "is_buyer", False):
+            return redirect('buyers:buyer_index')
+
+        return redirect('core:index')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = _('Change Password')
+        return context

@@ -76,6 +76,14 @@
       {% trans 'Two Factor Authentication' %}
     </a>
 
+    <a class="dropdown-item" href="{% url 'account:change_password' %}">
+      <div class="dropdown-item-icon">
+        <i data-feather="key"></i>
+      </div>
+      {% trans 'Change Password' %}
+    </a>
+
+
     <a class="dropdown-item" href="{% url 'account:logout' %}">
       <div class="dropdown-item-icon">
         <i data-feather="log-out"></i>
