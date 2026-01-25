@@ -246,6 +246,37 @@ class BuyerRequiredMixin(LoginRequiredMixin):
 
         return super().dispatch(request, *args, **kwargs)
 
+class OnlySpecificUserMixin(LoginRequiredMixin):
+    """Mixin to allow only specific users by their username.
+
+    Args:
+        LoginRequiredMixin (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+
+    allowed_user_username = [
+        'asset.acquisition@propensionesabogados.com',
+        'director@propensionesabogados.com'
+    ]
+
+    def dispatch(self, request, *args, **kwargs):
+        """
+        Mixin to allow only specific users by their username.
+        """
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
+        if (
+            request.user.username not in self.allowed_user_username and
+            not request.user.is_superuser and
+            not request.user.is_staff
+        ):
+            return redirect(reverse('core:index'))
+
+        return super().dispatch(request, *args, **kwargs)
+
 
 class PurchaseOrdersView(BuyerRequiredMixin, TemplateView):
     template_name = 'dashboard/pages/buyers/purchase_orders.html'
@@ -997,5 +1028,5 @@ class AssetCreditFormTemplateView(BuyerRequiredMixin, TemplateView):
 class AssetCreditFormSuccessTemplateView(BuyerRequiredMixin, TemplateView):
     template_name = 'dashboard/pages/buyers/hermes/success_asset_credit_form.html'
 
-class OrionSchedulerView(LoginRequiredMixin, TemplateView):
+class OrionSchedulerView(OnlySpecificUserMixin, TemplateView):
     template_name = 'dashboard/pages/buyers/orion/scheduler.html'
