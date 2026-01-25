@@ -997,5 +997,5 @@ class AssetCreditFormTemplateView(BuyerRequiredMixin, TemplateView):
 class AssetCreditFormSuccessTemplateView(BuyerRequiredMixin, TemplateView):
     template_name = 'dashboard/pages/buyers/hermes/success_asset_credit_form.html'
 
-class OrionSchedulerView(TemplateView):
+class OrionSchedulerView(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard/pages/buyers/orion/scheduler.html'
