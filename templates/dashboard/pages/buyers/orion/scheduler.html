@@ -1,0 +1,258 @@
+{% extends 'dashboard/dashboard_layout_base.html' %}
+
+{% load i18n static %}
+
+{% block main_layout %}
+<script>window.enableEventObserver=true</script>
+<script>window.CDN="https://cdn.jotfor.ms/"</script>
+<script>window.umdRootPath="https://cdn.jotfor.ms/s/umd/269859705ad/"</script>
+<script>window.staticRootPath="https://cdn.jotfor.ms/s/static/d1bbaa7ce9f/"</script>
+<script src="https://cdn.jotfor.ms/s/static/d1bbaa7ce9f/static/prototype.forms.js" type="text/javascript"></script>
+<script src="https://cdn.jotfor.ms/s/static/d1bbaa7ce9f/static/jotform.forms.js" type="text/javascript"></script>
+<script src="https://cdn.jotfor.ms/s/static/d1bbaa7ce9f/js/punycode-1.4.1.min.js" type="text/javascript" defer></script>
+<script src="https://cdn.jotfor.ms/s/umd/269859705ad/for-widgets-server.js" type="text/javascript"></script>
+<script src="https://cdn.jotfor.ms/s/static/d1bbaa7ce9f/js/vendor/smoothscroll.min.js" type="text/javascript"></script>
+<script src="https://cdn.jotfor.ms/s/static/d1bbaa7ce9f/js/errorNavigation.js" type="text/javascript"></script>
+<script type="text/javascript">	JotForm.newDefaultTheme = true;
+	JotForm.extendsNewTheme = false;
+	// {GPT_APP_SCRIPT}
+	JotForm.singleProduct = false;
+	JotForm.newPaymentUIForNewCreatedForms = true;
+	JotForm.texts = {"confirmEmail":"E-mail does not match","pleaseWait":"Please wait...","validateEmail":"You need to validate this e-mail","confirmClearForm":"Are you sure you want to clear the form","lessThan":"Your score should be less than or equal to","incompleteFields":"There are incomplete required fields. Please complete them.","required":"This field is required.","requireOne":"At least one field required.","requireEveryRow":"Every row is required.","requireEveryCell":"Every cell is required.","email":"Enter a valid e-mail address","alphabetic":"This field can only contain letters","numeric":"This field can only contain numeric values","alphanumeric":"This field can only contain letters and numbers.","cyrillic":"This field can only contain cyrillic characters","url":"This field can only contain a valid URL","currency":"This field can only contain currency values.","fillMask":"Field value must fill mask.","uploadExtensions":"You can only upload following files:","noUploadExtensions":"File has no extension file type (e.g. .txt, .png, .jpeg)","uploadFilesize":"File size cannot be bigger than:","uploadFilesizemin":"File size cannot be smaller than:","gradingScoreError":"Score total should only be less than or equal to","inputCarretErrorA":"Input should not be less than the minimum value:","inputCarretErrorB":"Input should not be greater than the maximum value:","maxDigitsError":"The maximum digits allowed is","minCharactersError":"The number of characters should not be less than the minimum value:","maxCharactersError":"The number of characters should not be more than the maximum value:","freeEmailError":"Free email accounts are not allowed","minSelectionsError":"The minimum required number of selections is ","maxSelectionsError":"The maximum number of selections allowed is ","pastDatesDisallowed":"Date must not be in the past.","dateLimited":"This date is unavailable.","dateInvalid":"This date is not valid. The date format is {format}","dateInvalidSeparate":"This date is not valid. Enter a valid {element}.","ageVerificationError":"You must be older than {minAge} years old to submit this form.","multipleFileUploads_typeError":"{file} has invalid extension. Only {extensions} are allowed.","multipleFileUploads_sizeError":"{file} is too large, maximum file size is {sizeLimit}.","multipleFileUploads_minSizeError":"{file} is too small, minimum file size is {minSizeLimit}.","multipleFileUploads_emptyError":"{file} is empty, please select files again without it.","multipleFileUploads_uploadFailed":"File upload failed, please remove it and upload the file again.","multipleFileUploads_onLeave":"The files are being uploaded, if you leave now the upload will be cancelled.","multipleFileUploads_fileLimitError":"Only {fileLimit} file uploads allowed.","dragAndDropFilesHere_infoMessage":"Drag and drop files here","chooseAFile_infoMessage":"Choose a file","maxFileSize_infoMessage":"Max. file size","generalError":"There are errors on the form. Please fix them before continuing.","generalPageError":"There are errors on this page. Please fix them before continuing.","wordLimitError":"Too many words. The limit is","wordMinLimitError":"Too few words.  The minimum is","characterLimitError":"Too many Characters.  The limit is","characterMinLimitError":"Too few characters. The minimum is","ccInvalidNumber":"Credit Card Number is invalid.","ccInvalidCVC":"CVC number is invalid.","ccInvalidExpireDate":"Expire date is invalid.","ccInvalidExpireMonth":"Expiration month is invalid.","ccInvalidExpireYear":"Expiration year is invalid.","ccMissingDetails":"Please fill up the credit card details.","ccMissingProduct":"Please select at least one product.","ccMissingDonation":"Please enter numeric values for donation amount.","disallowDecimals":"Please enter a whole number.","restrictedDomain":"This domain is not allowed","ccDonationMinLimitError":"Minimum amount is {minAmount} {currency}","requiredLegend":"All fields marked with * are required and must be filled.","geoPermissionTitle":"Permission Denied","geoPermissionDesc":"Check your browser's privacy settings.","geoNotAvailableTitle":"Position Unavailable","geoNotAvailableDesc":"Location provider not available. Please enter the address manually.","geoTimeoutTitle":"Timeout","geoTimeoutDesc":"Please check your internet connection and try again.","selectedTime":"Selected Time","formerSelectedTime":"Former Time","cancelAppointment":"Cancel Appointment","cancelSelection":"Cancel Selection","confirmSelection":"Confirm Selection","noSlotsAvailable":"No slots available","slotUnavailable":"{time} on {date} has been selected is unavailable. Please select another slot.","multipleError":"There are {count} errors on this page. Please correct them before moving on.","oneError":"There is {count} error on this page. Please correct it before moving on.","doneMessage":"Well done! All errors are fixed.","invalidTime":"Enter a valid time","doneButton":"Done","reviewSubmitText":"Review and Submit","nextButtonText":"Next","prevButtonText":"Previous","seeErrorsButton":"See Errors","notEnoughStock":"Not enough stock for the current selection","notEnoughStock_remainedItems":"Not enough stock for the current selection ({count} items left)","soldOut":"Sold Out","justSoldOut":"Just Sold Out","selectionSoldOut":"Selection Sold Out","subProductItemsLeft":"({count} items left)","startButtonText":"START","submitButtonText":"Submit","submissionLimit":"Sorry! Only one entry is allowed. <br> Multiple submissions are disabled for this form.","reviewBackText":"Back to Form","seeAllText":"See All","progressMiddleText":"of","fieldError":"field has an error.","error":"Error"};
+	JotForm.newPaymentUI = true;
+	JotForm.originalLanguage = "es";
+	JotForm.isFormViewTrackingAllowed = true;
+	JotForm.replaceTagTest = true;
+	JotForm.activeRedirect = "thanktext";
+	JotForm.uploadServerURL = "https://upload.jotform.com/upload";
+	JotForm.clearFieldOnHide="disable";
+	JotForm.submitError="jumpToFirstError";
+	window.addEventListener('DOMContentLoaded',function(){window.brandingFooter.init({"formID":260244431686053,"campaign":"powered_by_jotform_le","isCardForm":false,"isLegacyForm":true,"formLanguage":"es"})});	JotForm.isFullSource = true;
+
+	JotForm.init(function(){
+	/*INIT-START*/
+if (window.JotForm && JotForm.accessible) $('input_17').setAttribute('tabindex',0);
+if (window.JotForm && JotForm.accessible) $('input_18').setAttribute('tabindex',0);
+if (window.JotForm && JotForm.accessible) $('input_19').setAttribute('tabindex',0);
+if (window.JotForm && JotForm.accessible) $('input_20').setAttribute('tabindex',0);
+      JotForm.alterTexts({"ageVerificationError":"Debe ser mayor de {minAge} años para enviar este formulario.","alphabetic":"Este campo solo puede contener letras.","alphanumeric":"Este campo solo puede contener letras y números.","appointmentSelected":"Ha seleccionado {time} el {date}","cancelAppointment":"Cancelar cita","cancelSelection":"Cancelar selección","ccDonationMinLimitError":"La cantidad mínima es {minAmount} {currency}","ccInvalidCVC":"El número CVC no es válido.","ccInvalidExpireDate":"La fecha de expiración no es válida","ccInvalidExpireMonth":"Expiration month is invalid.","ccInvalidExpireYear":"Expiration year is invalid.","ccInvalidNumber":"El número de su tarjeta de crédito no es válido.","ccMissingDetails":"Por favor ingrese los datos de la tarjeta de crédito.","ccMissingDonation":"Escriba los valores numéricos de la cantidad a donar.","ccMissingProduct":"Por favor seleccione al menos un producto.","characterLimitError":"Demasiados caracteres. El límite es","characterMinLimitError":"Muy pocos caracteres. El mínimum es","chooseAFile_infoMessage":"Elegir un archivo","confirmClearForm":"¿Está seguro que desea limpiar el formulario?","confirmEmail":"El correo electrónico no coincide","confirmSelection":"Confirm Selection","currency":"Este campo sólo puede contener valores de moneda.","cyrillic":"Este campo solo puede contener caracteres cirílicos.","dateInvalid":"Esta fecha no es valida. El formato de fecha es {format}","dateInvalidSeparate":"Esta fecha no es válida. Ponga una {element} válida","dateLimited":"Esta fecha no está disponible.","disallowDecimals":"Por favor, introduzca un número entero.","doneButton":"Listo","doneMessage":"Bien hecho! Todos los errores resueltos.","dragAndDropFilesHere_infoMessage":"Arrastre y suelte archivos aquí","email":"Introduzca una dirección e-mail válida","error":"error","fieldError":"El campo tiene un error.","fillMask":"El valor de este campo debe llenar la mascara","formerSelectedTime":"Hora anterior","freeEmailError":"No se permiten cuentas de correo gratuitas","generalError":"Existen errores en el formulario, por favor corríjalos antes de continuar.","generalPageError":"Hay errores en esta página. Por favor, corríjalos antes de continuar.","geoNotAvailableDesc":"Location provider not available. Please enter the address manually.","geoNotAvailableTitle":"Position Unavailable","geoPermissionDesc":"Check your browser's privacy settings.","geoPermissionTitle":"Permission Denied","geoTimeoutDesc":"Please check your internet connection and try again.","geoTimeoutTitle":"Timeout","gradingScoreError":"El puntaje total debería ser sólo &amp;quot;menos que&amp;quot; o &amp;quot;igual que&amp;quot;","incompleteFields":"Existen campos requeridos incompletos. Por favor complételos.","inputCarretErrorA":"La entrada no debe ser inferior al valor mínimo:","inputCarretErrorB":"La entrada debe ser menor al valor:","invalidTime":"Introduzca una hora válida","justSoldOut":"Se acaba de agotar","lessThan":"Su puntuación debería ser menor o igual que","maxCharactersError":"The number of characters should not be more than the maximum value:","maxDigitsError":"El máximo de dígitos permitido es","maxFileSize_infoMessage":"Máximo tamaño de archivo","maxSelectionsError":"El número máximo de selecciones permitidas es","minCharactersError":"El número de caracteres no debería ser menos que el valor mínimo:","minSelectionsError":"El número mínimo de opciones obligatorias es","multipleError":"Hay {count} errores en esta página. Favor corregirlos antes de continuar.","multipleFileUploads_emptyError":"El archivo {file} está vacío; por favor, seleccione de nuevo los archivos sin él.","multipleFileUploads_fileLimitError":"Solo se permite subir {fileLimit} archivo(s)","multipleFileUploads_minSizeError":"El archivo {file} es demasiado pequeño, el tamaño mínimo es: {minSizeLimit}.","multipleFileUploads_onLeave":"Se están cargando los archivos, si cierra ahora, se cancelará dicha carga.","multipleFileUploads_sizeError":"El archivo {file} es demasiado grande; el tamaño del archivo no debe superar {sizeLimit}.","multipleFileUploads_typeError":"El archivo {file} posee una extensión no permitida. Solo están permitidas las extensiones {extensions}.","multipleFileUploads_uploadFailed":"Carga de archivo fallida, favor remover y cargar de nuevo.","nextButtonText":"Siguiente","noSlotsAvailable":"No hay cupos disponibles","notEnoughStock":"No hay suficientes existencias para la selección actual","notEnoughStock_remainedItems":"No hay suficientes existencias para la selección actual (quedan {count} artículos)","noUploadExtensions":"File has no extension file type (e.g. .txt, .png, .jpeg)","numeric":"Este campo sólo admite valores numéricos.","oneError":"Hay {count} error en esta página. Favor corregirlo antes de continuar.","pastDatesDisallowed":"La fecha debe ser futura","pleaseWait":"Por favor, espere ...","prevButtonText":"Atrás","progressMiddleText":"de","required":"Este campo es obligatorio.","requiredLegend":"Todos los campos marcados con * son obligatorios y deben llenarse.","requireEveryCell":"Se requieren todas las celdas.","requireEveryRow":"Todas las filas son obligatorias.","requireOne":"Al menos un campo obligatorio.","restrictedDomain":"This domain is not allowed","reviewBackText":"Ir al formulario","reviewSubmitText":"Revisar y enviar","seeAllText":"Mostrar todos","seeErrorsButton":"Ver Errores","selectedTime":"Hora seleccionada","selectionSoldOut":"Selección agotada","slotUnavailable":"La hora {time} del día {date} ha sido ocupada. Escoja otro intervalo.","soldOut":"Agotado","startButtonText":"COMENZAR","submissionLimit":"Lo sentimos. Sólo se permite una entrada. &lt;br&gt; Los envíos múltiples están deshabilitados para este formulario.","submitButtonText":"Enviar","subProductItemsLeft":"(quedan {count} productos)","uploadExtensions":"Solo puede subir los siguientes archivos:","uploadFilesize":"Tamaño del archivo no puede ser mayor que:","uploadFilesizemin":"Tamañao de archivo no puede ser menos de:","url":"Este campo solo contiene una URL válida.","validateEmail":"Usted necesita validar este e-mail","wordLimitError":"Demasiadas palabras. El límite es","wordMinLimitError":"Muy pocas palabras. El mínimo es"});
+	/*INIT-END*/
+	});
+
+   setTimeout(function() {
+JotForm.paymentExtrasOnTheFly([null,{"name":"heading","qid":"1","text":"Cronograma tecnico de entrega de activos","type":"control_head"},{"name":"submit2","qid":"2","text":"Enviar","type":"control_button"},{"name":"informacionPersonal","qid":"3","text":"Informacion personal del tenedor y\u002Fo representante","type":"control_head"},null,{"description":"","name":"nombre","qid":"5","text":"Nombre","type":"control_fullname"},{"description":"","name":"email","qid":"6","subLabel":"ejemplo@ejemplo.com","text":"Email","type":"control_email"},{"description":"","name":"numeroDe","qid":"7","text":"Numero de telefono","type":"control_phone"},{"name":"separadorDe","qid":"8","text":"Separador de pagina","type":"control_pagebreak"},{"name":"activosDisponibles","qid":"9","text":"Activos disponibles para entrega inmediata","type":"control_head"},null,null,null,{"name":"escribaUna","qid":"13","text":"Activos para entrega inmediata","type":"control_widget"},{"name":"separadorDe14","qid":"14","text":"Separador de pagina","type":"control_pagebreak"},{"name":"activosDisponibles15","qid":"15","text":"Activos disponibles para entregar posteriormente","type":"control_head"},{"name":"activosEn","qid":"16","text":"Activos en posesion","type":"control_widget"},{"description":"","mde":"No","name":"comentarios","qid":"17","subLabel":"","text":"Comentarios","type":"control_textarea","wysiwyg":"Disable"},{"description":"","mde":"No","name":"observaciones","qid":"18","subLabel":"","text":"Observaciones","type":"control_textarea","wysiwyg":"Disable"},{"description":"","mde":"No","name":"comentarios19","qid":"19","subLabel":"","text":"Comentarios","type":"control_textarea","wysiwyg":"Disable"},{"description":"","mde":"No","name":"observaciones20","qid":"20","subLabel":"","text":"Observaciones","type":"control_textarea","wysiwyg":"Disable"},{"name":"input21","qid":"21","text":"De 1 a 5 dias a partir del inicio de la operacion, ingrese los activos en el orden de entrega, por ejemplo:\r\nBonos - Activos Historicos - 50 - 1  Esto significa que 50 bonos se van a entregar el primer dia\r\nBonos - Activos Historicos - 150 - 3Esto significa que 150 extras se van a entregar el tercer dia","type":"control_text"}]);}, 20); 
+</script>
+<link type="text/css" rel="stylesheet" href="https://cdn.jotfor.ms/stylebuilder/static/form-common.css?v=bfad20d
+"/>
+<style type="text/css">@media print{*{-webkit-print-color-adjust: exact !important;color-adjust: exact !important;}.form-section{display:inline!important}.form-pagebreak{display:none!important}.form-section-closed{height:auto!important}.page-section{position:initial!important}}</style>
+<link id="custom-font" type="text/css" rel="stylesheet" href="//cdn.jotfor.ms/fonts/?family=Inter" />
+<link type="text/css" rel="stylesheet" href="https://cdn.jotfor.ms/themes/CSS/5e6b428acc8c4e222d1beb91.css?v=3.3.68260"/>
+<link type="text/css" rel="stylesheet" href="https://cdn.jotfor.ms/s/static/d1bbaa7ce9f/css/styles/payment/payment_styles.css?3.3.68260" />
+<link type="text/css" rel="stylesheet" href="https://cdn.jotfor.ms/s/static/d1bbaa7ce9f/css/styles/payment/payment_feature.css?3.3.68260" />
+<form class="jotform-form" onsubmit="return typeof testSubmitFunction !== 'undefined' && testSubmitFunction();" action="https://submit.jotform.com/submit/260244431686053" method="post" name="form_260244431686053" id="260244431686053" accept-charset="utf-8" autocomplete="on"><input type="hidden" name="formID" value="260244431686053" /><input type="hidden" id="JWTContainer" value="" /><input type="hidden" id="cardinalOrderNumber" value="" /><input type="hidden" id="jsExecutionTracker" name="jsExecutionTracker" value="build-date-1769353771323" /><input type="hidden" id="submitSource" name="submitSource" value="unknown" /><input type="hidden" id="submitDate" name="submitDate" value="undefined" /><input type="hidden" id="buildDate" name="buildDate" value="1769353771323" /><input type="hidden" name="uploadServerUrl" value="https://upload.jotform.com/upload" /><input type="hidden" name="eventObserver" value="1" />
+  <div role="main" class="form-all">
+    <ul class="form-section page-section" role="presentation">
+      <li id="cid_1" class="form-input-wide" data-type="control_head">
+        <div class="form-header-group  header-large">
+          <div class="header-text httal htvam">
+            <h1 id="header_1" class="form-header" data-component="header">Cronograma técnico de entrega de activos</h1>
+          </div>
+        </div>
+      </li>
+      <li id="cid_3" class="form-input-wide" data-type="control_head">
+        <div class="form-header-group  header-default">
+          <div class="header-text httal htvam">
+            <h2 id="header_3" class="form-header" data-component="header">Información personal del tenedor y/o representante</h2>
+          </div>
+        </div>
+      </li>
+      <li class="form-line" data-type="control_fullname" id="id_5"><label class="form-label form-label-top form-label-auto" id="label_5" for="first_5" aria-hidden="false"> Nombre </label>
+        <div id="cid_5" class="form-input-wide" data-layout="full">
+          <div data-wrapper-react="true"><span class="form-sub-label-container" style="vertical-align:top" data-input-type="first"><input type="text" id="first_5" name="q5_nombre[first]" class="form-textbox" data-defaultvalue="" autoComplete="section-input_5 given-name" size="10" data-component="first" aria-labelledby="label_5 sublabel_5_first" value="" /><label class="form-sub-label" for="first_5" id="sublabel_5_first" style="min-height:13px">Nombre</label></span><span class="form-sub-label-container" style="vertical-align:top" data-input-type="last"><input type="text" id="last_5" name="q5_nombre[last]" class="form-textbox" data-defaultvalue="" autoComplete="section-input_5 family-name" size="15" data-component="last" aria-labelledby="label_5 sublabel_5_last" value="" /><label class="form-sub-label" for="last_5" id="sublabel_5_last" style="min-height:13px">Apellido</label></span></div>
+        </div>
+      </li>
+      <li class="form-line form-line-column form-col-1 jf-required" data-type="control_email" id="id_6"><label class="form-label form-label-top" id="label_6" for="input_6" aria-hidden="false"> Email<span class="form-required">*</span> </label>
+        <div id="cid_6" class="form-input-wide jf-required" data-layout="half"> <span class="form-sub-label-container" style="vertical-align:top"><input type="email" id="input_6" name="q6_email" class="form-textbox validate[required, Email]" data-defaultvalue="" autoComplete="section-input_6 email" style="width:310px" size="310" data-component="email" aria-labelledby="label_6 sublabel_input_6" required="" value="" /><label class="form-sub-label" for="input_6" id="sublabel_input_6" style="min-height:13px">ejemplo@ejemplo.com</label></span> </div>
+      </li>
+      <li class="form-line form-line-column form-col-2" data-type="control_phone" id="id_7" data-compound-hint=",,"><label class="form-label form-label-top" id="label_7" for="input_7_country" aria-hidden="false"> Número de teléfono </label>
+        <div id="cid_7" class="form-input-wide" data-layout="half">
+          <div data-wrapper-react="true" class="extended"><span class="form-sub-label-container" style="vertical-align:top" data-input-type="countryCode"><input type="tel" id="input_7_country" name="q7_numeroDe[country]" class="form-textbox" data-defaultvalue="" autoComplete="section-input_7 tel-country-code" data-component="countryCode" aria-labelledby="label_7 sublabel_7_country" value="" /><span class="phone-separate" aria-hidden="true"> -</span><label class="form-sub-label" for="input_7_country" id="sublabel_7_country" style="min-height:13px">Código de país</label></span><span class="form-sub-label-container" style="vertical-align:top" data-input-type="areaCode"><input type="tel" id="input_7_area" name="q7_numeroDe[area]" class="form-textbox" data-defaultvalue="" autoComplete="section-input_7 tel-area-code" data-component="areaCode" aria-labelledby="label_7 sublabel_7_area" value="" /><span class="phone-separate" aria-hidden="true"> -</span><label class="form-sub-label" for="input_7_area" id="sublabel_7_area" style="min-height:13px">Código de área</label></span><span class="form-sub-label-container" style="vertical-align:top" data-input-type="phone"><input type="tel" id="input_7_phone" name="q7_numeroDe[phone]" class="form-textbox" data-defaultvalue="" autoComplete="section-input_7 tel-local" data-component="phone" aria-labelledby="label_7 sublabel_7_phone" value="" /><label class="form-sub-label" for="input_7_phone" id="sublabel_7_phone" style="min-height:13px">Número de teléfono</label></span></div>
+        </div>
+      </li>
+      <li id="cid_8" class="form-input-wide" data-type="control_pagebreak">
+        <div class="form-pagebreak" data-component="pagebreak">
+          <div class="form-pagebreak-back-container"><button id="form-pagebreak-back_8" type="button" class="form-pagebreak-back  jf-form-buttons" data-component="pagebreak-back">Atrás</button></div>
+          <div class="form-pagebreak-next-container"><button id="form-pagebreak-next_8" type="button" class="form-pagebreak-next  jf-form-buttons" data-component="pagebreak-next">Siguiente</button></div>
+          <div style="clear:both" class="pageInfo form-sub-label" id="pageInfo_8"></div>
+        </div>
+      </li>
+    </ul>
+    <ul class="form-section page-section" role="presentation" style="display:none;">
+      <li id="cid_9" class="form-input-wide" data-type="control_head">
+        <div class="form-header-group  header-default">
+          <div class="header-text httal htvam">
+            <h2 id="header_9" class="form-header" data-component="header">Activos disponibles para entrega inmediata</h2>
+          </div>
+        </div>
+      </li>
+      <li class="form-line" data-type="control_text" id="id_21">
+        <div id="cid_21" class="form-input-wide" data-layout="full">
+          <div id="text_21" class="form-html" data-component="text" tabindex="-1">
+            <p>De 1 a 5 días a partir del inicio de la operación, ingrese los activos en el orden de entrega, por ejemplo:</p>
+            <p>Bonos - Activos Historicos - 50 - 1 <br /> Esto significa que 50 bonos se van a entregar el <strong>primer</strong> día</p>
+            <p>Bonos - Activos Historicos - 150 - 3<br />Esto significa que 150 extras se van a entregar el <strong>tercer</strong> día</p>
+          </div>
+        </div>
+      </li>
+      <li class="form-line jf-required" data-type="control_widget" id="id_13"><label class="form-label form-label-top form-label-auto" id="label_13" for="input_13" aria-hidden="false"> Activos para entrega inmediata<span class="form-required">*</span> </label>
+        <div id="cid_13" class="form-input-wide jf-required" data-layout="full">
+          <div data-widget-name="Lista Configurable" style="width:100%;text-align:Left;overflow-x:auto" data-component="widget-field"><iframe data-client-id="533946093c1ad0c45d000070" data-unique-id="" title="Lista Configurable" frameBorder="0" scrolling="no" allowtransparency="true" allow="geolocation; microphone; camera; autoplay; encrypted-media; fullscreen" data-type="iframe" class="custom-field-frame" id="customFieldFrame_13" src="" style="max-width:668px;border:none;width:100%;height:130px" data-width="668" data-height="130"></iframe>
+            <div class="widget-inputs-wrapper"><input id="input_13" class="form-hidden form-widget widget-required " type="hidden" name="q13_escribaUna" value="" /><input id="widget_settings_13" class="form-hidden form-widget-settings" type="hidden" data-version="2" value="%5B%7B%22name%22%3A%22fields%22%2C%22value%22%3A%22Nombre%20del%20activo%20%3A%20text%5CnCategor%C3%ADa%20%3A%20dropdown%20%3A%20Activos%20Ex%C3%B3ticos%2C%20Activos%20Historicos%2C%20Pergaminos%2C%20Religiosos%20%3A%20Seleccione%5CnCantidad%3A%20text%5Cn%C2%BFEn%20cu%C3%A1nto%20tiempo%20esta%20listo%3F%3A%20number%20%3A%20M%C3%A1ximo%205%20d%C3%ADas%22%7D%2C%7B%22name%22%3A%22minRowsNumber%22%2C%22value%22%3A%221%22%7D%2C%7B%22name%22%3A%22limit%22%2C%22value%22%3A%220%22%7D%2C%7B%22name%22%3A%22labelAdd%22%2C%22value%22%3A%22%2B%20A%C3%B1adir%20activo%22%7D%2C%7B%22name%22%3A%22labelRemove%22%2C%22value%22%3A%22x%22%7D%2C%7B%22name%22%3A%22isTableView%22%2C%22value%22%3A%22undefined%22%7D%5D" /></div>
+            <script type="text/javascript">
+              setTimeout(function()
+              {
+                function renderWidget()
+                {
+                  var _cFieldFrame = document.getElementById("customFieldFrame_13");
+                  if (_cFieldFrame)
+                  {
+                    _cFieldFrame.onload = function()
+                    {
+                      if (typeof widgetFrameLoaded !== 'undefined')
+                      {
+                        widgetFrameLoaded(13,
+                        {
+                          "formID": 260244431686053
+                        }, undefined,
+                        {})
+                      }
+                    };
+                    _cFieldFrame.src = "//widgets.jotform.io/configurableList/index.html?qid=13&isOpenedInPortal=undefined&isOpenedInAgent=undefined&align=Left&ref=" +
+                      encodeURIComponent(window.location.protocol + "//" + window.location.host) + '' + '' + '' +
+                      '&injectCSS=' + encodeURIComponent(window.location.search.indexOf("ndt=1") > -1);
+                    _cFieldFrame.addClassName("custom-field-frame-rendered");
+                  }
+                }
+                if (false)
+                {
+                  var _interval = setInterval(function()
+                  {
+                    var dataMode = document.querySelector('html').getAttribute('data-mode');
+                    if (dataMode === 'fillMode')
+                    {
+                      renderWidget()
+                      clearInterval(_interval);
+                    }
+                  }, 1000);
+                }
+                else
+                {
+                  renderWidget();
+                }
+              }, 0);
+            </script>
+          </div>
+        </div>
+      </li>
+      <li class="form-line" data-type="control_textarea" id="id_17"><label class="form-label form-label-top" id="label_17" for="input_17" aria-hidden="false"> Comentarios </label>
+        <div id="cid_17" class="form-input-wide" data-layout="full"> <textarea id="input_17" class="form-textarea" name="q17_comentarios" style="width:648px;height:163px" data-component="textarea" aria-labelledby="label_17"></textarea> </div>
+      </li>
+      <li class="form-line" data-type="control_textarea" id="id_18"><label class="form-label form-label-top" id="label_18" for="input_18" aria-hidden="false"> Observaciones </label>
+        <div id="cid_18" class="form-input-wide" data-layout="full"> <textarea id="input_18" class="form-textarea" name="q18_observaciones" style="width:648px;height:163px" data-component="textarea" aria-labelledby="label_18"></textarea> </div>
+      </li>
+      <li id="cid_14" class="form-input-wide" data-type="control_pagebreak">
+        <div class="form-pagebreak" data-component="pagebreak">
+          <div class="form-pagebreak-back-container"><button id="form-pagebreak-back_14" type="button" class="form-pagebreak-back  jf-form-buttons" data-component="pagebreak-back">Atrás</button></div>
+          <div class="form-pagebreak-next-container"><button id="form-pagebreak-next_14" type="button" class="form-pagebreak-next  jf-form-buttons" data-component="pagebreak-next">Siguiente</button></div>
+          <div style="clear:both" class="pageInfo form-sub-label" id="pageInfo_14"></div>
+        </div>
+      </li>
+    </ul>
+    <ul class="form-section page-section" role="presentation" style="display:none;">
+      <li id="cid_15" class="form-input-wide" data-type="control_head">
+        <div class="form-header-group  header-default">
+          <div class="header-text httal htvam">
+            <h2 id="header_15" class="form-header" data-component="header">Activos disponibles para entregar posteriormente</h2>
+            <div id="subHeader_15" class="form-subHeader">Ventas futuras y para que fecha estarían listas</div>
+          </div>
+        </div>
+      </li>
+      <li class="form-line jf-required" data-type="control_widget" id="id_16"><label class="form-label form-label-top form-label-auto" id="label_16" for="input_16" aria-hidden="false"> Activos en posesión<span class="form-required">*</span> </label>
+        <div id="cid_16" class="form-input-wide jf-required" data-layout="full">
+          <div data-widget-name="Lista Configurable" style="width:100%;text-align:Left;overflow-x:auto" data-component="widget-field"><iframe data-client-id="533946093c1ad0c45d000070" data-unique-id="" title="Lista Configurable" frameBorder="0" scrolling="no" allowtransparency="true" allow="geolocation; microphone; camera; autoplay; encrypted-media; fullscreen" data-type="iframe" class="custom-field-frame" id="customFieldFrame_16" src="" style="max-width:668px;border:none;width:100%;height:130px" data-width="668" data-height="130"></iframe>
+            <div class="widget-inputs-wrapper"><input id="input_16" class="form-hidden form-widget widget-required " type="hidden" name="q16_activosEn" value="" /><input id="widget_settings_16" class="form-hidden form-widget-settings" type="hidden" data-version="2" value="%5B%7B%22name%22%3A%22fields%22%2C%22value%22%3A%22Nombre%20del%20activo%20%3A%20text%5CnCategor%C3%ADa%20%3A%20dropdown%20%3A%20Activos%20Ex%C3%B3ticos%2C%20Activos%20Historicos%2C%20Pergaminos%2C%20Religiosos%20%3A%20Seleccione%5CnCantidad%3A%20text%5Cn%C2%BFEn%20cu%C3%A1nto%20tiempo%20estar%C3%ADa%20listo%3F%3A%20number%22%7D%2C%7B%22name%22%3A%22minRowsNumber%22%2C%22value%22%3A%221%22%7D%2C%7B%22name%22%3A%22limit%22%2C%22value%22%3A%220%22%7D%2C%7B%22name%22%3A%22labelAdd%22%2C%22value%22%3A%22%2B%20A%C3%B1adir%20fila%22%7D%2C%7B%22name%22%3A%22labelRemove%22%2C%22value%22%3A%22x%22%7D%2C%7B%22name%22%3A%22isTableView%22%2C%22value%22%3A%22undefined%22%7D%5D" /></div>
+            <script type="text/javascript">
+              setTimeout(function()
+              {
+                function renderWidget()
+                {
+                  var _cFieldFrame = document.getElementById("customFieldFrame_16");
+                  if (_cFieldFrame)
+                  {
+                    _cFieldFrame.onload = function()
+                    {
+                      if (typeof widgetFrameLoaded !== 'undefined')
+                      {
+                        widgetFrameLoaded(16,
+                        {
+                          "formID": 260244431686053
+                        }, undefined,
+                        {})
+                      }
+                    };
+                    _cFieldFrame.src = "//widgets.jotform.io/configurableList/index.html?qid=16&isOpenedInPortal=undefined&isOpenedInAgent=undefined&align=Left&ref=" +
+                      encodeURIComponent(window.location.protocol + "//" + window.location.host) + '' + '' + '' +
+                      '&injectCSS=' + encodeURIComponent(window.location.search.indexOf("ndt=1") > -1);
+                    _cFieldFrame.addClassName("custom-field-frame-rendered");
+                  }
+                }
+                if (false)
+                {
+                  var _interval = setInterval(function()
+                  {
+                    var dataMode = document.querySelector('html').getAttribute('data-mode');
+                    if (dataMode === 'fillMode')
+                    {
+                      renderWidget()
+                      clearInterval(_interval);
+                    }
+                  }, 1000);
+                }
+                else
+                {
+                  renderWidget();
+                }
+              }, 0);
+            </script>
+          </div>
+        </div>
+      </li>
+      <li class="form-line" data-type="control_textarea" id="id_19"><label class="form-label form-label-top form-label-auto" id="label_19" for="input_19" aria-hidden="false"> Comentarios </label>
+        <div id="cid_19" class="form-input-wide" data-layout="full"> <textarea id="input_19" class="form-textarea" name="q19_comentarios19" style="width:648px;height:163px" data-component="textarea" aria-labelledby="label_19"></textarea> </div>
+      </li>
+      <li class="form-line" data-type="control_textarea" id="id_20"><label class="form-label form-label-top form-label-auto" id="label_20" for="input_20" aria-hidden="false"> Observaciones </label>
+        <div id="cid_20" class="form-input-wide" data-layout="full"> <textarea id="input_20" class="form-textarea" name="q20_observaciones20" style="width:648px;height:163px" data-component="textarea" aria-labelledby="label_20"></textarea> </div>
+      </li>
+      <li class="form-line" data-type="control_button" id="id_2">
+        <div id="cid_2" class="form-input-wide" data-layout="full">
+          <div data-align="auto" class="form-buttons-wrapper form-buttons-auto   jsTest-button-wrapperField"><button id="input_2" type="submit" class="form-submit-button submit-button jf-form-buttons jsTest-submitField legacy-submit" data-component="button" data-content="">Enviar</button></div>
+        </div>
+      </li>
+      <li style="display:none">Should be Empty: <input type="text" name="website" value="" type="hidden" /></li>
+    </ul>
+  </div>
+  <script>
+    JotForm.showJotFormPowered = "new_footer";
+  </script>
+  <script>
+    JotForm.poweredByText = "Powered by Jotform";
+  </script><input type="hidden" class="simple_spc" id="simple_spc" name="simple_spc" value="260244431686053" />
+  <script type="text/javascript">
+    var all_spc = document.querySelectorAll("form[id='260244431686053'] .si" + "mple" + "_spc");
+    for (var i = 0; i < all_spc.length; i++)
+    {
+      all_spc[i].value = "260244431686053-260244431686053";
+    }
+  </script>
+</form><script type="text/javascript">JotForm.ownerView=true;</script><script type="text/javascript">JotForm.isNewSACL=true;</script>
+{% endblock %}

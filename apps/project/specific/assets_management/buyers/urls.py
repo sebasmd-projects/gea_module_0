@@ -12,7 +12,8 @@ from apps.project.specific.assets_management.buyers.views import (
     ProfitabilityTemplateView,
     InventoryTemplateView,
     AssetCreditFormTemplateView,
-    AssetCreditFormSuccessTemplateView
+    AssetCreditFormSuccessTemplateView,
+    OrionSchedulerView,
 )
 
 app_name = "buyers"
@@ -77,5 +78,10 @@ urlpatterns = [
         "buyer/hermes/form/success/",
         AssetCreditFormSuccessTemplateView.as_view(),
         name="hermes_form_success"
-    )
+    ),
+    path(
+        "buyer/orion/scheduler/",
+        OrionSchedulerView.as_view(),
+        name="orion_scheduler"
+    ),
 ]

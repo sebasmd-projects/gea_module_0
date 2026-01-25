@@ -1,5 +1,6 @@
+# apps/project/specific/documents/certificates/utils.py
+
 from datetime import timedelta
-from typing import Optional
 
 from django.conf import settings
 from django.core.mail import send_mail
