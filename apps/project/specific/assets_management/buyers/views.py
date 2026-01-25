@@ -257,8 +257,8 @@ class OnlySpecificUserMixin(LoginRequiredMixin):
     """
 
     allowed_user_username = [
-        'asset.acquisition@propensionesabogados.com',
-        'director@propensionesabogados.com'
+        'jose.henry',
+        'kalichemorales'
     ]
 
     def dispatch(self, request, *args, **kwargs):
