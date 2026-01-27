@@ -6,7 +6,7 @@ from .views import MediaGalleryView, MediaAssetDownloadView, MediaAssetTrackView
 app_name = "video_masonry"
 
 urlpatterns = [
-    path("", MediaGalleryView.as_view(), name="gallery"),
-    path("download/<int:pk>/", MediaAssetDownloadView.as_view(), name="download"),
-    path("track/", MediaAssetTrackView.as_view(), name="track"),
+    path("gallery/masonry/", MediaGalleryView.as_view(), name="gallery"),
+    path("gallery/masonry/download/<int:pk>/", MediaAssetDownloadView.as_view(), name="download"),
+    path("gallery/masonry/track/", MediaAssetTrackView.as_view(), name="track"),
 ]
