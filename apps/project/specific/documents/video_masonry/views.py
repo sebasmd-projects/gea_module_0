@@ -11,7 +11,7 @@ from apps.project.specific.assets_management.buyers.views import BuyerRequiredMi
 
 from .models import MediaAsset, MediaAssetInteraction, MediaAssetUserStats
 
-PAGE_SIZE = 48
+PAGE_SIZE = 15
 
 
 class MediaGalleryView(BuyerRequiredMixin, TemplateView):

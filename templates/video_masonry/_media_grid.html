@@ -3,28 +3,41 @@
 
 {% for it in items %}
   <article class="masonry-item card border-0 shadow-sm overflow-hidden">
-    {% if it.media_type == "image" %}
-      <img
-        src="{{ it.file.url }}"
-        class="media-thumb"
-        alt="{{ it.caption|default:it.file.name|escape }}"
-        loading="lazy"
-        decoding="async"
-      />
-    {% else %}
-      <video
-        class="media-thumb"
-        muted
-        playsinline
-        preload="metadata"
-        controlslist="nodownload noremoteplayback noplaybackrate"
-        disablepictureinpicture
-        tabindex="-1"
-        aria-label="{{ it.caption|default:it.file.name|escape }}"
-      >
-        <source src="{{ it.file.url }}">
-      </video>
-    {% endif %}
+    <div class="media-wrap">
+      {% if it.media_type == "image" %}
+        <img
+          src="{{ it.file.url }}"
+          class="media-thumb"
+          alt="{{ it.caption|default:it.file.name|escape }}"
+          loading="lazy"
+          decoding="async"
+        />
+      {% else %}
+        <video
+          class="media-thumb js-video"
+          data-asset-id="{{ it.id }}"
+          muted
+          playsinline
+          preload="metadata"
+          controls="false"
+          controlslist="nodownload noremoteplayback noplaybackrate"
+          disablepictureinpicture
+          tabindex="-1"
+          aria-label="{{ it.caption|default:it.file.name|escape }}"
+        >
+          <source src="{{ it.file.url }}">
+        </video>
+
+        <button
+          type="button"
+          class="play-overlay js-play"
+          data-asset-id="{{ it.id }}"
+          aria-label="{% trans 'Play' %}"
+        >
+          <span class="play-icon" aria-hidden="true"></span>
+        </button>
+      {% endif %}
+    </div>
 
     <div class="p-2">
       <div class="d-flex align-items-center justify-content-between gap-2">
@@ -32,14 +45,9 @@
           {% if it.media_type == "image" %}IMG{% else %}VID{% endif %}
         </span>
 
-        <div class="d-flex gap-2">
-          <a
-            class="btn btn-sm btn-primary"
-            href="{% url 'video_masonry:download' it.id %}"
-          >
-            {% trans "Download" %}
-          </a>
-        </div>
+        <a class="btn btn-sm btn-primary" href="{% url 'video_masonry:download' it.id %}">
+          {% trans "Download" %}
+        </a>
       </div>
 
       {% if it.caption %}

@@ -19,9 +19,9 @@
 
   <nav class="d-flex justify-content-center gap-2 mt-4" aria-label="Pagination">
     {% if has_prev %}
-      <a class="btn btn-outline-secondary" href="?page={{ prev_page }}">{% trans "Previous" %}</a>
+      <a class="btn btn-outline-success" href="?page={{ prev_page }}">{% trans "Previous" %}</a>
     {% else %}
-      <button class="btn btn-outline-secondary" disabled>{% trans "Previous" %}</button>
+      <button class="btn btn-outline-success" disabled>{% trans "Previous" %}</button>
     {% endif %}
 
     <span class="align-self-center small text-muted">
@@ -29,9 +29,9 @@
     </span>
 
     {% if has_next %}
-      <a class="btn btn-outline-secondary" href="?page={{ next_page }}">{% trans "Next" %}</a>
+      <a class="btn btn-outline-success" href="?page={{ next_page }}">{% trans "Next" %}</a>
     {% else %}
-      <button class="btn btn-outline-secondary" disabled>{% trans "Next" %}</button>
+      <button class="btn btn-outline-success" disabled>{% trans "Next" %}</button>
     {% endif %}
   </nav>
 </section>
@@ -52,12 +52,47 @@
   .media-caption{ font-size:.85rem; color:rgba(0,0,0,.55); }
 </style>
 
+<style>
+  .media-wrap{ position:relative; }
+
+  .play-overlay{
+    position:absolute;
+    inset:0;
+    border:0;
+    background:transparent;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+
+  .play-icon{
+    width:64px; height:64px;
+    border-radius:999px;
+    background:rgba(0,0,0,.45);
+    position:relative;
+    box-shadow:0 6px 24px rgba(0,0,0,.25);
+  }
+  .play-icon::before{
+    content:"";
+    position:absolute;
+    left:26px; top:18px;
+    width:0; height:0;
+    border-left:18px solid rgba(255,255,255,.95);
+    border-top:14px solid transparent;
+    border-bottom:14px solid transparent;
+  }
+
+  /* Cuando está reproduciendo, ocultamos overlay */
+  .is-playing .play-overlay{ display:none; }
+
+  /* opcional: hover */
+  .play-overlay:hover .play-icon{ background:rgba(0,0,0,.55); }
+</style>
+
+
 <script>
 (() => {
-  const titleEl = document.getElementById("viewerTitle");
-  const imgEl = document.getElementById("viewerImg");
-  const vidEl = document.getElementById("viewerVid");
-
   function getCookie(name) {
     const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
     return v ? v.pop() : '';
@@ -68,18 +103,80 @@
     try{
       const form = new FormData();
       form.append("asset_id", String(assetId));
-      const res = await fetch("{% url 'video_masonry:track' %}", {
+      await fetch("{% url 'video_masonry:track' %}", {
         method: "POST",
         headers: { "X-CSRFToken": csrftoken, "X-Requested-With": "XMLHttpRequest" },
         body: form
       });
-      // si falla, no rompemos UX
-      await res.json().catch(()=>null);
-    }catch(e){}
+    } catch(e){}
   }
 
-  
+  // Evita track duplicado por sesión (en esa página)
+  const tracked = new Set();
 
+  // Pausa cualquier otro video al reproducir uno
+  function pauseOthers(currentVideo){
+    document.querySelectorAll("video.js-video").forEach(v => {
+      if (v !== currentVideo) {
+        v.pause();
+        v.controls = false;
+        v.closest(".masonry-item")?.classList.remove("is-playing");
+      }
+    });
+  }
+
+  // Click en overlay o en el propio video
+  document.addEventListener("click", async (ev) => {
+    const playBtn = ev.target.closest(".js-play");
+    const videoEl = ev.target.closest("video.js-video");
+
+    let assetId = null;
+    let v = null;
+
+    if (playBtn) {
+      assetId = playBtn.dataset.assetId;
+      v = playBtn.parentElement.querySelector("video.js-video");
+    } else if (videoEl) {
+      assetId = videoEl.dataset.assetId;
+      v = videoEl;
+    } else {
+      return;
+    }
+
+    if (!v) return;
+
+    const card = v.closest(".masonry-item");
+    const isPaused = v.paused;
+
+    if (isPaused) {
+      pauseOthers(v);
+      v.controls = true;
+      card?.classList.add("is-playing");
+
+      // Track view SOLO la primera vez (por asset en esta carga)
+      if (assetId && !tracked.has(assetId)) {
+        tracked.add(assetId);
+        trackView(assetId);
+      }
+
+      // intenta reproducir
+      try { await v.play(); } catch(e) {}
+    } else {
+      v.pause();
+      v.controls = false;
+      card?.classList.remove("is-playing");
+    }
+  });
+
+  // Si el usuario pausa desde controles, re-mostramos overlay
+  document.addEventListener("pause", (ev) => {
+    const v = ev.target;
+    if (!(v instanceof HTMLVideoElement)) return;
+    if (!v.classList.contains("js-video")) return;
+    v.controls = false;
+    v.closest(".masonry-item")?.classList.remove("is-playing");
+  }, true);
 })();
 </script>
+
 {% endblock content %}
