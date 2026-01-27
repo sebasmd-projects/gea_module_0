@@ -1,0 +1,51 @@
+{% load i18n %}
+
+{% if next_page %}
+  <span class="d-none" data-next-page="{{ next_page }}"></span>
+{% else %}
+  <span class="d-none" data-next-page=""></span>
+{% endif %}
+
+{% for it in items %}
+  <article class="masonry-item card border-0 shadow-sm overflow-hidden">
+    {% if it.media_type == "image" %}
+      <img
+        src="{{ it.file.url }}"
+        class="media-thumb"
+        alt="{{ it.caption|default:it.file.name|escape }}"
+        loading="lazy"
+        decoding="async"
+      />
+    {% else %}
+      <video
+        class="media-thumb"
+        data-no-audio="1"
+        muted
+        playsinline
+        preload="metadata"
+        controls="false"
+        controlslist="nodownload noremoteplayback noplaybackrate"
+        disablepictureinpicture
+        tabindex="-1"
+        aria-label="{{ it.caption|default:it.file.name|escape }}"
+      >
+        <source src="{{ it.file.url }}">
+      </video>
+    {% endif %}
+
+    <div class="p-2">
+      <div class="d-flex align-items-center justify-content-between gap-2">
+        <span class="badge text-bg-light border">
+          {% if it.media_type == "image" %}IMG{% else %}VID{% endif %}
+          {% if it.categories_list %}
+            | {{ it.categories_list|join:" | " }}
+          {% endif %}
+        </span>
+      </div>
+
+      {% if it.caption %}
+        <div class="media-caption text-truncate">{{ it.caption }}</div>
+      {% endif %}
+    </div>
+  </article>
+{% endfor %}

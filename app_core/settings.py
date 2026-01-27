@@ -88,6 +88,7 @@ PROJECT_COMMON_APPS = [
 
 PROJECT_DOCUMENTS_APPS = [
     'apps.project.specific.documents.certificates',
+    'apps.project.specific.documents.video_masonry',
 ]
 
 PROJECT_INTERNAL_APPS = [

@@ -1,4 +1,3 @@
-import secrets
 import uuid
 
 from auditlog.registry import auditlog
