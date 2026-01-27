@@ -8,7 +8,7 @@ from django.views.generic import TemplateView, View
 
 from .models import MediaAsset
 
-PAGE_SIZE = 24
+PAGE_SIZE = 70
 
 
 def _get_all_categories() -> list[str]:

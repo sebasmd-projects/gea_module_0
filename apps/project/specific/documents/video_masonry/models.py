@@ -9,7 +9,7 @@ from apps.common.utils.models import TimeStampedModel
 
 ALLOWED_IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
 ALLOWED_VIDEO_EXTS = {".mp4", ".webm"}
-DEFAULT_MAX_MB = 120
+DEFAULT_MAX_MB = 160
 DEFAULT_MAX_BYTES = DEFAULT_MAX_MB * 1024 * 1024
 
 
