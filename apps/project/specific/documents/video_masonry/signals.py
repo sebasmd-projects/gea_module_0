@@ -4,13 +4,17 @@ from __future__ import annotations
 from django.core.exceptions import ValidationError
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from django.utils.translation import gettext_lazy as _
 
 from .models import MediaAsset, DEFAULT_MAX_BYTES, DEFAULT_MAX_MB
 
 
-def _normalize_categories(raw: str | None) -> str | None:
+def _normalize_categories(raw: str | None) -> list[str]:
+    """
+    Devuelve lista limpia, deduplicada (case-insensitive), preservando orden.
+    """
     if not raw:
-        return None
+        return []
     parts = [p.strip() for p in raw.split(",")]
     cleaned: list[str] = []
     seen = set()
@@ -22,7 +26,17 @@ def _normalize_categories(raw: str | None) -> str | None:
             continue
         seen.add(key)
         cleaned.append(p)
-    return ", ".join(cleaned) if cleaned else None
+    return cleaned
+
+
+def _build_categories_key(categories: list[str]) -> str | None:
+    """
+    Formato: |exotic|historical|scrolls|religious|
+    en lower para comparación consistente.
+    """
+    if not categories:
+        return None
+    return "|" + "|".join([c.strip().lower() for c in categories if c.strip()]) + "|"
 
 
 @receiver(pre_save, sender=MediaAsset)
@@ -30,16 +44,15 @@ def mediaasset_pre_save(sender, instance: MediaAsset, **kwargs):
     if not instance.file:
         return
 
-    # Infer media_type
     inferred = instance.infer_media_type()
     if not inferred:
-        raise ValidationError("File type not allowed.")
+        raise ValidationError(_("File type not allowed."))
     instance.media_type = inferred
 
-    # Normalizar categories
-    instance.categories = _normalize_categories(instance.categories)
+    cats = _normalize_categories(instance.categories)
+    instance.categories = ", ".join(cats) if cats else None
+    instance.categories_key = _build_categories_key(cats)
 
-    # Verificar peso
     size = getattr(instance.file, "size", None)
     if size is None:
         instance.size_bytes = 0
@@ -48,4 +61,4 @@ def mediaasset_pre_save(sender, instance: MediaAsset, **kwargs):
     instance.size_bytes = int(size)
 
     if size > DEFAULT_MAX_BYTES:
-        raise ValidationError(f"The file exceeds {DEFAULT_MAX_MB}MB.")
+        raise ValidationError(_("The file exceeds %(max_mb)dMB.") % {"max_mb": DEFAULT_MAX_MB})
