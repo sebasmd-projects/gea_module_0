@@ -4,13 +4,13 @@ from .models import MediaAsset
 
 @admin.register(MediaAsset)
 class MediaAssetAdmin(admin.ModelAdmin):
-    list_display = ("id", "media_type", "file", "remove_audio", "categories", "size_bytes", "created_at")
-    list_filter = ("media_type", "remove_audio", "created_at")
-    search_fields = ("file", "caption", "categories")
-    readonly_fields = ("media_type", "size_bytes", "created_at")
+    list_display = ("id", "media_type", "file", "remove_audio", "size_bytes", "created")
+    list_filter = ("media_type", "remove_audio", "created")
+    search_fields = ("file", "caption")
+    readonly_fields = ("media_type", "size_bytes", "created")
 
     fieldsets = (
-        ("Archivo", {"fields": ("file", "caption", "categories")}),
+        ("Archivo", {"fields": ("file", "caption")}),
         ("Política de video", {"fields": ("remove_audio",)}),
-        ("Sistema", {"fields": ("media_type", "size_bytes", "created_at")}),
+        ("Sistema", {"fields": ("media_type", "size_bytes", "created")}),
     )

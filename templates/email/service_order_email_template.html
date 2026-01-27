@@ -80,7 +80,7 @@
         <h1>{% trans 'Service Order Generated' %}</h1>
         <div style="margin-top:6px;color:#666">
           <small>
-            {{ po_short }} • {% trans 'Created' %}: {{ created_at|date:'d/m/Y H:i' }}
+            {{ po_short }} • {% trans 'Created' %}: {{ created|date:'d/m/Y H:i' }}
             {% if sent_at %}
               • {% trans 'Sent' %}: {{ sent_at|date:'d/m/Y H:i' }}
             {% endif %}
