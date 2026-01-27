@@ -4,8 +4,8 @@ from __future__ import annotations
 import os
 from django.core.exceptions import ValidationError
 from django.db import models
-from apps.common.utils.models import TimeStampedModel
 from django.utils.translation import gettext_lazy as _
+from apps.common.utils.models import TimeStampedModel
 
 ALLOWED_IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
 ALLOWED_VIDEO_EXTS = {".mp4", ".webm"}
@@ -30,6 +30,7 @@ class MediaAsset(TimeStampedModel):
         editable=False
     )
     caption = models.TextField(blank=True, null=True)
+
     categories = models.CharField(
         max_length=500,
         blank=True,
@@ -37,15 +38,28 @@ class MediaAsset(TimeStampedModel):
         help_text=_("Categories separated by commas. E.g: historical, exotic, scrolls"),
     )
 
+    # ✅ NUEVO: clave derivada para filtrar exacto por token: |civil|laboral|
+    categories_key = models.CharField(
+        max_length=650,
+        blank=True,
+        null=True,
+        editable=False,
+        db_index=True,
+        help_text=_("Derived field for filtering. Do not edit."),
+    )
+
     remove_audio = models.BooleanField(default=True)
 
     size_bytes = models.BigIntegerField(default=0, editable=False)
+
+    # Si TimeStampedModel ya trae created_at, elimina este campo.
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ["-created_at", "-id"]
         indexes = [
             models.Index(fields=["media_type", "created_at"]),
+            models.Index(fields=["categories_key"]),
         ]
 
     def __str__(self) -> str:
@@ -66,13 +80,11 @@ class MediaAsset(TimeStampedModel):
 
         size = getattr(self.file, "size", None)
         if size is not None and size > DEFAULT_MAX_BYTES:
-            raise ValidationError(
-                {"file": _("File exceeds ") + str(DEFAULT_MAX_MB) + _("MB.")})
+            raise ValidationError({"file": _("File exceeds ") + str(DEFAULT_MAX_MB) + _("MB.")})
 
         if self.categories and len(self.categories) > 500:
-            raise ValidationError(
-                {"categories": _("Categories too long.")})
-            
+            raise ValidationError({"categories": _("Categories too long.")})
+
     def infer_media_type(self) -> str:
         ext = os.path.splitext(self.file.name)[1].lower()
         if ext in ALLOWED_IMAGE_EXTS:
@@ -83,9 +95,6 @@ class MediaAsset(TimeStampedModel):
 
     @property
     def categories_list(self) -> list[str]:
-        """
-        Lista de categorías normalizadas (siempre seguras para template).
-        """
         if not self.categories:
             return []
         parts = [p.strip() for p in self.categories.split(",")]

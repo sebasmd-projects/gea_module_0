@@ -13,24 +13,6 @@
     <div class="small text-muted">{{ total_items }} {% trans "files" %}</div>
   </div>
 
-  {# Filtro por categoría (GET) #}
-  <form class="row g-2 align-items-end mb-3" method="get">
-    <div class="col-12 col-sm-6 col-md-4">
-      <label class="form-label mb-1">{% trans "Category" %}</label>
-      <select class="form-select" name="cat" onchange="this.form.submit()">
-        <option value="">{% trans "All" %}</option>
-        {% for c in categories %}
-          <option value="{{ c }}" {% if current_cat|lower == c|lower %}selected{% endif %}>{{ c }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div class="col-12 col-sm-auto">
-      <a class="btn btn-outline-secondary" href="{% url 'video_masonry:gallery' %}">
-        {% trans "Clear" %}
-      </a>
-    </div>
-  </form>
-
   <div id="masonry" class="masonry">
     {% include "video_masonry/_media_grid.html" with items=items %}
   </div>
