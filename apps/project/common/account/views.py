@@ -136,31 +136,27 @@ class ForgotPasswordFormView(View):
         })
 
     def _handle_step1_post(self, request):
-        """Process step 1 form"""
         form = ForgotPasswordStep1Form(request.POST)
         if form.is_valid():
             user = form.get_user()
             if user:
-                # Generate password reset token and send email
                 self._send_password_reset_email(request, user)
 
-                # Show success message (but don't reveal if user exists for security)
-                messages.success(request, _(
-                    "If an account exists with the provided email/username, "
-                    "you will receive password reset instructions shortly."
-                ))
+            messages.success(request, _(
+                "If an account exists with the provided email/username, "
+                "you will receive password reset instructions shortly."
+            ))
 
-                # Show success page instead of redirecting immediately
-                return render(request, self.template_name, {
-                    'step': 'success',
-                    'title': _('Check Your Email'),
-                    'message': _(
-                        "We've sent password reset instructions to your email. "
-                        "Please check your inbox and follow the link to reset your password."
-                    ),
-                })
+            return render(request, self.template_name, {
+                'step': 'success',
+                'title': _('Check Your Email'),
+                'message': _(
+                    "We've sent password reset instructions to your email. "
+                    "Please check your inbox and follow the link to reset your password."
+                ),
+            })
 
-        # Form invalid, show errors
+        # solo caerá aquí si el campo viene vacío u otro error real
         return render(request, self.template_name, {
             'form': form,
             'step': 1,
@@ -263,7 +259,8 @@ class ForgotPasswordFormView(View):
         }
 
         # Render email content
-        subject = render_to_string(_("Password Reset Request for {}").format(site_name), context)
+        subject = _("Password Reset Request for %(site)s") % {"site": site_name}
+        subject = "".join(subject.splitlines())
         
         # Remove newlines from subject
         subject = ''.join(subject.splitlines())

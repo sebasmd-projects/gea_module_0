@@ -12,6 +12,7 @@ from apps.project.common.users.models import UserModel
 from apps.project.common.users.validators import (UnicodeLastNameValidator,
                                                   UnicodeNameValidator,
                                                   UnicodeUsernameValidator)
+from django.core.exceptions import ValidationError
 
 USER_TXT = _('User')
 EMAIL_TXT = _('Email')
@@ -231,27 +232,11 @@ class ForgotPasswordStep1Form(forms.Form):
     )
 
     def clean_email_or_username(self):
-        email_or_username = self.cleaned_data.get(
-            'email_or_username', '').strip().lower()
+        value = (self.cleaned_data.get("email_or_username") or "").strip().lower()
 
-        # Try to find user by email or username
-        try:
-            user = UserModel.objects.get(email=email_or_username)
-        except UserModel.DoesNotExist:
-            try:
-                user = UserModel.objects.get(username=email_or_username)
-            except UserModel.DoesNotExist:
-                raise forms.ValidationError(
-                    _("No account found with this email or username.")
-                )
-
-        # Check if user is active
-        if not user.is_active:
-            raise forms.ValidationError(
-                _("This account is inactive. Please contact support.")
-            )
-
-        return email_or_username
+        if not value:
+            raise ValidationError(_("This field is required."))
+        return value
 
     def get_user(self):
         """Return user object based on cleaned data"""
@@ -259,7 +244,7 @@ class ForgotPasswordStep1Form(forms.Form):
             'email_or_username', '').strip().lower()
 
         try:
-            return UserModel.objects.get(email=email_or_username)
+            return UserModel.objects.get(email_hash=email_or_username)
         except UserModel.DoesNotExist:
             try:
                 return UserModel.objects.get(username=email_or_username)
