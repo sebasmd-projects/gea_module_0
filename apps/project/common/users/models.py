@@ -345,10 +345,10 @@ class UserModel(TimeStampedModel, AbstractUser):
         return f"({self.user_type}) {self.get_full_name()} ({self.username})"
 
     def save(self, *args, **kwargs):
-        email = self.email.lower().strip()
         self.first_name = self.first_name.title().strip()
         self.last_name = self.last_name.title().strip()
         self.username = self.username.lower().strip()
+        email = self.email.lower().strip()
         self.email = email
         self.email_hash = sha256_hex(email.strip().lower())
         if self.user_type == self.UserTypeChoices.BUYER:

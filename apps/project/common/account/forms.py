@@ -13,6 +13,7 @@ from apps.project.common.users.validators import (UnicodeLastNameValidator,
                                                   UnicodeNameValidator,
                                                   UnicodeUsernameValidator)
 from django.core.exceptions import ValidationError
+from apps.common.utils.functions import sha256_hex
 
 USER_TXT = _('User')
 EMAIL_TXT = _('Email')
@@ -232,24 +233,25 @@ class ForgotPasswordStep1Form(forms.Form):
     )
 
     def clean_email_or_username(self):
-        value = (self.cleaned_data.get("email_or_username") or "").strip().lower()
+        value = (self.cleaned_data.get(
+            "email_or_username") or "").strip().lower()
 
         if not value:
             raise ValidationError(_("This field is required."))
         return value
 
     def get_user(self):
-        """Return user object based on cleaned data"""
-        email_or_username = self.cleaned_data.get(
-            'email_or_username', '').strip().lower()
+        raw = (self.cleaned_data.get('email_or_username') or '').strip()
+        value = raw.casefold()
 
-        try:
-            return UserModel.objects.get(email_hash=email_or_username)
-        except UserModel.DoesNotExist:
-            try:
-                return UserModel.objects.get(username=email_or_username)
-            except UserModel.DoesNotExist:
-                return None
+        if "@" in value:
+            return UserModel.objects.filter(
+                email_hash=sha256_hex(value.strip().lower())
+            ).first()
+
+        return UserModel.objects.filter(
+            username__iexact=value
+        ).first()
 
 
 class ForgotPasswordStep2Form(SetPasswordForm):
