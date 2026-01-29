@@ -6,6 +6,8 @@ from django.db.models import Count, Q
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
+from django.db.models import F, Value, CharField
+from django.db.models.functions import Coalesce, Cast, Concat
 
 from apps.common.utils.admin import GeneralAdminModel
 
@@ -66,7 +68,8 @@ action_set_generic = set_certificate_type_action(
 
 @admin.register(UserVerificationModel)
 class UserVerificationModelAdmin(GeneralAdminModel):
-    actions = [action_set_idoneity, action_set_em_ipcon, action_set_em_propensiones]
+    actions = [action_set_idoneity,
+               action_set_em_ipcon, action_set_em_propensiones]
 
     list_per_page = 50
     empty_value_display = "-"
@@ -170,14 +173,18 @@ class UserVerificationModelAdmin(GeneralAdminModel):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        # Evita N+1: anota conteos (total y únicos)
+
+        viewer_key = Concat(
+            Coalesce(Cast(F("view_logs__user_id"),
+                     output_field=CharField()), Value("")),
+            Value("|"),
+            Coalesce(F("view_logs__anonymous_email"), Value("")),
+            output_field=CharField(),
+        )
+
         return qs.annotate(
-            _views_total=Count("view_logs", distinct=False),
-            _views_unique=Count(
-                "view_logs",
-                distinct=True,
-                filter=Q(view_logs__isnull=False),
-            ),
+            _views_total=Count("view_logs"),
+            _views_unique=Count(viewer_key, distinct=True),
         )
 
     @admin.display(description=_("Full name"))
@@ -202,9 +209,6 @@ class UserVerificationModelAdmin(GeneralAdminModel):
 
     @admin.display(description=_("Unique"))
     def views_unique(self, obj):
-        # Nota: tu unique_views real distingue user/email.
-        # Esto es “suficientemente útil” para admin; si quieres exactitud,
-        # te propongo una vista materializada o un contador denormalizado.
         return getattr(obj, "_views_unique", 0)
 
     @admin.display(description=_("CC (masked)"))
@@ -226,13 +230,10 @@ class UserVerificationModelAdmin(GeneralAdminModel):
 
     @admin.display(description=_("Detail"))
     def detail_link(self, obj):
-        url = reverse("certificates:detail_employee_verification_ipcon", args=[obj.pk])
+        url = reverse(
+            "certificates:detail_employee_verification_ipcon", args=[obj.pk])
         return format_html('<a href="{}">Ver</a>', url)
 
-
-# -----------------------
-# DocumentVerification
-# -----------------------
 @admin.register(DocumentVerificationModel)
 class DocumentVerificationModelAdmin(GeneralAdminModel):
     actions = [action_set_aegis, action_set_generic]
@@ -264,7 +265,8 @@ class DocumentVerificationModelAdmin(GeneralAdminModel):
     date_hierarchy = "created"
     ordering = ("-created",)
 
-    search_fields = ("public_code", "uuid_prefix", "document_title", "document_hash")
+    search_fields = ("public_code", "uuid_prefix",
+                     "document_title", "document_hash")
 
     readonly_fields = (
         "id",
@@ -281,19 +283,32 @@ class DocumentVerificationModelAdmin(GeneralAdminModel):
     )
 
     fieldsets = (
-        (_("Identificación"), {"fields": ("uuid_prefix", "public_code", "certificate_type")}),
-        (_("Documento"), {"fields": ("document_title", "document_file", "file_link", "document_hash", "hash_short")}),
+        (_("Identificación"), {
+         "fields": ("uuid_prefix", "public_code", "certificate_type")}),
+        (_("Documento"), {"fields": (
+            "document_title", "document_file", "file_link", "document_hash", "hash_short")}),
         (_("Entrega"), {"fields": ("delivery_method", "sent_at")}),
         (_("Vigencia"), {"fields": ("issued_at", "expires_at", "is_expired")}),
-        (_("Métricas"), {"fields": ("views_total", "views_unique"), "classes": ("collapse",)}),
-        (_("Auditoría"), {"fields": ("created", "updated"), "classes": ("collapse",)}),
+        (_("Métricas"), {"fields": ("views_total",
+         "views_unique"), "classes": ("collapse",)}),
+        (_("Auditoría"), {"fields": ("created",
+         "updated"), "classes": ("collapse",)}),
     )
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
+
+        viewer_key = Concat(
+            Coalesce(Cast(F("view_logs__user_id"),
+                     output_field=CharField()), Value("")),
+            Value("|"),
+            Coalesce(F("view_logs__anonymous_email"), Value("")),
+            output_field=CharField(),
+        )
+
         return qs.annotate(
-            _views_total=Count("view_logs", distinct=False),
-            _views_unique=Count("view_logs", distinct=True),
+            _views_total=Count("view_logs"),
+            _views_unique=Count(viewer_key, distinct=True),
         )
 
     @admin.display(description=_("Expired"), boolean=True)
@@ -371,10 +386,14 @@ class CertificateViewLogModelAdmin(GeneralAdminModel):
     )
 
     fieldsets = (
-        (_("Target"), {"fields": ("certificate_user", "document_verification", "target_type", "target_admin_link")}),
-        (_("Viewer"), {"fields": ("user", "anonymous_email", "viewer_display", "ip_address")}),
-        (_("Technical"), {"fields": ("user_agent",), "classes": ("collapse",)}),
-        (_("Audit"), {"fields": ("viewed_at", "created", "updated"), "classes": ("collapse",)}),
+        (_("Target"), {"fields": ("certificate_user",
+         "document_verification", "target_type", "target_admin_link")}),
+        (_("Viewer"), {"fields": ("user", "anonymous_email",
+         "viewer_display", "ip_address")}),
+        (_("Technical"), {"fields": ("user_agent",),
+         "classes": ("collapse",)}),
+        (_("Audit"), {"fields": ("viewed_at", "created",
+         "updated"), "classes": ("collapse",)}),
     )
 
     @admin.display(description=_("Type"))
@@ -384,11 +403,13 @@ class CertificateViewLogModelAdmin(GeneralAdminModel):
     @admin.display(description=_("Target"))
     def target_admin_link(self, obj):
         if obj.certificate_user_id:
-            url = reverse("admin:certificates_userverificationmodel_change", args=[obj.certificate_user_id])
+            url = reverse("admin:certificates_userverificationmodel_change", args=[
+                          obj.certificate_user_id])
             label = f"{obj.certificate_user.name} {obj.certificate_user.last_name}".strip()
             return format_html('<a href="{}">{}</a>', url, label or "-")
         if obj.document_verification_id:
-            url = reverse("admin:certificates_documentverificationmodel_change", args=[obj.document_verification_id])
+            url = reverse("admin:certificates_documentverificationmodel_change", args=[
+                          obj.document_verification_id])
             return format_html('<a href="{}">{}</a>', url, obj.document_verification.document_title)
         return "-"
 
