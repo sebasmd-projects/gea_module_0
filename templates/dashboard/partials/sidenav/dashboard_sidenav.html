@@ -64,6 +64,12 @@
                 </div>
                 {% trans 'Security' %}
               </a>
+              <a class="nav-link {% active_class 'account:change_password' %}" href="{% url 'account:change_password' %}">
+                <div class="nav-link-icon">
+                  <i data-feather="key"></i>
+                </div>
+                {% trans 'Change Password' %}
+              </a>
             </nav>
           </div>
 
