@@ -1,29 +1,21 @@
-{% extends "two_factor/_base.html" %}
+{% extends 'two_factor/_base.html' %}
 {% load i18n %}
 {% load two_factor_tags %}
 
 {% block layout_content %}
-  <div class="container-xl px-4">
-    <div class="row justify-content-center">
-      <div class="col-xl-7 col-lg-7 col-md-8 col-sm-11">
-        <div class="card my-5">
-          <div class="card-header">
-            <h1 class="h3 fw-light my-2">{% block title %}{% trans "Enable Two-Factor Authentication" %}{% endblock %}</h1>
-          </div>
-          <div class="card-body p-4">
-            
-            <p>{% blocktrans trimmed %}Congratulations, you've successfully enabled two-factor authentication.{% endblocktrans %}</p>
+  <div class="min-vh-100 d-flex align-items-center justify-content-center container-xl px-5">
+    <div class="card mx-auto" style="max-width: 400px; width: 100%;">
+      <div class="card-header text-center">
+        <a href="{% url 'core:index' %}"><img src="https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/gea_logo_gold.webp" class="card-img-top img-fluid" alt="..." style="max-width: fit-content;" /></a>
+      </div>
+      <div class="card-body p-4">
+        <p>
+          {% blocktrans trimmed %}Congratulations, you've successfully enabled two-factor authentication.{% endblocktrans %}
+        </p>
 
-            {% if not phone_methods %}
-              <p><a href="{% url 'two_factor:profile' %}" class="btn btn-block btn-warning">{% trans "Back to Account Security" %}</a></p>
-            {% else %}
-              <p>{% blocktrans trimmed %}However, it might happen that you don't have access to your primary token device. To enable account recovery, add a phone number.{% endblocktrans %}</p>
-
-              <a href="{% url 'two_factor:profile' %}" class="float-right btn btn-link">{% trans "Back to Account Security" %}</a>
-              <p><a href="{% url 'two_factor:phone_create' %}" class="btn btn-success mt-2">{% trans "Add Phone Number" %}</a></p>
-            {% endif %}
-          </div>
-        </div>
+        <p>
+          <a href="{% url 'two_factor:profile' %}" class="btn btn-block btn-outline-success">{% trans 'Back to Account Security' %}</a>
+        </p>
       </div>
     </div>
   </div>
