@@ -34,6 +34,7 @@ class DocumentCertificateTypeChoices(models.TextChoices):
 class DeliveryMethod(models.TextChoices):
     DIGITAL = 'DIGITAL', _('Digital')
     PHYSICAL = 'PHYSICAL', _('Physical')
+    BOTH = 'BOTH', _('Digital and Physical')
     NONE = 'NONE', _('Not delivered')
 
 
@@ -76,6 +77,13 @@ class UserVerificationModel(TimeStampedModel):
         on_delete=models.SET_NULL,
         verbose_name=_('User'),
         related_name='certificates_certificate_user',
+        blank=True,
+        null=True
+    )
+
+    employee_photo = models.ImageField(
+        _('Employee photo'),
+        upload_to='certificates/employee_photos/',
         blank=True,
         null=True
     )

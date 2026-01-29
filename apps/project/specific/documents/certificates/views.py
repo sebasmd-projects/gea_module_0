@@ -269,9 +269,10 @@ class DocumentVerificationDetailView(OTPProtectedDocumentMixin, DetailView):
         )
         return context
 
+
 class CertificatesLandingTemplateView(TemplateView):
     template_name = 'dashboard/pages/certificates/certificates_landing.html'
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -296,7 +297,7 @@ class CertificatesLandingTemplateView(TemplateView):
                 "button_class": "btn-outline-success",
                 "url": reverse_lazy("certificates:input_employee_verification_ipcon"),
             },
-            
+
             # {
             #     "title": _("Propensiones Employee Certificate"),
             #     "description": _(

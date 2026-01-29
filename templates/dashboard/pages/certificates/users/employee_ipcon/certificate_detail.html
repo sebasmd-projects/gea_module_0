@@ -13,7 +13,6 @@
 {% block main %}
   <div class="container-md mt-5 min-vh-100">
     <div class="mx-auto">
-
       {% url 'certificates:input_employee_verification_ipcon' as input_url %}
       {% include 'dashboard/pages/certificates/includes/aegis_header.html' with url=input_url %}
 
@@ -28,37 +27,53 @@
       <div class="row">
         {# ================== LEFT COLUMN ================== #}
         <div class="col-md-4 text-center">
-          {% include "dashboard/pages/certificates/includes/left_column.html" %}
+          {% include 'dashboard/pages/certificates/includes/left_column.html' %}
         </div>
 
         {# ================== RIGHT COLUMN ================== #}
         <div class="col-md-8">
           {# ================== CERTIFICATE DATA ================== #}
-          <h2>{{ certificate.name }} {{ certificate.last_name }}</h2>
+          <div class="row g-3 align-items-start mb-3">
+            {# INFO (8) #}
+            <div class="{% if certificate.employee_photo %}
+                col-md-8
+              {% else %}
+                col-12
+              {% endif %}">
+              <h2 class="mb-2">{{ certificate.name }} {{ certificate.last_name }}</h2>
 
-          <p class="mb-1">
-            <strong>{% trans 'Document Number:' %}</strong>
-            {{ certificate.cc_masked|default:certificate.pa_masked }}
-          </p>
+              <p class="mb-1">
+                <strong>{% trans 'Document Number:' %}</strong>
+                {{ certificate.cc_masked|default:certificate.pa_masked }}
+              </p>
 
-          <p class="mb-1">
-            <strong>{% trans 'Certificate ID:' %}</strong>
-            {{ certificate.id }}
-          </p>
+              <p class="mb-1">
+                <strong>{% trans 'Certificate ID:' %}</strong>
+                {{ certificate.id }}
+              </p>
 
-          {% if certificate.approval_date %}
-            <p class="mb-1">
-              <strong>{% trans 'Approval date:' %}</strong>
-              {{ certificate.approval_date|date:'d/m/Y' }}
-            </p>
-          {% endif %}
+              {% if certificate.approval_date %}
+                <p class="mb-1">
+                  <strong>{% trans 'Approval date:' %}</strong>
+                  {{ certificate.approval_date|date:'d/m/Y' }}
+                </p>
+              {% endif %}
 
-          {% if certificate.expires_at %}
-            <p class="mb-3">
-              <strong>{% trans 'Expires at:' %}</strong>
-              {{ certificate.expires_at|date:'d/m/Y' }}
-            </p>
-          {% endif %}
+              {% if certificate.expires_at %}
+                <p class="mb-0">
+                  <strong>{% trans 'Expires at:' %}</strong>
+                  {{ certificate.expires_at|date:'d/m/Y' }}
+                </p>
+              {% endif %}
+            </div>
+
+            {# PHOTO (4) #}
+            {% if certificate.employee_photo %}
+              <div class="col-md-4 text-center">
+                <img src="{{ certificate.employee_photo.url }}" alt="{% trans 'Employee photo' %}" class="img-fluid rounded shadow-sm" style="max-height: 220px; object-fit: cover;" loading="lazy" decoding="async" />
+              </div>
+            {% endif %}
+          </div>
 
           <hr />
 
