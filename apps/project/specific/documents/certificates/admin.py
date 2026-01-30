@@ -143,15 +143,11 @@ class UserVerificationModelAdmin(GeneralAdminModel):
             "fields": ("user", "name", "last_name", "employee_photo", "employee_photo_preview"),
         }),
         (_("Documentos (sensibles)"), {
-            # Seguridad: deja editables si realmente lo necesitas,
-            # pero muestra máscara explícita y hash siempre.
             "fields": (
                 "document_number_cc",
                 "cc_masked_admin",
-                "document_number_cc_hash",
                 "document_number_pa",
                 "pa_masked_admin",
-                "document_number_pa_hash",
                 "passport_expiration_date",
             ),
         }),

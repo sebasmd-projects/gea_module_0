@@ -1,126 +1,146 @@
 {% extends 'account/layout/account.html' %}
-
 {% load static i18n %}
 
 {% block icons %}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"
-  crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/aa367a5aee.js" crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block layout_content %}
-<div class="d-flex align-items-center justify-content-center min-vh-100">
+<div class="min-vh-100 d-flex flex-column align-items-center justify-content-center container-xl px-5">
   <div class="card mx-auto" style="max-width: 800px; width: 100%;">
     <div class="card-header text-center">
       <a href="{% url 'core:index' %}">
-        <img src="https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/gea_logo_gold.webp"
-          class="card-img-top img-fluid" alt="GEA" style="max-height: 80px; width: auto;" />
+          <img src="https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/gea_logo_gold.webp"
+          class="card-img-top img-fluid" alt="..." style="max-width: fit-content;" />
       </a>
     </div>
 
     <div class="card-body">
       <form method="POST">
-        {{ form.media.css }}
-        
+        {{ wizard.form.media.css }}
         {% csrf_token %}
-        <input type="hidden" name="next" value="{{ next }}" />
+        {{ wizard.management_form }}
 
-        <!-- Display non-field errors -->
-        {% if form.non_field_errors %}
-        <div class="alert alert-danger" role="alert">
-          {% for error in form.non_field_errors %}
-          <p>{{ error }}</p>
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags|default:'info' }}" role="alert">
+              {{ message }}
+            </div>
           {% endfor %}
-        </div>
         {% endif %}
+
+        {% if wizard.form.non_field_errors %}
+          <div class="alert alert-danger" role="alert">
+            {% for error in wizard.form.non_field_errors %}
+              <p class="mb-0">{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div class="text-muted">
+            {% trans "Step" %} {{ step_index }} / {{ step_count }}
+          </div>
+        </div>
 
         <div class="row g-1">
           {% with "account/partials/_floating_input.html" as floating_input %}
 
-          <h4>{% trans "Account Information" %}</h4>
-          <div class="col-md-4">
-            {% include floating_input with field=form.username label=_("Username*") %}
-          </div>
+            {% if step_key == "user" %}
+              <h4 class="mt-2">{% trans "User information" %}</h4>
+              <div class="col-md-4">
+                {% include floating_input with field=wizard.form.username label=_("Username*") %}
+              </div>
+              <div class="col-md-4">
+                {% include floating_input with field=wizard.form.first_name label=_("Names*") %}
+              </div>
+              <div class="col-md-4">
+                {% include floating_input with field=wizard.form.last_name label=_("Surnames*") %}
+              </div>
+              <div class="col-md-6">
+                {% include floating_input with field=wizard.form.user_type label=_("User type*") %}
+              </div>
+              <div class="col-md-6" id="referred-wrapper">
+                {% include floating_input with field=wizard.form.referred label=_("Referred By") %}
+              </div>
+            {% endif %}
 
-          <div class="col-md-4">
-            {% include floating_input with field=form.first_name label=_("First Names*") %}
-          </div>
+            {% if step_key == "security" %}
+              <h4 class="mt-2">{% trans "Security information" %}</h4>
+              <div class="col-md-6">
+                {% include floating_input with field=wizard.form.password label=_("Password*") show_eye=True eye_target_id="register_password" %}
+              </div>
+              <div class="col-md-6">
+                {% include floating_input with field=wizard.form.confirm_password label=_("Confirm Password*") show_eye=True eye_target_id="register_confirm_password" %}
+              </div>
+            {% endif %}
 
-          <div class="col-md-4">
-            {% include floating_input with field=form.last_name label=_("Last Names*") %}
-          </div>
+            {% if step_key == "contact" %}
+              <h4 class="mt-2">{% trans "Contact information" %}</h4>
+              <div class="col-md-2">
+                {% include floating_input with field=wizard.form.phone_number_code label=_("Code*") %}
+              </div>
+              <div class="col-md-5">
+                {% include floating_input with field=wizard.form.phone_number label=_("Cell phone*") %}
+              </div>
+              <div class="col-md-5">
+                {% include floating_input with field=wizard.form.email label=_("Email*") %}
+              </div>
+              <div class="col-md-6">
+                {% include floating_input with field=wizard.form.confirm_email label=_("Confirm Email*") %}
+              </div>
 
-          <h4>{% trans "Security Information" %}</h4>
-          <div class="col-md-6">
-            {% include floating_input with field=form.password label=_("Password*") show_eye=True eye_target_id="register_password" %}
-          </div>
+              {% if wizard.form.user_type.value == "B" %}
+              <div class="col-12 mt-1">
+                <small class="text-muted">
+                  {% trans "If you selected Buyer, we will email you a verification code after you continue." %}
+                </small>
+              </div>
+              {% endif %}
+            {% endif %}
 
-          <div class="col-md-6">
-            {% include floating_input with field=form.confirm_password label=_("Confirm Password*") show_eye=True eye_target_id="register_confirm_password" %}
-          </div>
+            {% if step_key == "code" %}
+              <h4 class="mt-2">{% trans "Unique code" %}</h4>
+              <div class="col-md-6">
+                {% include floating_input with field=wizard.form.unique_code label=_("Unique Code*") show_eye=True eye_target_id="register_unique_code" %}
+              </div>
 
-          <h4>{% trans "Contact Information" %}</h4>
-          <div class="col-md-2">
-            {% include "account/partials/_floating_input.html" with field=form.phone_number_code %}
-          </div>
-
-          <div class="col-md-5">
-            {% include "account/partials/_floating_input.html" with field=form.phone_number label=_("Cellphone*") %}
-          </div>
-
-          <div class="col-md-5">
-            {% include floating_input with field=form.email label=_("Email*") %}
-          </div>
-
-          <h4>{% trans "User Information" %}</h4>
-          <div class="col-md-4">
-            {% include floating_input with field=form.user_type label=_("User Type*") %}
-          </div>
-
-          <div class="col-md-4">
-            {% include floating_input with field=form.referred label=_("Referred By") %}
-          </div>
-
-          <div class="col-md-4">
-            {% include floating_input with field=form.unique_code label=_("Unique Code*") show_eye=True eye_target_id="register_unique_code" %}
-          </div>
-
-          <div class="col-12">
-            {# 1) Cuerpo del correo traducido y luego URL-encode #}
-            {% blocktrans asvar mail_body %}
-            Please complete the following information:
-
-            First Names*:
-            Last Names*:
-            Cellphone*:
-
-            If you do not provide this information, we will not be able to generate your unique code.
-            {% endblocktrans %}
-
-            {# 2) Asunto del correo (opcional usar asvar) #}
-            {% blocktrans asvar mail_subject %}Request for unique code – GEA{% endblocktrans %}
-
-            {# 3) Mensaje de WhatsApp en español (como pediste antes) y luego URL-encode #}
-            {% blocktrans asvar wa_body_es %}Hello, I would like to request the unique code to register with GEA.{% endblocktrans %}
-
-            <div class="form-text text-black size-14">
-              {% trans 'You must request your unique registration code through' %}<br/>
-              <a href="https://wa.me/573012283818?text={{ wa_body_es|urlencode }}" target="_blank">
-                <i class="mx-1 fa-solid fa-headset"></i><i class="mx-1 fa-brands fa-whatsapp text-green"></i> 
-                <span style="font-size: 20px;">WhatsApp: +57 301 228 38 18</span>
-              </a>
-              <br/>
-              <a href="mailto:info@propensionesabogados.com?subject={{ mail_subject|urlencode }}&body={{ mail_body|urlencode }}">
-                <span style="font-size: 15px;">info@propensionesabogados.com</span>
-              </a>
-            </div>
-          </div>
+              {% if wizard.form.user_type.value == "B" %}
+              <div class="col-12 mt-1">
+                <small class="text-muted">
+                  {% trans "Buyers: enter the code sent to your email." %}
+                </small>
+              </div>
+              {% else %}
+              <div class="col-12 mt-1">
+                <small class="text-muted">
+                  {% trans "Suppliers: enter the daily code provided by your advisor." %}
+                </small>
+              </div>
+              {% endif %}
+            {% endif %}
           {% endwith %}
         </div>
 
-        <div class="d-grid gap-2 mt-2">
-          <button type="submit" class="btn btn-success">{% trans 'Register' %}</button>
+        <div class="d-grid gap-2 mt-3">
+          <div class="d-flex gap-2">
+            {% if wizard.steps.prev %}
+              <button
+                type="submit"
+                name="wizard_goto_step"
+                value="{{ wizard.steps.prev }}"
+                class="btn btn-outline-secondary w-50"
+                formnovalidate
+              >
+                {% trans "Back" %}
+              </button>
+            {% endif %}
+            <button type="submit" class="btn btn-success {% if wizard.steps.prev %}w-50{% else %}w-100{% endif %}">
+              {% if step_key == "code" %}{% trans "Register" %}{% else %}{% trans "Continue" %}{% endif %}
+            </button>
+          </div>
+
           <a class="btn btn-outline-dark" href="{% url 'two_factor:login' %}">
             {% trans 'Do you already have an account? Sign in' %}
           </a>
@@ -132,8 +152,6 @@
 {% endblock %}
 
 {% block body_custom_js %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
 <script>
   document.addEventListener('click', function (e) {
     const btn = e.target.closest('.toggle-visibility');
@@ -156,5 +174,25 @@
   });
 </script>
 
-{{ form.media.js }}
-{% endblock body_custom_js %}
+<script>
+  function toggleReferred() {
+    const sel = document.getElementById('register_user_type');
+    const wrap = document.getElementById('referred-wrapper');
+    if (!sel || !wrap) return;
+
+    const isBuyer = sel.value === "B";
+    wrap.style.display = isBuyer ? "none" : "";
+    if (isBuyer) {
+      const input = wrap.querySelector('input,select,textarea');
+      if (input) input.value = "";
+    }
+  }
+
+  document.addEventListener('change', function (e) {
+    if (e.target && e.target.name === "user-user_type") toggleReferred();
+  });
+
+  document.addEventListener('DOMContentLoaded', toggleReferred);
+</script>
+{{ wizard.form.media.js }}
+{% endblock %}

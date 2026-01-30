@@ -2,8 +2,12 @@
 
 from django.urls import path
 
-from .views import (GeaUserRegisterView,
-                    UserLogoutView, ForgotPasswordFormView, ChangePasswordFormView)
+from .views import (
+    GeaUserRegisterWizardView,
+    UserLogoutView,
+    ForgotPasswordFormView,
+    ChangePasswordFormView
+)
 
 app_name = "account"
 
@@ -11,7 +15,7 @@ app_name = "account"
 urlpatterns = [
     path(
         'account/register/',
-        GeaUserRegisterView.as_view(),
+        GeaUserRegisterWizardView.as_view(),
         name='register'
     ),
     path(
