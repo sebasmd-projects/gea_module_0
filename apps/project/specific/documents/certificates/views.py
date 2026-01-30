@@ -120,28 +120,31 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
     def resend_otp(self):
         otp_state = self.get_otp_session()
 
-        if not otp_state or otp_state.get('verified'):
+        if not otp_state or otp_state.get("verified"):
             return redirect(self.request.path)
 
         allowed, remaining = self.can_resend_otp()
-
         if not allowed:
             messages.warning(
                 self.request,
-                _('Please wait %(seconds)s seconds before requesting a new code.')
-                % {'seconds': remaining}
+                _("Please wait %(seconds)s seconds before requesting a new code.")
+                % {"seconds": remaining}
             )
+            return redirect(self.request.path)
+
+        email = otp_state.get("email", "")
+        allowed_send, _ = self.can_send_otp(email)
+        if not allowed_send:
+            messages.warning(self.request, _("Too many code requests. Try again later."))
             return redirect(self.request.path)
 
         otp = generate_otp()
         self.update_otp(otp)
-        send_otp_email(otp_state['email'], otp)
+        send_otp_email(email, otp)
 
-        messages.success(
-            self.request,
-            _('A new verification code has been sent to your email.')
-        )
+        self.record_send_otp(email)
 
+        messages.success(self.request, _("A new verification code has been sent to your email."))
         return redirect(self.request.path)
 
     def post(self, request, *args, **kwargs):
@@ -178,30 +181,34 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
         return context
 
     def _handle_email_step(self, form):
-        if not form.is_valid():
+        email = form.cleaned_data["email"]
+
+        allowed_send, _ = self.can_send_otp(email)
+        
+        if not allowed_send:
+            form.add_error("email", _("Too many code requests. Try again later."))
             return self.form_invalid(form)
 
-        email = form.cleaned_data['email']
         otp = generate_otp()
-
-        self.set_otp_session(email, otp)
+        self.set_otp_session(email, otp, purpose="document_verification")
         send_otp_email(email, otp)
+
+        self.record_send_otp(email)
 
         return redirect(self.request.path)
 
     def _handle_otp_step(self, form):
-        if not form.is_valid():
-            return self.form_invalid(form)
+        otp = form.cleaned_data["otp"]
 
-        if not self.is_otp_valid(form.cleaned_data['otp']):
-            form.add_error('otp', _('Invalid or expired code.'))
+        if not self.is_otp_valid(otp, purpose="document_verification"):
+            form.add_error("otp", _("Invalid or expired code."))
             return self.form_invalid(form)
 
         self.mark_otp_verified()
         return redirect(self.request.path)
 
     def form_valid(self, form):
-        identifier = normalize_identifier(form.cleaned_data['identifier'])
+        identifier = form.cleaned_data['identifier']
         cert_type = form.cleaned_data['certificate_type']
 
         filters = {'certificate_type': cert_type}
@@ -210,13 +217,19 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
             filters['public_code'] = identifier
         elif len(identifier) == 8:
             filters['uuid_prefix'] = identifier
-        else:
+        elif len(identifier) >= 32 and len(identifier) <= 36:
             filters['id'] = identifier
+        else:
+            form.add_error("identifier", _("Invalid identifier length."))
+            return self.form_invalid(form)
 
         try:
             document = DocumentVerificationModel.objects.get(**filters)
         except DocumentVerificationModel.DoesNotExist:
-            form.add_error('identifier', _('Document not found.'))
+            if self.request.user.is_authenticated:
+                form.add_error("identifier", _("Document not found."))
+            else:
+                form.add_error("identifier", _("We could not verify the document with the provided data."))
             return self.form_invalid(form)
 
         return redirect(

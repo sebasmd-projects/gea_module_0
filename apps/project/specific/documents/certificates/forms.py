@@ -4,7 +4,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
-from .functions import is_temporary_email, is_ipcon_email
+from .functions import is_temporary_email, is_ipcon_email, normalize_identifier
 from .models import DocumentCertificateTypeChoices, DocumentTypeChoices
 
 
@@ -26,12 +26,13 @@ class CertificateUserForm(forms.Form):
         )
     )
 
+
 class DocumentVerificationForm(forms.Form):
     certificate_type = forms.ChoiceField(
         choices=DocumentCertificateTypeChoices.choices,
         label=_('Certificate type')
     )
-    
+
     identifier = forms.CharField(
         label=_('Document Public Code'),
         max_length=36,
@@ -43,10 +44,11 @@ class DocumentVerificationForm(forms.Form):
     )
 
     def clean_identifier(self):
-        value = self.cleaned_data['identifier'].strip().upper()
-        if len(value) not in (4, 8, 36):
-            raise ValidationError(_('Invalid identifier length.'))
-        return value
+        raw = self.cleaned_data["identifier"]
+        try:
+            return normalize_identifier(raw)
+        except ValidationError as e:
+            raise forms.ValidationError(e.message)
 
 
 class AnonymousEmailOTPForm(forms.Form):
@@ -60,13 +62,15 @@ class AnonymousEmailOTPForm(forms.Form):
     )
 
     def clean_email(self):
-        email = self.cleaned_data['email'].lower()
+        email = (self.cleaned_data["email"] or "").strip().lower()
+
         if is_temporary_email(email):
-            raise ValidationError(_('Temporary email addresses are not allowed.'))
-        
+            raise ValidationError(
+                _('Temporary email addresses are not allowed.'))
+
         if not is_ipcon_email(email):
             raise ValidationError(_('Only authorized emails.'))
-        
+
         return email
 
 

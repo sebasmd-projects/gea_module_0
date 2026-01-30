@@ -184,13 +184,18 @@ def normalize_identifier(value: str) -> str:
     """
     value = value.strip()
 
-    if len(value) == 36:
+    if len(value) == 4:
+        return value.upper()
+
+    if len(value) == 8:
+        return value
+
+    if len(value) >= 32 and len(value) <= 36:
         if not UUID_REGEX.match(value):
             raise ValidationError(_('Invalid UUID format.'))
-        return value.lower()
+        return value
 
-    return value.upper()
-
+    raise ValidationError(_('Invalid identifier length.'))
 
 def is_temporary_email(email: str) -> bool:
 
