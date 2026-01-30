@@ -14,7 +14,6 @@ def generate_and_send_gea_code():
     Genera (si no existe) el código y lo envía por correo.
     """
     GeaDailyUniqueCode.send_today(kind=GeaDailyUniqueCode.KindChoices.GENERAL)
-    GeaDailyUniqueCode.send_today(kind=GeaDailyUniqueCode.KindChoices.BUYER)
 
 
 def warm_gea_app():
