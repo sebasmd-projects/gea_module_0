@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-06 23:15-0500\n"
+"POT-Creation-Date: 2026-02-02 19:50-0500\n"
 "PO-Revision-Date: 2026-01-06 23:16+0000\n"
 "Last-Translator: Sebastian Morales <cto@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,37 +52,47 @@ msgstr ""
 msgid "Your browser does not support HTML5 video."
 msgstr "Su navegador no soporta vídeo HTML5."
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:22
-#: .\apps\common\core\templates\core\partials\core_nav.html:182
+#: .\apps\common\core\templates\core\partials\core_nav.html:18
+msgid "Toggle navigation"
+msgstr ""
+
+#: .\apps\common\core\templates\core\partials\core_nav.html:33
+#: .\apps\common\core\templates\core\partials\core_nav.html:185
 msgid "Buyers"
 msgstr "Compradores"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:34
-#: .\apps\common\core\templates\core\partials\core_nav.html:185
+#: .\apps\common\core\templates\core\partials\core_nav.html:41
+#: .\apps\common\core\templates\core\partials\core_nav.html:190
 msgid "Suppliers"
 msgstr "Proveedores"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:84
-#: .\apps\common\core\templates\core\partials\core_nav.html:169
-msgid "Portfolio"
-msgstr "Portafolio"
-
-#: .\apps\common\core\templates\core\partials\core_nav.html:97
-#: .\apps\common\core\templates\core\partials\core_nav.html:176
-msgid "Aegis - Certification"
+#: .\apps\common\core\templates\core\partials\core_nav.html:55
+#: .\apps\common\core\templates\core\partials\core_nav.html:63
+#: .\apps\common\core\templates\core\partials\core_nav.html:149
+#: .\apps\common\core\templates\core\partials\core_nav.html:154
+#, fuzzy
+#| msgid "Aegis - Certification"
+msgid "Certificates"
 msgstr "Aegis - Certificación"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:109
-#: .\apps\common\core\templates\core\partials\core_nav.html:190
+#: .\apps\common\core\templates\core\partials\core_nav.html:74
+#: .\apps\common\core\templates\core\partials\core_nav.html:163
+#, fuzzy
+#| msgid "Aegis - Certification"
+msgid "AEGIS Certification (PDF)"
+msgstr "Aegis - Certificación"
+
+#: .\apps\common\core\templates\core\partials\core_nav.html:103
+#: .\apps\common\core\templates\core\partials\core_nav.html:198
 msgid "Login"
 msgstr "Iniciar Sesión"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:112
-#: .\apps\common\core\templates\core\partials\core_nav.html:191
+#: .\apps\common\core\templates\core\partials\core_nav.html:108
+#: .\apps\common\core\templates\core\partials\core_nav.html:201
 msgid "Register"
 msgstr "Registro"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:126
+#: .\apps\common\core\templates\core\partials\core_nav.html:122
 msgid "Menu"
 msgstr "Menú"
 
@@ -90,13 +100,16 @@ msgstr "Menú"
 msgid "Language"
 msgstr "Idioma"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:193
+#: .\apps\common\core\templates\core\partials\core_nav.html:194
 msgid "Logout"
 msgstr "Cerrar Sesión"
 
 #: .\apps\common\core\templates\core\partials\whatsapp.html:51
 msgid "Contact Us Now"
 msgstr "Contáctanos"
+
+#~ msgid "Portfolio"
+#~ msgstr "Portafolio"
 
 #~ msgid "Client Area"
 #~ msgstr "Área de Clientes"

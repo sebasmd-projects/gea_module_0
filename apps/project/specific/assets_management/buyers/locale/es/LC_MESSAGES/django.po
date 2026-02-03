@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-06 23:11-0500\n"
+"POT-Creation-Date: 2026-02-02 19:50-0500\n"
 "PO-Revision-Date: 2025-11-10 21:47+0000\n"
 "Last-Translator: Sebastian Morales <support@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -480,28 +480,28 @@ msgstr "Destinatario de la orden de servicio"
 msgid "Service Order Recipients"
 msgstr "Destinatarios de la orden de servicio"
 
-#: .\apps\project\specific\assets_management\buyers\views.py:287
+#: .\apps\project\specific\assets_management\buyers\views.py:318
 msgid "Your Purchase order has been sent for verification."
 msgstr "Su orden de compra ha sido enviada para verificación."
 
-#: .\apps\project\specific\assets_management\buyers\views.py:312
+#: .\apps\project\specific\assets_management\buyers\views.py:343
 msgid "New Purchase order Submitted for Verification"
 msgstr "Nueva orden de compra enviada para verificación"
 
-#: .\apps\project\specific\assets_management\buyers\views.py:581
+#: .\apps\project\specific\assets_management\buyers\views.py:612
 msgid "No recipients to notify."
 msgstr "No hay destinatarios a notificar."
 
-#: .\apps\project\specific\assets_management\buyers\views.py:604
+#: .\apps\project\specific\assets_management\buyers\views.py:635
 #, python-format
 msgid "Service Order Notification for OC: %(po)s"
 msgstr "Notificación de Orden de servicio para OC: %(po)s"
 
-#: .\apps\project\specific\assets_management\buyers\views.py:683
+#: .\apps\project\specific\assets_management\buyers\views.py:714
 msgid "You don't have permission to perform this action."
 msgstr "No tienes permisos para realizar esta acción."
 
-#: .\apps\project\specific\assets_management\buyers\views.py:745
+#: .\apps\project\specific\assets_management\buyers\views.py:776
 msgid "Unknown step."
 msgstr "Paso desconocido."
 

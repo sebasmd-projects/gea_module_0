@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-11 02:54-0500\n"
-"PO-Revision-Date: 2026-01-11 01:56+0000\n"
+"POT-Creation-Date: 2026-02-02 19:50-0500\n"
+"PO-Revision-Date: 2026-02-02 20:03+0000\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -19,105 +19,246 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.3\n"
 
-#: .\templates\account\gea_register.html:41
-msgid "Account Information"
-msgstr "Información de la Cuenta"
+#: .\templates\account\change_password.html:6
+#| msgid "Confirm Password*"
+msgid "Change Your Password"
+msgstr "Cambia tu contraseña"
+
+#: .\templates\account\change_password.html:89
+msgid "Your password must contain at least:"
+msgstr "Su contraseña debe contener al menos:"
+
+#: .\templates\account\change_password.html:92
+msgid "8 characters"
+msgstr "8 caracteres"
+
+#: .\templates\account\change_password.html:95
+msgid "1 uppercase and 1 lowercase letter"
+msgstr "1 letra mayúscula y 1 minúscula"
+
+#: .\templates\account\change_password.html:98
+msgid "1 special and 1 number character"
+msgstr "1 carácter especial y 1 carácter numérico"
+
+#: .\templates\account\change_password.html:105
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:71
+#: .\templates\partials\nav\user_dropdown.html:84
+#| msgid "Password"
+msgid "Change Password"
+msgstr "Cambiar la contraseña"
+
+#: .\templates\account\change_password.html:106
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2106
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2131
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2156
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2181
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2206
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2252
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2277
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2302
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2327
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2352
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2398
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2444
+#: .\templates\dashboard\pages\buyers\modals\delete_offer_modal.html:60
+#: .\templates\dashboard\pages\holders\modals\delete_asset_modal.html:21
+#: .\templates\dashboard\pages\holders\modals\delete_location_reference_modal.html:21
+#: .\templates\two_factor\_wizard_actions.html:5
+#: .\templates\two_factor\core\setup.html:82
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: .\templates\account\forgot_password.html:5
+#: .\templates\account\forgot_password.html:32
+#| msgid "Forgot your password?"
+msgid "Reset Your Password"
+msgstr "Restablecer su contraseña"
+
+#: .\templates\account\forgot_password.html:36
+#| msgid "Enter your email to receive a verification code."
+msgid "Enter your email or username to receive password reset instructions."
+msgstr ""
+"Ingrese su correo electrónico o nombre de usuario para recibir instrucciones"
+" para restablecer su contraseña."
+
+#: .\templates\account\forgot_password.html:52
+#| msgid "Username*"
+msgid "Email or Username"
+msgstr "Correo o nombre de usuario"
+
+#: .\templates\account\forgot_password.html:66
+#| msgid "Send notification"
+msgid "Send Reset Instructions"
+msgstr "Enviar instrucciones de reinicio"
+
+#: .\templates\account\forgot_password.html:69
+#: .\templates\account\forgot_password.html:141
+#| msgid "Back to login"
+msgid "Back to Login"
+msgstr "Volver a iniciar sesión"
+
+#: .\templates\account\forgot_password.html:77
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+"Ingrese su nueva contraseña dos veces para que podamos verificar que la "
+"escribió correctamente."
+
+#: .\templates\account\forgot_password.html:95
+#| msgid "Password"
+msgid "New Password"
+msgstr "Nueva contraseña"
+
+#: .\templates\account\forgot_password.html:109
+#| msgid "Confirm Password*"
+msgid "Confirm Password"
+msgstr "Confirmar Contraseña"
+
+#: .\templates\account\forgot_password.html:123
+#| msgid "Confirm Password*"
+msgid "Change My Password"
+msgstr "Cambiar mi contraseña"
+
+#: .\templates\account\forgot_password.html:126
+#| msgid "Requested Term"
+msgid "Request New Link"
+msgstr "Solicitar nuevo enlace"
+
+#: .\templates\account\forgot_password.html:137
+#| msgid "Username or Email"
+msgid "Check Your Email"
+msgstr "Revisa tu correo"
+
+#: .\templates\account\forgot_password.html:144
+msgid "Go to Homepage"
+msgstr "Ir a la página de inicio"
 
 #: .\templates\account\gea_register.html:43
+msgid "Step"
+msgstr "Paso"
+
+#: .\templates\account\gea_register.html:51
+#| msgid "User Information"
+msgid "User information"
+msgstr "Información de Usuario"
+
+#: .\templates\account\gea_register.html:53
 msgid "Username*"
 msgstr "Usuario*"
 
-#: .\templates\account\gea_register.html:47
-msgid "First Names*"
-msgstr "Nombres*"
-
-#: .\templates\account\gea_register.html:51
-msgid "Last Names*"
-msgstr "Apellidos*"
-
-#: .\templates\account\gea_register.html:54
-msgid "Security Information"
-msgstr "Información de Seguridad"
-
 #: .\templates\account\gea_register.html:56
-msgid "Password*"
-msgstr "Contraseña*"
+#| msgid "Names"
+msgid "Names*"
+msgstr "Nombres"
 
-#: .\templates\account\gea_register.html:60
-msgid "Confirm Password*"
-msgstr "Confirmar Contraseña*"
+#: .\templates\account\gea_register.html:59
+#| msgid "Surenames"
+msgid "Surnames*"
+msgstr "Apellidos"
 
-#: .\templates\account\gea_register.html:63
-msgid "Contact Information"
-msgstr "Información de contacto "
-
-#: .\templates\account\gea_register.html:69
-msgid "Cellphone*"
-msgstr "Celular*"
-
-#: .\templates\account\gea_register.html:73
-msgid "Email*"
-msgstr "Correo*"
-
-#: .\templates\account\gea_register.html:76
-msgid "User Information"
-msgstr "Información de Usuario"
-
-#: .\templates\account\gea_register.html:78
-msgid "User Type*"
+#: .\templates\account\gea_register.html:62
+#| msgid "User Type*"
+msgid "User type*"
 msgstr "Tipo de usuario*"
 
-#: .\templates\account\gea_register.html:82
+#: .\templates\account\gea_register.html:65
 msgid "Referred By"
 msgstr "Referido por"
 
-#: .\templates\account\gea_register.html:86
+#: .\templates\account\gea_register.html:70
+#| msgid "Security Information"
+msgid "Security information"
+msgstr "Información de Seguridad"
+
+#: .\templates\account\gea_register.html:72
+msgid "Password*"
+msgstr "Contraseña*"
+
+#: .\templates\account\gea_register.html:75
+msgid "Confirm Password*"
+msgstr "Confirmar Contraseña*"
+
+#: .\templates\account\gea_register.html:80
+#| msgid "Contact Information"
+msgid "Contact information"
+msgstr "Información de contacto "
+
+#: .\templates\account\gea_register.html:82
+#| msgid "QR Code"
+msgid "Code*"
+msgstr "Código"
+
+#: .\templates\account\gea_register.html:85
+#| msgid "Cellphone*"
+msgid "Cell phone*"
+msgstr "Celular"
+
+#: .\templates\account\gea_register.html:88
+msgid "Email*"
+msgstr "Correo*"
+
+#: .\templates\account\gea_register.html:91
+#| msgid "Confirm Password*"
+msgid "Confirm Email*"
+msgstr "Confirmar correo"
+
+#: .\templates\account\gea_register.html:97
+msgid ""
+"If you selected Buyer, we will email you a verification code after you "
+"continue."
+msgstr ""
+"Si seleccionó Comprador, le enviaremos un código de verificación por correo "
+"después de continuar."
+
+#: .\templates\account\gea_register.html:104
+#| msgid "Unique Code*"
+msgid "Unique code"
+msgstr "Código Único*"
+
+#: .\templates\account\gea_register.html:106
 msgid "Unique Code*"
 msgstr "Código Único*"
 
-#: .\templates\account\gea_register.html:91
-msgid ""
-"\n"
-"            Please complete the following information:\n"
-"\n"
-"            First Names*:\n"
-"            Last Names*:\n"
-"            Cellphone*:\n"
-"\n"
-"            If you do not provide this information, we will not be able to "
-"generate your unique code.\n"
-"            "
-msgstr ""
-"\n"
-"Por favor, complete la siguiente información:\n"
-"\n"
-"Nombre*:\n"
-"Apellidos*:\n"
-"Teléfono celular*:\n"
-"\n"
-"Si no proporciona esta información, no podremos generar su código único."
+#: .\templates\account\gea_register.html:112
+#| msgid "Enter the verification code sent to your email."
+msgid "Buyers: enter the code sent to your email."
+msgstr "Introduzca el código de verificación enviado a su correo electrónico."
 
-#: .\templates\account\gea_register.html:102
-msgid "Request for unique code – GEA"
-msgstr "Solicitud de código único – GEA"
+#: .\templates\account\gea_register.html:118
+msgid "Suppliers: enter the daily code provided by your advisor."
+msgstr "Proveedores: ingrese el código diario proporcionado por su asesor."
 
-#: .\templates\account\gea_register.html:105
-msgid "Hello, I would like to request the unique code to register with GEA."
-msgstr "Hello, I would like to request the unique code to register with GEA."
+#: .\templates\account\gea_register.html:137
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:752
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:819
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:1211
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:1568
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:1651
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2028
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2067
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2213
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2359
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2405
+#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2451
+#: .\templates\two_factor\_wizard_actions.html:11
+msgid "Back"
+msgstr "Atrás"
 
-#: .\templates\account\gea_register.html:108
-msgid "You must request your unique registration code through"
-msgstr "Debe solicitar su código de registro único a través de"
-
-#: .\templates\account\gea_register.html:123
+#: .\templates\account\gea_register.html:141
 msgid "Register"
 msgstr "Registro"
 
-#: .\templates\account\gea_register.html:125
+#: .\templates\account\gea_register.html:141
+#| msgid "Continent"
+msgid "Continue"
+msgstr "Continuar"
+
+#: .\templates\account\gea_register.html:146
 msgid "Do you already have an account? Sign in"
 msgstr "¿Ya tienes una cuenta? Iniciar sesión"
 
-#: .\templates\account\partials\_floating_input.html:38
+#: .\templates\account\partials\_floating_input.html:47
 msgid "Show/Hide"
 msgstr "Mostrar/Ocultar"
 
@@ -271,7 +412,7 @@ msgstr "Guardando y traduciendo..."
 #: .\templates\dashboard\pages\buyers\edit_offer.html:21
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:22
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:51
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:88
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:94
 msgid "Purchase Orders"
 msgstr "Órdenes de compra"
 
@@ -288,7 +429,7 @@ msgstr "Registrar un nuevo nombre de activo y su categoría"
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:20
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:23
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:178
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:94
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:100
 msgid "Add New Purchase Order"
 msgstr "Agregar nueva orden de compra"
 
@@ -303,7 +444,7 @@ msgstr "Agregar nueva orden de compra"
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:85
 #: .\templates\dashboard\pages\holders\location\add_location.html:16
 #: .\templates\dashboard\pages\holders\location\edit_location.html:17
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:100
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:106
 msgid "Add New Asset"
 msgstr "Agregar nuevo activo"
 
@@ -353,7 +494,7 @@ msgid "Image"
 msgstr "Imagen"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:126
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:106
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:112
 msgid "Add New Category"
 msgstr "Añadir nueva categoría"
 
@@ -588,21 +729,6 @@ msgstr "Por adelantado"
 msgid "Monthly"
 msgstr "Mensual"
 
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:752
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:819
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:1211
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:1568
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:1651
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2028
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2067
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2213
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2359
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2405
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2451
-#: .\templates\two_factor\_wizard_actions.html:11
-msgid "Back"
-msgstr "Atrás"
-
 #: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:755
 #: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:822
 #: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:1214
@@ -621,7 +747,9 @@ msgstr "Atrás"
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:501
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:517
 #: .\templates\two_factor\_wizard_actions.html:13
-#: .\templates\two_factor\core\setup.html:59
+#: .\templates\two_factor\core\setup.html:79
+#: .\templates\video_masonry\gallery.html:32
+#: .\templates\video_masonry\gallery.html:34
 msgid "Next"
 msgstr "Siguiente"
 
@@ -972,26 +1100,6 @@ msgstr "Elige un archivo"
 #: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2352
 #: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2398
 #: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2444
-#: .\templates\dashboard\pages\buyers\modals\delete_offer_modal.html:60
-#: .\templates\dashboard\pages\holders\modals\delete_asset_modal.html:21
-#: .\templates\dashboard\pages\holders\modals\delete_location_reference_modal.html:21
-#: .\templates\two_factor\_wizard_actions.html:5
-#: .\templates\two_factor\core\setup.html:64
-msgid "Cancel"
-msgstr "Cancelar"
-
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2106
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2131
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2156
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2181
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2206
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2252
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2277
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2302
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2327
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2352
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2398
-#: .\templates\dashboard\pages\buyers\hermes\asset_credit_form.html:2444
 msgid "of"
 msgstr "de"
 
@@ -1143,7 +1251,7 @@ msgstr "Crear nueva orden de compra"
 
 #: .\templates\dashboard\pages\buyers\inventory.html:33
 #: .\templates\dashboard\pages\buyers\inventory.html:92
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:124
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:130
 msgid "Inventory"
 msgstr "Inventario"
 
@@ -1289,7 +1397,7 @@ msgstr "Orden de pago enviada"
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:47
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:334
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:390
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:116
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:122
 msgid "Profitability"
 msgstr "Rentabilidad"
 
@@ -1459,8 +1567,8 @@ msgstr "Asistente de Aprobación"
 #: .\templates\dashboard\pages\buyers\wizard\offer_wizard_page.html:29
 msgid "Track and advance the purchase order through the approval pipeline"
 msgstr ""
-"Realizar un seguimiento y avanzar la orden de compra a través del proceso de "
-"aprobación"
+"Realizar un seguimiento y avanzar la orden de compra a través del proceso de"
+" aprobación"
 
 #: .\templates\dashboard\pages\buyers\wizard\offer_wizard_page.html:52
 msgid "Loading wizard…"
@@ -1532,6 +1640,8 @@ msgstr "Marcar como aprobado"
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:380
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:499
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:516
+#: .\templates\video_masonry\gallery.html:22
+#: .\templates\video_masonry\gallery.html:24
 msgid "Previous"
 msgstr "Previo"
 
@@ -1687,87 +1797,121 @@ msgstr "Propensiones International Pagado"
 msgid "Completed."
 msgstr "Completado. "
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_detail.html:5
+#: .\templates\dashboard\pages\certificates\certificates_landing.html:6
+#| msgid "Notifications"
+msgid "Certifications"
+msgstr "Certificaciones"
+
+#: .\templates\dashboard\pages\certificates\certificates_landing.html:43
+msgid "ACTIVE STANDBY MODE"
+msgstr "MODO DE ESPERA ACTIVO"
+
+#: .\templates\dashboard\pages\certificates\certificates_landing.html:47
+msgid ""
+"\n"
+"                    By order of the General Director and by virtue of Internal Resolution No. <a href=\"https://propensionesabogados.com/INTERNAL_RESOLUTION_No_PI_X92_003_2026.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">PI‑X92‑003‑2026</a>, issued by Propensiones Abogados Internacional S.A.S.\n"
+"                    "
+msgstr ""
+"\n"
+"Por directriz del Director General y en virtud de la Resolución Interna N.º <a href=\"https://propensionesabogados.com/INTERNAL_RESOLUTION_No_PI_X92_003_2026.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">PI‑X92‑003‑2026</a>, emitida por Propensiones Abogados Internacional S.A.S."
+
+#: .\templates\dashboard\pages\certificates\certificates_landing.html:52
+msgid ""
+"The platform remains active in strategic standby mode, with limited "
+"functionality and restricted access."
+msgstr ""
+"La plataforma permanece activa en modo de espera estratégica, con "
+"funcionalidades limitadas y acceso reservado. "
+
+#: .\templates\dashboard\pages\certificates\certificates_landing.html:55
+msgid ""
+"Its full reactivation will depend on direct orders from the legal high "
+"command."
+msgstr ""
+"Su reactivación plena dependerá de órdenes directas del alto mando legal. "
+
+#: .\templates\dashboard\pages\certificates\certificates_landing.html:59
+msgid "\"Only those who master time, master the outcome.\""
+msgstr "“Solo quien domina el tiempo, domina el resultado.\""
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:6
 msgid "Document Verification Details"
 msgstr "Detalles de verificación de documentos"
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_detail.html:21
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:22
 msgid "Document Verification"
 msgstr "Verificación de documentos"
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_detail.html:23
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:24
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:23
 msgid "Institutional Certificate of Authenticity and Legal Validity"
 msgstr ""
 "CERTIFICACIÓN INSTITUCIONAL DE AUTENTICIDAD, ORIGINALIDAD Y VALIDEZ JURÍDICA"
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_detail.html:45
-msgid "QR Code"
-msgstr "Código QR"
-
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_detail.html:55
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:38
 msgid "Verified Document"
 msgstr "Documento verificado"
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_detail.html:58
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:41
 msgid "Certificate Type:"
 msgstr "Tipo de certificado:"
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_detail.html:63
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:46
 msgid "Document Title:"
 msgstr "Título del documento:"
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_detail.html:68
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:51
 msgid "Verification ID:"
 msgstr "ID de verificación:"
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_detail.html:73
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:56
 msgid "Public Verification Code:"
 msgstr "Código de verificación pública:"
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_detail.html:78
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:61
 msgid "Issued at:"
 msgstr "Emisión:"
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_detail.html:84
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:59
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:67
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:64
 msgid "Expires at:"
 msgstr "Expiración:"
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_detail.html:91
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:74
 msgid "Download Original Document:"
 msgstr "Descargar Documento Original:"
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_detail.html:92
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:75
 msgid "Download "
 msgstr "Descargar"
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_detail.html:100
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:83
 msgid ""
 "INSTITUTIONAL CERTIFICATION OF AUTHENTICITY, ORIGINALITY AND LEGAL VALIDITY "
 "PROPENSIONES ABOGADOS INTERNACIONAL S.A.S., a legally constituted entity "
 "identified with Tax ID (NIT) 901409813-7, duly incorporated and in full "
-"legal capacity under the laws of the Republic of Colombia, acting within the "
-"scope of its institutional authority, HEREBY CERTIFIES, DECLARES AND "
+"legal capacity under the laws of the Republic of Colombia, acting within the"
+" scope of its institutional authority, HEREBY CERTIFIES, DECLARES AND "
 "ATTESTS, with full legal and doctrinal effect, that: The document to which "
-"this certification is attached is original, authentic and legally effective, "
-"having been issued under formal procedures of control, verification and due "
-"diligence. It constitutes the primary, prevailing and determinative "
+"this certification is attached is original, authentic and legally effective,"
+" having been issued under formal procedures of control, verification and due"
+" diligence. It constitutes the primary, prevailing and determinative "
 "instrument to evidence the legitimacy, origin and legal backing of the act, "
 "right, asset or legal situation contained therein. This certification "
 "consolidates, reaffirms and ratifies the originality of the certified "
 "document, conferring upon it full legal effectiveness, sufficient "
-"evidentiary force and institutional validity. It serves as the governing and "
-"interpretative instrument of authenticity, not subject to informal or "
-"extrajuridical challenge. Likewise, it is expressly stated that the document "
-"has been issued in accordance with the foundational principles of the legal "
-"system, including legality, objective good faith, legal certainty and "
+"evidentiary force and institutional validity. It serves as the governing and"
+" interpretative instrument of authenticity, not subject to informal or "
+"extrajuridical challenge. Likewise, it is expressly stated that the document"
+" has been issued in accordance with the foundational principles of the legal"
+" system, including legality, objective good faith, legal certainty and "
 "regulatory compliance, incorporating international compliance standards, "
 "anti-money laundering (AML) and counter-terrorist financing (CFT) "
 "frameworks, in accordance with the applicable regulatory regimes."
 msgstr ""
-"CERTIFICACIÓN INSTITUCIONAL DE AUTENTICIDAD, ORIGINALIDAD Y VALIDEZ JURÍDICA "
-"PROPENSIONES ABOGADOS INTERNACIONAL S.A.S., entidad legalmente constituida, "
-"identificada con NIT 901409813-7, debidamente incorporada y en pleno "
+"CERTIFICACIÓN INSTITUCIONAL DE AUTENTICIDAD, ORIGINALIDAD Y VALIDEZ JURÍDICA"
+" PROPENSIONES ABOGADOS INTERNACIONAL S.A.S., entidad legalmente constituida,"
+" identificada con NIT 901409813-7, debidamente incorporada y en pleno "
 "ejercicio de su capacidad jurídica conforme a las leyes de la República de "
 "Colombia, actuando dentro del ámbito de su autoridad institucional, "
 "CERTIFICA, DECLARA Y DA FE, con pleno efecto legal y doctrinal, que: El "
@@ -1775,20 +1919,20 @@ msgstr ""
 "y jurídicamente eficaz, habiendo sido emitido bajo procedimientos formales "
 "de control, verificación y debida diligencia. Constituye el instrumento "
 "primario, prevalente y determinante para evidenciar la legitimidad, el "
-"origen y el respaldo jurídico del acto, derecho, activo o situación jurídica "
-"que en él se consigna. La presente certificación consolida, reafirma y "
+"origen y el respaldo jurídico del acto, derecho, activo o situación jurídica"
+" que en él se consigna. La presente certificación consolida, reafirma y "
 "ratifica la originalidad del documento certificado, confiriéndole plena "
 "eficacia jurídica, fuerza probatoria suficiente y validez institucional. Se "
 "erige como el instrumento rector e interpretativo de autenticidad, no "
 "susceptible de impugnación por vías informales o extrajurídicas. Así mismo, "
-"se deja expresa constancia de que dicho documento ha sido emitido conforme a "
-"los principios fundamentales del ordenamiento jurídico, incluidos la "
+"se deja expresa constancia de que dicho documento ha sido emitido conforme a"
+" los principios fundamentales del ordenamiento jurídico, incluidos la "
 "legalidad, la buena fe objetiva, la seguridad jurídica y el cumplimiento "
 "normativo, incorporando estándares internacionales de compliance, marcos de "
 "prevención del lavado de activos (AML) y de financiación del terrorismo "
 "(CFT), de conformidad con los regímenes regulatorios aplicables."
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_detail.html:112
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:95
 msgid ""
 "SCOPE OF VALIDATION AND APPLICABLE LEGAL EFFECTS This certification and the "
 "document it authenticates produce full, enforceable and opposable legal "
@@ -1801,129 +1945,152 @@ msgid ""
 "corresponding legal framework."
 msgstr ""
 "ALCANCE DE LA VALIDACIÓN Y EFECTOS JURÍDICOS APLICABLES\n"
-"La presente certificación y el documento que autentica producen efectos "
-"jurídicos plenos, exigibles y oponibles. Su eficacia legal resulta idónea, "
-"adecuada y suficiente dentro de procesos de verificación, debida diligencia, "
-"análisis de riesgo, custodia, aseguramiento o validación institucional, sin "
-"que ello implique dispensa, sustitución o limitación de los controles que "
-"cada entidad deba adelantar conforme a su régimen jurídico aplicable.\n"
-"En consecuencia, el documento podrá ser válidamente aceptado, incorporado y "
-"utilizado como soporte jurídico suficiente, de conformidad con el "
-"ordenamiento jurídico correspondiente."
+"La presente certificación y el documento que autentica producen efectos jurídicos plenos, exigibles y oponibles. Su eficacia legal resulta idónea, adecuada y suficiente dentro de procesos de verificación, debida diligencia, análisis de riesgo, custodia, aseguramiento o validación institucional, sin que ello implique dispensa, sustitución o limitación de los controles que cada entidad deba adelantar conforme a su régimen jurídico aplicable.\n"
+"En consecuencia, el documento podrá ser válidamente aceptado, incorporado y utilizado como soporte jurídico suficiente, de conformidad con el ordenamiento jurídico correspondiente."
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_detail.html:121
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:104
 msgid ""
 "APPLICABLE LEGAL REGIME Private International Law, General Principles of "
-"International Law, Vienna Convention on the Law of Treaties (1969), UNIDROIT "
-"Principles of International Commercial Contracts, international compliance "
+"International Law, Vienna Convention on the Law of Treaties (1969), UNIDROIT"
+" Principles of International Commercial Contracts, international compliance "
 "standards, international AML/CFT regulations, Financial Action Task Force "
 "(FATF/GAFI) recommendations, and applicable provisions of the USA PATRIOT "
 "Act."
 msgstr ""
 "RÉGIMEN JURÍDICO APLICABLE Derecho Internacional Privado, Principios "
-"Generales del Derecho Internacional, Convención de Viena sobre el Derecho de "
-"los Tratados (1969), Principios UNIDROIT sobre los Contratos Comerciales "
+"Generales del Derecho Internacional, Convención de Viena sobre el Derecho de"
+" los Tratados (1969), Principios UNIDROIT sobre los Contratos Comerciales "
 "Internacionales, estándares internacionales de compliance, normativa "
 "internacional en materia de prevención del lavado de activos y financiación "
 "del terrorismo (AML/CFT), recomendaciones del Grupo de Acción Financiera "
 "Internacional (GAFI/FATF) y las disposiciones aplicables de la USA PATRIOT "
 "Act."
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_detail.html:135
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:118
 msgid "Legal Representative – International Attorney"
 msgstr "Representante Legal – Abogado Internacional"
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_detail.html:143
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:126
 msgid "Verification Barcode"
 msgstr "Código de barras de verificación"
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_input.html:6
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_input.html:21
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:6
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:18
 msgid "Verify Document Certificate"
 msgstr "Verificar certificado de documento"
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_input.html:27
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:24
 msgid "Enter your email to receive a verification code."
 msgstr ""
 "Introduce tu correo electrónico para recibir un código de verificación."
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_input.html:31
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:28
 msgid "Enter the verification code sent to your email."
 msgstr "Introduzca el código de verificación enviado a su correo electrónico."
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_input.html:35
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:32
 msgid "You may now verify the document."
 msgstr "Ahora puedes verificar el documento."
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_input.html:40
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:37
 msgid "Enter the document details to verify."
 msgstr "Ingrese los detalles del documento a verificar."
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_input.html:114
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:111
 msgid "Send verification code"
 msgstr "Enviar código de verificación"
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_input.html:116
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:113
 msgid "Verify code"
 msgstr "Verificar código"
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_input.html:118
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:115
 msgid "Verify document"
 msgstr "Verificar documento"
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_input.html:133
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:130
 msgid "Resend verification code"
 msgstr "Reenviar código de verificación"
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_input.html:145
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:142
 msgid "Change email address"
 msgstr "Cambiar dirección de correo electrónico"
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_input.html:165
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:162
 msgid "The code expires in a few minutes."
 msgstr "El código caduca en unos minutos."
 
-#: .\templates\dashboard\pages\documents\certificates\aegis_documents\certificate_input.html:197
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:194
 msgid "You can request a new code in"
 msgstr "Puedes solicitar un nuevo código en"
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:6
+#: .\templates\dashboard\pages\certificates\includes\habeas_data.html:8
+msgid ""
+"We remind you that, in accordance with the provisions of the Habeas Data "
+"Law, all your personal data has been treated with due confidentiality and is"
+" protected under the strictest security standards, guaranteeing its "
+"integrity and privacy."
+msgstr ""
+"Le recordamos que, de conformidad con la Ley de Habeas Data, todos sus datos"
+" personales han sido tratados con la debida confidencialidad y están "
+"protegidos bajo los más estrictos estándares de seguridad, garantizando su "
+"integridad y privacidad. Sus datos se utilizarán exclusivamente para los "
+"fines autorizados y de conformidad con la normativa vigente en materia de "
+"protección de datos."
+
+#: .\templates\dashboard\pages\certificates\includes\habeas_data.html:14
+msgid "\"This system does not depend on trust — it produces trust\""
+msgstr "\"Este sistema no depende de la confianza; la genera\""
+
+#: .\templates\dashboard\pages\certificates\includes\left_column.html:18
+msgid "QR Code"
+msgstr "Código QR"
+
+#: .\templates\dashboard\pages\certificates\partials\_certificate_card.html:18
+#| msgid "Verify Document Certificate"
+msgid "Verify certificate"
+msgstr "Verificar certificado"
+
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:6
 msgid "Certificate Details"
 msgstr "Detalles del certificado"
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:18
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_input.html:5
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_input.html:18
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:21
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_input.html:5
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_input.html:15
 msgid "Verify IPCON Badge"
 msgstr "Verificar insignia IPCON"
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:41
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:46
 msgid "Document Number:"
 msgstr "Número de documento:"
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:46
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:51
 msgid "Certificate ID:"
 msgstr "ID del certificado:"
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:52
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:57
 msgid "Approval date:"
 msgstr "Fecha de aprobación:"
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:69
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:73
+msgid "Employee photo"
+msgstr "Foto del empleado"
+
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:83
 msgid "This document certifies that"
 msgstr "Este documento certifica que"
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:71
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:85
 msgid ""
 "is currently verified as a member, employee, or authorized collaborator of\n"
-"              <strong>Propensiones</strong> and <strong>IPCON (International "
-"Private Consortium)</strong> the new financial era."
+"              <strong>Propensiones</strong> and <strong>IPCON (International Private Consortium)</strong> the new financial era."
 msgstr ""
 "está actualmente verificado como miembro, empleado o colaborador autorizado "
 "de <strong>Propensiones</strong> e <strong>IPCON (Consorcio Privado "
 "Internacional)</strong> la nueva era financiera."
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:76
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:90
 msgid ""
 "This verification confirms that the holder is duly registered within the "
 "organization's internal systems and is authorized to act on its behalf in "
@@ -1936,75 +2103,61 @@ msgstr ""
 "las políticas internas de cumplimiento de acuerdo a su rol y "
 "responsabilidades."
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:90
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:104
 msgid "Certificate Revoked"
 msgstr "Certificado revocado"
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:93
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:107
 msgid "This verification has been revoked and is no longer valid."
 msgstr "Esta verificación ha sido revocada y ya no es válida."
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:98
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:112
 msgid "Reason:"
 msgstr "Razón:"
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:107
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:121
 msgid "Not Approved"
 msgstr "No aprobado"
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:110
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:124
 msgid "This verification has not been approved by the issuing authority."
 msgstr "Esta verificación no ha sido aprobada por la autoridad emisora."
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:117
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:131
 msgid "Expired Certificate"
 msgstr "Certificado caducado"
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:120
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:134
 msgid "This verification was valid but has expired."
 msgstr "Esta verificación era válida pero ha caducado."
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:125
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:139
 msgid "Expiration date:"
 msgstr "Fecha de expiración:"
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:134
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:148
 msgid "Passport Expired"
 msgstr "Pasaporte Caducado"
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:137
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:151
 msgid "The passport associated with this verification has expired."
 msgstr "El pasaporte asociado a esta verificación ha caducado."
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:144
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:158
 msgid "Approved and Valid"
 msgstr "Aprobado y válido"
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_detail.html:147
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:161
 msgid "This verification is valid and currently active."
 msgstr "Esta verificación es válida y actualmente activa."
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_input.html:20
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_input.html:17
 msgid "Enter the badge details to verify."
 msgstr "Ingrese los detalles de la escarapela a verificar."
 
-#: .\templates\dashboard\pages\documents\certificates\employee_ipcon\certificate_input.html:61
+#: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_input.html:58
 msgid "Verify"
 msgstr "Verificar"
-
-#: .\templates\dashboard\pages\documents\certificates\partials\habeas_data.html:6
-msgid ""
-"We remind you that, in accordance with the provisions of the Habeas Data "
-"Law, all your personal data has been treated with due confidentiality and is "
-"protected under the strictest security standards, guaranteeing its integrity "
-"and privacy."
-msgstr ""
-"Le recordamos que, de conformidad con la Ley de Habeas Data, todos sus datos "
-"personales han sido tratados con la debida confidencialidad y están "
-"protegidos bajo los más estrictos estándares de seguridad, garantizando su "
-"integridad y privacidad. Sus datos se utilizarán exclusivamente para los "
-"fines autorizados y de conformidad con la normativa vigente en materia de "
-"protección de datos."
 
 #: .\templates\dashboard\pages\holders\add_asset_location.html:28
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:23
@@ -2024,7 +2177,7 @@ msgid "Amount"
 msgstr "Cantidad"
 
 #: .\templates\dashboard\pages\holders\add_asset_location.html:66
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:162
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:168
 msgid "Add Asset"
 msgstr "Añadir Activo"
 
@@ -2046,7 +2199,7 @@ msgstr "Cree y administre sus activos y visualice órdenes de servicio"
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:16
 #: .\templates\dashboard\pages\holders\location\add_location.html:15
 #: .\templates\dashboard\pages\holders\location\edit_location.html:16
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:150
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:156
 msgid "Assets and Service Orders"
 msgstr "Activos y Órdenes de Servicio"
 
@@ -2060,14 +2213,12 @@ msgstr "¿Necesitas ayuda?"
 #: .\templates\dashboard\pages\holders\asset_location_base.html:61
 msgid ""
 "\n"
-"                        The Asset Location ties a specific asset to a "
-"location, defining where and in what quantity the\n"
+"                        The Asset Location ties a specific asset to a location, defining where and in what quantity the\n"
 "                        asset is available.\n"
 "                        "
 msgstr ""
 "\n"
-"La ubicación del activo vincula un activo específico a una ubicación, "
-"definiendo dónde y en qué cantidad está disponible el activo."
+"La ubicación del activo vincula un activo específico a una ubicación, definiendo dónde y en qué cantidad está disponible el activo."
 
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:5
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:62
@@ -2130,20 +2281,17 @@ msgstr "Su cuenta está bajo proceso de verificación."
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:407
 msgid ""
 "\n"
-"                    This process can take between 24 to 72 hours (1 to 3 "
-"business days), Please be patient while we\n"
+"                    This process can take between 24 to 72 hours (1 to 3 business days), Please be patient while we\n"
 "                    verify your account.\n"
 "                    "
 msgstr ""
 "\n"
-"Este proceso puede tardar entre 24 y 72 horas (1 a 3 días hábiles). Por "
-"favor, tenga paciencia mientras verificamos su cuenta."
+"Este proceso puede tardar entre 24 y 72 horas (1 a 3 días hábiles). Por favor, tenga paciencia mientras verificamos su cuenta."
 
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:413
 msgid ""
 "\n"
-"                    If you have any questions, please contact our support "
-"team.\n"
+"                    If you have any questions, please contact our support team.\n"
 "                    "
 msgstr ""
 "\n"
@@ -2160,7 +2308,7 @@ msgstr "Referencia"
 
 #: .\templates\dashboard\pages\holders\location\add_location.html:110
 #: .\templates\dashboard\pages\holders\location\edit_location.html:101
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:156
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:162
 msgid "Add Location Reference"
 msgstr "Agregar referencia de ubicación"
 
@@ -2168,30 +2316,24 @@ msgstr "Agregar referencia de ubicación"
 #: .\templates\dashboard\pages\holders\location\edit_location.html:109
 msgid ""
 "\n"
-"                        The Location Reference serves as a unique identifier "
-"to manage inventory across various\n"
+"                        The Location Reference serves as a unique identifier to manage inventory across various\n"
 "                        locations.\n"
 "                        "
 msgstr ""
 "\n"
-"La referencia de ubicación sirve como un identificador único para "
-"administrar el inventario en varias ubicaciones."
+"La referencia de ubicación sirve como un identificador único para administrar el inventario en varias ubicaciones."
 
 #: .\templates\dashboard\pages\holders\location\add_location.html:125
 #: .\templates\dashboard\pages\holders\location\edit_location.html:116
 msgid ""
 "\n"
-"                        It allows differentiation between inventory located "
-"in the same country but in different areas,\n"
-"                        inventory in different countries, or inventory in "
-"the same country as well as across multiple\n"
+"                        It allows differentiation between inventory located in the same country but in different areas,\n"
+"                        inventory in different countries, or inventory in the same country as well as across multiple\n"
 "                        countries.\n"
 "                        "
 msgstr ""
 "\n"
-"Permite diferenciar entre inventario ubicado en el mismo país pero en "
-"diferentes áreas, inventario en diferentes países o inventario en el mismo "
-"país y en varios países."
+"Permite diferenciar entre inventario ubicado en el mismo país pero en diferentes áreas, inventario en diferentes países o inventario en el mismo país y en varios países."
 
 #: .\templates\dashboard\pages\holders\location\edit_location.html:53
 msgid "Edit Location Reference"
@@ -2258,8 +2400,8 @@ msgstr "Cuenta"
 msgid "Security"
 msgstr "Seguridad"
 
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:77
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:138
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:83
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:144
 msgid "Assets"
 msgstr "Activos"
 
@@ -2404,47 +2546,52 @@ msgstr "Proveedores"
 msgid "Two Factor Authentication"
 msgstr "Autenticación de dos factores"
 
-#: .\templates\partials\nav\user_dropdown.html:84
+#: .\templates\partials\nav\user_dropdown.html:92
 msgid "Logout"
 msgstr "Cerrar sesión"
 
-#: .\templates\two_factor\core\backup_tokens.html:16
-#: .\templates\two_factor\profile\profile.html:18
-msgid "Backup Tokens"
-msgstr "Tokens de respaldo"
-
-#: .\templates\two_factor\core\backup_tokens.html:19
-msgid ""
-"Backup tokens can be used when your primary and backup phone numbers aren't "
-"available. The backup tokens below can be used for login verification. If "
-"you've used up all your backup tokens, you can generate a new set of backup "
-"tokens. Only the backup tokens shown below will be valid."
+#: .\templates\two_factor\core\backup_tokens.html:17
+msgid "Backup tokens can be used when your primary method is not available."
 msgstr ""
-"Los tokens de respaldo se pueden usar cuando tu número principal y de "
-"respaldo no estén disponibles. Los tokens de respaldo a continuación se "
-"pueden usar para la verificación de inicio de sesión. Si ya usaste todos tus "
-"tokens de respaldo, puedes generar un nuevo conjunto. Solo los tokens de "
-"respaldo que se muestran a continuación serán válidos."
+"Los tokens de respaldo se pueden utilizar cuando su método principal no está"
+" disponible."
 
-#: .\templates\two_factor\core\backup_tokens.html:28
+#: .\templates\two_factor\core\backup_tokens.html:22
+#| msgid ""
+#| "Backup tokens can be used when your primary and backup phone numbers aren't "
+#| "available. The backup tokens below can be used for login verification. If "
+#| "you've used up all your backup tokens, you can generate a new set of backup "
+#| "tokens. Only the backup tokens shown below will be valid."
+msgid ""
+"The backup tokens below can be used for login verification. If you've used "
+"up all your backup tokens, you can generate a new set of backup tokens."
+msgstr ""
+"Los tokens de respaldo a continuación se pueden usar para verificar el "
+"inicio de sesión. Si ya los ha usado, puede generar un nuevo conjunto."
+
+#: .\templates\two_factor\core\backup_tokens.html:26
+msgid "Only the backup tokens shown below will be valid."
+msgstr ""
+"Sólo los tokens de respaldo que se muestran a continuación serán válidos."
+
+#: .\templates\two_factor\core\backup_tokens.html:35
 msgid "Copy these tokens and keep them somewhere safe."
 msgstr "Copia estos tokens y guárdalos en un lugar seguro."
 
-#: .\templates\two_factor\core\backup_tokens.html:30
+#: .\templates\two_factor\core\backup_tokens.html:39
 msgid "You don't have any backup codes yet."
 msgstr "Aún no tienes códigos de respaldo."
 
-#: .\templates\two_factor\core\backup_tokens.html:34
-#: .\templates\two_factor\core\setup_complete.html:18
-#: .\templates\two_factor\core\setup_complete.html:22
+#: .\templates\two_factor\core\backup_tokens.html:45
+#: .\templates\two_factor\core\setup_complete.html:17
 msgid "Back to Account Security"
 msgstr "Volver a la seguridad de la cuenta"
 
-#: .\templates\two_factor\core\backup_tokens.html:35
+#: .\templates\two_factor\core\backup_tokens.html:46
 msgid "Generate Tokens"
 msgstr "Generar tokens"
 
-#: .\templates\two_factor\core\login.html:28
+#: .\templates\two_factor\core\login.html:29
 msgid ""
 "Use this form for entering backup tokens for logging in. These tokens have "
 "been generated for you to print and keep safe. Please enter one of these "
@@ -2452,14 +2599,14 @@ msgid ""
 msgstr ""
 "Usa este formulario para ingresar tokens de respaldo para iniciar sesión. "
 "Estos tokens han sido generados para que los imprimas y los mantengas "
-"seguros. Por favor, introduce uno de estos tokens de respaldo para acceder a "
-"tu cuenta."
+"seguros. Por favor, introduce uno de estos tokens de respaldo para acceder a"
+" tu cuenta."
 
-#: .\templates\two_factor\core\login.html:54
+#: .\templates\two_factor\core\login.html:55
 msgid "Username or Email"
 msgstr "Usuario o Correo electrónico"
 
-#: .\templates\two_factor\core\login.html:73
+#: .\templates\two_factor\core\login.html:74
 msgid "Password"
 msgstr "Contraseña"
 
@@ -2502,10 +2649,10 @@ msgstr ""
 "estas funciones de seguridad para acceder a esta página."
 
 #: .\templates\two_factor\core\otp_required.html:12
-#: .\templates\two_factor\profile\profile.html:29
+#: .\templates\two_factor\profile\profile.html:27
 msgid ""
-"Two-factor authentication is not enabled for your account. Enable two-factor "
-"authentication for enhanced account security."
+"Two-factor authentication is not enabled for your account. Enable two-factor"
+" authentication for enhanced account security."
 msgstr ""
 "La autenticación de dos factores no está habilitada en tu cuenta. Actívala "
 "para mejorar la seguridad de tu cuenta."
@@ -2515,93 +2662,62 @@ msgid "Go back"
 msgstr "Regresar"
 
 #: .\templates\two_factor\core\otp_required.html:21
-#: .\templates\two_factor\core\setup.html:14
-#: .\templates\two_factor\core\setup_complete.html:11
 #: .\templates\two_factor\profile\profile.html:30
 msgid "Enable Two-Factor Authentication"
 msgstr "Habilitar autenticación de dos factores"
 
-#: .\templates\two_factor\core\setup.html:17
-msgid ""
-"You are about to take your account security to the next level. Follow the "
-"steps in this wizard to enable two-factor authentication."
+#: .\templates\two_factor\core\setup.html:34
+#| msgid ""
+#| "You are about to take your account security to the next level. Follow the "
+#| "steps in this wizard to enable two-factor authentication."
+msgid "Follow the steps in this wizard to enable two-factor authentication."
 msgstr ""
-"Estás a punto de llevar la seguridad de tu cuenta al siguiente nivel. Sigue "
-"los pasos de este asistente para habilitar la autenticación de dos factores."
+"Siga los pasos de este asistente para habilitar la autenticación de dos "
+"factores."
 
-#: .\templates\two_factor\core\setup.html:22
+#: .\templates\two_factor\core\setup.html:38
 msgid "Please select which authentication method you would like to use."
 msgstr "Por favor, selecciona el método de autenticación que deseas usar."
 
-#: .\templates\two_factor\core\setup.html:27
+#: .\templates\two_factor\core\setup.html:49
+msgid "Click to copy"
+msgstr "Haga clic para copiar"
+
+#: .\templates\two_factor\core\setup.html:50
+msgid "Copied to clipboard"
+msgstr "Copiado al portapapeles"
+
+#: .\templates\two_factor\core\setup.html:56
 msgid ""
-"To set up a token generator, scan the QR code below using an app like Google "
-"Authenticator, Authenticator from Windows or a similar app."
-msgstr ""
-"Para configurar un generador de tokens, escanea el código QR a continuación "
-"con una aplicación como Google Authenticator, Authenticator de Windows o una "
-"app similar."
-
-#: .\templates\two_factor\core\setup.html:29
-msgid ""
-"Alternatively, use the following secret to configure the token manually in "
-"your authenticator or password manager."
-msgstr ""
-"Alternativamente, usa el siguiente secreto para configurar el token "
-"manualmente en tu autenticador o gestor de contraseñas."
-
-#: .\templates\two_factor\core\setup.html:30
-msgid "TOTP Secret:"
-msgstr "Secreto TOTP:"
-
-#: .\templates\two_factor\core\setup.html:31
-msgid "Then, enter the token generated by the app below to verify setup."
-msgstr ""
-"Luego, ingresa el token generado por la aplicación a continuación para "
-"verificar la configuración."
-
-#: .\templates\two_factor\core\setup.html:34
-msgid "Token validated successfully. Two-factor authentication is now enabled."
+"Token validated successfully. Two-factor authentication is now enabled."
 msgstr ""
 "Token validado exitosamente. La autenticación de dos factores ahora está "
 "habilitada."
 
-#: .\templates\two_factor\core\setup.html:36
+#: .\templates\two_factor\core\setup.html:60
 msgid "Token validation failed. Please try again."
 msgstr "La validación del token falló. Intenta de nuevo."
 
-#: .\templates\two_factor\core\setup.html:75
-#: .\templates\two_factor\core\setup.html:82
+#: .\templates\two_factor\core\setup.html:89
+#: .\templates\two_factor\core\setup.html:93
 msgid "Back to login"
 msgstr "Volver al inicio de sesión"
 
-#: .\templates\two_factor\core\setup_complete.html:15
-msgid "Congratulations, you've successfully enabled two-factor authentication."
+#: .\templates\two_factor\core\setup_complete.html:13
+msgid ""
+"Congratulations, you've successfully enabled two-factor authentication."
 msgstr "¡Felicidades! Has habilitado la autenticación de dos factores."
 
-#: .\templates\two_factor\core\setup_complete.html:20
-msgid ""
-"However, it might happen that you don't have access to your primary token "
-"device. To enable account recovery, add a phone number."
-msgstr ""
-"Sin embargo, puede suceder que no tengas acceso a tu dispositivo principal "
-"de tokens. Para habilitar la recuperación de cuenta, agrega un número de "
-"teléfono."
-
-#: .\templates\two_factor\core\setup_complete.html:23
-msgid "Add Phone Number"
-msgstr "Agregar número de teléfono"
-
-#: .\templates\two_factor\profile\profile.html:11
-msgid "Account Security"
-msgstr "Seguridad de la cuenta"
-
-#: .\templates\two_factor\profile\profile.html:16
+#: .\templates\two_factor\profile\profile.html:14
 #, python-format
 msgid "Primary method: %(primary)s"
 msgstr "Método principal: %(primary)s"
 
-#: .\templates\two_factor\profile\profile.html:20
+#: .\templates\two_factor\profile\profile.html:17
+msgid "Backup Tokens"
+msgstr "Tokens de respaldo"
+
+#: .\templates\two_factor\profile\profile.html:19
 msgid ""
 "If you don't have any device with you, you can access your account using "
 "backup tokens."
@@ -2609,16 +2725,121 @@ msgstr ""
 "Si no tienes ningún dispositivo contigo, puedes acceder a tu cuenta usando "
 "tokens de respaldo."
 
-#: .\templates\two_factor\profile\profile.html:21
+#: .\templates\two_factor\profile\profile.html:20
 #, python-format
 msgid "You have only one backup token remaining."
 msgid_plural "You have %(counter)s backup tokens remaining."
 msgstr[0] "Solo tienes un token de respaldo restante."
 msgstr[1] "Tienes %(counter)s tokens de respaldo restantes."
 
-#: .\templates\two_factor\profile\profile.html:27
+#: .\templates\two_factor\profile\profile.html:23
 msgid "Show Codes"
 msgstr "Mostrar códigos"
+
+#: .\templates\video_masonry\_media_grid.html:35
+msgid "Play"
+msgstr "Reproducir"
+
+#: .\templates\video_masonry\_media_grid.html:49
+#| msgid "Download "
+msgid "Download"
+msgstr "Descargar"
+
+#: .\templates\video_masonry\gallery.html:4
+msgid "Asset Video Gallery"
+msgstr "Galería de activos"
+
+#: .\templates\video_masonry\gallery.html:10
+msgid "Gallery"
+msgstr "Galería"
+
+#: .\templates\video_masonry\gallery.html:11
+msgid "Multimedia content layout."
+msgstr "Diseño de contenidos multimedia."
+
+#: .\templates\video_masonry\gallery.html:13
+msgid "files"
+msgstr "archivos"
+
+#: .\templates\video_masonry\gallery.html:28
+#| msgid "Pages"
+msgid "Page"
+msgstr "Página"
+
+#~ msgid "Account Information"
+#~ msgstr "Información de la Cuenta"
+
+#~ msgid "First Names*"
+#~ msgstr "Nombres*"
+
+#~ msgid "Last Names*"
+#~ msgstr "Apellidos*"
+
+#~ msgid ""
+#~ "\n"
+#~ "            Please complete the following information:\n"
+#~ "\n"
+#~ "            First Names*:\n"
+#~ "            Last Names*:\n"
+#~ "            Cellphone*:\n"
+#~ "\n"
+#~ "            If you do not provide this information, we will not be able to generate your unique code.\n"
+#~ "            "
+#~ msgstr ""
+#~ "\n"
+#~ "Por favor, complete la siguiente información:\n"
+#~ "\n"
+#~ "Nombre*:\n"
+#~ "Apellidos*:\n"
+#~ "Teléfono celular*:\n"
+#~ "\n"
+#~ "Si no proporciona esta información, no podremos generar su código único."
+
+#~ msgid "Request for unique code – GEA"
+#~ msgstr "Solicitud de código único – GEA"
+
+#~ msgid "Hello, I would like to request the unique code to register with GEA."
+#~ msgstr "Hello, I would like to request the unique code to register with GEA."
+
+#~ msgid "You must request your unique registration code through"
+#~ msgstr "Debe solicitar su código de registro único a través de"
+
+#~ msgid ""
+#~ "To set up a token generator, scan the QR code below using an app like Google"
+#~ " Authenticator, Authenticator from Windows or a similar app."
+#~ msgstr ""
+#~ "Para configurar un generador de tokens, escanea el código QR a continuación "
+#~ "con una aplicación como Google Authenticator, Authenticator de Windows o una"
+#~ " app similar."
+
+#~ msgid ""
+#~ "Alternatively, use the following secret to configure the token manually in "
+#~ "your authenticator or password manager."
+#~ msgstr ""
+#~ "Alternativamente, usa el siguiente secreto para configurar el token "
+#~ "manualmente en tu autenticador o gestor de contraseñas."
+
+#~ msgid "TOTP Secret:"
+#~ msgstr "Secreto TOTP:"
+
+#~ msgid "Then, enter the token generated by the app below to verify setup."
+#~ msgstr ""
+#~ "Luego, ingresa el token generado por la aplicación a continuación para "
+#~ "verificar la configuración."
+
+#~ msgid ""
+#~ "However, it might happen that you don't have access to your primary token "
+#~ "device. To enable account recovery, add a phone number."
+#~ msgstr ""
+#~ "Sin embargo, puede suceder que no tengas acceso a tu dispositivo principal "
+#~ "de tokens. Para habilitar la recuperación de cuenta, agrega un número de "
+#~ "teléfono."
+
+#~ msgid "Add Phone Number"
+#~ msgstr "Agregar número de teléfono"
+
+#~ msgid "Account Security"
+#~ msgstr "Seguridad de la cuenta"
 
 #~ msgid "View Original Document"
 #~ msgstr "Ver documento original"
@@ -2680,18 +2901,18 @@ msgstr "Mostrar códigos"
 #~ msgstr "Plataforma segura de activos históricos"
 
 #~ msgid ""
-#~ "Comprehensive and secure platform for the purchase and sale of US "
-#~ "historical assets. Official, exclusive and trusted."
+#~ "Comprehensive and secure platform for the purchase and sale of US historical"
+#~ " assets. Official, exclusive and trusted."
 #~ msgstr ""
 #~ "Plataforma integral y segura para la compra y venta de activos históricos "
 #~ "EE. UU. Oficial, exclusiva y confiable."
 
 #~ msgid ""
-#~ "Official and exclusive platform for the purchase and sale of US "
-#~ "historical assets."
+#~ "Official and exclusive platform for the purchase and sale of US historical "
+#~ "assets."
 #~ msgstr ""
-#~ "Plataforma oficial y exclusiva para la compra y venta de activos "
-#~ "históricos de Estados Unidos."
+#~ "Plataforma oficial y exclusiva para la compra y venta de activos históricos "
+#~ "de Estados Unidos."
 
 #~ msgid ""
 #~ "Exclusive and official platform for the secure purchase of US historical "
@@ -2753,24 +2974,12 @@ msgstr "Mostrar códigos"
 
 #~ msgid ""
 #~ "\n"
-#~ "                                qualifies as a beneficiary, who has "
-#~ "undergone a security screening and accreditation of judicial records in "
-#~ "accordance with current regulations, criminal reports on social media, "
-#~ "and Interpol databases. Consequently, they do <strong>NOT</strong> have "
-#~ "any judicial or disciplinary records from the certifying entities "
-#~ "authorized by international public consultation databases, which would "
-#~ "affect their suitability.\n"
+#~ "                                qualifies as a beneficiary, who has undergone a security screening and accreditation of judicial records in accordance with current regulations, criminal reports on social media, and Interpol databases. Consequently, they do <strong>NOT</strong> have any judicial or disciplinary records from the certifying entities authorized by international public consultation databases, which would affect their suitability.\n"
 #~ "                                <br/>\n"
 #~ "                                For the record, this is signed on "
 #~ msgstr ""
 #~ "\n"
-#~ "Se considera beneficiario, quien ha sido sometido a una revisión de "
-#~ "seguridad y acreditación de antecedentes judiciales de acuerdo con la "
-#~ "normativa vigente, denuncias penales en redes sociales y bases de datos "
-#~ "de Interpol. Por consiguiente, <strong>NO</strong> cuenta con "
-#~ "antecedentes judiciales ni disciplinarios de las entidades certificadoras "
-#~ "autorizadas por las bases de datos de consulta pública internacional, lo "
-#~ "que afectaría su idoneidad.\n"
+#~ "Se considera beneficiario, quien ha sido sometido a una revisión de seguridad y acreditación de antecedentes judiciales de acuerdo con la normativa vigente, denuncias penales en redes sociales y bases de datos de Interpol. Por consiguiente, <strong>NO</strong> cuenta con antecedentes judiciales ni disciplinarios de las entidades certificadoras autorizadas por las bases de datos de consulta pública internacional, lo que afectaría su idoneidad.\n"
 #~ "<br/>\n"
 #~ "Para que conste, se firma el presente."
 
@@ -2779,16 +2988,11 @@ msgstr "Mostrar códigos"
 
 #~ msgid ""
 #~ "\n"
-#~ "                                we inform you that, after the evaluation "
-#~ "conducted, your security study <span class=\"text-danger\">HAS NOT BEEN "
-#~ "APPROVED</span> due to not meeting the suitability requirements according "
-#~ "to the current security regulations.\n"
+#~ "                                we inform you that, after the evaluation conducted, your security study <span class=\"text-danger\">HAS NOT BEEN APPROVED</span> due to not meeting the suitability requirements according to the current security regulations.\n"
 #~ "                            "
 #~ msgstr ""
 #~ "\n"
-#~ "Le informamos que, tras la evaluación realizada, su estudio de seguridad "
-#~ "<span class=\"text-danger\">NO HA SIDO APROBADO</span> por no cumplir los "
-#~ "requisitos de idoneidad según la normativa de seguridad vigente."
+#~ "Le informamos que, tras la evaluación realizada, su estudio de seguridad <span class=\"text-danger\">NO HA SIDO APROBADO</span> por no cumplir los requisitos de idoneidad según la normativa de seguridad vigente."
 
 #~ msgid "minutes."
 #~ msgstr "minutos."
@@ -2796,67 +3000,35 @@ msgstr "Mostrar códigos"
 #, python-format
 #~ msgid ""
 #~ "\n"
-#~ "                                <strong>%(name)s %(last_name)s</strong> "
-#~ "with document <strong>%(document_type)s</strong> and number "
-#~ "<strong>%(masked_document_number)s</strong>\n"
-#~ "                                was duly registered to participate in the "
-#~ "sovereign purchase of the United States after the corresponding "
-#~ "verification,\n"
-#~ "                                it is declared that it fully complied "
-#~ "with the requirements demanded by the process and demonstrated that it "
-#~ "was suitable to belong to this operation.\n"
+#~ "                                <strong>%(name)s %(last_name)s</strong> with document <strong>%(document_type)s</strong> and number <strong>%(masked_document_number)s</strong>\n"
+#~ "                                was duly registered to participate in the sovereign purchase of the United States after the corresponding verification,\n"
+#~ "                                it is declared that it fully complied with the requirements demanded by the process and demonstrated that it was suitable to belong to this operation.\n"
 #~ "                                <br/>\n"
 #~ "                                For the record, this is signed on\n"
 #~ "                            "
 #~ msgstr ""
 #~ "\n"
-#~ "<strong>%(name)s %(last_name)s</strong> con documento "
-#~ "<strong>%(document_type)s</strong> y número "
-#~ "<strong>%(masked_document_number)s</strong>\n"
-#~ "se registró debidamente para participar en la compra de soberanía de los "
-#~ "Estados Unidos tras la verificación correspondiente,\n"
-#~ "declara que cumplió plenamente con los requisitos exigidos por el proceso "
-#~ "y demostró su idoneidad para participar en esta operación.\n"
+#~ "<strong>%(name)s %(last_name)s</strong> con documento <strong>%(document_type)s</strong> y número <strong>%(masked_document_number)s</strong>\n"
+#~ "se registró debidamente para participar en la compra de soberanía de los Estados Unidos tras la verificación correspondiente,\n"
+#~ "declara que cumplió plenamente con los requisitos exigidos por el proceso y demostró su idoneidad para participar en esta operación.\n"
 #~ "<br/>\n"
 #~ "Para que conste, se firma el presente."
 
 #~ msgid ""
 #~ "\n"
-#~ "                            We remind you that, in accordance with the "
-#~ "provisions of the Habeas Data Law, all your personal data has been "
-#~ "treated with due confidentiality and is protected under the strictest "
-#~ "security standards, guaranteeing its integrity and privacy. Your data "
-#~ "will be used exclusively for authorized purposes and within the framework "
-#~ "of current data protection regulations.\n"
+#~ "                            We remind you that, in accordance with the provisions of the Habeas Data Law, all your personal data has been treated with due confidentiality and is protected under the strictest security standards, guaranteeing its integrity and privacy. Your data will be used exclusively for authorized purposes and within the framework of current data protection regulations.\n"
 #~ "                            "
 #~ msgstr ""
 #~ "\n"
-#~ "Le recordamos que, de conformidad con la Ley de Habeas Data, todos sus "
-#~ "datos personales han sido tratados con la debida confidencialidad y están "
-#~ "protegidos bajo los más estrictos estándares de seguridad, garantizando "
-#~ "su integridad y privacidad. Sus datos se utilizarán exclusivamente para "
-#~ "los fines autorizados y de conformidad con la normativa vigente en "
-#~ "materia de protección de datos."
+#~ "Le recordamos que, de conformidad con la Ley de Habeas Data, todos sus datos personales han sido tratados con la debida confidencialidad y están protegidos bajo los más estrictos estándares de seguridad, garantizando su integridad y privacidad. Sus datos se utilizarán exclusivamente para los fines autorizados y de conformidad con la normativa vigente en materia de protección de datos."
 
 #~ msgid ""
 #~ "\n"
-#~ "                                The following clarification is made: the "
-#~ "reproduction, publication, or any improper use of this certificate for "
-#~ "requesting money or for fraudulent purposes will result in legal "
-#~ "sanctions, in accordance with applicable national and international "
-#~ "regulations. Furthermore, it is warned that such conduct will lead to "
-#~ "immediate expulsion and total disqualification, both present and future, "
-#~ "from any participation in programs, benefits, or related agreements.\n"
+#~ "                                The following clarification is made: the reproduction, publication, or any improper use of this certificate for requesting money or for fraudulent purposes will result in legal sanctions, in accordance with applicable national and international regulations. Furthermore, it is warned that such conduct will lead to immediate expulsion and total disqualification, both present and future, from any participation in programs, benefits, or related agreements.\n"
 #~ "                            "
 #~ msgstr ""
 #~ "\n"
-#~ "Se aclara lo siguiente: la reproducción, publicación o cualquier uso "
-#~ "indebido de este certificado para solicitar dinero o con fines "
-#~ "fraudulentos conllevará sanciones legales, de conformidad con la "
-#~ "normativa nacional e internacional aplicable. Asimismo, se advierte que "
-#~ "dicha conducta conllevará la expulsión inmediata y la inhabilitación "
-#~ "total, presente y futura, de cualquier participación en programas, "
-#~ "beneficios o acuerdos relacionados."
+#~ "Se aclara lo siguiente: la reproducción, publicación o cualquier uso indebido de este certificado para solicitar dinero o con fines fraudulentos conllevará sanciones legales, de conformidad con la normativa nacional e internacional aplicable. Asimismo, se advierte que dicha conducta conllevará la expulsión inmediata y la inhabilitación total, presente y futura, de cualquier participación en programas, beneficios o acuerdos relacionados."
 
 #~ msgid "Regulatory References:"
 #~ msgstr "Referencias regulatorias:"
@@ -2866,56 +3038,44 @@ msgstr "Mostrar códigos"
 
 #~ msgid ""
 #~ "\n"
-#~ "                                United Nations Convention against "
-#~ "Corruption (UNCAC): Article 15 and subsequent provisions, applicable to "
-#~ "acts of forgery and misuse of official documents.\n"
+#~ "                                United Nations Convention against Corruption (UNCAC): Article 15 and subsequent provisions, applicable to acts of forgery and misuse of official documents.\n"
 #~ "                                "
 #~ msgstr ""
 #~ "\n"
-#~ "Convención de las Naciones Unidas contra la Corrupción (CNUCC): Artículo "
-#~ "15 y disposiciones posteriores, aplicables a los actos de falsificación y "
-#~ "uso indebido de documentos oficiales."
+#~ "Convención de las Naciones Unidas contra la Corrupción (CNUCC): Artículo 15 y disposiciones posteriores, aplicables a los actos de falsificación y uso indebido de documentos oficiales."
 
 #~ msgid "International Criminal Code (Rome Statute): "
 #~ msgstr "Código Penal Internacional (Estatuto de Roma):"
 
 #~ msgid ""
 #~ "\n"
-#~ "                                Related to fraud, forgery, and violations "
-#~ "of international ethical standards.\n"
+#~ "                                Related to fraud, forgery, and violations of international ethical standards.\n"
 #~ "                                "
 #~ msgstr ""
 #~ "\n"
-#~ "Relacionado con fraude, falsificación y violaciones de estándares éticos "
-#~ "internacionales."
+#~ "Relacionado con fraude, falsificación y violaciones de estándares éticos internacionales."
 
 #~ msgid "Internal Regulations of the Fund/Organization: "
 #~ msgstr "Reglamento Interno del Fondo/Organización:"
 
 #~ msgid ""
 #~ "\n"
-#~ "                                In accordance with contractual clauses "
-#~ "and specific regulations governing user relationships.\n"
+#~ "                                In accordance with contractual clauses and specific regulations governing user relationships.\n"
 #~ "                                "
 #~ msgstr ""
 #~ "\n"
-#~ "De acuerdo con las cláusulas contractuales y la normativa específica que "
-#~ "regula las relaciones con los usuarios."
+#~ "De acuerdo con las cláusulas contractuales y la normativa específica que regula las relaciones con los usuarios."
 
 #~ msgid "Legal Warning: "
 #~ msgstr "Aviso legal:"
 
 #~ msgid ""
 #~ "\n"
-#~ "                            Any contrary act will result in the "
-#~ "corresponding judicial actions, including reports to the competent "
-#~ "authorities of the country and international organizations.\n"
+#~ "                            Any contrary act will result in the corresponding judicial actions, including reports to the competent authorities of the country and international organizations.\n"
 #~ "                            "
 #~ msgstr ""
 #~ "\n"
-#~ "Cualquier acto contrario dará lugar a las acciones judiciales "
-#~ "correspondientes, incluyendo denuncias ante las autoridades competentes "
-#~ "del país y organismos internacionales."
+#~ "Cualquier acto contrario dará lugar a las acciones judiciales correspondientes, incluyendo denuncias ante las autoridades competentes del país y organismos internacionales."
 
 #~ msgid "POL"
 #~ msgstr "Prueba de vida"
@@ -2936,20 +3096,17 @@ msgstr "Mostrar códigos"
 #~ "All-in-one suite for business management of historical assets safely and "
 #~ "easily"
 #~ msgstr ""
-#~ "Suite todo en uno para la gestión empresarial de activos históricos de "
-#~ "forma segura y sencilla"
+#~ "Suite todo en uno para la gestión empresarial de activos históricos de forma"
+#~ " segura y sencilla"
 
 #~ msgid ""
 #~ "\n"
-#~ "          This platform is governed by the USA PATRIOT Act (2001) and "
-#~ "rejects any relationship\n"
+#~ "          This platform is governed by the USA PATRIOT Act (2001) and rejects any relationship\n"
 #~ "          with terrorism, drug trafficking, and money laundering.\n"
 #~ "          "
 #~ msgstr ""
 #~ "\n"
-#~ "Esta plataforma se rige por la Ley Patriota de los Estados Unidos (2001) "
-#~ "y rechaza cualquier relación con el terrorismo, el narcotráfico y el "
-#~ "lavado de dinero."
+#~ "Esta plataforma se rige por la Ley Patriota de los Estados Unidos (2001) y rechaza cualquier relación con el terrorismo, el narcotráfico y el lavado de dinero."
 
 #~ msgid "Order of service"
 #~ msgstr "Orden de servicio"
@@ -2971,44 +3128,34 @@ msgstr "Mostrar códigos"
 
 #~ msgid ""
 #~ "\n"
-#~ "              PRIVATE ALLIANCE USA (RECOVERY REPATRIATION FOUNDATION, AM "
-#~ "PRO HOLDINGS GROUP LLC AND\n"
-#~ "              PROPENSIONES ABOGADOS INTERNACIONAL). OFFICIAL APPOINTMENT "
-#~ "#F991, 07 JULY 2025 SIGNED AND AUTHENTICATED IN\n"
-#~ "              FLORIDA, USA # F991, 07 JULY 2025 SIGNED AND AUTHENTICATED "
-#~ "IN FLORIDA, USA\n"
+#~ "              PRIVATE ALLIANCE USA (RECOVERY REPATRIATION FOUNDATION, AM PRO HOLDINGS GROUP LLC AND\n"
+#~ "              PROPENSIONES ABOGADOS INTERNACIONAL). OFFICIAL APPOINTMENT #F991, 07 JULY 2025 SIGNED AND AUTHENTICATED IN\n"
+#~ "              FLORIDA, USA # F991, 07 JULY 2025 SIGNED AND AUTHENTICATED IN FLORIDA, USA\n"
 #~ "              "
 #~ msgstr ""
 #~ "\n"
-#~ "Plataforma Exclusiva para la Gestión Estratégica de Activos Históricos de "
-#~ "la Compra Oficial de EE. UU."
+#~ "Plataforma Exclusiva para la Gestión Estratégica de Activos Históricos de la Compra Oficial de EE. UU."
 
 #~ msgid ""
 #~ "\n"
-#~ "              GLOBAL ALLIANCE (AM PRO HOLDINGS GROUP LLC AND PROPENSIONES "
-#~ "ABOGADOS INTERNACIONAL).\n"
-#~ "              OFFICIAL APPOINTMENT #M9Q0, 04 AUGUST 2025 SIGNED AND "
-#~ "AUTHENTICATED IN QUEENS SUPREME COURT IN NEW YORK,\n"
+#~ "              GLOBAL ALLIANCE (AM PRO HOLDINGS GROUP LLC AND PROPENSIONES ABOGADOS INTERNACIONAL).\n"
+#~ "              OFFICIAL APPOINTMENT #M9Q0, 04 AUGUST 2025 SIGNED AND AUTHENTICATED IN QUEENS SUPREME COURT IN NEW YORK,\n"
 #~ "              USA\n"
 #~ "              "
 #~ msgstr ""
 #~ "\n"
-#~ "Esta plataforma se rige por la Ley Patriota de los Estados Unidos (USA "
-#~ "PATRIOT Act, 2001) y rechaza toda relación con terrorismo, narcotráfico y "
-#~ "lavado de dinero o de activos."
+#~ "Esta plataforma se rige por la Ley Patriota de los Estados Unidos (USA PATRIOT Act, 2001) y rechaza toda relación con terrorismo, narcotráfico y lavado de dinero o de activos."
 
 #~ msgid "Legal Notice:"
 #~ msgstr "Aviso Legal:"
 
 #~ msgid ""
 #~ "\n"
-#~ "        Official Appointment #F991, 07 July 2025 Signed and Authenticated "
-#~ "in Florida, USA\n"
+#~ "        Official Appointment #F991, 07 July 2025 Signed and Authenticated in Florida, USA\n"
 #~ "        "
 #~ msgstr ""
 #~ "\n"
-#~ "Nombramiento oficial N.° F991, 7 de julio de 2025, firmado y autenticado "
-#~ "en Florida, EE. UU."
+#~ "Nombramiento oficial N.° F991, 7 de julio de 2025, firmado y autenticado en Florida, EE. UU."
 
 #~ msgid "Buyer Client Area"
 #~ msgstr "Área de Cliente Compra"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GEAUSA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-11 02:54-0500\n"
+"POT-Creation-Date: 2026-02-02 19:50-0500\n"
 "PO-Revision-Date: 2026-01-11 02:56+0000\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -18,25 +18,144 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.3\n"
 
-#: .\apps\project\specific\documents\certificates\admin.py:53
-msgid "Assign user certificate type to 'IDONEITY'"
-msgstr "Asignar el tipo de certificado de usuario a 'IDONEITY'"
+#: .\apps\project\specific\documents\certificates\admin.py:139
+#: .\apps\project\specific\documents\certificates\admin.py:282
+msgid "Identificación"
+msgstr ""
 
-#: .\apps\project\specific\documents\certificates\admin.py:55
-msgid "Assign user certificate type to 'EM_IPCON'"
-msgstr "Asignar el tipo de certificado de usuario a 'EM_IPCON'"
+#: .\apps\project\specific\documents\certificates\admin.py:142
+msgid "Titular"
+msgstr ""
 
-#: .\apps\project\specific\documents\certificates\admin.py:57
-msgid "Assign user certificate type to 'EM_PROPENSIONES'"
-msgstr "Asignar tipo de certificado de usuario a 'EM_PROPENSIONES'"
+#: .\apps\project\specific\documents\certificates\admin.py:145
+#, fuzzy
+#| msgid "Document file"
+msgid "Documentos (sensibles)"
+msgstr "Archivo o Documento"
 
-#: .\apps\project\specific\documents\certificates\admin.py:59
-msgid "Assign document certificate type to 'AEGIS'"
-msgstr "Asignar tipo de certificado de documento a 'AEGIS'"
+#: .\apps\project\specific\documents\certificates\admin.py:154
+msgid "Estado legal"
+msgstr ""
 
-#: .\apps\project\specific\documents\certificates\admin.py:61
-msgid "Assign document certificate type to 'GENERIC'"
-msgstr "Asignar el tipo de certificado de documento a 'GENÉRICO'"
+#: .\apps\project\specific\documents\certificates\admin.py:157
+#: .\apps\project\specific\documents\certificates\admin.py:287
+msgid "Vigencia"
+msgstr ""
+
+#: .\apps\project\specific\documents\certificates\admin.py:160
+#: .\apps\project\specific\documents\certificates\admin.py:288
+msgid "Métricas"
+msgstr ""
+
+#: .\apps\project\specific\documents\certificates\admin.py:164
+#: .\apps\project\specific\documents\certificates\admin.py:290
+msgid "Auditoría"
+msgstr ""
+
+#: .\apps\project\specific\documents\certificates\admin.py:186
+msgid "Full name"
+msgstr ""
+
+#: .\apps\project\specific\documents\certificates\admin.py:190
+#: .\apps\project\specific\documents\certificates\models.py:140
+msgid "Approved"
+msgstr "Aprobado"
+
+#: .\apps\project\specific\documents\certificates\admin.py:194
+#: .\apps\project\specific\documents\certificates\admin.py:310
+#, fuzzy
+#| msgid "Expires at"
+msgid "Expired"
+msgstr "Vence en"
+
+#: .\apps\project\specific\documents\certificates\admin.py:198
+#, fuzzy
+#| msgid "Revoked at"
+msgid "Revoked"
+msgstr "Revocado"
+
+#: .\apps\project\specific\documents\certificates\admin.py:202
+#: .\apps\project\specific\documents\certificates\admin.py:314
+msgid "Views"
+msgstr ""
+
+#: .\apps\project\specific\documents\certificates\admin.py:206
+#: .\apps\project\specific\documents\certificates\admin.py:318
+#, fuzzy
+#| msgid "Unique Code"
+msgid "Unique"
+msgstr "Código Único"
+
+#: .\apps\project\specific\documents\certificates\admin.py:210
+msgid "CC (masked)"
+msgstr ""
+
+#: .\apps\project\specific\documents\certificates\admin.py:214
+#, fuzzy
+#| msgid "Passport (PA)"
+msgid "Passport (masked)"
+msgstr "Pasaporte (PA)"
+
+#: .\apps\project\specific\documents\certificates\admin.py:218
+msgid "Photo"
+msgstr ""
+
+#: .\apps\project\specific\documents\certificates\admin.py:227
+msgid "Detail"
+msgstr ""
+
+#: .\apps\project\specific\documents\certificates\admin.py:284
+#, fuzzy
+#| msgid "Document Type"
+msgid "Documento"
+msgstr "Tipo de Documento"
+
+#: .\apps\project\specific\documents\certificates\admin.py:286
+msgid "Entrega"
+msgstr ""
+
+#: .\apps\project\specific\documents\certificates\admin.py:322
+msgid "File"
+msgstr ""
+
+#: .\apps\project\specific\documents\certificates\admin.py:328
+msgid "Hash"
+msgstr ""
+
+#: .\apps\project\specific\documents\certificates\admin.py:385
+#: .\apps\project\specific\documents\certificates\admin.py:399
+msgid "Target"
+msgstr ""
+
+#: .\apps\project\specific\documents\certificates\admin.py:387
+#: .\apps\project\specific\documents\certificates\admin.py:412
+#, fuzzy
+#| msgid "Viewed at"
+msgid "Viewer"
+msgstr "Visto a las"
+
+#: .\apps\project\specific\documents\certificates\admin.py:389
+msgid "Technical"
+msgstr ""
+
+#: .\apps\project\specific\documents\certificates\admin.py:391
+msgid "Audit"
+msgstr ""
+
+#: .\apps\project\specific\documents\certificates\admin.py:395
+msgid "Type"
+msgstr ""
+
+#: .\apps\project\specific\documents\certificates\admin.py:397
+#: .\apps\project\specific\documents\certificates\models.py:442
+msgid "User Certificate"
+msgstr "Certificado de usuario"
+
+#: .\apps\project\specific\documents\certificates\admin.py:397
+#, fuzzy
+#| msgid "Document Verification"
+msgid "Document Certificate"
+msgstr "Verificación de documentos"
 
 #: .\apps\project\specific\documents\certificates\apps.py:8
 msgid "Certificate"
@@ -46,100 +165,108 @@ msgstr "Certificado"
 msgid "Certificates"
 msgstr "Certificados"
 
-#: .\apps\project\specific\documents\certificates\forms.py:12
+#: .\apps\project\specific\documents\certificates\forms.py:14
 msgid "Document Type"
 msgstr "Tipo de Documento"
 
-#: .\apps\project\specific\documents\certificates\forms.py:18
+#: .\apps\project\specific\documents\certificates\forms.py:20
 msgid "Document Number"
 msgstr "Número de Documento"
 
-#: .\apps\project\specific\documents\certificates\forms.py:22
-#| msgid "Generic Document"
+#: .\apps\project\specific\documents\certificates\forms.py:24
 msgid "Enter document"
 msgstr "Ingresar el documento"
 
-#: .\apps\project\specific\documents\certificates\forms.py:30
-#: .\apps\project\specific\documents\certificates\models.py:153
-#: .\apps\project\specific\documents\certificates\models.py:341
+#: .\apps\project\specific\documents\certificates\forms.py:33
+#: .\apps\project\specific\documents\certificates\models.py:160
+#: .\apps\project\specific\documents\certificates\models.py:348
 msgid "Certificate type"
 msgstr "Tipo de Certificado"
 
-#: .\apps\project\specific\documents\certificates\forms.py:34
+#: .\apps\project\specific\documents\certificates\forms.py:37
 msgid "Document Public Code"
 msgstr "Documento Código Público"
 
-#: .\apps\project\specific\documents\certificates\forms.py:38
+#: .\apps\project\specific\documents\certificates\forms.py:41
 msgid "Enter public code, prefix or UUID"
 msgstr "Introduzca el código público, prefijo o UUID"
 
-#: .\apps\project\specific\documents\certificates\forms.py:46
-msgid "Invalid identifier length."
-msgstr "Longitud de identificador no válida."
-
-#: .\apps\project\specific\documents\certificates\forms.py:52
+#: .\apps\project\specific\documents\certificates\forms.py:56
 msgid "Email"
 msgstr "Correo"
 
-#: .\apps\project\specific\documents\certificates\forms.py:55
+#: .\apps\project\specific\documents\certificates\forms.py:59
 msgid "Enter your email for OTP verification"
 msgstr "Ingresa tu correo electrónico para la verificación OTP"
 
-#: .\apps\project\specific\documents\certificates\forms.py:63
+#: .\apps\project\specific\documents\certificates\forms.py:69
 msgid "Temporary email addresses are not allowed."
 msgstr "No se permiten direcciones de correo electrónico temporales."
 
-#: .\apps\project\specific\documents\certificates\forms.py:69
+#: .\apps\project\specific\documents\certificates\forms.py:72
+msgid "Only authorized emails."
+msgstr ""
+
+#: .\apps\project\specific\documents\certificates\forms.py:79
 msgid "Verification code"
 msgstr "Código de verificación"
 
-#: .\apps\project\specific\documents\certificates\forms.py:73
+#: .\apps\project\specific\documents\certificates\forms.py:83
 msgid "Enter the 6-digit code"
 msgstr "Introduzca el código de 6 dígitos"
 
-#: .\apps\project\specific\documents\certificates\functions.py:181
+#: .\apps\project\specific\documents\certificates\functions.py:195
 msgid "Invalid UUID format."
 msgstr "Formato UUID no válido."
 
-#: .\apps\project\specific\documents\certificates\models.py:19
+#: .\apps\project\specific\documents\certificates\functions.py:198
+#: .\apps\project\specific\documents\certificates\views.py:223
+msgid "Invalid identifier length."
+msgstr "Longitud de identificador no válida."
+
+#: .\apps\project\specific\documents\certificates\models.py:18
 msgid "Citizen ID (CC)"
 msgstr "Cédula de Ciudadanía (CC)"
 
-#: .\apps\project\specific\documents\certificates\models.py:20
+#: .\apps\project\specific\documents\certificates\models.py:19
 msgid "Passport (PA)"
 msgstr "Pasaporte (PA)"
 
-#: .\apps\project\specific\documents\certificates\models.py:21
+#: .\apps\project\specific\documents\certificates\models.py:20
 msgid "Unique Code"
 msgstr "Código Único"
 
-#: .\apps\project\specific\documents\certificates\models.py:25
+#: .\apps\project\specific\documents\certificates\models.py:24
 msgid "Idoneity"
 msgstr "Idoneidad"
 
-#: .\apps\project\specific\documents\certificates\models.py:26
+#: .\apps\project\specific\documents\certificates\models.py:25
 msgid "Employee Badge (IPCON)"
 msgstr "Insignia de empleado (IPCON)"
 
-#: .\apps\project\specific\documents\certificates\models.py:27
+#: .\apps\project\specific\documents\certificates\models.py:26
 msgid "Employee Badge (Propensiones)"
 msgstr "Insignia de empleado (Propensiones)"
 
-#: .\apps\project\specific\documents\certificates\models.py:31
+#: .\apps\project\specific\documents\certificates\models.py:30
 msgid "Asset Certificate (AEGIS)"
 msgstr "Certificado de Activos (AEGIS)"
 
-#: .\apps\project\specific\documents\certificates\models.py:32
+#: .\apps\project\specific\documents\certificates\models.py:31
 msgid "Generic Document"
 msgstr "Documento genérico"
 
-#: .\apps\project\specific\documents\certificates\models.py:36
+#: .\apps\project\specific\documents\certificates\models.py:35
 msgid "Digital"
 msgstr "Digital"
 
-#: .\apps\project\specific\documents\certificates\models.py:37
+#: .\apps\project\specific\documents\certificates\models.py:36
 msgid "Physical"
 msgstr "Físico"
+
+#: .\apps\project\specific\documents\certificates\models.py:37
+msgid "Digital and Physical"
+msgstr ""
 
 #: .\apps\project\specific\documents\certificates\models.py:38
 msgid "Not delivered"
@@ -154,7 +281,7 @@ msgid "UUID Prefix"
 msgstr "Prefijo UUID"
 
 #: .\apps\project\specific\documents\certificates\models.py:67
-#: .\apps\project\specific\documents\certificates\models.py:324
+#: .\apps\project\specific\documents\certificates\models.py:331
 msgid "Public verification code"
 msgstr "Código de verificación pública"
 
@@ -163,143 +290,139 @@ msgid "User"
 msgstr "Usuario"
 
 #: .\apps\project\specific\documents\certificates\models.py:85
+msgid "Employee photo"
+msgstr ""
+
+#: .\apps\project\specific\documents\certificates\models.py:92
 msgid "Names"
 msgstr "Nombres"
 
-#: .\apps\project\specific\documents\certificates\models.py:92
+#: .\apps\project\specific\documents\certificates\models.py:99
 msgid "Last name"
 msgstr "Apellido"
 
-#: .\apps\project\specific\documents\certificates\models.py:99
+#: .\apps\project\specific\documents\certificates\models.py:106
 msgid "Document number CC"
 msgstr "Número de documento CC"
 
-#: .\apps\project\specific\documents\certificates\models.py:106
+#: .\apps\project\specific\documents\certificates\models.py:113
 msgid "Document number PA"
 msgstr "Número de documento PA"
 
-#: .\apps\project\specific\documents\certificates\models.py:113
+#: .\apps\project\specific\documents\certificates\models.py:120
 msgid "Passport expiration date"
 msgstr "Fecha de vencimiento del pasaporte"
 
-#: .\apps\project\specific\documents\certificates\models.py:133
-msgid "Approved"
-msgstr "Aprobado"
-
-#: .\apps\project\specific\documents\certificates\models.py:140
+#: .\apps\project\specific\documents\certificates\models.py:147
 msgid "Approved by"
 msgstr "Aprobado por"
 
-#: .\apps\project\specific\documents\certificates\models.py:147
+#: .\apps\project\specific\documents\certificates\models.py:154
 msgid "Approval date"
 msgstr "Fecha de aprobación"
 
-#: .\apps\project\specific\documents\certificates\models.py:159
-#: .\apps\project\specific\documents\certificates\models.py:372
+#: .\apps\project\specific\documents\certificates\models.py:166
+#: .\apps\project\specific\documents\certificates\models.py:379
 msgid "Issued at"
 msgstr "Emitido en"
 
-#: .\apps\project\specific\documents\certificates\models.py:162
+#: .\apps\project\specific\documents\certificates\models.py:169
 msgid "Legal issuance date of the certificate"
 msgstr "Fecha de emisión legal del certificado"
 
-#: .\apps\project\specific\documents\certificates\models.py:166
-#: .\apps\project\specific\documents\certificates\models.py:376
+#: .\apps\project\specific\documents\certificates\models.py:173
+#: .\apps\project\specific\documents\certificates\models.py:383
 msgid "Expires at"
 msgstr "Vence en"
 
-#: .\apps\project\specific\documents\certificates\models.py:173
+#: .\apps\project\specific\documents\certificates\models.py:180
 msgid "Revoked at"
 msgstr "Revocado"
 
-#: .\apps\project\specific\documents\certificates\models.py:179
+#: .\apps\project\specific\documents\certificates\models.py:186
 msgid "Revocation reason"
 msgstr "Motivo de revocación"
 
-#: .\apps\project\specific\documents\certificates\models.py:231
+#: .\apps\project\specific\documents\certificates\models.py:238
 msgid "If no user is provided, both name and last name are required."
 msgstr ""
 "Si no se proporciona ningún usuario, se requieren tanto el nombre como el "
 "apellido."
 
-#: .\apps\project\specific\documents\certificates\models.py:236
+#: .\apps\project\specific\documents\certificates\models.py:243
 msgid "You must provide at least one document: CC or Passport."
 msgstr "Debes proporcionar al menos un documento: CC o Pasaporte."
 
-#: .\apps\project\specific\documents\certificates\models.py:241
+#: .\apps\project\specific\documents\certificates\models.py:248
 msgid "Passport expiration date is required when Passport is provided."
 msgstr ""
 "Se requiere la fecha de vencimiento del pasaporte cuando se proporciona el "
 "mismo."
 
-#: .\apps\project\specific\documents\certificates\models.py:290
-#: .\apps\project\specific\documents\certificates\models.py:291
+#: .\apps\project\specific\documents\certificates\models.py:297
+#: .\apps\project\specific\documents\certificates\models.py:298
 msgid "User Verification"
 msgstr "Verificación de usuario"
 
-#: .\apps\project\specific\documents\certificates\models.py:319
+#: .\apps\project\specific\documents\certificates\models.py:326
 msgid "Document title"
 msgstr "Título del documento"
 
-#: .\apps\project\specific\documents\certificates\models.py:347
+#: .\apps\project\specific\documents\certificates\models.py:354
 msgid "Document file"
 msgstr "Archivo o Documento"
 
-#: .\apps\project\specific\documents\certificates\models.py:366
+#: .\apps\project\specific\documents\certificates\models.py:373
 msgid "Sent at"
 msgstr "Enviado a"
 
-#: .\apps\project\specific\documents\certificates\models.py:412
-#: .\apps\project\specific\documents\certificates\models.py:413
-#: .\apps\project\specific\documents\certificates\models.py:441
+#: .\apps\project\specific\documents\certificates\models.py:422
+#: .\apps\project\specific\documents\certificates\models.py:423
+#: .\apps\project\specific\documents\certificates\models.py:451
 msgid "Document Verification"
 msgstr "Verificación de documentos"
 
-#: .\apps\project\specific\documents\certificates\models.py:432
-msgid "User Certificate"
-msgstr "Certificado de usuario"
-
-#: .\apps\project\specific\documents\certificates\models.py:450
+#: .\apps\project\specific\documents\certificates\models.py:460
 msgid "Authenticated user"
 msgstr "Usuario autenticado"
 
-#: .\apps\project\specific\documents\certificates\models.py:456
+#: .\apps\project\specific\documents\certificates\models.py:466
 msgid "Anonymous email"
 msgstr "Correo electrónico anónimo"
 
-#: .\apps\project\specific\documents\certificates\models.py:462
+#: .\apps\project\specific\documents\certificates\models.py:472
 msgid "IP address"
 msgstr "Dirección IP"
 
-#: .\apps\project\specific\documents\certificates\models.py:468
+#: .\apps\project\specific\documents\certificates\models.py:478
 msgid "User agent"
 msgstr "agente del usuario"
 
-#: .\apps\project\specific\documents\certificates\models.py:474
+#: .\apps\project\specific\documents\certificates\models.py:484
 msgid "Viewed at"
 msgstr "Visto a las"
 
-#: .\apps\project\specific\documents\certificates\models.py:483
+#: .\apps\project\specific\documents\certificates\models.py:493
 msgid "You must relate the view to a certificate or a document."
 msgstr "Debe relacionar la vista con un certificado o un documento."
 
-#: .\apps\project\specific\documents\certificates\models.py:488
+#: .\apps\project\specific\documents\certificates\models.py:498
 msgid "Anonymous view require an email address."
 msgstr "La vista anónima requiere una dirección de correo electrónico."
 
-#: .\apps\project\specific\documents\certificates\models.py:504
+#: .\apps\project\specific\documents\certificates\models.py:514
 msgid "Certificate View Log"
 msgstr "Registro de vista de certificado"
 
-#: .\apps\project\specific\documents\certificates\models.py:505
+#: .\apps\project\specific\documents\certificates\models.py:515
 msgid "Certificate View Logs"
 msgstr "Registros de visualización de certificados"
 
-#: .\apps\project\specific\documents\certificates\utils.py:115
+#: .\apps\project\specific\documents\certificates\utils.py:116
 msgid "Your document verification code"
 msgstr "Tu código de verificación para los documentos"
 
-#: .\apps\project\specific\documents\certificates\utils.py:117
+#: .\apps\project\specific\documents\certificates\utils.py:118
 #, python-brace-format
 msgid ""
 "Your verification code is:\n"
@@ -314,27 +437,71 @@ msgstr ""
 "\n"
 "Este código caduca en 10 minutos."
 
-#: .\apps\project\specific\documents\certificates\views.py:57
+#: .\apps\project\specific\documents\certificates\views.py:61
 msgid "ID Number not found."
 msgstr "Número de identificación no encontrado."
 
-#: .\apps\project\specific\documents\certificates\views.py:125
+#: .\apps\project\specific\documents\certificates\views.py:130
 #, python-format
 msgid "Please wait %(seconds)s seconds before requesting a new code."
 msgstr "Espere %(seconds)s segundos antes de solicitar un nuevo código."
 
-#: .\apps\project\specific\documents\certificates\views.py:136
-msgid "A new verification code has been sent to your email."
+#: .\apps\project\specific\documents\certificates\views.py:138
+#: .\apps\project\specific\documents\certificates\views.py:189
+msgid "Too many code requests. Try again later."
 msgstr ""
-"Se ha enviado un nuevo código de verificación a su correo electrónico."
 
-#: .\apps\project\specific\documents\certificates\views.py:192
+#: .\apps\project\specific\documents\certificates\views.py:147
+msgid "A new verification code has been sent to your email."
+msgstr "Se ha enviado un nuevo código de verificación a su correo electrónico."
+
+#: .\apps\project\specific\documents\certificates\views.py:204
 msgid "Invalid or expired code."
 msgstr "Código inválido o caducado."
 
-#: .\apps\project\specific\documents\certificates\views.py:214
+#: .\apps\project\specific\documents\certificates\views.py:230
 msgid "Document not found."
 msgstr "Documento no encontrado."
+
+#: .\apps\project\specific\documents\certificates\views.py:232
+msgid "We could not verify the document with the provided data."
+msgstr ""
+
+#: .\apps\project\specific\documents\certificates\views.py:294
+#, fuzzy
+#| msgid "Document Verification"
+msgid "AEGIS Documents Certificates"
+msgstr "Verificación de documentos"
+
+#: .\apps\project\specific\documents\certificates\views.py:296
+msgid ""
+"Verify documents protected and issued through the AEGIS certification system."
+msgstr ""
+
+#: .\apps\project\specific\documents\certificates\views.py:304
+#, fuzzy
+#| msgid "User Certificate"
+msgid "IPCON Employee Certificate"
+msgstr "Certificado de usuario"
+
+#: .\apps\project\specific\documents\certificates\views.py:306
+msgid "Validate employment and institutional certificates issued by IPCON."
+msgstr ""
+
+#~ msgid "Assign user certificate type to 'IDONEITY'"
+#~ msgstr "Asignar el tipo de certificado de usuario a 'IDONEITY'"
+
+#~ msgid "Assign user certificate type to 'EM_IPCON'"
+#~ msgstr "Asignar el tipo de certificado de usuario a 'EM_IPCON'"
+
+#~ msgid "Assign user certificate type to 'EM_PROPENSIONES'"
+#~ msgstr "Asignar tipo de certificado de usuario a 'EM_PROPENSIONES'"
+
+#~ msgid "Assign document certificate type to 'AEGIS'"
+#~ msgstr "Asignar tipo de certificado de documento a 'AEGIS'"
+
+#~ msgid "Assign document certificate type to 'GENERIC'"
+#~ msgstr "Asignar el tipo de certificado de documento a 'GENÉRICO'"
 
 #, python-brace-format
 #~ msgid "Updated {num_actualizados} certificates to IDONEITY."
