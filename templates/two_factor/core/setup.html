@@ -86,11 +86,11 @@
 
         {% if request.user.is_authenticated %}
           {% comment 'TODO go to profile' %}
-          <a href="{% url 'two_factor:login' %}">{% trans 'Back to login' %}</a>
+          <a href="">{% trans 'Back to login' %}</a>
           {% endcomment %}
         {% else %}
           <div class="small text-center">
-            <a href="{% url 'two_factor:login' %}">{% trans 'Back to login' %}</a>
+            <a href="">{% trans 'Back to login' %}</a>
           </div>
         {% endif %}
       </div>

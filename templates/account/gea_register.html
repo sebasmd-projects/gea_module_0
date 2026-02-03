@@ -50,45 +50,45 @@
             {% if step_key == "user" %}
               <h4 class="mt-2">{% trans "User information" %}</h4>
               <div class="col-md-4">
-                {% include floating_input with field=wizard.form.username label=_("Username*") %}
+                {% include floating_input with field=wizard.form.username label=_("Username*") disabled=True %}
               </div>
               <div class="col-md-4">
-                {% include floating_input with field=wizard.form.first_name label=_("Names*") %}
+                {% include floating_input with field=wizard.form.first_name label=_("Names*") disabled=True %}
               </div>
               <div class="col-md-4">
-                {% include floating_input with field=wizard.form.last_name label=_("Surnames*") %}
+                {% include floating_input with field=wizard.form.last_name label=_("Surnames*") disabled=True %}
               </div>
               <div class="col-md-6">
-                {% include floating_input with field=wizard.form.user_type label=_("User type*") %}
+                {% include floating_input with field=wizard.form.user_type label=_("User type*") disabled=True %}
               </div>
               <div class="col-md-6" id="referred-wrapper">
-                {% include floating_input with field=wizard.form.referred label=_("Referred By") %}
+                {% include floating_input with field=wizard.form.referred label=_("Referred By") disabled=True %}
               </div>
             {% endif %}
 
             {% if step_key == "security" %}
               <h4 class="mt-2">{% trans "Security information" %}</h4>
               <div class="col-md-6">
-                {% include floating_input with field=wizard.form.password label=_("Password*") show_eye=True eye_target_id="register_password" %}
+                {% include floating_input with field=wizard.form.password label=_("Password*") show_eye=True eye_target_id="register_password" disabled=True %}
               </div>
               <div class="col-md-6">
-                {% include floating_input with field=wizard.form.confirm_password label=_("Confirm Password*") show_eye=True eye_target_id="register_confirm_password" %}
+                {% include floating_input with field=wizard.form.confirm_password label=_("Confirm Password*") show_eye=True eye_target_id="register_confirm_password" disabled=True %}
               </div>
             {% endif %}
 
             {% if step_key == "contact" %}
               <h4 class="mt-2">{% trans "Contact information" %}</h4>
               <div class="col-md-2">
-                {% include floating_input with field=wizard.form.phone_number_code label=_("Code*") %}
+                {% include floating_input with field=wizard.form.phone_number_code label=_("Code*") disabled=True %}
               </div>
               <div class="col-md-5">
-                {% include floating_input with field=wizard.form.phone_number label=_("Cell phone*") %}
+                {% include floating_input with field=wizard.form.phone_number label=_("Cell phone*") disabled=True %}
               </div>
               <div class="col-md-5">
-                {% include floating_input with field=wizard.form.email label=_("Email*") %}
+                {% include floating_input with field=wizard.form.email label=_("Email*") disabled=True %}
               </div>
               <div class="col-md-6">
-                {% include floating_input with field=wizard.form.confirm_email label=_("Confirm Email*") %}
+                {% include floating_input with field=wizard.form.confirm_email label=_("Confirm Email*") disabled=True %}
               </div>
 
               {% if wizard.form.user_type.value == "B" %}
@@ -103,7 +103,7 @@
             {% if step_key == "code" %}
               <h4 class="mt-2">{% trans "Unique code" %}</h4>
               <div class="col-md-6">
-                {% include floating_input with field=wizard.form.unique_code label=_("Unique Code*") show_eye=True eye_target_id="register_unique_code" %}
+                {% include floating_input with field=wizard.form.unique_code label=_("Unique Code*") show_eye=True eye_target_id="register_unique_code" disabled=True %}
               </div>
 
               {% if wizard.form.user_type.value == "B" %}
@@ -132,16 +132,17 @@
                 value="{{ wizard.steps.prev }}"
                 class="btn btn-outline-secondary w-50"
                 formnovalidate
+                disabled
               >
                 {% trans "Back" %}
               </button>
             {% endif %}
-            <button type="submit" class="btn btn-success {% if wizard.steps.prev %}w-50{% else %}w-100{% endif %}">
+            <button type="submit" class="btn btn-success {% if wizard.steps.prev %}w-50{% else %}w-100{% endif %}" disabled>
               {% if step_key == "code" %}{% trans "Register" %}{% else %}{% trans "Continue" %}{% endif %}
             </button>
           </div>
 
-          <a class="btn btn-outline-dark" href="{% url 'two_factor:login' %}">
+          <a class="btn btn-outline-dark" href="">
             {% trans 'Do you already have an account? Sign in' %}
           </a>
         </div>

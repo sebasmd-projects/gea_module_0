@@ -298,7 +298,7 @@ class CertificatesLandingTemplateView(TemplateView):
                 "icon": "bi-shield-lock",
                 "icon_color": "text-success",
                 "button_class": "btn-outline-success",
-                "url": reverse_lazy("certificates:input_document_verification_aegis"),
+                # "url": reverse_lazy("certificates:input_document_verification_aegis"),
             },
             {
                 "title": _("IPCON Employee Certificate"),
@@ -308,7 +308,7 @@ class CertificatesLandingTemplateView(TemplateView):
                 "icon": "bi-building-check",
                 "icon_color": "text-success",
                 "button_class": "btn-outline-success",
-                "url": reverse_lazy("certificates:input_employee_verification_ipcon"),
+                # "url": reverse_lazy("certificates:input_employee_verification_ipcon"),
             },
 
             # {
