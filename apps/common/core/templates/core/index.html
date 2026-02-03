@@ -186,7 +186,6 @@
 
       <div class="hero-standby-wrapper" id="heroStandbyWrapper">
         <div class="hero-standby-card">
-          <button type="button" class="hero-standby-close" id="heroStandbyClose" aria-label="{% trans 'Close' %}">&times;</button>
 
           <h2 class="fw-semibold text-center">{% trans 'ACTIVE STANDBY MODE' %}</h2>
 
@@ -223,19 +222,6 @@
   <script defer src="{% static 'js/scripts.js' %}"></script>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const wrapper = document.getElementById('heroStandbyWrapper')
-      const closeBtn = document.getElementById('heroStandbyClose')
-      if (!wrapper || !closeBtn) return
-    
-      closeBtn.addEventListener('click', function () {
-        wrapper.classList.add('is-hidden')
-      })
-    })
-  </script>
-
-  <script>
-    // Lazy load del video del hero
     document.addEventListener('DOMContentLoaded', function () {
       const video = document.getElementById('hero-video')
       if (!video) return
