@@ -19,11 +19,11 @@ class IndexTemplateView(TemplateView):
 
 
 class PrivacyTemplateView(TemplateView):
-    template_name = "core/privacy.html"
+    template_name = "core/tyc/privacy.html"
 
 
 class TermsTemplateView(TemplateView):
-    template_name = "core/terms.html"
+    template_name = "core/tyc/terms.html"
 
 
 class PortfolioTemplateView(TemplateView):
