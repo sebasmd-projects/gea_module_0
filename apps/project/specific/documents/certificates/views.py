@@ -135,7 +135,8 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
         email = otp_state.get("email", "")
         allowed_send, _ = self.can_send_otp(email)
         if not allowed_send:
-            messages.warning(self.request, _("Too many code requests. Try again later."))
+            messages.warning(self.request, _(
+                "Too many code requests. Try again later."))
             return redirect(self.request.path)
 
         otp = generate_otp()
@@ -144,7 +145,8 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
 
         self.record_send_otp(email)
 
-        messages.success(self.request, _("A new verification code has been sent to your email."))
+        messages.success(self.request, _(
+            "A new verification code has been sent to your email."))
         return redirect(self.request.path)
 
     def post(self, request, *args, **kwargs):
@@ -184,9 +186,10 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
         email = form.cleaned_data["email"]
 
         allowed_send, _ = self.can_send_otp(email)
-        
+
         if not allowed_send:
-            form.add_error("email", _("Too many code requests. Try again later."))
+            form.add_error("email", _(
+                "Too many code requests. Try again later."))
             return self.form_invalid(form)
 
         otp = generate_otp()
@@ -229,7 +232,8 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
             if self.request.user.is_authenticated:
                 form.add_error("identifier", _("Document not found."))
             else:
-                form.add_error("identifier", _("We could not verify the document with the provided data."))
+                form.add_error("identifier", _(
+                    "We could not verify the document with the provided data."))
             return self.form_invalid(form)
 
         return redirect(
@@ -298,7 +302,7 @@ class CertificatesLandingTemplateView(TemplateView):
                 "icon": "bi-shield-lock",
                 "icon_color": "text-success",
                 "button_class": "btn-outline-success",
-                # "url": reverse_lazy("certificates:input_document_verification_aegis"),
+                "url": reverse_lazy("certificates:input_document_verification_aegis"),
             },
             {
                 "title": _("IPCON Employee Certificate"),
@@ -308,7 +312,7 @@ class CertificatesLandingTemplateView(TemplateView):
                 "icon": "bi-building-check",
                 "icon_color": "text-success",
                 "button_class": "btn-outline-success",
-                # "url": reverse_lazy("certificates:input_employee_verification_ipcon"),
+                "url": reverse_lazy("certificates:input_employee_verification_ipcon"),
             },
 
             # {

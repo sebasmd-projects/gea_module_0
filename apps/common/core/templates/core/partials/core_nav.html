@@ -98,12 +98,12 @@
 
     {% if not request.user.is_authenticated %}
       <li class="nav-item me-2 d-none d-md-block">
-        <a class="btn btn-outline-success" href="">
+        <a class="btn btn-outline-success" href="{% url 'two_factor:login' %}">
           {% trans 'Login' %}
         </a>
       </li>
       <li class="nav-item me-3 d-none d-md-block">
-        <a class="btn btn-outline-warning" href="">
+        <a class="btn btn-outline-warning" href="{% url 'account:register' %}">
           {% trans 'Register' %}
         </a>
       </li>
@@ -193,10 +193,10 @@
             {% trans 'Logout' %}
           </a>
         {% else %}
-          <a href="" class="btn btn-outline-success">
+          <a href="{% url 'two_factor:login' %}" class="btn btn-outline-success">
             {% trans 'Login' %}
           </a>
-          <a href="" class="btn btn-outline-warning">
+          <a href="{% url 'account:register' %}" class="btn btn-outline-warning">
             {% trans 'Register' %}
           </a>
         {% endif %}

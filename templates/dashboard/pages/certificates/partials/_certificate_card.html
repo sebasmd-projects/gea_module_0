@@ -1,7 +1,7 @@
 {% load i18n %}
 
 <div class="col-12 col-md-6 col-lg-4">
-  {% comment %} <a href="{{ url }}" class="text-decoration-none"> {% endcomment %}
+  <a href="{{ url }}" class="text-decoration-none">
     <div class="card h-100 border-0 shadow-sm hover-card">
       <div class="card-body text-center">
         <div>
@@ -12,9 +12,8 @@
 
         <p class="card-text text-muted small">{{ description }}</p>
 
-        {% comment %} <a href="{{ url }}" class="btn {{ button_class }} btn-sm mt-3">{% trans 'Verify certificate' %}</a> {% endcomment %}
-        <button class="btn {{ button_class }} btn-sm mt-3">{% trans 'Verify certificate' %}</button>
+        <a href="{{ url }}" class="btn {{ button_class }} btn-sm mt-3">{% trans 'Verify certificate' %}</a>
       </div>
     </div>
-  {% comment %} </a> {% endcomment %}
+  </a>
 </div>
