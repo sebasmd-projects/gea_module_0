@@ -292,12 +292,8 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-if bool(os.getenv('DJANGO_EMAIL_USE_SSL')):
-    EMAIL_USE_SSL = True
-    EMAIL_USE_TLS = False
-else:
-    EMAIL_USE_SSL = False
-    EMAIL_USE_TLS = True
+EMAIL_USE_SSL = bool(os.getenv('DJANGO_EMAIL_USE_SSL'))
+EMAIL_USE_TLS = not EMAIL_USE_SSL
 
 DEFAULT_FROM_EMAIL = os.getenv('DJANGO_EMAIL_DEFAULT_FROM_EMAIL')
 EMAIL_BACKEND = os.getenv('DJANGO_EMAIL_BACKEND')
