@@ -113,7 +113,7 @@
     .hero-standby-card h2 {
       letter-spacing: 0.1em;
       margin-bottom: 0.1rem;
-      font-size: 1.0rem;
+      font-size: 1rem;
     }
     
     .hero-standby-card p {
@@ -174,7 +174,7 @@
     <!-- Hero Section -->
     <div id="hero" class="hero">
       <div class="hero-video">
-        <video id="hero-video" muted loop playsinline preload="none" poster="{% static 'assets/imgs/hero-poster.webp' %}">
+        <video id="hero-video" muted loop playsinline preload="none">
           <!-- Video para móviles (9:16) -->
           <source data-src="{% static 'assets/video/hero-video-mobile.mp4' %}" type="video/mp4" media="(max-width: 425px)" />
 
@@ -184,6 +184,16 @@
         </video>
       </div>
     </div>
+
+    <script>
+      const video = document.getElementById('hero-video')
+      
+      if (window.innerWidth <= 425) {
+        video.poster = "{% static 'assets/video/hero-poster-mobile.webp' %}"
+      } else {
+        video.poster = "{% static 'assets/video/hero-poster.webp' %}"
+      }
+    </script>
 
     <!-- /Hero Section -->
   </main>
