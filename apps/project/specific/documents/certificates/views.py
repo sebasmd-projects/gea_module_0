@@ -294,16 +294,16 @@ class CertificatesLandingTemplateView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         context["certificates"] = [
-            {
-                "title": _("AEGIS Documents Certificates"),
-                "description": _(
-                    "Verify documents protected and issued through the AEGIS certification system."
-                ),
-                "icon": "bi-shield-lock",
-                "icon_color": "text-success",
-                "button_class": "btn-outline-success",
-                "url": reverse_lazy("certificates:input_document_verification_aegis"),
-            },
+            # {
+            #     "title": _("AEGIS Documents Certificates"),
+            #     "description": _(
+            #         "Verify documents protected and issued through the AEGIS certification system."
+            #     ),
+            #     "icon": "bi-shield-lock",
+            #     "icon_color": "text-success",
+            #     "button_class": "btn-outline-success",
+            #     "url": reverse_lazy("certificates:input_document_verification_aegis"),
+            # },
             {
                 "title": _("IPCON Employee Certificate"),
                 "description": _(
