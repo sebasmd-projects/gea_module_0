@@ -36,6 +36,8 @@ else:
     else:
         ALLOWED_HOSTS = [os.getenv('DJANGO_ALLOWED_HOSTS')]
 
+ALLOW_ANY_EMAIL_IPCON = os.getenv('ALLOW_ANY_EMAIL_IPCON', 'False').lower() == 'true'
+
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -301,6 +303,8 @@ EMAIL_HOST = os.getenv('DJANGO_EMAIL_HOST')
 EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_HOST_PASSWORD')
 EMAIL_HOST_USER = os.getenv('DJANGO_EMAIL_HOST_USER')
 EMAIL_PORT = int(os.getenv('DJANGO_EMAIL_PORT'))
+
+
 
 
 if ',' in os.getenv('GEA_DAILY_CODE_BUYER_RECIPIENTS'):

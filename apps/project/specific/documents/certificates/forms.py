@@ -3,6 +3,7 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
+from django.conf import settings
 
 from .functions import is_temporary_email, is_ipcon_email, normalize_identifier
 from .models import DocumentCertificateTypeChoices, DocumentTypeChoices
@@ -68,7 +69,7 @@ class AnonymousEmailOTPForm(forms.Form):
             raise ValidationError(
                 _('Temporary email addresses are not allowed.'))
 
-        if not is_ipcon_email(email):
+        if not is_ipcon_email(email, getattr(settings, "ALLOW_ANY_EMAIL_IPCON", False)):
             raise ValidationError(_('Only authorized emails.'))
 
         return email

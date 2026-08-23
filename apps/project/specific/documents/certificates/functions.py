@@ -197,6 +197,7 @@ def normalize_identifier(value: str) -> str:
 
     raise ValidationError(_('Invalid identifier length.'))
 
+
 def is_temporary_email(email: str) -> bool:
 
     if not EMAIL_REGEX.match(email):
@@ -206,10 +207,13 @@ def is_temporary_email(email: str) -> bool:
     return domain in TEMP_EMAIL_DOMAINS
 
 
-def is_ipcon_email(email:str) -> bool:
+def is_ipcon_email(email: str, allow_any: bool = False) -> bool:
 
     if not EMAIL_REGEX.match(email):
         return True
-    
-    domain = email.split('@')[-1].lower()
-    return domain in IPCON_EMAIL_DOMAINS
+
+    if allow_any:
+        return True
+    else:
+        domain = email.split('@')[-1].lower()
+        return domain in IPCON_EMAIL_DOMAINS
