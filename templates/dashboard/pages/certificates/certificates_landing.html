@@ -39,11 +39,20 @@
 
 
             {# ================= GRID ================= #}
-            <div class="row g-4">
-                {% for cert in certificates %}
-                    {% include "dashboard/pages/certificates/partials/_certificate_card.html" with title=cert.title description=cert.description icon=cert.icon icon_color=cert.icon_color button_class=cert.button_class url=cert.url %}
-                {% endfor %}
+            <div class="row g-4 justify-content-center">
 
+                {# ================= CERTIFICATE CARDS ================= #}
+                {% if certificates|length == 0 %}
+                    <div class="col-12 text-center">
+                        <p class="text-muted">
+                            {% trans 'No certifications available at this time.' %}
+                        </p>
+                    </div>
+                {% else %}
+                    {% for cert in certificates %}
+                        {% include "dashboard/pages/certificates/partials/_certificate_card.html" with title=cert.title description=cert.description icon=cert.icon icon_color=cert.icon_color button_class=cert.button_class url=cert.url %}
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
     </div>
