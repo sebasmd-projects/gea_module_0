@@ -30,7 +30,7 @@ def set_certificate_type_action(*, certificate_value: str, label: str, name: str
             updated = queryset.update(certificate_type=certificate_value)
         messages.success(request, _(f"{updated} records updated to {label}."))
 
-    _action.__name__ = name  # 👈 clave para evitar admin.E130
+    _action.__name__ = name
     _action.short_description = _(f"Asignar tipo de certificado: {label}")
     return _action
 

@@ -40,5 +40,6 @@ dependencies = [
     "python-pptx>=1.0",
     "reportlab>=4.0",
     "requests>=2.32",
+    "setuptools<81",
     "urllib3>=2.2",
 ]
