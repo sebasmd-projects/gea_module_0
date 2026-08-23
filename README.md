@@ -43,3 +43,13 @@ uv sync
 ```cmd
 uv export --format=requirements-txt > requirements.txt
 ```
+
+## Activar tunel
+
+```powershell
+cd C:\Users\USUARIO\.ssh
+ssh -p 1022 -i "$env:USERPROFILE\.ssh\ssh_access" -L 3307:127.0.0.1:3306 propensi@190.90.160.103
+```
+
+Mantener la terminal abierta
+
