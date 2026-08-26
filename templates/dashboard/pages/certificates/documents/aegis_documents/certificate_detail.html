@@ -25,6 +25,23 @@
         </p>
       </div>
 
+      {# ================== FILE MATCH RESULT ================== #}
+      {% if file_match %}
+        <div class="alert {% if file_match.is_exact %}alert-success{% else %}alert-info{% endif %} shadow-sm">
+          <h2 class="h5 alert-heading">
+            <i class="bi bi-patch-check-fill me-1"></i>
+            {{ file_match.headline }}
+          </h2>
+
+          <p class="mb-2 small">{{ file_match.detail }}</p>
+
+          <p class="mb-0 small text-break">
+            <strong>{% trans 'Fingerprint of the file you uploaded (SHA-256):' %}</strong><br />
+            <code>{{ file_match.file_hash }}</code>
+          </p>
+        </div>
+      {% endif %}
+
       <div class="row">
         {# ================== LEFT COLUMN ================== #}
         <div class="col-md-4 text-center">
@@ -69,11 +86,131 @@
             </p>
           {% endif %}
         
-          {% if document.document_file %}
-          <p class="mb-1">
-            <strong>{% trans 'Download Original Document:' %}</strong>
-            <a href="{{ document.document_file.url }}" target="_blank" rel="noopener noreferrer">{% trans "Download " %}: {{ document.document_title }}</a>
-          </p>
+          {% if document.code_payload %}
+            <p class="mb-1">
+              <strong>{% trans 'Certification code:' %}</strong>
+              <code class="text-break">{{ document.code_payload }}</code>
+            </p>
+          {% endif %}
+
+          {% if document.public_copy_file %}
+            <p class="mb-1">
+              <strong>{% trans 'Certified digital copy:' %}</strong>
+              <a href="{{ document.public_copy_file.url }}" target="_blank" rel="noopener noreferrer">
+                {% trans 'Download' %}: {{ document.document_title }}
+              </a>
+            </p>
+            <p class="text-muted small mb-1">
+              {% trans 'This is the distributable copy. It carries a hidden watermark that lets this platform recognise it as a certified copy even if its metadata changes while being emailed or shared.' %}
+            </p>
+          {% elif document.document_file %}
+            <p class="mb-1">
+              <strong>{% trans 'Download Original Document:' %}</strong>
+              <a href="{{ document.document_file.url }}" target="_blank" rel="noopener noreferrer">{% trans "Download " %}: {{ document.document_title }}</a>
+            </p>
+          {% endif %}
+
+          {# ================== CERTIFICATION RECORD (AUDIT) ================== #}
+          {% if document.is_certified %}
+            <div class="card border-secondary my-4">
+              <div class="card-header bg-light">
+                <strong>{% trans 'Certification record' %}</strong>
+                <span class="badge bg-{{ record_status_class }} float-end">{{ record_status_label }}</span>
+              </div>
+
+              <div class="card-body">
+                <p class="small text-muted">
+                  {% trans 'The record below is what an auditor needs. It states what this certification does and does not attest, and lets anyone check the file they hold without having to come back to this platform.' %}
+                </p>
+
+                {# ---------- What it does / does not attest ---------- #}
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <div class="border rounded p-2 h-100">
+                      <p class="small fw-bold mb-1">{% trans 'Legal content' %}</p>
+                      <p class="small text-muted mb-0">
+                        {% trans 'What the firm declares about the asset. It rests on the document itself and the signature of the legal representative — the platform records it, it does not vouch for it.' %}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="border rounded p-2 h-100">
+                      <p class="small fw-bold mb-1">{% trans 'Digital integrity' %}</p>
+                      <p class="small text-muted mb-0">
+                        {% trans 'Proof that the file you hold is byte-for-byte the one registered on the certification date, and that any later alteration is detectable. That is what this record attests.' %}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {# ---------- Fingerprints ---------- #}
+                <div class="table-responsive">
+                  <table class="table table-sm small mb-2">
+                    <thead>
+                      <tr>
+                        <th>{% trans 'File' %}</th>
+                        <th>{% trans 'SHA-256' %}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if document.source_hash %}
+                        <tr>
+                          <td>{% trans 'Original (without codes)' %}</td>
+                          <td><code class="text-break">{{ document.source_hash }}</code></td>
+                        </tr>
+                      {% endif %}
+                      {% if document.document_hash %}
+                        <tr>
+                          <td>{% trans 'Certified (with codes)' %}</td>
+                          <td><code class="text-break">{{ document.document_hash }}</code></td>
+                        </tr>
+                      {% endif %}
+                      {% if document.public_copy_hash %}
+                        <tr>
+                          <td>{% trans 'Distributable copy' %}</td>
+                          <td><code class="text-break">{{ document.public_copy_hash }}</code></td>
+                        </tr>
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
+
+                <p class="small text-muted">
+                  {% trans 'Compute it yourself:' %}
+                  <code>sha256sum &lt;file&gt;.pdf</code>
+                  {% trans 'on Linux or macOS,' %}
+                  <code>certutil -hashfile &lt;file&gt;.pdf SHA256</code>
+                  {% trans 'on Windows.' %}
+                </p>
+
+                {# ---------- Downloads ---------- #}
+                <div class="d-grid gap-2 d-md-flex">
+                  <a class="btn btn-outline-dark btn-sm"
+                     href="{% url 'certificates:certification_record' document.pk %}">
+                    <i class="bi bi-file-earmark-code"></i>
+                    {% trans 'Download certification record (JSON)' %}
+                  </a>
+
+                  {% if document.public_copy_file %}
+                    <a class="btn btn-outline-primary btn-sm"
+                       href="{{ document.public_copy_file.url }}" target="_blank" rel="noopener noreferrer">
+                      <i class="bi bi-file-earmark-pdf"></i>
+                      {% trans 'Download distributable copy (PDF)' %}
+                    </a>
+                  {% endif %}
+
+                  <a class="btn btn-outline-secondary btn-sm"
+                     href="{% url 'certificates:certification_public_key' %}" target="_blank" rel="noopener noreferrer">
+                    <i class="bi bi-key"></i>
+                    {% trans 'Public key' %}
+                  </a>
+                </div>
+
+                <p class="small text-muted mt-2 mb-0">
+                  {% trans 'The record is sealed cryptographically: any change to its contents breaks the seal. Expiry and revocation are not frozen in it — check this page for the live status.' %}
+                </p>
+              </div>
+            </div>
           {% endif %}
 
           <hr />

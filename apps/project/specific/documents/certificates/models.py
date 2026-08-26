@@ -10,8 +10,9 @@ from encrypted_model_fields.fields import EncryptedCharField
 from apps.common.utils.models import TimeStampedModel
 from apps.project.common.users.models import UserModel
 
-from .functions import (generate_public_code, get_hmac, masked_document_number,
-                        normalize_text)
+from .constants import DOCUMENT_PUBLIC_CODE_LENGTH
+from .functions import (generate_public_code, generate_unique_public_code,
+                        get_hmac, masked_document_number, normalize_text)
 
 
 class DocumentTypeChoices(models.TextChoices):
@@ -36,6 +37,20 @@ class DeliveryMethod(models.TextChoices):
     PHYSICAL = 'PHYSICAL', _('Physical')
     BOTH = 'BOTH', _('Digital and Physical')
     NONE = 'NONE', _('Not delivered')
+
+
+class CertificationStatusChoices(models.TextChoices):
+    DRAFT = 'DRAFT', _('Draft (original uploaded, not certified)')
+    CERTIFIED = 'CERTIFIED', _('Certified')
+    REVOKED = 'REVOKED', _('Revoked')
+
+
+class DocumentCopyKind(models.TextChoices):
+    """Que archivo de los tres reconocio la verificacion por huella."""
+    SOURCE = 'SOURCE', _('Original document without codes')
+    CERTIFIED = 'CERTIFIED', _('Certified document with codes')
+    PUBLIC_COPY = 'PUBLIC_COPY', _('Certified distributable digital copy')
+    WATERMARK = 'WATERMARK', _('Distributable copy identified by its hidden watermark')
 
 
 class UserVerificationModel(TimeStampedModel):
@@ -315,6 +330,23 @@ class UserVerificationModel(TimeStampedModel):
 
 
 class DocumentVerificationModel(TimeStampedModel):
+    """
+    Documento verificable publicamente.
+
+    Un documento certificado existe en tres archivos:
+
+    - ``source_file``      original recibido, sin codigos.
+    - ``document_file``    original con el QR y el codigo de barras ya
+                           incrustados: es el que hace fe y del que sale el
+                           hash certificado.
+    - ``public_copy_file`` copia distribuible, identica a la anterior a la
+                           vista, con una marca de agua oculta y verificable.
+
+    De cada uno se guardan dos huellas: la del archivo exacto (``*_hash``) y
+    la del contenido renderizable (``*_content_hash``), que sobrevive a los
+    cambios de metadatos habituales en el transporte por correo.
+    """
+
     id = models.UUIDField(
         'ID',
         default=uuid.uuid4,
@@ -329,7 +361,7 @@ class DocumentVerificationModel(TimeStampedModel):
 
     public_code = models.CharField(
         _('Public verification code'),
-        max_length=4,
+        max_length=32,
         unique=True,
         db_index=True,
         blank=True,
@@ -337,6 +369,7 @@ class DocumentVerificationModel(TimeStampedModel):
     )
 
     uuid_prefix = models.CharField(
+        _('UUID Prefix'),
         max_length=8,
         editable=False,
         unique=True,
@@ -350,20 +383,150 @@ class DocumentVerificationModel(TimeStampedModel):
         choices=DocumentCertificateTypeChoices.choices
     )
 
+    certification_status = models.CharField(
+        _('Certification status'),
+        max_length=20,
+        choices=CertificationStatusChoices.choices,
+        default=CertificationStatusChoices.DRAFT,
+        db_index=True
+    )
+
+    stamp_layout = models.ForeignKey(
+        'code_gen.StampLayoutModel',
+        on_delete=models.SET_NULL,
+        verbose_name=_('Stamp layout'),
+        related_name='documents',
+        blank=True,
+        null=True,
+        help_text=_(
+            'Where the QR and the barcode are placed inside the PDF. '
+            'Leave empty to use the default layout.'
+        )
+    )
+
+    # ---------- 1. Original sin codigos ----------
+    source_file = models.FileField(
+        _('Original document (without codes)'),
+        upload_to='certificates/documents/source/',
+        blank=True,
+        null=True
+    )
+
+    source_hash = models.CharField(
+        _('Original file hash'),
+        max_length=64,
+        blank=True,
+        db_index=True,
+        default=''
+    )
+
+    source_content_hash = models.CharField(
+        _('Original content hash'),
+        max_length=64,
+        blank=True,
+        db_index=True,
+        default=''
+    )
+
+    # ---------- 2. Certificado con codigos ----------
     document_file = models.FileField(
-        _('Document file'),
+        _('Certified document (with codes)'),
         upload_to='certificates/documents/',
         blank=True,
         null=True
     )
 
     document_hash = models.CharField(
+        _('Certified file hash'),
         max_length=64,
         blank=True,
+        db_index=True,
         editable=False
     )
 
+    certified_content_hash = models.CharField(
+        _('Certified content hash'),
+        max_length=64,
+        blank=True,
+        db_index=True,
+        default=''
+    )
+
+    # ---------- 3. Copia publica distribuible ----------
+    public_copy_file = models.FileField(
+        _('Distributable digital copy'),
+        upload_to='certificates/documents/public/',
+        blank=True,
+        null=True
+    )
+
+    public_copy_hash = models.CharField(
+        _('Distributable copy hash'),
+        max_length=64,
+        blank=True,
+        db_index=True,
+        default=''
+    )
+
+    public_copy_content_hash = models.CharField(
+        _('Distributable copy content hash'),
+        max_length=64,
+        blank=True,
+        db_index=True,
+        default=''
+    )
+
+    watermark_token = models.CharField(
+        _('Watermark token'),
+        max_length=128,
+        blank=True,
+        default='',
+        editable=False
+    )
+
+    # ---------- Codigo emitido ----------
+    code_payload = models.TextField(
+        _('Code payload'),
+        blank=True,
+        default=''
+    )
+
+    code_initials = models.CharField(
+        _('Certificate initials'),
+        max_length=20,
+        blank=True,
+        default=''
+    )
+
+    code_sequence = models.CharField(
+        _('Autonomous sequence'),
+        max_length=20,
+        blank=True,
+        default='',
+        db_index=True
+    )
+
+    code_hash_fragment = models.CharField(
+        _('Hash fragment in the code'),
+        max_length=64,
+        blank=True,
+        default=''
+    )
+
+    qr_payload = models.TextField(
+        _('QR payload'),
+        blank=True,
+        default=''
+    )
+
+    certified_at = models.DateTimeField(
+        _('Certified at'),
+        blank=True,
+        null=True
+    )
+
     delivery_method = models.CharField(
+        _('Delivery method'),
         max_length=10,
         choices=DeliveryMethod.choices,
         default=DeliveryMethod.NONE
@@ -390,6 +553,10 @@ class DocumentVerificationModel(TimeStampedModel):
         return self.expires_at and self.expires_at < timezone.now().date()
 
     @property
+    def is_certified(self) -> bool:
+        return self.certification_status == CertificationStatusChoices.CERTIFIED
+
+    @property
     def total_views(self) -> int:
         return self.view_logs.count()
 
@@ -401,13 +568,24 @@ class DocumentVerificationModel(TimeStampedModel):
             .distinct()
             .count()
         )
-        
+
+    def known_hashes(self) -> dict:
+        """Mapa huella -> tipo de copia, para la verificacion por archivo."""
+        return {
+            self.source_hash: DocumentCopyKind.SOURCE,
+            self.document_hash: DocumentCopyKind.CERTIFIED,
+            self.public_copy_hash: DocumentCopyKind.PUBLIC_COPY,
+        }
+
     def __str__(self):
         return f"{self.document_title} [{self.public_code}]"
 
     def save(self, *args, **kwargs):
         if not self.public_code:
-            self.public_code = generate_public_code(4)
+            self.public_code = generate_unique_public_code(
+                type(self),
+                length=DOCUMENT_PUBLIC_CODE_LENGTH
+            )
 
         self.uuid_prefix = str(self.id)[:8]
 
@@ -426,6 +604,7 @@ class DocumentVerificationModel(TimeStampedModel):
             models.Index(fields=['public_code']),
             models.Index(fields=['uuid_prefix']),
             models.Index(fields=['expires_at']),
+            models.Index(fields=['certification_status']),
         ]
 
 

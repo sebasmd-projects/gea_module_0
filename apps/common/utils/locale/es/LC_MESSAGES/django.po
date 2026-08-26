@@ -203,28 +203,3 @@ msgstr "Error 504"
 #: .\apps\common\utils\views.py:163
 msgid "Gateway Timeout"
 msgstr "Tiempo de Espera Agotado del Gateway"
-
-#, python-brace-format
-#~ msgid "Maximum allowed: {self.max_list_per_page} records."
-#~ msgstr "Máximo permitido: {self.max_list_per_page} registros."
-
-#~ msgid "Prohibited Request"
-#~ msgstr "Solicitud Prohibida"
-
-#~ msgid "group_required attribute not set"
-#~ msgstr "Atributo group_required no establecido"
-
-#~ msgid "You do not have permission to view this page"
-#~ msgstr "No tienes permiso para ver esta página."
-
-#~ msgid "Security Key"
-#~ msgstr "Clave de seguridad"
-
-#~ msgid "requests"
-#~ msgstr "solicitudes"
-
-#~ msgid "Request"
-#~ msgstr "Solicitud"
-
-#~ msgid "Requests"
-#~ msgstr "Solicitudes"

@@ -36,7 +36,8 @@ else:
     else:
         ALLOWED_HOSTS = [os.getenv('DJANGO_ALLOWED_HOSTS')]
 
-ALLOW_ANY_EMAIL_IPCON = os.getenv('ALLOW_ANY_EMAIL_IPCON', 'False').lower() == 'true'
+ALLOW_ANY_EMAIL_IPCON = os.getenv(
+    'ALLOW_ANY_EMAIL_IPCON', 'False').lower() == 'true'
 
 DJANGO_APPS = [
     'django.contrib.admin',
@@ -94,7 +95,7 @@ PROJECT_DOCUMENTS_APPS = [
 ]
 
 PROJECT_INTERNAL_APPS = [
-
+    'apps.project.specific.internal.code_gen'
 ]
 
 ALL_CUSTOM_APPS = [
@@ -224,7 +225,7 @@ DATABASES = {
             "charset": "utf8mb4",
             "init_command": "SET NAMES utf8mb4 COLLATE utf8mb4_bin",
         }
-        
+
     }
 }
 
@@ -278,6 +279,20 @@ SESSION_COOKIE_AGE = 7200
 
 ROSETTA_SHOW_AT_ADMIN_PANEL = True
 
+# Base absoluta del sitio, usada cuando se generan URLs (QR de certificacion)
+# fuera del ciclo de una peticion, por ejemplo desde una accion del admin.
+PUBLIC_BASE_URL = os.getenv(
+    'PUBLIC_BASE_URL',
+    'https://geausa.propensionesabogados.com'
+).rstrip('/')
+
+# Clave privada Ed25519 (32 bytes en base64) con la que se firma el registro
+# de certificacion. Generala con:
+#     uv run python manage.py generate_certification_key
+# Sin ella el registro se sella con HMAC y solo la propia plataforma puede
+# comprobarlo: un auditor externo no podria verificarlo por su cuenta.
+CERTIFICATION_SIGNING_KEY = os.getenv('CERTIFICATION_SIGNING_KEY', '')
+
 STATIC_URL = os.getenv('DJANGO_STATIC_URL')
 
 STATIC_ROOT = str(os.getenv('DJANGO_STATIC_ROOT'))
@@ -303,8 +318,6 @@ EMAIL_HOST = os.getenv('DJANGO_EMAIL_HOST')
 EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_HOST_PASSWORD')
 EMAIL_HOST_USER = os.getenv('DJANGO_EMAIL_HOST_USER')
 EMAIL_PORT = int(os.getenv('DJANGO_EMAIL_PORT'))
-
-
 
 
 if ',' in os.getenv('GEA_DAILY_CODE_BUYER_RECIPIENTS'):

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-02 19:50-0500\n"
+"POT-Creation-Date: 2026-08-25 17:46-0500\n"
 "PO-Revision-Date: 2025-09-15 17:14-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,77 +30,62 @@ msgstr "Correo"
 #: .\apps\project\common\account\forms\buyers_register_form.py:40
 #: .\apps\project\common\account\forms\suppliers_register_form.py:27
 #: .\apps\project\common\account\forms\suppliers_register_form.py:31
-#, fuzzy
-#| msgid "Confirm Password"
 msgid "Confirm Email"
-msgstr "Confirmar contraseña"
+msgstr "Confirmar correo"
 
 #: .\apps\project\common\account\forms\buyers_register_form.py:49
 msgid "Email domain is not allowed for buyer registration."
 msgstr ""
+"El dominio del correo no está permitido para el registro de compradores."
 
 #: .\apps\project\common\account\forms\buyers_register_form.py:60
 #: .\apps\project\common\account\forms\suppliers_register_form.py:47
-#, fuzzy
-#| msgid "Passwords do not match"
 msgid "Emails do not match."
-msgstr "Las contraseñas no coinciden"
+msgstr "Los correos no coinciden."
 
 #: .\apps\project\common\account\forms\change_password_form.py:9
-#, fuzzy
-#| msgid "Confirm Password"
 msgid "Current Password"
-msgstr "Confirmar contraseña"
+msgstr "Contraseña actual"
 
 #: .\apps\project\common\account\forms\change_password_form.py:13
 msgid "Enter your current password"
-msgstr ""
+msgstr "Introduce tu contraseña actual"
 
 #: .\apps\project\common\account\forms\change_password_form.py:22
 #: .\apps\project\common\account\forms\forgot_password_form.py:78
-#, fuzzy
-#| msgid "Password"
 msgid "New Password"
-msgstr "Contraseña"
+msgstr "Contraseña nueva"
 
 #: .\apps\project\common\account\forms\change_password_form.py:26
 #: .\apps\project\common\account\forms\forgot_password_form.py:58
 msgid "Enter new password"
-msgstr ""
+msgstr "Introduce la contraseña nueva"
 
 #: .\apps\project\common\account\forms\change_password_form.py:35
 #: .\apps\project\common\account\forms\forgot_password_form.py:79
-#, fuzzy
-#| msgid "Confirm Password"
 msgid "Confirm New Password"
-msgstr "Confirmar contraseña"
+msgstr "Confirmar contraseña nueva"
 
 #: .\apps\project\common\account\forms\change_password_form.py:39
 #: .\apps\project\common\account\forms\forgot_password_form.py:65
 #: .\apps\project\common\account\forms\forgot_password_form.py:69
-#, fuzzy
-#| msgid "Confirm Password"
 msgid "Confirm new password"
-msgstr "Confirmar contraseña"
+msgstr "Confirma la contraseña nueva"
 
 #: .\apps\project\common\account\forms\change_password_form.py:55
 msgid "Your current password was entered incorrectly."
-msgstr ""
+msgstr "La contraseña actual que introdujiste no es correcta."
 
 #: .\apps\project\common\account\forms\change_password_form.py:71
-#, fuzzy
-#| msgid "Passwords do not match"
 msgid "The two password fields didn't match."
-msgstr "Las contraseñas no coinciden"
+msgstr "Las dos contraseñas no coinciden."
 
 #: .\apps\project\common\account\forms\change_password_form.py:77
 msgid "New password cannot be the same as current password."
-msgstr ""
+msgstr "La contraseña nueva no puede ser igual a la actual."
 
 #: .\apps\project\common\account\forms\common_register_form.py:56
 #: .\apps\project\common\account\forms\common_register_form.py:61
-#, fuzzy
-#| msgid "User"
 msgid "Username"
 msgstr "Usuario"
 
@@ -110,18 +95,14 @@ msgid "Names"
 msgstr "Nombres"
 
 #: .\apps\project\common\account\forms\common_register_form.py:78
-#, fuzzy
-#| msgid "Names"
 msgid "Surnames"
-msgstr "Nombres"
+msgstr "Apellidos"
 
 #: .\apps\project\common\account\forms\common_register_form.py:83
 msgid "Last names"
 msgstr "Apellidos"
 
 #: .\apps\project\common\account\forms\common_register_form.py:89
-#, fuzzy
-#| msgid "User Type"
 msgid "User type"
 msgstr "Tipo de usuario"
 
@@ -140,18 +121,14 @@ msgid "Confirm Password"
 msgstr "Confirmar contraseña"
 
 #: .\apps\project\common\account\forms\common_register_form.py:136
-#, fuzzy
-#| msgid "Passwords do not match"
 msgid "Passwords do not match."
-msgstr "Las contraseñas no coinciden"
+msgstr "Las contraseñas no coinciden."
 
 #: .\apps\project\common\account\forms\common_register_form.py:146
 msgid "Code"
-msgstr ""
+msgstr "Código"
 
 #: .\apps\project\common\account\forms\common_register_form.py:156
-#, fuzzy
-#| msgid "Cellphone"
 msgid "Cell phone"
 msgstr "Celular"
 
@@ -164,10 +141,8 @@ msgid "Enter a valid phone number (7–15 digits)."
 msgstr "Introduzca un número de teléfono válido (7–15 dígitos)."
 
 #: .\apps\project\common\account\forms\common_register_form.py:187
-#, fuzzy
-#| msgid "Unique Code"
 msgid "Unique code"
-msgstr "Código Único "
+msgstr "Código único"
 
 #: .\apps\project\common\account\forms\common_register_form.py:192
 msgid "Unique Code"
@@ -175,37 +150,35 @@ msgstr "Código Único "
 
 #: .\apps\project\common\account\forms\forgot_password_form.py:18
 msgid "Email or Username"
-msgstr ""
+msgstr "Correo o usuario"
 
 #: .\apps\project\common\account\forms\forgot_password_form.py:23
 msgid "Enter your email or username"
-msgstr ""
+msgstr "Introduce tu correo o tu usuario"
 
 #: .\apps\project\common\account\forms\forgot_password_form.py:34
 msgid "This field is required."
-msgstr ""
+msgstr "Este campo es obligatorio."
 
 #: .\apps\project\common\account\forms\forgot_password_form.py:54
-#, fuzzy
-#| msgid "Password"
 msgid "New password"
-msgstr "Contraseña"
+msgstr "Contraseña nueva"
 
 #: .\apps\project\common\account\views.py:77
 msgid "Register"
-msgstr ""
+msgstr "Registrarse"
 
 #: .\apps\project\common\account\views.py:140
 msgid "Invalid email."
-msgstr ""
+msgstr "Correo electrónico no válido."
 
 #: .\apps\project\common\account\views.py:148
 msgid "Too many code requests. Please try again later."
-msgstr ""
+msgstr "Demasiadas solicitudes de código. Inténtalo más tarde."
 
 #: .\apps\project\common\account\views.py:160
 msgid "Your GEA registration code"
-msgstr ""
+msgstr "Tu código de registro en GEA"
 
 #: .\apps\project\common\account\views.py:162
 #, python-format
@@ -216,14 +189,19 @@ msgid ""
 "\n"
 "This code expires in %(minutes)s minutes."
 msgstr ""
+"Tu código de registro es:\n"
+"\n"
+"%(code)s\n"
+"\n"
+"Este código caduca en %(minutes)s minutos."
 
 #: .\apps\project\common\account\views.py:190
 msgid "We sent a verification code to your email."
-msgstr ""
+msgstr "Hemos enviado un código de verificación a tu correo."
 
 #: .\apps\project\common\account\views.py:230
 msgid "Invalid or expired code."
-msgstr ""
+msgstr "Código no válido o caducado."
 
 #: .\apps\project\common\account\views.py:255
 msgid "A user with this email already exists."
@@ -231,33 +209,33 @@ msgstr "Ya existe un usuario con este correo electrónico."
 
 #: .\apps\project\common\account\views.py:320
 #: .\apps\project\common\account\views.py:348
-#, fuzzy
-#| msgid "Confirm Password"
 msgid "Reset Your Password"
-msgstr "Confirmar contraseña"
+msgstr "Restablece tu contraseña"
 
 #: .\apps\project\common\account\views.py:331
 msgid ""
 "If an account exists with the provided email/username, you will receive "
 "password reset instructions shortly."
 msgstr ""
+"Si existe una cuenta con el correo o el usuario indicados, recibirás en "
+"breve las instrucciones para restablecer la contraseña."
 
 #: .\apps\project\common\account\views.py:337
 msgid "Check Your Email"
-msgstr ""
+msgstr "Revisa tu correo"
 
 #: .\apps\project\common\account\views.py:339
 msgid ""
 "We've sent password reset instructions to your email. Please check your "
 "inbox and follow the link to reset your password."
 msgstr ""
+"Hemos enviado a tu correo las instrucciones para restablecer la contraseña. "
+"Revisa tu bandeja de entrada y sigue el enlace para restablecerla."
 
 #: .\apps\project\common\account\views.py:366
 #: .\apps\project\common\account\views.py:413
-#, fuzzy
-#| msgid "Password"
 msgid "Set New Password"
-msgstr "Contraseña"
+msgstr "Establece una contraseña nueva"
 
 #: .\apps\project\common\account\views.py:371
 #: .\apps\project\common\account\views.py:386
@@ -265,38 +243,30 @@ msgid ""
 "The password reset link is invalid or has expired. Please request a new "
 "password reset."
 msgstr ""
+"El enlace para restablecer la contraseña no es válido o ha caducado. "
+"Solicita uno nuevo."
 
 #: .\apps\project\common\account\views.py:400
 msgid ""
 "Your password has been reset successfully. You can now log in with your new "
 "password."
 msgstr ""
+"Tu contraseña se ha restablecido correctamente. Ya puedes iniciar sesión con "
+"la contraseña nueva."
 
 #: .\apps\project\common\account\views.py:447
 #, python-format
 msgid "Password Reset Request for %(site)s"
-msgstr ""
+msgstr "Solicitud de restablecimiento de contraseña para %(site)s"
 
 #: .\apps\project\common\account\views.py:477
 msgid "You must be logged in to change your password."
-msgstr ""
+msgstr "Tienes que haber iniciado sesión para cambiar tu contraseña."
 
 #: .\apps\project\common\account\views.py:495
 msgid "Your password has been changed successfully!"
-msgstr ""
+msgstr "¡Tu contraseña se ha cambiado correctamente!"
 
 #: .\apps\project\common\account\views.py:508
-#, fuzzy
-#| msgid "Confirm Password"
 msgid "Change Password"
-msgstr "Confirmar contraseña"
-
-#~ msgid "Digits only, 7–15 digits."
-#~ msgstr "Sólo dígitos, 7–15 dígitos."
-
-#, python-brace-format
-#~ msgid "Invalid Unique Code ({label})"
-#~ msgstr "Código único no válido ({label})"
-
-#~ msgid "Citizenship Number"
-#~ msgstr "Número de documento"
+msgstr "Cambiar contraseña"

@@ -237,6 +237,149 @@ Bitácora de cada consulta: certificado (de usuario o de documento), usuario aut
 
 ---
 
+## 6-bis. Motor de certificación documental (`internal.code_gen`)
+
+### Qué hace
+
+Convierte un PDF sin marcas en un documento certificado y verificable
+públicamente. De cada documento certificado quedan **tres archivos**:
+
+| Archivo | Campo | Contenido |
+|---|---|---|
+| Original | `source_file` | El PDF tal cual se recibió, sin códigos. |
+| Certificado | `document_file` | El original con el QR y el código de barras ya incrustados. Es el que hace fe. |
+| Copia distribuible | `public_copy_file` | Idéntico a la vista al anterior, con una marca de agua oculta y verificable. Es el que se entrega. |
+
+### El código emitido
+
+Orden canónico de los segmentos (los no seleccionados se omiten):
+
+```
+NIT   texto libre   INICIALES_SECUENCIA   HASH_B64   DDMMYYYY   ALEATORIO(12)
+901.409.813-7 AEGIS_04829173 xgXuB9Dj7EXz9mhV 25082026 90685R83CCJU
+```
+
+- **Secuencia autónoma**: permutación multiplicativa modular sobre un contador
+  interno (`CodeSequenceModel`), `seq = (n * A) mod 10^8` con `gcd(A, 10^8) = 1`.
+  Es biyectiva: no se repite dentro del ciclo y nunca es consecutiva.
+- **Código aleatorio**: 12 caracteres por defecto, alfabeto sin `I O 0 1`. Es
+  también el `public_code` con el que se verifica el documento.
+- **Hash**: base64 urlsafe sin relleno del SHA-256 del **archivo original**,
+  truncado a 16 caracteres por legibilidad del simbolo.
+
+### La dependencia circular hash / código
+
+El hash del archivo estampado no existe hasta estampar, pero el código
+estampado debería llevar un hash. La regla adoptada: **el código certifica el
+contenido que se certificó**, es decir el hash del original. Los hashes del
+certificado y de la copia se calculan después del estampado y se almacenan.
+
+### Restricciones del código de barras
+
+Code128 solo se emite con `[A-Za-z0-9 ._-]`. Se rechazan URLs (`://`, `:`),
+`? & # % = + < > " ' \ | / @` y demás. Todo eso va en el QR. Por encima de 48
+caracteres se avisa (no se bloquea); el límite duro son 80.
+
+### Marca de agua imperceptible
+
+Dos canales redundantes en la copia distribuible:
+
+1. un **XObject de imagen incrustado en los recursos de cada página pero nunca
+   referenciado desde el flujo de contenido**: está en el archivo, no se dibuja
+   ni se imprime, y la plataforma puede extraerlo y mostrarlo;
+2. una clave privada en los metadatos `/Info`.
+
+Ambos llevan el mismo token `GEAWM1|<uuid>|<hmac-sha256(SECRET_KEY, uuid)[:16]>`.
+El HMAC impide fabricar copias con marca válida sin la `SECRET_KEY`.
+
+### Estampado
+
+`StampLayoutModel` + `StampPlacementModel` definen dónde va cada símbolo:
+tipo (QR/barcode), páginas (primera / última / todas / concretas), anclaje a
+una esquina, desplazamientos y tamaño en puntos PostScript. Un layout marcado
+`is_default` se aplica a los documentos que no tengan uno asignado. El overlay
+se genera con ReportLab y se fusiona con pypdf: **el contenido original no se
+reconstruye**.
+
+### Verificación por archivo
+
+Tres canales, del más estricto al más tolerante:
+
+1. **Huella exacta** (SHA-256 de los bytes). Reconoce cualquiera de los tres
+   archivos byte a byte.
+2. **Huella de contenido** (`canonical_pdf_hash`): SHA-256 sobre caja de página,
+   rotación, flujos de contenido y XObjects, **ignorando** `/Info`, `/ID`, la
+   estructura física del archivo y el recurso de la marca de agua. Sobrevive a
+   los cambios de metadatos del transporte por correo. Como certificado y copia
+   comparten esta huella, se distinguen por la presencia de la marca.
+3. **Marca de agua**: si el contenido ya no coincide pero la marca sigue válida,
+   el archivo salió de la plataforma **pero fue modificado** → se rechaza
+   diciéndolo.
+
+Sin ningún cotejo, el archivo no corresponde a un documento certificado.
+
+### Registro de certificación (auditoría)
+
+Un certificado tiene dos mitades, y conviene no confundirlas:
+
+| | Qué es | De dónde sale |
+|---|---|---|
+| **Contenido jurídico** | Lo que la firma declara sobre el activo | El documento y la firma del representante legal. La plataforma lo registra, **no lo avala** |
+| **Integridad digital** | La prueba de que el archivo no fue alterado | Las huellas, el QR, el código de barras y la marca de agua |
+
+El **registro de certificación** acredita solo la segunda. Es un JSON
+determinista y sellado, descargable desde el detalle público
+(`certificates:certification_record`), pensado para adjuntarse a un expediente:
+
+```json
+{
+  "schema": "gea.certification-record/1",
+  "status": "VALID",
+  "algorithm": "SHA-256",
+  "certificate": { "id": "...", "public_code": "...", "code": "NIT INICIALES_SEC HASH FECHA ALEATORIO" },
+  "issuer": { "name": "PROPENSIONES ABOGADOS INTERNACIONAL S.A.S.", "nit": "901.409.813-7" },
+  "files": {
+    "original":    { "sha256": "H0", "content_sha256": "..." },
+    "certified":   { "sha256": "H1", "content_sha256": "..." },
+    "public_copy": { "sha256": "H2", "content_sha256": "..." }
+  },
+  "dates": { "issued_at": "...", "certified_at": "...", "expires_at": "...", "record_generated_at": "..." },
+  "verification_url": "https://...",
+  "scope": { "attests": "...", "does_not_attest": "..." },
+  "how_to_verify": [ "..." ],
+  "seal": { "algorithm": "Ed25519", "key_id": "...", "public_key": "...", "signature": "..." }
+}
+```
+
+Van las **tres** huellas, no solo dos: el auditor puede tener en la mano
+cualquiera de los tres archivos y el registro le dice cuál es.
+
+**Sello.** Con `CERTIFICATION_SIGNING_KEY` configurada (Ed25519, generada con
+`manage.py generate_certification_key`), el sello es una firma asimétrica que
+**cualquiera** verifica en local con la clave pública publicada en
+`certificates:certification_public_key`. Sin esa clave el registro se sella con
+un HMAC simétrico que solo la propia plataforma puede comprobar, y el registro
+lo dice de forma explícita en `seal.warning`. La firma cubre todos los campos
+salvo `seal`, serializados como JSON compacto con claves ordenadas en UTF-8.
+
+**Lo que el registro no congela**: el vencimiento y la revocación. `status` es
+el del momento en que se generó; para el estado vivo hay que abrir
+`verification_url`.
+
+### URLs permanentes
+
+`public_base_url()` devuelve siempre `PUBLIC_BASE_URL` y **nunca** deriva del
+host de la petición: el QR queda estampado dentro de un PDF que circulará
+durante años, y certificar desde `runserver` en la LAN grabaría un
+`http://192.168.x.x:8000` dentro del documento para siempre.
+
+### Formatos
+
+Certificación y verificación por archivo: **PDF únicamente**. El archivo subido
+para verificar no se almacena: se calcula su huella en memoria y se descarta.
+
+---
+
 ## 7. Galería multimedia (`video_masonry`)
 
 | Modelo | Contenido |

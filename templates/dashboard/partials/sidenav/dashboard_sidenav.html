@@ -74,7 +74,7 @@
           </div>
 
           <!-- Assets (Buyer) -->
-          {% if request.user.is_buyer or request.user.is_superadmin %}
+          {% if request.user.is_buyer or request.user.is_superuser %}
             {% is_any_active 'buyers:buyer_index' 'buyers:buyer_create' 'assets:create' 'assets:add_category' as assets_open %}
             <a class="nav-link {% link_collapsed_class 'buyers:buyer_index' 'buyers:buyer_create' 'assets:create' 'assets:add_category' %}" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAssets" aria-expanded="{% aria_expanded 'buyers:buyer_index' 'buyers:buyer_create' 'assets:create' 'assets:add_category' %}" aria-controls="pagesCollapseAssets">
               <div class="nav-link-icon">
@@ -172,11 +172,29 @@
         {% endif %}
       {% endif %}
 
-      {% if request.user.is_buyer or request.user.is_superadmin %}
+      {% if request.user.is_buyer or request.user.is_superuser %}
         <a class="nav-link" href="{% url 'buyers:hermes_form' %}">
           <div class="nav-link-icon">
             <i class="fa-regular fa-credit-card"></i>
           </div>AssetCredit - Hermes
+        </a>
+      {% endif %}
+
+      {% if request.user.is_staff or request.user.is_superuser %}
+        <div class="sidenav-menu-heading">{% trans 'Documents' %}</div>
+
+        <a class="nav-link {% active_class 'code_gen:code_generate' %}" href="{% url 'code_gen:code_generate' %}">
+          <div class="nav-link-icon">
+            <i class="fa-solid fa-barcode"></i>
+          </div>
+          {% trans 'Code generator' %}
+        </a>
+
+        <a class="nav-link {% active_class 'certificates:input_document_verification_aegis' %}" href="{% url 'certificates:input_document_verification_aegis' %}">
+          <div class="nav-link-icon">
+            <i class="fa-solid fa-file-shield"></i>
+          </div>
+          {% trans 'Verify document' %}
         </a>
       {% endif %}
     </div>

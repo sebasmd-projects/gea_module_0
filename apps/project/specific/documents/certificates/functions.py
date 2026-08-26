@@ -20,6 +20,8 @@ from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
+from .constants import IDENTIFIER_MAX_LENGTH, IDENTIFIER_MIN_LENGTH
+
 logging = logging.getLogger(__name__)
 
 OTP_LENGTH = 6
@@ -56,7 +58,30 @@ EMAIL_REGEX = re.compile(
 
 def generate_public_code(length=4):
     alphabet = string.ascii_uppercase + string.digits
-    return ''.join(secrets.choice(alphabet) for _ in range(length))
+    return ''.join(secrets.choice(alphabet) for _i in range(length))
+
+
+def generate_unique_public_code(model, length=4, field='public_code', attempts=25):
+    """
+    Genera un codigo publico garantizado unico contra el modelo indicado.
+
+    Parameters:
+        model: clase del modelo donde se comprueba la unicidad.
+        length (int): numero de caracteres.
+        field (str): campo a comprobar.
+        attempts (int): reintentos antes de rendirse.
+
+    Returns:
+        str: codigo publico libre.
+    """
+    for _attempt in range(attempts):
+        candidate = generate_public_code(length)
+        if not model.objects.filter(**{field: candidate}).exists():
+            return candidate
+
+    raise ValidationError(
+        _('Could not generate a unique public code. Please try again.')
+    )
 
 
 def normalize_text(value: str) -> str:
@@ -171,10 +196,11 @@ def normalize_identifier(value: str) -> str:
     """
     Normalize input identifier for document verification.
 
-    Rules:
-    - Strip spaces
-    - Uppercase public_code / uuid_prefix
-    - Validate UUID format strictly
+    Se aceptan, sin depender de una longitud fija:
+    - el codigo publico (4 o 12 caracteres, segun la epoca de emision),
+    - el prefijo del UUID (8 caracteres hexadecimales),
+    - el UUID completo (con o sin guiones),
+    - una URL de verificacion completa, de la que se extrae el UUID.
 
     Parameters:
         value (str): Raw user input
@@ -182,20 +208,32 @@ def normalize_identifier(value: str) -> str:
     Returns:
         str: Normalized identifier
     """
+    value = (value or '').strip()
+
+    if not value:
+        raise ValidationError(_('Enter a verification code.'))
+
+    # Si pegan la URL del QR, nos quedamos con el ultimo segmento util.
+    if '/' in value:
+        segments = [segment for segment in value.split('/') if segment]
+        if segments:
+            value = segments[-1]
+
     value = value.strip()
 
-    if len(value) == 4:
-        return value.upper()
+    if UUID_REGEX.match(value):
+        return value.lower()
 
-    if len(value) == 8:
-        return value
+    if len(value) == 32 and all(char in '0123456789abcdefABCDEF' for char in value):
+        return value.lower()
 
-    if len(value) >= 32 and len(value) <= 36:
-        if not UUID_REGEX.match(value):
-            raise ValidationError(_('Invalid UUID format.'))
-        return value
+    if not value.isalnum():
+        raise ValidationError(_('Invalid identifier format.'))
 
-    raise ValidationError(_('Invalid identifier length.'))
+    if not IDENTIFIER_MIN_LENGTH <= len(value) <= IDENTIFIER_MAX_LENGTH:
+        raise ValidationError(_('Invalid identifier length.'))
+
+    return value.upper()
 
 
 def is_temporary_email(email: str) -> bool:

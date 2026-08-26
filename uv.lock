@@ -659,9 +659,11 @@ dependencies = [
     { name = "pillow" },
     { name = "psycopg2-binary" },
     { name = "pyjwt" },
+    { name = "pypdf" },
     { name = "python-barcode" },
     { name = "python-dotenv" },
     { name = "python-pptx" },
+    { name = "qrcode" },
     { name = "reportlab" },
     { name = "requests" },
     { name = "setuptools" },
@@ -700,9 +702,11 @@ requires-dist = [
     { name = "pillow", specifier = ">=10" },
     { name = "psycopg2-binary", specifier = ">=2.9,<3.0" },
     { name = "pyjwt", specifier = ">=2.8" },
+    { name = "pypdf", specifier = ">=6.16.2" },
     { name = "python-barcode", specifier = ">=0.16.1" },
     { name = "python-dotenv", specifier = ">=1.0" },
     { name = "python-pptx", specifier = ">=1.0" },
+    { name = "qrcode", specifier = ">=8.2" },
     { name = "reportlab", specifier = ">=4.0" },
     { name = "requests", specifier = ">=2.32" },
     { name = "setuptools", specifier = "<81" },
@@ -1260,6 +1264,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/e7/46/bd74733ff231675599650d3e47f361794b22ef3e3770998dda30d3b63726/pyjwt-2.10.1.tar.gz", hash = "sha256:3cc5772eb20009233caf06e9d8a0577824723b44e6648ee0a2aedb6cf9381953", size = 87785, upload-time = "2024-11-28T03:43:29.933Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/61/ad/689f02752eeec26aed679477e80e632ef1b682313be70793d798c1d5fc8f/PyJWT-2.10.1-py3-none-any.whl", hash = "sha256:dcdd193e30abefd5debf142f9adfcdd2b58004e644f25406ffaebd50bd98dacb", size = 22997, upload-time = "2024-11-28T03:43:27.893Z" },
+]
+
+[[package]]
+name = "pypdf"
+version = "6.16.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/44/66/54212e75406afd9f3e933d0dda23072f6aecc55c5a273077dc2e0b028b23/pypdf-6.16.2.tar.gz", hash = "sha256:595647f6191de6f402cfde1d0c455d6cbccbd509aac32b34783009c032de5d6e", size = 7008996, upload-time = "2026-08-23T13:50:07.135Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/13/f1/a2da3b55acd4ab737bf728c97edaaed5ec1d3c1236acb639dcdfa97e42c7/pypdf-6.16.2-py3-none-any.whl", hash = "sha256:c8b09a59399062fb45a1b8156c18a787a10a3dae03ac9674397a226712c94604", size = 385060, upload-time = "2026-08-23T13:50:05.349Z" },
 ]
 
 [[package]]

@@ -1,0 +1,448 @@
+{% extends 'dashboard/dashboard_layout_base.html' %}
+
+{% load i18n static custom_filters %}
+
+{% block title %}
+  <title>{% trans 'Code Generator' %}</title>
+{% endblock title %}
+
+{% block icons %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/aa367a5aee.js" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block main_layout %}
+  {% url 'core:index' as dashboard_url %}
+  {% trans 'Code generator and document certification' as page_title %}
+  {% trans 'Issue barcodes and QR codes, and certify a PDF end to end.' as page_description %}
+  {% trans 'Dashboard' as dashboard_title %}
+  {% trans 'Documents' as documents_title %}
+  {% trans 'Code generator' as code_generator_title %}
+
+  {% include 'dashboard/partials/header/_header.html' with icon_class='me-2 fa-solid fa-barcode' page_title=page_title page_description=page_description parent_title=dashboard_title parent_url=dashboard_url breadcrumbs=documents_title|add:' > '|add:code_generator_title %}
+
+  <div class="container-xl px-4 mt-n10">
+
+    {# ================= MESSAGES ================= #}
+    {% if messages %}
+      <div class="mb-4">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} mb-2">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+      {% endif %}
+
+      <div class="row">
+
+        {# ============================================================ #}
+        {# ======================= LEFT: FORM ========================= #}
+        {# ============================================================ #}
+        <div class="col-xl-7">
+
+          {# -------- 1. Identification -------- #}
+          <div class="card mb-4">
+            <div class="card-header">
+              <i class="fa-regular fa-file-lines me-2"></i>{% trans 'Identification' %}
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label class="form-label" for="{{ form.reference.id_for_label }}">
+                  {{ form.reference.label }} <span class="text-danger">*</span>
+                </label>
+                {{ form.reference|add_class:"form-control" }}
+                {% for error in form.reference.errors %}
+                  <div class="invalid-feedback d-block">{{ error }}</div>
+                {% endfor %}
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="{{ form.custom_text_input.id_for_label }}">
+                  {{ form.custom_text_input.label }}
+                </label>
+                {{ form.custom_text_input|add_class:"form-control" }}
+                {% for error in form.custom_text_input.errors %}
+                  <div class="invalid-feedback d-block">{{ error }}</div>
+                {% endfor %}
+              </div>
+
+              <div class="mb-0">
+                <label class="form-label" for="{{ form.description.id_for_label }}">
+                  {{ form.description.label }}
+                </label>
+                {{ form.description|add_class:"form-control" }}
+              </div>
+            </div>
+          </div>
+
+          {# -------- 2. Code segments -------- #}
+          <div class="card mb-4">
+            <div class="card-header">
+              <i class="fa-solid fa-list-check me-2"></i>{% trans 'Code segments' %}
+            </div>
+            <div class="card-body">
+              <p class="small text-muted">
+                {% trans 'The selected segments are joined in this order:' %}
+                <code>NIT &nbsp; {% trans 'custom text' %} &nbsp; INITIALS_SEQUENCE &nbsp; HASH &nbsp; DDMMYYYY &nbsp; {% trans 'random code' %}</code>
+              </p>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="form-check">
+                    {{ form.include_nit|add_class:"form-check-input" }}
+                    <label class="form-check-label" for="{{ form.include_nit.id_for_label }}">
+                      {{ form.include_nit.label }}
+                    </label>
+                    <div class="form-text">{{ form.include_nit.help_text }}</div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-check">
+                    {{ form.include_initials_sequence|add_class:"form-check-input" }}
+                    <label class="form-check-label" for="{{ form.include_initials_sequence.id_for_label }}">
+                      {{ form.include_initials_sequence.label }}
+                    </label>
+                    <div class="form-text">{{ form.include_initials_sequence.help_text }}</div>
+                  </div>
+                  <div class="mt-2">
+                    {{ form.initials|add_class:"form-control form-control-sm" }}
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-check">
+                    {{ form.include_document_hash|add_class:"form-check-input" }}
+                    <label class="form-check-label" for="{{ form.include_document_hash.id_for_label }}">
+                      {{ form.include_document_hash.label }}
+                    </label>
+                    <div class="form-text">{{ form.include_document_hash.help_text }}</div>
+                  </div>
+                  <div class="mt-2">
+                    <label class="form-label small mb-1" for="{{ form.hash_fragment_length.id_for_label }}">
+                      {{ form.hash_fragment_length.label }}
+                    </label>
+                    {{ form.hash_fragment_length|add_class:"form-control form-control-sm" }}
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-check">
+                    {{ form.include_date|add_class:"form-check-input" }}
+                    <label class="form-check-label" for="{{ form.include_date.id_for_label }}">
+                      {{ form.include_date.label }}
+                    </label>
+                  </div>
+
+                  <div class="form-check mt-3">
+                    {{ form.include_random_code|add_class:"form-check-input" }}
+                    <label class="form-check-label" for="{{ form.include_random_code.id_for_label }}">
+                      {{ form.include_random_code.label }}
+                    </label>
+                  </div>
+                  <div class="mt-2">
+                    <label class="form-label small mb-1" for="{{ form.random_code_length.id_for_label }}">
+                      {{ form.random_code_length.label }}
+                    </label>
+                    {{ form.random_code_length|add_class:"form-control form-control-sm" }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {# -------- 3. Symbols -------- #}
+          <div class="card mb-4">
+            <div class="card-header">
+              <i class="fa-solid fa-qrcode me-2"></i>{% trans 'Symbols' %}
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="form-check">
+                    {{ form.generate_barcode|add_class:"form-check-input" }}
+                    <label class="form-check-label" for="{{ form.generate_barcode.id_for_label }}">
+                      {{ form.generate_barcode.label }}
+                    </label>
+                  </div>
+                  <div class="alert alert-warning small mt-2 mb-0">
+                    <i class="bi bi-exclamation-triangle me-1"></i>
+                    {% trans 'A barcode only accepts letters, digits, spaces and the symbols . _ - . Anything with "://", "?", "&amp;" or other URL characters must go in the QR code instead.' %}
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-check">
+                    {{ form.generate_qr|add_class:"form-check-input" }}
+                    <label class="form-check-label" for="{{ form.generate_qr.id_for_label }}">
+                      {{ form.generate_qr.label }}
+                    </label>
+                  </div>
+
+                  <div class="mt-2">
+                    <label class="form-label small mb-1" for="{{ form.qr_content.id_for_label }}">
+                      {{ form.qr_content.label }}
+                    </label>
+                    {{ form.qr_content }}
+                    {% for error in form.qr_content.errors %}
+                      <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                  </div>
+
+                  <div class="mt-2">
+                    <label class="form-label small mb-1" for="{{ form.qr_custom_value.id_for_label }}">
+                      {{ form.qr_custom_value.label }}
+                    </label>
+                    {{ form.qr_custom_value|add_class:"form-control" }}
+                    {% for error in form.qr_custom_value.errors %}
+                      <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {# -------- 4. Certification -------- #}
+          <div class="card mb-4">
+            <div class="card-header">
+              <i class="fa-solid fa-shield-halved me-2"></i>{% trans 'Document certification' %}
+            </div>
+            <div class="card-body">
+
+              <div class="mb-3">
+                <label class="form-label" for="{{ form.source_file.id_for_label }}">
+                  {{ form.source_file.label }}
+                </label>
+                {{ form.source_file }}
+                <div class="form-text">{{ form.source_file.help_text }}</div>
+                {% for error in form.source_file.errors %}
+                  <div class="invalid-feedback d-block">{{ error }}</div>
+                {% endfor %}
+              </div>
+
+              <div class="form-check mb-3">
+                {{ form.certify_document|add_class:"form-check-input" }}
+                <label class="form-check-label" for="{{ form.certify_document.id_for_label }}">
+                  <strong>{{ form.certify_document.label }}</strong>
+                </label>
+                <div class="form-text">{{ form.certify_document.help_text }}</div>
+              </div>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label" for="{{ form.document_title.id_for_label }}">
+                    {{ form.document_title.label }}
+                  </label>
+                  {{ form.document_title|add_class:"form-control" }}
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label" for="{{ form.certificate_type.id_for_label }}">
+                    {{ form.certificate_type.label }}
+                  </label>
+                  {{ form.certificate_type }}
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label" for="{{ form.stamp_layout.id_for_label }}">
+                    {{ form.stamp_layout.label }}
+                  </label>
+                  {{ form.stamp_layout }}
+                  <div class="form-text">
+                    {% trans 'Defines where the QR and the barcode are placed inside the PDF.' %}
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label" for="{{ form.issued_at.id_for_label }}">
+                    {{ form.issued_at.label }}
+                  </label>
+                  {{ form.issued_at }}
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label" for="{{ form.expires_at.id_for_label }}">
+                    {{ form.expires_at.label }}
+                  </label>
+                  {{ form.expires_at }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-grid gap-2 mb-4">
+            <button type="submit" class="btn btn-primary btn-lg">
+              {% trans 'Generate' %} <i class="bi bi-upc-scan ms-1"></i>
+            </button>
+          </div>
+        </div>
+
+        {# ============================================================ #}
+        {# ====================== RIGHT: RESULT ======================= #}
+        {# ============================================================ #}
+        <div class="col-xl-5">
+          <div class="card mb-4">
+            <div class="card-header">
+              <i class="fa-solid fa-square-poll-horizontal me-2"></i>{% trans 'Result' %}
+            </div>
+            <div class="card-body">
+
+              {% if not code_payload %}
+                <p class="text-muted mb-0">
+                  {% trans 'Fill in the form and press Generate to see the code and its symbols here.' %}
+                </p>
+              {% else %}
+
+                <label class="form-label small text-uppercase text-muted">
+                  {% trans 'Code' %}
+                </label>
+                <div class="p-2 bg-light border rounded mb-3">
+                  <code class="text-break">{{ code_payload }}</code>
+                </div>
+
+                {% if barcode_warning %}
+                  <div class="alert alert-warning small">{{ barcode_warning }}</div>
+                {% endif %}
+
+                {% if barcode_image %}
+                  <div class="text-center mb-3">
+                    <img id="barcodeImage" class="img-fluid border rounded p-2 bg-white"
+                         src="{{ barcode_image }}" alt="{% trans 'Barcode' %}" />
+                    <div class="d-grid mt-2">
+                      <a class="btn btn-outline-success btn-sm"
+                         href="{{ barcode_image }}"
+                         download="barcode-{{ random_code|default:'code' }}.png">
+                        {% trans 'Download barcode' %} <i class="bi bi-cloud-arrow-down"></i>
+                      </a>
+                    </div>
+                  </div>
+                {% endif %}
+
+                {% if qr_image %}
+                  <div class="text-center mb-3">
+                    <img id="qrImage" class="img-fluid border rounded p-2 bg-white"
+                         style="max-width: 240px;"
+                         src="{{ qr_image }}" alt="{% trans 'QR code' %}" />
+                    <div class="d-grid mt-2">
+                      <a class="btn btn-outline-success btn-sm"
+                         href="{{ qr_image }}"
+                         download="qr-{{ random_code|default:'code' }}.png">
+                        {% trans 'Download QR' %} <i class="bi bi-cloud-arrow-down"></i>
+                      </a>
+                    </div>
+                    {% if qr_payload %}
+                      <p class="small text-muted text-break mt-2 mb-0">{{ qr_payload }}</p>
+                    {% endif %}
+                  </div>
+                {% endif %}
+
+                <hr />
+
+                <dl class="row small mb-0">
+                  {% if sequence %}
+                    <dt class="col-5">{% trans 'Sequence' %}</dt>
+                    <dd class="col-7"><code>{{ sequence }}</code></dd>
+                  {% endif %}
+
+                  {% if random_code %}
+                    <dt class="col-5">{% trans 'Public code' %}</dt>
+                    <dd class="col-7"><code>{{ random_code }}</code></dd>
+                  {% endif %}
+
+                  {% if hash_fragment %}
+                    <dt class="col-5">{% trans 'Hash in code' %}</dt>
+                    <dd class="col-7"><code>{{ hash_fragment }}</code></dd>
+                  {% endif %}
+
+                  {% if source_hash %}
+                    <dt class="col-5">{% trans 'Original SHA-256' %}</dt>
+                    <dd class="col-7"><code class="text-break">{{ source_hash }}</code></dd>
+                  {% endif %}
+                </dl>
+              {% endif %}
+            </div>
+          </div>
+
+          {# -------- Certification result -------- #}
+          {% if document %}
+            <div class="card mb-4 border-success">
+              <div class="card-header bg-success text-white">
+                <i class="fa-solid fa-certificate me-2"></i>{% trans 'Certified document' %}
+              </div>
+              <div class="card-body">
+                <dl class="row small">
+                  <dt class="col-5">{% trans 'Title' %}</dt>
+                  <dd class="col-7">{{ document.document_title }}</dd>
+
+                  <dt class="col-5">{% trans 'Verification ID' %}</dt>
+                  <dd class="col-7"><code class="text-break">{{ document.id }}</code></dd>
+
+                  <dt class="col-5">{% trans 'Public code' %}</dt>
+                  <dd class="col-7"><code>{{ document.public_code }}</code></dd>
+
+                  <dt class="col-5">{% trans 'Pages stamped' %}</dt>
+                  <dd class="col-7">{{ page_count }}</dd>
+
+                  <dt class="col-5">{% trans 'Certified SHA-256' %}</dt>
+                  <dd class="col-7"><code class="text-break">{{ document.document_hash }}</code></dd>
+
+                  <dt class="col-5">{% trans 'Copy SHA-256' %}</dt>
+                  <dd class="col-7"><code class="text-break">{{ document.public_copy_hash }}</code></dd>
+                </dl>
+
+                {% if stamp_applied %}
+                  <p class="small text-muted mb-1">{% trans 'Placements applied:' %}</p>
+                  <ul class="small text-muted">
+                    {% for item in stamp_applied %}<li>{{ item }}</li>{% endfor %}
+                  </ul>
+                {% endif %}
+
+                {% if stamp_skipped %}
+                  <div class="alert alert-warning small">
+                    {% trans 'Placements that did not match any page:' %}
+                    {{ stamp_skipped|join:", " }}
+                  </div>
+                {% endif %}
+
+                <div class="d-grid gap-2">
+                  {% if document.document_file %}
+                    <a class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer"
+                       href="{{ document.document_file.url }}">
+                      {% trans 'Certified PDF (with codes)' %}
+                    </a>
+                  {% endif %}
+                  {% if document.public_copy_file %}
+                    <a class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer"
+                       href="{{ document.public_copy_file.url }}">
+                      {% trans 'Distributable copy (watermarked)' %}
+                    </a>
+                  {% endif %}
+                  {% if document.source_file %}
+                    <a class="btn btn-outline-secondary btn-sm" target="_blank" rel="noopener noreferrer"
+                       href="{{ document.source_file.url }}">
+                      {% trans 'Original filed (without codes)' %}
+                    </a>
+                  {% endif %}
+                  {% if verification_url %}
+                    <a class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer"
+                       href="{{ verification_url }}">
+                      {% trans 'Open public verification page' %}
+                    </a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock main_layout %}

@@ -1,9 +1,9 @@
 from django.urls import path
 
-from .views import (CertificatesLandingTemplateView,
+from .views import (CertificatesLandingTemplateView, CertificationRecordView,
                     DocumentVerificationDetailView, EmployeeIPCONDetailView,
                     InputDocumentVerificationFormView,
-                    InputEmployeeIPCONFormView)
+                    InputEmployeeIPCONFormView, certification_public_key)
 
 app_name = 'certificates'
 
@@ -36,5 +36,17 @@ urlpatterns = [
         'verify/aegis/asset/certification/<uuid:pk>/',
         DocumentVerificationDetailView.as_view(),
         name='detail_document_verification_aegis'
-    )
+    ),
+
+    # Registro de certificacion (auditoria)
+    path(
+        'verify/aegis/asset/certification/<uuid:pk>/record/',
+        CertificationRecordView.as_view(),
+        name='certification_record'
+    ),
+    path(
+        'verify/aegis/certification/key/',
+        certification_public_key,
+        name='certification_public_key'
+    ),
 ]

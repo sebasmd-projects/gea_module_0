@@ -11,6 +11,8 @@ psycopg2-binary>=2.9,<3.0           #                           https://www.psyc
 cryptography>=42                    #                           https://cryptography.io/en/latest/
 pillow>=10                          #                           https://pillow.readthedocs.io/
 python-barcode>=0.16.1              #                           https://pypi.org/project/python-barcode/
+qrcode>=8.0                         #                           https://pypi.org/project/qrcode/
+pypdf>=6.0                          #                           https://pypdf.readthedocs.io/
 
 # =========================
 # SECURITY / AUTH / AUDIT

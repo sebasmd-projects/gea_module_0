@@ -185,31 +185,3 @@ msgstr "Nueva categoría creada exitosamente."
 #: .\apps\project\specific\assets_management\assets\views.py:143
 msgid "I need help with GEA, my user is"
 msgstr "Necesito ayuda con la plataforma GEA, mi usuario es "
-
-#, python-brace-format
-#~ msgid "Error filling asset category translation fields: {e}"
-#~ msgstr ""
-#~ "Error al rellenar los campos de traducción de la categoría de activos: {e}"
-
-#, python-brace-format
-#~ msgid "Error filling asset name translation fields: {e}"
-#~ msgstr ""
-#~ "Error al completar los campos de traducción del nombre del activo: {e}"
-
-#, python-brace-format
-#~ msgid "Error filling asset translation fields: {e}"
-#~ msgstr "Error al rellenar los campos de traducción de activos: {e}"
-
-#~ msgid "Total Quantity Zero"
-#~ msgstr "Cantidad total cero"
-
-#~ msgid "2. Category"
-#~ msgstr "2. Categoría"
-
-#~ msgid "3. Asset"
-#~ msgstr "3. Activo"
-
-#~ msgid "Both ES and EN names must be set (we auto-fill the hidden one)."
-#~ msgstr ""
-#~ "Se deben configurar los nombres ES y EN (completamos automáticamente el "
-#~ "oculto)."

@@ -1,21 +1,29 @@
 # apps/project/specific/documents/certificates/views.py
 
 from django.contrib import messages
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, FormView, TemplateView
 
+from apps.project.specific.internal.code_gen.services.record import (
+    document_status, key_id, public_key_b64, record_filename, record_json)
+
+from .constants import FILE_MATCH_SESSION_KEY
 from .forms import (AnonymousEmailOTPForm, AnonymousOTPVerifyForm,
-                    CertificateUserForm, DocumentVerificationForm)
+                    CertificateUserForm, DocumentFileVerificationForm,
+                    DocumentVerificationForm)
 from .functions import (generate_barcode, generate_otp,
                         generate_qr_with_favicon, get_hmac,
                         normalize_identifier)
 from .mixins import OTPProtectedDocumentMixin, OTPSessionMixin
-from .models import (DocumentTypeChoices, DocumentVerificationModel,
-                     UserCertificateTypeChoices, UserVerificationModel)
+from .models import (DocumentCopyKind, DocumentTypeChoices,
+                     DocumentVerificationModel, UserCertificateTypeChoices,
+                     UserVerificationModel)
 from .utils import send_otp_email, track_certificate_view, track_document_view
+from .verification import find_document_by_identifier, identify_uploaded_document
 from django.urls import reverse_lazy
 
 
@@ -133,7 +141,7 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
             return redirect(self.request.path)
 
         email = otp_state.get("email", "")
-        allowed_send, _ = self.can_send_otp(email)
+        allowed_send, _wait = self.can_send_otp(email)
         if not allowed_send:
             messages.warning(self.request, _(
                 "Too many code requests. Try again later."))
@@ -158,6 +166,9 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
             self.clear_otp_session()
             return redirect(self.request.path)
 
+        if 'verify_by_file' in request.POST and self.file_verification_allowed():
+            return self._handle_file_step()
+
         form = self.get_form()
 
         if not form.is_valid():
@@ -171,6 +182,14 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
 
         return self.form_valid(form)
 
+    def file_verification_allowed(self) -> bool:
+        """El cotejo por archivo solo se ofrece tras superar el OTP."""
+        if self.request.user.is_authenticated:
+            return True
+
+        otp_state = self.get_otp_session()
+        return bool(otp_state and otp_state.get('verified'))
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -180,12 +199,76 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
                 allowed, remaining = self.can_resend_otp()
                 context['otp_resend_remaining'] = remaining
 
+        context['file_verification_allowed'] = self.file_verification_allowed()
+        context['file_form'] = kwargs.get(
+            'file_form',
+            DocumentFileVerificationForm()
+        )
+
         return context
+
+    def _handle_file_step(self):
+        """Cotejo del archivo subido contra los documentos certificados."""
+        file_form = DocumentFileVerificationForm(
+            self.request.POST,
+            self.request.FILES
+        )
+
+        if not file_form.is_valid():
+            return self._render_file_error(file_form)
+
+        match = identify_uploaded_document(
+            file_form.cleaned_data['document_file']
+        )
+
+        if match is None:
+            file_form.add_error(
+                'document_file',
+                _(
+                    'This file is not valid: it is neither the original nor a '
+                    'certified digital copy issued by this platform.'
+                )
+            )
+            return self._render_file_error(file_form)
+
+        if not match.is_valid:
+            file_form.add_error(
+                'document_file',
+                _(
+                    'This file carries the hidden watermark of the platform, so '
+                    'it originated from a certified copy, but its content has '
+                    'been modified. It is not a valid certified copy.'
+                )
+            )
+            return self._render_file_error(file_form)
+
+        self.request.session[FILE_MATCH_SESSION_KEY] = match.as_session_payload()
+
+        return redirect(
+            'certificates:detail_document_verification_aegis',
+            pk=match.document.pk
+        )
+
+    def _render_file_error(self, file_form):
+        """
+        Repinta la pagina con el error del archivo.
+
+        El formulario de codigo se devuelve **sin enlazar**: el POST que llega
+        aqui es el de la subida y no trae identificador, asi que enlazarlo
+        pintaria un "campo obligatorio" espurio en un formulario que el
+        usuario ni ha tocado.
+        """
+        return self.render_to_response(
+            self.get_context_data(
+                form=self.get_form_class()(),
+                file_form=file_form
+            )
+        )
 
     def _handle_email_step(self, form):
         email = form.cleaned_data["email"]
 
-        allowed_send, _ = self.can_send_otp(email)
+        allowed_send, _wait = self.can_send_otp(email)
 
         if not allowed_send:
             form.add_error("email", _(
@@ -214,27 +297,17 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
         identifier = form.cleaned_data['identifier']
         cert_type = form.cleaned_data['certificate_type']
 
-        filters = {'certificate_type': cert_type}
+        document = find_document_by_identifier(identifier, cert_type)
 
-        if len(identifier) == 4:
-            filters['public_code'] = identifier
-        elif len(identifier) == 8:
-            filters['uuid_prefix'] = identifier
-        elif len(identifier) >= 32 and len(identifier) <= 36:
-            filters['id'] = identifier
-        else:
-            form.add_error("identifier", _("Invalid identifier length."))
-            return self.form_invalid(form)
-
-        try:
-            document = DocumentVerificationModel.objects.get(**filters)
-        except DocumentVerificationModel.DoesNotExist:
+        if document is None:
             if self.request.user.is_authenticated:
                 form.add_error("identifier", _("Document not found."))
             else:
                 form.add_error("identifier", _(
                     "We could not verify the document with the provided data."))
             return self.form_invalid(form)
+
+        self.request.session.pop(FILE_MATCH_SESSION_KEY, None)
 
         return redirect(
             'certificates:detail_document_verification_aegis',
@@ -282,9 +355,154 @@ class DocumentVerificationDetailView(OTPProtectedDocumentMixin, DetailView):
         )
 
         context['barcode'] = mark_safe(
-            generate_barcode(absolute_url)
+            generate_barcode(self.object.code_payload or self.object.public_code)
         )
+
+        context.update(self._file_match_context())
+        context.update(self._record_status_context())
+
         return context
+
+    def _record_status_context(self) -> dict:
+        """Estado del certificado, tal y como lo publica el registro."""
+        status = document_status(self.object)
+
+        labels = {
+            'VALID': _('Valid'),
+            'EXPIRED': _('Expired'),
+            'REVOKED': _('Revoked'),
+            'NOT_CERTIFIED': _('Not certified'),
+        }
+
+        classes = {
+            'VALID': 'success',
+            'EXPIRED': 'warning text-dark',
+            'REVOKED': 'danger',
+            'NOT_CERTIFIED': 'secondary',
+        }
+
+        return {
+            'record_status': status,
+            'record_status_label': labels.get(status, status),
+            'record_status_class': classes.get(status, 'secondary'),
+        }
+
+    def _file_match_context(self) -> dict:
+        """
+        Traduce el resultado del cotejo por archivo guardado en sesion.
+
+        Solo se muestra si corresponde al documento que se esta viendo.
+        """
+        payload = self.request.session.get(FILE_MATCH_SESSION_KEY)
+
+        if not payload or payload.get('document_id') != str(self.object.pk):
+            return {'file_match': None}
+
+        copy_kind = payload.get('copy_kind')
+        match_level = payload.get('match_level')
+
+        headlines = {
+            DocumentCopyKind.SOURCE: _(
+                'Verified file: this is the ORIGINAL document filed with the '
+                'platform, unmodified.'
+            ),
+            DocumentCopyKind.CERTIFIED: _(
+                'Verified file: this is the CERTIFIED document, with its codes '
+                'embedded, unmodified.'
+            ),
+            DocumentCopyKind.PUBLIC_COPY: _(
+                'Verified file: this is a CERTIFIED DIGITAL COPY of the '
+                'original and it is valid.'
+            ),
+        }
+
+        details = {
+            'EXACT': _(
+                'Recognised by the exact fingerprint of the file (SHA-256).'
+            ),
+            'CONTENT': _(
+                'The bytes of the file changed (typically document metadata '
+                'rewritten while it was emailed or re-saved), but its '
+                'renderable content matches the certified one exactly, page by '
+                'page.'
+            ),
+        }
+
+        return {
+            'file_match': {
+                'copy_kind': copy_kind,
+                'match_level': match_level,
+                'file_hash': payload.get('file_hash'),
+                'headline': headlines.get(copy_kind),
+                'detail': details.get(match_level),
+                'is_exact': match_level == 'EXACT',
+            }
+        }
+
+
+class CertificationRecordView(OTPProtectedDocumentMixin, DetailView):
+    """
+    Descarga del registro de certificacion en JSON.
+
+    Es el artefacto que se adjunta a un expediente: lleva las tres huellas, la
+    fecha, el estado y un sello criptografico, de modo que un auditor puede
+    cotejar el archivo que tiene en la mano sin volver a esta plataforma.
+    """
+
+    model = DocumentVerificationModel
+
+    def get(self, request, *args, **kwargs):
+        document = self.get_object()
+
+        payload = record_json(document, request=request)
+
+        response = HttpResponse(
+            payload,
+            content_type='application/json; charset=utf-8'
+        )
+        response['Content-Disposition'] = (
+            f'attachment; filename="{record_filename(document)}"'
+        )
+        return response
+
+
+def certification_public_key(request):
+    """
+    Clave publica con la que se verifica el sello del registro.
+
+    Publica y estable: es lo que permite a un tercero comprobar un registro
+    sin depender de esta plataforma en el momento de la comprobacion.
+    """
+    public = public_key_b64()
+
+    if not public:
+        return JsonResponse(
+            {
+                'algorithm': None,
+                'public_key': None,
+                'detail': _(
+                    'This platform is not configured with a public signing '
+                    'key. Certification records are sealed with a symmetric '
+                    'HMAC that only the platform itself can verify.'
+                ),
+            },
+            json_dumps_params={'indent': 2, 'ensure_ascii': False},
+        )
+
+    return JsonResponse(
+        {
+            'algorithm': 'Ed25519',
+            'key_id': key_id(),
+            'public_key': public,
+            'encoding': 'base64 of the 32-byte raw Ed25519 public key',
+            'verifies': _(
+                'The "seal.signature" field of a GEA certification record, '
+                'over every other field serialised as compact JSON with '
+                'sorted keys, UTF-8.'
+            ),
+        },
+        json_dumps_params={'indent': 2, 'ensure_ascii': False},
+    )
 
 
 class CertificatesLandingTemplateView(TemplateView):

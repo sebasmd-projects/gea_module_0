@@ -5,6 +5,8 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.conf import settings
 
+from .constants import (MAX_VERIFICATION_UPLOAD_BYTES,
+                        VERIFICATION_UPLOAD_EXTENSIONS)
 from .functions import is_temporary_email, is_ipcon_email, normalize_identifier
 from .models import DocumentCertificateTypeChoices, DocumentTypeChoices
 
@@ -50,6 +52,47 @@ class DocumentVerificationForm(forms.Form):
             return normalize_identifier(raw)
         except ValidationError as e:
             raise forms.ValidationError(e.message)
+
+
+class DocumentFileVerificationForm(forms.Form):
+    """
+    Verificacion subiendo el propio archivo.
+
+    No se guarda nada del archivo recibido: se calcula su huella en memoria y
+    se descarta.
+    """
+
+    document_file = forms.FileField(
+        label=_('Document file'),
+        help_text=_(
+            'Upload the PDF you want to verify: the original, the certified '
+            'document or the distributable digital copy.'
+        ),
+        widget=forms.ClearableFileInput(
+            attrs={
+                'accept': ','.join(VERIFICATION_UPLOAD_EXTENSIONS),
+            }
+        )
+    )
+
+    def clean_document_file(self):
+        uploaded = self.cleaned_data['document_file']
+
+        name = (uploaded.name or '').lower()
+
+        if not name.endswith(VERIFICATION_UPLOAD_EXTENSIONS):
+            raise ValidationError(
+                _('Only these formats can be verified: %(formats)s.')
+                % {'formats': ', '.join(VERIFICATION_UPLOAD_EXTENSIONS)}
+            )
+
+        if uploaded.size > MAX_VERIFICATION_UPLOAD_BYTES:
+            raise ValidationError(
+                _('The file is too large. The maximum is %(size)s MB.')
+                % {'size': MAX_VERIFICATION_UPLOAD_BYTES // (1024 * 1024)}
+            )
+
+        return uploaded
 
 
 class AnonymousEmailOTPForm(forms.Form):

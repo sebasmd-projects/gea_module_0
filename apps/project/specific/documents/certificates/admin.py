@@ -11,13 +11,83 @@ from django.db.models.functions import Coalesce, Cast, Concat
 
 from apps.common.utils.admin import GeneralAdminModel
 
+from apps.project.specific.internal.code_gen.services.certification import (
+    CertificationError, certify_document)
+
 from .models import (
     CertificateViewLogModel,
+    CertificationStatusChoices,
     DocumentCertificateTypeChoices,
     DocumentVerificationModel,
     UserCertificateTypeChoices,
     UserVerificationModel,
 )
+
+
+@admin.action(description=_('Certify: stamp codes, hash and issue the copy'))
+def action_certify_documents(modeladmin, request, queryset):
+    """
+    Ejecuta el flujo completo de certificacion sobre los documentos elegidos.
+
+    Cada documento se procesa por separado para que un PDF ilegible no tumbe
+    el lote entero.
+    """
+    certified = 0
+
+    for document in queryset:
+        try:
+            outcome = certify_document(document, request=request)
+        except CertificationError as error:
+            messages.error(
+                request,
+                _('%(title)s: %(error)s') % {
+                    'title': document.document_title,
+                    'error': error,
+                }
+            )
+            continue
+        except Exception as error:
+            messages.error(
+                request,
+                _('%(title)s: unexpected error (%(error)s)') % {
+                    'title': document.document_title,
+                    'error': error,
+                }
+            )
+            continue
+
+        certified += 1
+
+        if outcome.skipped:
+            messages.warning(
+                request,
+                _('%(title)s: some placements did not match any page (%(items)s).')
+                % {
+                    'title': document.document_title,
+                    'items': ', '.join(outcome.skipped),
+                }
+            )
+
+    if certified:
+        messages.success(
+            request,
+            _('%(count)s document(s) certified.') % {'count': certified}
+        )
+
+
+@admin.action(description=_('Re-certify: rebuild codes, files and hashes'))
+def action_recertify_documents(modeladmin, request, queryset):
+    """
+    Vuelve a certificar desde el original.
+
+    Reutiliza el codigo publico y la secuencia ya asignados, de modo que la
+    identidad del documento no cambia; lo que se rehace es el estampado, las
+    huellas y la copia distribuible.
+    """
+    with transaction.atomic():
+        queryset.update(certification_status=CertificationStatusChoices.DRAFT)
+
+    action_certify_documents(modeladmin, request, queryset)
 
 
 def set_certificate_type_action(*, certificate_value: str, label: str, name: str):
@@ -124,8 +194,8 @@ class UserVerificationModelAdmin(GeneralAdminModel):
         "document_number_pa_hash",
         "created",
         "updated",
-        "is_expired",
-        "is_revoked",
+        "expired_badge",
+        "revoked_badge",
         # UX/seguridad: mostrar solo máscara en admin
         "cc_masked_admin",
         "pa_masked_admin",
@@ -155,7 +225,7 @@ class UserVerificationModelAdmin(GeneralAdminModel):
             "fields": ("approved", "approved_by", "approval_date", "revoked_at", "revocation_reason"),
         }),
         (_("Vigencia"), {
-            "fields": ("issued_at", "expires_at", "is_expired", "is_revoked"),
+            "fields": ("issued_at", "expires_at", "expired_badge", "revoked_badge"),
         }),
         (_("Métricas"), {
             "fields": ("views_total", "views_unique"),
@@ -232,7 +302,12 @@ class UserVerificationModelAdmin(GeneralAdminModel):
 
 @admin.register(DocumentVerificationModel)
 class DocumentVerificationModelAdmin(GeneralAdminModel):
-    actions = [action_set_aegis, action_set_generic]
+    actions = [
+        action_certify_documents,
+        action_recertify_documents,
+        action_set_aegis,
+        action_set_generic,
+    ]
 
     list_per_page = 50
     empty_value_display = "-"
@@ -241,12 +316,14 @@ class DocumentVerificationModelAdmin(GeneralAdminModel):
         "uuid_prefix",
         "document_title",
         "certificate_type",
+        "status_badge",
+        "public_code",
         "delivery_method",
         "expired_badge",
         "expires_at",
         "views_total",
         "views_unique",
-        "file_link",
+        "files_column",
         "hash_short",
     )
     list_display_links = ("uuid_prefix", "document_title")
@@ -254,6 +331,7 @@ class DocumentVerificationModelAdmin(GeneralAdminModel):
 
     list_filter = (
         "certificate_type",
+        "certification_status",
         "delivery_method",
         ("expires_at", admin.DateFieldListFilter),
         ("created", admin.DateFieldListFilter),
@@ -261,34 +339,105 @@ class DocumentVerificationModelAdmin(GeneralAdminModel):
     date_hierarchy = "created"
     ordering = ("-created",)
 
-    search_fields = ("public_code", "uuid_prefix",
-                     "document_title", "document_hash")
+    search_fields = (
+        "public_code",
+        "uuid_prefix",
+        "document_title",
+        "document_hash",
+        "source_hash",
+        "public_copy_hash",
+        "code_sequence",
+        "code_payload",
+    )
+
+    autocomplete_fields = ()
 
     readonly_fields = (
         "id",
         "uuid_prefix",
         "public_code",
+        "certification_status",
+        "certified_at",
+        "source_hash",
+        "source_content_hash",
         "document_hash",
+        "certified_content_hash",
+        "public_copy_hash",
+        "public_copy_content_hash",
+        "code_payload",
+        "code_initials",
+        "code_sequence",
+        "code_hash_fragment",
+        "qr_payload",
         "hash_short",
         "created",
         "updated",
-        "is_expired",
+        "expired_badge",
         "views_total",
         "views_unique",
-        "file_link",
+        "files_column",
+        "record_link",
+        "certification_help",
     )
 
     fieldsets = (
-        (_("Identificación"), {
-         "fields": ("uuid_prefix", "public_code", "certificate_type")}),
-        (_("Documento"), {"fields": (
-            "document_title", "document_file", "file_link", "document_hash", "hash_short")}),
+        (_("Identificacion"), {
+            "fields": (
+                "uuid_prefix",
+                "public_code",
+                "certificate_type",
+                "document_title",
+            )
+        }),
+        (_("Certificacion"), {
+            "fields": (
+                "certification_help",
+                "source_file",
+                "stamp_layout",
+                "certification_status",
+                "certified_at",
+                "files_column",
+                "record_link",
+            )
+        }),
+        (_("Archivos generados"), {
+            "fields": (
+                "document_file",
+                "public_copy_file",
+            ),
+            "classes": ("collapse",),
+        }),
+        (_("Huellas"), {
+            "fields": (
+                "source_hash",
+                "source_content_hash",
+                "document_hash",
+                "certified_content_hash",
+                "public_copy_hash",
+                "public_copy_content_hash",
+            ),
+            "classes": ("collapse",),
+        }),
+        (_("Codigo emitido"), {
+            "fields": (
+                "code_payload",
+                "code_initials",
+                "code_sequence",
+                "code_hash_fragment",
+                "qr_payload",
+            ),
+            "classes": ("collapse",),
+        }),
         (_("Entrega"), {"fields": ("delivery_method", "sent_at")}),
-        (_("Vigencia"), {"fields": ("issued_at", "expires_at", "is_expired")}),
-        (_("Métricas"), {"fields": ("views_total",
-         "views_unique"), "classes": ("collapse",)}),
-        (_("Auditoría"), {"fields": ("created",
-         "updated"), "classes": ("collapse",)}),
+        (_("Vigencia"), {"fields": ("issued_at", "expires_at", "expired_badge")}),
+        (_("Metricas"), {
+            "fields": ("views_total", "views_unique"),
+            "classes": ("collapse",),
+        }),
+        (_("Auditoria"), {
+            "fields": ("created", "updated"),
+            "classes": ("collapse",),
+        }),
     )
 
     def get_queryset(self, request):
@@ -307,6 +456,35 @@ class DocumentVerificationModelAdmin(GeneralAdminModel):
             _views_unique=Count(viewer_key, distinct=True),
         )
 
+    @admin.display(description=_("How it works"))
+    def certification_help(self, obj):
+        return format_html(
+            "<div style=\"max-width:60em\">{}<br><br>{}</div>",
+            _(
+                "1) Upload the ORIGINAL PDF without codes. 2) Pick the stamp "
+                "layout (or leave it empty for the default one). 3) Save. "
+                "4) Run the action \u201cCertify\u201d from the list view."
+            ),
+            _(
+                "Certifying produces the certified PDF with its QR and barcode, "
+                "the distributable copy carrying a hidden watermark, and the "
+                "fingerprints of all three files."
+            ),
+        )
+
+    @admin.display(description=_("Status"))
+    def status_badge(self, obj):
+        colors = {
+            CertificationStatusChoices.DRAFT: "#a17f1a",
+            CertificationStatusChoices.CERTIFIED: "#1a7f37",
+            CertificationStatusChoices.REVOKED: "#a11a1a",
+        }
+        return format_html(
+            '<b style="color:{}">{}</b>',
+            colors.get(obj.certification_status, "#444"),
+            obj.get_certification_status_display(),
+        )
+
     @admin.display(description=_("Expired"), boolean=True)
     def expired_badge(self, obj):
         return bool(obj.is_expired)
@@ -319,16 +497,47 @@ class DocumentVerificationModelAdmin(GeneralAdminModel):
     def views_unique(self, obj):
         return getattr(obj, "_views_unique", 0)
 
-    @admin.display(description=_("File"))
-    def file_link(self, obj):
-        if not obj.document_file:
+    @admin.display(description=_("Files"))
+    def files_column(self, obj):
+        links = []
+
+        for field_name, label in (
+            ("source_file", _("Original")),
+            ("document_file", _("Certified")),
+            ("public_copy_file", _("Public copy")),
+        ):
+            file_field = getattr(obj, field_name, None)
+            if file_field:
+                links.append(
+                    format_html(
+                        '<a href="{}" target="_blank" rel="noopener noreferrer">{}</a>',
+                        file_field.url,
+                        label,
+                    )
+                )
+
+        if not links:
             return "-"
-        return format_html('<a href="{}" target="_blank" rel="noopener noreferrer">Abrir</a>', obj.document_file.url)
+
+        return format_html(" · ".join("{}" for _link in links), *links)
+
+    @admin.display(description=_("Certification record"))
+    def record_link(self, obj):
+        if not obj.is_certified:
+            return "-"
+
+        url = reverse("certificates:certification_record", args=[obj.pk])
+
+        return format_html(
+            '<a href="{}">{}</a>',
+            url,
+            _("Download the signed JSON record (for auditors)"),
+        )
 
     @admin.display(description=_("Hash"))
     def hash_short(self, obj):
         h = obj.document_hash or ""
-        return (h[:10] + "…") if len(h) > 12 else (h or "-")
+        return (h[:10] + "\u2026") if len(h) > 12 else (h or "-")
 
 
 # -----------------------

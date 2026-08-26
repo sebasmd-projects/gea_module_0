@@ -103,8 +103,19 @@ Solo con `DEBUG=True` se añaden rutas de prueba de páginas de error:
 | `verify/ipcon/<uuid:pk>/` | `certificates:detail_employee_verification_ipcon` | `EmployeeIPCONDetailView` | Público (registra la visita) |
 | `verify/aegis/asset/certification/` | `certificates:input_document_verification_aegis` | `InputDocumentVerificationFormView` | Público **+ OTP por email** |
 | `verify/aegis/asset/certification/<uuid:pk>/` | `certificates:detail_document_verification_aegis` | `DocumentVerificationDetailView` | Requiere sesión OTP válida |
+| `verify/aegis/asset/certification/<uuid:pk>/record/` | `certificates:certification_record` | `CertificationRecordView` | Requiere sesión OTP válida |
+| `verify/aegis/certification/key/` | `certificates:certification_public_key` | `certification_public_key` | Público |
 
 Las rutas `aegis` están protegidas por `OTPSessionMixin` / `OTPProtectedDocumentMixin` (código de un solo uso enviado por email, TTL 10 min, límites de reenvío y de intentos).
+
+La vista de entrada `input_document_verification_aegis` acepta **dos formas de
+verificar**, ambas por POST a la misma URL:
+
+- por identificador (`identifier` + `certificate_type`): código público de 12
+  caracteres, prefijo del UUID (8), UUID completo o la propia URL del QR;
+- por archivo (`verify_by_file=1` + `document_file`, `multipart/form-data`):
+  solo se ofrece una vez superado el OTP. El archivo no se almacena.
+
 
 ---
 
@@ -220,6 +231,21 @@ El paso `contact` cambia de formulario según `user_type` (`BuyerContactForm` vs
 
 ---
 
+## 12-bis. Generador de códigos y certificación — `internal.code_gen` (`app_name = 'code_gen'`)
+
+| Ruta | Nombre | Vista | Acceso |
+|---|---|---|---|
+| `generate/code/` | `code_gen:code_generate` | `CodeGeneratorView` | `is_staff` o `is_superuser` |
+
+- La app va **la última** en `ALL_CUSTOM_APPS`, por lo que sus rutas quedan
+  *después* del catch-all anti-escaneo de §7: cualquier ruta nueva de esta app
+  debe evitar los términos de `COMMON_ATTACK_TERMS`.
+- La antigua ruta `code_gen:dynamic_qr` (`qr/generate/<path:text>/`) se eliminó:
+  generaba un QR con texto arbitrario tomado del path, sin autenticación, y su
+  comodín `<path:text>` chocaba con el catch-all.
+
+---
+
 ## 13. Apps sin rutas
 
 `apps.project.common.notifications` y `apps.project.common.users` exponen `urlpatterns = []`.
@@ -233,6 +259,7 @@ El paso `contact` cambia de formulario según `user_type` (`BuyerContactForm` vs
 two_factor:  login, setup, qr, setup_complete, backup_tokens, profile, disable
 core:        index, health_check, privacy, terms
 utils:       set_language, attack_path
+code_gen:    code_generate
 certificates: certificates_landing,
               input_employee_verification_ipcon, detail_employee_verification_ipcon,
               input_document_verification_aegis, detail_document_verification_aegis

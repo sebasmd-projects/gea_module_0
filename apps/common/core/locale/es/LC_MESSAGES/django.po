@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-02 19:50-0500\n"
+"POT-Creation-Date: 2026-08-25 17:46-0500\n"
 "PO-Revision-Date: 2026-01-06 23:16+0000\n"
 "Last-Translator: Sebastian Morales <cto@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,12 +19,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.3\n"
 
+#: .\apps\common\core\templates\core\index.html:18
 #: .\apps\common\core\templates\core\index.html:24
-#: .\apps\common\core\templates\core\index.html:30
 msgid "Secure platform for historical assets"
 msgstr "Plataforma para los activos historicos"
 
-#: .\apps\common\core\templates\core\index.html:39
+#: .\apps\common\core\templates\core\index.html:33
 msgid ""
 "Comprehensive, exclusive and secure platform for buying and selling "
 "historical assets. Official U.S. purchasing platform."
@@ -32,7 +32,7 @@ msgstr ""
 "Plataforma exclusiva y segura para la compraventa de activos históricos. "
 "Plataforma de compras oficial de EE. UU."
 
-#: .\apps\common\core\templates\core\index.html:50
+#: .\apps\common\core\templates\core\index.html:43
 msgid ""
 "Official and exclusive platform for the purchase and sale of US historical "
 "assets."
@@ -40,7 +40,7 @@ msgstr ""
 "Plataforma completa, exclusiva y segura para la compra y venta de activos "
 "históricos. Plataforma de compras oficial de EE. UU."
 
-#: .\apps\common\core\templates\core\index.html:64
+#: .\apps\common\core\templates\core\index.html:56
 msgid ""
 "Exclusive and official platform for the secure purchase of US historical "
 "assets."
@@ -48,13 +48,13 @@ msgstr ""
 "Plataforma exclusiva y oficial para la compra segura de activos históricos "
 "de EE. UU."
 
-#: .\apps\common\core\templates\core\index.html:112
+#: .\apps\common\core\templates\core\index.html:183
 msgid "Your browser does not support HTML5 video."
 msgstr "Su navegador no soporta vídeo HTML5."
 
 #: .\apps\common\core\templates\core\partials\core_nav.html:18
 msgid "Toggle navigation"
-msgstr ""
+msgstr "Alternar navegación"
 
 #: .\apps\common\core\templates\core\partials\core_nav.html:33
 #: .\apps\common\core\templates\core\partials\core_nav.html:185
@@ -70,17 +70,13 @@ msgstr "Proveedores"
 #: .\apps\common\core\templates\core\partials\core_nav.html:63
 #: .\apps\common\core\templates\core\partials\core_nav.html:149
 #: .\apps\common\core\templates\core\partials\core_nav.html:154
-#, fuzzy
-#| msgid "Aegis - Certification"
 msgid "Certificates"
-msgstr "Aegis - Certificación"
+msgstr "Certificados"
 
 #: .\apps\common\core\templates\core\partials\core_nav.html:74
 #: .\apps\common\core\templates\core\partials\core_nav.html:163
-#, fuzzy
-#| msgid "Aegis - Certification"
 msgid "AEGIS Certification (PDF)"
-msgstr "Aegis - Certificación"
+msgstr "Certificación AEGIS (PDF)"
 
 #: .\apps\common\core\templates\core\partials\core_nav.html:103
 #: .\apps\common\core\templates\core\partials\core_nav.html:198
@@ -107,86 +103,3 @@ msgstr "Cerrar Sesión"
 #: .\apps\common\core\templates\core\partials\whatsapp.html:51
 msgid "Contact Us Now"
 msgstr "Contáctanos"
-
-#~ msgid "Portfolio"
-#~ msgstr "Portafolio"
-
-#~ msgid "Client Area"
-#~ msgstr "Área de Clientes"
-
-#, fuzzy
-#~ msgid "Contact Us"
-#~ msgstr "Contactos"
-
-#~ msgid "On-demand offers"
-#~ msgstr "OFERTAS bajo demanda"
-
-#~ msgid "First name"
-#~ msgstr "Nombres"
-
-#~ msgid "Last name"
-#~ msgstr "Apellidos"
-
-#~ msgid "Your Email"
-#~ msgstr "Correo"
-
-#~ msgid "Subject"
-#~ msgstr "Asunto"
-
-#~ msgid "Message"
-#~ msgstr "Mensaje"
-
-#~ msgid "name"
-#~ msgstr "Nombres"
-
-#~ msgid "last name"
-#~ msgstr "Apellidos"
-
-#~ msgid "email"
-#~ msgstr "Correo"
-
-#~ msgid "subject"
-#~ msgstr "Asunto"
-
-#~ msgid "message"
-#~ msgstr "Mensaje"
-
-#~ msgid "Contact"
-#~ msgstr "Contacto"
-
-#~ msgid "title"
-#~ msgstr "Título"
-
-#~ msgid "title (English)"
-#~ msgstr "Título (EN)"
-
-#~ msgid "description"
-#~ msgstr "Descripción"
-
-#~ msgid "image file"
-#~ msgstr "archivo de imagen"
-
-#~ msgid "image file (English)"
-#~ msgstr "archivo de imagen (EN)"
-
-#~ msgid "link"
-#~ msgstr "enlace"
-
-#~ msgid "link (English)"
-#~ msgstr "link (EN)"
-
-#~ msgid "Modal Banner"
-#~ msgstr "Banner"
-
-#~ msgid "Modal Banners"
-#~ msgstr "Banners"
-
-#~ msgid "This form has already been sent."
-#~ msgstr "Este formulario ya ha sido enviado."
-
-#~ msgid "Message Received! | GEA"
-#~ msgstr "Mensaje recibido | GEA"
-
-#, python-format
-#~ msgid "Thank you %(name)s for contacting us."
-#~ msgstr "Gracias %(name)s por contactarnos."

@@ -202,12 +202,3 @@ msgstr "Registro de Ubicaciones"
 #: .\apps\project\specific\assets_management\assets_location\views.py:109
 msgid "A location with the same details already exists."
 msgstr "Ya existe una ubicación con los mismos detalles."
-
-#~ msgid "3. Country"
-#~ msgstr "3. País"
-
-#~ msgid "2. Location"
-#~ msgstr "2. Ubicación"
-
-#~ msgid "Containers"
-#~ msgstr "Contenedores"

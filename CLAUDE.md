@@ -35,7 +35,7 @@ Idiomas: español (contenido primario) e inglés.
 | Base de datos | MySQL o PostgreSQL — se elige por la variable `DB_ENGINE`; charset `utf8mb4` |
 | Frontend | Plantillas Django + **Bootstrap 5.2.3** (CDN), AJAX con HTML renderizado en servidor. Sin SPA, sin build de JS |
 | Estáticos | `django-compressor`, `public/staticfiles/` (~45 MB), imágenes en WebP |
-| PDF | ReportLab (código de barras Code128) |
+| PDF | ReportLab (capa de estampado), **pypdf** (fusión, lectura y marca de agua), `python-barcode` (Code128), `qrcode` |
 | IA | OpenAI (`gpt-4o-mini` para traducción es↔en, `gpt-4o-transcribe` para audio) |
 
 **Terceros clave**: `django-two-factor-auth` + `django-otp` (2FA), `django-axes` (fuerza bruta),
@@ -118,6 +118,8 @@ apps/
       documents/
         certificates/        # verificación pública de certificados
         video_masonry/       # galería multimedia
+    internal/
+      code_gen/              # generador de códigos + motor de certificación de PDF
 templates/                   # plantillas globales (dashboard, account, two_factor, email)
 public/staticfiles/          # css, js, imágenes WebP, vídeo
 docs/                        # mapas de rutas y funcionalidades
@@ -178,6 +180,11 @@ Después hay que **añadirla a mano** al grupo correspondiente en `settings.py`.
 5. **`email_hash`** (SHA-256 del email normalizado) se recalcula en `UserModel.save()`; los flujos de recuperación de contraseña dependen de él.
 6. **Cada etapa del wizard exige su permiso Django concreto** (`buyers.can_*`). Los permisos están declarados en `OfferModel.Meta.permissions`; añadir una etapa implica migración.
 7. **La `ADMIN_URL` es secreta** y viene de entorno. No la fijes a `/admin/` ni la escribas en el código.
+8. **Un documento certificado son tres archivos**: `source_file` (original sin códigos), `document_file` (con QR y barcode, el que hace fe) y `public_copy_file` (copia distribuible con marca de agua oculta). De cada uno se guardan dos huellas: la exacta (`*_hash`) y la de contenido (`*_content_hash`). No sustituyas ninguno de los tres a mano: usa la acción "Certify" del admin o `services.certification.certify_document()`, que recalcula todo el conjunto.
+9. **El código de barras nunca lleva URLs.** `services.codes.validate_barcode_payload()` rechaza `://`, `:` y los caracteres de URL. Todo lo que no encaje va al QR.
+10. **La huella de contenido ignora deliberadamente la marca de agua**, de modo que el certificado y su copia distribuible comparten `*_content_hash` y se distinguen solo por la marca. Si tocas `canonical_pdf_hash()` invalidas todas las huellas ya emitidas.
+11. **La certificación acredita integridad, no veracidad.** El registro de certificación lo dice expresamente en `scope.does_not_attest`: la plataforma prueba que el archivo no ha cambiado desde que se registró, no que sea cierto lo que el documento afirma. No redactes textos que sugieran lo contrario.
+12. **Las URLs de los artefactos permanentes salen de `PUBLIC_BASE_URL`**, nunca de `request.build_absolute_uri()`: el QR vive dentro del PDF y no puede apuntar al host desde el que se certificó.
 
 ---
 
@@ -188,13 +195,11 @@ Después hay que **añadirla a mano** al grupo correspondiente en `settings.py`.
 | **Regex catch-all antes que rutas reales** | `apps/common/utils/attack_patterns.py` registra un `re_path` que matchea cualquier término de `COMMON_ATTACK_TERMS` en cualquier posición del path, y `utils` va en la 4.ª posición del URLconf — **antes** de `assets`, `assets_location`, `buyers` y `account`. Un término mal elegido secuestra rutas legítimas y bloquea la IP del usuario. |
 | **`CACHES` no está definido** | Django cae en `LocMemCache`, que es **por proceso**. Los límites de OTP (`certificates/mixins.py`) y el código de registro de compradores viven en cache: con varios workers, los contadores no se comparten y los límites son efectivamente por worker. Si se despliega multi-proceso hay que configurar Redis/Memcached. |
 | **`ERROR_TEMPLATE` no está definido** | Varios módulos hacen `settings.ERROR_TEMPLATE` dentro de `try/except` y caen a `'errors_template.html'`. Funciona, pero el `getattr` es engañoso. |
-| **`request.user.is_superadmin` no existe** | Se usa en `templates/dashboard/partials/sidenav/dashboard_sidenav.html` (líneas 77 y 175). Django resuelve el atributo inexistente a cadena vacía (falsy), así que ese `or` **nunca aporta nada**: los superusuarios ven el bloque solo si además son `is_buyer`. Probable bug de visibilidad. |
 | **`settings.py` explota si falta una variable** | Muchos `os.getenv(...)` se pasan directamente a `int()` o `.split(',')` sin valor por defecto (`DB_PORT`, `DJANGO_EMAIL_PORT`, `IP_BLOCKED_TIME_IN_MINUTES`, `CORS_ALLOWED_ORIGINS`, `COMMON_ATTACK_TERMS`, `GEA_DAILY_CODE_*`). Sin `.env` completo, el proyecto no arranca. |
 | **`OPTIONS` de la BD se sobrescribe** | En `DATABASES` se define un `OPTIONS` con `charset`/`init_command` y, si `DB_ENGINE` es MySQL, el bloque siguiente **reemplaza el dict entero** (se pierde el `charset` y el `COLLATE utf8mb4_bin`). |
 | **Allowlist de usuarios hardcodeada** | `OnlySpecificUserMixin.allowed_user_username = ['jose.henry', 'kalichemorales']` en `buyers/views.py` controla el acceso a Orion. |
 | **Llamadas a OpenAI en señales `pre_save`** | La traducción automática de activos y ofertas ocurre **de forma síncrona dentro del guardado** (timeout 20 s). Un fallo o lentitud de la API se traduce en peticiones lentas. No hay cola de tareas. |
 | **`ffmpeg` como dependencia del sistema** | `video_masonry` invoca `ffmpeg` por `subprocess` para quitar el audio de los vídeos. Si no está en el `PATH`, la subida falla. |
-| **Descarga de logo por HTTP al enviar emails** | `SO_NOTIFY` hace `requests.get()` al logo en producción para incrustarlo. Depende de que el sitio esté accesible desde el propio servidor. |
 | **`ATOMIC_REQUESTS = True`** | Cada petición es una transacción. Cuidado con operaciones largas (PDF, OpenAI, email) dentro de vistas. |
 | **`logging.basicConfig` a `stderr.log`** | Configurado en `settings.py`, sin rotación. |
 | **Ajustes definidos y nunca leídos** | `MIDDLEWARE_NOT_INCLUDE`, `ADMIN_DELETE_PERMISSION` y `ADMIN_ADD_PERMISSION` se declaran en `settings.py` pero no los consume nadie. No asumas que hacen algo. (`UTILS_DATA_PATH` sí se usa, solo en `delete_migrations`.) |
@@ -220,6 +225,12 @@ DJANGO_EMAIL_HOST_USER, DJANGO_EMAIL_HOST_PASSWORD, DJANGO_EMAIL_DEFAULT_FROM_EM
 
 # Seguridad
 FIELD_ENCRYPTION_KEY          # cifrado de PII — perderla inutiliza los datos cifrados
+CERTIFICATION_SIGNING_KEY     # Ed25519 base64; firma el registro de certificación
+                              # (manage.py generate_certification_key). Sin ella
+                              # el registro se sella con HMAC y solo la propia
+                              # plataforma puede verificarlo
+PUBLIC_BASE_URL               # base canónica para el QR y el registro; NUNCA se
+                              # deriva del host de la petición
 CORS_ALLOWED_ORIGINS          # lista separada por comas
 COMMON_ATTACK_TERMS           # lista separada por comas → regex catch-all
 IP_BLOCKED_TIME_IN_MINUTES
@@ -254,6 +265,10 @@ OfferModel ─1:N─ ServiceOrderRecipient     (destinatarios por usuario o por 
 
 UserVerificationModel      ─1:N─ CertificateViewLogModel
 DocumentVerificationModel  ─1:N─ CertificateViewLogModel
+DocumentVerificationModel  ─FK──  StampLayoutModel        (dónde se estampan los códigos)
+StampLayoutModel           ─1:N─ StampPlacementModel
+CodeSequenceModel                (contador de la secuencia autónoma)
+CodeRegistrationModel            (traza de cada código emitido)
 
 MediaAsset ─1:N─ MediaAssetInteraction
 MediaAsset ─1:N─ MediaAssetUserStats  (unique por usuario+activo)
@@ -271,6 +286,10 @@ IPBlockedModel / WhiteListedIPModel
 **Añadir una etapa al flujo de órdenes**: campos `*_by`/`*_at` en `OfferModel` → método `mark_*()` atómico → rama en `status_code` (respetando el orden de más avanzado a más básico) → entradas en `status_icon`/`status_color` → permiso en `Meta.permissions` → `CheckConstraint` → rama en `_apply_step()` de `OfferApprovalWizardActionView` → partial de timeline en `templates/dashboard/pages/buyers/partials/timeline/` → migración.
 
 **Añadir un modelo bilingüe**: hereda de `TimeStampedModel`, define `es_*`/`en_*`, fija `db_table`, y si quieres traducción automática engancha una señal `pre_save` al estilo de `assets/signals.py`.
+
+**Certificar un documento**: en el admin, `Document Verification` → subir el PDF original en `source_file`, elegir `stamp_layout` (o dejarlo vacío para el layout por defecto), guardar, y ejecutar la acción *Certify*. También desde el dashboard en `code_gen:code_generate` marcando "Certify this document". Re-certificar rehace el estampado, las huellas y la copia, conservando `public_code` y secuencia.
+
+**Mover un código dentro del PDF**: edita el `StampPlacementModel` correspondiente (coordenadas en puntos PostScript, medidas desde el anclaje hacia el interior) y vuelve a certificar.
 
 **Cambiar textos visibles**: edita el código con `_()`, luego `makemessages -l es` / `compilemessages`, o usa Rosetta desde el admin.
 

@@ -26,7 +26,7 @@ db.sqlite3-journal
 media/
 tmp/
 stderr.log
-static/*
+static/
 
 
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/

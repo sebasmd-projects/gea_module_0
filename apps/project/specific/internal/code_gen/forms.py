@@ -1,0 +1,340 @@
+# apps/project/specific/internal/code_gen/forms.py
+
+from django import forms
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
+
+from .constants import (CERTIFIABLE_EXTENSIONS, HASH_B64_DEFAULT_LENGTH,
+                        HASH_B64_MAX_LENGTH, HASH_B64_MIN_LENGTH,
+                        MAX_UPLOAD_BYTES, RANDOM_CODE_DEFAULT_LENGTH,
+                        RANDOM_CODE_MAX_LENGTH, RANDOM_CODE_MIN_LENGTH)
+from .models import StampLayoutModel
+
+
+QR_CONTENT_VERIFICATION = 'VERIFICATION'
+QR_CONTENT_CODE = 'CODE'
+QR_CONTENT_CUSTOM = 'CUSTOM'
+
+QR_CONTENT_CHOICES = (
+    (
+        QR_CONTENT_VERIFICATION,
+        _('Public verification URL (requires certifying a document)')
+    ),
+    (QR_CONTENT_CODE, _('The generated code itself')),
+    (QR_CONTENT_CUSTOM, _('A custom URL or text')),
+)
+
+
+class CodeGeneratorForm(forms.Form):
+    """
+    Generador de codigos y, opcionalmente, certificacion de un documento.
+
+    Los checkboxes componen el codigo en el orden canonico:
+
+        NIT · texto libre · INICIALES_SECUENCIA · HASH · FECHA · ALEATORIO
+    """
+
+    # ------------------------------------------------------------------
+    # Identificacion
+    # ------------------------------------------------------------------
+    reference = forms.CharField(
+        label=_('Reference'),
+        max_length=100,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': _('e.g. AEGIS Special Edition'),
+            }
+        )
+    )
+
+    description = forms.CharField(
+        label=_('Description'),
+        required=False,
+        widget=forms.Textarea(
+            attrs={
+                'class': 'form-control',
+                'rows': 2,
+                'placeholder': _('Internal notes about this code'),
+            }
+        )
+    )
+
+    custom_text_input = forms.CharField(
+        label=_('Custom text'),
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': _('Free text added to the code'),
+            }
+        )
+    )
+
+    # ------------------------------------------------------------------
+    # Segmentos del codigo
+    # ------------------------------------------------------------------
+    include_nit = forms.BooleanField(
+        label=_('NIT'),
+        required=False,
+        initial=True,
+        help_text=_('Adds the tax ID of the firm at the beginning.')
+    )
+
+    include_initials_sequence = forms.BooleanField(
+        label=_('Certificate initials + autonomous sequence'),
+        required=False,
+        initial=True,
+        help_text=_(
+            'Non-consecutive and non-repeating sequence, reserved by the '
+            'platform.'
+        )
+    )
+
+    initials = forms.CharField(
+        label=_('Initials'),
+        max_length=20,
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': _('Derived from the reference if left empty'),
+            }
+        )
+    )
+
+    include_document_hash = forms.BooleanField(
+        label=_('Document hash'),
+        required=False,
+        help_text=_(
+            'Requires uploading the document. The code carries the base64 '
+            'fingerprint of the original file.'
+        )
+    )
+
+    hash_fragment_length = forms.IntegerField(
+        label=_('Hash characters'),
+        required=False,
+        initial=HASH_B64_DEFAULT_LENGTH,
+        min_value=HASH_B64_MIN_LENGTH,
+        max_value=HASH_B64_MAX_LENGTH,
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
+    )
+
+    include_date = forms.BooleanField(
+        label=_('Date (DDMMYYYY)'),
+        required=False,
+        initial=True
+    )
+
+    include_random_code = forms.BooleanField(
+        label=_('Unique random code'),
+        required=False,
+        initial=True
+    )
+
+    random_code_length = forms.IntegerField(
+        label=_('Random code length'),
+        required=False,
+        initial=RANDOM_CODE_DEFAULT_LENGTH,
+        min_value=RANDOM_CODE_MIN_LENGTH,
+        max_value=RANDOM_CODE_MAX_LENGTH,
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
+    )
+
+    # ------------------------------------------------------------------
+    # Simbolos
+    # ------------------------------------------------------------------
+    generate_barcode = forms.BooleanField(
+        label=_('Generate barcode (Code128)'),
+        required=False,
+        initial=True,
+        help_text=_(
+            'Only letters, digits, spaces and . _ - are allowed. URLs cannot '
+            'be encoded in a barcode.'
+        )
+    )
+
+    generate_qr = forms.BooleanField(
+        label=_('Generate QR code'),
+        required=False,
+        initial=True
+    )
+
+    qr_content = forms.ChoiceField(
+        label=_('QR content'),
+        required=False,
+        choices=QR_CONTENT_CHOICES,
+        initial=QR_CONTENT_VERIFICATION,
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+    qr_custom_value = forms.CharField(
+        label=_('Custom QR content'),
+        required=False,
+        max_length=900,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'https://...',
+            }
+        )
+    )
+
+    # ------------------------------------------------------------------
+    # Certificacion del documento
+    # ------------------------------------------------------------------
+    source_file = forms.FileField(
+        label=_('Original document (without codes)'),
+        required=False,
+        widget=forms.ClearableFileInput(
+            attrs={
+                'class': 'form-control',
+                'accept': ','.join(CERTIFIABLE_EXTENSIONS),
+            }
+        ),
+        # El texto de ayuda se interpola en __init__: hacerlo aqui evaluaria
+        # la cadena perezosa en el idioma activo al importar el modulo, que
+        # no es el del usuario.
+    )
+
+    certify_document = forms.BooleanField(
+        label=_('Certify this document'),
+        required=False,
+        help_text=_(
+            'Embeds the codes in the PDF, computes its fingerprints and issues '
+            'the distributable digital copy.'
+        )
+    )
+
+    document_title = forms.CharField(
+        label=_('Document title'),
+        max_length=200,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+
+    certificate_type = forms.ChoiceField(
+        label=_('Certificate type'),
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+    stamp_layout = forms.ModelChoiceField(
+        label=_('Stamp layout'),
+        required=False,
+        queryset=StampLayoutModel.objects.filter(is_active=True),
+        empty_label=_('Default layout'),
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+    issued_at = forms.DateField(
+        label=_('Issued at'),
+        required=False,
+        widget=forms.DateInput(
+            attrs={'class': 'form-control', 'type': 'date'}
+        )
+    )
+
+    expires_at = forms.DateField(
+        label=_('Expires at'),
+        required=False,
+        widget=forms.DateInput(
+            attrs={'class': 'form-control', 'type': 'date'}
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        from apps.project.specific.documents.certificates.models import \
+            DocumentCertificateTypeChoices
+
+        self.fields['certificate_type'].choices = (
+            DocumentCertificateTypeChoices.choices
+        )
+        self.fields['certificate_type'].initial = (
+            DocumentCertificateTypeChoices.AEGIS
+        )
+
+        self.fields['source_file'].help_text = (
+            _('Accepted formats: %(formats)s.')
+            % {'formats': ', '.join(CERTIFIABLE_EXTENSIONS)}
+        )
+
+    # ------------------------------------------------------------------
+    # Validacion
+    # ------------------------------------------------------------------
+    def clean_source_file(self):
+        uploaded = self.cleaned_data.get('source_file')
+
+        if not uploaded:
+            return uploaded
+
+        name = (uploaded.name or '').lower()
+
+        if not name.endswith(CERTIFIABLE_EXTENSIONS):
+            raise ValidationError(
+                _('Only these formats can be certified: %(formats)s.')
+                % {'formats': ', '.join(CERTIFIABLE_EXTENSIONS)}
+            )
+
+        if uploaded.size > MAX_UPLOAD_BYTES:
+            raise ValidationError(
+                _('The file is too large. The maximum is %(size)s MB.')
+                % {'size': MAX_UPLOAD_BYTES // (1024 * 1024)}
+            )
+
+        return uploaded
+
+    def clean(self):
+        cleaned = super().clean()
+
+        source_file = cleaned.get('source_file')
+
+        if cleaned.get('include_document_hash') and not source_file:
+            self.add_error(
+                'source_file',
+                _('Upload the document to include its hash in the code.')
+            )
+
+        if cleaned.get('certify_document'):
+            if not source_file:
+                self.add_error(
+                    'source_file',
+                    _('Upload the document you want to certify.')
+                )
+
+            if not cleaned.get('document_title'):
+                cleaned['document_title'] = cleaned.get('reference', '')[:200]
+
+            if not cleaned.get('issued_at'):
+                cleaned['issued_at'] = timezone.localdate()
+
+        if not cleaned.get('generate_barcode') and not cleaned.get('generate_qr'):
+            raise ValidationError(
+                _('Select at least one symbol to generate: barcode or QR.')
+            )
+
+        if cleaned.get('generate_qr'):
+            qr_content = cleaned.get('qr_content') or QR_CONTENT_VERIFICATION
+
+            if qr_content == QR_CONTENT_CUSTOM and not cleaned.get('qr_custom_value'):
+                self.add_error(
+                    'qr_custom_value',
+                    _('Enter the content for the QR code.')
+                )
+
+            if qr_content == QR_CONTENT_VERIFICATION and not cleaned.get('certify_document'):
+                self.add_error(
+                    'qr_content',
+                    _(
+                        'The public verification URL only exists once the '
+                        'document is certified. Certify the document or choose '
+                        'another QR content.'
+                    )
+                )
+
+        return cleaned
