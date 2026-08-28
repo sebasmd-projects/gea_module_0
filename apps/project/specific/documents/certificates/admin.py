@@ -237,6 +237,12 @@ class UserVerificationModelAdmin(GeneralAdminModel):
         }),
     )
 
+    class Media:
+        # La accion "Certificar" estampa, hashea y marca al agua un PDF que
+        # puede pesar decenas de MB: sin senal visual el operador la relanza.
+        css = {'all': ('css/busy_buttons.css',)}
+        js = ('js/busy_buttons.js',)
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
 

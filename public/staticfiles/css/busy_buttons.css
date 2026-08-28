@@ -1,0 +1,17 @@
+/* busy_buttons.css — estado ocupado de los botones. */
+
+.is-busy {
+  pointer-events: none;
+  opacity: 0.85;
+  cursor: progress;
+}
+
+.is-busy .spinner-border {
+  vertical-align: -0.125em;
+}
+
+/* En el admin de Django los botones son <input type="submit">: no admiten
+   spinner, asi que se marca el estado con el cursor y la opacidad. */
+.is-busy[type="submit"] {
+  opacity: 0.7;
+}

@@ -106,7 +106,8 @@
 
                             {# ================= SUBMIT ================= #}
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary"
+                                        data-loading-text="{% if form.email %}{% trans 'Sending…' %}{% else %}{% trans 'Verifying…' %}{% endif %}">
                                     {% if form.email %}
                                         {% trans 'Send verification code' %}
                                     {% elif form.otp %}
@@ -187,7 +188,9 @@
                             </div>
 
                             <div class="d-grid">
-                                <button type="submit" name="verify_by_file" value="1" class="btn btn-outline-primary">
+                                <button type="submit" name="verify_by_file" value="1"
+                                        class="btn btn-outline-primary"
+                                        data-loading-text="{% trans 'Verifying the file…' %}">
                                     {% trans 'Verify file' %}
                                 </button>
                             </div>

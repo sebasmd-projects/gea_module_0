@@ -181,6 +181,11 @@
     
     
     {% block charts_js %}{% endblock charts_js %}
+    {# Spinner y bloqueo en los botones que disparan trabajo largo. #}
+    <link rel="stylesheet" href="{% static 'css/busy_buttons.css' %}" />
+    <script src="{% static 'js/busy_buttons.js' %}"
+            data-default-loading-text="{% trans 'Processing…' %}" defer></script>
+
     {% block body_custom_js %}{% endblock body_custom_js %}
     {% block body_third_js %}{% endblock body_third_js %}
 

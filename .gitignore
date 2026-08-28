@@ -14,6 +14,7 @@ backup.json
 users_backup.json
 DRAFT_SECURITY_REPORT.md
 SECURITY_ANALYSIS_TODO.md
+strix_runs/
 
 ### Django ###
 *.log

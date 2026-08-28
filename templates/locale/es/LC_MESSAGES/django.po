@@ -8,9 +8,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-27 20:22-0500\n"
+"POT-Creation-Date: 2026-08-28 00:29-0500\n"
 "PO-Revision-Date: 2026-08-27 20:24+0000\n"
-"Last-Translator: Juan Sebastian Morales Delgado <cto@propensionesabogados.com>\n"
+"Last-Translator: Juan Sebastian Morales Delgado "
+"<cto@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -63,8 +64,8 @@ msgstr "Restablecer su contraseña"
 #: .\templates\account\forgot_password.html:36
 msgid "Enter your email or username to receive password reset instructions."
 msgstr ""
-"Ingrese su correo electrónico o nombre de usuario para recibir instrucciones"
-" para restablecer su contraseña."
+"Ingrese su correo electrónico o nombre de usuario para recibir instrucciones "
+"para restablecer su contraseña."
 
 #: .\templates\account\forgot_password.html:52
 msgid "Email or Username"
@@ -968,8 +969,8 @@ msgstr "Asistente de Aprobación"
 #: .\templates\dashboard\pages\buyers\wizard\offer_wizard_page.html:29
 msgid "Track and advance the purchase order through the approval pipeline"
 msgstr ""
-"Realizar un seguimiento y avanzar la orden de compra a través del proceso de"
-" aprobación"
+"Realizar un seguimiento y avanzar la orden de compra a través del proceso de "
+"aprobación"
 
 #: .\templates\dashboard\pages\buyers\wizard\offer_wizard_page.html:52
 msgid "Loading wizard…"
@@ -1290,9 +1291,9 @@ msgstr "Descargar"
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:104
 msgid ""
-"This is the distributable copy. It carries a hidden watermark that lets this"
-" platform recognise it as a certified copy even if its metadata changes "
-"while being emailed or shared."
+"This is the distributable copy. It carries a hidden watermark that lets this "
+"platform recognise it as a certified copy even if its metadata changes while "
+"being emailed or shared."
 msgstr ""
 "Esta es la copia distribuible. Lleva una marca de agua oculta que permite a "
 "esta plataforma reconocerla como copia certificada aunque sus metadatos "
@@ -1312,8 +1313,8 @@ msgstr "Registro de certificación"
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:123
 msgid ""
-"The record below is what an auditor needs. It states what this certification"
-" does and does not attest, and lets anyone check the file they hold without "
+"The record below is what an auditor needs. It states what this certification "
+"does and does not attest, and lets anyone check the file they hold without "
 "having to come back to this platform."
 msgstr ""
 "El registro que aparece abajo es lo que necesita un auditor. Indica qué "
@@ -1328,8 +1329,8 @@ msgstr "Contenido jurídico"
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:132
 msgid ""
 "What the firm declares about the asset. It rests on the document itself and "
-"the signature of the legal representative — the platform records it, it does"
-" not vouch for it."
+"the signature of the legal representative — the platform records it, it does "
+"not vouch for it."
 msgstr ""
 "Lo que la firma declara sobre el activo. Descansa en el propio documento y "
 "en la firma del representante legal: la plataforma lo registra, no lo avala."
@@ -1408,28 +1409,28 @@ msgid ""
 "INSTITUTIONAL CERTIFICATION OF AUTHENTICITY, ORIGINALITY AND LEGAL VALIDITY "
 "PROPENSIONES ABOGADOS INTERNACIONAL S.A.S., a legally constituted entity "
 "identified with Tax ID (NIT) 901409813-7, duly incorporated and in full "
-"legal capacity under the laws of the Republic of Colombia, acting within the"
-" scope of its institutional authority, HEREBY CERTIFIES, DECLARES AND "
+"legal capacity under the laws of the Republic of Colombia, acting within the "
+"scope of its institutional authority, HEREBY CERTIFIES, DECLARES AND "
 "ATTESTS, with full legal and doctrinal effect, that: The document to which "
-"this certification is attached is original, authentic and legally effective,"
-" having been issued under formal procedures of control, verification and due"
-" diligence. It constitutes the primary, prevailing and determinative "
+"this certification is attached is original, authentic and legally effective, "
+"having been issued under formal procedures of control, verification and due "
+"diligence. It constitutes the primary, prevailing and determinative "
 "instrument to evidence the legitimacy, origin and legal backing of the act, "
 "right, asset or legal situation contained therein. This certification "
 "consolidates, reaffirms and ratifies the originality of the certified "
 "document, conferring upon it full legal effectiveness, sufficient "
-"evidentiary force and institutional validity. It serves as the governing and"
-" interpretative instrument of authenticity, not subject to informal or "
-"extrajuridical challenge. Likewise, it is expressly stated that the document"
-" has been issued in accordance with the foundational principles of the legal"
-" system, including legality, objective good faith, legal certainty and "
+"evidentiary force and institutional validity. It serves as the governing and "
+"interpretative instrument of authenticity, not subject to informal or "
+"extrajuridical challenge. Likewise, it is expressly stated that the document "
+"has been issued in accordance with the foundational principles of the legal "
+"system, including legality, objective good faith, legal certainty and "
 "regulatory compliance, incorporating international compliance standards, "
 "anti-money laundering (AML) and counter-terrorist financing (CFT) "
 "frameworks, in accordance with the applicable regulatory regimes."
 msgstr ""
-"CERTIFICACIÓN INSTITUCIONAL DE AUTENTICIDAD, ORIGINALIDAD Y VALIDEZ JURÍDICA"
-" PROPENSIONES ABOGADOS INTERNACIONAL S.A.S., entidad legalmente constituida,"
-" identificada con NIT 901409813-7, debidamente incorporada y en pleno "
+"CERTIFICACIÓN INSTITUCIONAL DE AUTENTICIDAD, ORIGINALIDAD Y VALIDEZ JURÍDICA "
+"PROPENSIONES ABOGADOS INTERNACIONAL S.A.S., entidad legalmente constituida, "
+"identificada con NIT 901409813-7, debidamente incorporada y en pleno "
 "ejercicio de su capacidad jurídica conforme a las leyes de la República de "
 "Colombia, actuando dentro del ámbito de su autoridad institucional, "
 "CERTIFICA, DECLARA Y DA FE, con pleno efecto legal y doctrinal, que: El "
@@ -1437,14 +1438,14 @@ msgstr ""
 "y jurídicamente eficaz, habiendo sido emitido bajo procedimientos formales "
 "de control, verificación y debida diligencia. Constituye el instrumento "
 "primario, prevalente y determinante para evidenciar la legitimidad, el "
-"origen y el respaldo jurídico del acto, derecho, activo o situación jurídica"
-" que en él se consigna. La presente certificación consolida, reafirma y "
+"origen y el respaldo jurídico del acto, derecho, activo o situación jurídica "
+"que en él se consigna. La presente certificación consolida, reafirma y "
 "ratifica la originalidad del documento certificado, confiriéndole plena "
 "eficacia jurídica, fuerza probatoria suficiente y validez institucional. Se "
 "erige como el instrumento rector e interpretativo de autenticidad, no "
 "susceptible de impugnación por vías informales o extrajurídicas. Así mismo, "
-"se deja expresa constancia de que dicho documento ha sido emitido conforme a"
-" los principios fundamentales del ordenamiento jurídico, incluidos la "
+"se deja expresa constancia de que dicho documento ha sido emitido conforme a "
+"los principios fundamentales del ordenamiento jurídico, incluidos la "
 "legalidad, la buena fe objetiva, la seguridad jurídica y el cumplimiento "
 "normativo, incorporando estándares internacionales de compliance, marcos de "
 "prevención del lavado de activos (AML) y de financiación del terrorismo "
@@ -1463,21 +1464,28 @@ msgid ""
 "corresponding legal framework."
 msgstr ""
 "ALCANCE DE LA VALIDACIÓN Y EFECTOS JURÍDICOS APLICABLES\n"
-"La presente certificación y el documento que autentica producen efectos jurídicos plenos, exigibles y oponibles. Su eficacia legal resulta idónea, adecuada y suficiente dentro de procesos de verificación, debida diligencia, análisis de riesgo, custodia, aseguramiento o validación institucional, sin que ello implique dispensa, sustitución o limitación de los controles que cada entidad deba adelantar conforme a su régimen jurídico aplicable.\n"
-"En consecuencia, el documento podrá ser válidamente aceptado, incorporado y utilizado como soporte jurídico suficiente, de conformidad con el ordenamiento jurídico correspondiente."
+"La presente certificación y el documento que autentica producen efectos "
+"jurídicos plenos, exigibles y oponibles. Su eficacia legal resulta idónea, "
+"adecuada y suficiente dentro de procesos de verificación, debida diligencia, "
+"análisis de riesgo, custodia, aseguramiento o validación institucional, sin "
+"que ello implique dispensa, sustitución o limitación de los controles que "
+"cada entidad deba adelantar conforme a su régimen jurídico aplicable.\n"
+"En consecuencia, el documento podrá ser válidamente aceptado, incorporado y "
+"utilizado como soporte jurídico suficiente, de conformidad con el "
+"ordenamiento jurídico correspondiente."
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:241
 msgid ""
 "APPLICABLE LEGAL REGIME Private International Law, General Principles of "
-"International Law, Vienna Convention on the Law of Treaties (1969), UNIDROIT"
-" Principles of International Commercial Contracts, international compliance "
+"International Law, Vienna Convention on the Law of Treaties (1969), UNIDROIT "
+"Principles of International Commercial Contracts, international compliance "
 "standards, international AML/CFT regulations, Financial Action Task Force "
 "(FATF/GAFI) recommendations, and applicable provisions of the USA PATRIOT "
 "Act."
 msgstr ""
 "RÉGIMEN JURÍDICO APLICABLE Derecho Internacional Privado, Principios "
-"Generales del Derecho Internacional, Convención de Viena sobre el Derecho de"
-" los Tratados (1969), Principios UNIDROIT sobre los Contratos Comerciales "
+"Generales del Derecho Internacional, Convención de Viena sobre el Derecho de "
+"los Tratados (1969), Principios UNIDROIT sobre los Contratos Comerciales "
 "Internacionales, estándares internacionales de compliance, normativa "
 "internacional en materia de prevención del lavado de activos y financiación "
 "del terrorismo (AML/CFT), recomendaciones del Grupo de Acción Financiera "
@@ -1514,32 +1522,40 @@ msgstr "Ahora puedes verificar el documento."
 msgid "Enter the document details to verify."
 msgstr "Ingrese los detalles del documento a verificar."
 
-#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:111
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:110
+msgid "Sending…"
+msgstr "Enviando…"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:110
+msgid "Verifying…"
+msgstr "Verificando…"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:112
 msgid "Send verification code"
 msgstr "Enviar código de verificación"
 
-#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:113
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:114
 msgid "Verify code"
 msgstr "Verificar código"
 
-#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:115
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:116
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:211
 msgid "Verify document"
 msgstr "Verificar documento"
 
-#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:130
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:131
 msgid "Resend verification code"
 msgstr "Reenviar código de verificación"
 
-#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:142
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:143
 msgid "Change email address"
 msgstr "Cambiar dirección de correo electrónico"
 
-#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:165
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:166
 msgid "Or verify by uploading the file"
 msgstr "O verifica subiendo el archivo"
 
-#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:167
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:168
 msgid ""
 "Upload the PDF and we will tell you whether it is the original, a valid "
 "certified digital copy, or a file that does not correspond to any certified "
@@ -1548,35 +1564,39 @@ msgstr ""
 "Sube el PDF y te diremos si es el original, una copia digital certificada "
 "válida, o un archivo que no corresponde a ningún documento certificado."
 
-#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:191
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:193
+msgid "Verifying the file…"
+msgstr "Verificando el archivo…"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:194
 msgid "Verify file"
 msgstr "Verificar archivo"
 
-#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:197
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:200
 msgid ""
 "The file is never stored: only its fingerprint is computed, in memory, and "
 "then discarded."
 msgstr ""
-"El archivo nunca se almacena: solo se calcula su huella, en memoria, y luego"
-" se descarta."
+"El archivo nunca se almacena: solo se calcula su huella, en memoria, y luego "
+"se descarta."
 
-#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:206
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:209
 msgid "The code expires in a few minutes."
 msgstr "El código caduca en unos minutos."
 
-#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:238
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:241
 msgid "You can request a new code in"
 msgstr "Puedes solicitar un nuevo código en"
 
 #: .\templates\dashboard\pages\certificates\includes\habeas_data.html:8
 msgid ""
 "We remind you that, in accordance with the provisions of the Habeas Data "
-"Law, all your personal data has been treated with due confidentiality and is"
-" protected under the strictest security standards, guaranteeing its "
-"integrity and privacy."
+"Law, all your personal data has been treated with due confidentiality and is "
+"protected under the strictest security standards, guaranteeing its integrity "
+"and privacy."
 msgstr ""
-"Le recordamos que, de conformidad con la Ley de Habeas Data, todos sus datos"
-" personales han sido tratados con la debida confidencialidad y están "
+"Le recordamos que, de conformidad con la Ley de Habeas Data, todos sus datos "
+"personales han sido tratados con la debida confidencialidad y están "
 "protegidos bajo los más estrictos estándares de seguridad, garantizando su "
 "integridad y privacidad. Sus datos se utilizarán exclusivamente para los "
 "fines autorizados y de conformidad con la normativa vigente en materia de "
@@ -1627,7 +1647,8 @@ msgstr "Este documento certifica que"
 #: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:85
 msgid ""
 "is currently verified as a member, employee, or authorized collaborator of\n"
-"              <strong>Propensiones</strong> and <strong>IPCON (International Private Consortium)</strong> the new financial era."
+"              <strong>Propensiones</strong> and <strong>IPCON (International "
+"Private Consortium)</strong> the new financial era."
 msgstr ""
 "está actualmente verificado como miembro, empleado o colaborador autorizado "
 "de <strong>Propensiones</strong> e <strong>IPCON (Consorcio Privado "
@@ -1891,8 +1912,8 @@ msgid ""
 "Anything with \"://\", \"?\", \"&amp;\" or other URL characters must go in "
 "the QR code instead."
 msgstr ""
-"Un código de barras solo admite letras, dígitos, espacios y los símbolos . _"
-" - . Todo lo que lleve \"://\", \"?\", \"&amp;\" u otros caracteres de URL "
+"Un código de barras solo admite letras, dígitos, espacios y los símbolos . _ "
+"- . Todo lo que lleve \"://\", \"?\", \"&amp;\" u otros caracteres de URL "
 "tiene que ir en el código QR."
 
 #: .\templates\dashboard\pages\documents\code_gen\code_form.html:221
@@ -1912,14 +1933,18 @@ msgid "Manage layouts"
 msgstr "Gestionar disposiciones"
 
 #: .\templates\dashboard\pages\documents\code_gen\code_form.html:291
+msgid "Generating…"
+msgstr "Generando…"
+
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:292
 msgid "Generate"
 msgstr "Generar"
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:302
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:303
 msgid "Result"
 msgstr "Resultado"
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:306
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:307
 msgid ""
 "After pressing Generate you land on the permanent page of the issued code, "
 "with its symbols and downloads. It stays available: you can close this tab "
@@ -1929,33 +1954,42 @@ msgstr ""
 "símbolos y sus descargas. Queda disponible: puedes cerrar esta pestaña y "
 "volver a ella más tarde."
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:312
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:313
 msgid "See previously generated codes"
 msgstr "Ver códigos generados antes"
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:336
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:337
 msgid "Pick a layout first, or use \"Save and create\"."
 msgstr "Elige primero una disposición, o usa «Guardar y crear»."
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:337
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:338
 msgid "Add at least one placement."
 msgstr "Añade al menos una posición."
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:338
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:339
 msgid "The layout could not be loaded."
 msgstr "No se pudo cargar la disposición."
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:339
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:340
 msgid "The layout could not be saved."
 msgstr "No se pudo guardar la disposición."
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:340
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:341
 msgid "The layout name is required."
 msgstr "El nombre de la disposición es obligatorio."
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:341
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:342
 msgid "Placement moved. Press Save to store it in the layout."
 msgstr "Posición movida. Pulsa Guardar para almacenarla en la disposición."
+
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:343
+#: .\templates\dashboard\pages\documents\code_gen\layout_form.html:174
+msgid "Saving…"
+msgstr "Guardando…"
+
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:344
+msgid "Creating…"
+msgstr "Creando…"
 
 #: .\templates\dashboard\pages\documents\code_gen\code_history.html:17
 msgid "Every code issued, so you can come back to any of them."
@@ -2072,15 +2106,15 @@ msgstr "Opacidad"
 msgid "Active"
 msgstr "Activa"
 
-#: .\templates\dashboard\pages\documents\code_gen\layout_form.html:174
+#: .\templates\dashboard\pages\documents\code_gen\layout_form.html:175
 msgid "Save layout"
 msgstr "Guardar disposición"
 
-#: .\templates\dashboard\pages\documents\code_gen\layout_form.html:177
+#: .\templates\dashboard\pages\documents\code_gen\layout_form.html:178
 msgid "Back to layouts"
 msgstr "Volver a las disposiciones"
 
-#: .\templates\dashboard\pages\documents\code_gen\layout_form.html:186
+#: .\templates\dashboard\pages\documents\code_gen\layout_form.html:187
 msgid "Live preview"
 msgstr "Vista previa en vivo"
 
@@ -2144,8 +2178,8 @@ msgid ""
 "Upload the PDF above to see it here. Drag a box to move it; the table "
 "updates with it. Boxes are only shown on the pages where they actually land."
 msgstr ""
-"Sube el PDF arriba para verlo aquí. Arrastra una caja para moverla; la tabla"
-" se actualiza con ella. Las cajas solo se muestran en las páginas donde "
+"Sube el PDF arriba para verlo aquí. Arrastra una caja para moverla; la tabla "
+"se actualiza con ella. Las cajas solo se muestran en las páginas donde "
 "realmente caen."
 
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:49
@@ -2240,12 +2274,14 @@ msgstr "¿Necesitas ayuda?"
 #: .\templates\dashboard\pages\holders\asset_location_base.html:61
 msgid ""
 "\n"
-"                        The Asset Location ties a specific asset to a location, defining where and in what quantity the\n"
+"                        The Asset Location ties a specific asset to a "
+"location, defining where and in what quantity the\n"
 "                        asset is available.\n"
 "                        "
 msgstr ""
 "\n"
-"La ubicación del activo vincula un activo específico a una ubicación, definiendo dónde y en qué cantidad está disponible el activo."
+"La ubicación del activo vincula un activo específico a una ubicación, "
+"definiendo dónde y en qué cantidad está disponible el activo."
 
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:5
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:62
@@ -2308,17 +2344,20 @@ msgstr "Su cuenta está bajo proceso de verificación."
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:407
 msgid ""
 "\n"
-"                    This process can take between 24 to 72 hours (1 to 3 business days), Please be patient while we\n"
+"                    This process can take between 24 to 72 hours (1 to 3 "
+"business days), Please be patient while we\n"
 "                    verify your account.\n"
 "                    "
 msgstr ""
 "\n"
-"Este proceso puede tardar entre 24 y 72 horas (1 a 3 días hábiles). Por favor, tenga paciencia mientras verificamos su cuenta."
+"Este proceso puede tardar entre 24 y 72 horas (1 a 3 días hábiles). Por "
+"favor, tenga paciencia mientras verificamos su cuenta."
 
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:413
 msgid ""
 "\n"
-"                    If you have any questions, please contact our support team.\n"
+"                    If you have any questions, please contact our support "
+"team.\n"
 "                    "
 msgstr ""
 "\n"
@@ -2338,24 +2377,30 @@ msgstr "Agregar referencia de ubicación"
 #: .\templates\dashboard\pages\holders\location\edit_location.html:109
 msgid ""
 "\n"
-"                        The Location Reference serves as a unique identifier to manage inventory across various\n"
+"                        The Location Reference serves as a unique identifier "
+"to manage inventory across various\n"
 "                        locations.\n"
 "                        "
 msgstr ""
 "\n"
-"La referencia de ubicación sirve como un identificador único para administrar el inventario en varias ubicaciones."
+"La referencia de ubicación sirve como un identificador único para "
+"administrar el inventario en varias ubicaciones."
 
 #: .\templates\dashboard\pages\holders\location\add_location.html:125
 #: .\templates\dashboard\pages\holders\location\edit_location.html:116
 msgid ""
 "\n"
-"                        It allows differentiation between inventory located in the same country but in different areas,\n"
-"                        inventory in different countries, or inventory in the same country as well as across multiple\n"
+"                        It allows differentiation between inventory located "
+"in the same country but in different areas,\n"
+"                        inventory in different countries, or inventory in "
+"the same country as well as across multiple\n"
 "                        countries.\n"
 "                        "
 msgstr ""
 "\n"
-"Permite diferenciar entre inventario ubicado en el mismo país pero en diferentes áreas, inventario en diferentes países o inventario en el mismo país y en varios países."
+"Permite diferenciar entre inventario ubicado en el mismo país pero en "
+"diferentes áreas, inventario en diferentes países o inventario en el mismo "
+"país y en varios países."
 
 #: .\templates\dashboard\pages\holders\location\edit_location.html:53
 msgid "Edit Location Reference"
@@ -2568,11 +2613,15 @@ msgstr "Autenticación de dos factores"
 msgid "Logout"
 msgstr "Cerrar sesión"
 
+#: .\templates\raw.html:187
+msgid "Processing…"
+msgstr "Procesando…"
+
 #: .\templates\two_factor\core\backup_tokens.html:17
 msgid "Backup tokens can be used when your primary method is not available."
 msgstr ""
-"Los tokens de respaldo se pueden utilizar cuando su método principal no está"
-" disponible."
+"Los tokens de respaldo se pueden utilizar cuando su método principal no está "
+"disponible."
 
 #: .\templates\two_factor\core\backup_tokens.html:22
 msgid ""
@@ -2612,8 +2661,8 @@ msgid ""
 msgstr ""
 "Usa este formulario para ingresar tokens de respaldo para iniciar sesión. "
 "Estos tokens han sido generados para que los imprimas y los mantengas "
-"seguros. Por favor, introduce uno de estos tokens de respaldo para acceder a"
-" tu cuenta."
+"seguros. Por favor, introduce uno de estos tokens de respaldo para acceder a "
+"tu cuenta."
 
 #: .\templates\two_factor\core\login.html:55
 msgid "Username or Email"
@@ -2664,8 +2713,8 @@ msgstr ""
 #: .\templates\two_factor\core\otp_required.html:12
 #: .\templates\two_factor\profile\profile.html:27
 msgid ""
-"Two-factor authentication is not enabled for your account. Enable two-factor"
-" authentication for enhanced account security."
+"Two-factor authentication is not enabled for your account. Enable two-factor "
+"authentication for enhanced account security."
 msgstr ""
 "La autenticación de dos factores no está habilitada en tu cuenta. Actívala "
 "para mejorar la seguridad de tu cuenta."
@@ -2698,8 +2747,7 @@ msgid "Copied to clipboard"
 msgstr "Copiado al portapapeles"
 
 #: .\templates\two_factor\core\setup.html:56
-msgid ""
-"Token validated successfully. Two-factor authentication is now enabled."
+msgid "Token validated successfully. Two-factor authentication is now enabled."
 msgstr ""
 "Token validado exitosamente. La autenticación de dos factores ahora está "
 "habilitada."
@@ -2714,8 +2762,7 @@ msgid "Back to login"
 msgstr "Volver al inicio de sesión"
 
 #: .\templates\two_factor\core\setup_complete.html:13
-msgid ""
-"Congratulations, you've successfully enabled two-factor authentication."
+msgid "Congratulations, you've successfully enabled two-factor authentication."
 msgstr "¡Felicidades! Has habilitado la autenticación de dos factores."
 
 #: .\templates\two_factor\profile\profile.html:14

@@ -195,7 +195,9 @@
     });
   }
 
-  document.getElementById('savePlacements').addEventListener('click', function () {
+  var saveButton = document.getElementById('savePlacements');
+
+  saveButton.addEventListener('click', function () {
     var pk = layoutSelect ? layoutSelect.value : '';
 
     if (!pk) {
@@ -210,19 +212,23 @@
       return;
     }
 
-    send(
-      config.placementsUrl.replace('/0/', '/' + pk + '/'),
-      'PATCH',
-      { placements: placements }
-    ).then(function (result) {
-      if (result.ok) {
-        notify(result.data.detail, 'success');
-        repaint();
-      } else {
-        notify(result.data.detail || config.messages.saveFailed, 'danger');
-      }
-    }).catch(function () {
-      notify(config.messages.saveFailed, 'danger');
+    // wrap() devuelve null si el boton ya estaba ocupado: el segundo click
+    // durante un guardado en curso se descarta sin llegar a la red.
+    window.GEABusy.wrap(saveButton, config.messages.saving, function () {
+      return send(
+        config.placementsUrl.replace('/0/', '/' + pk + '/'),
+        'PATCH',
+        { placements: placements }
+      ).then(function (result) {
+        if (result.ok) {
+          notify(result.data.detail, 'success');
+          repaint();
+        } else {
+          notify(result.data.detail || config.messages.saveFailed, 'danger');
+        }
+      }).catch(function () {
+        notify(config.messages.saveFailed, 'danger');
+      });
     });
   });
 
@@ -248,7 +254,9 @@
     }
   });
 
-  document.getElementById('confirmNewLayout').addEventListener('click', function () {
+  var confirmButton = document.getElementById('confirmNewLayout');
+
+  confirmButton.addEventListener('click', function () {
     var name = (nameInput.value || '').trim();
 
     modalError.innerHTML = '';
@@ -262,7 +270,8 @@
       return;
     }
 
-    send(config.createUrl, 'POST', {
+    window.GEABusy.wrap(confirmButton, config.messages.creating, function () {
+    return send(config.createUrl, 'POST', {
       name: name,
       description: descriptionInput.value || '',
       is_default: defaultInput.checked,
@@ -298,6 +307,7 @@
       modalError.innerHTML =
         '<div class="alert alert-danger py-2 small"></div>';
       modalError.firstChild.textContent = config.messages.saveFailed;
+    });
     });
   });
 

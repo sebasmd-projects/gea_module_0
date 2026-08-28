@@ -287,7 +287,8 @@
           </div>
 
           <div class="d-grid gap-2 mb-4">
-            <button type="submit" class="btn btn-primary btn-lg">
+            <button type="submit" class="btn btn-primary btn-lg"
+                    data-loading-text="{% trans 'Generating…' %}">
               {% trans 'Generate' %} <i class="bi bi-upc-scan ms-1"></i>
             </button>
           </div>
@@ -338,7 +339,9 @@
         loadFailed: '{% trans 'The layout could not be loaded.' %}',
         saveFailed: '{% trans 'The layout could not be saved.' %}',
         nameRequired: '{% trans 'The layout name is required.' %}',
-        unsaved: '{% trans 'Placement moved. Press Save to store it in the layout.' %}'
+        unsaved: '{% trans 'Placement moved. Press Save to store it in the layout.' %}',
+        saving: '{% trans 'Saving…' %}',
+        creating: '{% trans 'Creating…' %}'
       }
     };
   </script>

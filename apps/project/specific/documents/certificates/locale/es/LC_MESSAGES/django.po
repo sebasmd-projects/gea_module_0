@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GEAUSA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-25 18:16-0500\n"
+"POT-Creation-Date: 2026-08-27 21:43-0500\n"
 "PO-Revision-Date: 2026-01-11 02:56+0000\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -64,7 +64,7 @@ msgid "Estado legal"
 msgstr "Estado legal"
 
 #: .\apps\project\specific\documents\certificates\admin.py:227
-#: .\apps\project\specific\documents\certificates\admin.py:432
+#: .\apps\project\specific\documents\certificates\admin.py:438
 msgid "Vigencia"
 msgstr "Vigencia"
 
@@ -76,90 +76,90 @@ msgstr "Métricas"
 msgid "Auditoría"
 msgstr "Auditoría"
 
-#: .\apps\project\specific\documents\certificates\admin.py:256
+#: .\apps\project\specific\documents\certificates\admin.py:262
 msgid "Full name"
 msgstr "Nombre completo"
 
-#: .\apps\project\specific\documents\certificates\admin.py:260
+#: .\apps\project\specific\documents\certificates\admin.py:266
 #: .\apps\project\specific\documents\certificates\models.py:155
 msgid "Approved"
 msgstr "Aprobado"
 
-#: .\apps\project\specific\documents\certificates\admin.py:264
-#: .\apps\project\specific\documents\certificates\admin.py:488
+#: .\apps\project\specific\documents\certificates\admin.py:270
+#: .\apps\project\specific\documents\certificates\admin.py:494
 #: .\apps\project\specific\documents\certificates\views.py:372
 msgid "Expired"
 msgstr "Vencido"
 
-#: .\apps\project\specific\documents\certificates\admin.py:268
+#: .\apps\project\specific\documents\certificates\admin.py:274
 #: .\apps\project\specific\documents\certificates\models.py:45
 #: .\apps\project\specific\documents\certificates\views.py:373
 msgid "Revoked"
 msgstr "Revocado"
 
-#: .\apps\project\specific\documents\certificates\admin.py:272
-#: .\apps\project\specific\documents\certificates\admin.py:492
+#: .\apps\project\specific\documents\certificates\admin.py:278
+#: .\apps\project\specific\documents\certificates\admin.py:498
 msgid "Views"
 msgstr "Visitas"
 
-#: .\apps\project\specific\documents\certificates\admin.py:276
-#: .\apps\project\specific\documents\certificates\admin.py:496
+#: .\apps\project\specific\documents\certificates\admin.py:282
+#: .\apps\project\specific\documents\certificates\admin.py:502
 msgid "Unique"
 msgstr "Únicas"
 
-#: .\apps\project\specific\documents\certificates\admin.py:280
+#: .\apps\project\specific\documents\certificates\admin.py:286
 msgid "CC (masked)"
 msgstr "CC (enmascarada)"
 
-#: .\apps\project\specific\documents\certificates\admin.py:284
+#: .\apps\project\specific\documents\certificates\admin.py:290
 msgid "Passport (masked)"
 msgstr "Pasaporte (enmascarado)"
 
-#: .\apps\project\specific\documents\certificates\admin.py:288
+#: .\apps\project\specific\documents\certificates\admin.py:294
 msgid "Photo"
 msgstr "Foto"
 
-#: .\apps\project\specific\documents\certificates\admin.py:297
+#: .\apps\project\specific\documents\certificates\admin.py:303
 msgid "Detail"
 msgstr "Detalle"
 
-#: .\apps\project\specific\documents\certificates\admin.py:384
+#: .\apps\project\specific\documents\certificates\admin.py:390
 msgid "Identificacion"
 msgstr "Identificación"
 
-#: .\apps\project\specific\documents\certificates\admin.py:392
+#: .\apps\project\specific\documents\certificates\admin.py:398
 msgid "Certificacion"
 msgstr "Certificación"
 
-#: .\apps\project\specific\documents\certificates\admin.py:403
+#: .\apps\project\specific\documents\certificates\admin.py:409
 msgid "Archivos generados"
 msgstr "Archivos generados"
 
-#: .\apps\project\specific\documents\certificates\admin.py:410
+#: .\apps\project\specific\documents\certificates\admin.py:416
 msgid "Huellas"
 msgstr "Huellas"
 
-#: .\apps\project\specific\documents\certificates\admin.py:421
+#: .\apps\project\specific\documents\certificates\admin.py:427
 msgid "Codigo emitido"
 msgstr "Código emitido"
 
-#: .\apps\project\specific\documents\certificates\admin.py:431
+#: .\apps\project\specific\documents\certificates\admin.py:437
 msgid "Entrega"
 msgstr "Entrega"
 
-#: .\apps\project\specific\documents\certificates\admin.py:433
+#: .\apps\project\specific\documents\certificates\admin.py:439
 msgid "Metricas"
 msgstr "Métricas"
 
-#: .\apps\project\specific\documents\certificates\admin.py:437
+#: .\apps\project\specific\documents\certificates\admin.py:443
 msgid "Auditoria"
 msgstr "Auditoría"
 
-#: .\apps\project\specific\documents\certificates\admin.py:459
+#: .\apps\project\specific\documents\certificates\admin.py:465
 msgid "How it works"
 msgstr "Cómo funciona"
 
-#: .\apps\project\specific\documents\certificates\admin.py:464
+#: .\apps\project\specific\documents\certificates\admin.py:470
 msgid ""
 "1) Upload the ORIGINAL PDF without codes. 2) Pick the stamp layout (or leave "
 "it empty for the default one). 3) Save. 4) Run the action “Certify” from the "
@@ -169,7 +169,7 @@ msgstr ""
 "déjala vacía para usar la de por defecto). 3) Guarda. 4) Ejecuta la acción "
 "«Certificar» desde el listado."
 
-#: .\apps\project\specific\documents\certificates\admin.py:469
+#: .\apps\project\specific\documents\certificates\admin.py:475
 msgid ""
 "Certifying produces the certified PDF with its QR and barcode, the "
 "distributable copy carrying a hidden watermark, and the fingerprints of all "
@@ -179,67 +179,67 @@ msgstr ""
 "copia distribuible con una marca de agua oculta, y las huellas de los tres "
 "archivos."
 
-#: .\apps\project\specific\documents\certificates\admin.py:475
+#: .\apps\project\specific\documents\certificates\admin.py:481
 msgid "Status"
 msgstr "Estado"
 
-#: .\apps\project\specific\documents\certificates\admin.py:500
+#: .\apps\project\specific\documents\certificates\admin.py:506
 msgid "Files"
 msgstr "Archivos"
 
-#: .\apps\project\specific\documents\certificates\admin.py:505
+#: .\apps\project\specific\documents\certificates\admin.py:511
 msgid "Original"
 msgstr "Original"
 
-#: .\apps\project\specific\documents\certificates\admin.py:506
+#: .\apps\project\specific\documents\certificates\admin.py:512
 #: .\apps\project\specific\documents\certificates\models.py:44
 msgid "Certified"
 msgstr "Certificado"
 
-#: .\apps\project\specific\documents\certificates\admin.py:507
+#: .\apps\project\specific\documents\certificates\admin.py:513
 msgid "Public copy"
 msgstr "Copia pública"
 
-#: .\apps\project\specific\documents\certificates\admin.py:524
+#: .\apps\project\specific\documents\certificates\admin.py:530
 msgid "Certification record"
 msgstr "Registro de certificación"
 
-#: .\apps\project\specific\documents\certificates\admin.py:534
+#: .\apps\project\specific\documents\certificates\admin.py:540
 msgid "Download the signed JSON record (for auditors)"
 msgstr "Descargar el registro JSON sellado (para auditoría)"
 
-#: .\apps\project\specific\documents\certificates\admin.py:537
+#: .\apps\project\specific\documents\certificates\admin.py:543
 msgid "Hash"
 msgstr "Hash"
 
-#: .\apps\project\specific\documents\certificates\admin.py:594
-#: .\apps\project\specific\documents\certificates\admin.py:608
+#: .\apps\project\specific\documents\certificates\admin.py:600
+#: .\apps\project\specific\documents\certificates\admin.py:614
 msgid "Target"
 msgstr "Objetivo"
 
-#: .\apps\project\specific\documents\certificates\admin.py:596
-#: .\apps\project\specific\documents\certificates\admin.py:621
+#: .\apps\project\specific\documents\certificates\admin.py:602
+#: .\apps\project\specific\documents\certificates\admin.py:627
 msgid "Viewer"
 msgstr "Visitante"
 
-#: .\apps\project\specific\documents\certificates\admin.py:598
+#: .\apps\project\specific\documents\certificates\admin.py:604
 msgid "Technical"
 msgstr "Técnico"
 
-#: .\apps\project\specific\documents\certificates\admin.py:600
+#: .\apps\project\specific\documents\certificates\admin.py:606
 msgid "Audit"
 msgstr "Auditoría"
 
-#: .\apps\project\specific\documents\certificates\admin.py:604
+#: .\apps\project\specific\documents\certificates\admin.py:610
 msgid "Type"
 msgstr "Tipo"
 
-#: .\apps\project\specific\documents\certificates\admin.py:606
+#: .\apps\project\specific\documents\certificates\admin.py:612
 #: .\apps\project\specific\documents\certificates\models.py:621
 msgid "User Certificate"
 msgstr "Certificado de usuario"
 
-#: .\apps\project\specific\documents\certificates\admin.py:606
+#: .\apps\project\specific\documents\certificates\admin.py:612
 msgid "Document Certificate"
 msgstr "Certificado de documento"
 
