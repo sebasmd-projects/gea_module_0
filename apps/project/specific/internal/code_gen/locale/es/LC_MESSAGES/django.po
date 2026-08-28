@@ -7,9 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ATLAS 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-27 20:15-0500\n"
+"POT-Creation-Date: 2026-08-27 20:22-0500\n"
 "PO-Revision-Date: 2024-12-15 02:02-0500\n"
-"Last-Translator: Sebastián Morales <sebastian.morales@propensionesabogados.com>\n"
+"Last-Translator: Sebastián Morales "
+"<sebastian.morales@propensionesabogados.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -106,7 +107,6 @@ msgid "Placement %(number)s: opacity must be between 0 and 1."
 msgstr "Posición %(number)s: la opacidad debe estar entre 0 y 1."
 
 #: .\apps\project\specific\internal\code_gen\api.py:194
-#| msgid "Stamp layout saved."
 msgid "Stamp layout updated."
 msgstr "Disposición de estampado actualizada."
 
@@ -119,7 +119,6 @@ msgid "A layout with this name already exists."
 msgstr "Ya existe una disposición con este nombre."
 
 #: .\apps\project\specific\internal\code_gen\api.py:249
-#| msgid "Stamp layout saved."
 msgid "Stamp layout created."
 msgstr "Disposición de estampado creada."
 
@@ -225,8 +224,8 @@ msgstr "Generar código de barras (Code128)"
 
 #: .\apps\project\specific\internal\code_gen\forms.py:156
 msgid ""
-"Only letters, digits, spaces and . _ - are allowed. URLs cannot be encoded in"
-" a barcode."
+"Only letters, digits, spaces and . _ - are allowed. URLs cannot be encoded "
+"in a barcode."
 msgstr ""
 "Solo se admiten letras, dígitos, espacios y los símbolos . _ - . Las URLs no "
 "se pueden codificar en un código de barras."
@@ -557,8 +556,8 @@ msgid ""
 "URLs and resource schemes (\":\", \"://\") cannot be encoded in a barcode. "
 "Use the QR code for links."
 msgstr ""
-"Las URLs y los esquemas de recurso (\":\", \"://\") no se pueden codificar en"
-" un código de barras. Usa el código QR para los enlaces."
+"Las URLs y los esquemas de recurso (\":\", \"://\") no se pueden codificar "
+"en un código de barras. Usa el código QR para los enlaces."
 
 #: .\apps\project\specific\internal\code_gen\services\codes.py:91
 #, python-format
@@ -600,8 +599,8 @@ msgid ""
 "The barcode has %(length)s characters; above %(maximum)s the symbol becomes "
 "very wide and harder to scan when printed."
 msgstr ""
-"El código de barras tiene %(length)s caracteres; por encima de %(maximum)s el"
-" símbolo queda muy ancho y cuesta más escanearlo impreso."
+"El código de barras tiene %(length)s caracteres; por encima de %(maximum)s "
+"el símbolo queda muy ancho y cuesta más escanearlo impreso."
 
 #: .\apps\project\specific\internal\code_gen\services\codes.py:157
 msgid "Could not generate a unique code. Try again."
