@@ -1,0 +1,156 @@
+/* stamp_preview.css — vista previa de las posiciones de estampado. */
+
+.gea-stamp-preview {
+  --gea-preview-qr: #1a7f37;
+  --gea-preview-barcode: #a17f1a;
+  --gea-preview-outside: #a11a1a;
+
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+}
+
+.gea-stamp-preview__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.gea-stamp-preview__label {
+  font-weight: 600;
+}
+
+.gea-stamp-preview__select {
+  padding: 0.15rem 0.4rem;
+  font-size: 0.8rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  background: #fff;
+  color: #212529;
+}
+
+.gea-stamp-preview__hint,
+.gea-stamp-preview__empty {
+  color: #6c757d;
+  font-size: 0.78rem;
+  margin: 0;
+}
+
+.gea-stamp-preview__stage {
+  max-width: 100%;
+}
+
+.gea-stamp-preview__page {
+  position: relative;
+  width: 100%;
+  height: 0;             /* la altura la fija el padding-top segun la pagina */
+  background: #fff;
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 10% 10%;
+  border: 1px solid #adb5bd;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+.gea-stamp-preview__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.gea-stamp-preview__layer {
+  position: absolute;
+  inset: 0;
+}
+
+.gea-stamp-preview__pagenav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.gea-stamp-preview__pagebtn {
+  border: 1px solid #ced4da;
+  background: #fff;
+  color: #212529;
+  border-radius: 0.25rem;
+  line-height: 1;
+  padding: 0.1rem 0.4rem;
+  cursor: pointer;
+}
+
+.gea-stamp-preview__pagelabel {
+  font-variant-numeric: tabular-nums;
+  min-width: 3.5em;
+  text-align: center;
+}
+
+.gea-stamp-preview__box {
+  position: absolute;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  box-sizing: border-box;
+  border: 2px solid var(--gea-preview-qr);
+  background: rgba(26, 127, 55, 0.18);
+  border-radius: 2px;
+  overflow: visible;
+}
+
+.gea-stamp-preview__box--barcode {
+  border-color: var(--gea-preview-barcode);
+  background: rgba(161, 127, 26, 0.18);
+}
+
+.gea-stamp-preview__box--outside {
+  border-color: var(--gea-preview-outside);
+  border-style: dashed;
+  background: rgba(161, 26, 26, 0.18);
+}
+
+.gea-stamp-preview__box--draggable {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.gea-stamp-preview__box--draggable.is-dragging {
+  cursor: grabbing;
+  opacity: 0.75;
+}
+
+.gea-stamp-preview__caption {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  white-space: nowrap;
+  font-size: 0.62rem;
+  line-height: 1.2;
+  padding: 0 2px;
+  color: #212529;
+  background: rgba(255, 255, 255, 0.85);
+  pointer-events: none;
+}
+
+/* --- Ajustes para el admin de Django ------------------------------- */
+.gea-stamp-preview--admin {
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background: #fbfbfb;
+}
+
+@media (prefers-color-scheme: dark) {
+  .gea-stamp-preview--admin {
+    background: var(--darkened-bg, #232323);
+    border-color: var(--hairline-color, #3d3d3d);
+  }
+
+  .gea-stamp-preview--admin .gea-stamp-preview__page {
+    background-color: #f4f4f4;
+  }
+}

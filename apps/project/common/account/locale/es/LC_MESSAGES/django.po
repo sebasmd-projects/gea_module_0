@@ -217,8 +217,8 @@ msgid ""
 "If an account exists with the provided email/username, you will receive "
 "password reset instructions shortly."
 msgstr ""
-"Si existe una cuenta con el correo o el usuario indicados, recibirás en "
-"breve las instrucciones para restablecer la contraseña."
+"Si existe una cuenta con el correo o el usuario indicados, recibirás en breve"
+" las instrucciones para restablecer la contraseña."
 
 #: .\apps\project\common\account\views.py:337
 msgid "Check Your Email"
@@ -226,8 +226,8 @@ msgstr "Revisa tu correo"
 
 #: .\apps\project\common\account\views.py:339
 msgid ""
-"We've sent password reset instructions to your email. Please check your "
-"inbox and follow the link to reset your password."
+"We've sent password reset instructions to your email. Please check your inbox"
+" and follow the link to reset your password."
 msgstr ""
 "Hemos enviado a tu correo las instrucciones para restablecer la contraseña. "
 "Revisa tu bandeja de entrada y sigue el enlace para restablecerla."
@@ -243,8 +243,8 @@ msgid ""
 "The password reset link is invalid or has expired. Please request a new "
 "password reset."
 msgstr ""
-"El enlace para restablecer la contraseña no es válido o ha caducado. "
-"Solicita uno nuevo."
+"El enlace para restablecer la contraseña no es válido o ha caducado. Solicita"
+" uno nuevo."
 
 #: .\apps\project\common\account\views.py:400
 msgid ""

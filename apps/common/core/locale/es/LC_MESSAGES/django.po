@@ -45,8 +45,8 @@ msgid ""
 "Exclusive and official platform for the secure purchase of US historical "
 "assets."
 msgstr ""
-"Plataforma exclusiva y oficial para la compra segura de activos históricos "
-"de EE. UU."
+"Plataforma exclusiva y oficial para la compra segura de activos históricos de"
+" EE. UU."
 
 #: .\apps\common\core\templates\core\index.html:183
 msgid "Your browser does not support HTML5 video."

@@ -7,10 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ATLAS 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-25 18:16-0500\n"
+"POT-Creation-Date: 2026-08-27 20:15-0500\n"
 "PO-Revision-Date: 2024-12-15 02:02-0500\n"
-"Last-Translator: Sebastián Morales "
-"<sebastian.morales@propensionesabogados.com>\n"
+"Last-Translator: Sebastián Morales <sebastian.morales@propensionesabogados.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -18,102 +17,184 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\apps\project\specific\internal\code_gen\admin.py:50
+#: .\apps\project\specific\internal\code_gen\admin.py:51
 msgid "Code information"
 msgstr "Información del código"
 
-#: .\apps\project\specific\internal\code_gen\admin.py:61
+#: .\apps\project\specific\internal\code_gen\admin.py:62
 msgid "Segments"
 msgstr "Segmentos"
 
-#: .\apps\project\specific\internal\code_gen\admin.py:73
+#: .\apps\project\specific\internal\code_gen\admin.py:74
 msgid "Symbols"
 msgstr "Símbolos"
 
-#: .\apps\project\specific\internal\code_gen\admin.py:83
+#: .\apps\project\specific\internal\code_gen\admin.py:84
 msgid "Status"
 msgstr "Estado"
 
-#: .\apps\project\specific\internal\code_gen\admin.py:91
+#: .\apps\project\specific\internal\code_gen\admin.py:92
 msgid "System Information"
 msgstr "Información del sistema"
 
-#: .\apps\project\specific\internal\code_gen\admin.py:128
+#: .\apps\project\specific\internal\code_gen\admin.py:133
+#: .\apps\project\specific\internal\code_gen\models.py:175
+msgid "Layout"
+msgstr "Disposición"
+
+#: .\apps\project\specific\internal\code_gen\admin.py:144
+msgid "Live preview"
+msgstr "Vista previa en vivo"
+
+#: .\apps\project\specific\internal\code_gen\admin.py:148
+msgid ""
+"Updates as you edit the placements below. Drag a box to move it: the offsets "
+"are written back into the form."
+msgstr ""
+"Se actualiza mientras editas las posiciones de abajo. Arrastra una caja para "
+"moverla: los desplazamientos se escriben de vuelta en el formulario."
+
+#: .\apps\project\specific\internal\code_gen\admin.py:159
 msgid "Placements"
 msgstr "Posiciones"
+
+#: .\apps\project\specific\internal\code_gen\api.py:33
+msgid "You are not allowed to do this."
+msgstr "No tienes permiso para hacer esto."
+
+#: .\apps\project\specific\internal\code_gen\api.py:51
+msgid "Malformed JSON body."
+msgstr "El cuerpo JSON está mal formado."
+
+#: .\apps\project\specific\internal\code_gen\api.py:65
+msgid "\"placements\" must be a list."
+msgstr "\"placements\" tiene que ser una lista."
+
+#: .\apps\project\specific\internal\code_gen\api.py:72
+#, python-format
+msgid "Placement %(number)s is not an object."
+msgstr "La posición %(number)s no es un objeto."
+
+#: .\apps\project\specific\internal\code_gen\api.py:82
+#, python-format
+msgid "Placement %(number)s: unknown code kind."
+msgstr "Posición %(number)s: tipo de código desconocido."
+
+#: .\apps\project\specific\internal\code_gen\api.py:88
+#, python-format
+msgid "Placement %(number)s: unknown anchor."
+msgstr "Posición %(number)s: anclaje desconocido."
+
+#: .\apps\project\specific\internal\code_gen\api.py:94
+#, python-format
+msgid "Placement %(number)s: unknown page selector."
+msgstr "Posición %(number)s: selector de páginas desconocido."
+
+#: .\apps\project\specific\internal\code_gen\api.py:108
+#, python-format
+msgid "Placement %(number)s: the measurements must be numbers."
+msgstr "Posición %(number)s: las medidas tienen que ser números."
+
+#: .\apps\project\specific\internal\code_gen\api.py:114
+#, python-format
+msgid "Placement %(number)s: width and height must be at least 1 pt."
+msgstr "Posición %(number)s: el ancho y el alto deben ser de al menos 1 pt."
+
+#: .\apps\project\specific\internal\code_gen\api.py:120
+#, python-format
+msgid "Placement %(number)s: opacity must be between 0 and 1."
+msgstr "Posición %(number)s: la opacidad debe estar entre 0 y 1."
+
+#: .\apps\project\specific\internal\code_gen\api.py:194
+#| msgid "Stamp layout saved."
+msgid "Stamp layout updated."
+msgstr "Disposición de estampado actualizada."
+
+#: .\apps\project\specific\internal\code_gen\api.py:216
+msgid "The layout name is required."
+msgstr "El nombre de la disposición es obligatorio."
+
+#: .\apps\project\specific\internal\code_gen\api.py:226
+msgid "A layout with this name already exists."
+msgstr "Ya existe una disposición con este nombre."
+
+#: .\apps\project\specific\internal\code_gen\api.py:249
+#| msgid "Stamp layout saved."
+msgid "Stamp layout created."
+msgstr "Disposición de estampado creada."
 
 #: .\apps\project\specific\internal\code_gen\apps.py:8
 msgid "Code generation and document certification"
 msgstr "Generación de códigos y certificación documental"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:22
+#: .\apps\project\specific\internal\code_gen\forms.py:23
 msgid "Public verification URL (requires certifying a document)"
 msgstr "URL pública de verificación (requiere certificar un documento)"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:24
+#: .\apps\project\specific\internal\code_gen\forms.py:25
 msgid "The generated code itself"
 msgstr "El propio código generado"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:25
+#: .\apps\project\specific\internal\code_gen\forms.py:26
 msgid "A custom URL or text"
 msgstr "Una URL o un texto personalizado"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:42
-#: .\apps\project\specific\internal\code_gen\models.py:267
+#: .\apps\project\specific\internal\code_gen\forms.py:43
+#: .\apps\project\specific\internal\code_gen\models.py:297
 msgid "Reference"
 msgstr "Referencia"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:47
+#: .\apps\project\specific\internal\code_gen\forms.py:48
 msgid "e.g. AEGIS Special Edition"
 msgstr "p. ej. AEGIS Special Edition"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:53
+#: .\apps\project\specific\internal\code_gen\forms.py:54
 #: .\apps\project\specific\internal\code_gen\models.py:100
-#: .\apps\project\specific\internal\code_gen\models.py:272
+#: .\apps\project\specific\internal\code_gen\models.py:302
 msgid "Description"
 msgstr "Descripción"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:59
+#: .\apps\project\specific\internal\code_gen\forms.py:60
 msgid "Internal notes about this code"
 msgstr "Notas internas sobre este código"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:65
+#: .\apps\project\specific\internal\code_gen\forms.py:66
 msgid "Custom text"
 msgstr "Texto personalizado"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:71
+#: .\apps\project\specific\internal\code_gen\forms.py:72
 msgid "Free text added to the code"
 msgstr "Texto libre que se añade al código"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:80
+#: .\apps\project\specific\internal\code_gen\forms.py:81
 msgid "NIT"
 msgstr "NIT"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:83
+#: .\apps\project\specific\internal\code_gen\forms.py:84
 msgid "Adds the tax ID of the firm at the beginning."
 msgstr "Añade el NIT de la firma al principio."
 
-#: .\apps\project\specific\internal\code_gen\forms.py:87
+#: .\apps\project\specific\internal\code_gen\forms.py:88
 msgid "Certificate initials + autonomous sequence"
 msgstr "Iniciales del certificado + secuencia autónoma"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:91
+#: .\apps\project\specific\internal\code_gen\forms.py:92
 msgid "Non-consecutive and non-repeating sequence, reserved by the platform."
 msgstr "Secuencia no consecutiva y no repetida, reservada por la plataforma."
 
-#: .\apps\project\specific\internal\code_gen\forms.py:97
+#: .\apps\project\specific\internal\code_gen\forms.py:98
 msgid "Initials"
 msgstr "Iniciales"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:103
+#: .\apps\project\specific\internal\code_gen\forms.py:104
 msgid "Derived from the reference if left empty"
 msgstr "Se deriva de la referencia si se deja vacío"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:109
+#: .\apps\project\specific\internal\code_gen\forms.py:110
 msgid "Document hash"
 msgstr "Hash del documento"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:112
+#: .\apps\project\specific\internal\code_gen\forms.py:113
 msgid ""
 "Requires uploading the document. The code carries the base64 fingerprint of "
 "the original file."
@@ -121,56 +202,56 @@ msgstr ""
 "Requiere subir el documento. El código lleva la huella en base64 del archivo "
 "original."
 
-#: .\apps\project\specific\internal\code_gen\forms.py:118
+#: .\apps\project\specific\internal\code_gen\forms.py:119
 msgid "Hash characters"
 msgstr "Caracteres del hash"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:127
+#: .\apps\project\specific\internal\code_gen\forms.py:128
 msgid "Date (DDMMYYYY)"
 msgstr "Fecha (DDMMAAAA)"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:133
-#: .\apps\project\specific\internal\code_gen\models.py:306
+#: .\apps\project\specific\internal\code_gen\forms.py:134
+#: .\apps\project\specific\internal\code_gen\models.py:336
 msgid "Unique random code"
 msgstr "Código único aleatorio"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:139
+#: .\apps\project\specific\internal\code_gen\forms.py:140
 msgid "Random code length"
 msgstr "Longitud del código aleatorio"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:151
+#: .\apps\project\specific\internal\code_gen\forms.py:152
 msgid "Generate barcode (Code128)"
 msgstr "Generar código de barras (Code128)"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:155
+#: .\apps\project\specific\internal\code_gen\forms.py:156
 msgid ""
-"Only letters, digits, spaces and . _ - are allowed. URLs cannot be encoded "
-"in a barcode."
+"Only letters, digits, spaces and . _ - are allowed. URLs cannot be encoded in"
+" a barcode."
 msgstr ""
 "Solo se admiten letras, dígitos, espacios y los símbolos . _ - . Las URLs no "
 "se pueden codificar en un código de barras."
 
-#: .\apps\project\specific\internal\code_gen\forms.py:161
+#: .\apps\project\specific\internal\code_gen\forms.py:162
 msgid "Generate QR code"
 msgstr "Generar código QR"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:167
+#: .\apps\project\specific\internal\code_gen\forms.py:168
 msgid "QR content"
 msgstr "Contenido del QR"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:175
+#: .\apps\project\specific\internal\code_gen\forms.py:176
 msgid "Custom QR content"
 msgstr "Contenido personalizado del QR"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:190
+#: .\apps\project\specific\internal\code_gen\forms.py:191
 msgid "Original document (without codes)"
 msgstr "Documento original (sin códigos)"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:204
+#: .\apps\project\specific\internal\code_gen\forms.py:205
 msgid "Certify this document"
 msgstr "Certificar este documento"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:207
+#: .\apps\project\specific\internal\code_gen\forms.py:208
 msgid ""
 "Embeds the codes in the PDF, computes its fingerprints and issues the "
 "distributable digital copy."
@@ -178,63 +259,63 @@ msgstr ""
 "Incrusta los códigos en el PDF, calcula sus huellas y emite la copia digital "
 "distribuible."
 
-#: .\apps\project\specific\internal\code_gen\forms.py:213
+#: .\apps\project\specific\internal\code_gen\forms.py:214
 msgid "Document title"
 msgstr "Título del documento"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:220
+#: .\apps\project\specific\internal\code_gen\forms.py:221
 msgid "Certificate type"
 msgstr "Tipo de Certificado"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:226
+#: .\apps\project\specific\internal\code_gen\forms.py:227
 msgid "Stamp layout"
 msgstr "Disposición de los códigos"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:229
+#: .\apps\project\specific\internal\code_gen\forms.py:230
 msgid "Default layout"
 msgstr "Disposición por defecto"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:234
+#: .\apps\project\specific\internal\code_gen\forms.py:235
 msgid "Issued at"
 msgstr "Emitido en"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:242
+#: .\apps\project\specific\internal\code_gen\forms.py:243
 msgid "Expires at"
 msgstr "Vence en"
 
-#: .\apps\project\specific\internal\code_gen\forms.py:263
+#: .\apps\project\specific\internal\code_gen\forms.py:264
 #, python-format
 msgid "Accepted formats: %(formats)s."
 msgstr "Formatos aceptados: %(formats)s."
 
-#: .\apps\project\specific\internal\code_gen\forms.py:280
-#: .\apps\project\specific\internal\code_gen\services\certification.py:202
+#: .\apps\project\specific\internal\code_gen\forms.py:281
+#: .\apps\project\specific\internal\code_gen\services\certification.py:203
 #, python-format
 msgid "Only these formats can be certified: %(formats)s."
 msgstr "Solo se pueden certificar estos formatos: %(formats)s."
 
-#: .\apps\project\specific\internal\code_gen\forms.py:286
+#: .\apps\project\specific\internal\code_gen\forms.py:287
 #, python-format
 msgid "The file is too large. The maximum is %(size)s MB."
 msgstr "El archivo es demasiado grande. El máximo son %(size)s MB."
 
-#: .\apps\project\specific\internal\code_gen\forms.py:300
+#: .\apps\project\specific\internal\code_gen\forms.py:301
 msgid "Upload the document to include its hash in the code."
 msgstr "Sube el documento para incluir su hash en el código."
 
-#: .\apps\project\specific\internal\code_gen\forms.py:307
+#: .\apps\project\specific\internal\code_gen\forms.py:308
 msgid "Upload the document you want to certify."
 msgstr "Sube el documento que quieres certificar."
 
-#: .\apps\project\specific\internal\code_gen\forms.py:318
+#: .\apps\project\specific\internal\code_gen\forms.py:319
 msgid "Select at least one symbol to generate: barcode or QR."
 msgstr "Selecciona al menos un símbolo a generar: código de barras o QR."
 
-#: .\apps\project\specific\internal\code_gen\forms.py:327
+#: .\apps\project\specific\internal\code_gen\forms.py:328
 msgid "Enter the content for the QR code."
 msgstr "Introduce el contenido del código QR."
 
-#: .\apps\project\specific\internal\code_gen\forms.py:334
+#: .\apps\project\specific\internal\code_gen\forms.py:335
 msgid ""
 "The public verification URL only exists once the document is certified. "
 "Certify the document or choose another QR content."
@@ -314,133 +395,155 @@ msgstr "Nombre de la disposición"
 msgid "Use as default layout"
 msgstr "Usar como disposición por defecto"
 
-#: .\apps\project\specific\internal\code_gen\models.py:129
+#: .\apps\project\specific\internal\code_gen\models.py:159
 msgid "Stamp Layout"
 msgstr "Disposición de estampado"
 
-#: .\apps\project\specific\internal\code_gen\models.py:130
+#: .\apps\project\specific\internal\code_gen\models.py:160
 msgid "Stamp Layouts"
 msgstr "Disposiciones de estampado"
 
-#: .\apps\project\specific\internal\code_gen\models.py:145
-msgid "Layout"
-msgstr "Disposición"
-
-#: .\apps\project\specific\internal\code_gen\models.py:149
+#: .\apps\project\specific\internal\code_gen\models.py:179
 msgid "Code kind"
 msgstr "Tipo de código"
 
-#: .\apps\project\specific\internal\code_gen\models.py:156
+#: .\apps\project\specific\internal\code_gen\models.py:186
 msgid "Pages"
 msgstr "Páginas"
 
-#: .\apps\project\specific\internal\code_gen\models.py:163
+#: .\apps\project\specific\internal\code_gen\models.py:193
 msgid "Page numbers"
 msgstr "Números de página"
 
-#: .\apps\project\specific\internal\code_gen\models.py:168
+#: .\apps\project\specific\internal\code_gen\models.py:198
 msgid "Comma separated, 1-based. Only used with the specific pages selector."
 msgstr ""
 "Separados por comas, empezando en 1. Solo se usa con el selector de páginas "
 "concretas."
 
-#: .\apps\project\specific\internal\code_gen\models.py:173
+#: .\apps\project\specific\internal\code_gen\models.py:203
 msgid "Anchor"
 msgstr "Anclaje"
 
-#: .\apps\project\specific\internal\code_gen\models.py:180
+#: .\apps\project\specific\internal\code_gen\models.py:210
 msgid "Horizontal offset (pt)"
 msgstr "Desplazamiento horizontal (pt)"
 
-#: .\apps\project\specific\internal\code_gen\models.py:185
+#: .\apps\project\specific\internal\code_gen\models.py:215
 msgid "Vertical offset (pt)"
 msgstr "Desplazamiento vertical (pt)"
 
-#: .\apps\project\specific\internal\code_gen\models.py:190
+#: .\apps\project\specific\internal\code_gen\models.py:220
 msgid "Width (pt)"
 msgstr "Ancho (pt)"
 
-#: .\apps\project\specific\internal\code_gen\models.py:196
+#: .\apps\project\specific\internal\code_gen\models.py:226
 msgid "Height (pt)"
 msgstr "Alto (pt)"
 
-#: .\apps\project\specific\internal\code_gen\models.py:202
+#: .\apps\project\specific\internal\code_gen\models.py:232
 msgid "Opacity"
 msgstr "Opacidad"
 
-#: .\apps\project\specific\internal\code_gen\models.py:211
+#: .\apps\project\specific\internal\code_gen\models.py:241
 msgid "Provide at least one page number for this selector."
 msgstr "Indica al menos un número de página para este selector."
 
-#: .\apps\project\specific\internal\code_gen\models.py:221
+#: .\apps\project\specific\internal\code_gen\models.py:251
 msgid "Page numbers must be positive integers separated by commas."
 msgstr "Los números de página deben ser enteros positivos separados por comas."
 
-#: .\apps\project\specific\internal\code_gen\models.py:226
+#: .\apps\project\specific\internal\code_gen\models.py:256
 msgid "Opacity must be greater than 0 and up to 1."
 msgstr "La opacidad debe ser mayor que 0 y como máximo 1."
 
-#: .\apps\project\specific\internal\code_gen\models.py:256
+#: .\apps\project\specific\internal\code_gen\models.py:286
 msgid "Stamp Placement"
 msgstr "Posición de estampado"
 
-#: .\apps\project\specific\internal\code_gen\models.py:257
+#: .\apps\project\specific\internal\code_gen\models.py:287
 msgid "Stamp Placements"
 msgstr "Posiciones de estampado"
 
-#: .\apps\project\specific\internal\code_gen\models.py:278
+#: .\apps\project\specific\internal\code_gen\models.py:308
 msgid "Custom Text Input"
 msgstr "Entrada de Texto Personalizado"
 
-#: .\apps\project\specific\internal\code_gen\models.py:285
+#: .\apps\project\specific\internal\code_gen\models.py:315
 msgid "Code Information"
 msgstr "Información del Código"
 
-#: .\apps\project\specific\internal\code_gen\models.py:291
+#: .\apps\project\specific\internal\code_gen\models.py:321
 msgid "Certificate initials"
 msgstr "Iniciales del certificado"
 
-#: .\apps\project\specific\internal\code_gen\models.py:298
+#: .\apps\project\specific\internal\code_gen\models.py:328
 msgid "Autonomous sequence"
 msgstr "Secuencia autónoma"
 
-#: .\apps\project\specific\internal\code_gen\models.py:314
+#: .\apps\project\specific\internal\code_gen\models.py:344
 msgid "Source file hash (SHA-256)"
 msgstr "Hash del archivo original (SHA-256)"
 
-#: .\apps\project\specific\internal\code_gen\models.py:322
+#: .\apps\project\specific\internal\code_gen\models.py:352
 msgid "Hash fragment (base64)"
 msgstr "Fragmento del hash (base64)"
 
-#: .\apps\project\specific\internal\code_gen\models.py:329
+#: .\apps\project\specific\internal\code_gen\models.py:359
 msgid "Barcode generated"
 msgstr "Código de barras generado"
 
-#: .\apps\project\specific\internal\code_gen\models.py:334
+#: .\apps\project\specific\internal\code_gen\models.py:364
 msgid "QR generated"
 msgstr "QR generado"
 
-#: .\apps\project\specific\internal\code_gen\models.py:339
+#: .\apps\project\specific\internal\code_gen\models.py:369
 msgid "QR payload"
 msgstr "Contenido del QR"
 
-#: .\apps\project\specific\internal\code_gen\models.py:353
+#: .\apps\project\specific\internal\code_gen\models.py:377
+msgid "Certified document"
+msgstr "Documento certificado"
+
+#: .\apps\project\specific\internal\code_gen\models.py:382
+msgid "Set when the code was issued as part of certifying a document."
+msgstr "Se rellena cuando el código se emitió al certificar un documento."
+
+#: .\apps\project\specific\internal\code_gen\models.py:410
 msgid "Code Registration"
 msgstr "Registro de Código"
 
-#: .\apps\project\specific\internal\code_gen\models.py:354
+#: .\apps\project\specific\internal\code_gen\models.py:411
 msgid "Code Registrations"
 msgstr "Registros de Códigos"
 
-#: .\apps\project\specific\internal\code_gen\services\certification.py:194
+#: .\apps\project\specific\internal\code_gen\preview.py:22
+msgid "Page size"
+msgstr "Tamaño de página"
+
+#: .\apps\project\specific\internal\code_gen\preview.py:23
+msgid "Drag a box to move it; the offsets update as you go."
+msgstr ""
+"Arrastra una caja para moverla; los desplazamientos se actualizan sobre la "
+"marcha."
+
+#: .\apps\project\specific\internal\code_gen\preview.py:24
+msgid "No placements yet. Add one to see it here."
+msgstr "Todavía no hay posiciones. Añade una para verla aquí."
+
+#: .\apps\project\specific\internal\code_gen\preview.py:25
+msgid "This placement falls outside the page."
+msgstr "Esta posición queda fuera de la página."
+
+#: .\apps\project\specific\internal\code_gen\services\certification.py:195
 msgid "Upload the original document (without codes) first."
 msgstr "Sube primero el documento original (sin códigos)."
 
-#: .\apps\project\specific\internal\code_gen\services\certification.py:211
+#: .\apps\project\specific\internal\code_gen\services\certification.py:212
 msgid "The uploaded file is not a readable PDF."
 msgstr "El archivo subido no es un PDF legible."
 
-#: .\apps\project\specific\internal\code_gen\services\certification.py:367
+#: .\apps\project\specific\internal\code_gen\services\certification.py:372
 #, python-format
 msgid "Automatic certification of document %(pk)s"
 msgstr "Certificación automática del documento %(pk)s"
@@ -454,8 +557,8 @@ msgid ""
 "URLs and resource schemes (\":\", \"://\") cannot be encoded in a barcode. "
 "Use the QR code for links."
 msgstr ""
-"Las URLs y los esquemas de recurso (\":\", \"://\") no se pueden codificar "
-"en un código de barras. Usa el código QR para los enlaces."
+"Las URLs y los esquemas de recurso (\":\", \"://\") no se pueden codificar en"
+" un código de barras. Usa el código QR para los enlaces."
 
 #: .\apps\project\specific\internal\code_gen\services\codes.py:91
 #, python-format
@@ -497,22 +600,31 @@ msgid ""
 "The barcode has %(length)s characters; above %(maximum)s the symbol becomes "
 "very wide and harder to scan when printed."
 msgstr ""
-"El código de barras tiene %(length)s caracteres; por encima de %(maximum)s "
-"el símbolo queda muy ancho y cuesta más escanearlo impreso."
+"El código de barras tiene %(length)s caracteres; por encima de %(maximum)s el"
+" símbolo queda muy ancho y cuesta más escanearlo impreso."
 
 #: .\apps\project\specific\internal\code_gen\services\codes.py:157
 msgid "Could not generate a unique code. Try again."
 msgstr "No se pudo generar un código único. Inténtalo de nuevo."
 
-#: .\apps\project\specific\internal\code_gen\views.py:62
+#: .\apps\project\specific\internal\code_gen\views.py:80
 msgid "The code could not be generated. Check the logs for details."
 msgstr "No se pudo generar el código. Revisa los registros para más detalle."
 
-#: .\apps\project\specific\internal\code_gen\views.py:134
+#: .\apps\project\specific\internal\code_gen\views.py:153
 msgid "Select at least one segment to build the code."
 msgstr "Selecciona al menos un segmento para construir el código."
 
-#: .\apps\project\specific\internal\code_gen\views.py:223
+#: .\apps\project\specific\internal\code_gen\views.py:216
+#, python-format
+msgid "Some placements did not match any page: %(items)s"
+msgstr "Algunas posiciones no coincidieron con ninguna página: %(items)s"
+
+#: .\apps\project\specific\internal\code_gen\views.py:222
 #, python-format
 msgid "Document certified. Public code: %(code)s"
 msgstr "Documento certificado. Código público: %(code)s"
+
+#: .\apps\project\specific\internal\code_gen\views.py:428
+msgid "Stamp layout saved."
+msgstr "Disposición de estampado guardada."

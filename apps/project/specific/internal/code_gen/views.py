@@ -5,14 +5,22 @@ import logging
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import ValidationError
+from django.db.models import Q
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import FormView
+from django.views.generic import DetailView, FormView, ListView, TemplateView
+
+from .preview import placements_as_data, render_preview_container
 
 from .constants import (HASH_B64_DEFAULT_LENGTH, RANDOM_CODE_DEFAULT_LENGTH)
 from .forms import (QR_CONTENT_CODE, QR_CONTENT_CUSTOM,
                     QR_CONTENT_VERIFICATION, CodeGeneratorForm)
-from .models import CodeRegistrationModel
+from .forms import StampLayoutForm, StampPlacementFormSet
+from .models import (AnchorChoices, CodeKindChoices, CodeRegistrationModel,
+                     PageSelectorChoices, StampLayoutModel,
+                     StampPlacementModel)
 from .services.certification import (CertificationError, CodeOptions,
                                      build_verification_url)
 from .services.certification import certify_document as run_certification
@@ -47,11 +55,21 @@ class CodeGeneratorView(InternalToolAccessMixin, FormView):
     template_name = 'dashboard/pages/documents/code_gen/code_form.html'
     form_class = CodeGeneratorForm
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Opciones para las filas que el banco de trabajo crea en cliente.
+        context['kind_choices'] = CodeKindChoices.choices
+        context['page_selector_choices'] = PageSelectorChoices.choices
+        context['anchor_choices'] = AnchorChoices.choices
+
+        return context
+
     def form_valid(self, form):
         data = form.cleaned_data
 
         try:
-            context = self._generate(form, data)
+            registration = self._generate(form, data)
         except (ValidationError, CertificationError) as error:
             messages.error(self.request, self._error_text(error))
             return self.form_invalid(form)
@@ -63,9 +81,10 @@ class CodeGeneratorView(InternalToolAccessMixin, FormView):
             )
             return self.form_invalid(form)
 
-        return self.render_to_response(
-            self.get_context_data(form=form, **context)
-        )
+        # Redireccion tras POST: el resultado vive en una URL permanente, de
+        # modo que se puede volver a el, compartirlo o recargar la pagina sin
+        # emitir un codigo nuevo ni volver a certificar.
+        return redirect('code_gen:code_detail', pk=registration.pk)
 
     @staticmethod
     def _error_text(error) -> str:
@@ -105,9 +124,9 @@ class CodeGeneratorView(InternalToolAccessMixin, FormView):
         if data.get('certify_document'):
             return self._certify(form, data, options)
 
-        return self._preview(form, data, options, source_hash)
+        return self._issue_code(form, data, options, source_hash)
 
-    def _preview(self, form, data, options: CodeOptions, source_hash: str) -> dict:
+    def _issue_code(self, form, data, options: CodeOptions, source_hash: str):
         """Emite el codigo sin certificar ningun archivo."""
         sequence = next_sequence() if options.include_initials_sequence else ''
         random_code = (
@@ -134,24 +153,17 @@ class CodeGeneratorView(InternalToolAccessMixin, FormView):
                 _('Select at least one segment to build the code.')
             )
 
-        context = {
-            'code_payload': code_payload,
-            'source_hash': source_hash,
-            'hash_fragment': hash_fragment,
-            'sequence': sequence,
-            'random_code': random_code,
-        }
-
         if data.get('generate_barcode'):
-            self._add_barcode(context, code_payload)
+            # Se valida ahora para fallar antes de guardar nada.
+            validate_barcode_payload(code_payload)
+
+            warning = barcode_length_warning(code_payload)
+            if warning:
+                messages.warning(self.request, warning)
 
         qr_payload = self._resolve_qr_payload(data, code_payload)
 
-        if qr_payload:
-            context['qr_payload'] = qr_payload
-            context['qr_image'] = png_to_data_uri(render_qr_png(qr_payload))
-
-        CodeRegistrationModel.objects.create(
+        return CodeRegistrationModel.objects.create(
             reference=data.get('reference', ''),
             description=data.get('description') or '',
             custom_text_input=data.get('custom_text_input') or '',
@@ -165,8 +177,6 @@ class CodeGeneratorView(InternalToolAccessMixin, FormView):
             generated_qr=bool(qr_payload),
             qr_payload=qr_payload or '',
         )
-
-        return context
 
     def _certify(self, form, data, options: CodeOptions) -> dict:
         """Crea el documento verificable y ejecuta la certificacion."""
@@ -196,26 +206,15 @@ class CodeGeneratorView(InternalToolAccessMixin, FormView):
             qr_payload=qr_override,
         )
 
-        context = {
-            'document': document,
-            'code_payload': outcome.code_payload,
-            'qr_payload': outcome.qr_payload,
-            'source_hash': document.source_hash,
-            'hash_fragment': document.code_hash_fragment,
-            'sequence': document.code_sequence,
-            'random_code': document.public_code,
-            'stamp_applied': outcome.applied,
-            'stamp_skipped': outcome.skipped,
-            'page_count': outcome.page_count,
-            'verification_url': build_verification_url(document),
-        }
+        warning = barcode_length_warning(outcome.code_payload)
+        if warning:
+            messages.warning(self.request, warning)
 
-        if data.get('generate_barcode'):
-            self._add_barcode(context, outcome.code_payload)
-
-        if data.get('generate_qr'):
-            context['qr_image'] = png_to_data_uri(
-                render_qr_png(outcome.qr_payload)
+        if outcome.skipped:
+            messages.warning(
+                self.request,
+                _('Some placements did not match any page: %(items)s')
+                % {'items': ', '.join(outcome.skipped)}
             )
 
         messages.success(
@@ -224,23 +223,11 @@ class CodeGeneratorView(InternalToolAccessMixin, FormView):
             % {'code': document.public_code}
         )
 
-        return context
+        return outcome.registration
 
     # ------------------------------------------------------------------
     # Helpers
     # ------------------------------------------------------------------
-    def _add_barcode(self, context: dict, code_payload: str) -> None:
-        validate_barcode_payload(code_payload)
-
-        warning = barcode_length_warning(code_payload)
-        if warning:
-            messages.warning(self.request, warning)
-            context['barcode_warning'] = warning
-
-        context['barcode_image'] = png_to_data_uri(
-            render_barcode_png(code_payload)
-        )
-
     @staticmethod
     def _resolve_qr_payload(data, code_payload: str):
         if not data.get('generate_qr'):
@@ -255,3 +242,189 @@ class CodeGeneratorView(InternalToolAccessMixin, FormView):
             return code_payload
 
         return None
+
+
+# ======================================================================
+# Historial: el resultado de una generacion vive en una URL permanente
+# ======================================================================
+
+class CodeHistoryListView(InternalToolAccessMixin, ListView):
+    """
+    Todos los codigos emitidos, para poder volver a cualquiera.
+
+    Cada certificacion registra tambien su codigo, asi que este listado cubre
+    igualmente los documentos certificados.
+    """
+
+    model = CodeRegistrationModel
+    template_name = 'dashboard/pages/documents/code_gen/code_history.html'
+    context_object_name = 'registrations'
+    paginate_by = 25
+
+    def get_queryset(self):
+        queryset = (
+            CodeRegistrationModel.objects
+            .select_related('document')
+            .order_by('-created')
+        )
+
+        search = (self.request.GET.get('q') or '').strip()
+
+        if search:
+            queryset = queryset.filter(
+                Q(reference__icontains=search)
+                | Q(code_information__icontains=search)
+                | Q(sequence__icontains=search)
+                | Q(random_code__icontains=search)
+                | Q(source_file_hash__icontains=search)
+                | Q(document__document_title__icontains=search)
+            )
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search'] = self.request.GET.get('q', '')
+        return context
+
+
+class CodeDetailView(InternalToolAccessMixin, DetailView):
+    """
+    Resultado de una generacion, reconstruido a partir de lo almacenado.
+
+    Los simbolos no se guardan como archivos: se vuelven a renderizar desde el
+    payload, de modo que son siempre coherentes con el codigo registrado.
+    """
+
+    model = CodeRegistrationModel
+    template_name = 'dashboard/pages/documents/code_gen/code_detail.html'
+    context_object_name = 'registration'
+
+    def get_queryset(self):
+        return CodeRegistrationModel.objects.select_related('document')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        registration = self.object
+
+        if registration.has_barcode:
+            try:
+                context['barcode_image'] = png_to_data_uri(
+                    render_barcode_png(registration.code_information)
+                )
+                context['barcode_warning'] = barcode_length_warning(
+                    registration.code_information
+                )
+            except Exception:
+                logger.exception('Could not re-render the barcode')
+
+        if registration.generated_qr and registration.qr_payload:
+            try:
+                context['qr_image'] = png_to_data_uri(
+                    render_qr_png(registration.qr_payload)
+                )
+            except Exception:
+                logger.exception('Could not re-render the QR code')
+
+        document = registration.document
+
+        if document is not None:
+            context['document'] = document
+            context['verification_url'] = build_verification_url(document)
+            context['record_url'] = reverse(
+                'certificates:certification_record',
+                kwargs={'pk': document.pk}
+            )
+            context['layout_placements'] = placements_as_data(
+                document.stamp_layout
+            )
+            context['stamp_preview'] = render_preview_container(
+                placements=placements_as_data(document.stamp_layout),
+                editable=False,
+            )
+
+        return context
+
+
+# ======================================================================
+# Disposiciones de estampado en el dashboard
+# ======================================================================
+
+class StampLayoutListView(InternalToolAccessMixin, ListView):
+    model = StampLayoutModel
+    template_name = 'dashboard/pages/documents/code_gen/layout_list.html'
+    context_object_name = 'layouts'
+    paginate_by = 25
+
+    def get_queryset(self):
+        return (
+            StampLayoutModel.objects
+            .prefetch_related('placements')
+            .order_by('-is_default', 'name')
+        )
+
+
+class StampLayoutEditView(InternalToolAccessMixin, TemplateView):
+    """
+    Editor de una disposicion con vista previa en vivo.
+
+    El formset y la vista previa comparten los mismos inputs: el JS lee las
+    filas y repinta al vuelo, y al arrastrar una caja escribe de vuelta los
+    desplazamientos.
+    """
+
+    template_name = 'dashboard/pages/documents/code_gen/layout_form.html'
+
+    def get_layout(self):
+        pk = self.kwargs.get('pk')
+
+        if pk is None:
+            return None
+
+        return get_object_or_404(StampLayoutModel, pk=pk)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        layout = kwargs.get('layout', self.get_layout())
+
+        context['layout'] = layout
+        context['form'] = kwargs.get('form') or StampLayoutForm(instance=layout)
+        context['formset'] = kwargs.get('formset') or StampPlacementFormSet(
+            instance=layout
+        )
+        context['stamp_preview'] = render_preview_container(
+            row_selector='[data-placement-row]',
+            form_scope='#layoutForm',
+            editable=True,
+        )
+        return context
+
+    def post(self, request, *args, **kwargs):
+        layout = self.get_layout()
+
+        form = StampLayoutForm(request.POST, instance=layout)
+        formset = StampPlacementFormSet(request.POST, instance=layout)
+
+        if not form.is_valid():
+            return self.render_to_response(
+                self.get_context_data(
+                    layout=layout, form=form, formset=formset
+                )
+            )
+
+        layout = form.save()
+
+        formset = StampPlacementFormSet(request.POST, instance=layout)
+
+        if not formset.is_valid():
+            return self.render_to_response(
+                self.get_context_data(
+                    layout=layout, form=form, formset=formset
+                )
+            )
+
+        formset.save()
+
+        messages.success(request, _('Stamp layout saved.'))
+
+        return redirect('code_gen:layout_edit', pk=layout.pk)

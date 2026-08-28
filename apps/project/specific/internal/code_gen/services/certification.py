@@ -77,6 +77,7 @@ class CertificationOutcome:
     page_count: int = 0
     applied: List[str] = field(default_factory=list)
     skipped: List[str] = field(default_factory=list)
+    registration: object = None
 
 
 # ==========================================================
@@ -346,7 +347,9 @@ def certify_document(
 
     document.save()
 
-    _register_code(document, code_payload, qr_payload, source_hash, hash_fragment)
+    registration = _register_code(
+        document, code_payload, qr_payload, source_hash, hash_fragment
+    )
 
     return CertificationOutcome(
         code_payload=code_payload,
@@ -354,6 +357,7 @@ def certify_document(
         page_count=report.page_count,
         applied=report.applied,
         skipped=report.skipped,
+        registration=registration,
     )
 
 
@@ -361,7 +365,8 @@ def _register_code(document, code_payload, qr_payload, source_hash, hash_fragmen
     """Deja traza del codigo emitido en el registro historico del generador."""
     from ..models import CodeRegistrationModel
 
-    CodeRegistrationModel.objects.create(
+    return CodeRegistrationModel.objects.create(
+        document=document,
         reference=document.document_title[:100],
         description=str(
             _('Automatic certification of document %(pk)s')

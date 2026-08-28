@@ -124,6 +124,36 @@ class StampLayoutModel(TimeStampedModel):
     def get_default(cls):
         return cls.objects.filter(is_default=True, is_active=True).first()
 
+    def placement_data(self) -> list:
+        """Posiciones activas, en la forma que consume la vista previa."""
+        return [
+            {
+                'kind': placement.kind,
+                'anchor': placement.anchor,
+                'offset_x': placement.offset_x,
+                'offset_y': placement.offset_y,
+                'width': placement.width,
+                'height': placement.height,
+                'kind_label': str(placement.get_kind_display()),
+                # El valor crudo lo usa el JS para saber a que paginas aplica;
+                # la etiqueta es solo para pintarla.
+                'page_selector': placement.page_selector,
+                'page_selector_label': str(
+                    placement.get_page_selector_display()
+                ),
+                'page_numbers': placement.page_numbers or '',
+            }
+            for placement in self.placements.all()
+            if placement.is_active
+        ]
+
+    @property
+    def preview_data(self) -> str:
+        """JSON listo para el atributo ``data-placements`` de una plantilla."""
+        import json
+
+        return json.dumps(self.placement_data())
+
     class Meta:
         db_table = 'apps_code_gen_stamp_layout'
         verbose_name = _('Stamp Layout')
@@ -340,6 +370,33 @@ class CodeRegistrationModel(TimeStampedModel):
         blank=True,
         null=True
     )
+
+    document = models.ForeignKey(
+        'certificates.DocumentVerificationModel',
+        on_delete=models.SET_NULL,
+        verbose_name=_('Certified document'),
+        related_name='code_registrations',
+        blank=True,
+        null=True,
+        help_text=_(
+            'Set when the code was issued as part of certifying a document.'
+        )
+    )
+
+    @property
+    def has_barcode(self) -> bool:
+        """El payload es representable como Code128."""
+        from .services.codes import validate_barcode_payload
+
+        if not self.generated_barcode or not self.code_information:
+            return False
+
+        try:
+            validate_barcode_payload(self.code_information)
+        except Exception:
+            return False
+
+        return True
 
     def __str__(self) -> str:
         return self.reference

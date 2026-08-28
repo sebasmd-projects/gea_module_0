@@ -1,0 +1,235 @@
+{% extends 'dashboard/dashboard_layout_base.html' %}
+
+{% load i18n static %}
+
+{% block title %}
+  <title>{% if layout %}{{ layout.name }}{% else %}{% trans 'New stamp layout' %}{% endif %}</title>
+{% endblock title %}
+
+{% block icons %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/aa367a5aee.js" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block custom_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/stamp_preview.css' %}" />
+{% endblock custom_css %}
+
+{% block main_layout %}
+  {% url 'core:index' as dashboard_url %}
+  {% url 'code_gen:layout_list' as layouts_url %}
+  {% trans 'Stamp layout' as page_title %}
+  {% trans 'Where the QR and the barcode land inside the PDF. Drag a box to move it.' as page_description %}
+  {% trans 'Dashboard' as dashboard_title %}
+  {% trans 'Stamp layouts' as layouts_title %}
+
+  {% include 'dashboard/partials/header/_header.html' with icon_class='me-2 fa-solid fa-crop-simple' page_title=page_title page_description=page_description parent_title=dashboard_title parent_url=dashboard_url breadcrumbs=layouts_title|add:'::'|add:layouts_url|add:' > '|add:page_title %}
+
+  <div class="container-xl px-4 mt-n10">
+
+    {% if messages %}
+      <div class="mb-4">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} mb-2">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post" id="layoutForm" novalidate>
+      {% csrf_token %}
+      {{ formset.management_form }}
+
+      {% if form.non_field_errors or formset.non_form_errors %}
+        <div class="alert alert-danger">
+          {{ form.non_field_errors }}
+          {{ formset.non_form_errors }}
+        </div>
+      {% endif %}
+
+      <div class="row">
+        {# ================= LEFT: FORM ================= #}
+        <div class="col-xl-8">
+          <div class="card mb-4">
+            <div class="card-header">
+              <i class="fa-regular fa-file-lines me-2"></i>{% trans 'Layout' %}
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label" for="{{ form.name.id_for_label }}">
+                    {{ form.name.label }} <span class="text-danger">*</span>
+                  </label>
+                  {{ form.name }}
+                  {% for error in form.name.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                  {% endfor %}
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label" for="{{ form.description.id_for_label }}">
+                    {{ form.description.label }}
+                  </label>
+                  {{ form.description }}
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-check">
+                    {{ form.is_default }}
+                    <label class="form-check-label" for="{{ form.is_default.id_for_label }}">
+                      {{ form.is_default.label }}
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    {{ form.is_active }}
+                    <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                      {{ form.is_active.label }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <span><i class="fa-solid fa-crop-simple me-2"></i>{% trans 'Placements' %}</span>
+              <button type="button" class="btn btn-outline-primary btn-sm" id="addPlacement">
+                <i class="bi bi-plus-lg"></i> {% trans 'Add placement' %}
+              </button>
+            </div>
+            <div class="card-body">
+              <p class="small text-muted">
+                {% trans 'Coordinates are in PostScript points (72 pt = 1 inch), measured from the anchor towards the inside of the page. For centred anchors, the horizontal offset is a shift from the centre.' %}
+              </p>
+
+              <div class="table-responsive">
+                <table class="table table-sm align-middle">
+                  <thead>
+                    <tr>
+                      <th>{% trans 'Code kind' %}</th>
+                      <th>{% trans 'Pages' %}</th>
+                      <th>{% trans 'Page numbers' %}</th>
+                      <th>{% trans 'Anchor' %}</th>
+                      <th>X</th>
+                      <th>Y</th>
+                      <th>{% trans 'Width (pt)' %}</th>
+                      <th>{% trans 'Height (pt)' %}</th>
+                      <th>{% trans 'Opacity' %}</th>
+                      <th>{% trans 'Active' %}</th>
+                      <th>{% trans 'Delete' %}</th>
+                    </tr>
+                  </thead>
+                  <tbody id="placementRows">
+                    {% for placement_form in formset %}
+                      <tr data-placement-row>
+                        {{ placement_form.id }}
+                        <td>{{ placement_form.kind }}</td>
+                        <td>{{ placement_form.page_selector }}</td>
+                        <td>{{ placement_form.page_numbers }}</td>
+                        <td>{{ placement_form.anchor }}</td>
+                        <td>{{ placement_form.offset_x }}</td>
+                        <td>{{ placement_form.offset_y }}</td>
+                        <td>{{ placement_form.width }}</td>
+                        <td>{{ placement_form.height }}</td>
+                        <td>{{ placement_form.opacity }}</td>
+                        <td class="text-center">{{ placement_form.is_active }}</td>
+                        <td class="text-center">
+                          {% if placement_form.instance.pk %}{{ placement_form.DELETE }}{% endif %}
+                        </td>
+                      </tr>
+                      {% if placement_form.errors %}
+                        <tr>
+                          <td colspan="11">
+                            <div class="alert alert-danger small mb-0">{{ placement_form.errors }}</div>
+                          </td>
+                        </tr>
+                      {% endif %}
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+
+              <template id="emptyPlacementRow">
+                <tr data-placement-row>
+                  {{ formset.empty_form.id }}
+                  <td>{{ formset.empty_form.kind }}</td>
+                  <td>{{ formset.empty_form.page_selector }}</td>
+                  <td>{{ formset.empty_form.page_numbers }}</td>
+                  <td>{{ formset.empty_form.anchor }}</td>
+                  <td>{{ formset.empty_form.offset_x }}</td>
+                  <td>{{ formset.empty_form.offset_y }}</td>
+                  <td>{{ formset.empty_form.width }}</td>
+                  <td>{{ formset.empty_form.height }}</td>
+                  <td>{{ formset.empty_form.opacity }}</td>
+                  <td class="text-center">{{ formset.empty_form.is_active }}</td>
+                  <td></td>
+                </tr>
+              </template>
+            </div>
+          </div>
+
+          <div class="d-grid gap-2 d-md-flex mb-4">
+            <button type="submit" class="btn btn-primary">
+              {% trans 'Save layout' %} <i class="bi bi-check2 ms-1"></i>
+            </button>
+            <a class="btn btn-outline-secondary" href="{% url 'code_gen:layout_list' %}">
+              {% trans 'Back to layouts' %}
+            </a>
+          </div>
+        </div>
+
+        {# ================= RIGHT: LIVE PREVIEW ================= #}
+        <div class="col-xl-4">
+          <div class="card mb-4 sticky-top" style="top: 1rem;">
+            <div class="card-header">
+              <i class="fa-regular fa-eye me-2"></i>{% trans 'Live preview' %}
+            </div>
+            <div class="card-body">
+              {{ stamp_preview }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock main_layout %}
+
+{% block body_custom_js %}
+  {{ block.super }}
+  <script src="{% static 'js/stamp_preview.js' %}"></script>
+  <script>
+    (function () {
+      var addButton = document.getElementById('addPlacement');
+      var rows = document.getElementById('placementRows');
+      var template = document.getElementById('emptyPlacementRow');
+      var total = document.querySelector('[name$="-TOTAL_FORMS"]');
+
+      if (!addButton || !rows || !template || !total) {
+        return;
+      }
+
+      addButton.addEventListener('click', function () {
+        var index = parseInt(total.value, 10);
+
+        // `empty_form` trae `__prefix__` en cada name/id; se sustituye por el
+        // indice real antes de insertar la fila.
+        var html = template.innerHTML.replace(/__prefix__/g, index);
+
+        var holder = document.createElement('tbody');
+        holder.innerHTML = html.trim();
+
+        var row = holder.querySelector('tr');
+        if (!row) {
+          return;
+        }
+
+        rows.appendChild(row);
+        total.value = index + 1;
+
+        // Avisa a la vista previa de que hay una fila nueva que leer.
+        document.dispatchEvent(new CustomEvent('gea:formset-changed'));
+      });
+    })();
+  </script>
+{% endblock body_custom_js %}

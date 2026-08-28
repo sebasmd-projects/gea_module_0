@@ -90,3 +90,9 @@ DEFAULT_QR_SIZE_PT = 84.0
 DEFAULT_BARCODE_WIDTH_PT = 216.0
 DEFAULT_BARCODE_HEIGHT_PT = 54.0
 DEFAULT_MARGIN_PT = 28.0
+
+# Tamano de pagina por defecto de la vista previa. Coincide con el de los
+# certificados AEGIS (612 x 793.5 pt); es solo el valor inicial, el operador
+# puede cambiarlo en el propio componente.
+DEFAULT_PAGE_WIDTH_PT = 612.0
+DEFAULT_PAGE_HEIGHT_PT = 793.5

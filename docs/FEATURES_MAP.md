@@ -301,6 +301,77 @@ una esquina, desplazamientos y tamaño en puntos PostScript. Un layout marcado
 se genera con ReportLab y se fusiona con pypdf: **el contenido original no se
 reconstruye**.
 
+### Vista previa del estampado
+
+`public/staticfiles/js/stamp_preview.js` dibuja una página a escala y coloca
+una caja por posición. **Replica exactamente
+`services/pdf_stamp.py::_resolve_position`**, y ambas implementaciones se
+contrastan con casos aleatorios sobre los seis anclajes: si se toca una, hay
+que tocar la otra.
+
+Se usa en cinco sitios, con el mismo componente:
+
+| Dónde | Modo |
+|---|---|
+| Admin, `StampLayoutModel` | Editable, enlazado al formset inline |
+| Dashboard, editor de disposición | Editable, enlazado al formset |
+| Dashboard, **generador de códigos** | Editable, sobre el PDF real, con tabla y guardado por API |
+| Dashboard, listado de disposiciones | Solo lectura, desde `preview_data` |
+| Dashboard, detalle del código | Solo lectura |
+
+En modo editable se puede **arrastrar una caja**: el JS convierte el
+desplazamiento a puntos y escribe de vuelta `offset_x`/`offset_y` respetando el
+anclaje (con anclaje derecho, mover a la izquierda *aumenta* el offset). Una
+posición que se sale de la página se pinta en rojo discontinuo.
+
+⚠️ **Durante el arrastre no se repinta la vista completa**, solo se recoloca la
+caja que se mueve. Un `render()` por cada `pointermove` destruye el propio
+elemento arrastrado, se pierde la captura del puntero y el arrastre se queda
+clavado tras el primer pixel. El repintado completo va en `pointerup`.
+
+### El PDF de fondo
+
+Con `data-pdf-input`, el componente pinta la página real del PDF elegido,
+renderizada con **pdf.js** en el navegador: el archivo se lee del propio input,
+**no se sube para esto**. De ahí salen el tamaño real de página (que manda
+sobre el selector de tamaños) y el número de páginas, y con eso las cajas se
+muestran **solo en las páginas donde de verdad caen** (`appliesToPage`, espejo
+de `resolved_pages`).
+
+⚠️ pdf.js no admite dos `render()` simultáneos sobre el mismo lienzo: hay que
+cancelar la tarea anterior antes de lanzar la siguiente. Las cajas se recolocan
+en cuanto se conoce la geometría, sin esperar a que el lienzo termine, para que
+un fallo del render no deje la vista a medias. Si pdf.js no carga, se sigue
+trabajando sobre la página en blanco y se avisa.
+
+### Guardado desde el generador
+
+`api.py` expone las disposiciones en JSON, sin DRF:
+
+| Verbo | Ruta | Qué hace |
+|---|---|---|
+| GET | `layouts/<pk>/placements/` | Lee las posiciones |
+| PATCH | `layouts/<pk>/placements/` | **Reemplaza** el conjunto completo |
+| POST | `layouts/save/` | Crea una disposición (nombre obligatorio + descripción) |
+
+El PATCH sustituye todas las posiciones de una vez dentro de una transacción:
+es lo que envía el editor, y evita casar identificadores en el cliente. Toda
+entrada se valida contra las choices del modelo antes de tocar nada.
+
+### Historial de códigos emitidos
+
+`code_generate` ya no devuelve el resultado en el propio POST: **redirige a
+`code_detail`**, una URL permanente. Con eso se arregla de paso que recargar la
+página de resultados volvía a emitir un código —y a certificar de nuevo el
+documento—, y el operador puede cerrar la pestaña y volver más tarde sin pasar
+por el admin.
+
+`CodeRegistrationModel.document` (FK opcional) enlaza el código con el
+documento que se certificó, de modo que el detalle muestra también los tres
+archivos, las huellas y el registro de certificación. Los símbolos no se
+almacenan: se vuelven a renderizar desde el payload, así que nunca pueden
+divergir del código registrado.
+
 ### Verificación por archivo
 
 Tres canales, del más estricto al más tolerante:
@@ -495,6 +566,102 @@ Dos variantes (`KindChoices`): `GENERAL` (facilitador, representante, tenedor) y
 
 ---
 
+## 12-bis. Anclaje temporal (evaluado, NO implementado)
+
+> **Nada de esta sección existe en el código.** Es el resultado de una
+> evaluación hecha en agosto de 2026 y la decisión que se tomó, para no
+> repetir el análisis cuando se retome.
+
+### El problema que resolvería
+
+El sistema actual prueba **integridad** (el archivo no cambió). Lo único que no
+puede probar es la **fecha**: `certified_at` lo afirma la propia plataforma.
+Un anclaje temporal da *prueba de anterioridad* verificable sin confiar en
+Propensiones. No mueve el límite de `scope.does_not_attest`: sigue sin
+acreditar que el contenido sea cierto.
+
+### Decisión: RFC 3161 + OpenTimestamps, no contrato propio
+
+| | RFC 3161 (TSA) | OpenTimestamps (Bitcoin) |
+|---|---|---|
+| En quién confías | En la TSA | En nadie |
+| Reconocimiento legal | Instrumento (eIDAS / Ley 527 si acreditada) | Indicio, no instrumento |
+| Verificación | `openssl ts -verify` | cliente `ots` / explorador |
+| Caduca | Sí, el certificado de la TSA expira | No |
+| Coste / latencia | céntimos / inmediato | 0 / 1-6 h |
+
+Se combinan porque cubren el fallo del otro: la TSA es el instrumento que un
+tribunal reconoce hoy; Bitcoin es la prueba que sigue en pie cuando ese
+certificado haya expirado. Para activos con horizonte de décadas, eso importa.
+
+**Contrato propio en EVM: descartado.** La atribución del emisor ya la da la
+firma Ed25519 del registro, y la revocación es estado vivo que el detalle ya
+responde. Lo único que añadiría es una wallet caliente con saldo, dependencia
+de un RPC y riesgo de longevidad de una L2: pasivo de seguridad nuevo a cambio
+de cero prueba adicional.
+
+**NFT: descartado.** Un token transferible que aparenta representar una
+participación sobre un activo físico tiene lectura regulatoria evidente, y el
+propio certificado invoca marcos AML/CFT y GAFI. Si alguna vez se retoma,
+solo ERC-721 no transferible (soulbound) y con concepto legal previo por
+escrito.
+
+### Cómo encajaría
+
+El registro de certificación ya tiene la forma correcta; se le añadiría un
+array `anchors`:
+
+```json
+"anchors": [
+  {"type": "rfc3161", "tsa": "...", "token": "base64...", "anchored_at": "..."},
+  {"type": "opentimestamps", "proof": "base64...", "status": "CONFIRMED", "bitcoin_block": 9xxxxx}
+]
+```
+
+⚠️ **Misma trampa circular que el hash y el código de barras**: el anclaje
+referencia el hash del registro pero vive dentro del registro. La solución es
+la ya aplicada en el resto del motor: se define el *payload anclable* como el
+registro **sin `seal` y sin `anchors`**, se ancla
+`sha256(canonical_bytes(payload))`, y solo después se añaden `anchors` y
+`seal`. Un único anclaje cubre transitivamente las tres huellas de archivo, el
+código y las fechas.
+
+### Pasos, si se retoma
+
+1. `anchorable_payload()` en `services/record.py`.
+2. Modelo `CertificationAnchorModel` (FK al documento, `type`, `payload_hash`,
+   `proof`, `status`, `anchored_at`). Un documento admite varios anclajes.
+3. `services/anchoring.py` con los dos backends, agnóstico al proveedor
+   (`CERTIFICATION_TSA_URL` configurable, degradando como
+   `CERTIFICATION_SIGNING_KEY`).
+4. Comando de cron `upgrade_ots_proofs`: la prueba de OpenTimestamps nace
+   `PENDING` y madura a `CONFIRMED` en 1-6 h. La certificación **no** puede
+   bloquearse esperándola.
+5. Descarga del `.tsr` y del `.ots` desde el detalle; `verify_record()` y
+   `how_to_verify` extendidos con los comandos que ejecuta un auditor.
+
+### Condiciones que fijó negocio
+
+- **Proveedor de TSA**: pendiente. Una TSA gratuita (FreeTSA) es técnicamente
+  idéntica pero **no tiene peso legal**; sin un proveedor cualificado (QTSP
+  eIDAS) o acreditado ONAC (Certicámara) detrás, no se puede publicitar como
+  fuerza probatoria.
+- **Disparo**: automático al certificar, **pero solo tras dos verificaciones**.
+  Publicar en Bitcoin es permanente: hace falta la doble comprobación antes de
+  que salga nada a la red. *(Falta precisar si son dos revisiones humanas
+  —control de cuatro ojos— o dos comprobaciones automáticas de integridad.)*
+
+### Lo que se podría afirmar, y lo que no
+
+Sí: «Cada certificado queda anclado en Bitcoin mediante OpenTimestamps y
+sellado por una autoridad de sellado de tiempo cualificada; cualquiera puede
+verificar ambos de forma independiente.»
+
+No: que «el documento está en la blockchain» (solo va su hash), ni que la
+cadena garantice que el contenido sea cierto.
+
+---
+
 ## 13. Funcionalidad presente pero inactiva
 
 | Elemento | Estado |
@@ -504,5 +671,4 @@ Dos variantes (`KindChoices`): `GENERAL` (facilitador, representante, tenedor) y
 | `PortfolioTemplateView` | Vista definida, sin ruta ni plantilla |
 | `django-parler` | Configurado (`PARLER_LANGUAGES`), pero el bilingüismo se resuelve con campos `es_*`/`en_*` |
 | `custom_processors` | Context processor registrado que devuelve un dict vacío |
-| `PROJECT_INTERNAL_APPS` | Lista vacía, reservada |
 | Plantillas `employee_propensiones/`, `idoneity/` | Existen en `templates/`, sin rutas propias (se sirven vía tipo de certificado) |

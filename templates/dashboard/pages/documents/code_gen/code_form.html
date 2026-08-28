@@ -6,6 +6,11 @@
   <title>{% trans 'Code Generator' %}</title>
 {% endblock title %}
 
+{% block custom_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/stamp_preview.css' %}" />
+{% endblock custom_css %}
+
 {% block icons %}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js" crossorigin="anonymous"></script>
@@ -257,7 +262,10 @@
                   </label>
                   {{ form.stamp_layout }}
                   <div class="form-text">
-                    {% trans 'Defines where the QR and the barcode are placed inside the PDF.' %}
+                    {% trans 'Defines where the QR and the barcode are placed inside the PDF. Edit it below, over the document itself.' %}
+                    <a href="{% url 'code_gen:layout_list' %}" target="_blank" rel="noopener noreferrer">
+                      {% trans 'Manage layouts' %}
+                    </a>
                   </div>
                 </div>
 
@@ -286,7 +294,7 @@
         </div>
 
         {# ============================================================ #}
-        {# ====================== RIGHT: RESULT ======================= #}
+        {# ====================== RIGHT: GUIDE ======================== #}
         {# ============================================================ #}
         <div class="col-xl-5">
           <div class="card mb-4">
@@ -294,155 +302,46 @@
               <i class="fa-solid fa-square-poll-horizontal me-2"></i>{% trans 'Result' %}
             </div>
             <div class="card-body">
+              <p class="text-muted">
+                {% trans 'After pressing Generate you land on the permanent page of the issued code, with its symbols and downloads. It stays available: you can close this tab and come back to it later.' %}
+              </p>
 
-              {% if not code_payload %}
-                <p class="text-muted mb-0">
-                  {% trans 'Fill in the form and press Generate to see the code and its symbols here.' %}
-                </p>
-              {% else %}
-
-                <label class="form-label small text-uppercase text-muted">
-                  {% trans 'Code' %}
-                </label>
-                <div class="p-2 bg-light border rounded mb-3">
-                  <code class="text-break">{{ code_payload }}</code>
-                </div>
-
-                {% if barcode_warning %}
-                  <div class="alert alert-warning small">{{ barcode_warning }}</div>
-                {% endif %}
-
-                {% if barcode_image %}
-                  <div class="text-center mb-3">
-                    <img id="barcodeImage" class="img-fluid border rounded p-2 bg-white"
-                         src="{{ barcode_image }}" alt="{% trans 'Barcode' %}" />
-                    <div class="d-grid mt-2">
-                      <a class="btn btn-outline-success btn-sm"
-                         href="{{ barcode_image }}"
-                         download="barcode-{{ random_code|default:'code' }}.png">
-                        {% trans 'Download barcode' %} <i class="bi bi-cloud-arrow-down"></i>
-                      </a>
-                    </div>
-                  </div>
-                {% endif %}
-
-                {% if qr_image %}
-                  <div class="text-center mb-3">
-                    <img id="qrImage" class="img-fluid border rounded p-2 bg-white"
-                         style="max-width: 240px;"
-                         src="{{ qr_image }}" alt="{% trans 'QR code' %}" />
-                    <div class="d-grid mt-2">
-                      <a class="btn btn-outline-success btn-sm"
-                         href="{{ qr_image }}"
-                         download="qr-{{ random_code|default:'code' }}.png">
-                        {% trans 'Download QR' %} <i class="bi bi-cloud-arrow-down"></i>
-                      </a>
-                    </div>
-                    {% if qr_payload %}
-                      <p class="small text-muted text-break mt-2 mb-0">{{ qr_payload }}</p>
-                    {% endif %}
-                  </div>
-                {% endif %}
-
-                <hr />
-
-                <dl class="row small mb-0">
-                  {% if sequence %}
-                    <dt class="col-5">{% trans 'Sequence' %}</dt>
-                    <dd class="col-7"><code>{{ sequence }}</code></dd>
-                  {% endif %}
-
-                  {% if random_code %}
-                    <dt class="col-5">{% trans 'Public code' %}</dt>
-                    <dd class="col-7"><code>{{ random_code }}</code></dd>
-                  {% endif %}
-
-                  {% if hash_fragment %}
-                    <dt class="col-5">{% trans 'Hash in code' %}</dt>
-                    <dd class="col-7"><code>{{ hash_fragment }}</code></dd>
-                  {% endif %}
-
-                  {% if source_hash %}
-                    <dt class="col-5">{% trans 'Original SHA-256' %}</dt>
-                    <dd class="col-7"><code class="text-break">{{ source_hash }}</code></dd>
-                  {% endif %}
-                </dl>
-              {% endif %}
+              <div class="d-grid">
+                <a class="btn btn-outline-secondary btn-sm" href="{% url 'code_gen:code_history' %}">
+                  <i class="bi bi-clock-history"></i>
+                  {% trans 'See previously generated codes' %}
+                </a>
+              </div>
             </div>
           </div>
-
-          {# -------- Certification result -------- #}
-          {% if document %}
-            <div class="card mb-4 border-success">
-              <div class="card-header bg-success text-white">
-                <i class="fa-solid fa-certificate me-2"></i>{% trans 'Certified document' %}
-              </div>
-              <div class="card-body">
-                <dl class="row small">
-                  <dt class="col-5">{% trans 'Title' %}</dt>
-                  <dd class="col-7">{{ document.document_title }}</dd>
-
-                  <dt class="col-5">{% trans 'Verification ID' %}</dt>
-                  <dd class="col-7"><code class="text-break">{{ document.id }}</code></dd>
-
-                  <dt class="col-5">{% trans 'Public code' %}</dt>
-                  <dd class="col-7"><code>{{ document.public_code }}</code></dd>
-
-                  <dt class="col-5">{% trans 'Pages stamped' %}</dt>
-                  <dd class="col-7">{{ page_count }}</dd>
-
-                  <dt class="col-5">{% trans 'Certified SHA-256' %}</dt>
-                  <dd class="col-7"><code class="text-break">{{ document.document_hash }}</code></dd>
-
-                  <dt class="col-5">{% trans 'Copy SHA-256' %}</dt>
-                  <dd class="col-7"><code class="text-break">{{ document.public_copy_hash }}</code></dd>
-                </dl>
-
-                {% if stamp_applied %}
-                  <p class="small text-muted mb-1">{% trans 'Placements applied:' %}</p>
-                  <ul class="small text-muted">
-                    {% for item in stamp_applied %}<li>{{ item }}</li>{% endfor %}
-                  </ul>
-                {% endif %}
-
-                {% if stamp_skipped %}
-                  <div class="alert alert-warning small">
-                    {% trans 'Placements that did not match any page:' %}
-                    {{ stamp_skipped|join:", " }}
-                  </div>
-                {% endif %}
-
-                <div class="d-grid gap-2">
-                  {% if document.document_file %}
-                    <a class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer"
-                       href="{{ document.document_file.url }}">
-                      {% trans 'Certified PDF (with codes)' %}
-                    </a>
-                  {% endif %}
-                  {% if document.public_copy_file %}
-                    <a class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer"
-                       href="{{ document.public_copy_file.url }}">
-                      {% trans 'Distributable copy (watermarked)' %}
-                    </a>
-                  {% endif %}
-                  {% if document.source_file %}
-                    <a class="btn btn-outline-secondary btn-sm" target="_blank" rel="noopener noreferrer"
-                       href="{{ document.source_file.url }}">
-                      {% trans 'Original filed (without codes)' %}
-                    </a>
-                  {% endif %}
-                  {% if verification_url %}
-                    <a class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer"
-                       href="{{ verification_url }}">
-                      {% trans 'Open public verification page' %}
-                    </a>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
-          {% endif %}
+        </div>
+      </div>
+      {# Banco de trabajo de la disposicion, a todo el ancho #}
+      <div class="row">
+        <div class="col-12">
+          {% include 'dashboard/pages/documents/code_gen/partials/_layout_workspace.html' %}
         </div>
       </div>
     </form>
   </div>
 {% endblock main_layout %}
+
+{% block body_custom_js %}
+  {{ block.super }}
+  <script>
+    window.GEA_LAYOUT_CONFIG = {
+      placementsUrl: '{% url 'code_gen:layout_placements' 0 %}',
+      createUrl: '{% url 'code_gen:layout_create_api' %}',
+      messages: {
+        pickLayout: '{% trans 'Pick a layout first, or use "Save and create".' %}',
+        needPlacement: '{% trans 'Add at least one placement.' %}',
+        loadFailed: '{% trans 'The layout could not be loaded.' %}',
+        saveFailed: '{% trans 'The layout could not be saved.' %}',
+        nameRequired: '{% trans 'The layout name is required.' %}',
+        unsaved: '{% trans 'Placement moved. Press Save to store it in the layout.' %}'
+      }
+    };
+  </script>
+  <script src="{% static 'js/stamp_preview.js' %}"></script>
+  <script src="{% static 'js/layout_workspace.js' %}"></script>
+{% endblock body_custom_js %}

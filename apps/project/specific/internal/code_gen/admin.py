@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.common.utils.admin import GeneralAdminModel
 
+from .preview import render_preview_container
 from .models import (CodeRegistrationModel, CodeSequenceModel,
                      StampLayoutModel, StampPlacementModel)
 
@@ -125,9 +126,54 @@ class StampLayoutModelAdmin(GeneralAdminModel):
     list_filter = ('is_default', 'is_active')
     search_fields = ('name', 'description')
 
+    readonly_fields = ('placement_preview',)
+
+    fieldsets = (
+        (
+            _('Layout'),
+            {
+                'fields': (
+                    'name',
+                    'description',
+                    'is_default',
+                    'is_active',
+                )
+            }
+        ),
+        (
+            _('Live preview'),
+            {
+                'fields': ('placement_preview',),
+                'description': _(
+                    'Updates as you edit the placements below. Drag a box to '
+                    'move it: the offsets are written back into the form.'
+                ),
+            }
+        ),
+    )
+
+    class Media:
+        css = {'all': ('css/stamp_preview.css',)}
+        js = ('js/stamp_preview.js',)
+
     @admin.display(description=_('Placements'))
     def placement_count(self, obj):
         return obj.placements.count()
+
+    @admin.display(description='')
+    def placement_preview(self, obj=None):
+        """
+        Contenedor de la vista previa.
+
+        El HTML es solo el hueco: la geometria la calcula ``stamp_preview.js``
+        leyendo los inputs del formset inline, de modo que la vista previa y el
+        estampado real comparten una unica definicion de las coordenadas.
+        """
+        return render_preview_container(
+            row_selector='#placements-group tr.form-row:not(.empty-form)',
+            editable=True,
+            extra_class='gea-stamp-preview--admin',
+        )
 
 
 @admin.register(CodeSequenceModel)

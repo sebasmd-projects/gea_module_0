@@ -236,10 +236,18 @@ El paso `contact` cambia de formulario según `user_type` (`BuyerContactForm` vs
 | Ruta | Nombre | Vista | Acceso |
 |---|---|---|---|
 | `generate/code/` | `code_gen:code_generate` | `CodeGeneratorView` | `is_staff` o `is_superuser` |
+| `generate/code/history/` | `code_gen:code_history` | `CodeHistoryListView` | `is_staff` o `is_superuser` |
+| `generate/code/<int:pk>/` | `code_gen:code_detail` | `CodeDetailView` | `is_staff` o `is_superuser` |
+| `generate/layouts/` | `code_gen:layout_list` | `StampLayoutListView` | `is_staff` o `is_superuser` |
+| `generate/layouts/new/` | `code_gen:layout_create` | `StampLayoutEditView` | `is_staff` o `is_superuser` |
+| `generate/layouts/<int:pk>/` | `code_gen:layout_edit` | `StampLayoutEditView` | `is_staff` o `is_superuser` |
+| `generate/layouts/<int:pk>/placements/` | `code_gen:layout_placements` | `api.layout_placements` (GET / **PATCH**) | `is_staff` o `is_superuser` |
+| `generate/layouts/save/` | `code_gen:layout_create_api` | `api.layout_create` (**POST**) | `is_staff` o `is_superuser` |
 
 - La app va **la última** en `ALL_CUSTOM_APPS`, por lo que sus rutas quedan
   *después* del catch-all anti-escaneo de §7: cualquier ruta nueva de esta app
   debe evitar los términos de `COMMON_ATTACK_TERMS`.
+- `code_generate` responde con **303/302 a `code_detail`**, no con el resultado en el propio POST: el codigo emitido vive en una URL permanente, y recargar deja de emitir uno nuevo.
 - La antigua ruta `code_gen:dynamic_qr` (`qr/generate/<path:text>/`) se eliminó:
   generaba un QR con texto arbitrario tomado del path, sin autenticación, y su
   comodín `<path:text>` chocaba con el catch-all.
@@ -259,7 +267,9 @@ El paso `contact` cambia de formulario según `user_type` (`BuyerContactForm` vs
 two_factor:  login, setup, qr, setup_complete, backup_tokens, profile, disable
 core:        index, health_check, privacy, terms
 utils:       set_language, attack_path
-code_gen:    code_generate
+code_gen:    code_generate, code_history, code_detail, layout_list,
+             layout_create, layout_edit, layout_placements,
+             layout_create_api
 certificates: certificates_landing,
               input_employee_verification_ipcon, detail_employee_verification_ipcon,
               input_document_verification_aegis, detail_document_verification_aegis

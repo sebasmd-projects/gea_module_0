@@ -1,0 +1,220 @@
+{% extends 'dashboard/dashboard_layout_base.html' %}
+
+{% load i18n static %}
+
+{% block title %}
+  <title>{{ registration.reference }}</title>
+{% endblock title %}
+
+{% block icons %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/aa367a5aee.js" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block custom_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/stamp_preview.css' %}" />
+{% endblock custom_css %}
+
+{% block main_layout %}
+  {% url 'core:index' as dashboard_url %}
+  {% url 'code_gen:code_history' as history_url %}
+  {% trans 'Issued code' as page_title %}
+  {% trans 'Dashboard' as dashboard_title %}
+  {% trans 'Generated codes' as history_title %}
+
+  {% include 'dashboard/partials/header/_header.html' with icon_class='me-2 fa-solid fa-barcode' page_title=page_title page_description=registration.reference parent_title=dashboard_title parent_url=dashboard_url breadcrumbs=history_title|add:'::'|add:history_url|add:' > '|add:page_title %}
+
+  <div class="container-xl px-4 mt-n10">
+
+    {% if messages %}
+      <div class="mb-4">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} mb-2">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="row">
+      {# ================= LEFT: CODE ================= #}
+      <div class="col-xl-7">
+        <div class="card mb-4">
+          <div class="card-header">
+            <i class="fa-regular fa-file-lines me-2"></i>{% trans 'Code' %}
+          </div>
+          <div class="card-body">
+            <div class="p-2 bg-light border rounded mb-3">
+              <code class="text-break">{{ registration.code_information }}</code>
+            </div>
+
+            {% if barcode_warning %}
+              <div class="alert alert-warning small">{{ barcode_warning }}</div>
+            {% endif %}
+
+            <dl class="row small mb-0">
+              <dt class="col-sm-4">{% trans 'Reference' %}</dt>
+              <dd class="col-sm-8">{{ registration.reference }}</dd>
+
+              {% if registration.custom_text_input %}
+                <dt class="col-sm-4">{% trans 'Custom text' %}</dt>
+                <dd class="col-sm-8">{{ registration.custom_text_input }}</dd>
+              {% endif %}
+
+              {% if registration.initials %}
+                <dt class="col-sm-4">{% trans 'Initials' %}</dt>
+                <dd class="col-sm-8"><code>{{ registration.initials }}</code></dd>
+              {% endif %}
+
+              {% if registration.sequence %}
+                <dt class="col-sm-4">{% trans 'Sequence' %}</dt>
+                <dd class="col-sm-8"><code>{{ registration.sequence }}</code></dd>
+              {% endif %}
+
+              {% if registration.random_code %}
+                <dt class="col-sm-4">{% trans 'Public code' %}</dt>
+                <dd class="col-sm-8"><code>{{ registration.random_code }}</code></dd>
+              {% endif %}
+
+              {% if registration.hash_fragment %}
+                <dt class="col-sm-4">{% trans 'Hash in code' %}</dt>
+                <dd class="col-sm-8"><code>{{ registration.hash_fragment }}</code></dd>
+              {% endif %}
+
+              {% if registration.source_file_hash %}
+                <dt class="col-sm-4">{% trans 'Original SHA-256' %}</dt>
+                <dd class="col-sm-8"><code class="text-break">{{ registration.source_file_hash }}</code></dd>
+              {% endif %}
+
+              <dt class="col-sm-4">{% trans 'Date' %}</dt>
+              <dd class="col-sm-8">{{ registration.created|date:'d/m/Y H:i' }}</dd>
+
+              {% if registration.description %}
+                <dt class="col-sm-4">{% trans 'Description' %}</dt>
+                <dd class="col-sm-8">{{ registration.description }}</dd>
+              {% endif %}
+            </dl>
+          </div>
+        </div>
+
+        {# ================= CERTIFIED DOCUMENT ================= #}
+        {% if document %}
+          <div class="card mb-4 border-success">
+            <div class="card-header bg-success text-white">
+              <i class="fa-solid fa-certificate me-2"></i>{% trans 'Certified document' %}
+            </div>
+            <div class="card-body">
+              <dl class="row small">
+                <dt class="col-sm-4">{% trans 'Title' %}</dt>
+                <dd class="col-sm-8">{{ document.document_title }}</dd>
+
+                <dt class="col-sm-4">{% trans 'Verification ID' %}</dt>
+                <dd class="col-sm-8"><code class="text-break">{{ document.id }}</code></dd>
+
+                <dt class="col-sm-4">{% trans 'Certified SHA-256' %}</dt>
+                <dd class="col-sm-8"><code class="text-break">{{ document.document_hash }}</code></dd>
+
+                <dt class="col-sm-4">{% trans 'Copy SHA-256' %}</dt>
+                <dd class="col-sm-8"><code class="text-break">{{ document.public_copy_hash }}</code></dd>
+              </dl>
+
+              <div class="d-grid gap-2">
+                {% if document.document_file %}
+                  <a class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer"
+                     href="{{ document.document_file.url }}">
+                    {% trans 'Certified PDF (with codes)' %}
+                  </a>
+                {% endif %}
+                {% if document.public_copy_file %}
+                  <a class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer"
+                     href="{{ document.public_copy_file.url }}">
+                    {% trans 'Distributable copy (watermarked)' %}
+                  </a>
+                {% endif %}
+                {% if document.source_file %}
+                  <a class="btn btn-outline-secondary btn-sm" target="_blank" rel="noopener noreferrer"
+                     href="{{ document.source_file.url }}">
+                    {% trans 'Original filed (without codes)' %}
+                  </a>
+                {% endif %}
+                {% if record_url %}
+                  <a class="btn btn-outline-dark btn-sm" href="{{ record_url }}">
+                    {% trans 'Download certification record (JSON)' %}
+                  </a>
+                {% endif %}
+                {% if verification_url %}
+                  <a class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer"
+                     href="{{ verification_url }}">
+                    {% trans 'Open public verification page' %}
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      {# ================= RIGHT: SYMBOLS ================= #}
+      <div class="col-xl-5">
+        <div class="card mb-4">
+          <div class="card-header">
+            <i class="fa-solid fa-qrcode me-2"></i>{% trans 'Symbols' %}
+          </div>
+          <div class="card-body text-center">
+            {% if barcode_image %}
+              <img class="img-fluid border rounded p-2 bg-white mb-2"
+                   src="{{ barcode_image }}" alt="{% trans 'Barcode' %}" />
+              <div class="d-grid mb-3">
+                <a class="btn btn-outline-success btn-sm" href="{{ barcode_image }}"
+                   download="barcode-{{ registration.random_code|default:registration.pk }}.png">
+                  {% trans 'Download barcode' %} <i class="bi bi-cloud-arrow-down"></i>
+                </a>
+              </div>
+            {% endif %}
+
+            {% if qr_image %}
+              <img class="img-fluid border rounded p-2 bg-white mb-2" style="max-width: 240px;"
+                   src="{{ qr_image }}" alt="{% trans 'QR code' %}" />
+              <div class="d-grid">
+                <a class="btn btn-outline-success btn-sm" href="{{ qr_image }}"
+                   download="qr-{{ registration.random_code|default:registration.pk }}.png">
+                  {% trans 'Download QR' %} <i class="bi bi-cloud-arrow-down"></i>
+                </a>
+              </div>
+              {% if registration.qr_payload %}
+                <p class="small text-muted text-break mt-2 mb-0">{{ registration.qr_payload }}</p>
+              {% endif %}
+            {% endif %}
+
+            {% if not barcode_image and not qr_image %}
+              <p class="text-muted mb-0">{% trans 'No symbols were generated for this code.' %}</p>
+            {% endif %}
+          </div>
+        </div>
+
+        {# ================= STAMP PREVIEW ================= #}
+        {% if stamp_preview %}
+          <div class="card mb-4">
+            <div class="card-header">
+              <i class="fa-solid fa-crop-simple me-2"></i>{% trans 'Where the codes were placed' %}
+            </div>
+            <div class="card-body">
+              {% if document.stamp_layout %}
+                <p class="small text-muted">
+                  {% trans 'Layout' %}: <strong>{{ document.stamp_layout.name }}</strong>
+                </p>
+              {% else %}
+                <p class="small text-muted">{% trans 'Default layout.' %}</p>
+              {% endif %}
+              {{ stamp_preview }}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock main_layout %}
+
+{% block body_custom_js %}
+  {{ block.super }}
+  <script src="{% static 'js/stamp_preview.js' %}"></script>
+{% endblock body_custom_js %}

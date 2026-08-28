@@ -1,0 +1,169 @@
+{% load i18n %}
+
+{# ==========================================================
+   Banco de trabajo de la disposicion de estampado.
+
+   La vista previa pinta la pagina real del PDF elegido arriba (se lee del
+   propio input, sin subirlo) y las cajas se arrastran sobre ella. La tabla y
+   la vista previa son la misma fuente: el JS lee estos inputs.
+   ========================================================== #}
+
+<div class="card mb-4" id="layoutWorkspace">
+  <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <span>
+      <i class="fa-solid fa-crop-simple me-2"></i>{% trans 'Placements over the document' %}
+    </span>
+
+    <span class="d-flex gap-2">
+      <button type="button" class="btn btn-outline-primary btn-sm" id="addPlacement">
+        <i class="bi bi-plus-lg"></i> {% trans 'Add placement' %}
+      </button>
+      <button type="button" class="btn btn-outline-success btn-sm" id="savePlacements">
+        <i class="bi bi-check2"></i> {% trans 'Save' %}
+      </button>
+      <button type="button" class="btn btn-success btn-sm" id="savePlacementsAs">
+        <i class="bi bi-plus-square"></i> {% trans 'Save and create' %}
+      </button>
+    </span>
+  </div>
+
+  <div class="card-body">
+    <div id="layoutFeedback"></div>
+
+    <p class="small text-muted">
+      {% trans 'Upload the PDF above to see it here. Drag a box to move it; the table updates with it. Boxes are only shown on the pages where they actually land.' %}
+    </p>
+
+    <div class="row">
+      {# -------- Preview -------- #}
+      <div class="col-lg-6">
+        <div data-gea-preview="1"
+             id="layoutPreview"
+             data-page-width="612"
+             data-page-height="793.5"
+             data-row-selector="[data-placement-row]"
+             data-form-scope="#placementTable"
+             data-pdf-input="#id_source_file"
+             data-editable="true"
+             data-label-page="{% trans 'Page size' %}"
+             data-label-hint="{% trans 'Drag a box to move it; the offsets update as you go.' %}"
+             data-label-empty="{% trans 'No placements yet. Add one to see it here.' %}"
+             data-label-outside="{% trans 'This placement falls outside the page.' %}"
+             data-label-loading="{% trans 'Rendering the document…' %}"
+             data-label-pdffailed="{% trans 'The document could not be rendered; the placements still work.' %}"></div>
+      </div>
+
+      {# -------- Table -------- #}
+      <div class="col-lg-6">
+        <div class="table-responsive" id="placementTable">
+          <table class="table table-sm align-middle small mb-0">
+            <thead>
+              <tr>
+                <th>{% trans 'Code kind' %}</th>
+                <th>{% trans 'Pages' %}</th>
+                <th>{% trans 'Anchor' %}</th>
+                <th>X</th>
+                <th>Y</th>
+                <th>{% trans 'Width (pt)' %}</th>
+                <th>{% trans 'Height (pt)' %}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="placementRows"></tbody>
+          </table>
+        </div>
+
+        <p class="small text-muted mt-2 mb-0">
+          {% trans 'Coordinates are in PostScript points (72 pt = 1 inch), measured from the anchor towards the inside of the page.' %}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{# ================= MODAL: save as a new layout ================= #}
+<div class="modal fade" id="newLayoutModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{% trans 'Save as a new layout' %}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                aria-label="{% trans 'Close' %}"></button>
+      </div>
+
+      <div class="modal-body">
+        <div id="newLayoutError"></div>
+
+        <div class="mb-3">
+          <label class="form-label" for="newLayoutName">
+            {% trans 'Layout name' %} <span class="text-danger">*</span>
+          </label>
+          <input type="text" class="form-control" id="newLayoutName" maxlength="100" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="newLayoutDescription">
+            {% trans 'Description' %}
+          </label>
+          <textarea class="form-control" id="newLayoutDescription" rows="2"></textarea>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="newLayoutDefault" />
+          <label class="form-check-label" for="newLayoutDefault">
+            {% trans 'Use as default layout' %}
+          </label>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          {% trans 'Cancel' %}
+        </button>
+        <button type="button" class="btn btn-success" id="confirmNewLayout">
+          {% trans 'Create layout' %}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{# ================= Row template ================= #}
+<template id="placementRowTemplate">
+  <tr data-placement-row>
+    <td>
+      <select class="form-select form-select-sm" name="placements-IDX-kind">
+        {% for value, label in kind_choices %}
+          <option value="{{ value }}">{{ label }}</option>
+        {% endfor %}
+      </select>
+    </td>
+    <td>
+      <select class="form-select form-select-sm" name="placements-IDX-page_selector">
+        {% for value, label in page_selector_choices %}
+          <option value="{{ value }}">{{ label }}</option>
+        {% endfor %}
+      </select>
+      <input type="text" class="form-control form-control-sm mt-1"
+             name="placements-IDX-page_numbers" placeholder="1, 3" />
+    </td>
+    <td>
+      <select class="form-select form-select-sm" name="placements-IDX-anchor">
+        {% for value, label in anchor_choices %}
+          <option value="{{ value }}">{{ label }}</option>
+        {% endfor %}
+      </select>
+    </td>
+    <td><input type="number" step="0.5" class="form-control form-control-sm" name="placements-IDX-offset_x" value="28" /></td>
+    <td><input type="number" step="0.5" class="form-control form-control-sm" name="placements-IDX-offset_y" value="28" /></td>
+    <td><input type="number" step="0.5" class="form-control form-control-sm" name="placements-IDX-width" value="84" /></td>
+    <td><input type="number" step="0.5" class="form-control form-control-sm" name="placements-IDX-height" value="84" /></td>
+    <td class="text-center">
+      <input type="hidden" name="placements-IDX-is_active" value="true" />
+      <button type="button" class="btn btn-outline-danger btn-sm" data-remove-placement
+              title="{% trans 'Remove' %}">
+        <i class="bi bi-trash"></i>
+      </button>
+    </td>
+  </tr>
+</template>

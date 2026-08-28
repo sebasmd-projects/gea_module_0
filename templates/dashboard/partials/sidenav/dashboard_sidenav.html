@@ -190,6 +190,20 @@
           {% trans 'Code generator' %}
         </a>
 
+        <a class="nav-link {% active_class 'code_gen:code_history' %}" href="{% url 'code_gen:code_history' %}">
+          <div class="nav-link-icon">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+          </div>
+          {% trans 'Generated codes' %}
+        </a>
+
+        <a class="nav-link {% active_class 'code_gen:layout_list' %}" href="{% url 'code_gen:layout_list' %}">
+          <div class="nav-link-icon">
+            <i class="fa-solid fa-crop-simple"></i>
+          </div>
+          {% trans 'Stamp layouts' %}
+        </a>
+
         <a class="nav-link {% active_class 'certificates:input_document_verification_aegis' %}" href="{% url 'certificates:input_document_verification_aegis' %}">
           <div class="nav-link-icon">
             <i class="fa-solid fa-file-shield"></i>

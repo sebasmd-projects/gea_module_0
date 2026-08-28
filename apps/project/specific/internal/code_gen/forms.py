@@ -2,6 +2,7 @@
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.forms import inlineformset_factory
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -9,7 +10,7 @@ from .constants import (CERTIFIABLE_EXTENSIONS, HASH_B64_DEFAULT_LENGTH,
                         HASH_B64_MAX_LENGTH, HASH_B64_MIN_LENGTH,
                         MAX_UPLOAD_BYTES, RANDOM_CODE_DEFAULT_LENGTH,
                         RANDOM_CODE_MAX_LENGTH, RANDOM_CODE_MIN_LENGTH)
-from .models import StampLayoutModel
+from .models import StampLayoutModel, StampPlacementModel
 
 
 QR_CONTENT_VERIFICATION = 'VERIFICATION'
@@ -338,3 +339,84 @@ class CodeGeneratorForm(forms.Form):
                 )
 
         return cleaned
+
+
+class StampLayoutForm(forms.ModelForm):
+    """Edicion de una disposicion de estampado desde el dashboard."""
+
+    class Meta:
+        model = StampLayoutModel
+        fields = ('name', 'description', 'is_default', 'is_active')
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(
+                attrs={'class': 'form-control', 'rows': 2}
+            ),
+            'is_default': forms.CheckboxInput(
+                attrs={'class': 'form-check-input'}
+            ),
+            'is_active': forms.CheckboxInput(
+                attrs={'class': 'form-check-input'}
+            ),
+        }
+
+
+class StampPlacementForm(forms.ModelForm):
+    """Una posicion dentro de la disposicion."""
+
+    class Meta:
+        model = StampPlacementModel
+        fields = (
+            'kind',
+            'page_selector',
+            'page_numbers',
+            'anchor',
+            'offset_x',
+            'offset_y',
+            'width',
+            'height',
+            'opacity',
+            'is_active',
+        )
+        widgets = {
+            'kind': forms.Select(attrs={'class': 'form-select form-select-sm'}),
+            'page_selector': forms.Select(
+                attrs={'class': 'form-select form-select-sm'}
+            ),
+            'page_numbers': forms.TextInput(
+                attrs={'class': 'form-control form-control-sm',
+                       'placeholder': '1, 3'}
+            ),
+            'anchor': forms.Select(
+                attrs={'class': 'form-select form-select-sm'}
+            ),
+            'offset_x': forms.NumberInput(
+                attrs={'class': 'form-control form-control-sm', 'step': '0.5'}
+            ),
+            'offset_y': forms.NumberInput(
+                attrs={'class': 'form-control form-control-sm', 'step': '0.5'}
+            ),
+            'width': forms.NumberInput(
+                attrs={'class': 'form-control form-control-sm', 'step': '0.5'}
+            ),
+            'height': forms.NumberInput(
+                attrs={'class': 'form-control form-control-sm', 'step': '0.5'}
+            ),
+            'opacity': forms.NumberInput(
+                attrs={'class': 'form-control form-control-sm',
+                       'step': '0.05', 'min': '0.05', 'max': '1'}
+            ),
+            'is_active': forms.CheckboxInput(
+                attrs={'class': 'form-check-input'}
+            ),
+        }
+
+
+StampPlacementFormSet = inlineformset_factory(
+    StampLayoutModel,
+    StampPlacementModel,
+    form=StampPlacementForm,
+    fk_name='layout',
+    extra=1,
+    can_delete=True,
+)
