@@ -281,6 +281,30 @@ ROSETTA_SHOW_AT_ADMIN_PANEL = True
 
 # Base absoluta del sitio, usada cuando se generan URLs (QR de certificacion)
 # fuera del ciclo de una peticion, por ejemplo desde una accion del admin.
+# TODO(infra): configurar Redis y apuntar CACHES aqui.
+#
+# Sin CACHES definido Django usa LocMemCache, que es **por proceso**. Los
+# limites de tasa del OTP publico (certificates/mixins.py) y el codigo de
+# registro de compradores viven en cache: con N workers los limites son N
+# veces mas laxos y se reinician en cada despliegue. Es el bypass mas facil
+# de la unica superficie no autenticada que tiene la plataforma.
+#
+# El hosting actual (cPanel / Conexcol) no permite levantar Redis, asi que la
+# salida es apuntar a un Redis en un VPS:
+#
+#     CACHES = {
+#         'default': {
+#             'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+#             'LOCATION': os.getenv('REDIS_URL'),   # rediss://... con TLS
+#             'TIMEOUT': 300,
+#         }
+#     }
+#
+# Requisitos al montarlo: TLS obligatorio (el trafico sale del datacenter),
+# contrasena, y la instancia cerrada por firewall a la IP del servidor web.
+# Mientras tanto los limites siguen siendo por worker: no confiar en ellos
+# como control de seguridad.
+
 PUBLIC_BASE_URL = os.getenv(
     'PUBLIC_BASE_URL',
     'https://geausa.propensionesabogados.com'
@@ -302,6 +326,24 @@ MEDIA_URL = os.getenv('DJANGO_MEDIA_URL')
 MEDIA_ROOT = str(os.getenv('DJANGO_MEDIA_ROOT'))
 
 STATICFILES_DIRS = [str(BASE_DIR / 'public' / 'staticfiles')]
+
+# Los estaticos se sirven con el hash del contenido en el nombre
+# (styles.a1b2c3.css), asi que un JS o CSS actualizado deja de quedarse
+# cacheado en el navegador hasta que expire. Obliga a ejecutar collectstatic
+# antes de servir: si un fichero referenciado no existe, falla ahi y no en
+# produccion.
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': (
+            'django.contrib.staticfiles.storage.StaticFilesStorage'
+            if DEBUG
+            else 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+        ),
+    },
+}
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',

@@ -507,17 +507,22 @@ class DocumentVerificationModelAdmin(GeneralAdminModel):
     def files_column(self, obj):
         links = []
 
-        for field_name, label in (
-            ("source_file", _("Original")),
-            ("document_file", _("Certified")),
-            ("public_copy_file", _("Public copy")),
+        # Se enlaza la vista controlada, no MEDIA_URL: el enlace directo no
+        # comprobaba permisos de ningun tipo.
+        for field_name, kind, label in (
+            ("source_file", "source", _("Original")),
+            ("document_file", "certified", _("Certified")),
+            ("public_copy_file", "public", _("Public copy")),
         ):
             file_field = getattr(obj, field_name, None)
             if file_field:
                 links.append(
                     format_html(
                         '<a href="{}" target="_blank" rel="noopener noreferrer">{}</a>',
-                        file_field.url,
+                        reverse(
+                            "certificates:document_file",
+                            args=[obj.pk, kind],
+                        ),
                         label,
                     )
                 )

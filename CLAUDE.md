@@ -77,6 +77,10 @@ uv run python manage.py generate_gea_code
 uv run python manage.py clear_cache
 ```
 
+```bash
+uv run python manage.py check_attack_terms
+```
+
 Volcado UTF-8 completo de la base de datos:
 
 ```bash
@@ -185,6 +189,8 @@ Después hay que **añadirla a mano** al grupo correspondiente en `settings.py`.
 10. **La huella de contenido ignora deliberadamente la marca de agua**, de modo que el certificado y su copia distribuible comparten `*_content_hash` y se distinguen solo por la marca. Si tocas `canonical_pdf_hash()` invalidas todas las huellas ya emitidas.
 11. **La certificación acredita integridad, no veracidad.** El registro de certificación lo dice expresamente en `scope.does_not_attest`: la plataforma prueba que el archivo no ha cambiado desde que se registró, no que sea cierto lo que el documento afirma. No redactes textos que sugieran lo contrario.
 12. **Las URLs de los artefactos permanentes salen de `PUBLIC_BASE_URL`**, nunca de `request.build_absolute_uri()`: el QR vive dentro del PDF y no puede apuntar al host desde el que se certificó.
+13. **Los archivos de certificación no se enlazan nunca por `MEDIA_URL`.** La única vía es `certificates:document_file`, que comprueba permisos: `source` y `certified` solo para `is_staff`/`is_superuser`; `public` para sesión OTP válida o autenticado. En el servidor hace falta además el `.htaccess` de `deploy/` — sin él el servidor web sigue sirviendo los PDF por su cuenta y estas reglas no pintan nada.
+14. **La trampa anti-escaneo empareja segmentos completos, no subcadenas.** Antes `env` convertía `/envio/` en trampa y bloqueaba la IP del usuario. Al tocar `COMMON_ATTACK_TERMS`, ejecuta `manage.py check_attack_terms`: comprueba colisiones **respetando el orden del URLconf**, que es lo único que determina si una ruta queda secuestrada de verdad.
 
 ---
 

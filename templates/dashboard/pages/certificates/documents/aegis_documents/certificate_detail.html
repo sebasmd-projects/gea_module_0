@@ -96,7 +96,7 @@
           {% if document.public_copy_file %}
             <p class="mb-1">
               <strong>{% trans 'Certified digital copy:' %}</strong>
-              <a href="{{ document.public_copy_file.url }}" target="_blank" rel="noopener noreferrer">
+              <a href="{% url 'certificates:document_file' document.pk 'public' %}" target="_blank" rel="noopener noreferrer">
                 {% trans 'Download' %}: {{ document.document_title }}
               </a>
             </p>
@@ -106,7 +106,7 @@
           {% elif document.document_file %}
             <p class="mb-1">
               <strong>{% trans 'Download Original Document:' %}</strong>
-              <a href="{{ document.document_file.url }}" target="_blank" rel="noopener noreferrer">{% trans "Download " %}: {{ document.document_title }}</a>
+              <a href="{% url 'certificates:document_file' document.pk 'certified' %}" target="_blank" rel="noopener noreferrer">{% trans "Download " %}: {{ document.document_title }}</a>
             </p>
           {% endif %}
 
@@ -193,7 +193,7 @@
 
                   {% if document.public_copy_file %}
                     <a class="btn btn-outline-primary btn-sm"
-                       href="{{ document.public_copy_file.url }}" target="_blank" rel="noopener noreferrer">
+                       href="{% url 'certificates:document_file' document.pk 'public' %}" target="_blank" rel="noopener noreferrer">
                       <i class="bi bi-file-earmark-pdf"></i>
                       {% trans 'Download distributable copy (PDF)' %}
                     </a>

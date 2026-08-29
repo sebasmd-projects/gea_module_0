@@ -1,9 +1,10 @@
 # apps/project/specific/documents/certificates/views.py
 
 from django.contrib import messages
-from django.http import HttpResponse, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, FormView, TemplateView
@@ -12,6 +13,7 @@ from apps.project.specific.internal.code_gen.services.record import (
     document_status, key_id, public_key_b64, record_filename, record_json)
 
 from .constants import FILE_MATCH_SESSION_KEY
+from .files import can_access, serve
 from .forms import (AnonymousEmailOTPForm, AnonymousOTPVerifyForm,
                     CertificateUserForm, DocumentFileVerificationForm,
                     DocumentVerificationForm)
@@ -438,6 +440,49 @@ class DocumentVerificationDetailView(OTPProtectedDocumentMixin, DetailView):
                 'is_exact': match_level == 'EXACT',
             }
         }
+
+
+class DocumentFileView(DetailView):
+    """
+    Unica puerta de salida de los PDF de certificacion.
+
+    Antes colgaban de MEDIA_URL y los servia el servidor web sin pasar por
+    aqui, asi que la proteccion OTP del detalle se saltaba con el enlace
+    directo. Ahora cada descarga pasa por esta comprobacion.
+    """
+
+    model = DocumentVerificationModel
+
+    def get(self, request, *args, **kwargs):
+        document = self.get_object()
+        kind = self.kwargs.get('kind')
+
+        if not can_access(kind, request.user, self._has_otp_access()):
+            # 404 y no 403: un 403 confirmaria que el documento existe.
+            raise Http404('not allowed')
+
+        return serve(document, kind)
+
+    def _has_otp_access(self) -> bool:
+        """Reutiliza la misma sesion OTP que protege la pagina de detalle."""
+        otp_state = self.request.session.get('document_otp')
+
+        if not otp_state or not otp_state.get('verified'):
+            return False
+
+        verified_at = otp_state.get('verified_at')
+
+        if not verified_at:
+            return False
+
+        try:
+            moment = timezone.datetime.fromisoformat(verified_at).astimezone(
+                timezone.get_current_timezone()
+            )
+        except Exception:
+            return False
+
+        return timezone.now() - moment <= OTPProtectedDocumentMixin.OTP_ACCESS_TTL
 
 
 class CertificationRecordView(OTPProtectedDocumentMixin, DetailView):

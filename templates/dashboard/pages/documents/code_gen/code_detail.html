@@ -120,19 +120,19 @@
               <div class="d-grid gap-2">
                 {% if document.document_file %}
                   <a class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer"
-                     href="{{ document.document_file.url }}">
+                     href="{% url 'certificates:document_file' document.pk 'certified' %}">
                     {% trans 'Certified PDF (with codes)' %}
                   </a>
                 {% endif %}
                 {% if document.public_copy_file %}
                   <a class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer"
-                     href="{{ document.public_copy_file.url }}">
+                     href="{% url 'certificates:document_file' document.pk 'public' %}">
                     {% trans 'Distributable copy (watermarked)' %}
                   </a>
                 {% endif %}
                 {% if document.source_file %}
                   <a class="btn btn-outline-secondary btn-sm" target="_blank" rel="noopener noreferrer"
-                     href="{{ document.source_file.url }}">
+                     href="{% url 'certificates:document_file' document.pk 'source' %}">
                     {% trans 'Original filed (without codes)' %}
                   </a>
                 {% endif %}

@@ -1,8 +1,8 @@
 from django.urls import path
 
 from .views import (CertificatesLandingTemplateView, CertificationRecordView,
-                    DocumentVerificationDetailView, EmployeeIPCONDetailView,
-                    InputDocumentVerificationFormView,
+                    DocumentFileView, DocumentVerificationDetailView,
+                    EmployeeIPCONDetailView, InputDocumentVerificationFormView,
                     InputEmployeeIPCONFormView, certification_public_key)
 
 app_name = 'certificates'
@@ -36,6 +36,14 @@ urlpatterns = [
         'verify/aegis/asset/certification/<uuid:pk>/',
         DocumentVerificationDetailView.as_view(),
         name='detail_document_verification_aegis'
+    ),
+
+    # Descarga controlada de los PDF. Sustituye a los enlaces directos a
+    # MEDIA_URL, que no tenian ningun control de acceso.
+    path(
+        'verify/aegis/asset/certification/<uuid:pk>/file/<str:kind>/',
+        DocumentFileView.as_view(),
+        name='document_file'
     ),
 
     # Registro de certificacion (auditoria)

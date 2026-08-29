@@ -1,0 +1,34 @@
+# deploy/media.htaccess
+#
+# Copiar a MEDIA_ROOT/.htaccess en el servidor (cPanel / Apache / LiteSpeed).
+#
+# Sin esto, el servidor web sigue entregando los PDF de certificacion y los
+# documentos de identidad directamente desde disco, sin pasar por Django y
+# por tanto sin ningun control de acceso. Con esto, la unica via es la vista
+# controlada `certificates:document_file`, que si comprueba permisos.
+#
+# Lo que se bloquea:
+#   certificates/   los tres PDF de cada certificacion y las fotos de empleado
+#   passport_images/  documentos de identidad (PII)
+#   signature_images/ firmas manuscritas (PII)
+#
+# El resto de media (imagenes de activos, galeria) se sigue sirviendo directo.
+
+<IfModule mod_authz_core.c>
+    # Apache 2.4+
+    <FilesMatch ".*">
+        Require all granted
+    </FilesMatch>
+</IfModule>
+
+RedirectMatch 404 ^/public/media/certificates/
+RedirectMatch 404 ^/public/media/passport_images/
+RedirectMatch 404 ^/public/media/signature_images/
+
+# Nunca ejecutar nada que se haya subido.
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+
+Options -ExecCGI -Indexes
+AddType text/plain .php .phtml .php3 .php4 .php5 .php7 .php8 .pl .py .cgi .sh
