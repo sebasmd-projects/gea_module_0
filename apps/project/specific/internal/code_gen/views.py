@@ -428,3 +428,76 @@ class StampLayoutEditView(InternalToolAccessMixin, TemplateView):
         messages.success(request, _('Stamp layout saved.'))
 
         return redirect('code_gen:layout_edit', pk=layout.pk)
+
+
+# ======================================================================
+# Compositor del resumen AEGIS
+# ======================================================================
+
+class SummaryListView(InternalToolAccessMixin, ListView):
+    template_name = 'dashboard/pages/documents/code_gen/summary_list.html'
+    context_object_name = 'summaries'
+    paginate_by = 25
+
+    def get_queryset(self):
+        from apps.project.specific.documents.certificates.models import             AegisSummaryModel
+
+        return (
+            AegisSummaryModel.objects
+            .prefetch_related('members__document', 'anchors')
+            .order_by('-created')
+        )
+
+
+class SummaryComposerView(InternalToolAccessMixin, TemplateView):
+    """
+    Compone la caja: elige los documentos, coloca sus codigos y sella.
+
+    Los codigos de barras de los miembros se arrastran igual que los propios;
+    la diferencia es que cada caja sabe de que documento viene.
+    """
+
+    template_name = 'dashboard/pages/documents/code_gen/summary_composer.html'
+
+    def get_summary(self):
+        from apps.project.specific.documents.certificates.models import             AegisSummaryModel
+
+        return get_object_or_404(AegisSummaryModel, pk=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        from apps.project.specific.documents.certificates.models import             DocumentVerificationModel
+        from apps.project.specific.internal.code_gen.services.anchoring import             anchor_url
+
+        context = super().get_context_data(**kwargs)
+        summary = self.get_summary()
+
+        context['summary'] = summary
+        context['members'] = summary.ordered_members()
+        context['anchor_url'] = anchor_url(summary)
+        context['layout'] = (
+            summary.summary_document.stamp_layout
+            if summary.summary_document else None
+        )
+
+        # Candidatos: certificados que todavia no estan en la caja.
+        context['candidates'] = (
+            DocumentVerificationModel.objects
+            .filter(certification_status='CERTIFIED')
+            .exclude(pk__in=summary.members.values_list('document_id', flat=True))
+            .exclude(pk=summary.summary_document_id or '00000000-0000-0000-0000-000000000000')
+            .order_by('-created')[:100]
+        )
+
+        context['kind_choices'] = CodeKindChoices.choices
+        context['page_selector_choices'] = PageSelectorChoices.choices
+        context['anchor_choices'] = AnchorChoices.choices
+        context['layouts'] = StampLayoutModel.objects.filter(is_active=True)
+
+        context['stamp_preview'] = render_preview_container(
+            row_selector='[data-placement-row]',
+            form_scope='#placementTable',
+            pdf_input='#summarySourceFile',
+            editable=True,
+        )
+
+        return context

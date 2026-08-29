@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GEAUSA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-28 22:56-0500\n"
+"POT-Creation-Date: 2026-08-29 00:49-0500\n"
 "PO-Revision-Date: 2026-01-11 02:56+0000\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -18,148 +18,154 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.3\n"
 
-#: .\apps\project\specific\documents\certificates\admin.py:27
+#: .\apps\project\specific\documents\certificates\admin.py:29
 msgid "Certify: stamp codes, hash and issue the copy"
 msgstr "Certificar: estampar códigos, calcular el hash y emitir la copia"
 
-#: .\apps\project\specific\documents\certificates\admin.py:43
+#: .\apps\project\specific\documents\certificates\admin.py:45
+#: .\apps\project\specific\documents\certificates\admin.py:659
+#: .\apps\project\specific\documents\certificates\admin.py:693
+#: .\apps\project\specific\documents\certificates\admin.py:726
 #, python-format
 msgid "%(title)s: %(error)s"
 msgstr "%(title)s: %(error)s"
 
-#: .\apps\project\specific\documents\certificates\admin.py:52
+#: .\apps\project\specific\documents\certificates\admin.py:54
 #, python-format
 msgid "%(title)s: unexpected error (%(error)s)"
 msgstr "%(title)s: error inesperado (%(error)s)"
 
-#: .\apps\project\specific\documents\certificates\admin.py:64
+#: .\apps\project\specific\documents\certificates\admin.py:66
 #, python-format
 msgid "%(title)s: some placements did not match any page (%(items)s)."
 msgstr ""
 "%(title)s: algunas posiciones no coincidieron con ninguna página (%(items)s)."
 
-#: .\apps\project\specific\documents\certificates\admin.py:74
+#: .\apps\project\specific\documents\certificates\admin.py:76
 #, python-format
 msgid "%(count)s document(s) certified."
 msgstr "%(count)s documento(s) certificado(s)."
 
-#: .\apps\project\specific\documents\certificates\admin.py:78
+#: .\apps\project\specific\documents\certificates\admin.py:80
 msgid "Re-certify: rebuild codes, files and hashes"
 msgstr "Recertificar: rehacer códigos, archivos y hashes"
 
-#: .\apps\project\specific\documents\certificates\admin.py:209
+#: .\apps\project\specific\documents\certificates\admin.py:211
 msgid "Identificación"
 msgstr "Identificación"
 
-#: .\apps\project\specific\documents\certificates\admin.py:212
+#: .\apps\project\specific\documents\certificates\admin.py:214
 msgid "Titular"
 msgstr "Titular"
 
-#: .\apps\project\specific\documents\certificates\admin.py:215
+#: .\apps\project\specific\documents\certificates\admin.py:217
 msgid "Documentos (sensibles)"
 msgstr "Documentos (sensibles)"
 
-#: .\apps\project\specific\documents\certificates\admin.py:224
+#: .\apps\project\specific\documents\certificates\admin.py:226
 msgid "Estado legal"
 msgstr "Estado legal"
 
-#: .\apps\project\specific\documents\certificates\admin.py:227
-#: .\apps\project\specific\documents\certificates\admin.py:438
+#: .\apps\project\specific\documents\certificates\admin.py:229
+#: .\apps\project\specific\documents\certificates\admin.py:440
 msgid "Vigencia"
 msgstr "Vigencia"
 
-#: .\apps\project\specific\documents\certificates\admin.py:230
+#: .\apps\project\specific\documents\certificates\admin.py:232
 msgid "Métricas"
 msgstr "Métricas"
 
-#: .\apps\project\specific\documents\certificates\admin.py:234
+#: .\apps\project\specific\documents\certificates\admin.py:236
 msgid "Auditoría"
 msgstr "Auditoría"
 
-#: .\apps\project\specific\documents\certificates\admin.py:262
+#: .\apps\project\specific\documents\certificates\admin.py:264
 msgid "Full name"
 msgstr "Nombre completo"
 
-#: .\apps\project\specific\documents\certificates\admin.py:266
+#: .\apps\project\specific\documents\certificates\admin.py:268
 #: .\apps\project\specific\documents\certificates\models.py:155
 msgid "Approved"
 msgstr "Aprobado"
 
-#: .\apps\project\specific\documents\certificates\admin.py:270
-#: .\apps\project\specific\documents\certificates\admin.py:494
+#: .\apps\project\specific\documents\certificates\admin.py:272
+#: .\apps\project\specific\documents\certificates\admin.py:496
 #: .\apps\project\specific\documents\certificates\views.py:374
 msgid "Expired"
 msgstr "Vencido"
 
-#: .\apps\project\specific\documents\certificates\admin.py:274
+#: .\apps\project\specific\documents\certificates\admin.py:276
 #: .\apps\project\specific\documents\certificates\models.py:45
 #: .\apps\project\specific\documents\certificates\views.py:375
 msgid "Revoked"
 msgstr "Revocado"
 
-#: .\apps\project\specific\documents\certificates\admin.py:278
-#: .\apps\project\specific\documents\certificates\admin.py:498
+#: .\apps\project\specific\documents\certificates\admin.py:280
+#: .\apps\project\specific\documents\certificates\admin.py:500
 msgid "Views"
 msgstr "Visitas"
 
-#: .\apps\project\specific\documents\certificates\admin.py:282
-#: .\apps\project\specific\documents\certificates\admin.py:502
+#: .\apps\project\specific\documents\certificates\admin.py:284
+#: .\apps\project\specific\documents\certificates\admin.py:504
 msgid "Unique"
 msgstr "Únicas"
 
-#: .\apps\project\specific\documents\certificates\admin.py:286
+#: .\apps\project\specific\documents\certificates\admin.py:288
 msgid "CC (masked)"
 msgstr "CC (enmascarada)"
 
-#: .\apps\project\specific\documents\certificates\admin.py:290
+#: .\apps\project\specific\documents\certificates\admin.py:292
 msgid "Passport (masked)"
 msgstr "Pasaporte (enmascarado)"
 
-#: .\apps\project\specific\documents\certificates\admin.py:294
+#: .\apps\project\specific\documents\certificates\admin.py:296
 msgid "Photo"
 msgstr "Foto"
 
-#: .\apps\project\specific\documents\certificates\admin.py:303
+#: .\apps\project\specific\documents\certificates\admin.py:305
 msgid "Detail"
 msgstr "Detalle"
 
-#: .\apps\project\specific\documents\certificates\admin.py:390
+#: .\apps\project\specific\documents\certificates\admin.py:392
+#: .\apps\project\specific\documents\certificates\admin.py:767
 msgid "Identificacion"
 msgstr "Identificación"
 
-#: .\apps\project\specific\documents\certificates\admin.py:398
+#: .\apps\project\specific\documents\certificates\admin.py:400
 msgid "Certificacion"
 msgstr "Certificación"
 
-#: .\apps\project\specific\documents\certificates\admin.py:409
+#: .\apps\project\specific\documents\certificates\admin.py:411
 msgid "Archivos generados"
 msgstr "Archivos generados"
 
-#: .\apps\project\specific\documents\certificates\admin.py:416
+#: .\apps\project\specific\documents\certificates\admin.py:418
 msgid "Huellas"
 msgstr "Huellas"
 
-#: .\apps\project\specific\documents\certificates\admin.py:427
+#: .\apps\project\specific\documents\certificates\admin.py:429
 msgid "Codigo emitido"
 msgstr "Código emitido"
 
-#: .\apps\project\specific\documents\certificates\admin.py:437
+#: .\apps\project\specific\documents\certificates\admin.py:439
 msgid "Entrega"
 msgstr "Entrega"
 
-#: .\apps\project\specific\documents\certificates\admin.py:439
+#: .\apps\project\specific\documents\certificates\admin.py:441
 msgid "Metricas"
 msgstr "Métricas"
 
-#: .\apps\project\specific\documents\certificates\admin.py:443
+#: .\apps\project\specific\documents\certificates\admin.py:445
+#: .\apps\project\specific\documents\certificates\admin.py:778
 msgid "Auditoria"
 msgstr "Auditoría"
 
-#: .\apps\project\specific\documents\certificates\admin.py:465
+#: .\apps\project\specific\documents\certificates\admin.py:467
+#: .\apps\project\specific\documents\certificates\admin.py:783
 msgid "How it works"
 msgstr "Cómo funciona"
 
-#: .\apps\project\specific\documents\certificates\admin.py:470
+#: .\apps\project\specific\documents\certificates\admin.py:472
 msgid ""
 "1) Upload the ORIGINAL PDF without codes. 2) Pick the stamp layout (or leave "
 "it empty for the default one). 3) Save. 4) Run the action “Certify” from the "
@@ -169,7 +175,7 @@ msgstr ""
 "déjala vacía para usar la de por defecto). 3) Guarda. 4) Ejecuta la acción "
 "«Certificar» desde el listado."
 
-#: .\apps\project\specific\documents\certificates\admin.py:475
+#: .\apps\project\specific\documents\certificates\admin.py:477
 msgid ""
 "Certifying produces the certified PDF with its QR and barcode, the "
 "distributable copy carrying a hidden watermark, and the fingerprints of all "
@@ -179,69 +185,152 @@ msgstr ""
 "copia distribuible con una marca de agua oculta, y las huellas de los tres "
 "archivos."
 
-#: .\apps\project\specific\documents\certificates\admin.py:481
+#: .\apps\project\specific\documents\certificates\admin.py:483
+#: .\apps\project\specific\documents\certificates\models.py:798
 msgid "Status"
 msgstr "Estado"
 
-#: .\apps\project\specific\documents\certificates\admin.py:506
+#: .\apps\project\specific\documents\certificates\admin.py:508
 msgid "Files"
 msgstr "Archivos"
 
-#: .\apps\project\specific\documents\certificates\admin.py:513
+#: .\apps\project\specific\documents\certificates\admin.py:515
 msgid "Original"
 msgstr "Original"
 
-#: .\apps\project\specific\documents\certificates\admin.py:514
+#: .\apps\project\specific\documents\certificates\admin.py:516
 #: .\apps\project\specific\documents\certificates\models.py:44
 msgid "Certified"
 msgstr "Certificado"
 
-#: .\apps\project\specific\documents\certificates\admin.py:515
+#: .\apps\project\specific\documents\certificates\admin.py:517
 msgid "Public copy"
 msgstr "Copia pública"
 
-#: .\apps\project\specific\documents\certificates\admin.py:535
+#: .\apps\project\specific\documents\certificates\admin.py:537
 msgid "Certification record"
 msgstr "Registro de certificación"
 
-#: .\apps\project\specific\documents\certificates\admin.py:545
+#: .\apps\project\specific\documents\certificates\admin.py:547
 msgid "Download the signed JSON record (for auditors)"
 msgstr "Descargar el registro JSON sellado (para auditoría)"
 
-#: .\apps\project\specific\documents\certificates\admin.py:548
+#: .\apps\project\specific\documents\certificates\admin.py:550
 msgid "Hash"
 msgstr "Hash"
 
-#: .\apps\project\specific\documents\certificates\admin.py:605
-#: .\apps\project\specific\documents\certificates\admin.py:619
+#: .\apps\project\specific\documents\certificates\admin.py:607
+#: .\apps\project\specific\documents\certificates\admin.py:621
 msgid "Target"
 msgstr "Objetivo"
 
-#: .\apps\project\specific\documents\certificates\admin.py:607
-#: .\apps\project\specific\documents\certificates\admin.py:632
+#: .\apps\project\specific\documents\certificates\admin.py:609
+#: .\apps\project\specific\documents\certificates\admin.py:634
 msgid "Viewer"
 msgstr "Visitante"
 
-#: .\apps\project\specific\documents\certificates\admin.py:609
+#: .\apps\project\specific\documents\certificates\admin.py:611
 msgid "Technical"
 msgstr "Técnico"
 
-#: .\apps\project\specific\documents\certificates\admin.py:611
+#: .\apps\project\specific\documents\certificates\admin.py:613
 msgid "Audit"
 msgstr "Auditoría"
 
-#: .\apps\project\specific\documents\certificates\admin.py:615
+#: .\apps\project\specific\documents\certificates\admin.py:617
 msgid "Type"
 msgstr "Tipo"
 
-#: .\apps\project\specific\documents\certificates\admin.py:617
+#: .\apps\project\specific\documents\certificates\admin.py:619
 #: .\apps\project\specific\documents\certificates\models.py:621
 msgid "User Certificate"
 msgstr "Certificado de usuario"
 
-#: .\apps\project\specific\documents\certificates\admin.py:617
+#: .\apps\project\specific\documents\certificates\admin.py:619
 msgid "Document Certificate"
 msgstr "Certificado de documento"
+
+#: .\apps\project\specific\documents\certificates\admin.py:646
+msgid "Seal: compute the master hash of the box"
+msgstr "Sellar: calcular el master hash de la caja"
+
+#: .\apps\project\specific\documents\certificates\admin.py:668
+#, python-format
+msgid "%(title)s sealed: %(hash)s"
+msgstr "%(title)s sellado: %(hash)s"
+
+#: .\apps\project\specific\documents\certificates\admin.py:675
+#, python-format
+msgid "%(count)s summary/summaries sealed."
+msgstr "%(count)s resumen(es) sellado(s)."
+
+#: .\apps\project\specific\documents\certificates\admin.py:679
+msgid "Anchor with the timestamp authority (RFC 3161)"
+msgstr "Anclar con la autoridad de sellado de tiempo (RFC 3161)"
+
+#: .\apps\project\specific\documents\certificates\admin.py:702
+#, python-format
+msgid "%(title)s anchored at %(time)s"
+msgstr "%(title)s anclado el %(time)s"
+
+#: .\apps\project\specific\documents\certificates\admin.py:709
+#, python-format
+msgid "%(count)s summary/summaries anchored."
+msgstr "%(count)s resumen(es) anclado(s)."
+
+#: .\apps\project\specific\documents\certificates\admin.py:713
+msgid "Anchor in Bitcoin (OpenTimestamps, free)"
+msgstr "Anclar en Bitcoin (OpenTimestamps, gratis)"
+
+#: .\apps\project\specific\documents\certificates\admin.py:737
+#, python-format
+msgid ""
+"%(count)s summary/summaries submitted to Bitcoin. The proof takes a few "
+"hours to mature; the anchor page updates on its own (manage.py "
+"upgrade_ots_anchors)."
+msgstr ""
+"%(count)s resumen(es) enviado(s) a Bitcoin. La prueba tarda unas horas en "
+"madurar; la página del anclaje se actualiza sola (manage.py "
+"upgrade_ots_anchors)."
+
+#: .\apps\project\specific\documents\certificates\admin.py:771
+msgid "Sello"
+msgstr "Sello"
+
+#: .\apps\project\specific\documents\certificates\admin.py:775
+msgid "Documento resumen"
+msgstr "Documento resumen"
+
+#: .\apps\project\specific\documents\certificates\admin.py:787
+msgid ""
+"1) Add the member documents below (all must be certified). 2) Run \"Seal\" "
+"to compute the master hash. 3) Issue the summary document, which carries "
+"that hash. 4) Run \"Anchor\" to have a timestamp authority attest the date. "
+"The master hash never covers the summary itself: it cannot, it does not "
+"exist yet when the hash is computed."
+msgstr ""
+"1) Añade abajo los documentos miembros (todos tienen que estar "
+"certificados). 2) Ejecuta «Sellar» para calcular el master hash. 3) Emite el "
+"documento resumen, que lleva ese hash. 4) Ejecuta «Anclar» para que una "
+"autoridad de sellado acredite la fecha. El master hash nunca cubre al propio "
+"resumen: no puede, todavía no existe cuando se calcula el hash."
+
+#: .\apps\project\specific\documents\certificates\admin.py:795
+msgid "Members"
+msgstr "Miembros"
+
+#: .\apps\project\specific\documents\certificates\admin.py:799
+#: .\apps\project\specific\documents\certificates\models.py:816
+msgid "Master hash"
+msgstr "Master hash"
+
+#: .\apps\project\specific\documents\certificates\admin.py:804
+msgid "Anchor"
+msgstr "Anclaje"
+
+#: .\apps\project\specific\documents\certificates\admin.py:809
+msgid "Not anchored"
+msgstr "Sin anclar"
 
 #: .\apps\project\specific\documents\certificates\apps.py:8
 msgid "Certificate"
@@ -413,11 +502,13 @@ msgstr "UUID público"
 
 #: .\apps\project\specific\documents\certificates\models.py:73
 #: .\apps\project\specific\documents\certificates\models.py:372
+#: .\apps\project\specific\documents\certificates\models.py:758
 msgid "UUID Prefix"
 msgstr "Prefijo UUID"
 
 #: .\apps\project\specific\documents\certificates\models.py:82
 #: .\apps\project\specific\documents\certificates\models.py:363
+#: .\apps\project\specific\documents\certificates\models.py:749
 msgid "Public verification code"
 msgstr "Código de verificación pública"
 
@@ -459,6 +550,7 @@ msgstr "Fecha de aprobación"
 
 #: .\apps\project\specific\documents\certificates\models.py:181
 #: .\apps\project\specific\documents\certificates\models.py:542
+#: .\apps\project\specific\documents\certificates\models.py:844
 msgid "Issued at"
 msgstr "Emitido en"
 
@@ -634,6 +726,122 @@ msgstr "Registro de vista de certificado"
 msgid "Certificate View Logs"
 msgstr "Registros de visualización de certificados"
 
+#: .\apps\project\specific\documents\certificates\models.py:717
+msgid "Draft (members selected, not sealed)"
+msgstr "Borrador (miembros elegidos, sin sellar)"
+
+#: .\apps\project\specific\documents\certificates\models.py:718
+msgid "Sealed (master hash computed)"
+msgstr "Sellado (master hash calculado)"
+
+#: .\apps\project\specific\documents\certificates\models.py:719
+msgid "Certified (summary document issued)"
+msgstr "Certificado (documento resumen emitido)"
+
+#: .\apps\project\specific\documents\certificates\models.py:744
+msgid "Summary title"
+msgstr "Título del resumen"
+
+#: .\apps\project\specific\documents\certificates\models.py:770
+msgid "Asset"
+msgstr "Activo"
+
+#: .\apps\project\specific\documents\certificates\models.py:774
+msgid "The asset this box of certificates belongs to."
+msgstr "El activo al que pertenece esta caja de certificados."
+
+#: .\apps\project\specific\documents\certificates\models.py:778
+msgid "Asset label"
+msgstr "Etiqueta del activo"
+
+#: .\apps\project\specific\documents\certificates\models.py:783
+msgid ""
+"Human readable name of the asset. Only a label: the binding is made through "
+"the asset UUID."
+msgstr ""
+"Nombre legible del activo. Solo una etiqueta: el vínculo se hace por el UUID "
+"del activo."
+
+#: .\apps\project\specific\documents\certificates\models.py:793
+msgid "Documents"
+msgstr "Documentos"
+
+#: .\apps\project\specific\documents\certificates\models.py:806
+msgid "Canonical payload"
+msgstr "Payload canónico"
+
+#: .\apps\project\specific\documents\certificates\models.py:810
+msgid ""
+"The exact bytes the master hash was computed over (JCS/RFC8785). Stored "
+"verbatim so anyone can recompute it."
+msgstr ""
+"Los bytes exactos sobre los que se calculó el master hash (JCS/RFC8785). Se "
+"guardan tal cual para que cualquiera pueda recalcularlo."
+
+#: .\apps\project\specific\documents\certificates\models.py:824
+msgid "Sealed at"
+msgstr "Sellado el"
+
+#: .\apps\project\specific\documents\certificates\models.py:833
+msgid "Summary document"
+msgstr "Documento resumen"
+
+#: .\apps\project\specific\documents\certificates\models.py:838
+msgid ""
+"The certified PDF that carries the master hash and the barcodes of every "
+"member. Issued after sealing, never part of the hash."
+msgstr ""
+"El PDF certificado que lleva el master hash y los códigos de barras de todos "
+"los miembros. Se emite después de sellar, y nunca forma parte del hash."
+
+#: .\apps\project\specific\documents\certificates\models.py:878
+msgid "AEGIS Summary"
+msgstr "Resumen AEGIS"
+
+#: .\apps\project\specific\documents\certificates\models.py:879
+msgid "AEGIS Summaries"
+msgstr "Resúmenes AEGIS"
+
+#: .\apps\project\specific\documents\certificates\models.py:897
+msgid "Summary"
+msgstr "Resumen"
+
+#: .\apps\project\specific\documents\certificates\models.py:904
+msgid "Document"
+msgstr "Documento"
+
+#: .\apps\project\specific\documents\certificates\models.py:908
+msgid "Code in the box"
+msgstr "Código dentro de la caja"
+
+#: .\apps\project\specific\documents\certificates\models.py:910
+msgid "For example AEGIS-1, AEGIS-2…"
+msgstr "Por ejemplo AEGIS-1, AEGIS-2…"
+
+#: .\apps\project\specific\documents\certificates\models.py:914
+msgid "Document type"
+msgstr "Tipo de documento"
+
+#: .\apps\project\specific\documents\certificates\models.py:918
+msgid "As it appears in the master payload."
+msgstr "Tal como aparece en el payload maestro."
+
+#: .\apps\project\specific\documents\certificates\models.py:926
+msgid ""
+"Only certified documents can be part of a summary: an uncertified one has no "
+"fingerprint to include."
+msgstr ""
+"Solo los documentos certificados pueden formar parte de un resumen: uno sin "
+"certificar no tiene huella que incluir."
+
+#: .\apps\project\specific\documents\certificates\models.py:938
+msgid "Summary member"
+msgstr "Miembro del resumen"
+
+#: .\apps\project\specific\documents\certificates\models.py:939
+msgid "Summary members"
+msgstr "Miembros del resumen"
+
 #: .\apps\project\specific\documents\certificates\utils.py:116
 msgid "Your document verification code"
 msgstr "Tu código de verificación para los documentos"
@@ -747,7 +955,7 @@ msgstr ""
 "reescritos al enviarlo por correo o al reguardarlo), pero su contenido "
 "visible coincide exactamente con el certificado, página a página."
 
-#: .\apps\project\specific\documents\certificates\views.py:529
+#: .\apps\project\specific\documents\certificates\views.py:551
 msgid ""
 "This platform is not configured with a public signing key. Certification "
 "records are sealed with a symmetric HMAC that only the platform itself can "
@@ -757,7 +965,7 @@ msgstr ""
 "registros de certificación se sellan con un HMAC simétrico que solo la "
 "propia plataforma puede verificar."
 
-#: .\apps\project\specific\documents\certificates\views.py:544
+#: .\apps\project\specific\documents\certificates\views.py:566
 msgid ""
 "The \"seal.signature\" field of a GEA certification record, over every other "
 "field serialised as compact JSON with sorted keys, UTF-8."
@@ -766,22 +974,22 @@ msgstr ""
 "todos los demás campos serializados como JSON compacto con las claves "
 "ordenadas, en UTF-8."
 
-#: .\apps\project\specific\documents\certificates\views.py:561
+#: .\apps\project\specific\documents\certificates\views.py:652
 msgid "AEGIS Documents Certificates"
 msgstr "Certificados de documentos AEGIS"
 
-#: .\apps\project\specific\documents\certificates\views.py:563
+#: .\apps\project\specific\documents\certificates\views.py:654
 msgid ""
 "Verify documents protected and issued through the AEGIS certification system."
 msgstr ""
 "Verifica documentos protegidos y emitidos a través del sistema de "
 "certificación AEGIS."
 
-#: .\apps\project\specific\documents\certificates\views.py:571
+#: .\apps\project\specific\documents\certificates\views.py:662
 msgid "IPCON Employee Certificate"
 msgstr "Certificado de empleado IPCON"
 
-#: .\apps\project\specific\documents\certificates\views.py:573
+#: .\apps\project\specific\documents\certificates\views.py:664
 msgid "Validate employment and institutional certificates issued by IPCON."
 msgstr ""
 "Valida los certificados laborales e institucionales emitidos por IPCON."

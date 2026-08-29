@@ -21,6 +21,10 @@ def preview_labels() -> dict:
     return {
         'page': _('Page size'),
         'hint': _('Drag a box to move it; the offsets update as you go.'),
+        'loading': _('Rendering the document…'),
+        'pdffailed': _(
+            'The document could not be rendered; the placements still work.'
+        ),
         'empty': _('No placements yet. Add one to see it here.'),
         'outside': _('This placement falls outside the page.'),
     }
@@ -30,6 +34,7 @@ def render_preview_container(
     *,
     row_selector: str = '',
     form_scope: str = '',
+    pdf_input: str = '',
     placements=None,
     editable: bool = False,
     extra_class: str = '',
@@ -56,20 +61,25 @@ def render_preview_container(
         '<div data-gea-preview="1" class="{}" '
         'data-page-width="{}" data-page-height="{}" '
         'data-row-selector="{}" data-form-scope="{}" '
+        'data-pdf-input="{}" '
         'data-editable="{}" data-placements="{}" '
         'data-label-page="{}" data-label-hint="{}" '
-        'data-label-empty="{}" data-label-outside="{}"></div>',
+        'data-label-empty="{}" data-label-outside="{}" '
+        'data-label-loading="{}" data-label-pdffailed="{}"></div>',
         extra_class,
         page_width,
         page_height,
         row_selector,
         form_scope,
+        pdf_input,
         'true' if editable else 'false',
         json.dumps(placements) if placements is not None else '',
         labels['page'],
         labels['hint'],
         labels['empty'],
         labels['outside'],
+        labels['loading'],
+        labels['pdffailed'],
     )
 
 

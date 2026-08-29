@@ -197,6 +197,13 @@
           {% trans 'Generated codes' %}
         </a>
 
+        <a class="nav-link {% active_class 'code_gen:summary_list' %}" href="{% url 'code_gen:summary_list' %}">
+          <div class="nav-link-icon">
+            <i class="fa-solid fa-boxes-packing"></i>
+          </div>
+          {% trans 'AEGIS summaries' %}
+        </a>
+
         <a class="nav-link {% active_class 'code_gen:layout_list' %}" href="{% url 'code_gen:layout_list' %}">
           <div class="nav-link-icon">
             <i class="fa-solid fa-crop-simple"></i>

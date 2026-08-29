@@ -70,7 +70,7 @@
             {# PHOTO (4) #}
             {% if certificate.employee_photo %}
               <div class="col-md-4 text-center">
-                <img src="{{ certificate.employee_photo.url }}" alt="{% trans 'Employee photo' %}" class="img-fluid rounded shadow-sm" style="max-height: 220px; object-fit: cover;" loading="lazy" decoding="async" />
+                <img src="{% url 'certificates:employee_photo' certificate.pk %}" alt="{% trans 'Employee photo' %}" class="img-fluid rounded shadow-sm" style="max-height: 220px; object-fit: cover;" loading="lazy" decoding="async" />
               </div>
             {% endif %}
           </div>

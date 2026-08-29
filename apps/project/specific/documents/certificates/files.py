@@ -89,6 +89,37 @@ def download_name(document, kind: str) -> str:
     return f'{base}-{suffix}-{reference}.pdf'
 
 
+def serve_field(file_field, *, filename: str, inline: bool = False) -> FileResponse:
+    """
+    Sirve un ``FieldFile`` cualquiera en streaming.
+
+    Sin comprobar permisos: eso lo decide la vista, para que el criterio de
+    acceso viva en un solo sitio.
+    """
+    if not file_field:
+        raise Http404('file not set')
+
+    try:
+        handle = file_field.open('rb')
+    except (FileNotFoundError, ValueError, OSError):
+        logger.warning('Missing file on disk: %s', getattr(file_field, 'name', ''))
+        raise Http404('file missing')
+
+    content_type = (
+        mimetypes.guess_type(os.path.basename(file_field.name))[0]
+        or 'application/octet-stream'
+    )
+
+    response = FileResponse(
+        handle,
+        content_type=content_type,
+        as_attachment=not inline,
+        filename=filename,
+    )
+    response['X-Content-Type-Options'] = 'nosniff'
+    return response
+
+
 def serve(document, kind: str) -> FileResponse:
     """
     Devuelve el archivo como respuesta en streaming.

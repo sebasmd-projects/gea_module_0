@@ -15,6 +15,11 @@ from .constants import (DEFAULT_MARGIN_PT, DEFAULT_QR_SIZE_PT,
 class CodeKindChoices(models.TextChoices):
     BARCODE = 'BARCODE', _('Barcode (Code128)')
     QR = 'QR', _('QR code')
+    # Solo para el documento resumen: el codigo de barras de uno de sus
+    # miembros. El miembro concreto se indica en `member_code` (AEGIS-1...).
+    MEMBER_BARCODE = 'MEMBER', _('Member barcode (summary only)')
+    # QR de la pagina de anclaje: URL estable, se actualiza sola.
+    ANCHOR_QR = 'ANCHOR', _('Anchor QR (summary only)')
 
 
 class PageSelectorChoices(models.TextChoices):
@@ -135,6 +140,7 @@ class StampLayoutModel(TimeStampedModel):
                 'width': placement.width,
                 'height': placement.height,
                 'kind_label': str(placement.get_kind_display()),
+                'member_code': placement.member_code or '',
                 # El valor crudo lo usa el JS para saber a que paginas aplica;
                 # la etiqueta es solo para pintarla.
                 'page_selector': placement.page_selector,
@@ -180,6 +186,17 @@ class StampPlacementModel(TimeStampedModel):
         max_length=10,
         choices=CodeKindChoices.choices,
         default=CodeKindChoices.QR
+    )
+
+    member_code = models.CharField(
+        _('Member code'),
+        max_length=30,
+        blank=True,
+        default='',
+        help_text=_(
+            'Only for the member barcode: which document of the box this '
+            'position carries (AEGIS-1, AEGIS-2…).'
+        )
     )
 
     page_selector = models.CharField(
@@ -235,6 +252,12 @@ class StampPlacementModel(TimeStampedModel):
 
     def clean(self):
         errors = {}
+
+        if self.kind == CodeKindChoices.MEMBER_BARCODE and not self.member_code:
+            errors['member_code'] = _(
+                'A member barcode needs to say which document of the box it '
+                'carries.'
+            )
 
         if self.page_selector == PageSelectorChoices.NUMBERS and not self.page_numbers:
             errors['page_numbers'] = _(
@@ -409,3 +432,108 @@ class CodeRegistrationModel(TimeStampedModel):
         db_table = 'apps_code_gen_coderegistration'
         verbose_name = _('Code Registration')
         verbose_name_plural = _('Code Registrations')
+
+
+class AnchorTypeChoices(models.TextChoices):
+    RFC3161 = 'RFC3161', _('Timestamp authority (RFC 3161)')
+    OPENTIMESTAMPS = 'OTS', _('OpenTimestamps (Bitcoin)')
+
+
+class AnchorStatusChoices(models.TextChoices):
+    PENDING = 'PENDING', _('Pending confirmation')
+    CONFIRMED = 'CONFIRMED', _('Confirmed')
+    FAILED = 'FAILED', _('Failed')
+
+
+class CertificationAnchorModel(TimeStampedModel):
+    """
+    Prueba de que un hash existia en una fecha.
+
+    Se ancla el **master hash** de un resumen, nunca un documento ni el
+    payload: lo que sale de la plataforma es una sola cifra de 64 caracteres,
+    y esa cifra compromete transitivamente a todos los miembros de la caja.
+
+    Un mismo hash puede tener varios anclajes a la vez —una TSA cualificada y
+    OpenTimestamps, por ejemplo— porque cubren fallos distintos: la TSA es el
+    instrumento que un tribunal reconoce hoy, y Bitcoin la prueba que sigue en
+    pie cuando el certificado de esa TSA haya caducado.
+    """
+
+    summary = models.ForeignKey(
+        'certificates.AegisSummaryModel',
+        on_delete=models.CASCADE,
+        related_name='anchors',
+        verbose_name=_('Summary')
+    )
+
+    anchor_type = models.CharField(
+        _('Anchor type'),
+        max_length=20,
+        choices=AnchorTypeChoices.choices
+    )
+
+    payload_hash = models.CharField(
+        _('Anchored hash'),
+        max_length=64,
+        db_index=True,
+        help_text=_('The master hash at the moment it was anchored.')
+    )
+
+    status = models.CharField(
+        _('Status'),
+        max_length=20,
+        choices=AnchorStatusChoices.choices,
+        default=AnchorStatusChoices.PENDING,
+        db_index=True
+    )
+
+    proof = models.BinaryField(
+        _('Proof'),
+        blank=True,
+        null=True,
+        help_text=_('DER timestamp token, or the .ots proof file.')
+    )
+
+    provider = models.CharField(
+        _('Provider'),
+        max_length=255,
+        blank=True,
+        default=''
+    )
+
+    stamped_at = models.DateTimeField(
+        _('Attested time'),
+        blank=True,
+        null=True,
+        help_text=_('The time the anchor itself attests, not our clock.')
+    )
+
+    serial = models.CharField(
+        _('Serial'),
+        max_length=80,
+        blank=True,
+        default=''
+    )
+
+    detail = models.TextField(
+        _('Detail'),
+        blank=True,
+        default=''
+    )
+
+    @property
+    def is_confirmed(self) -> bool:
+        return self.status == AnchorStatusChoices.CONFIRMED
+
+    def __str__(self) -> str:
+        return f'{self.get_anchor_type_display()} · {self.payload_hash[:16]}…'
+
+    class Meta:
+        db_table = 'apps_code_gen_certification_anchor'
+        verbose_name = _('Certification anchor')
+        verbose_name_plural = _('Certification anchors')
+        ordering = ['-created']
+        indexes = [
+            models.Index(fields=['payload_hash']),
+            models.Index(fields=['anchor_type', 'status']),
+        ]

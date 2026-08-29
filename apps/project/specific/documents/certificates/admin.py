@@ -15,6 +15,8 @@ from apps.project.specific.internal.code_gen.services.certification import (
     CertificationError, certify_document)
 
 from .models import (
+    AegisSummaryDocumentModel,
+    AegisSummaryModel,
     CertificateViewLogModel,
     CertificationStatusChoices,
     DocumentCertificateTypeChoices,
@@ -297,7 +299,7 @@ class UserVerificationModelAdmin(GeneralAdminModel):
             return "-"
         return format_html(
             '<img src="{}" style="height:55px;width:55px;object-fit:cover;border-radius:8px;" />',
-            obj.employee_photo.url,
+            reverse('certificates:employee_photo', args=[obj.pk]),
         )
 
     @admin.display(description=_("Detail"))
@@ -632,3 +634,179 @@ class CertificateViewLogModelAdmin(GeneralAdminModel):
     @admin.display(description=_("Viewer"))
     def viewer_display(self, obj):
         return obj.user or obj.anonymous_email or "-"
+
+
+class AegisSummaryDocumentInline(admin.TabularInline):
+    model = AegisSummaryDocumentModel
+    extra = 0
+    fields = ('code', 'document', 'document_type_label', 'default_order')
+    autocomplete_fields = ('document',)
+
+
+@admin.action(description=_('Seal: compute the master hash of the box'))
+def action_seal_summaries(modeladmin, request, queryset):
+    from apps.project.specific.internal.code_gen.services.master import (
+        MasterHashError, seal_summary)
+
+    sealed = 0
+
+    for summary in queryset:
+        try:
+            digest = seal_summary(summary)
+        except MasterHashError as error:
+            messages.error(
+                request,
+                _('%(title)s: %(error)s') % {
+                    'title': summary.title, 'error': error,
+                }
+            )
+            continue
+
+        sealed += 1
+        messages.info(
+            request,
+            _('%(title)s sealed: %(hash)s') % {
+                'title': summary.title, 'hash': digest,
+            }
+        )
+
+    if sealed:
+        messages.success(
+            request, _('%(count)s summary/summaries sealed.') % {'count': sealed}
+        )
+
+
+@admin.action(description=_('Anchor with the timestamp authority (RFC 3161)'))
+def action_anchor_summaries(modeladmin, request, queryset):
+    from apps.project.specific.internal.code_gen.services.anchoring import \
+        anchor_with_tsa
+    from apps.project.specific.internal.code_gen.services.tsa import TSAError
+
+    anchored = 0
+
+    for summary in queryset:
+        try:
+            anchor = anchor_with_tsa(summary)
+        except TSAError as error:
+            messages.error(
+                request,
+                _('%(title)s: %(error)s') % {
+                    'title': summary.title, 'error': error,
+                }
+            )
+            continue
+
+        anchored += 1
+        messages.info(
+            request,
+            _('%(title)s anchored at %(time)s') % {
+                'title': summary.title, 'time': anchor.stamped_at,
+            }
+        )
+
+    if anchored:
+        messages.success(
+            request, _('%(count)s summary/summaries anchored.') % {'count': anchored}
+        )
+
+
+@admin.action(description=_('Anchor in Bitcoin (OpenTimestamps, free)'))
+def action_anchor_ots(modeladmin, request, queryset):
+    from apps.project.specific.internal.code_gen.services.anchoring import         anchor_with_ots
+    from apps.project.specific.internal.code_gen.services.ots import OTSError
+
+    anchored = 0
+
+    for summary in queryset:
+        try:
+            anchor_with_ots(summary)
+        except OTSError as error:
+            messages.error(
+                request,
+                _('%(title)s: %(error)s') % {
+                    'title': summary.title, 'error': error,
+                }
+            )
+            continue
+
+        anchored += 1
+
+    if anchored:
+        messages.success(
+            request,
+            _('%(count)s summary/summaries submitted to Bitcoin. The proof '
+              'takes a few hours to mature; the anchor page updates on its '
+              'own (manage.py upgrade_ots_anchors).')
+            % {'count': anchored}
+        )
+
+
+@admin.register(AegisSummaryModel)
+class AegisSummaryModelAdmin(GeneralAdminModel):
+    inlines = [AegisSummaryDocumentInline]
+    actions = [action_seal_summaries, action_anchor_summaries,
+               action_anchor_ots]
+
+    list_display = (
+        'uuid_prefix', 'title', 'status', 'public_code',
+        'member_count', 'master_hash_short', 'anchor_state',
+    )
+    list_display_links = ('uuid_prefix', 'title')
+    list_filter = ('status',)
+    search_fields = ('title', 'public_code', 'master_hash', 'asset_label')
+    ordering = ('-created',)
+
+    readonly_fields = (
+        'id', 'uuid_prefix', 'public_code', 'status',
+        'master_hash', 'canonical_payload', 'sealed_at',
+        'summary_document', 'anchor_state', 'created', 'updated',
+        'seal_help',
+    )
+
+    fieldsets = (
+        (_('Identificacion'), {
+            'fields': ('uuid_prefix', 'public_code', 'title',
+                       'asset', 'asset_label', 'issued_at')
+        }),
+        (_('Sello'), {
+            'fields': ('seal_help', 'status', 'master_hash',
+                       'sealed_at', 'anchor_state', 'canonical_payload')
+        }),
+        (_('Documento resumen'), {
+            'fields': ('summary_document',),
+        }),
+        (_('Auditoria'), {
+            'fields': ('created', 'updated'), 'classes': ('collapse',)
+        }),
+    )
+
+    @admin.display(description=_('How it works'))
+    def seal_help(self, obj=None):
+        return format_html(
+            '<div style="max-width:60em">{}</div>',
+            _('1) Add the member documents below (all must be certified). '
+              '2) Run "Seal" to compute the master hash. 3) Issue the summary '
+              'document, which carries that hash. 4) Run "Anchor" to have a '
+              'timestamp authority attest the date. The master hash never '
+              'covers the summary itself: it cannot, it does not exist yet '
+              'when the hash is computed.')
+        )
+
+    @admin.display(description=_('Members'))
+    def member_count(self, obj):
+        return obj.members.count()
+
+    @admin.display(description=_('Master hash'))
+    def master_hash_short(self, obj):
+        value = obj.master_hash or ''
+        return (value[:12] + '…') if value else '-'
+
+    @admin.display(description=_('Anchor'))
+    def anchor_state(self, obj):
+        total = obj.anchors.count()
+
+        if not total:
+            return _('Not anchored')
+
+        confirmed = obj.anchors.filter(status='CONFIRMED').count()
+        return f'{confirmed}/{total}'

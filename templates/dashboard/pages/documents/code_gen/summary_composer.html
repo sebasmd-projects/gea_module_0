@@ -1,0 +1,272 @@
+{% extends 'dashboard/dashboard_layout_base.html' %}
+
+{% load i18n static %}
+
+{% block title %}
+  <title>{{ summary.title }}</title>
+{% endblock title %}
+
+{% block icons %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/aa367a5aee.js" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block custom_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/stamp_preview.css' %}" />
+{% endblock custom_css %}
+
+{% block main_layout %}
+  {% url 'core:index' as dashboard_url %}
+  {% url 'code_gen:summary_list' as summaries_url %}
+  {% trans 'AEGIS summary' as page_title %}
+  {% trans 'Pick the documents, place their barcodes on the summary, seal and anchor.' as page_description %}
+  {% trans 'Dashboard' as dashboard_title %}
+  {% trans 'AEGIS summaries' as summaries_title %}
+
+  {% include 'dashboard/partials/header/_header.html' with icon_class='me-2 fa-solid fa-boxes-packing' page_title=page_title page_description=page_description parent_title=dashboard_title parent_url=dashboard_url breadcrumbs=summaries_title|add:'::'|add:summaries_url|add:' > '|add:summary.title %}
+
+  <div class="container-xl px-4 mt-n10">
+
+    {% csrf_token %}
+    <div id="summaryFeedback"></div>
+
+    {# ================= ESTADO ================= #}
+    <div class="card mb-4">
+      <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <span><i class="fa-solid fa-box me-2"></i>{{ summary.title }}</span>
+        <span>
+          <span class="badge bg-secondary" id="summaryStatus">{{ summary.get_status_display }}</span>
+          {% if summary.public_code %}<code class="ms-2">{{ summary.public_code }}</code>{% endif %}
+        </span>
+      </div>
+      <div class="card-body">
+        <dl class="row small mb-0">
+          <dt class="col-sm-3">{% trans 'Master hash' %}</dt>
+          <dd class="col-sm-9"><code class="text-break" id="masterHash">{{ summary.master_hash|default:'—' }}</code></dd>
+
+          <dt class="col-sm-3">{% trans 'Anchor URL (inside the QR)' %}</dt>
+          <dd class="col-sm-9"><code class="text-break">{{ anchor_url }}</code></dd>
+        </dl>
+        <p class="small text-muted mt-2 mb-0">
+          {% trans 'The QR carries this URL, not the proof: the page updates on its own as anchors mature, so the PDF is never reissued.' %}
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      {# ================= MIEMBROS ================= #}
+      <div class="col-xl-5">
+        <div class="card mb-4">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span><i class="fa-solid fa-list-ol me-2"></i>{% trans 'Documents in the box' %}</span>
+            <button type="button" class="btn btn-outline-success btn-sm" id="saveMembers"
+                    data-loading-text="{% trans 'Saving…' %}">
+              <i class="bi bi-check2"></i> {% trans 'Save members' %}
+            </button>
+          </div>
+          <div class="card-body">
+            <p class="small text-muted">
+              {% trans 'Only certified documents can join: an uncertified one has no fingerprint to include. Changing the members invalidates the seal.' %}
+            </p>
+
+            <div class="table-responsive">
+              <table class="table table-sm small align-middle">
+                <thead>
+                  <tr>
+                    <th>{% trans 'Code' %}</th>
+                    <th>{% trans 'Document' %}</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="memberRows">
+                  {% for member in members %}
+                    <tr data-member-row
+                        data-document-id="{{ member.document_id }}"
+                        data-title="{{ member.document.document_title }}">
+                      <td>
+                        <input type="text" class="form-control form-control-sm"
+                               data-member-code value="{{ member.code }}" size="10" />
+                      </td>
+                      <td class="text-break">{{ member.document.document_title }}</td>
+                      <td class="text-end">
+                        <button type="button" class="btn btn-outline-danger btn-sm" data-remove-member>
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+
+            <hr />
+
+            <label class="form-label small">{% trans 'Add a certified document' %}</label>
+            <div class="input-group input-group-sm">
+              <select class="form-select" id="candidateSelect">
+                <option value="">{% trans '— choose —' %}</option>
+                {% for candidate in candidates %}
+                  <option value="{{ candidate.pk }}" data-title="{{ candidate.document_title }}">
+                    {{ candidate.document_title }} ({{ candidate.public_code }})
+                  </option>
+                {% endfor %}
+              </select>
+              <button type="button" class="btn btn-outline-primary" id="addMember">
+                <i class="bi bi-plus-lg"></i> {% trans 'Add' %}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {# ================= SELLAR ================= #}
+        <div class="card mb-4">
+          <div class="card-header"><i class="fa-solid fa-stamp me-2"></i>{% trans 'Seal' %}</div>
+          <div class="card-body">
+            <p class="small text-muted">
+              {% trans 'Sealing computes the master hash over the members. It never covers the summary itself — that document does not exist yet when the hash is computed.' %}
+            </p>
+            <div class="d-grid">
+              <button type="button" class="btn btn-primary" id="sealSummary"
+                      data-loading-text="{% trans 'Sealing…' %}">
+                <i class="bi bi-shield-lock"></i> {% trans 'Seal the box' %}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {# ================= ESTAMPADO ================= #}
+      <div class="col-xl-7">
+        <div class="card mb-4">
+          <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <span><i class="fa-solid fa-crop-simple me-2"></i>{% trans 'Codes on the summary' %}</span>
+            <span class="d-flex gap-2">
+              <button type="button" class="btn btn-outline-primary btn-sm" id="addMemberBarcodes">
+                <i class="bi bi-upc"></i> {% trans 'Bring the member barcodes' %}
+              </button>
+              <button type="button" class="btn btn-outline-success btn-sm" id="savePlacements"
+                      data-loading-text="{% trans 'Saving…' %}">
+                <i class="bi bi-check2"></i> {% trans 'Save' %}
+              </button>
+            </span>
+          </div>
+
+          <div class="card-body">
+            <div class="mb-3">
+              <label class="form-label small" for="summaryLayout">{% trans 'Stamp layout' %}</label>
+              <select class="form-select form-select-sm" id="summaryLayout">
+                <option value="">{% trans '— choose —' %}</option>
+                {% for item in layouts %}
+                  <option value="{{ item.pk }}" {% if layout and layout.pk == item.pk %}selected{% endif %}>
+                    {{ item.name }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small" for="summarySourceFile">
+                {% trans 'Summary PDF (without codes), to preview over it' %}
+              </label>
+              <input type="file" class="form-control form-control-sm"
+                     id="summarySourceFile" accept=".pdf" />
+              <div class="form-text">
+                {% trans 'Read in the browser only: it is not uploaded from here.' %}
+              </div>
+            </div>
+
+            {{ stamp_preview }}
+
+            <div class="table-responsive mt-3" id="placementTable">
+              <table class="table table-sm align-middle small mb-0">
+                <thead>
+                  <tr>
+                    <th>{% trans 'Code kind' %}</th>
+                    <th>{% trans 'Member' %}</th>
+                    <th>{% trans 'Pages' %}</th>
+                    <th>{% trans 'Anchor' %}</th>
+                    <th>X</th>
+                    <th>Y</th>
+                    <th>{% trans 'Width (pt)' %}</th>
+                    <th>{% trans 'Height (pt)' %}</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="placementRows"></tbody>
+              </table>
+            </div>
+
+            <button type="button" class="btn btn-outline-secondary btn-sm mt-2" id="addPlacement">
+              <i class="bi bi-plus-lg"></i> {% trans 'Add placement' %}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {# ================= Row template ================= #}
+  <template id="placementRowTemplate">
+    <tr data-placement-row>
+      <td>
+        <select class="form-select form-select-sm" name="placements-IDX-kind">
+          {% for value, label in kind_choices %}
+            <option value="{{ value }}">{{ label }}</option>
+          {% endfor %}
+        </select>
+      </td>
+      <td>
+        <input type="text" class="form-control form-control-sm"
+               name="placements-IDX-member_code" placeholder="AEGIS-1" size="8" />
+      </td>
+      <td>
+        <select class="form-select form-select-sm" name="placements-IDX-page_selector">
+          {% for value, label in page_selector_choices %}
+            <option value="{{ value }}">{{ label }}</option>
+          {% endfor %}
+        </select>
+        <input type="text" class="form-control form-control-sm mt-1"
+               name="placements-IDX-page_numbers" placeholder="1, 3" />
+      </td>
+      <td>
+        <select class="form-select form-select-sm" name="placements-IDX-anchor">
+          {% for value, label in anchor_choices %}
+            <option value="{{ value }}">{{ label }}</option>
+          {% endfor %}
+        </select>
+      </td>
+      <td><input type="number" step="0.5" class="form-control form-control-sm" name="placements-IDX-offset_x" value="28" /></td>
+      <td><input type="number" step="0.5" class="form-control form-control-sm" name="placements-IDX-offset_y" value="28" /></td>
+      <td><input type="number" step="0.5" class="form-control form-control-sm" name="placements-IDX-width" value="216" /></td>
+      <td><input type="number" step="0.5" class="form-control form-control-sm" name="placements-IDX-height" value="54" /></td>
+      <td class="text-center">
+        <input type="hidden" name="placements-IDX-is_active" value="true" />
+        <button type="button" class="btn btn-outline-danger btn-sm" data-remove-placement>
+          <i class="bi bi-trash"></i>
+        </button>
+      </td>
+    </tr>
+  </template>
+{% endblock main_layout %}
+
+{% block body_custom_js %}
+  {{ block.super }}
+  <script>
+    window.GEA_SUMMARY_CONFIG = {
+      membersUrl: '{% url 'code_gen:summary_members' summary.pk %}',
+      sealUrl: '{% url 'code_gen:summary_seal' summary.pk %}',
+      placementsUrl: '{% url 'code_gen:layout_placements' 0 %}',
+      messages: {
+        pickLayout: '{% trans 'Choose a stamp layout first.' %}',
+        pickDocument: '{% trans 'Choose a document to add.' %}',
+        alreadyIn: '{% trans 'That document is already in the box.' %}',
+        needMembers: '{% trans 'Add at least one document.' %}',
+        saveFailed: '{% trans 'It could not be saved.' %}',
+        broughtBarcodes: '{% trans 'Member barcodes added. Drag them into place and press Save.' %}'
+      }
+    };
+  </script>
+  <script src="{% static 'js/stamp_preview.js' %}"></script>
+  <script src="{% static 'js/summary_composer.js' %}"></script>
+{% endblock body_custom_js %}

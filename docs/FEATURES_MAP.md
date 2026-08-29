@@ -566,99 +566,82 @@ Dos variantes (`KindChoices`): `GENERAL` (facilitador, representante, tenedor) y
 
 ---
 
-## 12-bis. Anclaje temporal (evaluado, NO implementado)
+## 12-bis. Resumen AEGIS, master hash y anclaje temporal
 
-> **Nada de esta sección existe en el código.** Es el resultado de una
-> evaluación hecha en agosto de 2026 y la decisión que se tomó, para no
-> repetir el análisis cuando se retome.
+### La caja
 
-### El problema que resolvería
+`AegisSummaryModel` agrupa N certificados bajo un único **master hash**, y
+`AegisSummaryDocumentModel` les asigna su código dentro de la caja (AEGIS-1…).
+Solo entran documentos **certificados**: uno sin certificar no tiene huella.
 
-El sistema actual prueba **integridad** (el archivo no cambió). Lo único que no
-puede probar es la **fecha**: `certified_at` lo afirma la propia plataforma.
-Un anclaje temporal da *prueba de anterioridad* verificable sin confiar en
-Propensiones. No mueve el límite de `scope.does_not_attest`: sigue sin
-acreditar que el contenido sea cierto.
+### El master hash
 
-### Decisión: RFC 3161 + OpenTimestamps, no contrato propio
+Payload canónico **JCS/RFC 8785** (`services/jcs.py`), que ordena las claves
+por unidades de código UTF-16 y **rechaza flotantes** — reproducir el algoritmo
+de números de ECMAScript es la parte frágil de JCS, y es preferible fallar
+ruidosamente a emitir un hash irreproducible.
+
+De cada miembro entra `sha256` = **`document_hash`** (el archivo certificado,
+el que hace fe) y `content_sha256` como campo aparte. El vínculo con el activo
+es por **UUID**; la etiqueta es solo para leerlo.
+
+⚠️ **La circularidad**: el master hash cubre a los miembros y **nunca al propio
+resumen**. El orden es sellar → emitir el resumen llevando ese hash → registrar
+la huella del resumen. Si el resumen entrara en su propio hash no habría forma
+de calcularlo.
+
+El payload se guarda **verbatim**: `sha256sum` sobre los bytes descargados en
+`certificates:summary_master_payload` da la cifra anclada.
+`verify_master_hash()` distingue dos fallos: registro corrupto (el hash no
+corresponde a los bytes) y caja modificada tras sellarse (los bytes ya no
+describen a los miembros).
+
+### El documento resumen
+
+Es el único que lleva **códigos de otros**. Dos tipos de posición nuevos:
+`MEMBER_BARCODE` (con `member_code` diciendo de qué documento es) y
+`ANCHOR_QR`. Los códigos de los miembros **se re-renderizan desde su payload
+almacenado**, nunca se copia la imagen, para que no puedan desincronizarse del
+código realmente emitido.
+
+Se guarda como un `DocumentVerificationModel` más, así que hereda gratis los
+tres archivos, la marca de agua, la verificación por archivo y el registro de
+certificación.
+
+### Anclaje temporal
 
 | | RFC 3161 (TSA) | OpenTimestamps (Bitcoin) |
 |---|---|---|
-| En quién confías | En la TSA | En nadie |
-| Reconocimiento legal | Instrumento (eIDAS / Ley 527 si acreditada) | Indicio, no instrumento |
-| Verificación | `openssl ts -verify` | cliente `ots` / explorador |
-| Caduca | Sí, el certificado de la TSA expira | No |
-| Coste / latencia | céntimos / inmediato | 0 / 1-6 h |
+| Confianza | En la TSA | En nadie |
+| Nace | Confirmado | **Pendiente**, madura en 1-6 h |
+| Caduca | Sí, el certificado de la TSA | No |
+| Coste | Céntimos | 0 |
+| Módulo | `services/tsa.py` (asn1crypto) | `services/ots.py` |
 
-Se combinan porque cubren el fallo del otro: la TSA es el instrumento que un
-tribunal reconoce hoy; Bitcoin es la prueba que sigue en pie cuando ese
-certificado haya expirado. Para activos con horizonte de décadas, eso importa.
+Se anclan juntos porque cubren el fallo del otro. Lo que sale de la plataforma
+es **solo el master hash**: 78 bytes en la petición TSA, nunca el documento ni
+el payload.
 
-**Contrato propio en EVM: descartado.** La atribución del emisor ya la da la
-firma Ed25519 del registro, y la revocación es estado vivo que el detalle ya
-responde. Lo único que añadiría es una wallet caliente con saldo, dependencia
-de un RPC y riesgo de longevidad de una L2: pasivo de seguridad nuevo a cambio
-de cero prueba adicional.
+⚠️ Una TSA **gratuita es técnicamente idéntica pero no tiene peso legal**. Sin
+`CERTIFICATION_TSA_URL` no se sella — no hay fallback silencioso.
 
-**NFT: descartado.** Un token transferible que aparenta representar una
-participación sobre un activo físico tiene lectura regulatoria evidente, y el
-propio certificado invoca marcos AML/CFT y GAFI. Si alguna vez se retoma,
-solo ERC-721 no transferible (soulbound) y con concepto legal previo por
-escrito.
+### La URL estable del anclaje
 
-### Cómo encajaría
+El QR estampado **no contiene la prueba**, sino la URL de
+`certificates:summary_anchor` — pública y sin OTP a propósito, porque es lo que
+abre quien escanea el papel, y solo muestra hashes y fechas. La página se
+actualiza sola según maduran los anclajes, así que **el PDF no se reemite
+nunca**. Un OTS pendiente no cuenta como fecha acreditada: hay compromiso, no
+bloque.
 
-El registro de certificación ya tiene la forma correcta; se le añadiría un
-array `anchors`:
+`manage.py upgrade_ots_anchors` (cron horario) madura las pruebas.
 
-```json
-"anchors": [
-  {"type": "rfc3161", "tsa": "...", "token": "base64...", "anchored_at": "..."},
-  {"type": "opentimestamps", "proof": "base64...", "status": "CONFIRMED", "bitcoin_block": 9xxxxx}
-]
-```
+### El compositor
 
-⚠️ **Misma trampa circular que el hash y el código de barras**: el anclaje
-referencia el hash del registro pero vive dentro del registro. La solución es
-la ya aplicada en el resto del motor: se define el *payload anclable* como el
-registro **sin `seal` y sin `anchors`**, se ancla
-`sha256(canonical_bytes(payload))`, y solo después se añaden `anchors` y
-`seal`. Un único anclaje cubre transitivamente las tres huellas de archivo, el
-código y las fechas.
-
-### Pasos, si se retoma
-
-1. `anchorable_payload()` en `services/record.py`.
-2. Modelo `CertificationAnchorModel` (FK al documento, `type`, `payload_hash`,
-   `proof`, `status`, `anchored_at`). Un documento admite varios anclajes.
-3. `services/anchoring.py` con los dos backends, agnóstico al proveedor
-   (`CERTIFICATION_TSA_URL` configurable, degradando como
-   `CERTIFICATION_SIGNING_KEY`).
-4. Comando de cron `upgrade_ots_proofs`: la prueba de OpenTimestamps nace
-   `PENDING` y madura a `CONFIRMED` en 1-6 h. La certificación **no** puede
-   bloquearse esperándola.
-5. Descarga del `.tsr` y del `.ots` desde el detalle; `verify_record()` y
-   `how_to_verify` extendidos con los comandos que ejecuta un auditor.
-
-### Condiciones que fijó negocio
-
-- **Proveedor de TSA**: pendiente. Una TSA gratuita (FreeTSA) es técnicamente
-  idéntica pero **no tiene peso legal**; sin un proveedor cualificado (QTSP
-  eIDAS) o acreditado ONAC (Certicámara) detrás, no se puede publicitar como
-  fuerza probatoria.
-- **Disparo**: automático al certificar, **pero solo tras dos verificaciones**.
-  Publicar en Bitcoin es permanente: hace falta la doble comprobación antes de
-  que salga nada a la red. *(Falta precisar si son dos revisiones humanas
-  —control de cuatro ojos— o dos comprobaciones automáticas de integridad.)*
-
-### Lo que se podría afirmar, y lo que no
-
-Sí: «Cada certificado queda anclado en Bitcoin mediante OpenTimestamps y
-sellado por una autoridad de sellado de tiempo cualificada; cualquiera puede
-verificar ambos de forma independiente.»
-
-No: que «el documento está en la blockchain» (solo va su hash), ni que la
-cadena garantice que el contenido sea cierto.
+`code_gen:summary_compose`: elige los miembros, «trae los códigos de barras» —
+crea una posición por miembro, ya enlazada a su código— y se arrastran sobre la
+vista previa del PDF real. Cambiar los miembros **invalida el sello** y lo
+limpia, para que nadie lo confunda con vigente.
 
 ---
 

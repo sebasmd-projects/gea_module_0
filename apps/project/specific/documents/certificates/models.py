@@ -711,3 +711,243 @@ auditlog.register(
     UserVerificationModel,
     serialize_data=True
 )
+
+
+class SummaryStatusChoices(models.TextChoices):
+    DRAFT = 'DRAFT', _('Draft (members selected, not sealed)')
+    SEALED = 'SEALED', _('Sealed (master hash computed)')
+    CERTIFIED = 'CERTIFIED', _('Certified (summary document issued)')
+
+
+class AegisSummaryModel(TimeStampedModel):
+    """
+    Documento maestro que integra varios certificados de una misma caja.
+
+    El resumen (AEGIS-6) no es un certificado mas: es el que los ata. Lleva
+    estampado el codigo de barras de cada uno de sus miembros, su propio par
+    QR/barcode, y el QR del anclaje temporal.
+
+    **La circularidad de siempre**: el master hash cubre a los miembros, nunca
+    a si mismo. Se sella primero (`seal()`), luego se genera el documento del
+    resumen llevando ese hash dentro, y solo despues se registra la huella del
+    propio resumen. Igual que el codigo de barras y el hash del original.
+    """
+
+    id = models.UUIDField(
+        'ID',
+        default=uuid.uuid4,
+        primary_key=True,
+        editable=False
+    )
+
+    title = models.CharField(
+        _('Summary title'),
+        max_length=200
+    )
+
+    public_code = models.CharField(
+        _('Public verification code'),
+        max_length=32,
+        unique=True,
+        db_index=True,
+        blank=True,
+        null=True
+    )
+
+    uuid_prefix = models.CharField(
+        _('UUID Prefix'),
+        max_length=8,
+        editable=False,
+        unique=True,
+        blank=True,
+        null=True
+    )
+
+    # ---------- Activo al que pertenece la caja ----------
+    asset = models.ForeignKey(
+        'assets.AssetModel',
+        on_delete=models.SET_NULL,
+        verbose_name=_('Asset'),
+        related_name='aegis_summaries',
+        blank=True,
+        null=True,
+        help_text=_('The asset this box of certificates belongs to.')
+    )
+
+    asset_label = models.CharField(
+        _('Asset label'),
+        max_length=200,
+        blank=True,
+        default='',
+        help_text=_(
+            'Human readable name of the asset. Only a label: the binding is '
+            'made through the asset UUID.'
+        )
+    )
+
+    # ---------- Miembros ----------
+    documents = models.ManyToManyField(
+        DocumentVerificationModel,
+        through='AegisSummaryDocumentModel',
+        related_name='aegis_summaries',
+        verbose_name=_('Documents')
+    )
+
+    # ---------- Sello ----------
+    status = models.CharField(
+        _('Status'),
+        max_length=20,
+        choices=SummaryStatusChoices.choices,
+        default=SummaryStatusChoices.DRAFT,
+        db_index=True
+    )
+
+    canonical_payload = models.TextField(
+        _('Canonical payload'),
+        blank=True,
+        default='',
+        help_text=_(
+            'The exact bytes the master hash was computed over (JCS/RFC8785). '
+            'Stored verbatim so anyone can recompute it.'
+        )
+    )
+
+    master_hash = models.CharField(
+        _('Master hash'),
+        max_length=64,
+        blank=True,
+        default='',
+        db_index=True
+    )
+
+    sealed_at = models.DateTimeField(
+        _('Sealed at'),
+        blank=True,
+        null=True
+    )
+
+    # ---------- El documento del resumen (AEGIS-6) ----------
+    summary_document = models.OneToOneField(
+        DocumentVerificationModel,
+        on_delete=models.SET_NULL,
+        verbose_name=_('Summary document'),
+        related_name='summary_of',
+        blank=True,
+        null=True,
+        help_text=_(
+            'The certified PDF that carries the master hash and the barcodes '
+            'of every member. Issued after sealing, never part of the hash.'
+        )
+    )
+
+    issued_at = models.DateField(
+        _('Issued at'),
+        blank=True,
+        null=True
+    )
+
+    @property
+    def is_sealed(self) -> bool:
+        return bool(self.master_hash)
+
+    @property
+    def member_count(self) -> int:
+        return self.members.count()
+
+    def ordered_members(self):
+        return self.members.select_related('document').order_by(
+            'default_order', 'code'
+        )
+
+    def __str__(self) -> str:
+        return f'{self.title} [{self.public_code or self.uuid_prefix}]'
+
+    def save(self, *args, **kwargs):
+        if not self.public_code:
+            self.public_code = generate_unique_public_code(
+                type(self),
+                length=DOCUMENT_PUBLIC_CODE_LENGTH
+            )
+
+        self.uuid_prefix = str(self.id)[:8]
+
+        super().save(*args, **kwargs)
+
+    class Meta:
+        db_table = 'apps_certificates_aegis_summary'
+        verbose_name = _('AEGIS Summary')
+        verbose_name_plural = _('AEGIS Summaries')
+        ordering = ['default_order', '-created']
+        indexes = [
+            models.Index(fields=['public_code']),
+            models.Index(fields=['uuid_prefix']),
+            models.Index(fields=['master_hash']),
+        ]
+
+
+class AegisSummaryDocumentModel(TimeStampedModel):
+    """
+    Un certificado dentro de un resumen, con el codigo que le toca en la caja.
+    """
+
+    summary = models.ForeignKey(
+        AegisSummaryModel,
+        on_delete=models.CASCADE,
+        related_name='members',
+        verbose_name=_('Summary')
+    )
+
+    document = models.ForeignKey(
+        DocumentVerificationModel,
+        on_delete=models.PROTECT,
+        related_name='summary_memberships',
+        verbose_name=_('Document')
+    )
+
+    code = models.CharField(
+        _('Code in the box'),
+        max_length=30,
+        help_text=_('For example AEGIS-1, AEGIS-2…')
+    )
+
+    document_type_label = models.CharField(
+        _('Document type'),
+        max_length=200,
+        blank=True,
+        default='',
+        help_text=_('As it appears in the master payload.')
+    )
+
+    def clean(self):
+        errors = {}
+
+        if self.document_id and not self.document.is_certified:
+            errors['document'] = _(
+                'Only certified documents can be part of a summary: an '
+                'uncertified one has no fingerprint to include.'
+            )
+
+        if errors:
+            raise ValidationError(errors)
+
+    def __str__(self) -> str:
+        return f'{self.code} · {self.document}'
+
+    class Meta:
+        db_table = 'apps_certificates_aegis_summary_document'
+        verbose_name = _('Summary member')
+        verbose_name_plural = _('Summary members')
+        ordering = ['default_order', 'code']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['summary', 'document'],
+                name='uniq_document_per_summary'
+            ),
+            models.UniqueConstraint(
+                fields=['summary', 'code'],
+                name='uniq_code_per_summary'
+            ),
+        ]
+
+
+auditlog.register(AegisSummaryModel, serialize_data=True)

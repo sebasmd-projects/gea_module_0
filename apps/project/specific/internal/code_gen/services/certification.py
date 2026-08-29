@@ -223,6 +223,7 @@ def certify_document(
     issue_date: Optional[date] = None,
     options: Optional[CodeOptions] = None,
     qr_payload: Optional[str] = None,
+    specs_builder=None,
 ):
     """
     Ejecuta la certificacion completa de un documento.
@@ -303,12 +304,17 @@ def certify_document(
     # ---- 4. Estampado -------------------------------------------------
     page_count = pdf_page_count(source_bytes)
 
-    specs = build_stamp_specs(
-        document.stamp_layout,
-        barcode_png,
-        qr_png,
-        page_count
-    )
+    # El resumen AEGIS estampa ademas los codigos de sus miembros, asi que
+    # puede aportar su propio constructor de posiciones.
+    if specs_builder is not None:
+        specs = specs_builder(document, page_count)
+    else:
+        specs = build_stamp_specs(
+            document.stamp_layout,
+            barcode_png,
+            qr_png,
+            page_count
+        )
 
     certified_bytes, report = stamp_pdf(source_bytes, specs)
 

@@ -1,31 +1,33 @@
-# deploy/media.htaccess
+# deploy/media.htaccess  ->  copiar a MEDIA_ROOT/.htaccess
 #
-# Copiar a MEDIA_ROOT/.htaccess en el servidor (cPanel / Apache / LiteSpeed).
+# MEDIA_ROOT vive dentro del arbol que sirve el servidor web, porque las
+# imagenes de activos y la galeria tienen que servirse directas (rapido, sin
+# pasar por Django). Lo que NO puede servirse directo es lo sensible.
 #
-# Sin esto, el servidor web sigue entregando los PDF de certificacion y los
-# documentos de identidad directamente desde disco, sin pasar por Django y
-# por tanto sin ningun control de acceso. Con esto, la unica via es la vista
-# controlada `certificates:document_file`, que si comprueba permisos.
+# Bloquea:
+#   certificates/      los tres PDF de cada certificacion y las fotos
+#   passport_images/   documentos de identidad (PII)
+#   signature_images/  firmas manuscritas (PII)
 #
-# Lo que se bloquea:
-#   certificates/   los tres PDF de cada certificacion y las fotos de empleado
-#   passport_images/  documentos de identidad (PII)
-#   signature_images/ firmas manuscritas (PII)
-#
-# El resto de media (imagenes de activos, galeria) se sigue sirviendo directo.
+# Todo eso se entrega por vistas de Django que si comprueban permisos.
+# El resto de media sigue sirviendose directo.
 
-<IfModule mod_authz_core.c>
-    # Apache 2.4+
-    <FilesMatch ".*">
-        Require all granted
-    </FilesMatch>
+# --- Bloqueo por ruta, relativo a este directorio -------------------
+# Se usa mod_rewrite y no RedirectMatch porque las reglas quedan relativas a
+# MEDIA_ROOT: si el directorio cambia de sitio, siguen valiendo.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(certificates|passport_images|signature_images)(/|$) - [R=404,L]
 </IfModule>
 
-RedirectMatch 404 ^/public/media/certificates/
-RedirectMatch 404 ^/public/media/passport_images/
-RedirectMatch 404 ^/public/media/signature_images/
+# Respaldo por si mod_rewrite no estuviera activo.
+<IfModule mod_alias.c>
+    RedirectMatch 404 ^/public/media/certificates/
+    RedirectMatch 404 ^/public/media/passport_images/
+    RedirectMatch 404 ^/public/media/signature_images/
+</IfModule>
 
-# Nunca ejecutar nada que se haya subido.
+# --- Nada de lo subido se ejecuta nunca ----------------------------
 <IfModule mod_php.c>
     php_flag engine off
 </IfModule>

@@ -1,0 +1,71 @@
+{% extends 'dashboard/dashboard_layout_base.html' %}
+
+{% load i18n static %}
+
+{% block title %}<title>{% trans 'AEGIS summaries' %}</title>{% endblock %}
+
+{% block icons %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/aa367a5aee.js" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block main_layout %}
+  {% url 'core:index' as dashboard_url %}
+  {% trans 'AEGIS summaries' as page_title %}
+  {% trans 'Boxes that group several certificates under one master hash.' as page_description %}
+  {% trans 'Dashboard' as dashboard_title %}
+  {% trans 'Documents' as documents_title %}
+
+  {% include 'dashboard/partials/header/_header.html' with icon_class='me-2 fa-solid fa-boxes-packing' page_title=page_title page_description=page_description parent_title=dashboard_title parent_url=dashboard_url breadcrumbs=documents_title|add:' > '|add:page_title %}
+
+  <div class="container-xl px-4 mt-n10">
+    <div class="card mb-4">
+      <div class="card-header"><i class="fa-solid fa-list me-2"></i>{% trans 'Summaries' %}</div>
+      <div class="card-body">
+        {% if not summaries %}
+          <p class="text-muted mb-0">
+            {% trans 'No summaries yet. Create one from the admin, then compose it here.' %}
+          </p>
+        {% else %}
+          <div class="table-responsive">
+            <table class="table table-striped table-sm align-middle">
+              <thead>
+                <tr>
+                  <th>{% trans 'Title' %}</th>
+                  <th>{% trans 'Public code' %}</th>
+                  <th>{% trans 'Status' %}</th>
+                  <th>{% trans 'Members' %}</th>
+                  <th>{% trans 'Master hash' %}</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in summaries %}
+                  <tr>
+                    <td class="small">{{ item.title }}</td>
+                    <td class="small"><code>{{ item.public_code|default:'—' }}</code></td>
+                    <td class="small">{{ item.get_status_display }}</td>
+                    <td class="small">{{ item.member_count }}</td>
+                    <td class="small"><code>{{ item.master_hash|slice:':12'|default:'—' }}</code></td>
+                    <td class="text-end">
+                      <a class="btn btn-outline-primary btn-sm"
+                         href="{% url 'code_gen:summary_compose' item.pk %}">
+                        {% trans 'Compose' %}
+                      </a>
+                      {% if item.master_hash %}
+                        <a class="btn btn-outline-dark btn-sm"
+                           href="{% url 'certificates:summary_anchor' item.pk %}">
+                          {% trans 'Anchor' %}
+                        </a>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock main_layout %}

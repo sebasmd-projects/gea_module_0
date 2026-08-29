@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-28 00:29-0500\n"
+"POT-Creation-Date: 2026-08-29 00:49-0500\n"
 "PO-Revision-Date: 2026-08-27 20:24+0000\n"
 "Last-Translator: Juan Sebastian Morales Delgado "
 "<cto@propensionesabogados.com>\n"
@@ -308,6 +308,7 @@ msgstr "Descripción (EN)"
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:116
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:190
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:22
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:150
 msgid "Save"
 msgstr "Guardar"
 
@@ -856,6 +857,8 @@ msgstr "Tipo de cantidad - Necesaria"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:66
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:78
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_detail.html:33
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:36
 msgid "Status"
 msgstr "Estado"
 
@@ -1127,6 +1130,7 @@ msgid "Intermediary"
 msgstr "Facilitador"
 
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:197
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:116
 msgid "Add"
 msgstr "Agregar"
 
@@ -1370,6 +1374,7 @@ msgid "Distributable copy"
 msgstr "Copia distribuible"
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:179
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:80
 msgid "Compute it yourself:"
 msgstr "Compruébalo tú mismo:"
 
@@ -1539,7 +1544,7 @@ msgid "Verify code"
 msgstr "Verificar código"
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:116
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:211
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:218
 msgid "Verify document"
 msgstr "Verificar documento"
 
@@ -1587,6 +1592,163 @@ msgstr "El código caduca en unos minutos."
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:241
 msgid "You can request a new code in"
 msgstr "Puedes solicitar un nuevo código en"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:6
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:20
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_detail.html:42
+msgid "Timestamp anchor"
+msgstr "Anclaje temporal"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:29
+msgid "The content of this box is proven to have existed since:"
+msgstr "Está probado que el contenido de esta caja existía desde:"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:33
+msgid "A third party attested the date. It is not this platform saying so."
+msgstr "La fecha la acreditó un tercero. No es esta plataforma quien lo dice."
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:38
+msgid "Not anchored yet"
+msgstr "Todavía sin anclar"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:40
+msgid ""
+"The box is sealed but no external timestamp confirms its date yet. This page "
+"updates on its own as anchors arrive: the printed code never needs reissuing."
+msgstr ""
+"La caja está sellada pero todavía ningún sello externo confirma su fecha. "
+"Esta página se actualiza sola según llegan los anclajes: el código impreso "
+"no hay que volver a emitirlo nunca."
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:47
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_detail.html:36
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:45
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:38
+msgid "Master hash"
+msgstr "Master hash"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:50
+msgid ""
+"One figure that commits to the fingerprints of every document in the box. It "
+"is the only thing that leaves the platform: never the documents, never their "
+"content."
+msgstr ""
+"Una sola cifra que compromete las huellas de todos los documentos de la "
+"caja. Es lo único que sale de la plataforma: nunca los documentos, nunca su "
+"contenido."
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:56
+msgid "Algorithm"
+msgstr "Algoritmo"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:59
+msgid "Canonicalization"
+msgstr "Canonicalización"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:62
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:130
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_detail.html:53
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:62
+msgid "Documents in the box"
+msgstr "Documentos de la caja"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:65
+msgid "Sealed at"
+msgstr "Sellado el"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:76
+msgid "Download the exact bytes that were hashed (JSON)"
+msgstr "Descargar los bytes exactos que se hashearon (JSON)"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:88
+msgid "Anchors"
+msgstr "Anclajes"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:91
+msgid "No anchors recorded."
+msgstr "No hay anclajes registrados."
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:97
+msgid "Type"
+msgstr "Tipo"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:98
+msgid "Attested time"
+msgstr "Hora acreditada"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:99
+msgid "Provider"
+msgstr "Proveedor"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:100
+msgid "State"
+msgstr "Estado"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:111
+msgid "Valid"
+msgstr "Válido"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:113
+msgid "Earlier hash"
+msgstr "Hash anterior"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:115
+msgid "Not valid"
+msgstr "No válido"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:136
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_detail.html:59
+#: .\templates\dashboard\pages\documents\code_gen\code_detail.html:43
+#: .\templates\dashboard\pages\documents\code_gen\code_history.html:60
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:77
+msgid "Code"
+msgstr "Código"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:137
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_detail.html:60
+msgid "Document type"
+msgstr "Tipo de documento"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:157
+msgid "What this proves, and what it does not."
+msgstr "Qué prueba esto y qué no."
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:158
+msgid ""
+"It proves WHEN: that this content existed on the stated date, attested by a "
+"third party. Who issued it is proven by the platform signature on each "
+"certification record. That what the documents claim is TRUE is not proven by "
+"any of this."
+msgstr ""
+"Prueba CUÁNDO: que este contenido existía en la fecha indicada, acreditado "
+"por un tercero. Quién lo emitió lo prueba la firma de la plataforma en cada "
+"registro de certificación. Que sea CIERTO lo que los documentos afirman no "
+"lo prueba nada de esto."
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:162
+msgid "Checked at"
+msgstr "Comprobado el"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_detail.html:27
+#: .\templates\dashboard\pages\documents\code_gen\code_detail.html:74
+#: .\templates\dashboard\pages\documents\code_gen\code_history.html:61
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:35
+msgid "Public code"
+msgstr "Código público"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_detail.html:30
+#: .\templates\dashboard\pages\documents\code_gen\code_detail.html:110
+msgid "Verification ID"
+msgstr "ID de verificación"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_detail.html:47
+msgid "Summary document (distributable copy)"
+msgstr "Documento resumen (copia distribuible)"
+
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_detail.html:72
+#: .\templates\dashboard\pages\documents\code_gen\code_history.html:88
+msgid "View"
+msgstr "Ver"
 
 #: .\templates\dashboard\pages\certificates\includes\habeas_data.html:8
 msgid ""
@@ -1732,6 +1894,8 @@ msgstr "Código emitido"
 #: .\templates\dashboard\pages\documents\code_gen\code_history.html:18
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:24
 #: .\templates\dashboard\pages\documents\code_gen\layout_list.html:23
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:24
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:16
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:14
 msgid "Dashboard"
 msgstr "Panel"
@@ -1742,11 +1906,6 @@ msgstr "Panel"
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:197
 msgid "Generated codes"
 msgstr "Códigos generados"
-
-#: .\templates\dashboard\pages\documents\code_gen\code_detail.html:43
-#: .\templates\dashboard\pages\documents\code_gen\code_history.html:60
-msgid "Code"
-msgstr "Código"
 
 #: .\templates\dashboard\pages\documents\code_gen\code_detail.html:55
 #: .\templates\dashboard\pages\documents\code_gen\code_history.html:59
@@ -1767,11 +1926,6 @@ msgstr "Iniciales"
 msgid "Sequence"
 msgstr "Secuencia"
 
-#: .\templates\dashboard\pages\documents\code_gen\code_detail.html:74
-#: .\templates\dashboard\pages\documents\code_gen\code_history.html:61
-msgid "Public code"
-msgstr "Código público"
-
 #: .\templates\dashboard\pages\documents\code_gen\code_detail.html:79
 msgid "Hash in code"
 msgstr "Hash en el código"
@@ -1790,12 +1944,9 @@ msgid "Certified document"
 msgstr "Documento certificado"
 
 #: .\templates\dashboard\pages\documents\code_gen\code_detail.html:107
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:34
 msgid "Title"
 msgstr "Título"
-
-#: .\templates\dashboard\pages\documents\code_gen\code_detail.html:110
-msgid "Verification ID"
-msgstr "ID de verificación"
 
 #: .\templates\dashboard\pages\documents\code_gen\code_detail.html:113
 msgid "Certified SHA-256"
@@ -1877,6 +2028,7 @@ msgstr "Emite códigos de barras y QR, y certifica un PDF de principio a fin."
 #: .\templates\dashboard\pages\documents\code_gen\code_form.html:25
 #: .\templates\dashboard\pages\documents\code_gen\code_history.html:19
 #: .\templates\dashboard\pages\documents\code_gen\layout_list.html:24
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:17
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:184
 msgid "Documents"
 msgstr "Documentos"
@@ -1984,6 +2136,8 @@ msgstr "Posición movida. Pulsa Guardar para almacenarla en la disposición."
 
 #: .\templates\dashboard\pages\documents\code_gen\code_form.html:343
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:174
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:64
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:149
 msgid "Saving…"
 msgstr "Guardando…"
 
@@ -2023,15 +2177,12 @@ msgstr "Todavía no se ha emitido ningún código."
 msgid "Certified"
 msgstr "Certificado"
 
-#: .\templates\dashboard\pages\documents\code_gen\code_history.html:88
-msgid "View"
-msgstr "Ver"
-
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:6
 msgid "New stamp layout"
 msgstr "Nueva disposición de estampado"
 
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:22
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:157
 msgid "Stamp layout"
 msgstr "Disposición de estampado"
 
@@ -2045,7 +2196,7 @@ msgstr ""
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:25
 #: .\templates\dashboard\pages\documents\code_gen\layout_list.html:6
 #: .\templates\dashboard\pages\documents\code_gen\layout_list.html:21
-#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:204
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:211
 msgid "Stamp layouts"
 msgstr "Disposiciones de estampado"
 
@@ -2055,6 +2206,7 @@ msgstr "Posiciones"
 
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:98
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:19
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:201
 msgid "Add placement"
 msgstr "Añadir posición"
 
@@ -2070,11 +2222,13 @@ msgstr ""
 
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:110
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:62
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:185
 msgid "Code kind"
 msgstr "Tipo de código"
 
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:111
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:63
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:187
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:41
 msgid "Pages"
 msgstr "Páginas"
@@ -2085,16 +2239,20 @@ msgstr "Números de página"
 
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:113
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:64
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:188
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:58
 msgid "Anchor"
 msgstr "Anclaje"
 
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:116
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:67
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:191
 msgid "Width (pt)"
 msgstr "Ancho (pt)"
 
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:117
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:68
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:192
 msgid "Height (pt)"
 msgstr "Alto (pt)"
 
@@ -2219,6 +2377,146 @@ msgstr "Usar como disposición por defecto"
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:124
 msgid "Create layout"
 msgstr "Crear disposición"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:22
+msgid "AEGIS summary"
+msgstr "Resumen AEGIS"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:23
+msgid ""
+"Pick the documents, place their barcodes on the summary, seal and anchor."
+msgstr ""
+"Elige los documentos, coloca sus códigos de barras sobre el resumen, sella y "
+"ancla."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:25
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:5
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:14
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:204
+msgid "AEGIS summaries"
+msgstr "Resúmenes AEGIS"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:48
+msgid "Anchor URL (inside the QR)"
+msgstr "URL del anclaje (dentro del QR)"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:52
+msgid ""
+"The QR carries this URL, not the proof: the page updates on its own as "
+"anchors mature, so the PDF is never reissued."
+msgstr ""
+"El QR lleva esta URL, no la prueba: la página se actualiza sola según "
+"maduran los anclajes, así que el PDF no se reemite nunca."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:65
+msgid "Save members"
+msgstr "Guardar miembros"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:70
+msgid ""
+"Only certified documents can join: an uncertified one has no fingerprint to "
+"include. Changing the members invalidates the seal."
+msgstr ""
+"Solo pueden entrar documentos certificados: uno sin certificar no tiene "
+"huella que incluir. Cambiar los miembros invalida el sello."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:78
+msgid "Document"
+msgstr "Documento"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:105
+msgid "Add a certified document"
+msgstr "Añadir un documento certificado"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:108
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:159
+msgid "— choose —"
+msgstr "— elegir —"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:124
+msgid "Seal"
+msgstr "Sellar"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:127
+msgid ""
+"Sealing computes the master hash over the members. It never covers the "
+"summary itself — that document does not exist yet when the hash is computed."
+msgstr ""
+"Sellar calcula el master hash sobre los miembros. Nunca cubre al propio "
+"resumen: ese documento todavía no existe cuando se calcula el hash."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:131
+msgid "Sealing…"
+msgstr "Sellando…"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:132
+msgid "Seal the box"
+msgstr "Sellar la caja"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:143
+msgid "Codes on the summary"
+msgstr "Códigos sobre el resumen"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:146
+msgid "Bring the member barcodes"
+msgstr "Traer los códigos de los miembros"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:170
+msgid "Summary PDF (without codes), to preview over it"
+msgstr "PDF del resumen (sin códigos), para previsualizar encima"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:175
+msgid "Read in the browser only: it is not uploaded from here."
+msgstr "Solo se lee en el navegador: desde aquí no se sube."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:186
+msgid "Member"
+msgstr "Miembro"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:261
+msgid "Choose a stamp layout first."
+msgstr "Elige antes una disposición de estampado."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:262
+msgid "Choose a document to add."
+msgstr "Elige un documento para añadir."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:263
+msgid "That document is already in the box."
+msgstr "Ese documento ya está en la caja."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:264
+msgid "Add at least one document."
+msgstr "Añade al menos un documento."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:265
+msgid "It could not be saved."
+msgstr "No se pudo guardar."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:266
+msgid "Member barcodes added. Drag them into place and press Save."
+msgstr ""
+"Códigos de los miembros añadidos. Arrástralos a su sitio y pulsa Guardar."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:15
+msgid "Boxes that group several certificates under one master hash."
+msgstr "Cajas que agrupan varios certificados bajo un único master hash."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:23
+msgid "Summaries"
+msgstr "Resúmenes"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:27
+msgid "No summaries yet. Create one from the admin, then compose it here."
+msgstr "Todavía no hay resúmenes. Crea uno desde el admin y compónlo aquí."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:37
+msgid "Members"
+msgstr "Miembros"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:53
+msgid "Compose"
+msgstr "Componer"
 
 #: .\templates\dashboard\pages\holders\add_asset_location.html:28
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:23

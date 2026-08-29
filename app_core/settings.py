@@ -317,6 +317,17 @@ PUBLIC_BASE_URL = os.getenv(
 # comprobarlo: un auditor externo no podria verificarlo por su cuenta.
 CERTIFICATION_SIGNING_KEY = os.getenv('CERTIFICATION_SIGNING_KEY', '')
 
+# Autoridad de sellado de tiempo (RFC 3161) para anclar el master hash de una
+# caja AEGIS. Sin esta variable no se sella: no hay fallback silencioso.
+#
+# OJO: una TSA gratuita es tecnicamente identica pero NO tiene peso legal.
+# Para fuerza probatoria hace falta un QTSP de la lista eIDAS o un proveedor
+# acreditado ONAC (Certicamara). El sello se guarda tal cual lo devuelve la
+# TSA, asi que cambiar de proveedor no invalida los ya emitidos.
+CERTIFICATION_TSA_URL = os.getenv('CERTIFICATION_TSA_URL', '')
+CERTIFICATION_TSA_USERNAME = os.getenv('CERTIFICATION_TSA_USERNAME', '')
+CERTIFICATION_TSA_PASSWORD = os.getenv('CERTIFICATION_TSA_PASSWORD', '')
+
 STATIC_URL = os.getenv('DJANGO_STATIC_URL')
 
 STATIC_ROOT = str(os.getenv('DJANGO_STATIC_ROOT'))
@@ -386,6 +397,11 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 15000
 
 # Cron jobs
 CRONJOBS = [
+    # Madura las pruebas de OpenTimestamps: nacen sin bloque de Bitcoin y
+    # entran en uno al cabo de unas horas. Que aun no este lista no es un
+    # error; la pagina de anclaje se actualiza sola cuando confirma.
+    ('15 * * * *', 'django.core.management.call_command',
+     ['upgrade_ots_anchors']),
     ('0 19 * * *', 'apps.common.utils.cron.generate_and_send_gea_code'),
     ('*/3 * * * *', 'apps.common.utils.cron.warm_gea_app'),
 ]

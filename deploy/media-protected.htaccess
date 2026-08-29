@@ -1,0 +1,23 @@
+# deploy/media-protected.htaccess
+#
+# Copiar DENTRO de cada subdirectorio sensible de MEDIA_ROOT:
+#   certificates/.htaccess
+#   passport_images/.htaccess
+#   signature_images/.htaccess
+#
+# Es el mecanismo mas robusto: deniega en el propio directorio, sin depender
+# de que mod_rewrite este activo ni de que la ruta publica siga llamandose
+# igual. Si alguien mueve el arbol, la denegacion se mueve con el.
+
+<IfModule mod_authz_core.c>
+    # Apache 2.4 / LiteSpeed
+    Require all denied
+</IfModule>
+
+<IfModule !mod_authz_core.c>
+    # Apache 2.2
+    Order allow,deny
+    Deny from all
+</IfModule>
+
+Options -ExecCGI -Indexes

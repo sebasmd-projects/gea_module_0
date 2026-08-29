@@ -1,0 +1,83 @@
+{% extends 'raw.html' %}
+
+{% load i18n static %}
+
+{% block title %}
+  <title>{{ summary.title }}</title>
+{% endblock %}
+
+{% block icons %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+{% endblock %}
+
+{% block main %}
+  <div class="container-md my-5 min-vh-100">
+
+    {% url 'certificates:certificates_landing' as landing_url %}
+    {% include 'dashboard/pages/certificates/includes/aegis_header.html' with url=landing_url %}
+
+    <div class="text-center my-4">
+      <h1 class="h3">{{ summary.title }}</h1>
+      {% if summary.asset_label %}
+        <p class="text-muted mb-0">{{ summary.asset_label }}</p>
+      {% endif %}
+    </div>
+
+    <dl class="row small">
+      <dt class="col-sm-4">{% trans 'Public code' %}</dt>
+      <dd class="col-sm-8"><code>{{ summary.public_code }}</code></dd>
+
+      <dt class="col-sm-4">{% trans 'Verification ID' %}</dt>
+      <dd class="col-sm-8"><code class="text-break">{{ summary.id }}</code></dd>
+
+      <dt class="col-sm-4">{% trans 'Status' %}</dt>
+      <dd class="col-sm-8">{{ summary.get_status_display }}</dd>
+
+      <dt class="col-sm-4">{% trans 'Master hash' %}</dt>
+      <dd class="col-sm-8"><code class="text-break">{{ summary.master_hash|default:'—' }}</code></dd>
+    </dl>
+
+    <div class="d-grid gap-2 d-md-flex mb-4">
+      <a class="btn btn-outline-dark btn-sm" href="{% url 'certificates:summary_anchor' summary.pk %}">
+        <i class="bi bi-clock-history"></i> {% trans 'Timestamp anchor' %}
+      </a>
+      {% if summary.summary_document %}
+        <a class="btn btn-outline-primary btn-sm"
+           href="{% url 'certificates:document_file' summary.summary_document.pk 'public' %}">
+          <i class="bi bi-file-earmark-pdf"></i> {% trans 'Summary document (distributable copy)' %}
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <div class="card-header"><strong>{% trans 'Documents in the box' %}</strong></div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-sm small align-middle mb-0">
+            <thead>
+              <tr>
+                <th>{% trans 'Code' %}</th>
+                <th>{% trans 'Document type' %}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for member in members %}
+                <tr>
+                  <td class="text-nowrap"><code>{{ member.code }}</code></td>
+                  <td>{{ member.document_type_label|default:member.document.document_title }}</td>
+                  <td class="text-end">
+                    <a class="btn btn-outline-secondary btn-sm"
+                       href="{% url 'certificates:detail_document_verification_aegis' member.document.pk %}">
+                      {% trans 'View' %}
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock main %}

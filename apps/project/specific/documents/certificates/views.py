@@ -2,7 +2,7 @@
 
 from django.contrib import messages
 from django.http import Http404, HttpResponse, JsonResponse
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.safestring import mark_safe
@@ -13,7 +13,7 @@ from apps.project.specific.internal.code_gen.services.record import (
     document_status, key_id, public_key_b64, record_filename, record_json)
 
 from .constants import FILE_MATCH_SESSION_KEY
-from .files import can_access, serve
+from .files import can_access, serve, serve_field
 from .forms import (AnonymousEmailOTPForm, AnonymousOTPVerifyForm,
                     CertificateUserForm, DocumentFileVerificationForm,
                     DocumentVerificationForm)
@@ -21,7 +21,7 @@ from .functions import (generate_barcode, generate_otp,
                         generate_qr_with_favicon, get_hmac,
                         normalize_identifier)
 from .mixins import OTPProtectedDocumentMixin, OTPSessionMixin
-from .models import (DocumentCopyKind, DocumentTypeChoices,
+from .models import (AegisSummaryModel, DocumentCopyKind, DocumentTypeChoices,
                      DocumentVerificationModel, UserCertificateTypeChoices,
                      UserVerificationModel)
 from .utils import send_otp_email, track_certificate_view, track_document_view
@@ -485,6 +485,28 @@ class DocumentFileView(DetailView):
         return timezone.now() - moment <= OTPProtectedDocumentMixin.OTP_ACCESS_TTL
 
 
+class EmployeePhotoView(DetailView):
+    """
+    Foto del empleado de un certificado IPCON.
+
+    La pagina de detalle que la muestra es publica, asi que esta vista tambien
+    lo es: seria absurdo proteger la imagen mas que la pagina donde aparece.
+    Lo que gana pasando por Django es que deja de colgar de un directorio
+    enumerable junto a los PDF de certificacion, que si son sensibles.
+    """
+
+    model = UserVerificationModel
+
+    def get(self, request, *args, **kwargs):
+        certificate = self.get_object()
+
+        return serve_field(
+            certificate.employee_photo,
+            filename=f'foto-{certificate.uuid_prefix or certificate.pk}.jpg',
+            inline=True,
+        )
+
+
 class CertificationRecordView(OTPProtectedDocumentMixin, DetailView):
     """
     Descarga del registro de certificacion en JSON.
@@ -548,6 +570,75 @@ def certification_public_key(request):
         },
         json_dumps_params={'indent': 2, 'ensure_ascii': False},
     )
+
+
+class AegisSummaryDetailView(OTPProtectedDocumentMixin, DetailView):
+    """
+    Pagina publica del resumen: la caja completa y su estado.
+    """
+
+    model = AegisSummaryModel
+    template_name = 'dashboard/pages/certificates/documents/aegis_documents/summary_detail.html'
+    context_object_name = 'summary'
+
+    def get_context_data(self, **kwargs):
+        from apps.project.specific.internal.code_gen.services.anchoring import (
+            anchor_url, summary_anchor_state)
+
+        context = super().get_context_data(**kwargs)
+        context['state'] = summary_anchor_state(self.object)
+        context['anchor_url'] = anchor_url(self.object)
+        context['members'] = self.object.ordered_members()
+        return context
+
+
+class AegisSummaryAnchorView(DetailView):
+    """
+    Destino del QR del anclaje.
+
+    **Publica y sin OTP a proposito**: es la pagina que abre quien escanea el
+    codigo impreso, y solo muestra hashes y fechas, nada del contenido de los
+    documentos. Pedir un OTP aqui convertiria el QR en un callejon.
+
+    Es tambien la razon de que el QR apunte aqui y no lleve la prueba dentro:
+    esta pagina se actualiza sola segun maduran los anclajes, sin reestampar
+    el PDF.
+    """
+
+    model = AegisSummaryModel
+    template_name = 'dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html'
+    context_object_name = 'summary'
+
+    def get_context_data(self, **kwargs):
+        from apps.project.specific.internal.code_gen.services.anchoring import             summary_anchor_state
+
+        context = super().get_context_data(**kwargs)
+        context['state'] = summary_anchor_state(self.object)
+        context['members'] = self.object.ordered_members()
+        return context
+
+
+def summary_master_payload(request, pk):
+    """
+    Los bytes exactos sobre los que se calculo el master hash.
+
+    Se sirven verbatim para que un auditor pueda recalcular el SHA-256 por su
+    cuenta y comprobar que da la cifra anclada.
+    """
+    summary = get_object_or_404(AegisSummaryModel, pk=pk)
+
+    if not summary.canonical_payload:
+        raise Http404('not sealed')
+
+    response = HttpResponse(
+        summary.canonical_payload,
+        content_type='application/json; charset=utf-8'
+    )
+    response['Content-Disposition'] = (
+        f'attachment; filename="master-payload-'
+        f'{summary.public_code or summary.uuid_prefix}.json"'
+    )
+    return response
 
 
 class CertificatesLandingTemplateView(TemplateView):

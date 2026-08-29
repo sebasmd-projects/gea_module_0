@@ -1,8 +1,10 @@
 from django.urls import path
 
-from .api import layout_create, layout_placements
+from .api import (layout_create, layout_placements, summary_members,
+                  summary_seal)
 from .views import (CodeDetailView, CodeGeneratorView, CodeHistoryListView,
-                    StampLayoutEditView, StampLayoutListView)
+                    StampLayoutEditView, StampLayoutListView,
+                    SummaryComposerView, SummaryListView)
 
 app_name = "code_gen"
 
@@ -47,6 +49,29 @@ urlpatterns = [
         layout_placements,
         name="layout_placements"
     ),
+    path(
+        "generate/summary/",
+        SummaryListView.as_view(),
+        name="summary_list"
+    ),
+    path(
+        "generate/summary/<uuid:pk>/compose/",
+        SummaryComposerView.as_view(),
+        name="summary_compose"
+    ),
+
+    # Resumen AEGIS: miembros y sellado.
+    path(
+        "generate/summary/<uuid:pk>/members/",
+        summary_members,
+        name="summary_members"
+    ),
+    path(
+        "generate/summary/<uuid:pk>/seal/",
+        summary_seal,
+        name="summary_seal"
+    ),
+
     path(
         "generate/layouts/save/",
         layout_create,

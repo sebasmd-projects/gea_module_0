@@ -1,0 +1,165 @@
+{% extends 'raw.html' %}
+
+{% load i18n static %}
+
+{% block title %}
+  <title>{% trans 'Timestamp anchor' %} · {{ summary.title }}</title>
+{% endblock %}
+
+{% block icons %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+{% endblock %}
+
+{% block main %}
+  <div class="container-md my-5 min-vh-100">
+
+    {% url 'certificates:certificates_landing' as landing_url %}
+    {% include 'dashboard/pages/certificates/includes/aegis_header.html' with url=landing_url %}
+
+    <div class="text-center my-4">
+      <h1 class="h3">{% trans 'Timestamp anchor' %}</h1>
+      <p class="text-muted mb-0">{{ summary.title }}</p>
+    </div>
+
+    {# ================= ESTADO ================= #}
+    {% if state.anchored %}
+      <div class="alert alert-success">
+        <h2 class="h5 alert-heading">
+          <i class="bi bi-clock-history me-1"></i>
+          {% trans 'The content of this box is proven to have existed since:' %}
+          {{ state.attested_since|date:'d/m/Y H:i' }} UTC
+        </h2>
+        <p class="mb-0 small">
+          {% trans 'A third party attested the date. It is not this platform saying so.' %}
+        </p>
+      </div>
+    {% else %}
+      <div class="alert alert-secondary">
+        <h2 class="h5 alert-heading">{% trans 'Not anchored yet' %}</h2>
+        <p class="mb-0 small">
+          {% trans 'The box is sealed but no external timestamp confirms its date yet. This page updates on its own as anchors arrive: the printed code never needs reissuing.' %}
+        </p>
+      </div>
+    {% endif %}
+
+    {# ================= MASTER HASH ================= #}
+    <div class="card mb-4">
+      <div class="card-header"><strong>{% trans 'Master hash' %}</strong></div>
+      <div class="card-body">
+        <p class="small text-muted">
+          {% trans 'One figure that commits to the fingerprints of every document in the box. It is the only thing that leaves the platform: never the documents, never their content.' %}
+        </p>
+
+        <p class="text-break mb-3"><code>{{ summary.master_hash|default:'—' }}</code></p>
+
+        <dl class="row small mb-3">
+          <dt class="col-sm-4">{% trans 'Algorithm' %}</dt>
+          <dd class="col-sm-8">SHA-256</dd>
+
+          <dt class="col-sm-4">{% trans 'Canonicalization' %}</dt>
+          <dd class="col-sm-8">JCS / RFC 8785</dd>
+
+          <dt class="col-sm-4">{% trans 'Documents in the box' %}</dt>
+          <dd class="col-sm-8">{{ members|length }}</dd>
+
+          <dt class="col-sm-4">{% trans 'Sealed at' %}</dt>
+          <dd class="col-sm-8">{{ summary.sealed_at|date:'d/m/Y H:i'|default:'—' }} UTC</dd>
+        </dl>
+
+        <div class="alert {% if state.master.payload_matches_members %}alert-success{% else %}alert-danger{% endif %} small mb-3">
+          {{ state.master.detail }}
+        </div>
+
+        <a class="btn btn-outline-dark btn-sm"
+           href="{% url 'certificates:summary_master_payload' summary.pk %}">
+          <i class="bi bi-file-earmark-code"></i>
+          {% trans 'Download the exact bytes that were hashed (JSON)' %}
+        </a>
+
+        <p class="small text-muted mt-2 mb-0">
+          {% trans 'Compute it yourself:' %}
+          <code>sha256sum master-payload-*.json</code>
+        </p>
+      </div>
+    </div>
+
+    {# ================= ANCLAJES ================= #}
+    <div class="card mb-4">
+      <div class="card-header"><strong>{% trans 'Anchors' %}</strong></div>
+      <div class="card-body">
+        {% if not state.anchors %}
+          <p class="text-muted mb-0">{% trans 'No anchors recorded.' %}</p>
+        {% else %}
+          <div class="table-responsive">
+            <table class="table table-sm small align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>{% trans 'Type' %}</th>
+                  <th>{% trans 'Attested time' %}</th>
+                  <th>{% trans 'Provider' %}</th>
+                  <th>{% trans 'State' %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in state.anchors %}
+                  <tr>
+                    <td>{{ item.anchor.get_anchor_type_display }}</td>
+                    <td class="text-nowrap">{{ item.stamped_at|date:'d/m/Y H:i'|default:'—' }}</td>
+                    <td class="text-break">{{ item.anchor.provider|default:'—' }}</td>
+                    <td>
+                      {% if item.valid and item.covers_current_master_hash %}
+                        <span class="badge bg-success">{% trans 'Valid' %}</span>
+                      {% elif item.valid %}
+                        <span class="badge bg-warning text-dark">{% trans 'Earlier hash' %}</span>
+                      {% else %}
+                        <span class="badge bg-danger">{% trans 'Not valid' %}</span>
+                      {% endif %}
+                      <div class="text-muted">{{ item.detail }}</div>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    {# ================= MIEMBROS ================= #}
+    <div class="card mb-4">
+      <div class="card-header"><strong>{% trans 'Documents in the box' %}</strong></div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-sm small align-middle mb-0">
+            <thead>
+              <tr>
+                <th>{% trans 'Code' %}</th>
+                <th>{% trans 'Document type' %}</th>
+                <th>SHA-256</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for member in members %}
+                <tr>
+                  <td class="text-nowrap"><code>{{ member.code }}</code></td>
+                  <td>{{ member.document_type_label|default:member.document.document_title }}</td>
+                  <td><code class="text-break">{{ member.document.document_hash }}</code></td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    {# ================= ALCANCE ================= #}
+    <div class="alert alert-light border small">
+      <strong>{% trans 'What this proves, and what it does not.' %}</strong>
+      {% trans 'It proves WHEN: that this content existed on the stated date, attested by a third party. Who issued it is proven by the platform signature on each certification record. That what the documents claim is TRUE is not proven by any of this.' %}
+    </div>
+
+    <p class="text-muted small text-center">
+      {% trans 'Checked at' %} {{ state.checked_at|date:'d/m/Y H:i' }} UTC
+    </p>
+  </div>
+{% endblock main %}

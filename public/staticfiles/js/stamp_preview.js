@@ -23,7 +23,7 @@
   'use strict';
 
   var FIELDS = [
-    'kind', 'anchor', 'offset_x', 'offset_y',
+    'kind', 'member_code', 'anchor', 'offset_x', 'offset_y',
     'width', 'height', 'page_selector', 'page_numbers',
     'is_active', 'DELETE'
   ];
@@ -113,6 +113,31 @@
     }
 
     return true;
+  }
+
+
+  // Cada tipo de simbolo se pinta de un color, para distinguir de un vistazo
+  // los codigos propios del documento de los que vienen de sus miembros.
+  function kindClass(kind) {
+    if (kind === 'BARCODE') { return 'barcode'; }
+    if (kind === 'MEMBER') { return 'member'; }
+    if (kind === 'ANCHOR') { return 'anchor'; }
+    return 'qr';
+  }
+
+  function captionFor(placement) {
+    var pages = placement.page_selector_label || placement.page_selector || '';
+
+    if (placement.kind === 'MEMBER') {
+      // Lo util aqui es de que documento es el codigo, no en que pagina cae.
+      return '▮▯▮ ' + (placement.member_code || '?');
+    }
+
+    if (placement.kind === 'ANCHOR') {
+      return '⛓ ' + pages;
+    }
+
+    return (placement.kind === 'BARCODE' ? '▮▯▮ ' : '▣ ') + pages;
   }
 
   function round2(value) {
@@ -357,6 +382,7 @@
           offset_y: toNumber(item.offset_y, 0),
           width: toNumber(item.width, 10),
           height: toNumber(item.height, 10),
+          member_code: item.member_code || '',
           page_selector: item.page_selector,
           page_selector_label: item.page_selector_label || item.page_selector,
           page_numbers: item.page_numbers,
@@ -645,15 +671,13 @@
 
     box.className =
       'gea-stamp-preview__box gea-stamp-preview__box--' +
-      (placement.kind === 'BARCODE' ? 'barcode' : 'qr');
+      kindClass(placement.kind);
 
     this.applyBoxGeometry(box, placement);
 
     var caption = document.createElement('span');
     caption.className = 'gea-stamp-preview__caption';
-    caption.textContent =
-      (placement.kind === 'BARCODE' ? '▮▯▮ ' : '▣ ') +
-      (placement.page_selector_label || placement.page_selector || '');
+    caption.textContent = captionFor(placement);
     box.appendChild(caption);
 
     if (this.editable && placement._inputs && placement._inputs.offset_x) {

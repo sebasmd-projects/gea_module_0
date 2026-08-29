@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ATLAS 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-27 20:22-0500\n"
+"POT-Creation-Date: 2026-08-29 00:49-0500\n"
 "PO-Revision-Date: 2024-12-15 02:02-0500\n"
 "Last-Translator: Sebastián Morales "
 "<sebastian.morales@propensionesabogados.com>\n"
@@ -31,6 +31,7 @@ msgid "Symbols"
 msgstr "Símbolos"
 
 #: .\apps\project\specific\internal\code_gen\admin.py:84
+#: .\apps\project\specific\internal\code_gen\models.py:483
 msgid "Status"
 msgstr "Estado"
 
@@ -39,7 +40,7 @@ msgid "System Information"
 msgstr "Información del sistema"
 
 #: .\apps\project\specific\internal\code_gen\admin.py:133
-#: .\apps\project\specific\internal\code_gen\models.py:175
+#: .\apps\project\specific\internal\code_gen\models.py:181
 msgid "Layout"
 msgstr "Disposición"
 
@@ -59,68 +60,114 @@ msgstr ""
 msgid "Placements"
 msgstr "Posiciones"
 
-#: .\apps\project\specific\internal\code_gen\api.py:33
+#: .\apps\project\specific\internal\code_gen\api.py:36
 msgid "You are not allowed to do this."
 msgstr "No tienes permiso para hacer esto."
 
-#: .\apps\project\specific\internal\code_gen\api.py:51
+#: .\apps\project\specific\internal\code_gen\api.py:54
 msgid "Malformed JSON body."
 msgstr "El cuerpo JSON está mal formado."
 
-#: .\apps\project\specific\internal\code_gen\api.py:65
+#: .\apps\project\specific\internal\code_gen\api.py:68
 msgid "\"placements\" must be a list."
 msgstr "\"placements\" tiene que ser una lista."
 
-#: .\apps\project\specific\internal\code_gen\api.py:72
+#: .\apps\project\specific\internal\code_gen\api.py:75
 #, python-format
 msgid "Placement %(number)s is not an object."
 msgstr "La posición %(number)s no es un objeto."
 
-#: .\apps\project\specific\internal\code_gen\api.py:82
+#: .\apps\project\specific\internal\code_gen\api.py:85
 #, python-format
 msgid "Placement %(number)s: unknown code kind."
 msgstr "Posición %(number)s: tipo de código desconocido."
 
-#: .\apps\project\specific\internal\code_gen\api.py:88
+#: .\apps\project\specific\internal\code_gen\api.py:91
 #, python-format
 msgid "Placement %(number)s: unknown anchor."
 msgstr "Posición %(number)s: anclaje desconocido."
 
-#: .\apps\project\specific\internal\code_gen\api.py:94
+#: .\apps\project\specific\internal\code_gen\api.py:97
 #, python-format
 msgid "Placement %(number)s: unknown page selector."
 msgstr "Posición %(number)s: selector de páginas desconocido."
 
-#: .\apps\project\specific\internal\code_gen\api.py:108
+#: .\apps\project\specific\internal\code_gen\api.py:111
 #, python-format
 msgid "Placement %(number)s: the measurements must be numbers."
 msgstr "Posición %(number)s: las medidas tienen que ser números."
 
-#: .\apps\project\specific\internal\code_gen\api.py:114
+#: .\apps\project\specific\internal\code_gen\api.py:117
 #, python-format
 msgid "Placement %(number)s: width and height must be at least 1 pt."
 msgstr "Posición %(number)s: el ancho y el alto deben ser de al menos 1 pt."
 
-#: .\apps\project\specific\internal\code_gen\api.py:120
+#: .\apps\project\specific\internal\code_gen\api.py:123
 #, python-format
 msgid "Placement %(number)s: opacity must be between 0 and 1."
 msgstr "Posición %(number)s: la opacidad debe estar entre 0 y 1."
 
-#: .\apps\project\specific\internal\code_gen\api.py:194
+#: .\apps\project\specific\internal\code_gen\api.py:131
+#, python-format
+msgid ""
+"Placement %(number)s: a member barcode must say which document of the box it "
+"carries."
+msgstr ""
+"Posición %(number)s: un código de barras de miembro tiene que indicar qué "
+"documento de la caja lleva."
+
+#: .\apps\project\specific\internal\code_gen\api.py:207
 msgid "Stamp layout updated."
 msgstr "Disposición de estampado actualizada."
 
-#: .\apps\project\specific\internal\code_gen\api.py:216
+#: .\apps\project\specific\internal\code_gen\api.py:229
 msgid "The layout name is required."
 msgstr "El nombre de la disposición es obligatorio."
 
-#: .\apps\project\specific\internal\code_gen\api.py:226
+#: .\apps\project\specific\internal\code_gen\api.py:239
 msgid "A layout with this name already exists."
 msgstr "Ya existe una disposición con este nombre."
 
-#: .\apps\project\specific\internal\code_gen\api.py:249
+#: .\apps\project\specific\internal\code_gen\api.py:262
 msgid "Stamp layout created."
 msgstr "Disposición de estampado creada."
+
+#: .\apps\project\specific\internal\code_gen\api.py:331
+msgid "\"members\" must be a list."
+msgstr "«members» tiene que ser una lista."
+
+#: .\apps\project\specific\internal\code_gen\api.py:341
+#, python-format
+msgid "Member %(number)s is not an object."
+msgstr "El miembro %(number)s no es un objeto."
+
+#: .\apps\project\specific\internal\code_gen\api.py:352
+#, python-format
+msgid "Member %(number)s has no code."
+msgstr "El miembro %(number)s no tiene código."
+
+#: .\apps\project\specific\internal\code_gen\api.py:359
+#, python-format
+msgid "The code %(code)s is repeated in the box."
+msgstr "El código %(code)s está repetido en la caja."
+
+#: .\apps\project\specific\internal\code_gen\api.py:373
+#, python-format
+msgid "Member %(code)s points to a document that does not exist."
+msgstr "El miembro %(code)s apunta a un documento que no existe."
+
+#: .\apps\project\specific\internal\code_gen\api.py:381
+#, python-format
+msgid "%(code)s is not certified: it has no fingerprint to include."
+msgstr "%(code)s no está certificado: no tiene huella que incluir."
+
+#: .\apps\project\specific\internal\code_gen\api.py:420
+msgid "Members updated. The box needs sealing again."
+msgstr "Miembros actualizados. Hay que volver a sellar la caja."
+
+#: .\apps\project\specific\internal\code_gen\api.py:446
+msgid "Box sealed."
+msgstr "Caja sellada."
 
 #: .\apps\project\specific\internal\code_gen\apps.py:8
 msgid "Code generation and document certification"
@@ -139,7 +186,7 @@ msgid "A custom URL or text"
 msgstr "Una URL o un texto personalizado"
 
 #: .\apps\project\specific\internal\code_gen\forms.py:43
-#: .\apps\project\specific\internal\code_gen\models.py:297
+#: .\apps\project\specific\internal\code_gen\models.py:320
 msgid "Reference"
 msgstr "Referencia"
 
@@ -148,8 +195,8 @@ msgid "e.g. AEGIS Special Edition"
 msgstr "p. ej. AEGIS Special Edition"
 
 #: .\apps\project\specific\internal\code_gen\forms.py:54
-#: .\apps\project\specific\internal\code_gen\models.py:100
-#: .\apps\project\specific\internal\code_gen\models.py:302
+#: .\apps\project\specific\internal\code_gen\models.py:105
+#: .\apps\project\specific\internal\code_gen\models.py:325
 msgid "Description"
 msgstr "Descripción"
 
@@ -210,7 +257,7 @@ msgid "Date (DDMMYYYY)"
 msgstr "Fecha (DDMMAAAA)"
 
 #: .\apps\project\specific\internal\code_gen\forms.py:134
-#: .\apps\project\specific\internal\code_gen\models.py:336
+#: .\apps\project\specific\internal\code_gen\models.py:359
 msgid "Unique random code"
 msgstr "Código único aleatorio"
 
@@ -330,191 +377,289 @@ msgstr "Código de barras (Code128)"
 msgid "QR code"
 msgstr "Código QR"
 
-#: .\apps\project\specific\internal\code_gen\models.py:21
+#: .\apps\project\specific\internal\code_gen\models.py:20
+msgid "Member barcode (summary only)"
+msgstr "Código de barras de un miembro (solo resumen)"
+
+#: .\apps\project\specific\internal\code_gen\models.py:22
+msgid "Anchor QR (summary only)"
+msgstr "QR del anclaje (solo resumen)"
+
+#: .\apps\project\specific\internal\code_gen\models.py:26
 msgid "First page"
 msgstr "Primera página"
 
-#: .\apps\project\specific\internal\code_gen\models.py:22
+#: .\apps\project\specific\internal\code_gen\models.py:27
 msgid "Last page"
 msgstr "Última página"
 
-#: .\apps\project\specific\internal\code_gen\models.py:23
+#: .\apps\project\specific\internal\code_gen\models.py:28
 msgid "Every page"
 msgstr "Todas las páginas"
 
-#: .\apps\project\specific\internal\code_gen\models.py:24
+#: .\apps\project\specific\internal\code_gen\models.py:29
 msgid "Specific pages"
 msgstr "Páginas concretas"
 
-#: .\apps\project\specific\internal\code_gen\models.py:28
+#: .\apps\project\specific\internal\code_gen\models.py:33
 msgid "Bottom left"
 msgstr "Inferior izquierda"
 
-#: .\apps\project\specific\internal\code_gen\models.py:29
+#: .\apps\project\specific\internal\code_gen\models.py:34
 msgid "Bottom center"
 msgstr "Inferior centro"
 
-#: .\apps\project\specific\internal\code_gen\models.py:30
+#: .\apps\project\specific\internal\code_gen\models.py:35
 msgid "Bottom right"
 msgstr "Inferior derecha"
 
-#: .\apps\project\specific\internal\code_gen\models.py:31
+#: .\apps\project\specific\internal\code_gen\models.py:36
 msgid "Top left"
 msgstr "Superior izquierda"
 
-#: .\apps\project\specific\internal\code_gen\models.py:32
+#: .\apps\project\specific\internal\code_gen\models.py:37
 msgid "Top center"
 msgstr "Superior centro"
 
-#: .\apps\project\specific\internal\code_gen\models.py:33
+#: .\apps\project\specific\internal\code_gen\models.py:38
 msgid "Top right"
 msgstr "Superior derecha"
 
-#: .\apps\project\specific\internal\code_gen\models.py:46
+#: .\apps\project\specific\internal\code_gen\models.py:51
 msgid "Sequence name"
 msgstr "Nombre de la secuencia"
 
-#: .\apps\project\specific\internal\code_gen\models.py:53
+#: .\apps\project\specific\internal\code_gen\models.py:58
 msgid "Internal counter"
 msgstr "Contador interno"
 
-#: .\apps\project\specific\internal\code_gen\models.py:83
+#: .\apps\project\specific\internal\code_gen\models.py:88
 msgid "Code Sequence"
 msgstr "Secuencia de códigos"
 
-#: .\apps\project\specific\internal\code_gen\models.py:84
+#: .\apps\project\specific\internal\code_gen\models.py:89
 msgid "Code Sequences"
 msgstr "Secuencias de códigos"
 
-#: .\apps\project\specific\internal\code_gen\models.py:94
+#: .\apps\project\specific\internal\code_gen\models.py:99
 msgid "Layout name"
 msgstr "Nombre de la disposición"
 
-#: .\apps\project\specific\internal\code_gen\models.py:106
+#: .\apps\project\specific\internal\code_gen\models.py:111
 msgid "Use as default layout"
 msgstr "Usar como disposición por defecto"
 
-#: .\apps\project\specific\internal\code_gen\models.py:159
+#: .\apps\project\specific\internal\code_gen\models.py:165
 msgid "Stamp Layout"
 msgstr "Disposición de estampado"
 
-#: .\apps\project\specific\internal\code_gen\models.py:160
+#: .\apps\project\specific\internal\code_gen\models.py:166
 msgid "Stamp Layouts"
 msgstr "Disposiciones de estampado"
 
-#: .\apps\project\specific\internal\code_gen\models.py:179
+#: .\apps\project\specific\internal\code_gen\models.py:185
 msgid "Code kind"
 msgstr "Tipo de código"
 
-#: .\apps\project\specific\internal\code_gen\models.py:186
+#: .\apps\project\specific\internal\code_gen\models.py:192
+msgid "Member code"
+msgstr "Código del miembro"
+
+#: .\apps\project\specific\internal\code_gen\models.py:197
+msgid ""
+"Only for the member barcode: which document of the box this position carries "
+"(AEGIS-1, AEGIS-2…)."
+msgstr ""
+"Solo para el código de barras de miembro: qué documento de la caja lleva "
+"esta posición (AEGIS-1, AEGIS-2…)."
+
+#: .\apps\project\specific\internal\code_gen\models.py:203
 msgid "Pages"
 msgstr "Páginas"
 
-#: .\apps\project\specific\internal\code_gen\models.py:193
+#: .\apps\project\specific\internal\code_gen\models.py:210
 msgid "Page numbers"
 msgstr "Números de página"
 
-#: .\apps\project\specific\internal\code_gen\models.py:198
+#: .\apps\project\specific\internal\code_gen\models.py:215
 msgid "Comma separated, 1-based. Only used with the specific pages selector."
 msgstr ""
 "Separados por comas, empezando en 1. Solo se usa con el selector de páginas "
 "concretas."
 
-#: .\apps\project\specific\internal\code_gen\models.py:203
+#: .\apps\project\specific\internal\code_gen\models.py:220
 msgid "Anchor"
 msgstr "Anclaje"
 
-#: .\apps\project\specific\internal\code_gen\models.py:210
+#: .\apps\project\specific\internal\code_gen\models.py:227
 msgid "Horizontal offset (pt)"
 msgstr "Desplazamiento horizontal (pt)"
 
-#: .\apps\project\specific\internal\code_gen\models.py:215
+#: .\apps\project\specific\internal\code_gen\models.py:232
 msgid "Vertical offset (pt)"
 msgstr "Desplazamiento vertical (pt)"
 
-#: .\apps\project\specific\internal\code_gen\models.py:220
+#: .\apps\project\specific\internal\code_gen\models.py:237
 msgid "Width (pt)"
 msgstr "Ancho (pt)"
 
-#: .\apps\project\specific\internal\code_gen\models.py:226
+#: .\apps\project\specific\internal\code_gen\models.py:243
 msgid "Height (pt)"
 msgstr "Alto (pt)"
 
-#: .\apps\project\specific\internal\code_gen\models.py:232
+#: .\apps\project\specific\internal\code_gen\models.py:249
 msgid "Opacity"
 msgstr "Opacidad"
 
-#: .\apps\project\specific\internal\code_gen\models.py:241
+#: .\apps\project\specific\internal\code_gen\models.py:258
+msgid "A member barcode needs to say which document of the box it carries."
+msgstr ""
+"Un código de barras de miembro tiene que indicar qué documento de la caja "
+"lleva."
+
+#: .\apps\project\specific\internal\code_gen\models.py:264
 msgid "Provide at least one page number for this selector."
 msgstr "Indica al menos un número de página para este selector."
 
-#: .\apps\project\specific\internal\code_gen\models.py:251
+#: .\apps\project\specific\internal\code_gen\models.py:274
 msgid "Page numbers must be positive integers separated by commas."
 msgstr "Los números de página deben ser enteros positivos separados por comas."
 
-#: .\apps\project\specific\internal\code_gen\models.py:256
+#: .\apps\project\specific\internal\code_gen\models.py:279
 msgid "Opacity must be greater than 0 and up to 1."
 msgstr "La opacidad debe ser mayor que 0 y como máximo 1."
 
-#: .\apps\project\specific\internal\code_gen\models.py:286
+#: .\apps\project\specific\internal\code_gen\models.py:309
 msgid "Stamp Placement"
 msgstr "Posición de estampado"
 
-#: .\apps\project\specific\internal\code_gen\models.py:287
+#: .\apps\project\specific\internal\code_gen\models.py:310
 msgid "Stamp Placements"
 msgstr "Posiciones de estampado"
 
-#: .\apps\project\specific\internal\code_gen\models.py:308
+#: .\apps\project\specific\internal\code_gen\models.py:331
 msgid "Custom Text Input"
 msgstr "Entrada de Texto Personalizado"
 
-#: .\apps\project\specific\internal\code_gen\models.py:315
+#: .\apps\project\specific\internal\code_gen\models.py:338
 msgid "Code Information"
 msgstr "Información del Código"
 
-#: .\apps\project\specific\internal\code_gen\models.py:321
+#: .\apps\project\specific\internal\code_gen\models.py:344
 msgid "Certificate initials"
 msgstr "Iniciales del certificado"
 
-#: .\apps\project\specific\internal\code_gen\models.py:328
+#: .\apps\project\specific\internal\code_gen\models.py:351
 msgid "Autonomous sequence"
 msgstr "Secuencia autónoma"
 
-#: .\apps\project\specific\internal\code_gen\models.py:344
+#: .\apps\project\specific\internal\code_gen\models.py:367
 msgid "Source file hash (SHA-256)"
 msgstr "Hash del archivo original (SHA-256)"
 
-#: .\apps\project\specific\internal\code_gen\models.py:352
+#: .\apps\project\specific\internal\code_gen\models.py:375
 msgid "Hash fragment (base64)"
 msgstr "Fragmento del hash (base64)"
 
-#: .\apps\project\specific\internal\code_gen\models.py:359
+#: .\apps\project\specific\internal\code_gen\models.py:382
 msgid "Barcode generated"
 msgstr "Código de barras generado"
 
-#: .\apps\project\specific\internal\code_gen\models.py:364
+#: .\apps\project\specific\internal\code_gen\models.py:387
 msgid "QR generated"
 msgstr "QR generado"
 
-#: .\apps\project\specific\internal\code_gen\models.py:369
+#: .\apps\project\specific\internal\code_gen\models.py:392
 msgid "QR payload"
 msgstr "Contenido del QR"
 
-#: .\apps\project\specific\internal\code_gen\models.py:377
+#: .\apps\project\specific\internal\code_gen\models.py:400
 msgid "Certified document"
 msgstr "Documento certificado"
 
-#: .\apps\project\specific\internal\code_gen\models.py:382
+#: .\apps\project\specific\internal\code_gen\models.py:405
 msgid "Set when the code was issued as part of certifying a document."
 msgstr "Se rellena cuando el código se emitió al certificar un documento."
 
-#: .\apps\project\specific\internal\code_gen\models.py:410
+#: .\apps\project\specific\internal\code_gen\models.py:433
 msgid "Code Registration"
 msgstr "Registro de Código"
 
-#: .\apps\project\specific\internal\code_gen\models.py:411
+#: .\apps\project\specific\internal\code_gen\models.py:434
 msgid "Code Registrations"
 msgstr "Registros de Códigos"
+
+#: .\apps\project\specific\internal\code_gen\models.py:438
+msgid "Timestamp authority (RFC 3161)"
+msgstr "Autoridad de sellado de tiempo (RFC 3161)"
+
+#: .\apps\project\specific\internal\code_gen\models.py:439
+msgid "OpenTimestamps (Bitcoin)"
+msgstr "OpenTimestamps (Bitcoin)"
+
+#: .\apps\project\specific\internal\code_gen\models.py:443
+msgid "Pending confirmation"
+msgstr "Pendiente de confirmación"
+
+#: .\apps\project\specific\internal\code_gen\models.py:444
+msgid "Confirmed"
+msgstr "Confirmado"
+
+#: .\apps\project\specific\internal\code_gen\models.py:445
+msgid "Failed"
+msgstr "Fallido"
+
+#: .\apps\project\specific\internal\code_gen\models.py:466
+msgid "Summary"
+msgstr "Resumen"
+
+#: .\apps\project\specific\internal\code_gen\models.py:470
+msgid "Anchor type"
+msgstr "Tipo de anclaje"
+
+#: .\apps\project\specific\internal\code_gen\models.py:476
+msgid "Anchored hash"
+msgstr "Hash anclado"
+
+#: .\apps\project\specific\internal\code_gen\models.py:479
+msgid "The master hash at the moment it was anchored."
+msgstr "El master hash en el momento en que se ancló."
+
+#: .\apps\project\specific\internal\code_gen\models.py:491
+msgid "Proof"
+msgstr "Prueba"
+
+#: .\apps\project\specific\internal\code_gen\models.py:494
+msgid "DER timestamp token, or the .ots proof file."
+msgstr "Token de sello de tiempo en DER, o el archivo de prueba .ots."
+
+#: .\apps\project\specific\internal\code_gen\models.py:498
+msgid "Provider"
+msgstr "Proveedor"
+
+#: .\apps\project\specific\internal\code_gen\models.py:505
+msgid "Attested time"
+msgstr "Hora acreditada"
+
+#: .\apps\project\specific\internal\code_gen\models.py:508
+msgid "The time the anchor itself attests, not our clock."
+msgstr "La hora que acredita el propio anclaje, no nuestro reloj."
+
+#: .\apps\project\specific\internal\code_gen\models.py:512
+msgid "Serial"
+msgstr "Número de serie"
+
+#: .\apps\project\specific\internal\code_gen\models.py:519
+msgid "Detail"
+msgstr "Detalle"
+
+#: .\apps\project\specific\internal\code_gen\models.py:533
+msgid "Certification anchor"
+msgstr "Anclaje de certificación"
+
+#: .\apps\project\specific\internal\code_gen\models.py:534
+msgid "Certification anchors"
+msgstr "Anclajes de certificación"
 
 #: .\apps\project\specific\internal\code_gen\preview.py:22
 msgid "Page size"
@@ -527,12 +672,46 @@ msgstr ""
 "marcha."
 
 #: .\apps\project\specific\internal\code_gen\preview.py:24
+msgid "Rendering the document…"
+msgstr "Dibujando el documento…"
+
+#: .\apps\project\specific\internal\code_gen\preview.py:26
+msgid "The document could not be rendered; the placements still work."
+msgstr "No se pudo dibujar el documento; las posiciones siguen funcionando."
+
+#: .\apps\project\specific\internal\code_gen\preview.py:28
 msgid "No placements yet. Add one to see it here."
 msgstr "Todavía no hay posiciones. Añade una para verla aquí."
 
-#: .\apps\project\specific\internal\code_gen\preview.py:25
+#: .\apps\project\specific\internal\code_gen\preview.py:29
 msgid "This placement falls outside the page."
 msgstr "Esta posición queda fuera de la página."
+
+#: .\apps\project\specific\internal\code_gen\services\anchoring.py:65
+#: .\apps\project\specific\internal\code_gen\services\anchoring.py:100
+msgid "Seal the summary before anchoring it."
+msgstr "Sella el resumen antes de anclarlo."
+
+#: .\apps\project\specific\internal\code_gen\services\anchoring.py:81
+#, python-format
+msgid "Policy %(policy)s"
+msgstr "Política %(policy)s"
+
+#: .\apps\project\specific\internal\code_gen\services\anchoring.py:111
+msgid "Waiting for inclusion in a Bitcoin block."
+msgstr "Esperando a entrar en un bloque de Bitcoin."
+
+#: .\apps\project\specific\internal\code_gen\services\anchoring.py:206
+msgid "This anchor type cannot be verified by the platform yet."
+msgstr "La plataforma todavía no puede verificar este tipo de anclaje."
+
+#: .\apps\project\specific\internal\code_gen\services\anchoring.py:211
+msgid ""
+"The anchor is valid, but it covers an earlier master hash: the summary was "
+"re-sealed after being anchored."
+msgstr ""
+"El anclaje es válido, pero cubre un master hash anterior: el resumen se "
+"volvió a sellar después de anclarlo."
 
 #: .\apps\project\specific\internal\code_gen\services\certification.py:195
 msgid "Upload the original document (without codes) first."
@@ -542,7 +721,7 @@ msgstr "Sube primero el documento original (sin códigos)."
 msgid "The uploaded file is not a readable PDF."
 msgstr "El archivo subido no es un PDF legible."
 
-#: .\apps\project\specific\internal\code_gen\services\certification.py:372
+#: .\apps\project\specific\internal\code_gen\services\certification.py:378
 #, python-format
 msgid "Automatic certification of document %(pk)s"
 msgstr "Certificación automática del documento %(pk)s"
@@ -605,6 +784,137 @@ msgstr ""
 #: .\apps\project\specific\internal\code_gen\services\codes.py:157
 msgid "Could not generate a unique code. Try again."
 msgstr "No se pudo generar un código único. Inténtalo de nuevo."
+
+#: .\apps\project\specific\internal\code_gen\services\master.py:67
+msgid "The summary has no member documents."
+msgstr "El resumen no tiene documentos miembros."
+
+#: .\apps\project\specific\internal\code_gen\services\master.py:78
+#, python-format
+msgid "%(code)s is not certified yet."
+msgstr "%(code)s todavía no está certificado."
+
+#: .\apps\project\specific\internal\code_gen\services\master.py:86
+#, python-format
+msgid "%(code)s has no certified fingerprint."
+msgstr "%(code)s no tiene huella certificada."
+
+#: .\apps\project\specific\internal\code_gen\services\master.py:190
+msgid "The summary has not been sealed yet."
+msgstr "El resumen todavía no se ha sellado."
+
+#: .\apps\project\specific\internal\code_gen\services\master.py:210
+msgid ""
+"The stored hash does not match the stored payload: the record is corrupt."
+msgstr ""
+"El hash guardado no corresponde al payload guardado: el registro está "
+"corrupto."
+
+#: .\apps\project\specific\internal\code_gen\services\master.py:215
+msgid ""
+"The summary changed after it was sealed: its members no longer match the "
+"sealed payload."
+msgstr ""
+"El resumen cambió después de sellarse: sus miembros ya no coinciden con el "
+"payload sellado."
+
+#: .\apps\project\specific\internal\code_gen\services\master.py:219
+msgid "The master hash is consistent."
+msgstr "El master hash es consistente."
+
+#: .\apps\project\specific\internal\code_gen\services\ots.py:114
+#: .\apps\project\specific\internal\code_gen\services\tsa.py:93
+msgid "The hash is not valid hexadecimal."
+msgstr "El hash no es hexadecimal válido."
+
+#: .\apps\project\specific\internal\code_gen\services\ots.py:117
+#: .\apps\project\specific\internal\code_gen\services\tsa.py:96
+msgid "Only SHA-256 digests are supported."
+msgstr "Solo se admiten digests SHA-256."
+
+#: .\apps\project\specific\internal\code_gen\services\ots.py:135
+msgid "No OpenTimestamps calendar could be reached."
+msgstr "No se pudo contactar con ningún calendario de OpenTimestamps."
+
+#: .\apps\project\specific\internal\code_gen\services\ots.py:176
+msgid "There is no OpenTimestamps proof stored."
+msgstr "No hay ninguna prueba de OpenTimestamps almacenada."
+
+#: .\apps\project\specific\internal\code_gen\services\ots.py:182
+#: .\apps\project\specific\internal\code_gen\services\ots.py:235
+msgid "The proof file could not be read."
+msgstr "No se pudo leer el archivo de prueba."
+
+#: .\apps\project\specific\internal\code_gen\services\ots.py:187
+msgid "The proof covers a different hash: it does not attest this summary."
+msgstr "La prueba cubre un hash distinto: no acredita este resumen."
+
+#: .\apps\project\specific\internal\code_gen\services\ots.py:209
+#, python-format
+msgid "Committed to Bitcoin block %(block)s."
+msgstr "Comprometido en el bloque de Bitcoin %(block)s."
+
+#: .\apps\project\specific\internal\code_gen\services\ots.py:214
+msgid ""
+"The commitment is made; waiting for it to be included in a Bitcoin block "
+"(usually a few hours)."
+msgstr ""
+"El compromiso ya está hecho; falta que entre en un bloque de Bitcoin "
+"(normalmente unas horas)."
+
+#: .\apps\project\specific\internal\code_gen\services\summary.py:52
+#: .\apps\project\specific\internal\code_gen\services\summary.py:169
+msgid "Seal the summary before issuing its document."
+msgstr "Sella el resumen antes de emitir su documento."
+
+#: .\apps\project\specific\internal\code_gen\services\tsa.py:65
+msgid "The timestamp token has no readable TSTInfo."
+msgstr "El token de sello de tiempo no tiene un TSTInfo legible."
+
+#: .\apps\project\specific\internal\code_gen\services\tsa.py:132
+msgid "The timestamp authority returned an unreadable response."
+msgstr "La autoridad de sellado devolvió una respuesta ilegible."
+
+#: .\apps\project\specific\internal\code_gen\services\tsa.py:149
+#, python-format
+msgid ""
+"The timestamp authority refused the request (status %(status)s). %(reason)s"
+msgstr ""
+"La autoridad de sellado rechazó la petición (estado %(status)s). %(reason)s"
+
+#: .\apps\project\specific\internal\code_gen\services\tsa.py:163
+msgid "The timestamp token could not be parsed."
+msgstr "No se pudo interpretar el token de sello de tiempo."
+
+#: .\apps\project\specific\internal\code_gen\services\tsa.py:172
+msgid "The timestamp covers a different hash than the one sent."
+msgstr "El sello cubre un hash distinto del que se envió."
+
+#: .\apps\project\specific\internal\code_gen\services\tsa.py:207
+msgid "No timestamp authority is configured (CERTIFICATION_TSA_URL)."
+msgstr ""
+"No hay ninguna autoridad de sellado configurada (CERTIFICATION_TSA_URL)."
+
+#: .\apps\project\specific\internal\code_gen\services\tsa.py:237
+#, python-format
+msgid "Could not reach the timestamp authority: %(error)s"
+msgstr "No se pudo contactar con la autoridad de sellado: %(error)s"
+
+#: .\apps\project\specific\internal\code_gen\services\tsa.py:264
+msgid "There is no timestamp token stored."
+msgstr "No hay ningún token de sello de tiempo almacenado."
+
+#: .\apps\project\specific\internal\code_gen\services\tsa.py:271
+msgid "The stored token could not be parsed."
+msgstr "No se pudo interpretar el token almacenado."
+
+#: .\apps\project\specific\internal\code_gen\services\tsa.py:282
+msgid "The token covers a different hash: it does not attest this summary."
+msgstr "El token cubre un hash distinto: no acredita este resumen."
+
+#: .\apps\project\specific\internal\code_gen\services\tsa.py:289
+msgid "The token attests this hash existed at the time it states."
+msgstr "El token acredita que este hash existía en la hora que indica."
 
 #: .\apps\project\specific\internal\code_gen\views.py:80
 msgid "The code could not be generated. Check the logs for details."

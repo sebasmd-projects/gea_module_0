@@ -3,6 +3,8 @@
 .gea-stamp-preview {
   --gea-preview-qr: #1a7f37;
   --gea-preview-barcode: #a17f1a;
+  --gea-preview-member: #1a5f7f;
+  --gea-preview-anchor: #6b1a7f;
   --gea-preview-outside: #a11a1a;
 
   margin: 0 0 1rem;
@@ -104,6 +106,16 @@
 .gea-stamp-preview__box--barcode {
   border-color: var(--gea-preview-barcode);
   background: rgba(161, 127, 26, 0.18);
+}
+
+.gea-stamp-preview__box--member {
+  border-color: var(--gea-preview-member);
+  background: rgba(26, 95, 127, 0.18);
+}
+
+.gea-stamp-preview__box--anchor {
+  border-color: var(--gea-preview-anchor);
+  background: rgba(107, 26, 127, 0.18);
 }
 
 .gea-stamp-preview__box--outside {
