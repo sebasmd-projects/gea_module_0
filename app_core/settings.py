@@ -95,7 +95,8 @@ PROJECT_DOCUMENTS_APPS = [
 ]
 
 PROJECT_INTERNAL_APPS = [
-    'apps.project.specific.internal.code_gen'
+    'apps.project.specific.internal.code_gen',
+    'apps.project.specific.internal.ops',
 ]
 
 ALL_CUSTOM_APPS = [

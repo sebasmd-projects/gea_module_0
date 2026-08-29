@@ -340,10 +340,9 @@ msgid ""
 "under the document title. Use \"Asset Certificate (AEGIS)\" for the "
 "certificates of a box of assets, and \"Generic Document\" for anything else."
 msgstr ""
-"Qué clase de documento es. Aparece en la página pública de "
-"verificación, debajo del título. Usa «Certificado de activo (AEGIS)» "
-"para los certificados de una caja de activos, y «Documento genérico» "
-"para todo lo demás."
+"Qué clase de documento es. Aparece en la página pública de verificación, "
+"debajo del título. Usa «Certificado de activo (AEGIS)» para los certificados "
+"de una caja de activos, y «Documento genérico» para todo lo demás."
 
 #: .\apps\project\specific\internal\code_gen\forms.py:290
 #: .\apps\project\specific\internal\code_gen\services\certification.py:203
@@ -405,8 +404,8 @@ msgid ""
 "Optional. Readable name printed on the summary. The binding is made through "
 "the asset UUID, never through this text."
 msgstr ""
-"Opcional. Nombre legible que se imprime en el resumen. El vínculo se "
-"hace por el UUID del activo, nunca por este texto."
+"Opcional. Nombre legible que se imprime en el resumen. El vínculo se hace "
+"por el UUID del activo, nunca por este texto."
 
 #: .\apps\project\specific\internal\code_gen\forms.py:489
 msgid "Issue date printed on the summary document."
@@ -735,8 +734,8 @@ msgid ""
 "Drag a corner to resize keeping the proportion, or an edge to change only "
 "the width or the height."
 msgstr ""
-"Arrastra una esquina para redimensionar conservando la proporción, o "
-"un lado para cambiar solo el ancho o el alto."
+"Arrastra una esquina para redimensionar conservando la proporción, o un lado "
+"para cambiar solo el ancho o el alto."
 
 #: .\apps\project\specific\internal\code_gen\preview.py:39
 #, python-format
@@ -744,8 +743,8 @@ msgid ""
 "The symbol keeps its proportion, so it uses %(w)s x %(h)s pt of the %(bw)s x "
 "%(bh)s pt box."
 msgstr ""
-"El símbolo conserva su proporción, así que ocupa %(w)s x %(h)s pt de "
-"la caja de %(bw)s x %(bh)s pt."
+"El símbolo conserva su proporción, así que ocupa %(w)s x %(h)s pt de la caja "
+"de %(bw)s x %(bh)s pt."
 
 #: .\apps\project\specific\internal\code_gen\preview.py:42
 msgid "The symbol fills the box exactly."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 13:10-0500\n"
+"POT-Creation-Date: 2026-08-29 13:33-0500\n"
 "PO-Revision-Date: 2026-08-27 20:24+0000\n"
 "Last-Translator: Juan Sebastian Morales Delgado "
 "<cto@propensionesabogados.com>\n"
@@ -198,6 +198,7 @@ msgid "Suppliers: enter the daily code provided by your advisor."
 msgstr "Proveedores: ingrese el código diario proporcionado por su asesor."
 
 #: .\templates\account\gea_register.html:137
+#: .\templates\admin\ops\command.html:131
 #: .\templates\two_factor\_wizard_actions.html:11
 msgid "Back"
 msgstr "Atrás"
@@ -225,6 +226,112 @@ msgstr "Mostrar"
 #: .\templates\admin\change_list.html:13
 msgid "(Max: 2000)"
 msgstr "(Max: 2000)"
+
+#: .\templates\admin\ops\command.html:6 .\templates\admin\ops\console.html:6
+msgid "Home"
+msgstr ""
+
+#: .\templates\admin\ops\command.html:7 .\templates\admin\ops\console.html:7
+#: .\templates\admin\ops\console.html:37
+#, fuzzy
+#| msgid "Observations"
+msgid "Operations console"
+msgstr "Observaciones"
+
+#: .\templates\admin\ops\command.html:59
+msgid "What it does"
+msgstr ""
+
+#: .\templates\admin\ops\command.html:62
+msgid "When you would run it"
+msgstr ""
+
+#: .\templates\admin\ops\command.html:68
+msgid "Careful"
+msgstr ""
+
+#: .\templates\admin\ops\command.html:76
+#, fuzzy
+#| msgid "Actions"
+msgid "Options"
+msgstr "Acciones"
+
+#: .\templates\admin\ops\command.html:117
+#, python-format
+msgid "Type <b>%(name)s</b> to confirm."
+msgstr ""
+
+#: .\templates\admin\ops\command.html:127
+#, fuzzy
+#| msgid "Sending…"
+msgid "Running…"
+msgstr "Enviando…"
+
+#: .\templates\admin\ops\command.html:128
+msgid "Run"
+msgstr ""
+
+#: .\templates\admin\ops\command.html:134
+#, python-format
+msgid "Cut off after %(seconds)s s."
+msgstr ""
+
+#: .\templates\admin\ops\command.html:142
+msgid "Output"
+msgstr ""
+
+#: .\templates\admin\ops\command.html:148
+#, fuzzy
+#| msgid "Verify code"
+msgid "exit code"
+msgstr "Verificar código"
+
+#: .\templates\admin\ops\command.html:156
+#, fuzzy
+#| msgid "Previous"
+msgid "Previous runs"
+msgstr "Previo"
+
+#: .\templates\admin\ops\command.html:160 .\templates\admin\ops\console.html:67
+msgid "When"
+msgstr ""
+
+#: .\templates\admin\ops\command.html:161 .\templates\admin\ops\console.html:69
+#: .\templates\dashboard\pages\buyers\profitability.html:66
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:78
+#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_detail.html:33
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:41
+msgid "Status"
+msgstr "Estado"
+
+#: .\templates\admin\ops\command.html:162 .\templates\admin\ops\console.html:70
+#, fuzzy
+#| msgid "Description (ES)"
+msgid "Duration (s)"
+msgstr "Descripción (ES)"
+
+#: .\templates\admin\ops\command.html:163 .\templates\admin\ops\console.html:71
+msgid "Run by"
+msgstr ""
+
+#: .\templates\admin\ops\console.html:40
+msgid ""
+"These commands run on the server, with the same effect as running them over "
+"SSH. Every run is recorded — who, what and the full output — and the record "
+"cannot be edited or deleted."
+msgstr ""
+
+#: .\templates\admin\ops\console.html:61
+msgid "Last runs"
+msgstr ""
+
+#: .\templates\admin\ops\console.html:68
+msgid "Command"
+msgstr ""
+
+#: .\templates\admin\ops\console.html:91
+msgid "Nothing has been run yet."
+msgstr ""
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:20
 #: .\templates\dashboard\pages\buyers\detail_offer.html:25
@@ -855,13 +962,6 @@ msgstr "OC de rentabilidad"
 #: .\templates\dashboard\pages\buyers\profitability.html:63
 msgid "Quantity Type - Needed"
 msgstr "Tipo de cantidad - Necesaria"
-
-#: .\templates\dashboard\pages\buyers\profitability.html:66
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:78
-#: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_detail.html:33
-#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:41
-msgid "Status"
-msgstr "Estado"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:72
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:79
@@ -2519,8 +2619,8 @@ msgid ""
 "A box groups several certificates under one summary document that carries "
 "all their barcodes."
 msgstr ""
-"Una caja agrupa varios certificados bajo un documento resumen que "
-"lleva todos sus códigos de barras."
+"Una caja agrupa varios certificados bajo un documento resumen que lleva "
+"todos sus códigos de barras."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_form.html:25
 msgid "AEGIS boxes"
@@ -2551,8 +2651,8 @@ msgid ""
 "You place each member barcode on the summary page, plus the summary own QR "
 "and barcode."
 msgstr ""
-"Colocas el código de barras de cada miembro en la página del "
-"resumen, más el QR y el código de barras del propio resumen."
+"Colocas el código de barras de cada miembro en la página del resumen, más el "
+"QR y el código de barras del propio resumen."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_form.html:145
 msgid ""
@@ -2560,17 +2660,17 @@ msgid ""
 "summary itself: the summary is issued carrying that hash, and only "
 "afterwards is its own fingerprint recorded."
 msgstr ""
-"Sellar calcula el master hash sobre los miembros. Nunca cubre al "
-"propio resumen: el resumen se emite llevando ese hash, y solo "
-"después se registra su propia huella."
+"Sellar calcula el master hash sobre los miembros. Nunca cubre al propio "
+"resumen: el resumen se emite llevando ese hash, y solo después se registra "
+"su propia huella."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_form.html:148
 msgid ""
 "The anchor QR points to a page that updates itself as the timestamp matures, "
 "so nothing has to be stamped again."
 msgstr ""
-"El QR del anclaje apunta a una página que se actualiza sola según "
-"madura el sellado, así que no hay que reestampar nada."
+"El QR del anclaje apunta a una página que se actualiza sola según madura el "
+"sellado, así que no hay que reestampar nada."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_list.html:15
 msgid "Boxes that group several certificates under one master hash."
@@ -2587,8 +2687,7 @@ msgstr "Nueva caja"
 #: .\templates\dashboard\pages\documents\code_gen\summary_list.html:32
 msgid "No boxes yet. Create the first one to start grouping certificates."
 msgstr ""
-"Todavía no hay cajas. Crea la primera para empezar a agrupar "
-"certificados."
+"Todavía no hay cajas. Crea la primera para empezar a agrupar certificados."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_list.html:42
 msgid "Members"

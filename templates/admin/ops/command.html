@@ -1,0 +1,193 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+  <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; <a href="{{ console_url }}">{% trans 'Operations console' %}</a>
+    &rsaquo; {{ command.title }}
+  </div>
+{% endblock %}
+
+{% block content %}
+  <style>
+    .ops-meta { margin-bottom: 1.25rem; }
+    .ops-risk {
+      display: inline-block; padding: .15rem .5rem; border-radius: 3px;
+      font-size: .78rem; color: #fff;
+    }
+    .ops-block {
+      padding: .75rem 1rem; margin: .75rem 0; border-radius: 4px;
+      background: var(--darkened-bg, #fbfbfb);
+      border: 1px solid var(--hairline-color, #e0e0e0); font-size: .88rem;
+    }
+    .ops-warn {
+      background: rgba(161,26,26,.08); border-color: rgba(161,26,26,.4);
+    }
+    .ops-field { margin-bottom: .9rem; }
+    .ops-field label { display: block; font-weight: 600; font-size: .85rem; }
+    .ops-field .help { font-size: .8rem; color: var(--body-quiet-color,#666); }
+    .ops-output {
+      padding: 1rem; border-radius: 4px; background: #1e1e1e; color: #e6e6e6;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .78rem; line-height: 1.45; white-space: pre-wrap;
+      word-break: break-word; max-height: 34rem; overflow: auto;
+    }
+    .ops-cmdline {
+      font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .8rem;
+      padding: .4rem .6rem; border-radius: 3px;
+      background: rgba(0,0,0,.06); display: inline-block;
+    }
+    .ops-history { width:100%; border-collapse: collapse; font-size:.8rem; }
+    .ops-history th, .ops-history td {
+      padding: .3rem .5rem; text-align: left;
+      border-bottom: 1px solid var(--hairline-color, #eee);
+    }
+  </style>
+
+  <h1>
+    {{ command.title }}
+    <span class="ops-risk" style="background: {{ risk_color }}">{{ risk_label }}</span>
+  </h1>
+
+  <div class="ops-meta">
+    <p><code class="ops-cmdline">manage.py {{ command.name }}</code></p>
+    <p>{{ command.summary }}</p>
+  </div>
+
+  <div class="ops-block">
+    <p style="margin-top:0"><b>{% trans 'What it does' %}</b></p>
+    <p>{{ command.detail }}</p>
+    <p style="margin-bottom:0">
+      <b>{% trans 'When you would run it' %}:</b> {{ command.example }}
+    </p>
+  </div>
+
+  {% if command.warning %}
+    <div class="ops-block ops-warn">
+      <b>{% trans 'Careful' %}:</b> {{ command.warning }}
+    </div>
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+
+    {% if command.options %}
+      <h2>{% trans 'Options' %}</h2>
+
+      {% for option in command.options %}
+        <div class="ops-field">
+          {% if option.kind == flag_kind %}
+            <label>
+              <input type="checkbox" name="{{ option.name }}"
+                     {% if option.default %}checked{% endif %} />
+              {{ option.label }} <code>{{ option.flag }}</code>
+            </label>
+          {% else %}
+            <label for="id_{{ option.name }}">
+              {{ option.label }} <code>{{ option.flag }}</code>
+            </label>
+            {% if option.kind == choice_kind %}
+              <select name="{{ option.name }}" id="id_{{ option.name }}">
+                {% for choice in option.choices %}
+                  <option value="{{ choice }}"
+                          {% if choice == option.default %}selected{% endif %}>
+                    {{ choice }}
+                  </option>
+                {% endfor %}
+              </select>
+            {% elif option.kind == number_kind %}
+              <input type="number" name="{{ option.name }}"
+                     id="id_{{ option.name }}"
+                     value="{{ option.default|default_if_none:'' }}" />
+            {% else %}
+              <input type="text" name="{{ option.name }}"
+                     id="id_{{ option.name }}"
+                     value="{{ option.default|default_if_none:'' }}" />
+            {% endif %}
+          {% endif %}
+          <span class="help">{{ option.help }}</span>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    {% if command.needs_confirmation %}
+      <div class="ops-block ops-warn">
+        <label for="id_confirm">
+          {% blocktrans trimmed with name=command.name %}
+            Type <b>{{ name }}</b> to confirm.
+          {% endblocktrans %}
+        </label>
+        <input type="text" name="confirm" id="id_confirm" autocomplete="off" />
+      </div>
+    {% endif %}
+
+    <p>
+      <button type="submit" class="default"
+              data-busy-text="{% trans 'Running…' %}">
+        {% trans 'Run' %}
+      </button>
+      <a href="{{ console_url }}" class="button" style="margin-left:.5rem">
+        {% trans 'Back' %}
+      </a>
+      <span style="margin-left:.75rem;font-size:.8rem;opacity:.75">
+        {% blocktrans trimmed with seconds=command.timeout %}
+          Cut off after {{ seconds }} s.
+        {% endblocktrans %}
+      </span>
+    </p>
+  </form>
+
+  {% if result %}
+    <h2>{% trans 'Output' %}</h2>
+    <p>
+      <code class="ops-cmdline">manage.py {{ result.command_line }}</code>
+      &nbsp;·&nbsp;
+      {{ result.get_status_display }}
+      {% if result.exit_code is not None %}
+        ({% trans 'exit code' %} {{ result.exit_code }})
+      {% endif %}
+      &nbsp;·&nbsp; {{ result.duration_seconds }} s
+    </p>
+    <div class="ops-output">{{ result.output|default:"(sin salida)" }}</div>
+  {% endif %}
+
+  {% if history %}
+    <h2>{% trans 'Previous runs' %}</h2>
+    <table class="ops-history">
+      <thead>
+        <tr>
+          <th>{% trans 'When' %}</th>
+          <th>{% trans 'Status' %}</th>
+          <th>{% trans 'Duration (s)' %}</th>
+          <th>{% trans 'Run by' %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in history %}
+          <tr>
+            <td>
+              <a href="{% url 'admin:ops_commandrunmodel_change' item.pk %}">
+                {{ item.created|date:"Y-m-d H:i" }}
+              </a>
+            </td>
+            <td>{{ item.get_status_display }}</td>
+            <td>{{ item.duration_seconds }}</td>
+            <td>{{ item.run_by|default:"—" }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+
+  <script>
+    // El comando puede tardar; sin esto se hace doble clic y se lanza dos veces.
+    document.querySelector('form').addEventListener('submit', function (event) {
+      var button = event.target.querySelector('button[type="submit"]');
+      if (button) {
+        button.disabled = true;
+        button.textContent = button.dataset.busyText || 'Running…';
+      }
+    });
+  </script>
+{% endblock %}

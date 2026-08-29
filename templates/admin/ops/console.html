@@ -1,0 +1,93 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+  <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; {% trans 'Operations console' %}
+  </div>
+{% endblock %}
+
+{% block content %}
+  <style>
+    .ops-group { margin-bottom: 2rem; }
+    .ops-group h2 { font-size: 1rem; margin-bottom: .5rem; }
+    .ops-card {
+      display: block; padding: .85rem 1rem; margin-bottom: .5rem;
+      border: 1px solid var(--hairline-color, #e0e0e0);
+      border-left-width: 4px; border-radius: 4px;
+      background: var(--darkened-bg, #fbfbfb); text-decoration: none;
+    }
+    .ops-card:hover { border-color: var(--link-fg, #417690); }
+    .ops-card b { display: block; font-size: .95rem; }
+    .ops-card span { display: block; margin-top: .2rem; font-size: .82rem;
+                     color: var(--body-quiet-color, #666); }
+    .ops-recent { width: 100%; border-collapse: collapse; font-size: .82rem; }
+    .ops-recent th, .ops-recent td {
+      padding: .35rem .5rem; text-align: left;
+      border-bottom: 1px solid var(--hairline-color, #eee);
+    }
+    .ops-note {
+      padding: .75rem 1rem; margin-bottom: 1.5rem; border-radius: 4px;
+      background: rgba(161,127,26,.10);
+      border: 1px solid rgba(161,127,26,.35); font-size: .85rem;
+    }
+  </style>
+
+  <h1>{% trans 'Operations console' %}</h1>
+
+  <p class="ops-note">
+    {% blocktrans trimmed %}
+      These commands run on the server, with the same effect as running them
+      over SSH. Every run is recorded — who, what and the full output — and
+      the record cannot be edited or deleted.
+    {% endblocktrans %}
+  </p>
+
+  {% for risk, label, commands in groups %}
+    <div class="ops-group">
+      <h2 style="color: {{ risk_colors|default_if_none:'' }}">{{ label }}</h2>
+
+      {% for command in commands %}
+        <a class="ops-card" href="{% url 'admin:ops_command' command.name %}"
+           style="border-left-color: {% if command.risk == 'READ_ONLY' %}#1a7f37{% elif command.risk == 'WRITES' %}#a17f1a{% else %}#a11a1a{% endif %}">
+          <b>{{ command.title }} <code style="font-weight:normal;opacity:.7">{{ command.name }}</code></b>
+          <span>{{ command.summary }}</span>
+        </a>
+      {% endfor %}
+    </div>
+  {% endfor %}
+
+  <h2>{% trans 'Last runs' %}</h2>
+
+  {% if recent %}
+    <table class="ops-recent">
+      <thead>
+        <tr>
+          <th>{% trans 'When' %}</th>
+          <th>{% trans 'Command' %}</th>
+          <th>{% trans 'Status' %}</th>
+          <th>{% trans 'Duration (s)' %}</th>
+          <th>{% trans 'Run by' %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in recent %}
+          <tr>
+            <td>
+              <a href="{% url 'admin:ops_commandrunmodel_change' item.pk %}">
+                {{ item.created|date:"Y-m-d H:i" }}
+              </a>
+            </td>
+            <td><code>{{ item.command }}</code></td>
+            <td>{{ item.get_status_display }}</td>
+            <td>{{ item.duration_seconds }}</td>
+            <td>{{ item.run_by|default:"—" }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>{% trans 'Nothing has been run yet.' %}</p>
+  {% endif %}
+{% endblock %}

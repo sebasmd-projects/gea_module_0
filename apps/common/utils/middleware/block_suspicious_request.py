@@ -1,3 +1,30 @@
+"""
+Aplicacion de los bloqueos por IP.
+
+Esto es **mitigacion de ruido, no seguridad**. Su unico trabajo es que los
+escaneres automaticos dejen de consumir recursos. Ninguna decision de
+seguridad debe apoyarse aqui, y por eso el criterio es *fallar abierto*: ante
+cualquier duda, dejar pasar.
+
+Lo que fallaba
+--------------
+* **La lista blanca no se consultaba.** Anadir una IP no la desbloqueaba,
+  porque quien aplica el bloqueo es este middleware y no la miraba. Era el
+  remedio documentado del proyecto, y no servia.
+* **La IP se resolvia distinto aqui que al crear el bloqueo**, asi que uno
+  guardaba bajo una IP y el otro buscaba por otra.
+* **El bloqueo crecia sin techo.** Cada peticion sumaba otro intervalo, asi
+  que un bot a diez peticiones por segundo lo convertia en permanente -- y a
+  un usuario legitimo pillado por un falso positivo, tambien.
+* **La lista de rutas crecia sin limite** dentro del JSON de la fila: un bot
+  insistente podia inflarla hasta pesar megabytes.
+* **Un administrador podia quedarse fuera de su propio panel** por teclear
+  mal una URL.
+
+Ver ``apps/common/utils/client_ip.py`` para la resolucion de la IP y las
+exenciones, que ahora viven en un solo sitio.
+"""
+
 import logging
 from datetime import timedelta
 
@@ -8,6 +35,8 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
+from apps.common.utils.blocking import capped_until, note_attempt
+from apps.common.utils.client_ip import get_client_ip, is_exempt
 from apps.common.utils.models import IPBlockedModel
 from apps.common.utils.views import is_safe_path
 
@@ -19,84 +48,107 @@ except AttributeError:
     template_name = 'errors_template.html'
 except SystemExit:
     raise
-except Exception as e:
-    logger.error(f"An unexpected error occurred: {e}")
+except Exception as error:
+    logger.error('An unexpected error occurred: %s', error)
     template_name = 'errors_template.html'
 
-logger = logging.getLogger(__name__)
-
-
 class DetectSuspiciousRequestMiddleware:
+    """Deja pasar, o devuelve 403 si la IP esta bloqueada ahora mismo."""
+
     def __init__(self, get_response):
         self.get_response = get_response
-        self.block_step = timedelta(minutes=getattr(
-            settings, 'IP_BLOCKED_TIME_IN_MINUTES', 15))
+        self.block_step = timedelta(
+            minutes=getattr(settings, 'IP_BLOCKED_TIME_IN_MINUTES', 15)
+        )
 
     def __call__(self, request):
-        client_ip = request.META.get('REMOTE_ADDR')
         path = request.path or ''
 
-        # 1) Si la ruta es 'safe' (assets, uuid, extensiones, etc) no hacemos nada
-        # -> devolvemos la respuesta normal sin tocar la DB ni el contador
+        # 1) Rutas inocuas (estaticos, extensiones, UUID): ni se mira.
         try:
             if is_safe_path(path):
                 return self.get_response(request)
         except Exception:
-            # si hay algún error en la detección, preferimos no bloquear por error
+            # Un fallo detectando no puede convertirse en un bloqueo.
             return self.get_response(request)
 
-        # 2) Si la IP está bloqueada, proceder como antes
+        # 2) Exenciones: lista blanca y personal interno autenticado. Va antes
+        #    de tocar la tabla de bloqueos, que es lo que hace que anadir una
+        #    IP a la lista blanca funcione de verdad.
+        try:
+            if is_exempt(request):
+                return self.get_response(request)
+        except Exception:
+            logger.exception('Could not evaluate the block exemptions')
+            return self.get_response(request)
+
+        client_ip = get_client_ip(request)
+
         try:
             blocked_entry = IPBlockedModel.objects.filter(
                 current_ip=client_ip,
                 is_active=True,
-                blocked_until__gte=timezone.now()
+                blocked_until__gte=timezone.now(),
             ).first()
         except (ProgrammingError, OperationalError):
             return self.get_response(request)
 
-        if blocked_entry:
-            # si está bloqueado, registramos intento (si no es safe — ya filtramos)
-            try:
-                with transaction.atomic():
-                    si = blocked_entry.session_info or {}
-                    si['attempt_count'] = int(si.get('attempt_count', 0)) + 1
-                    paths = si.get('paths', [])
-                    paths.append(request.path)
-                    si['paths'] = paths
-                    si['timestamp'] = timezone.now().isoformat()
-                    si['user_agent'] = request.META.get('HTTP_USER_AGENT')
-                    si['referer'] = request.META.get('HTTP_REFERER')
+        if not blocked_entry:
+            response = self.get_response(request)
 
-                    # extiende el bloqueo en cada intento mientras está bloqueado
-                    now = timezone.now()
-                    base = blocked_entry.blocked_until if blocked_entry.blocked_until and blocked_entry.blocked_until > now else now
-                    blocked_entry.blocked_until = base + self.block_step
+            if 400 < response.status_code < 500:
+                logger.info(
+                    'Error %s for IP %s', response.status_code, client_ip
+                )
 
-                    blocked_entry.session_info = si
-                    blocked_entry.save(update_fields=['session_info', 'blocked_until'])
+            return response
 
-            except Exception as e:
-                logger.exception("Error updating attempt_count while blocked: %s", e)
+        self._note_attempt(blocked_entry, request)
 
-            logger.warning(f"Blocked IP {client_ip} attempted access. Returning 403.")
-            return render(
-                request,
-                template_name,
-                status=403,
-                context={
-                    'exception': _('This IP is temporarily blocked due to suspicious activity.'),
-                    'title': _('Error 403'),
-                    'error': _('Access denied due to suspicious activity.'),
-                    'status': 403,
-                    'error_image': 'https://geausa.propensionesabogados.com/public/static/assets/imgs/status_errors/403-error-forbidden.svg',
-                    'attempt_count': blocked_entry.session_info.get('attempt_count', 1),
-                }
-            )
+        logger.warning('Blocked IP %s attempted access.', client_ip)
 
-        response = self.get_response(request)
+        return render(
+            request,
+            template_name,
+            status=403,
+            context={
+                'exception': _(
+                    'This IP is temporarily blocked due to suspicious '
+                    'activity.'
+                ),
+                'title': _('Error 403'),
+                'error': _('Access denied due to suspicious activity.'),
+                'status': 403,
+                'error_image': (
+                    'https://geausa.propensionesabogados.com/public/static/'
+                    'assets/imgs/status_errors/403-error-forbidden.svg'
+                ),
+                'attempt_count': (blocked_entry.session_info or {}).get(
+                    'attempt_count', 1
+                ),
+                'blocked_until': blocked_entry.blocked_until,
+            },
+        )
 
-        if 400 < response.status_code < 500:
-            logger.info(f"Error {response.status_code} encountered for IP: {client_ip}")
+    def _note_attempt(self, blocked_entry, request):
+        """
+        Anota el intento y alarga el bloqueo, pero con techo.
 
-        return response
+        El techo es lo importante: antes cada peticion sumaba otro intervalo
+        sin limite, asi que insistir lo volvia perpetuo. Ahora insistir no
+        pasa de ``MAX_BLOCK`` desde ahora.
+        """
+        try:
+            with transaction.atomic():
+                blocked_entry.session_info = note_attempt(
+                    blocked_entry.session_info, request
+                )
+                blocked_entry.blocked_until = capped_until(
+                    self.block_step, current=blocked_entry.blocked_until
+                )
+                blocked_entry.save(
+                    update_fields=['session_info', 'blocked_until']
+                )
+        except Exception as error:
+            # Que no se pueda anotar el intento no cambia la decision.
+            logger.exception('Could not record the blocked attempt: %s', error)

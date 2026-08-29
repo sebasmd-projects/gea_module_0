@@ -1,0 +1,463 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-29 13:33-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\apps\project\specific\internal\ops\admin.py:86
+#: .\apps\project\specific\internal\ops\models.py:50
+msgid "Status"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\admin.py:138
+#: .\apps\project\specific\internal\ops\apps.py:8
+msgid "Operations console"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\admin.py:195
+#, python-format
+msgid "Type \"%(name)s\" to confirm before running it."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\admin.py:220
+msgid "That command is not allowed."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\admin.py:240
+#, python-format
+msgid "%(title)s finished in %(seconds)s s."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\admin.py:246
+#, python-format
+msgid ""
+"%(title)s was cut off after %(seconds)s s. The output below is partial, and "
+"the command may have kept going."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\admin.py:253
+#, python-format
+msgid "%(title)s failed with exit code %(code)s."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\models.py:24
+msgid "Finished"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\models.py:25
+msgid "Failed"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\models.py:26
+msgid "Cut off by timeout"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\models.py:27
+msgid "Refused"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\models.py:30
+msgid "Command"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\models.py:36
+msgid "Arguments"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\models.py:39
+msgid "The values as they were filled in the form."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\models.py:43
+msgid "Command line"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\models.py:46
+msgid "What was actually run, argument by argument."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\models.py:57
+msgid "Exit code"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\models.py:63
+msgid "Duration (s)"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\models.py:68
+msgid "Output"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\models.py:77
+msgid "Run by"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\models.py:85
+msgid "Client IP"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\models.py:99
+msgid "Command run"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\models.py:100
+msgid "Command runs"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:39
+msgid "Read only — only reports, changes nothing"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:40
+msgid "Writes — changes data or files"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:41
+msgid "Dangerous — hard to undo, confirm before running"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:109
+msgid "Django checks"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:110
+msgid "Looks for configuration problems without touching anything."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:112
+msgid ""
+"Runs the framework checks: models, admin, URLs, templates and security "
+"settings. It is what should come out clean before any deploy."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:116
+msgid "After changing settings.py, to confirm nothing broke."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:121
+msgid "Deploy checks"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:124
+msgid ""
+"Adds the production-only checks: HTTPS, cookies, HSTS. Expect warnings in "
+"development."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:133
+msgid "Media storage"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:135
+msgid ""
+"Checks that MEDIA_ROOT points where the files really are and that the "
+"sensitive folders are not served by the web server."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:139
+msgid ""
+"FileField stores paths relative to MEDIA_ROOT. If the variable points "
+"somewhere else, nothing is lost but Django stops finding the files: every "
+"download 404s and new uploads land in the wrong place. It fails silently, "
+"which is why this exists. It also checks the .htaccess files that stop the "
+"web server from handing out certificates and identity documents on its own."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:146
+msgid "After moving the media folder, or after a deploy."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:151
+msgid "Files per field"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:154
+msgid "How many files to check per model field."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:158
+msgid "Search under"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:161
+msgid ""
+"If a file is missing, look for it by name under this path and say where it "
+"is."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:168
+msgid "Check over HTTP"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:171
+msgid ""
+"Actually request a sensitive file from outside and confirm the web server "
+"answers 404."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:180
+msgid "Certified documents health"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:182
+msgid ""
+"Checks that the three files of every certified document are on disk and that "
+"their fingerprints still match."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:186
+msgid ""
+"Two different failures: a record pointing at a deleted file, and a file "
+"whose stored hash no longer matches what is on disk. The second one is the "
+"serious one — it means the certification is lying."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:191
+msgid "Monthly, and after any migration of the media folder."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:197
+msgid "Anti-scan trap"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:199
+msgid "Checks that no legitimate route collides with the scanner trap."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:202
+msgid ""
+"The trap catches any path containing one of COMMON_ATTACK_TERMS and blocks "
+"the IP. A badly chosen term hijacks a real route and locks out real users. "
+"This reports collisions respecting the URLconf order, which is what actually "
+"decides it."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:207
+msgid "Every time COMMON_ATTACK_TERMS changes."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:213
+msgid "Migration state"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:214
+msgid "Lists which migrations are applied and which are pending."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:216
+msgid ""
+"Nothing runs. It is the way to see whether the database matches the code "
+"before deciding to migrate."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:219
+msgid "Right after deploying, before running migrate."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:224
+msgid "Show plan"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:226
+msgid "Lists them in the order they would be applied."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:237
+msgid "Apply migrations"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:238
+msgid "Brings the database schema up to date with the code."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:240
+msgid ""
+"Applies every pending migration. Run the migration state check first to see "
+"what is going to happen."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:243
+msgid "After deploying code that adds fields or constraints."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:248
+#: .\apps\project\specific\internal\ops\registry.py:274
+msgid "No questions"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:251
+#: .\apps\project\specific\internal\ops\registry.py:277
+msgid "Required here: there is nobody to answer a prompt."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:256
+msgid ""
+"A migration can lock tables. On a busy database, run it out of office hours."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:262
+msgid "Collect static files"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:263
+msgid "Publishes the CSS and JS so the browser gets them."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:265
+msgid ""
+"In production static files are served with a hash in the name, so a change "
+"is invisible until this runs. If a page looks broken after a deploy, this is "
+"usually why."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:269
+msgid "After every deploy that touches CSS or JS."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:281
+msgid "Clear first"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:284
+msgid ""
+"Deletes what was collected before. Slower, but leaves no orphan files behind."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:293
+msgid "Compile translations"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:294
+msgid "Turns the .po catalogs into the .mo files Django reads."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:296
+msgid ""
+"Editing a translation changes the .po file, but Django only reads the "
+"compiled .mo. Until this runs, the new text shows in English."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:300
+msgid "After translating with Rosetta or editing a .po by hand."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:305
+msgid "Language"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:309
+msgid "Which catalog to compile."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:316
+msgid "Clear the cache"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:317
+msgid "Empties the application cache."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:319
+msgid ""
+"Useful when something stale is being served. Note that it also clears the "
+"public OTP rate-limit counters, which live in cache: right after running "
+"this, those limits start from zero."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:323
+msgid "After changing data that a page keeps cached."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:327
+msgid ""
+"It resets the public OTP rate limits. Do not run it while someone is "
+"hammering the verification page."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:333
+msgid "Daily GEA code"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:334
+msgid "Issues the daily code and mails it to its recipients."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:336
+msgid ""
+"The same thing the scheduled job does. Running it by hand sends real email, "
+"so only use it if the scheduled run failed."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:339
+msgid "The cron did not run and the code for today is missing."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:342
+msgid "This sends real email to the configured recipients."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:350
+msgid "Database backup"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:351
+msgid "Writes a full dump of the database to disk."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:353
+msgid ""
+"Produces a file with everything in the database. Where it lands matters: "
+"anyone who can read that path can read every record, including the encrypted "
+"personal data fields."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:357
+msgid "Right before applying a risky migration."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:362
+msgid "Output folder"
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:365
+msgid "Folder for the dump, relative to the project root."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\registry.py:371
+msgid ""
+"The dump contains every record. Keep it out of any folder the web server can "
+"serve."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\runner.py:86
+#, python-format
+msgid "%(label)s must be a whole number."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\runner.py:95
+#, python-format
+msgid "%(label)s: \"%(value)s\" is not one of the allowed values."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\runner.py:113
+#, python-format
+msgid "%(label)s contains characters that are not allowed."
+msgstr ""
+
+#: .\apps\project\specific\internal\ops\runner.py:217
+msgid "manage.py could not be found. Check BASE_DIR."
+msgstr ""

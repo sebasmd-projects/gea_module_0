@@ -12,6 +12,8 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import View
 
+from apps.common.utils.blocking import capped_until, note_attempt
+from apps.common.utils.client_ip import get_client_ip, is_exempt
 from apps.common.utils.models import IPBlockedModel, WhiteListedIPModel
 
 logger = logging.getLogger(__name__)
@@ -33,9 +35,19 @@ SAFE_PATH_PREFIXES = [
     'api',
 ]
 
+# OJO: estos se buscan con `search`, o sea en cualquier posicion de la ruta.
+# Aqui solo van patrones que de verdad identifiquen una ruta inocua.
+#
+# Habia un `r'^(?!api/).*'` en esta lista. Con `search`, eso casa con **toda**
+# ruta que no empiece por `api/` -- es decir, con casi todas -- asi que
+# `is_safe_path` devolvia True para `/wp-admin/`, `/phpmyadmin/` y `/.env`.
+# Consecuencia: el middleware se saltaba cada peticion sin mirar los bloqueos,
+# y la propia vista trampa se iba por su primera linea sin crear ninguno. La
+# mitigacion anti-escaneo llevaba sin hacer absolutamente nada.
 SAFE_PATH_REGEXES = [
-    r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}',
-    r'^(?!api/).*'
+    # Las URL de verificacion de certificados llevan un UUID: son legitimas.
+    r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-'
+    r'[0-9a-fA-F]{4}-[0-9a-fA-F]{12}',
 ]
 
 SAFE_PATH_EXTENSIONS = [
@@ -237,8 +249,9 @@ def is_safe_path(path: str) -> bool:
 
     # 1) prefijos (ej. static/, media/, favicon.ico)
     for pref in SAFE_PATH_PREFIXES:
-        # aceptar coincidencia exacta de archivo (favicon.ico) o startswith para prefijos
-        if p == pref or p.startswith(pref + '/') or p.startswith(pref):
+        # Segmento completo o coincidencia exacta. El `startswith(pref)` que
+        # habia aqui daba por buena `/apiXYZ/` por culpa del prefijo `api`.
+        if p == pref or p.startswith(pref + '/'):
             return True
 
     # 2) extensiones
@@ -263,16 +276,15 @@ class HttpRequestAttackView(View):
         return is_safe_path(path)
 
     def get_client_ip(self, request):
-        xff = request.META.get("HTTP_X_FORWARDED_FOR")
-        if xff:
-            ip = xff.split(",")[0].strip()
-        else:
-            ip = request.META.get(
-                "HTTP_CF_CONNECTING_IP") or request.META.get("REMOTE_ADDR", "")
-        try:
-            return str(ip_address(ip))
-        except Exception:
-            return "0.0.0.0"
+        """
+        Una sola respuesta, compartida con el middleware que aplica el bloqueo.
+
+        Antes se leia ``X-Forwarded-For`` aqui y ``REMOTE_ADDR`` alli, asi que
+        se guardaba bajo una IP y se buscaba por otra. Y como la cabecera la
+        pone el cliente, bastaba con mandarla con la IP de otro para que
+        bloquearan a otro.
+        """
+        return get_client_ip(request)
 
     def get(self, request, *args, **kwargs):
         if self.is_safe_path(request.get_full_path()):
@@ -281,8 +293,9 @@ class HttpRequestAttackView(View):
         client_ip = self.get_client_ip(
             request) or request.META.get('REMOTE_ADDR')
 
-        # Skip if IP is whitelisted
-        if WhiteListedIPModel.objects.filter(current_ip=client_ip).exists():
+        # Exenciones: lista blanca y personal interno autenticado. Las mismas
+        # que aplica el middleware, para que no haya dos criterios.
+        if is_exempt(request):
             return redirect('/')
 
         resolver_match = getattr(request, 'resolver_match', None)
@@ -326,20 +339,18 @@ class HttpRequestAttackView(View):
 
         if not created:
             # Update attempt count and paths
-            attempt_count = blocked_entry.session_info.get(
-                'attempt_count', 0) + 1
-            blocked_entry.session_info['attempt_count'] = attempt_count
-            blocked_entry.session_info['paths'].append(request.path)
-            blocked_entry.session_info['timestamp'] = timezone.now(
-            ).isoformat()
+            info = note_attempt(blocked_entry.session_info, request)
+            attempt_count = info['attempt_count']
 
-            # Calculate block time
+            # El castigo crece con la insistencia, pero con techo: sin el,
+            # seguir picando lo convertia en un bloqueo perpetuo.
             if attempt_count > 2:
                 block_time = self.time_in_minutes * attempt_count
             else:
                 block_time = self.time_in_minutes
 
-            blocked_entry.blocked_until = timezone.now() + block_time
+            blocked_entry.session_info = info
+            blocked_entry.blocked_until = capped_until(block_time)
             blocked_entry.save()
 
         return redirect('/')
