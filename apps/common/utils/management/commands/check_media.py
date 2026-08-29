@@ -54,6 +54,20 @@ class Command(BaseCommand):
             '--sample', type=int, default=25,
             help='Cuantos archivos por campo se comprueban en disco.'
         )
+        parser.add_argument(
+            '--find', metavar='RUTA', default='',
+            help=(
+                'Si falta algun archivo, lo busca por nombre bajo esta ruta '
+                'y dice donde esta. Util despues de mover MEDIA_ROOT.'
+            )
+        )
+        parser.add_argument(
+            '--http', action='store_true',
+            help=(
+                'Comprueba de verdad, por HTTP contra PUBLIC_BASE_URL, que un '
+                'archivo sensible responde 404 y no se sirve.'
+            )
+        )
 
     def handle(self, *args, **options):
         root = str(settings.MEDIA_ROOT)
@@ -86,6 +100,8 @@ class Command(BaseCommand):
 
         total_missing = 0
         total_checked = 0
+        missing_all = []
+        protected_missing = []
 
         for model, field in _check_fields():
             name = field.name
@@ -113,11 +129,20 @@ class Command(BaseCommand):
 
             total_checked += len(rows)
             total_missing += len(missing)
+            missing_all.extend(str(value) for value in missing)
 
             protected = any(
                 str(value).startswith(PROTECTED_PREFIXES) for value in rows
             )
             mark = ' [sensible]' if protected else ''
+
+            if protected:
+                present = [
+                    str(value) for value in rows
+                    if os.path.isfile(os.path.join(root, str(value)))
+                ]
+                if present:
+                    protected_missing.append(present[0])
 
             if missing:
                 self.stdout.write(self.style.ERROR(
@@ -148,6 +173,46 @@ class Command(BaseCommand):
                 'MEDIA_ROOT dice.'
             ))
 
+        # ---- Donde estan los que faltan ----
+        search_root = options['find']
+
+        if missing_all and search_root:
+            self.stdout.write('')
+            self.stdout.write(self.style.MIGRATE_HEADING(
+                f'Buscando los archivos que faltan bajo {search_root}'
+            ))
+
+            index = {}
+
+            for base, _dirs, names in os.walk(search_root):
+                for name in names:
+                    index.setdefault(name, []).append(
+                        os.path.join(base, name)
+                    )
+
+            for relative in missing_all:
+                name = os.path.basename(relative)
+                found = index.get(name, [])
+
+                if found:
+                    self.stdout.write(self.style.WARNING(
+                        f'  {relative}'
+                    ))
+                    for path in found[:3]:
+                        self.stdout.write(f'      esta en: {path}')
+                else:
+                    self.stdout.write(self.style.ERROR(
+                        f'  {relative}: no aparece por ningun lado. '
+                        'Probablemente se borro; el registro sigue en la base '
+                        'de datos apuntando a un archivo inexistente.'
+                    ))
+        elif missing_all:
+            self.stdout.write('')
+            self.stdout.write(
+                '  Para saber donde estan, repite con:  '
+                '--find /home/propensi'
+            )
+
         # ---- Exposicion web ----
         self.stdout.write('')
         self.stdout.write(self.style.MIGRATE_HEADING(
@@ -172,11 +237,68 @@ class Command(BaseCommand):
 
         for prefix in PROTECTED_PREFIXES:
             path = os.path.join(root, prefix.rstrip('/'))
-            if os.path.isdir(path):
-                self.stdout.write(f'  existe y debe estar bloqueado: {prefix}')
+
+            if not os.path.isdir(path):
+                continue
+
+            inner = os.path.join(path, '.htaccess')
+
+            if os.path.isfile(inner):
+                self.stdout.write(self.style.SUCCESS(
+                    f'  {prefix} protegido por su propio .htaccess'
+                ))
+            else:
+                self.stdout.write(self.style.WARNING(
+                    f'  {prefix} SIN .htaccess propio (solo depende del de la '
+                    'raiz). Copia deploy/media-protected.htaccess dentro.'
+                ))
 
         self.stdout.write('')
-        self.stdout.write(
-            'Comprobacion final, desde fuera (debe responder 404):\n'
-            f'  curl -I {settings.MEDIA_URL}certificates/documents/<archivo>.pdf'
+
+        sample_protected = (
+            protected_missing[0] if protected_missing else None
         )
+
+        base = str(getattr(settings, 'PUBLIC_BASE_URL', '') or '').rstrip('/')
+        url = (
+            f'{base}{settings.MEDIA_URL}{sample_protected}'
+            if sample_protected else None
+        )
+
+        if not options['http'] or not url:
+            self.stdout.write(
+                'Comprobacion final, desde fuera (debe responder 404):'
+            )
+            self.stdout.write(
+                f'  curl -I {url}' if url
+                else f'  curl -I {base}{settings.MEDIA_URL}certificates/...'
+            )
+            if url:
+                self.stdout.write('  o repite con --http para hacerlo aqui.')
+            return
+
+        self.stdout.write(self.style.MIGRATE_HEADING(
+            'Comprobacion real por HTTP'
+        ))
+        self.stdout.write(f'  {url}')
+
+        try:
+            import requests
+
+            response = requests.head(url, timeout=15, allow_redirects=False)
+            status = response.status_code
+        except Exception as error:
+            self.stdout.write(self.style.WARNING(
+                f'  No se pudo comprobar: {error}'
+            ))
+            return
+
+        if status in (403, 404):
+            self.stdout.write(self.style.SUCCESS(
+                f'  {status}: el servidor web NO entrega el archivo. Correcto.'
+            ))
+        else:
+            self.stdout.write(self.style.ERROR(
+                f'  {status}: el servidor web SIGUE ENTREGANDO el archivo '
+                'sensible sin pasar por Django. El bloqueo no esta activo.'
+            ))
