@@ -6,6 +6,9 @@ Documentos complementarios:
 - [`docs/ROUTES_MAP.md`](docs/ROUTES_MAP.md) — todas las URLs, namespaces, vistas y permisos.
 - [`docs/FEATURES_MAP.md`](docs/FEATURES_MAP.md) — funcionalidades por dominio, modelos y reglas de negocio.
 
+Si lo que necesitas es orientarte —qué módulo llama a cuál y por dónde entra una petición—
+empieza por [§4-bis, Mapa de arquitectura](#4-bis-mapa-de-arquitectura-codebase-map).
+
 ---
 
 ## 1. Qué es este proyecto
@@ -126,9 +129,10 @@ apps/
       documents/
         certificates/        # verificación pública de certificados
         video_masonry/       # galería multimedia
-    internal/
-      code_gen/              # generador de códigos + motor de certificación de PDF
-templates/                   # plantillas globales (dashboard, account, two_factor, email)
+      internal/
+        code_gen/            # generador de códigos + motor de certificación de PDF
+        ops/                 # consola de operaciones (comandos en lista blanca, dentro del admin)
+templates/                   # plantillas globales (dashboard, account, two_factor, email, admin/ops)
 public/staticfiles/          # css, js, imágenes WebP, vídeo
 docs/                        # mapas de rutas y funcionalidades
 ```
@@ -144,6 +148,200 @@ uv run python manage.py start_app apps/project/specific/<grupo>/<nombre>
 ```
 
 Después hay que **añadirla a mano** al grupo correspondiente en `settings.py`.
+
+---
+
+## 4-bis. Mapa de arquitectura (codebase map)
+
+La estructura de carpetas dice dónde están los ficheros; esta sección dice **quién llama a quién**.
+Úsala para localizar el punto de entrada correcto antes de abrir nada.
+
+### A. Recorrido de una petición
+
+```
+navegador
+  │
+  ├─ MIDDLEWARE (settings.py, en orden)
+  │    security → session → locale → cors → common → csrf → auth
+  │    → auditlog → otp → messages → clickjacking
+  │    → RedirectWWWMiddleware              (apps/common/utils/middleware/)
+  │    → RedirectAuthenticatedUserMiddleware   idem
+  │    → BlockBadBotsMiddleware                idem
+  │    → DetectSuspiciousRequestMiddleware  ← consulta IPBlockedModel / WhiteListedIPModel
+  │    → axes → impersonate
+  │
+  ├─ URLconf raíz (app_core/urls.py)
+  │    1. two_factor.urls        2. admin en ADMIN_URL
+  │    3. apps propias en el orden de ALL_CUSTOM_APPS  ← incluye la regex catch-all de `utils`
+  │    4. rosetta / ckeditor5 / select2 / impersonate
+  │    `include_if_present()` omite (y loguea) una app cuyo urls.py no importe; en DEBUG re-lanza.
+  │
+  ├─ CBV + mixin de acceso   (nunca decoradores; ver §5)
+  │    BuyerRequiredMixin · HolderRequiredMixin · OnlySpecificUserMixin
+  │    InternalToolAccessMixin · OTPSessionMixin / OTPProtectedDocumentMixin
+  │    OfferMutationMixin  (buyers/access.py, autorización por objeto + etapa)
+  │
+  ├─ modelo (reglas de negocio en el propio modelo) o servicio (code_gen/services/)
+  │    ATOMIC_REQUESTS = True → toda la vista va dentro de una transacción
+  │
+  └─ respuesta: plantilla Django, o JsonResponse con HTML pre-renderizado (AJAX)
+```
+
+### B. Grafo de dependencias entre apps
+
+Las flechas van de quien importa a quien es importado.
+
+```
+                       apps.common.utils            (base: TimeStampedModel,
+                        ▲   ▲   ▲   ▲   ▲            GeneralAdminModel, sha256_hex,
+                        │   │   │   │   │            IPBlocked, middleware, cron)
+      ┌─────────────────┘   │   │   │   └──────────────────┐
+      │                     │   │   └────────┐             │
+   users ◄──── account   assets ◄─ assets_location      video_masonry
+      ▲  ▲                  ▲   ▲       ▲                   │
+      │  │                  │   └───┬───┘                   │
+      │  └──────────────── buyers ──┘                       │
+      │                     ▲ (BuyerRequiredMixin) ─────────┘
+      │                     │
+  certificates ◄══════════► code_gen ────► assets (import diferido, sólo lectura)
+      ▲                                 └─► certificates (imports dentro de función)
+      │
+     ops ──► users (sólo en tests) · utils
+```
+
+Reglas que se deducen del grafo — respétalas al añadir código:
+
+- **`apps.common.utils` no importa nunca hacia arriba.** Es la base de todo (excepto en `utils/tests.py`,
+  que sí toca `users`). Si necesitas algo de negocio dentro de `utils`, va en el sitio equivocado.
+- **`users` es hoja de dominio**: lo importa medio proyecto y él sólo importa `utils`.
+- **`assets` importa desde `assets_location` y `buyers`** (mixins y modelos, en `assets/views.py`).
+  Es acoplamiento cruzado real y no accidental: mover un mixin rompe la otra app.
+- **`certificates` ↔ `code_gen` es bidireccional a propósito.** `certificates` **posee los modelos**
+  (`DocumentVerificationModel`, `AegisSummaryModel`) y `code_gen` **posee los algoritmos**
+  (`services/`). Para evitar el import circular, cada lado importa al otro **dentro de la función**,
+  nunca en el encabezado del módulo. Mantén ese patrón.
+- **`ops` es terminal**: nadie lo importa; su superficie es el admin.
+- **`notifications` está vacía** (modelos, vistas y `urls.py` sin contenido). No la uses como ejemplo.
+
+### C. Índice: quiero tocar X → abre Y
+
+| Si buscas… | Fichero |
+|---|---|
+| Orden del URLconf, handlers de error | `app_core/urls.py` |
+| Apps instaladas, middleware, crons, i18n | `app_core/settings.py` (`ALL_CUSTOM_APPS`, `CRONJOBS`) |
+| Pruebas sobre SQLite en memoria | `app_core/settings_test.py` |
+| Modelo base, códigos diarios, bloqueo de IP | `apps/common/utils/models.py` |
+| Trampa anti-escaneo y su comprobador | `apps/common/utils/attack_patterns.py` + `management/commands/check_attack_terms.py` |
+| Tareas programadas | `apps/common/utils/cron.py` |
+| Filtros y tags de plantilla | `apps/common/utils/templatetags/custom_filters.py` |
+| Landing pública y `health/` | `apps/common/core/views.py` |
+| Usuario, PII cifrada, geografía | `apps/project/common/users/models.py` |
+| Registro por wizard, recuperar contraseña | `apps/project/common/account/views.py` + `forms/` |
+| Catálogo de activos y traducción automática | `assets/models.py`, `assets/signals.py` |
+| Ubicaciones e inventario por ubicación | `assets_location/models.py`, `views.py` |
+| **Flujo de 12 etapas de una orden** | `buyers/models.py` (`status_code`, `mark_*`, `CheckConstraint`) |
+| **Quién puede ver/editar una orden** | `buyers/access.py` — no está repartido por las vistas |
+| Wizard de aprobación (UI + acciones) | `buyers/views.py` (`OfferApprovalWizard*`) + `templates/dashboard/pages/buyers/wizard/` |
+| PDFs de orden de compra / de servicio | `buyers/functions/generate_*.py` |
+| Verificación pública, OTP, entrega de PDF | `certificates/views.py`, `mixins.py`, `files.py` |
+| Cotejo de un archivo subido | `certificates/verification.py` |
+| Modelos de certificación y cajas AEGIS | `certificates/models.py` |
+| **Algoritmos de certificación** | `internal/code_gen/services/` (ver §4-bis.E) |
+| Generador de códigos, disposiciones, cajas | `code_gen/views.py`, `forms.py`, `api.py`, `preview.py` |
+| Consola de operaciones | `internal/ops/registry.py`, `runner.py`, `admin.py` |
+| Galería multimedia | `documents/video_masonry/` |
+
+### D. Los cuatro flujos, de punta a punta
+
+**1. Alta y acceso**
+`two_factor:login` → `GeaUserRegisterWizardView` (`account/views.py`, `formtools`) → `UserModel`
+(`user_type` I/R/H/B) + `UserPersonalInformationModel` (PII cifrada). El registro de comprador exige el
+código diario (`GeaDailyUniqueCode`, emitido por cron a las 19:00). `email_hash` se recalcula en
+`UserModel.save()` y lo consume el flujo de recuperación de contraseña.
+
+**2. Activo → ubicación → inventario**
+`AssetsNamesModel` 1:1 `AssetModel` (FK a `AssetCategoryModel`) → señal `pre_save` que traduce es↔en
+llamando a OpenAI **de forma síncrona** → `AssetLocationModel` cruza activo, `LocationModel` y cantidad.
+Vistas del tenedor en `assets_location/views.py` bajo `HolderRequiredMixin`.
+
+**3. Orden de compra**
+`PurchaseOrderCreateView` → `OfferModel` → `OfferApprovalWizardPageView` pinta el timeline,
+`OfferApprovalWizardActionView._apply_step()` ejecuta la etapa: comprueba el permiso `buyers.can_*`,
+llama al `mark_*()` correspondiente, la BD valida con sus `CheckConstraint` y `status_code` se **recalcula**
+desde los sellos `*_at`. Aprobar dispara la creación de la orden de servicio en `OfferModel.save()`
+(bloque B) y el envío por correo a `ServiceOrderRecipient`, con los PDF de `buyers/functions/`.
+
+**4. Certificación y verificación pública**
+```
+subir PDF (admin «Certify» | code_gen:code_generate)
+   └─ services/certification.certify_document()
+        ├─ codes.build_code_payload()      código y payload del barcode (sin URLs)
+        ├─ render.render_{barcode,qr}_png()
+        ├─ pdf_stamp.stamp_pdf()           overlay ReportLab + fusión pypdf, según StampLayout/Placement
+        ├─ hashing.file_fingerprints()     huella exacta + huella canónica (ignora la marca de agua)
+        ├─ watermark.embed_watermark()     copia distribuible
+        └─ record.build_certification_record() + seal_record()   (Ed25519, o HMAC si falta la clave)
+   → DocumentVerificationModel: source_file / document_file / public_copy_file
+
+caja AEGIS: summary.certify_summary() → master.seal_summary() (payload JCS verbatim)
+             → anchoring.anchor_with_tsa() (instantáneo) y anchor_with_ots() (madura por cron)
+
+consulta pública: certificates:input_document_verification_aegis → OTP por correo
+   → OTPSessionMixin → detail → certificates:document_file (única vía de descarga)
+                              → certificates:certification_record (JSON del registro)
+```
+
+### E. `code_gen/services/` — el subsistema más denso
+
+Cada módulo tiene un docstring largo que explica *por qué* existe. Léelo antes de modificarlo.
+
+| Módulo | Responsabilidad |
+|---|---|
+| `certification.py` | Orquestador. Resuelve la circularidad hash ↔ código estampado |
+| `codes.py` | Composición y validación del payload; rechaza URLs en el barcode |
+| `hashing.py` | Huella exacta (`raw`) y canónica (`canonical_pdf_hash`, ignora la marca de agua) |
+| `pdf_stamp.py` | Overlay ReportLab + fusión pypdf; no reconstruye el PDF original |
+| `render.py` | Code128 y QR a bytes PNG |
+| `watermark.py` | Marca oculta en dos canales, verificable |
+| `record.py` | Registro de certificación: separa contenido jurídico de prueba técnica |
+| `jcs.py` | Canonicalización JSON RFC 8785 — tocarlo invalida todos los master hash |
+| `master.py` | Master hash de una caja AEGIS sobre sus miembros |
+| `summary.py` | Emisión del resumen AEGIS-6 (lleva códigos de otros documentos) |
+| `anchoring.py` | Fachada de anclaje temporal; el QR lleva la URL, no la prueba |
+| `tsa.py` / `ots.py` | RFC 3161 (instantáneo) / OpenTimestamps sobre Bitcoin (madura por cron) |
+| `samples.py`, `preview.py` | Símbolos y contenedor de la vista previa de estampado |
+
+La vista previa se dibuja en el navegador: `public/staticfiles/js/stamp_preview.js` **replica** la
+geometría de `pdf_stamp.py`. Si cambias el posicionamiento en Python, actualiza también el JS.
+
+### F. Consola de operaciones (`internal.ops`)
+
+App sin rutas propias: `urls.py` está vacío a propósito y las páginas cuelgan del admin
+(`admin:ops_console`, `admin:ops_command`, en `ops/admin.py::get_urls`, plantillas en `templates/admin/ops/`).
+Es una superficie de ejecución remota y por eso está acotada en tres puntos:
+`registry.py` (lista blanca de comandos y de sus opciones), `runner.py` (ejecución **en subproceso**,
+nunca dentro de la petición, por `ATOMIC_REQUESTS`) y `models.py::CommandRunModel` (traza de quién
+ejecutó qué). Sólo superusuarios; el guardia aborta con 404, no con 403.
+
+### G. Puntos de entrada que no son el navegador
+
+| Entrada | Dónde |
+|---|---|
+| Crons (`django-crontab`) | `settings.CRONJOBS`: `upgrade_ots_anchors` cada hora, código diario 19:00, warm-up cada 3 min |
+| Comandos propios | `apps/common/utils/management/commands/` y `code_gen/management/commands/`, `certificates/management/commands/check_certifications.py` |
+| Acciones del admin | «Certify» de `certificates/admin.py`; sellado y anclaje de cajas |
+| Endpoints JSON internos | `code_gen/api.py` (disposiciones, miembros de caja, símbolos de vista previa) |
+| Señales | `assets/signals.py`, `buyers/signals.py` (traducción por OpenAI), `video_masonry/signals.py` |
+
+Los directorios `api/` sueltos (`utils/api/`, `account/api/`) están vacíos: **no hay DRF**.
+
+### H. Frontend
+
+Sin build ni SPA. Plantillas Django + Bootstrap 5 por CDN; `templates/raw.html` →
+`templates/dashboard/dashboard_layout_base.html` → página. Las plantillas globales viven en
+`templates/` (no dentro de cada app, salvo `core/index.html`). JS a mano en `public/staticfiles/js/`:
+`stamp_preview.js` y `layout_workspace.js` (editor de disposiciones), `summary_composer.js` (cajas),
+`searchable_select.js`, `busy_buttons.js`, `toasts.js`, `simple-datatable.js`.
 
 ---
 
@@ -314,6 +512,6 @@ IPBlockedModel / WhiteListedIPModel
 ## 11. Estado del repositorio
 
 - Rama principal: `master`.
-- No hay CI ni linters configurados. La única suite de pruebas es `buyers/tests.py`, que cubre el control de acceso del flujo de órdenes: una mitad reproduce agujeros ya cerrados, la otra comprueba que el trabajo legítimo del equipo sigue pasando. Los demás `tests.py` siguen vacíos. Se ejecutan con `--settings=app_core.settings_test` (SQLite en memoria), porque el usuario de MySQL en cPanel no puede crear la base `test_*`. La otra carpeta `tests` con contenido es `buyers/functions/tests/dummy_offer.py` (fixture para probar la generación de PDFs a mano).
+- No hay CI ni linters configurados. Sólo cuatro `tests.py` tienen contenido: `buyers/tests.py` (control de acceso del flujo de órdenes: una mitad reproduce agujeros ya cerrados, la otra comprueba que el trabajo legítimo del equipo sigue pasando), `assets/tests.py`, `common/utils/tests.py` e `internal/ops/tests.py` (lista blanca y trazabilidad de la consola). Los demás siguen vacíos. Se ejecutan con `--settings=app_core.settings_test` (SQLite en memoria), porque el usuario de MySQL en cPanel no puede crear la base `test_*`. La otra carpeta `tests` con contenido es `buyers/functions/tests/dummy_offer.py` (fixture para probar la generación de PDFs a mano).
 - Los mensajes de commit son informales y en español/inglés mezclado.
 - El historial reciente muestra la plataforma pasando por un ciclo de desactivación ("standby mode") y reactivación.
