@@ -1,10 +1,10 @@
 from django.urls import path
 
-from .api import (layout_create, layout_placements, summary_members,
-                  summary_seal)
+from .api import (layout_create, layout_placements, preview_symbols,
+                  summary_members, summary_seal)
 from .views import (CodeDetailView, CodeGeneratorView, CodeHistoryListView,
                     StampLayoutEditView, StampLayoutListView,
-                    SummaryComposerView, SummaryListView)
+                    SummaryComposerView, SummaryCreateView, SummaryListView)
 
 app_name = "code_gen"
 
@@ -55,6 +55,11 @@ urlpatterns = [
         name="summary_list"
     ),
     path(
+        "generate/summary/new/",
+        SummaryCreateView.as_view(),
+        name="summary_create"
+    ),
+    path(
         "generate/summary/<uuid:pk>/compose/",
         SummaryComposerView.as_view(),
         name="summary_compose"
@@ -76,5 +81,13 @@ urlpatterns = [
         "generate/layouts/save/",
         layout_create,
         name="layout_create_api"
+    ),
+
+    # JSON: simbolos de ejemplo para la vista previa (QR real y Code128 de la
+    # longitud que se pida), con su tamano natural.
+    path(
+        "generate/preview/symbols/",
+        preview_symbols,
+        name="preview_symbols"
     ),
 ]

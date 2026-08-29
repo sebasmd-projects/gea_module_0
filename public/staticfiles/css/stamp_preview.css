@@ -148,6 +148,119 @@
   pointer-events: none;
 }
 
+/* --- Simbolo de ejemplo dentro de la caja --------------------------- */
+/* Pegado abajo a la izquierda, igual que anchor='sw' al estampar. */
+.gea-stamp-preview__symbol {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: block;
+  object-fit: fill;
+  pointer-events: none;
+  image-rendering: auto;
+}
+
+/* Cuando la proporcion del simbolo no llena la caja, sobra sitio: se marca
+   con trama para que el hueco se vea, que es justo lo que se queria mostrar. */
+.gea-stamp-preview__box--slack {
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(161, 26, 26, 0.10) 0,
+    rgba(161, 26, 26, 0.10) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+}
+
+.gea-stamp-preview__fit {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  white-space: nowrap;
+  font-size: 0.58rem;
+  line-height: 1.2;
+  padding: 0 2px;
+  color: #6c2020;
+  background: rgba(255, 255, 255, 0.88);
+  pointer-events: none;
+}
+
+/* --- Manijas de redimension ---------------------------------------- */
+.gea-stamp-preview__handle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border: 1.5px solid currentColor;
+  border-radius: 2px;
+  touch-action: none;
+  opacity: 0;
+  transition: opacity 0.12s ease-in-out;
+}
+
+.gea-stamp-preview__box--draggable:hover .gea-stamp-preview__handle,
+.gea-stamp-preview__box.is-resizing .gea-stamp-preview__handle {
+  opacity: 1;
+}
+
+/* Las de los lados cambian una dimension; las de las esquinas, las dos. */
+.gea-stamp-preview__handle--e {
+  right: -6px;
+  top: 50%;
+  margin-top: -5px;
+  cursor: ew-resize;
+}
+
+.gea-stamp-preview__handle--s {
+  bottom: -6px;
+  left: 50%;
+  margin-left: -5px;
+  cursor: ns-resize;
+}
+
+.gea-stamp-preview__handle--se {
+  right: -6px;
+  bottom: -6px;
+  cursor: nwse-resize;
+}
+
+.gea-stamp-preview__handle--sw {
+  left: -6px;
+  bottom: -6px;
+  cursor: nesw-resize;
+}
+
+.gea-stamp-preview__handle--ne {
+  right: -6px;
+  top: -6px;
+  cursor: nesw-resize;
+}
+
+.gea-stamp-preview__handle--nw {
+  left: -6px;
+  top: -6px;
+  cursor: nwse-resize;
+}
+
+.gea-stamp-preview__box.is-resizing {
+  opacity: 0.9;
+}
+
+/* --- Longitud de la muestra ---------------------------------------- */
+.gea-stamp-preview__sample {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.gea-stamp-preview__number {
+  width: 4.5rem;
+  padding: 0.1rem 0.3rem;
+  font-size: 0.78rem;
+  border: 1px solid #ced4da;
+  border-radius: 3px;
+}
+
 /* --- Ajustes para el admin de Django ------------------------------- */
 .gea-stamp-preview--admin {
   padding: 1rem;

@@ -10,14 +10,16 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import DetailView, FormView, ListView, TemplateView
+from django.views.generic import (CreateView, DetailView, FormView,
+                                  ListView, TemplateView)
 
 from .preview import placements_as_data, render_preview_container
 
 from .constants import (HASH_B64_DEFAULT_LENGTH, RANDOM_CODE_DEFAULT_LENGTH)
 from .forms import (QR_CONTENT_CODE, QR_CONTENT_CUSTOM,
                     QR_CONTENT_VERIFICATION, CodeGeneratorForm)
-from .forms import StampLayoutForm, StampPlacementFormSet
+from .forms import (AegisSummaryForm, StampLayoutForm,
+                    StampPlacementFormSet)
 from .models import (AnchorChoices, CodeKindChoices, CodeRegistrationModel,
                      PageSelectorChoices, StampLayoutModel,
                      StampPlacementModel)
@@ -446,6 +448,35 @@ class SummaryListView(InternalToolAccessMixin, ListView):
             AegisSummaryModel.objects
             .prefetch_related('members__document', 'anchors')
             .order_by('-created')
+        )
+
+
+class SummaryCreateView(InternalToolAccessMixin, CreateView):
+    """
+    Alta de una caja AEGIS sin pasar por el admin.
+
+    Hasta ahora el unico camino era el admin: la lista decia "creala desde el
+    admin y componla aqui", que obliga a saltar entre dos interfaces para una
+    sola tarea. Aqui se crea y se cae directamente en el compositor, que es lo
+    siguiente que hay que hacer.
+    """
+
+    form_class = AegisSummaryForm
+    template_name = 'dashboard/pages/documents/code_gen/summary_form.html'
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        messages.success(
+            self.request,
+            _('Box created. Now add the certificates it contains.')
+        )
+
+        return response
+
+    def get_success_url(self):
+        return reverse(
+            'code_gen:summary_compose', kwargs={'pk': self.object.pk}
         )
 
 

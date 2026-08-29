@@ -1,0 +1,161 @@
+{% extends 'dashboard/dashboard_layout_base.html' %}
+
+{% load i18n static %}
+
+{% block title %}
+  <title>{% trans 'New AEGIS box' %}</title>
+{% endblock title %}
+
+{% block icons %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/aa367a5aee.js" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block custom_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/searchable_select.css' %}" />
+{% endblock custom_css %}
+
+{% block main_layout %}
+  {% url 'core:index' as dashboard_url %}
+  {% url 'code_gen:summary_list' as summaries_url %}
+  {% trans 'New AEGIS box' as page_title %}
+  {% trans 'A box groups several certificates under one summary document that carries all their barcodes.' as page_description %}
+  {% trans 'Dashboard' as dashboard_title %}
+  {% trans 'AEGIS boxes' as summaries_title %}
+
+  {% include 'dashboard/partials/header/_header.html' with icon_class='me-2 fa-solid fa-boxes-stacked' page_title=page_title page_description=page_description parent_title=dashboard_title parent_url=dashboard_url breadcrumbs=summaries_title|add:'::'|add:summaries_url|add:' > '|add:page_title %}
+
+  <div class="container-xl px-4 mt-n10">
+
+    {% if messages %}
+      <div class="mb-4">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} mb-2">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="row">
+      <div class="col-xl-8">
+        <div class="card mb-4">
+          <div class="card-header">
+            <i class="fa-solid fa-box me-2"></i>{% trans 'Box details' %}
+          </div>
+
+          <div class="card-body">
+            <form method="post" id="summaryForm" novalidate>
+              {% csrf_token %}
+
+              {% if form.non_field_errors %}
+                <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+              {% endif %}
+
+              <div class="row g-3">
+                <div class="col-md-12">
+                  <label class="form-label" for="{{ form.title.id_for_label }}">
+                    {{ form.title.label }}
+                  </label>
+                  {{ form.title }}
+                  {% if form.title.help_text %}
+                    <div class="form-text">{{ form.title.help_text }}</div>
+                  {% endif %}
+                  {% for error in form.title.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                  {% endfor %}
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label" for="{{ form.asset.id_for_label }}">
+                    {{ form.asset.label }}
+                  </label>
+                  {{ form.asset }}
+                  <div class="form-text">
+                    {{ form.asset.help_text }}
+                    {% comment %}
+                      Un activo no se da de alta suelto: su nombre lo lleva como
+                      inline obligatorio, asi que el alta empieza por el nombre.
+                    {% endcomment %}
+                    <a href="{% url 'admin:assets_assetsnamesmodel_add' %}"
+                       target="_blank" rel="noopener noreferrer">
+                      {% trans 'Add a new asset (starts with its name).' %}
+                    </a>
+                  </div>
+                  {% for error in form.asset.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                  {% endfor %}
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label" for="{{ form.issued_at.id_for_label }}">
+                    {{ form.issued_at.label }}
+                  </label>
+                  {{ form.issued_at }}
+                  {% if form.issued_at.help_text %}
+                    <div class="form-text">{{ form.issued_at.help_text }}</div>
+                  {% endif %}
+                  {% for error in form.issued_at.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                  {% endfor %}
+                </div>
+
+                <div class="col-md-12">
+                  <label class="form-label" for="{{ form.asset_label.id_for_label }}">
+                    {{ form.asset_label.label }}
+                  </label>
+                  {{ form.asset_label }}
+                  {% if form.asset_label.help_text %}
+                    <div class="form-text">{{ form.asset_label.help_text }}</div>
+                  {% endif %}
+                  {% for error in form.asset_label.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                  {% endfor %}
+                </div>
+              </div>
+
+              <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-primary"
+                        data-busy-text="{% trans 'Creating…' %}">
+                  <i class="bi bi-plus-lg me-1"></i>{% trans 'Create and compose' %}
+                </button>
+                <a href="{% url 'code_gen:summary_list' %}" class="btn btn-outline-secondary">
+                  {% trans 'Cancel' %}
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-4">
+        <div class="card mb-4">
+          <div class="card-header">
+            <i class="fa-regular fa-circle-question me-2"></i>{% trans 'What happens next' %}
+          </div>
+          <div class="card-body small">
+            <ol class="ps-3 mb-0">
+              <li class="mb-2">
+                {% trans 'You pick the certificates that go inside the box.' %}
+              </li>
+              <li class="mb-2">
+                {% trans 'You place each member barcode on the summary page, plus the summary own QR and barcode.' %}
+              </li>
+              <li class="mb-2">
+                {% trans 'Sealing computes the master hash over the members. It never covers the summary itself: the summary is issued carrying that hash, and only afterwards is its own fingerprint recorded.' %}
+              </li>
+              <li>
+                {% trans 'The anchor QR points to a page that updates itself as the timestamp matures, so nothing has to be stamped again.' %}
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock main_layout %}
+
+{% block body_custom_js %}
+  {{ block.super }}
+  <script src="{% static 'js/searchable_select.js' %}"></script>
+  <script src="{% static 'js/busy_buttons.js' %}"></script>
+{% endblock body_custom_js %}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 12:12-0500\n"
+"POT-Creation-Date: 2026-08-29 12:50-0500\n"
 "PO-Revision-Date: 2026-08-27 20:24+0000\n"
 "Last-Translator: Juan Sebastian Morales Delgado "
 "<cto@propensionesabogados.com>\n"
@@ -49,6 +49,7 @@ msgstr "Cambiar la contraseña"
 #: .\templates\account\change_password.html:106
 #: .\templates\dashboard\pages\buyers\modals\delete_offer_modal.html:60
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:121
+#: .\templates\dashboard\pages\documents\code_gen\summary_form.html:123
 #: .\templates\dashboard\pages\holders\modals\delete_asset_modal.html:21
 #: .\templates\dashboard\pages\holders\modals\delete_location_reference_modal.html:21
 #: .\templates\two_factor\_wizard_actions.html:5
@@ -308,7 +309,7 @@ msgstr "Descripción (EN)"
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:116
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:190
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:22
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:150
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:157
 msgid "Save"
 msgstr "Guardar"
 
@@ -858,7 +859,7 @@ msgstr "Tipo de cantidad - Necesaria"
 #: .\templates\dashboard\pages\buyers\profitability.html:66
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:78
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_detail.html:33
-#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:36
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:41
 msgid "Status"
 msgstr "Estado"
 
@@ -1130,7 +1131,7 @@ msgid "Intermediary"
 msgstr "Facilitador"
 
 #: .\templates\dashboard\pages\buyers\wizard\partials\_offer_approval_wizard.html:197
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:116
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:124
 msgid "Add"
 msgstr "Agregar"
 
@@ -1622,8 +1623,8 @@ msgstr ""
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:47
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_detail.html:36
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:45
-#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:38
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:46
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:43
 msgid "Master hash"
 msgstr "Master hash"
 
@@ -1648,7 +1649,7 @@ msgstr "Canonicalización"
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:62
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:130
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_detail.html:53
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:62
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:63
 msgid "Documents in the box"
 msgstr "Documentos de la caja"
 
@@ -1700,7 +1701,7 @@ msgstr "No válido"
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_detail.html:59
 #: .\templates\dashboard\pages\documents\code_gen\code_detail.html:43
 #: .\templates\dashboard\pages\documents\code_gen\code_history.html:60
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:77
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:78
 msgid "Code"
 msgstr "Código"
 
@@ -1732,7 +1733,7 @@ msgstr "Comprobado el"
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_detail.html:27
 #: .\templates\dashboard\pages\documents\code_gen\code_detail.html:74
 #: .\templates\dashboard\pages\documents\code_gen\code_history.html:61
-#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:35
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:40
 msgid "Public code"
 msgstr "Código público"
 
@@ -1894,7 +1895,8 @@ msgstr "Código emitido"
 #: .\templates\dashboard\pages\documents\code_gen\code_history.html:18
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:24
 #: .\templates\dashboard\pages\documents\code_gen\layout_list.html:23
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:24
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:25
+#: .\templates\dashboard\pages\documents\code_gen\summary_form.html:24
 #: .\templates\dashboard\pages\documents\code_gen\summary_list.html:16
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:14
 msgid "Dashboard"
@@ -1944,7 +1946,7 @@ msgid "Certified document"
 msgstr "Documento certificado"
 
 #: .\templates\dashboard\pages\documents\code_gen\code_detail.html:107
-#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:34
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:39
 msgid "Title"
 msgstr "Título"
 
@@ -2072,7 +2074,7 @@ msgstr ""
 msgid "Document certification"
 msgstr "Certificación del documento"
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:265
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:268
 msgid ""
 "Defines where the QR and the barcode are placed inside the PDF. Edit it "
 "below, over the document itself."
@@ -2080,23 +2082,23 @@ msgstr ""
 "Define dónde se colocan el QR y el código de barras dentro del PDF. Edítala "
 "abajo, sobre el propio documento."
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:267
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:270
 msgid "Manage layouts"
 msgstr "Gestionar disposiciones"
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:291
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:294
 msgid "Generating…"
 msgstr "Generando…"
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:292
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:295
 msgid "Generate"
 msgstr "Generar"
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:303
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:306
 msgid "Result"
 msgstr "Resultado"
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:307
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:310
 msgid ""
 "After pressing Generate you land on the permanent page of the issued code, "
 "with its symbols and downloads. It stays available: you can close this tab "
@@ -2106,42 +2108,43 @@ msgstr ""
 "símbolos y sus descargas. Queda disponible: puedes cerrar esta pestaña y "
 "volver a ella más tarde."
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:313
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:316
 msgid "See previously generated codes"
 msgstr "Ver códigos generados antes"
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:337
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:340
 msgid "Pick a layout first, or use \"Save and create\"."
 msgstr "Elige primero una disposición, o usa «Guardar y crear»."
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:338
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:341
 msgid "Add at least one placement."
 msgstr "Añade al menos una posición."
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:339
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:342
 msgid "The layout could not be loaded."
 msgstr "No se pudo cargar la disposición."
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:340
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:343
 msgid "The layout could not be saved."
 msgstr "No se pudo guardar la disposición."
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:341
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:344
 msgid "The layout name is required."
 msgstr "El nombre de la disposición es obligatorio."
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:342
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:345
 msgid "Placement moved. Press Save to store it in the layout."
 msgstr "Posición movida. Pulsa Guardar para almacenarla en la disposición."
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:343
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:346
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:174
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:64
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:149
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:65
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:156
 msgid "Saving…"
 msgstr "Guardando…"
 
-#: .\templates\dashboard\pages\documents\code_gen\code_form.html:344
+#: .\templates\dashboard\pages\documents\code_gen\code_form.html:347
+#: .\templates\dashboard\pages\documents\code_gen\summary_form.html:119
 msgid "Creating…"
 msgstr "Creando…"
 
@@ -2182,7 +2185,7 @@ msgid "New stamp layout"
 msgstr "Nueva disposición de estampado"
 
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:22
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:157
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:164
 msgid "Stamp layout"
 msgstr "Disposición de estampado"
 
@@ -2206,7 +2209,7 @@ msgstr "Posiciones"
 
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:98
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:19
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:201
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:208
 msgid "Add placement"
 msgstr "Añadir posición"
 
@@ -2222,13 +2225,13 @@ msgstr ""
 
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:110
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:62
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:185
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:192
 msgid "Code kind"
 msgstr "Tipo de código"
 
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:111
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:63
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:187
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:194
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:41
 msgid "Pages"
 msgstr "Páginas"
@@ -2239,20 +2242,20 @@ msgstr "Números de página"
 
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:113
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:64
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:188
-#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:58
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:195
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:63
 msgid "Anchor"
 msgstr "Anclaje"
 
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:116
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:67
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:191
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:198
 msgid "Width (pt)"
 msgstr "Ancho (pt)"
 
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:117
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:68
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:192
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:199
 msgid "Height (pt)"
 msgstr "Alto (pt)"
 
@@ -2378,29 +2381,29 @@ msgstr "Usar como disposición por defecto"
 msgid "Create layout"
 msgstr "Crear disposición"
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:22
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:23
 msgid "AEGIS summary"
 msgstr "Resumen AEGIS"
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:23
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:24
 msgid ""
 "Pick the documents, place their barcodes on the summary, seal and anchor."
 msgstr ""
 "Elige los documentos, coloca sus códigos de barras sobre el resumen, sella y "
 "ancla."
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:25
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:26
 #: .\templates\dashboard\pages\documents\code_gen\summary_list.html:5
 #: .\templates\dashboard\pages\documents\code_gen\summary_list.html:14
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:204
 msgid "AEGIS summaries"
 msgstr "Resúmenes AEGIS"
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:48
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:49
 msgid "Anchor URL (inside the QR)"
 msgstr "URL del anclaje (dentro del QR)"
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:52
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:53
 msgid ""
 "The QR carries this URL, not the proof: the page updates on its own as "
 "anchors mature, so the PDF is never reissued."
@@ -2408,11 +2411,11 @@ msgstr ""
 "El QR lleva esta URL, no la prueba: la página se actualiza sola según "
 "maduran los anclajes, así que el PDF no se reemite nunca."
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:65
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:66
 msgid "Save members"
 msgstr "Guardar miembros"
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:70
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:71
 msgid ""
 "Only certified documents can join: an uncertified one has no fingerprint to "
 "include. Changing the members invalidates the seal."
@@ -2420,24 +2423,32 @@ msgstr ""
 "Solo pueden entrar documentos certificados: uno sin certificar no tiene "
 "huella que incluir. Cambiar los miembros invalida el sello."
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:78
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:79
 msgid "Document"
 msgstr "Documento"
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:105
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:107
 msgid "Add a certified document"
 msgstr "Añadir un documento certificado"
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:108
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:159
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:113
+msgid "Search by title or code…"
+msgstr "Buscar por título o código…"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:114
+msgid "No certified document matches."
+msgstr "Ningún documento certificado coincide."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:115
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:166
 msgid "— choose —"
 msgstr "— elegir —"
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:124
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:131
 msgid "Seal"
 msgstr "Sellar"
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:127
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:134
 msgid ""
 "Sealing computes the master hash over the members. It never covers the "
 "summary itself — that document does not exist yet when the hash is computed."
@@ -2445,76 +2456,145 @@ msgstr ""
 "Sellar calcula el master hash sobre los miembros. Nunca cubre al propio "
 "resumen: ese documento todavía no existe cuando se calcula el hash."
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:131
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:138
 msgid "Sealing…"
 msgstr "Sellando…"
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:132
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:139
 msgid "Seal the box"
 msgstr "Sellar la caja"
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:143
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:150
 msgid "Codes on the summary"
 msgstr "Códigos sobre el resumen"
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:146
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:153
 msgid "Bring the member barcodes"
 msgstr "Traer los códigos de los miembros"
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:170
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:177
 msgid "Summary PDF (without codes), to preview over it"
 msgstr "PDF del resumen (sin códigos), para previsualizar encima"
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:175
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:182
 msgid "Read in the browser only: it is not uploaded from here."
 msgstr "Solo se lee en el navegador: desde aquí no se sube."
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:186
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:193
 msgid "Member"
 msgstr "Miembro"
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:261
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:268
 msgid "Choose a stamp layout first."
 msgstr "Elige antes una disposición de estampado."
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:262
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:269
 msgid "Choose a document to add."
 msgstr "Elige un documento para añadir."
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:263
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:270
 msgid "That document is already in the box."
 msgstr "Ese documento ya está en la caja."
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:264
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:271
 msgid "Add at least one document."
 msgstr "Añade al menos un documento."
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:265
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:272
 msgid "It could not be saved."
 msgstr "No se pudo guardar."
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:266
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:273
 msgid "Member barcodes added. Drag them into place and press Save."
 msgstr ""
 "Códigos de los miembros añadidos. Arrástralos a su sitio y pulsa Guardar."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_form.html:6
+#: .\templates\dashboard\pages\documents\code_gen\summary_form.html:22
+msgid "New AEGIS box"
+msgstr "Nueva caja AEGIS"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_form.html:23
+msgid ""
+"A box groups several certificates under one summary document that carries "
+"all their barcodes."
+msgstr ""
+"Una caja agrupa varios certificados bajo un documento resumen que "
+"lleva todos sus códigos de barras."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_form.html:25
+msgid "AEGIS boxes"
+msgstr "Cajas AEGIS"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_form.html:43
+msgid "Box details"
+msgstr "Datos de la caja"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_form.html:82
+msgid "Add a new asset (starts with its name)."
+msgstr "Añadir un activo nuevo (empieza por su nombre)."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_form.html:120
+msgid "Create and compose"
+msgstr "Crear y componer"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_form.html:134
+msgid "What happens next"
+msgstr "Qué viene después"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_form.html:139
+msgid "You pick the certificates that go inside the box."
+msgstr "Eliges los certificados que van dentro de la caja."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_form.html:142
+msgid ""
+"You place each member barcode on the summary page, plus the summary own QR "
+"and barcode."
+msgstr ""
+"Colocas el código de barras de cada miembro en la página del "
+"resumen, más el QR y el código de barras del propio resumen."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_form.html:145
+msgid ""
+"Sealing computes the master hash over the members. It never covers the "
+"summary itself: the summary is issued carrying that hash, and only "
+"afterwards is its own fingerprint recorded."
+msgstr ""
+"Sellar calcula el master hash sobre los miembros. Nunca cubre al "
+"propio resumen: el resumen se emite llevando ese hash, y solo "
+"después se registra su propia huella."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_form.html:148
+msgid ""
+"The anchor QR points to a page that updates itself as the timestamp matures, "
+"so nothing has to be stamped again."
+msgstr ""
+"El QR del anclaje apunta a una página que se actualiza sola según "
+"madura el sellado, así que no hay que reestampar nada."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_list.html:15
 msgid "Boxes that group several certificates under one master hash."
 msgstr "Cajas que agrupan varios certificados bajo un único master hash."
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:23
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:24
 msgid "Summaries"
 msgstr "Resúmenes"
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:27
-msgid "No summaries yet. Create one from the admin, then compose it here."
-msgstr "Todavía no hay resúmenes. Crea uno desde el admin y compónlo aquí."
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:26
+msgid "New box"
+msgstr "Nueva caja"
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:37
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:32
+msgid "No boxes yet. Create the first one to start grouping certificates."
+msgstr ""
+"Todavía no hay cajas. Crea la primera para empezar a agrupar "
+"certificados."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:42
 msgid "Members"
 msgstr "Miembros"
 
-#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:53
+#: .\templates\dashboard\pages\documents\code_gen\summary_list.html:58
 msgid "Compose"
 msgstr "Componer"
 

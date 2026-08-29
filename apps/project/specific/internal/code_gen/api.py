@@ -447,3 +447,41 @@ def summary_seal(request, pk):
         'master_hash': digest,
         **_summary_payload(summary),
     })
+
+
+@require_http_methods(['GET'])
+def preview_symbols(request):
+    """
+    Simbolos de ejemplo para la vista previa de disposicion.
+
+    La vista previa necesita el simbolo *de verdad* para poder avisar de que el
+    ancho declarado no es el que se ocupa: al estampar se conserva la
+    proporcion, asi que una caja demasiado baja deja ancho sin usar. Con la
+    imagen y su tamano natural, el JS calcula exactamente lo mismo que
+    ``pdf_stamp`` va a dibujar.
+
+    Parametros de consulta:
+        ``length``  longitud de la carga de ejemplo del codigo de barras.
+        ``payload`` codigo real, si se quiere ver el caso concreto.
+    """
+    if not _is_internal(request.user):
+        return _forbidden()
+
+    from .services.samples import (BARCODE_SAMPLE_DEFAULT_LENGTH,
+                                   BARCODE_SAMPLE_MAX_LENGTH,
+                                   BARCODE_SAMPLE_MIN_LENGTH, clamp_length,
+                                   sample_symbols)
+
+    length = clamp_length(
+        request.GET.get('length'), default=BARCODE_SAMPLE_DEFAULT_LENGTH
+    )
+
+    return JsonResponse({
+        'symbols': sample_symbols(
+            barcode_length=length,
+            barcode_payload=(request.GET.get('payload') or '').strip(),
+        ),
+        'length': length,
+        'min_length': BARCODE_SAMPLE_MIN_LENGTH,
+        'max_length': BARCODE_SAMPLE_MAX_LENGTH,
+    })

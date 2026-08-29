@@ -265,6 +265,15 @@ class CodeGeneratorForm(forms.Form):
             % {'formats': ', '.join(CERTIFIABLE_EXTENSIONS)}
         )
 
+        # Que es y donde se ve: sale impreso en la pagina publica de
+        # verificacion, asi que no es una etiqueta interna.
+        self.fields['certificate_type'].help_text = _(
+            'What kind of document this is. It is shown on the public '
+            'verification page, under the document title. Use "Asset '
+            'Certificate (AEGIS)" for the certificates of a box of assets, '
+            'and "Generic Document" for anything else.'
+        )
+
     # ------------------------------------------------------------------
     # Validacion
     # ------------------------------------------------------------------
@@ -420,3 +429,74 @@ StampPlacementFormSet = inlineformset_factory(
     extra=1,
     can_delete=True,
 )
+
+
+class AegisSummaryForm(forms.ModelForm):
+    """
+    Alta de una caja AEGIS fuera del admin.
+
+    Solo pide lo que hace falta para empezar a componerla: el resto -- codigo
+    publico, secuencia, sello, documento resumen -- lo pone la plataforma, y
+    los miembros se eligen ya en el compositor.
+    """
+
+    class Meta:
+        from apps.project.specific.documents.certificates.models import \
+            AegisSummaryModel
+
+        model = AegisSummaryModel
+        fields = ('title', 'asset', 'asset_label', 'issued_at')
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'asset_label': forms.TextInput(attrs={'class': 'form-control'}),
+            'issued_at': forms.DateInput(
+                attrs={'class': 'form-control', 'type': 'date'}
+            ),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        from apps.project.specific.assets_management.assets.models import \
+            AssetModel
+
+        self.fields['asset'].queryset = (
+            AssetModel.objects
+            .filter(is_active=True)
+            .select_related('asset_name', 'category')
+            .order_by('asset_name__es_name')
+        )
+        self.fields['asset'].required = False
+        self.fields['asset'].empty_label = _('— none —')
+
+        # El catalogo es largo: sin buscador no se encuentra nada.
+        self.fields['asset'].widget.attrs.update({
+            'class': 'form-select',
+            'data-searchable': '1',
+            'data-search-placeholder': _('Search asset…'),
+            'data-search-empty': _('No asset matches.'),
+        })
+
+        self.fields['title'].help_text = _(
+            'How this box is identified internally, e.g. "AEGIS box - '
+            'Zimbabwe gold micro-ingots".'
+        )
+        self.fields['asset_label'].help_text = _(
+            'Optional. Readable name printed on the summary. The binding is '
+            'made through the asset UUID, never through this text.'
+        )
+        self.fields['issued_at'].help_text = _(
+            'Issue date printed on the summary document.'
+        )
+
+    def clean(self):
+        cleaned = super().clean()
+
+        # Si se eligio un activo y no se escribio etiqueta, se rellena sola:
+        # es solo un texto legible, el vinculo real va por el UUID.
+        asset = cleaned.get('asset')
+
+        if asset and not (cleaned.get('asset_label') or '').strip():
+            cleaned['asset_label'] = str(asset)[:200]
+
+        return cleaned

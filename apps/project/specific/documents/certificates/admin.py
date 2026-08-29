@@ -744,6 +744,43 @@ def action_anchor_ots(modeladmin, request, queryset):
 @admin.register(AegisSummaryModel)
 class AegisSummaryModelAdmin(GeneralAdminModel):
     inlines = [AegisSummaryDocumentInline]
+
+    # El desplegable de activos listaba el catalogo entero sin buscador.
+    autocomplete_fields = ('asset',)
+
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        """
+        Manda el "anadir" del activo a donde de verdad se anade un activo.
+
+        ``AssetModel`` no se crea suelto: ``AssetsNamesModelAdmin`` lo lleva
+        como inline obligatorio, asi que el alta empieza siempre por el nombre.
+        El "+" que Django pone junto al desplegable apuntaba al alta directa de
+        ``AssetModel``, que deja un activo sin nombre. Se quita ese atajo y se
+        indica el camino bueno.
+
+        Tiene que ser ``formfield_for_dbfield`` y no ``formfield_for_foreignkey``:
+        el ``RelatedFieldWidgetWrapper`` que pinta esos iconos lo anade Django
+        **despues** de llamar a la segunda, con sus propios flags, asi que
+        tocarlos alli no surte ningun efecto.
+        """
+        formfield = super().formfield_for_dbfield(db_field, request, **kwargs)
+
+        if db_field.name == 'asset' and formfield is not None:
+            widget = getattr(formfield, 'widget', None)
+
+            if hasattr(widget, 'can_add_related'):
+                widget.can_add_related = False
+                widget.can_change_related = False
+                widget.can_delete_related = False
+
+            formfield.help_text = format_html(
+                '{} <a href="{}" target="_blank" rel="noopener">{}</a>',
+                _('The asset this box of certificates belongs to.'),
+                reverse('admin:assets_assetsnamesmodel_add'),
+                _('Add a new asset (starts with its name).'),
+            )
+
+        return formfield
     actions = [action_seal_summaries, action_anchor_summaries,
                action_anchor_ots]
 

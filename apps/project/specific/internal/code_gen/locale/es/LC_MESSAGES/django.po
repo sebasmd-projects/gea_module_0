@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ATLAS 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 00:49-0500\n"
+"POT-Creation-Date: 2026-08-29 12:50-0500\n"
 "PO-Revision-Date: 2024-12-15 02:02-0500\n"
 "Last-Translator: Sebastián Morales "
 "<sebastian.morales@propensionesabogados.com>\n"
@@ -334,40 +334,83 @@ msgstr "Vence en"
 msgid "Accepted formats: %(formats)s."
 msgstr "Formatos aceptados: %(formats)s."
 
-#: .\apps\project\specific\internal\code_gen\forms.py:281
+#: .\apps\project\specific\internal\code_gen\forms.py:271
+msgid ""
+"What kind of document this is. It is shown on the public verification page, "
+"under the document title. Use \"Asset Certificate (AEGIS)\" for the "
+"certificates of a box of assets, and \"Generic Document\" for anything else."
+msgstr ""
+"Qué clase de documento es. Aparece en la página pública de "
+"verificación, debajo del título. Usa «Certificado de activo (AEGIS)» "
+"para los certificados de una caja de activos, y «Documento genérico» "
+"para todo lo demás."
+
+#: .\apps\project\specific\internal\code_gen\forms.py:290
 #: .\apps\project\specific\internal\code_gen\services\certification.py:203
 #, python-format
 msgid "Only these formats can be certified: %(formats)s."
 msgstr "Solo se pueden certificar estos formatos: %(formats)s."
 
-#: .\apps\project\specific\internal\code_gen\forms.py:287
+#: .\apps\project\specific\internal\code_gen\forms.py:296
 #, python-format
 msgid "The file is too large. The maximum is %(size)s MB."
 msgstr "El archivo es demasiado grande. El máximo son %(size)s MB."
 
-#: .\apps\project\specific\internal\code_gen\forms.py:301
+#: .\apps\project\specific\internal\code_gen\forms.py:310
 msgid "Upload the document to include its hash in the code."
 msgstr "Sube el documento para incluir su hash en el código."
 
-#: .\apps\project\specific\internal\code_gen\forms.py:308
+#: .\apps\project\specific\internal\code_gen\forms.py:317
 msgid "Upload the document you want to certify."
 msgstr "Sube el documento que quieres certificar."
 
-#: .\apps\project\specific\internal\code_gen\forms.py:319
+#: .\apps\project\specific\internal\code_gen\forms.py:328
 msgid "Select at least one symbol to generate: barcode or QR."
 msgstr "Selecciona al menos un símbolo a generar: código de barras o QR."
 
-#: .\apps\project\specific\internal\code_gen\forms.py:328
+#: .\apps\project\specific\internal\code_gen\forms.py:337
 msgid "Enter the content for the QR code."
 msgstr "Introduce el contenido del código QR."
 
-#: .\apps\project\specific\internal\code_gen\forms.py:335
+#: .\apps\project\specific\internal\code_gen\forms.py:344
 msgid ""
 "The public verification URL only exists once the document is certified. "
 "Certify the document or choose another QR content."
 msgstr ""
 "La URL pública de verificación solo existe una vez certificado el documento. "
 "Certifica el documento o elige otro contenido para el QR."
+
+#: .\apps\project\specific\internal\code_gen\forms.py:470
+msgid "— none —"
+msgstr "— ninguno —"
+
+#: .\apps\project\specific\internal\code_gen\forms.py:476
+msgid "Search asset…"
+msgstr "Buscar activo…"
+
+#: .\apps\project\specific\internal\code_gen\forms.py:477
+msgid "No asset matches."
+msgstr "Ningún activo coincide."
+
+#: .\apps\project\specific\internal\code_gen\forms.py:481
+msgid ""
+"How this box is identified internally, e.g. \"AEGIS box - Zimbabwe gold "
+"micro-ingots\"."
+msgstr ""
+"Cómo se identifica esta caja internamente, p. ej. «Caja AEGIS - "
+"microlingotes de oro de Zimbabue»."
+
+#: .\apps\project\specific\internal\code_gen\forms.py:485
+msgid ""
+"Optional. Readable name printed on the summary. The binding is made through "
+"the asset UUID, never through this text."
+msgstr ""
+"Opcional. Nombre legible que se imprime en el resumen. El vínculo se "
+"hace por el UUID del activo, nunca por este texto."
+
+#: .\apps\project\specific\internal\code_gen\forms.py:489
+msgid "Issue date printed on the summary document."
+msgstr "Fecha de emisión que se imprime en el documento resumen."
 
 #: .\apps\project\specific\internal\code_gen\models.py:16
 msgid "Barcode (Code128)"
@@ -661,31 +704,64 @@ msgstr "Anclaje de certificación"
 msgid "Certification anchors"
 msgstr "Anclajes de certificación"
 
-#: .\apps\project\specific\internal\code_gen\preview.py:22
+#: .\apps\project\specific\internal\code_gen\preview.py:26
 msgid "Page size"
 msgstr "Tamaño de página"
 
-#: .\apps\project\specific\internal\code_gen\preview.py:23
+#: .\apps\project\specific\internal\code_gen\preview.py:27
 msgid "Drag a box to move it; the offsets update as you go."
 msgstr ""
 "Arrastra una caja para moverla; los desplazamientos se actualizan sobre la "
 "marcha."
 
-#: .\apps\project\specific\internal\code_gen\preview.py:24
+#: .\apps\project\specific\internal\code_gen\preview.py:28
 msgid "Rendering the document…"
 msgstr "Dibujando el documento…"
 
-#: .\apps\project\specific\internal\code_gen\preview.py:26
+#: .\apps\project\specific\internal\code_gen\preview.py:30
 msgid "The document could not be rendered; the placements still work."
 msgstr "No se pudo dibujar el documento; las posiciones siguen funcionando."
 
-#: .\apps\project\specific\internal\code_gen\preview.py:28
+#: .\apps\project\specific\internal\code_gen\preview.py:32
 msgid "No placements yet. Add one to see it here."
 msgstr "Todavía no hay posiciones. Añade una para verla aquí."
 
-#: .\apps\project\specific\internal\code_gen\preview.py:29
+#: .\apps\project\specific\internal\code_gen\preview.py:33
 msgid "This placement falls outside the page."
 msgstr "Esta posición queda fuera de la página."
+
+#: .\apps\project\specific\internal\code_gen\preview.py:35
+msgid ""
+"Drag a corner to resize keeping the proportion, or an edge to change only "
+"the width or the height."
+msgstr ""
+"Arrastra una esquina para redimensionar conservando la proporción, o "
+"un lado para cambiar solo el ancho o el alto."
+
+#: .\apps\project\specific\internal\code_gen\preview.py:39
+#, python-format
+msgid ""
+"The symbol keeps its proportion, so it uses %(w)s x %(h)s pt of the %(bw)s x "
+"%(bh)s pt box."
+msgstr ""
+"El símbolo conserva su proporción, así que ocupa %(w)s x %(h)s pt de "
+"la caja de %(bw)s x %(bh)s pt."
+
+#: .\apps\project\specific\internal\code_gen\preview.py:42
+msgid "The symbol fills the box exactly."
+msgstr "El símbolo llena la caja exactamente."
+
+#: .\apps\project\specific\internal\code_gen\preview.py:43
+msgid "Sample characters"
+msgstr "Caracteres de muestra"
+
+#: .\apps\project\specific\internal\code_gen\preview.py:45
+msgid ""
+"Number of characters in the sample barcode. The more characters, the wider "
+"the symbol gets."
+msgstr ""
+"Número de caracteres del código de barras de muestra. Cuantos más "
+"caracteres, más ancho sale el símbolo."
 
 #: .\apps\project\specific\internal\code_gen\services\anchoring.py:65
 #: .\apps\project\specific\internal\code_gen\services\anchoring.py:100
@@ -862,6 +938,19 @@ msgstr ""
 "El compromiso ya está hecho; falta que entre en un bloque de Bitcoin "
 "(normalmente unas horas)."
 
+#: .\apps\project\specific\internal\code_gen\services\samples.py:141
+msgid "Sample QR pointing to the platform."
+msgstr "QR de muestra que apunta a la plataforma."
+
+#: .\apps\project\specific\internal\code_gen\services\samples.py:165
+#, python-format
+msgid "Sample payload of %(count)s characters."
+msgstr "Carga de muestra de %(count)s caracteres."
+
+#: .\apps\project\specific\internal\code_gen\services\samples.py:169
+msgid "Real code for this document."
+msgstr "Código real de este documento."
+
 #: .\apps\project\specific\internal\code_gen\services\summary.py:52
 #: .\apps\project\specific\internal\code_gen\services\summary.py:169
 msgid "Seal the summary before issuing its document."
@@ -916,24 +1005,28 @@ msgstr "El token cubre un hash distinto: no acredita este resumen."
 msgid "The token attests this hash existed at the time it states."
 msgstr "El token acredita que este hash existía en la hora que indica."
 
-#: .\apps\project\specific\internal\code_gen\views.py:80
+#: .\apps\project\specific\internal\code_gen\views.py:82
 msgid "The code could not be generated. Check the logs for details."
 msgstr "No se pudo generar el código. Revisa los registros para más detalle."
 
-#: .\apps\project\specific\internal\code_gen\views.py:153
+#: .\apps\project\specific\internal\code_gen\views.py:155
 msgid "Select at least one segment to build the code."
 msgstr "Selecciona al menos un segmento para construir el código."
 
-#: .\apps\project\specific\internal\code_gen\views.py:216
+#: .\apps\project\specific\internal\code_gen\views.py:218
 #, python-format
 msgid "Some placements did not match any page: %(items)s"
 msgstr "Algunas posiciones no coincidieron con ninguna página: %(items)s"
 
-#: .\apps\project\specific\internal\code_gen\views.py:222
+#: .\apps\project\specific\internal\code_gen\views.py:224
 #, python-format
 msgid "Document certified. Public code: %(code)s"
 msgstr "Documento certificado. Código público: %(code)s"
 
-#: .\apps\project\specific\internal\code_gen\views.py:428
+#: .\apps\project\specific\internal\code_gen\views.py:430
 msgid "Stamp layout saved."
 msgstr "Disposición de estampado guardada."
+
+#: .\apps\project\specific\internal\code_gen\views.py:472
+msgid "Box created. Now add the certificates it contains."
+msgstr "Caja creada. Ahora añade los certificados que contiene."

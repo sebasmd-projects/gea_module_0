@@ -140,6 +140,30 @@
     return (placement.kind === 'BARCODE' ? '▮▯▮ ' : '▣ ') + pages;
   }
 
+  /**
+   * Tamano que el simbolo ocupa de verdad dentro de la caja.
+   *
+   * `pdf_stamp` dibuja con preserveAspectRatio=True y anchor='sw': el simbolo
+   * se ajusta DENTRO del ancho y el alto declarados conservando su propia
+   * proporcion, y se pega a la esquina inferior izquierda. Por eso declarar
+   * 320 pt de ancho no significa ocupar 320: si el alto se queda corto, sobra
+   * ancho a la derecha. Esta funcion replica ese calculo.
+   */
+  function fittedSize(ratio, boxWidth, boxHeight) {
+    if (!ratio || ratio <= 0) {
+      return { width: boxWidth, height: boxHeight };
+    }
+
+    return {
+      width: Math.min(boxWidth, boxHeight * ratio),
+      height: Math.min(boxWidth / ratio, boxHeight)
+    };
+  }
+
+  //: Ninguna caja baja de aqui: por debajo el simbolo no se veria y el
+  //: ajuste dejaria de tener sentido.
+  var MIN_BOX_PT = 6;
+
   function round2(value) {
     return Math.round(value * 100) / 100;
   }
@@ -261,6 +285,22 @@
     this.currentPage = 1;
     this.renderToken = 0;
 
+    // Muestras reales de cada tipo de codigo, con su proporcion natural.
+    this.symbols = {};
+    this.symbolsUrl = root.getAttribute('data-symbols-url') || '';
+    this.sampleLength = toNumber(root.getAttribute('data-sample-length'), 48);
+    this.sampleMin = toNumber(root.getAttribute('data-sample-min'), 8);
+    this.sampleMax = toNumber(root.getAttribute('data-sample-max'), 80);
+
+    var rawSymbols = root.getAttribute('data-symbols');
+    if (rawSymbols) {
+      try {
+        this.symbols = JSON.parse(rawSymbols) || {};
+      } catch (error) {
+        this.symbols = {};
+      }
+    }
+
     var raw = root.getAttribute('data-placements');
     if (raw) {
       try {
@@ -324,9 +364,40 @@
     this.pageNav.style.display = 'none';
     this.toolbar.appendChild(this.pageNav);
 
+    // Longitud de la carga de ejemplo del codigo de barras: cuantos mas
+    // caracteres, mas alargado sale el simbolo y menos alto cabe en la caja.
+    if (this.symbolsUrl) {
+      this.sampleWrap = document.createElement('span');
+      this.sampleWrap.className = 'gea-stamp-preview__sample';
+      this.sampleWrap.title = this.label('samplehint');
+
+      var sampleLabel = document.createElement('label');
+      sampleLabel.className = 'gea-stamp-preview__label';
+      sampleLabel.textContent = this.label('samplelength', 'Sample');
+      this.sampleWrap.appendChild(sampleLabel);
+
+      this.sampleInput = document.createElement('input');
+      this.sampleInput.type = 'number';
+      this.sampleInput.className = 'gea-stamp-preview__number';
+      this.sampleInput.min = this.sampleMin;
+      this.sampleInput.max = this.sampleMax;
+      this.sampleInput.step = 1;
+      this.sampleInput.value = this.sampleLength;
+      sampleLabel.setAttribute('for', '');
+      this.sampleWrap.appendChild(this.sampleInput);
+
+      this.sampleInput.addEventListener('change', function () {
+        self.reloadSymbols(self.sampleInput.value);
+      });
+
+      this.toolbar.appendChild(this.sampleWrap);
+    }
+
     this.hint = document.createElement('span');
     this.hint.className = 'gea-stamp-preview__hint';
-    this.hint.textContent = this.editable ? this.label('hint') : '';
+    this.hint.textContent = this.editable
+      ? this.label('hint') + ' ' + this.label('resize')
+      : '';
     this.toolbar.appendChild(this.hint);
 
     this.stage = document.createElement('div');
@@ -663,6 +734,8 @@
     box.classList.toggle('gea-stamp-preview__box--outside', outOfPage);
     box.title = outOfPage ? this.label('outside') : '';
 
+    this.applySymbolFit(box, placement);
+
     return position;
   };
 
@@ -673,19 +746,194 @@
       'gea-stamp-preview__box gea-stamp-preview__box--' +
       kindClass(placement.kind);
 
+    // El simbolo de verdad, pegado abajo a la izquierda igual que al estampar.
+    var symbol = this.symbols[placement.kind];
+
+    if (symbol && symbol.src) {
+      var image = document.createElement('img');
+      image.className = 'gea-stamp-preview__symbol';
+      image.src = symbol.src;
+      image.alt = '';
+      image.draggable = false;
+      box.appendChild(image);
+      box.__symbolImage = image;
+    }
+
     this.applyBoxGeometry(box, placement);
 
     var caption = document.createElement('span');
     caption.className = 'gea-stamp-preview__caption';
     caption.textContent = captionFor(placement);
     box.appendChild(caption);
+    box.__caption = caption;
 
     if (this.editable && placement._inputs && placement._inputs.offset_x) {
       box.classList.add('gea-stamp-preview__box--draggable');
       this.makeDraggable(box, placement);
+
+      if (placement._inputs.width && placement._inputs.height) {
+        this.addResizeHandles(box, placement);
+      }
     }
 
+    this.applySymbolFit(box, placement);
+
     return box;
+  };
+
+  /**
+   * Coloca el simbolo dentro de la caja y cuenta cuanto ocupa de verdad.
+   */
+  StampPreview.prototype.applySymbolFit = function (box, placement) {
+    var symbol = this.symbols[placement.kind];
+    var image = box.__symbolImage;
+
+    if (!symbol || !image) {
+      return;
+    }
+
+    var fit = fittedSize(symbol.ratio, placement.width, placement.height);
+
+    image.style.width = (fit.width / placement.width) * 100 + '%';
+    image.style.height = (fit.height / placement.height) * 100 + '%';
+
+    // Sobra sitio cuando la proporcion del simbolo no es la de la caja.
+    var slack =
+      Math.abs(fit.width - placement.width) > 0.5 ||
+      Math.abs(fit.height - placement.height) > 0.5;
+
+    box.classList.toggle('gea-stamp-preview__box--slack', slack);
+
+    var note = slack
+      ? this.label('fitted')
+          .replace('%(w)s', round2(fit.width))
+          .replace('%(h)s', round2(fit.height))
+          .replace('%(bw)s', round2(placement.width))
+          .replace('%(bh)s', round2(placement.height))
+      : this.label('exact');
+
+    if (box.__caption) {
+      box.__caption.title = note;
+    }
+
+    if (box.__fitNote) {
+      box.__fitNote.textContent = slack
+        ? round2(fit.width) + ' x ' + round2(fit.height)
+        : '';
+    }
+  };
+
+  /**
+   * Manijas para cambiar el tamano de una caja.
+   *
+   * Las de los lados cambian una sola dimension; las de las esquinas cambian
+   * las dos conservando la relacion ancho/alto que la caja tenga en ese
+   * momento. Arrastrar hacia la derecha o hacia abajo siempre agranda, sea
+   * cual sea el anclaje: hacia donde crece la caja lo decide el anclaje --
+   * una anclada a la derecha crece hacia la izquierda -- y eso se ve en la
+   * propia vista previa mientras se arrastra.
+   */
+  StampPreview.prototype.addResizeHandles = function (box, placement) {
+    var self = this;
+
+    [
+      ['e', 'width'],
+      ['s', 'height'],
+      ['se', 'both'],
+      ['sw', 'both'],
+      ['ne', 'both'],
+      ['nw', 'both']
+    ].forEach(function (item) {
+      var handle = document.createElement('span');
+
+      handle.className =
+        'gea-stamp-preview__handle gea-stamp-preview__handle--' + item[0];
+      handle.dataset.mode = item[1];
+
+      self.makeResizable(handle, box, placement, item[1]);
+      box.appendChild(handle);
+    });
+
+    // Cuanto ocupa realmente el simbolo, visible mientras se ajusta.
+    var note = document.createElement('span');
+    note.className = 'gea-stamp-preview__fit';
+    box.appendChild(note);
+    box.__fitNote = note;
+  };
+
+  StampPreview.prototype.makeResizable = function (handle, box, placement, mode) {
+    var self = this;
+
+    handle.addEventListener('pointerdown', function (event) {
+      event.preventDefault();
+      // Sin esto el arrastre de la caja se dispararia a la vez.
+      event.stopPropagation();
+
+      var scale = self.scale();
+      var startX = event.clientX;
+      var startY = event.clientY;
+      var startW = placement.width;
+      var startH = placement.height;
+      var boxRatio = startH ? startW / startH : 1;
+
+      box.classList.add('is-resizing');
+
+      try {
+        handle.setPointerCapture(event.pointerId);
+      } catch (error) {
+        /* algunos navegadores no lo permiten */
+      }
+
+      function onMove(moveEvent) {
+        var dx = (moveEvent.clientX - startX) / scale;
+        var dy = (moveEvent.clientY - startY) / scale;
+
+        var width = startW;
+        var height = startH;
+
+        if (mode === 'width') {
+          width = startW + dx;
+        } else if (mode === 'height') {
+          height = startH + dy;
+        } else {
+          // Esquina: manda el eje en el que mas se ha movido el puntero, y el
+          // otro lo sigue para no deformar la caja.
+          if (Math.abs(dx) >= Math.abs(dy)) {
+            width = startW + dx;
+            height = boxRatio ? width / boxRatio : startH;
+          } else {
+            height = startH + dy;
+            width = height * boxRatio;
+          }
+        }
+
+        self.writeSize(placement, width, height);
+        self.applyBoxGeometry(box, placement);
+      }
+
+      function onUp(upEvent) {
+        box.classList.remove('is-resizing');
+        handle.removeEventListener('pointermove', onMove);
+        handle.removeEventListener('pointerup', onUp);
+        handle.removeEventListener('pointercancel', onUp);
+
+        try {
+          handle.releasePointerCapture(upEvent.pointerId);
+        } catch (error) {
+          /* el puntero ya se solto */
+        }
+
+        self.render();
+
+        document.dispatchEvent(
+          new CustomEvent('gea:placement-moved', { detail: placement })
+        );
+      }
+
+      handle.addEventListener('pointermove', onMove);
+      handle.addEventListener('pointerup', onUp);
+      handle.addEventListener('pointercancel', onUp);
+    });
   };
 
   StampPreview.prototype.makeDraggable = function (box, placement) {
@@ -762,6 +1010,81 @@
       box.addEventListener('pointerup', onUp);
       box.addEventListener('pointercancel', onUp);
     });
+  };
+
+  /**
+   * Pide al servidor las muestras con otra longitud de carga.
+   *
+   * Solo cambia el dibujo: ninguna posicion se toca. Si la peticion falla se
+   * conservan las muestras que ya habia, que es mejor que quedarse sin nada.
+   */
+  StampPreview.prototype.reloadSymbols = function (length) {
+    var self = this;
+
+    if (!this.symbolsUrl) {
+      return;
+    }
+
+    var wanted = Math.max(
+      this.sampleMin, Math.min(this.sampleMax, toNumber(length, this.sampleLength))
+    );
+
+    if (this.sampleInput) {
+      this.sampleInput.value = wanted;
+      this.sampleInput.disabled = true;
+    }
+
+    fetch(this.symbolsUrl + '?length=' + encodeURIComponent(wanted), {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      credentials: 'same-origin'
+    })
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error('HTTP ' + response.status);
+        }
+        return response.json();
+      })
+      .then(function (data) {
+        if (data && data.symbols) {
+          self.symbols = data.symbols;
+          self.sampleLength = data.length || wanted;
+          self.render();
+        }
+      })
+      .catch(function (error) {
+        if (window.console) {
+          console.warn('Sample symbols could not be reloaded', error);
+        }
+      })
+      .then(function () {
+        if (self.sampleInput) {
+          self.sampleInput.disabled = false;
+        }
+      });
+  };
+
+  /**
+   * Escribe el tamano en la fila del formulario.
+   *
+   * El minimo evita cajas de cero o negativas, que dejarian el simbolo sin
+   * sitio y romperian el ajuste; el maximo, que se salga de la pagina.
+   */
+  StampPreview.prototype.writeSize = function (placement, width, height) {
+    var inputs = placement._inputs;
+
+    placement.width = round2(
+      Math.max(MIN_BOX_PT, Math.min(width, this.pageW))
+    );
+    placement.height = round2(
+      Math.max(MIN_BOX_PT, Math.min(height, this.pageH))
+    );
+
+    if (inputs.width) {
+      inputs.width.value = placement.width;
+    }
+    if (inputs.height) {
+      inputs.height.value = placement.height;
+    }
   };
 
   StampPreview.prototype.writeOffsets = function (placement, offsets) {
