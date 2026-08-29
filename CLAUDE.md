@@ -81,6 +81,10 @@ uv run python manage.py clear_cache
 uv run python manage.py check_attack_terms
 ```
 
+```bash
+uv run python manage.py test --settings=app_core.settings_test
+```
+
 Volcado UTF-8 completo de la base de datos:
 
 ```bash
@@ -193,6 +197,7 @@ Después hay que **añadirla a mano** al grupo correspondiente en `settings.py`.
 15. **El master hash de una caja nunca cubre al propio resumen.** Se sella sobre los miembros, luego se emite el resumen llevando ese hash, y solo después se registra su huella. Es la misma circularidad del código de barras y el hash del original, y no tiene otra solución.
 16. **El QR del anclaje lleva una URL, no la prueba.** La página de `certificates:summary_anchor` se actualiza sola según maduran los anclajes; si el bloque de Bitcoin fuera impreso habría que reestampar el PDF cada vez.
 17. **El payload maestro se guarda verbatim.** No se reconstruye para verificar: se compara contra los bytes exactos que se hashearon. Cambiar `services/jcs.py` invalidaría todos los master hash ya anclados.
+18. **Una orden aprobada ya no se edita ni se oculta desde las vistas de listado.** Aprobar crea la orden de servicio automáticamente (`OfferModel.save`, bloque B), así que a partir de ahí la orden es un documento vivo con PDF ya enviados a terceros: cambiarle la cantidad o ponerle `display = False` dejaría la base de datos contradiciendo lo repartido. Las reglas de quién puede hacer qué sobre una orden viven en `buyers/access.py`, no repartidas por las vistas. Y todo lo que tenga efecto hacia fuera —mandar la orden de servicio por correo— comprueba el estado **antes** de producir el efecto, no al guardar después.
 14. **La trampa anti-escaneo empareja segmentos completos, no subcadenas.** Antes `env` convertía `/envio/` en trampa y bloqueaba la IP del usuario. Al tocar `COMMON_ATTACK_TERMS`, ejecuta `manage.py check_attack_terms`: comprueba colisiones **respetando el orden del URLconf**, que es lo único que determina si una ruta queda secuestrada de verdad.
 
 ---
@@ -309,6 +314,6 @@ IPBlockedModel / WhiteListedIPModel
 ## 11. Estado del repositorio
 
 - Rama principal: `master`.
-- Los ficheros `tests.py` existen en todas las apps pero **están vacíos**. No hay suite de pruebas, ni CI, ni linters configurados. La única carpeta `tests` con contenido es `buyers/functions/tests/dummy_offer.py` (fixture para probar la generación de PDFs a mano).
+- No hay CI ni linters configurados. La única suite de pruebas es `buyers/tests.py`, que cubre el control de acceso del flujo de órdenes: una mitad reproduce agujeros ya cerrados, la otra comprueba que el trabajo legítimo del equipo sigue pasando. Los demás `tests.py` siguen vacíos. Se ejecutan con `--settings=app_core.settings_test` (SQLite en memoria), porque el usuario de MySQL en cPanel no puede crear la base `test_*`. La otra carpeta `tests` con contenido es `buyers/functions/tests/dummy_offer.py` (fixture para probar la generación de PDFs a mano).
 - Los mensajes de commit son informales y en español/inglés mezclado.
 - El historial reciente muestra la plataforma pasando por un ciclo de desactivación ("standby mode") y reactivación.

@@ -10,7 +10,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin)
-from django.core.exceptions import ValidationError
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.mail import EmailMultiAlternatives
 from django.db.models import Count, Sum
 from django.db.models.functions import Coalesce, TruncMonth
@@ -34,6 +34,7 @@ from apps.project.specific.assets_management.assets.models import (
 from apps.project.specific.assets_management.assets_location.models import \
     AssetLocationModel
 
+from .access import OfferMutationMixin, can_view_offer
 from .form import OfferForm, OfferUpdateForm, ServiceOrderRecipientsForm
 from .functions import generate_purchase_order_pdf, generate_service_order_pdf
 from .models import OfferModel
@@ -441,28 +442,66 @@ class PurchaseOrderCreateView(BuyerRequiredMixin, CreateView):
             email.send(fail_silently=False)
 
 
-class OfferUpdateView(BuyerRequiredMixin, UpdateView):
+class OfferUpdateView(BuyerRequiredMixin, OfferMutationMixin, UpdateView):
+    """
+    Edicion de una orden.
+
+    Solo mientras sea un borrador: en cuanto se aprueba, la orden de servicio
+    ya existe y puede haberse enviado por correo, asi que cambiarle la cantidad
+    aqui dejaria la base de datos diciendo una cosa y los PDF repartidos otra.
+    A partir de ahi corrige el personal interno, o se hace por el wizard.
+    """
+
     model = OfferModel
     form_class = OfferUpdateForm
     template_name = 'dashboard/pages/buyers/edit_offer.html'
     success_url = reverse_lazy('buyers:buyer_index')
+    offer_url_kwarg = 'pk'
 
 
-class OfferSoftDeleteView(BuyerRequiredMixin, View):
+class OfferSoftDeleteView(BuyerRequiredMixin, OfferMutationMixin, View):
+    """
+    Retira una orden de los listados (``display = False``).
+
+    Nunca una que ya este aprobada: esa tiene documentos emitidos y hacerla
+    desaparecer de la vista es justo lo que no debe poder hacerse sin dejar
+    rastro.
+    """
+
+    http_method_names = ['post']
+    offer_url_kwarg = 'id'
+    mutation_denied_json = True
+
     def post(self, request, *args, **kwargs):
-        offer = get_object_or_404(OfferModel, pk=kwargs.get('id'))
+        offer = self.get_offer()
         offer.display = False
         offer.save()
+        logger.info(
+            'Offer %s hidden by %s', offer.pk, request.user.get_username()
+        )
         return JsonResponse({'success': True, 'id': str(offer.pk)})
 
 
-class OfferDetailView(LoginRequiredMixin, DetailView):
+class OfferDetailView(BuyerRequiredMixin, DetailView):
+    """
+    Detalle de una orden de compra.
+
+    Llevaba solo ``LoginRequiredMixin``, asi que cualquier usuario autenticado
+    -- un tenedor, un intermediario -- veia la ficha comercial completa de
+    cualquier orden con solo tener el UUID. Es trabajo del equipo de compras.
+    """
+
     model = OfferModel
     template_name = 'dashboard/pages/buyers/detail_offer.html'
     context_object_name = 'offer'
 
     def get_object(self, queryset=None):
-        return get_object_or_404(OfferModel, id=self.kwargs.get('id'))
+        offer = get_object_or_404(OfferModel, id=self.kwargs.get('id'))
+
+        if not can_view_offer(self.request.user, offer):
+            raise PermissionDenied
+
+        return offer
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -606,6 +645,21 @@ class OfferApprovalWizardActionView(BuyerRequiredMixin, PermissionRequiredMixin,
         # --- service order: notify (sends email + pdf) ---
         if step == "SO_NOTIFY":
             self._require_perm(request.user, "can_send_service_order")
+
+            # El correo lleva adjunta la orden de servicio en PDF, asi que el
+            # estado se comprueba ANTES de enviarlo. Antes se enviaba primero y
+            # se validaba al guardar: una orden ni revisada ni aprobada salia
+            # por correo igualmente y, como el guardado posterior limpiaba el
+            # sello, encima no quedaba registro de que se hubiera enviado.
+            if not offer.is_approved or not offer.service_order_created_at:
+                return JsonResponse(
+                    {"ok": False, "errors": [_(
+                        "The service order cannot be sent before the purchase "
+                        "order is approved."
+                    )]},
+                    status=400
+                )
+
             recipients = _resolve_so_emails(offer)
             if not recipients:
                 return JsonResponse(
@@ -665,9 +719,10 @@ class OfferApprovalWizardActionView(BuyerRequiredMixin, PermissionRequiredMixin,
 
             email.send(fail_silently=False)
 
+            # Por la via atomica: ademas del sello guarda QUIEN lo envio, que
+            # el guardado directo anterior se dejaba sin escribir.
             if not offer.service_order_sent_at:
-                offer.service_order_sent_at = timezone.now()
-                offer.save(update_fields=["service_order_sent_at"])
+                offer.mark_service_order_sent(request.user)
 
             ctx = build_wizard_context(request, offer)
             html = render_to_string(

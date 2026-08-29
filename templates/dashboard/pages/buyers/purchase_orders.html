@@ -451,7 +451,11 @@
                         // Refresca la tabla (quitar fila + reindexar)
                         removeRowFromTable(offerId);
                     } else {
-                        showAlert("{{ DeleteErrorText }}", 'danger');
+                        // El servidor explica por que no se puede (p.ej. la
+                        // orden ya esta aprobada); es mas util que un error
+                        // generico.
+                        const reason = data && data.errors && data.errors[0];
+                        showAlert(reason || "{{ DeleteErrorText }}", 'danger');
                     }
                 } catch (err) {
                     console.error(err);

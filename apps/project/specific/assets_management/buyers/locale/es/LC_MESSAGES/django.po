@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-02 19:50-0500\n"
+"POT-Creation-Date: 2026-08-29 12:12-0500\n"
 "PO-Revision-Date: 2025-11-10 21:47+0000\n"
 "Last-Translator: Sebastian Morales <support@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,6 +18,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.0\n"
+
+#: .\apps\project\specific\assets_management\buyers\access.py:76
+msgid ""
+"This purchase order is already approved and its service order has been "
+"issued. Changing or deleting it now would contradict the documents already "
+"sent. Use the approval workflow instead."
+msgstr ""
+"Esta orden de compra ya esta aprobada y su orden de servicio esta emitida. "
+"Modificarla o eliminarla ahora contradiria los documentos ya enviados. "
+"Utiliza el flujo de aprobacion."
+
+#: .\apps\project\specific\assets_management\buyers\access.py:97
+#: .\apps\project\specific\assets_management\buyers\views.py:769
+msgid "You don't have permission to perform this action."
+msgstr "No tienes permisos para realizar esta acción."
 
 #: .\apps\project\specific\assets_management\buyers\admin.py:102
 msgid "Required Fields"
@@ -480,27 +495,29 @@ msgstr "Destinatario de la orden de servicio"
 msgid "Service Order Recipients"
 msgstr "Destinatarios de la orden de servicio"
 
-#: .\apps\project\specific\assets_management\buyers\views.py:318
+#: .\apps\project\specific\assets_management\buyers\views.py:319
 msgid "Your Purchase order has been sent for verification."
 msgstr "Su orden de compra ha sido enviada para verificación."
 
-#: .\apps\project\specific\assets_management\buyers\views.py:343
+#: .\apps\project\specific\assets_management\buyers\views.py:344
 msgid "New Purchase order Submitted for Verification"
 msgstr "Nueva orden de compra enviada para verificación"
 
-#: .\apps\project\specific\assets_management\buyers\views.py:612
+#: .\apps\project\specific\assets_management\buyers\views.py:657
+msgid "The service order cannot be sent before the purchase order is approved."
+msgstr ""
+"No se puede enviar la orden de servicio antes de que la orden de compra este "
+"aprobada."
+
+#: .\apps\project\specific\assets_management\buyers\views.py:666
 msgid "No recipients to notify."
 msgstr "No hay destinatarios a notificar."
 
-#: .\apps\project\specific\assets_management\buyers\views.py:635
+#: .\apps\project\specific\assets_management\buyers\views.py:689
 #, python-format
 msgid "Service Order Notification for OC: %(po)s"
 msgstr "Notificación de Orden de servicio para OC: %(po)s"
 
-#: .\apps\project\specific\assets_management\buyers\views.py:714
-msgid "You don't have permission to perform this action."
-msgstr "No tienes permisos para realizar esta acción."
-
-#: .\apps\project\specific\assets_management\buyers\views.py:776
+#: .\apps\project\specific\assets_management\buyers\views.py:831
 msgid "Unknown step."
 msgstr "Paso desconocido."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 00:49-0500\n"
+"POT-Creation-Date: 2026-08-29 12:12-0500\n"
 "PO-Revision-Date: 2026-08-27 20:24+0000\n"
 "Last-Translator: Juan Sebastian Morales Delgado "
 "<cto@propensionesabogados.com>\n"
@@ -895,7 +895,7 @@ msgstr "Pendiente"
 #: .\templates\dashboard\pages\buyers\profitability.html:83
 #: .\templates\dashboard\pages\buyers\profitability.html:318
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:99
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:483
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:487
 msgid "Show full ID"
 msgstr "Mostrar ID completo"
 
@@ -922,7 +922,7 @@ msgid "Closed"
 msgstr "Cerrado"
 
 #: .\templates\dashboard\pages\buyers\profitability.html:317
-#: .\templates\dashboard\pages\buyers\purchase_orders.html:484
+#: .\templates\dashboard\pages\buyers\purchase_orders.html:488
 msgid "Hide full ID"
 msgstr "Esconder ID completo"
 
