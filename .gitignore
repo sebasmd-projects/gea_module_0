@@ -15,6 +15,8 @@ users_backup.json
 DRAFT_SECURITY_REPORT.md
 SECURITY_ANALYSIS_TODO.md
 strix_runs/
+.agents
+skills-lock.json
 
 ### Django ###
 *.log
@@ -28,7 +30,7 @@ media/
 tmp/
 stderr.log
 static/
-
+.claude/skills/
 
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
 # in your Git repository. Update and uncomment the following line accordingly.
