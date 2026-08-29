@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-06 23:11-0500\n"
+"POT-Creation-Date: 2026-08-29 13:10-0500\n"
 "PO-Revision-Date: 2026-01-06 23:16+0000\n"
 "Last-Translator: Sebastian Morales <cto@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -170,18 +170,18 @@ msgstr "Activo H."
 msgid "Assets"
 msgstr "Activos H."
 
-#: .\apps\project\specific\assets_management\assets\views.py:92
+#: .\apps\project\specific\assets_management\assets\views.py:139
 msgid "Asset and Asset Name created successfully."
 msgstr "Activo y nombre del activo creados exitosamente."
 
-#: .\apps\project\specific\assets_management\assets\views.py:95
+#: .\apps\project\specific\assets_management\assets\views.py:150
 msgid "Please fix the errors below."
 msgstr "Por favor corrija los errores a continuación."
 
-#: .\apps\project\specific\assets_management\assets\views.py:123
+#: .\apps\project\specific\assets_management\assets\views.py:179
 msgid "New category created successfully."
 msgstr "Nueva categoría creada exitosamente."
 
-#: .\apps\project\specific\assets_management\assets\views.py:143
+#: .\apps\project\specific\assets_management\assets\views.py:199
 msgid "I need help with GEA, my user is"
 msgstr "Necesito ayuda con la plataforma GEA, mi usuario es "

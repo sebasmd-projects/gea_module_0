@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
+from django.utils.http import urlencode
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import (CreateView, DetailView, FormView,
                                   ListView, TemplateView)
@@ -463,6 +464,46 @@ class SummaryCreateView(InternalToolAccessMixin, CreateView):
 
     form_class = AegisSummaryForm
     template_name = 'dashboard/pages/documents/code_gen/summary_form.html'
+
+    def get_initial(self):
+        """
+        Preselecciona el activo con el que se vuelve de darlo de alta.
+
+        Se comprueba que exista antes de proponerlo: un UUID inventado en la
+        barra de direcciones no debe dejar el formulario en un estado raro.
+        """
+        initial = super().get_initial()
+        asset_id = (self.request.GET.get('asset') or '').strip()
+
+        if not asset_id:
+            return initial
+
+        from apps.project.specific.assets_management.assets.models import             AssetModel
+
+        try:
+            asset = AssetModel.objects.filter(
+                pk=asset_id, is_active=True
+            ).first()
+        except (ValueError, ValidationError):
+            asset = None
+
+        if asset:
+            initial['asset'] = asset.pk
+            initial['asset_label'] = str(asset)[:200]
+
+        return initial
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # El alta de activos tiene su propia pantalla: no se manda a nadie al
+        # admin. Se le pasa a donde volver para no perder el hilo.
+        context['asset_create_url'] = (
+            f"{reverse('assets:create')}?"
+            f"{urlencode({'next': self.request.path})}"
+        )
+
+        return context
 
     def form_valid(self, form):
         response = super().form_valid(form)

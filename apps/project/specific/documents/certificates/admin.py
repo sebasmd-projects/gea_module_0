@@ -776,8 +776,8 @@ class AegisSummaryModelAdmin(GeneralAdminModel):
             formfield.help_text = format_html(
                 '{} <a href="{}" target="_blank" rel="noopener">{}</a>',
                 _('The asset this box of certificates belongs to.'),
-                reverse('admin:assets_assetsnamesmodel_add'),
-                _('Add a new asset (starts with its name).'),
+                reverse('assets:create'),
+                _('Add a new asset'),
             )
 
         return formfield

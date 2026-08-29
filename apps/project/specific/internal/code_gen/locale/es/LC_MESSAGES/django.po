@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ATLAS 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 12:50-0500\n"
+"POT-Creation-Date: 2026-08-29 13:10-0500\n"
 "PO-Revision-Date: 2024-12-15 02:02-0500\n"
 "Last-Translator: Sebastián Morales "
 "<sebastian.morales@propensionesabogados.com>\n"
@@ -1005,28 +1005,28 @@ msgstr "El token cubre un hash distinto: no acredita este resumen."
 msgid "The token attests this hash existed at the time it states."
 msgstr "El token acredita que este hash existía en la hora que indica."
 
-#: .\apps\project\specific\internal\code_gen\views.py:82
+#: .\apps\project\specific\internal\code_gen\views.py:83
 msgid "The code could not be generated. Check the logs for details."
 msgstr "No se pudo generar el código. Revisa los registros para más detalle."
 
-#: .\apps\project\specific\internal\code_gen\views.py:155
+#: .\apps\project\specific\internal\code_gen\views.py:156
 msgid "Select at least one segment to build the code."
 msgstr "Selecciona al menos un segmento para construir el código."
 
-#: .\apps\project\specific\internal\code_gen\views.py:218
+#: .\apps\project\specific\internal\code_gen\views.py:219
 #, python-format
 msgid "Some placements did not match any page: %(items)s"
 msgstr "Algunas posiciones no coincidieron con ninguna página: %(items)s"
 
-#: .\apps\project\specific\internal\code_gen\views.py:224
+#: .\apps\project\specific\internal\code_gen\views.py:225
 #, python-format
 msgid "Document certified. Public code: %(code)s"
 msgstr "Documento certificado. Código público: %(code)s"
 
-#: .\apps\project\specific\internal\code_gen\views.py:430
+#: .\apps\project\specific\internal\code_gen\views.py:431
 msgid "Stamp layout saved."
 msgstr "Disposición de estampado guardada."
 
-#: .\apps\project\specific\internal\code_gen\views.py:472
+#: .\apps\project\specific\internal\code_gen\views.py:513
 msgid "Box created. Now add the certificates it contains."
 msgstr "Caja creada. Ahora añade los certificados que contiene."

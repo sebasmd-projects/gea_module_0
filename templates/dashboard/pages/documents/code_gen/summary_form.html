@@ -73,12 +73,12 @@
                   <div class="form-text">
                     {{ form.asset.help_text }}
                     {% comment %}
-                      Un activo no se da de alta suelto: su nombre lo lleva como
-                      inline obligatorio, asi que el alta empieza por el nombre.
+                      El alta de activos tiene su propia pantalla, que crea el
+                      nombre y el activo a la vez. Se le pasa a donde volver:
+                      al guardar se regresa aqui con el activo seleccionado.
                     {% endcomment %}
-                    <a href="{% url 'admin:assets_assetsnamesmodel_add' %}"
-                       target="_blank" rel="noopener noreferrer">
-                      {% trans 'Add a new asset (starts with its name).' %}
+                    <a href="{{ asset_create_url }}" id="addAssetLink">
+                      {% trans 'Add a new asset' %}
                     </a>
                   </div>
                   {% for error in form.asset.errors %}
@@ -158,4 +158,78 @@
   {{ block.super }}
   <script src="{% static 'js/searchable_select.js' %}"></script>
   <script src="{% static 'js/busy_buttons.js' %}"></script>
+
+  <script>
+    // Salir a dar de alta un activo no debe costar lo ya escrito. Al pulsar
+    // el enlace se guarda el borrador en el navegador, y al volver -- que es
+    // cuando la URL trae ?asset= -- se repone. Es una comodidad local: no
+    // viaja a ningun sitio, y si el navegador no deja escribir, no pasa nada.
+    (function () {
+      'use strict';
+
+      var KEY = 'gea:summary-draft';
+      var FIELDS = ['title', 'issued_at', 'asset_label'];
+      var form = document.getElementById('summaryForm');
+      var link = document.getElementById('addAssetLink');
+
+      if (!form) {
+        return;
+      }
+
+      function field(name) {
+        return form.querySelector('[name="' + name + '"]');
+      }
+
+      if (link) {
+        link.addEventListener('click', function () {
+          var draft = {};
+
+          FIELDS.forEach(function (name) {
+            var input = field(name);
+            if (input) {
+              draft[name] = input.value;
+            }
+          });
+
+          try {
+            window.sessionStorage.setItem(KEY, JSON.stringify(draft));
+          } catch (error) {
+            /* modo privado o almacenamiento bloqueado: se sigue igual */
+          }
+        });
+      }
+
+      if (window.location.search.indexOf('asset=') === -1) {
+        return;
+      }
+
+      var stored = null;
+
+      try {
+        stored = window.sessionStorage.getItem(KEY);
+        window.sessionStorage.removeItem(KEY);
+      } catch (error) {
+        return;
+      }
+
+      if (!stored) {
+        return;
+      }
+
+      try {
+        var draft = JSON.parse(stored);
+
+        FIELDS.forEach(function (name) {
+          var input = field(name);
+          // La etiqueta la rellena el servidor con el activo que vuelve: solo
+          // se repone lo que el operador habia escrito de su mano.
+          if (input && draft[name] && !(name === 'asset_label' && input.value)) {
+            input.value = draft[name];
+          }
+        });
+      } catch (error) {
+        /* borrador ilegible: se ignora */
+      }
+    })();
+  </script>
 {% endblock body_custom_js %}

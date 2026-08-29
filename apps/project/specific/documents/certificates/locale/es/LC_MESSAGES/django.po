@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GEAUSA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 12:50-0500\n"
+"POT-Creation-Date: 2026-08-29 13:10-0500\n"
 "PO-Revision-Date: 2026-01-11 02:56+0000\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -299,8 +299,8 @@ msgid "The asset this box of certificates belongs to."
 msgstr "El activo al que pertenece esta caja de certificados."
 
 #: .\apps\project\specific\documents\certificates\admin.py:780
-msgid "Add a new asset (starts with its name)."
-msgstr "Añadir un activo nuevo (empieza por su nombre)."
+msgid "Add a new asset"
+msgstr "Agregar nuevo activo"
 
 #: .\apps\project\specific\documents\certificates\admin.py:808
 msgid "Sello"

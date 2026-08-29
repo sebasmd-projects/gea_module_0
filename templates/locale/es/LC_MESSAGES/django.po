@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 12:50-0500\n"
+"POT-Creation-Date: 2026-08-29 13:10-0500\n"
 "PO-Revision-Date: 2026-08-27 20:24+0000\n"
 "Last-Translator: Juan Sebastian Morales Delgado "
 "<cto@propensionesabogados.com>\n"
@@ -259,8 +259,8 @@ msgstr "Agregar nuevo activo"
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:23
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:59
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:146
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:112
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:222
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:117
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:227
 #: .\templates\dashboard\pages\buyers\inventory.html:57
 #: .\templates\dashboard\pages\buyers\inventory.html:100
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:29
@@ -287,7 +287,7 @@ msgid "Asset Category (ES)*"
 msgstr "Categoría de activo (ES)*"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:76
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:136
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:141
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:114
 #: .\templates\dashboard\pages\holders\location\add_location.html:99
 #: .\templates\dashboard\pages\holders\location\edit_location.html:90
@@ -299,7 +299,7 @@ msgid "Asset Category (EN)"
 msgstr "Categoría de activos (EN)*"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:101
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:161
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:166
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:116
 #: .\templates\dashboard\pages\holders\location\add_location.html:104
 #: .\templates\dashboard\pages\holders\location\edit_location.html:95
@@ -307,7 +307,7 @@ msgid "Description (EN)"
 msgstr "Descripción (EN)"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:116
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:190
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:195
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:22
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:157
 msgid "Save"
@@ -318,7 +318,7 @@ msgid "Add new Asset"
 msgstr "Agregar nuevo activo"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:125
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:200
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:205
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:142
 #: .\templates\dashboard\pages\buyers\edit_offer.html:147
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:108
@@ -330,7 +330,7 @@ msgid "Categories"
 msgstr "Categorías"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:147
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:223
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:228
 #: .\templates\dashboard\pages\buyers\inventory.html:59
 #: .\templates\dashboard\pages\buyers\inventory.html:104
 #: .\templates\dashboard\pages\buyers\partials\_offer_summary_card.html:65
@@ -359,7 +359,7 @@ msgid "No categories found."
 msgstr "No se encontraron categorías."
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:196
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:297
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:302
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:161
 #: .\templates\dashboard\pages\buyers\edit_offer.html:169
 msgid "Saving and Translating..."
@@ -383,7 +383,7 @@ msgid "Register a new asset name and its category"
 msgstr "Registrar un nuevo nombre de activo y su categoría"
 
 #: .\templates\dashboard\pages\buyers\assetname_inline_create.html:23
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:195
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:200
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:20
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:23
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:178
@@ -417,8 +417,8 @@ msgstr "Agregar nueva categoría de activos"
 msgid "New Asset"
 msgstr "Nuevo activo"
 
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:62
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:221
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:67
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:226
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:213
 #: .\templates\dashboard\pages\holders\asset_location_base.html:74
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:94
@@ -428,20 +428,20 @@ msgstr "Nuevo activo"
 msgid "Asset Name"
 msgstr "Nombre del activo"
 
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:68
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:73
 msgid "Asset name (ES)"
 msgstr "Nombre del activo (ES)"
 
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:79
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:84
 msgid "Asset name (EN)"
 msgstr "Nombre del activo (EN)"
 
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:95
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:100
 msgid "Asset Details"
 msgstr "Detalles del Activo"
 
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:100
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:220
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:105
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:225
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:212
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:93
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:107
@@ -450,28 +450,28 @@ msgstr "Detalles del Activo"
 msgid "Image"
 msgstr "Imagen"
 
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:126
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:131
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:112
 msgid "Add New Category"
 msgstr "Añadir nueva categoría"
 
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:148
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:153
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:129
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:51
 msgid "Observations (ES)"
 msgstr "Observaciones (ES)"
 
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:173
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:178
 #: .\templates\dashboard\pages\buyers\create_purchase_orders.html:131
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:54
 msgid "Observations (EN)"
 msgstr "Observaciones (EN)"
 
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:213
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:218
 msgid "Existing Assets"
 msgstr "Activos existentes"
 
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:224
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:229
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:216
 #: .\templates\dashboard\pages\holders\add_asset_location.html:54
 #: .\templates\dashboard\pages\holders\asset_location_base.html:77
@@ -479,7 +479,7 @@ msgstr "Activos existentes"
 msgid "Observations"
 msgstr "Observaciones"
 
-#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:276
+#: .\templates\dashboard\pages\buyers\assetname_inline_create.html:281
 #: .\templates\dashboard\pages\buyers\purchase_orders.html:268
 msgid "No assets found."
 msgstr "No se encontraron activos."
@@ -2531,8 +2531,8 @@ msgid "Box details"
 msgstr "Datos de la caja"
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_form.html:82
-msgid "Add a new asset (starts with its name)."
-msgstr "Añadir un activo nuevo (empieza por su nombre)."
+msgid "Add a new asset"
+msgstr "Agregar nuevo activo"
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_form.html:120
 msgid "Create and compose"
