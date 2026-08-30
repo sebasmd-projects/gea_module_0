@@ -186,6 +186,9 @@
     <script src="{% static 'js/busy_buttons.js' %}"
             data-default-loading-text="{% trans 'Processing…' %}" defer></script>
 
+    {# Avisos flotantes: se ven con la pagina scrolleada hasta el pie. #}
+    {% include 'partials/toasts.html' %}
+
     {% block body_custom_js %}{% endblock body_custom_js %}
     {% block body_third_js %}{% endblock body_third_js %}
 

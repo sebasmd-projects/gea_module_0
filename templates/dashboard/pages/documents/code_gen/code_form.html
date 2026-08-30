@@ -29,15 +29,6 @@
 
   <div class="container-xl px-4 mt-n10">
 
-    {# ================= MESSAGES ================= #}
-    {% if messages %}
-      <div class="mb-4">
-        {% for message in messages %}
-          <div class="alert alert-{{ message.tags }} mb-2">{{ message }}</div>
-        {% endfor %}
-      </div>
-    {% endif %}
-
     <form method="post" enctype="multipart/form-data" novalidate>
       {% csrf_token %}
 

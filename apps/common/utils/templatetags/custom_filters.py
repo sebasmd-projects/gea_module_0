@@ -114,3 +114,28 @@ def trim(value):
     if value is None:
         return ''
     return str(value).strip()
+
+
+@register.filter
+def messages_as_data(messages):
+    """
+    Los mensajes de Django como datos, listos para ``json_script``.
+
+    Se entregan al navegador como JSON y no como HTML ya pintado porque el
+    aviso se muestra en un toast flotante: un bloque dentro de la página
+    aparece arriba del contenido, y quien acaba de pulsar un botón al pie de un
+    formulario largo no lo ve.
+
+    Y porque el texto de un mensaje puede venir de un error del servidor o de
+    algo que escribió el usuario. Pintado con ``textContent`` desde JSON, no
+    hay forma de que se convierta en marcado.
+
+    Uso: {{ messages|messages_as_data|json_script:"djangoMessages" }}
+    """
+    return [
+        {
+            'level': message.level_tag or 'info',
+            'message': str(message),
+        }
+        for message in messages
+    ]

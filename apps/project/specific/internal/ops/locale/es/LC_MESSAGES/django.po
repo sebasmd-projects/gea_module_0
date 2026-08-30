@@ -483,6 +483,25 @@ msgid "Check the last test send"
 msgstr "Comprobar el último envío de prueba"
 
 #: .\apps\project\specific\internal\ops\registry.py:1
+msgid "Background workers"
+msgstr "Workers en segundo plano"
+
+#: .\apps\project\specific\internal\ops\registry.py:1
+msgid ""
+"Checks whether this server can hold a worker process outside the request."
+msgstr ""
+"Comprueba si este servidor puede sostener un proceso worker fuera de la "
+"petición."
+
+#: .\apps\project\specific\internal\ops\registry.py:1
+msgid "Before deciding whether Celery is worth adopting here."
+msgstr "Antes de decidir si merece la pena adoptar Celery aquí."
+
+#: .\apps\project\specific\internal\ops\registry.py:1
+msgid "Launch the test process"
+msgstr "Lanzar el proceso de prueba"
+
+#: .\apps\project\specific\internal\ops\registry.py:1
 msgid "Dependencies"
 msgstr "Dependencias"
 
