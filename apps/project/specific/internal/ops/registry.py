@@ -215,6 +215,40 @@ COMMANDS = (
         timeout=90,
     ),
     Command(
+        name='check_workers',
+        title=_('Background workers'),
+        summary=_(
+            'Checks whether this server can hold a worker process outside the '
+            'request.'
+        ),
+        detail=_(
+            'A worker is not a library you install: it is a process that '
+            'lives outside the request and does not die. Shared hosting often '
+            'kills anything that is not serving a page, and never says so, so '
+            'this is not decided by reading documentation — it is measured. '
+            'It also checks something easy to miss: Redis working as a cache '
+            'does not mean it works as a broker, because the ACL is written '
+            'for the cache and a broker needs other keys and other commands. '
+            'That one fails silently, with tasks simply vanishing.'
+        ),
+        example=_('Before deciding whether Celery is worth adopting here.'),
+        risk=RISK_READ_ONLY,
+        timeout=120,
+        options=[
+            Option(
+                flag='--spawn',
+                label=_('Launch the test process'),
+                kind=KIND_FLAG,
+                help=_(
+                    'Starts a detached process that does nothing but write '
+                    'the time every 30 seconds for half an hour. Come back '
+                    'later and run this again: what matters is not that it '
+                    'starts, but that it is still alive then.'
+                ),
+            ),
+        ],
+    ),
+    Command(
         name='check_requirements',
         title=_('Dependencies'),
         summary=_(

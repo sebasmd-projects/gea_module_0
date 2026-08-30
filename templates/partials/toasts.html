@@ -1,0 +1,18 @@
+{% load static custom_filters %}
+{% comment %}
+Los mensajes de Django, entregados al navegador como datos.
+
+Van en un <script type="application/json"> y no como HTML ya pintado por dos
+razones. La primera es donde se ven: un bloque dentro de la pagina aparece
+arriba del contenido, y quien acaba de pulsar un boton al pie de un formulario
+largo no lo ve. Un toast va en position:fixed y no depende del scroll.
+
+La segunda es que el texto de un mensaje puede venir de un error del servidor o
+de algo que escribio el usuario. Entregado como JSON y pintado con textContent,
+no hay forma de que se convierta en marcado.
+
+Se incluye una sola vez, en raw.html, para que ninguna pagina tenga que
+acordarse de pintar sus mensajes.
+{% endcomment %}
+{% if messages %}{{ messages|messages_as_data|json_script:"djangoMessages" }}{% endif %}
+<script src="{% static 'js/toasts.js' %}" defer></script>

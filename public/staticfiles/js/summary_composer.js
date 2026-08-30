@@ -34,22 +34,32 @@
     return input ? input.value : '';
   }
 
+  // El aviso va en un toast flotante y no dentro de la tarjeta. Aqui importa
+  // mas que en ningun otro sitio: el compositor es largo, los botones de
+  // sellar estan abajo, y el aviso que mas hay que leer --«se sello, pero el
+  // envio a la cadena de bloques fallo»-- aparecia arriba del todo, fuera de
+  // la pantalla justo despues de pulsar.
   function notify(message, level) {
-    feedback.innerHTML = '';
+    if (window.geaToastClear) {
+      window.geaToastClear();
+    }
 
     if (!message) {
       return;
     }
 
-    var alert = document.createElement('div');
-    alert.className = 'alert alert-' + (level || 'info') + ' py-2 small';
-    alert.textContent = message;
-    feedback.appendChild(alert);
+    if (window.geaToast) {
+      window.geaToast(message, level);
+      return;
+    }
 
-    if (level === 'success') {
-      window.setTimeout(function () {
-        if (alert.parentElement) { alert.parentElement.removeChild(alert); }
-      }, 5000);
+    // Sin toasts.js cargado, antes de perder el aviso se pinta donde se pueda.
+    if (feedback) {
+      feedback.innerHTML = '';
+      var alert = document.createElement('div');
+      alert.className = 'alert alert-' + (level || 'info') + ' py-2 small';
+      alert.textContent = message;
+      feedback.appendChild(alert);
     }
   }
 
