@@ -193,6 +193,35 @@ COMMANDS = (
         timeout=300,
     ),
     Command(
+        name='check_anchoring',
+        title=_('Blockchain anchoring'),
+        summary=_(
+            'Checks whether this server can send hashes to the '
+            'OpenTimestamps calendars.'
+        ),
+        detail=_(
+            'When the composer says the box was sealed but not sent, the '
+            'cause is almost never the code: either the opentimestamps '
+            'library is not installed on this server, or the hosting blocks '
+            'outbound connections. This tells the two apart, which is what '
+            'decides whether the fix is «uv sync» or a call to the provider.'
+        ),
+        example=_('When sealing reports that sending to the blockchain failed.'),
+        risk=RISK_READ_ONLY,
+        timeout=120,
+        options=[
+            Option(
+                flag='--stamp',
+                label=_('Send a test hash'),
+                kind=KIND_FLAG,
+                help=_(
+                    'Sends a made-up hash for real, to test the whole path. '
+                    'Harmless: it belongs to no document.'
+                ),
+            ),
+        ],
+    ),
+    Command(
         name='check_attack_terms',
         title=_('Anti-scan trap'),
         summary=_(
