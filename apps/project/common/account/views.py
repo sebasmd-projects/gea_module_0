@@ -1,10 +1,11 @@
 # apps/project/common/account/views.py
 
+import logging
 from collections import OrderedDict
 
+from django.conf import settings
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
@@ -22,6 +23,7 @@ from django.utils.crypto import get_random_string
 
 from formtools.wizard.views import SessionWizardView
 
+from apps.common.utils.client_ip import get_client_ip
 from apps.common.utils.models import GeaDailyUniqueCode
 from apps.project.common.users.models import UserModel
 
@@ -36,6 +38,8 @@ from .forms import (
     SecurityInformationForm,
     UniqueCodeForm
 )
+
+logger = logging.getLogger(__name__)
 
 STEP_USER = "user"
 STEP_SECURITY = "security"
@@ -283,9 +287,45 @@ class GeaUserRegisterWizardView(SessionWizardView):
 
 
 class ForgotPasswordFormView(View):
-    """Two-step forgot password process in one URL"""
+    """
+    Recuperacion de contrasena en dos pasos sobre una sola URL.
+
+    Es el unico punto de la plataforma donde **alguien sin cuenta provoca el
+    envio de un correo**, y eso obliga a cuidar tres cosas que antes no estaban:
+
+    1. **Un limite de peticiones.** Sin el, repetir el formulario con el correo
+       de otra persona le llena la bandeja, y de paso quema la cuota del
+       proveedor de correo hasta que el dominio empieza a caer en spam. El
+       limite es por pareja (IP, identificador) y ademas por IP suelta, porque
+       si no bastaria con ir cambiando de destinatario.
+    2. **Que la respuesta no delate quien tiene cuenta.** El mensaje ya era
+       generico, pero solo se enviaba correo cuando el usuario existia: la
+       diferencia de tiempo entre una ida y vuelta de SMTP y una respuesta
+       inmediata es un oraculo de existencia. Peor todavia, ``send_mail`` iba
+       con ``fail_silently=False``, asi que un fallo de SMTP daba error 500
+       para quien existe y pagina normal para quien no. Ahora todas las ramas
+       terminan en la misma pantalla.
+    3. **Que el enlace no salga del host de la peticion.** Es la invariante 12
+       del proyecto, y aqui importa mas que en el QR: ``get_current_site`` cae
+       en ``RequestSite`` -- ``django.contrib.sites`` no esta instalado -- y
+       devuelve la cabecera ``Host``, que la pone el cliente. Un enlace de
+       restablecimiento construido con ella es un enlace que puede acabar
+       apuntando al dominio del atacante. Se usa ``PUBLIC_BASE_URL``.
+
+    Aviso sobre el limite: vive en cache, y sin ``CACHES`` configurado Django
+    usa ``LocMemCache``, que es por proceso. Con varios workers el limite es
+    efectivamente por worker. Es la misma limitacion que el OTP publico y el
+    codigo de registro, y se resuelve toda de golpe el dia que haya Redis
+    (ver el TODO de ``settings.py``).
+    """
+
     template_name = "account/forgot_password.html"
     token_generator = default_token_generator
+
+    # Ventana y cupos del limite de envios.
+    RESET_RATE_TTL_SECONDS = 15 * 60
+    RESET_MAX_SENDS_PER_TARGET = 3
+    RESET_MAX_SENDS_PER_IP = 10
 
     def get(self, request, *args, **kwargs):
         """Handle both steps based on URL parameters"""
@@ -320,26 +360,79 @@ class ForgotPasswordFormView(View):
             'title': _('Reset Your Password'),
         })
 
+    def _reset_target_key(self, ip: str, identifier: str) -> str:
+        return f"gea:pwd_reset_rate:{ip}:{identifier}"
+
+    def _reset_ip_key(self, ip: str) -> str:
+        return f"gea:pwd_reset_ip:{ip}"
+
+    def _within_send_quota(self, request, identifier: str) -> bool:
+        """
+        Si esta peticion tiene cupo para provocar un envio.
+
+        Se cuentan dos cosas a la vez: los envios a un mismo destinatario --
+        que es lo que llena una bandeja ajena -- y los envios totales desde una
+        IP, que es lo que impide esquivar el limite cambiando de destinatario.
+
+        Returns:
+            bool: True si hay cupo. Consume una unidad de ambos contadores.
+        """
+        ip = get_client_ip(request)
+
+        target_key = self._reset_target_key(ip, identifier)
+        ip_key = self._reset_ip_key(ip)
+
+        target_count = cache.get(target_key) or 0
+        ip_count = cache.get(ip_key) or 0
+
+        if (target_count >= self.RESET_MAX_SENDS_PER_TARGET
+                or ip_count >= self.RESET_MAX_SENDS_PER_IP):
+            logger.warning(
+                'Password reset rate limit hit from %s', ip,
+            )
+            return False
+
+        cache.set(target_key, target_count + 1,
+                  timeout=self.RESET_RATE_TTL_SECONDS)
+        cache.set(ip_key, ip_count + 1,
+                  timeout=self.RESET_RATE_TTL_SECONDS)
+
+        return True
+
+    def _sent_response(self, request):
+        """
+        La unica pantalla con la que termina el paso 1, pase lo que pase.
+
+        Existir o no existir, tener cupo o haberlo agotado, y que el correo
+        salga o falle, dan todos el mismo resultado visible. Es lo que impide
+        usar el formulario para averiguar quien tiene cuenta.
+        """
+        messages.success(request, _(
+            "If an account exists with the provided email/username, "
+            "you will receive password reset instructions shortly."
+        ))
+
+        return render(request, self.template_name, {
+            'step': 'success',
+            'title': _('Check Your Email'),
+            'message': _(
+                "We've sent password reset instructions to your email. "
+                "Please check your inbox and follow the link to reset your password."
+            ),
+        })
+
     def _handle_step1_post(self, request):
         form = ForgotPasswordStep1Form(request.POST)
         if form.is_valid():
-            user = form.get_user()
-            if user:
-                self._send_password_reset_email(request, user)
+            identifier = form.cleaned_data.get('email_or_username') or ''
 
-            messages.success(request, _(
-                "If an account exists with the provided email/username, "
-                "you will receive password reset instructions shortly."
-            ))
+            if self._within_send_quota(request, identifier):
+                user = form.get_user()
 
-            return render(request, self.template_name, {
-                'step': 'success',
-                'title': _('Check Your Email'),
-                'message': _(
-                    "We've sent password reset instructions to your email. "
-                    "Please check your inbox and follow the link to reset your password."
-                ),
-            })
+                if user:
+                    self._send_password_reset_email(request, user)
+
+            return self._sent_response(request)
 
         # solo caerá aquí si el campo viene vacío u otro error real
         return render(request, self.template_name, {
@@ -414,13 +507,19 @@ class ForgotPasswordFormView(View):
         })
 
     def _send_password_reset_email(self, request, user):
-        """Send password reset email to user"""
-        current_site = get_current_site(request)
-        site_name = current_site.name
-        domain = current_site.domain
+        """
+        Manda el correo de restablecimiento. No propaga fallos a proposito.
 
-        # Use HTTPS if request is secure
-        protocol = 'https' if request.is_secure() else 'http'
+        Un fallo de SMTP no puede convertirse en un error 500, porque entonces
+        la respuesta distinta delataria que ese usuario existe. Se registra y
+        la pantalla sigue siendo la misma.
+        """
+        # El enlace NO se construye con el host de la peticion (invariante 12).
+        # ``django.contrib.sites`` no esta instalado, asi que get_current_site
+        # devolveria un RequestSite con la cabecera Host, que la pone el
+        # cliente: un enlace de restablecimiento apuntando donde el diga.
+        base = str(getattr(settings, 'PUBLIC_BASE_URL', '')).rstrip('/')
+        site_name = base.split('//')[-1]
 
         # Generate token and uid
         uid = urlsafe_base64_encode(force_bytes(user.pk))
@@ -429,7 +528,10 @@ class ForgotPasswordFormView(View):
         # Build reset URL
         reset_url = reverse('account:forgot_password') + \
             f'?uidb64={uid}&token={token}'
-        reset_url = f"{protocol}://{domain}{reset_url}"
+        reset_url = f"{base}{reset_url}"
+
+        domain = site_name
+        protocol = 'https'
 
         # Email context
         context = {
@@ -455,14 +557,18 @@ class ForgotPasswordFormView(View):
             'account/password_reset_email.html', context)
 
         # Send email
-        send_mail(
-            subject=subject,
-            message=message,
-            from_email=None,  # Use DEFAULT_FROM_EMAIL
-            recipient_list=[user.email],
-            html_message=message,
-            fail_silently=False,
-        )
+        try:
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=None,  # Use DEFAULT_FROM_EMAIL
+                recipient_list=[user.email],
+                html_message=message,
+                fail_silently=False,
+            )
+        except Exception:  # noqa: BLE001
+            # Ver el docstring: un 500 aqui seria un oraculo de existencia.
+            logger.exception('Password reset email could not be sent')
 
 
 class ChangePasswordFormView(FormView):
