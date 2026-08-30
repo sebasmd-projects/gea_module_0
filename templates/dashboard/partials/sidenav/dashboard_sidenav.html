@@ -218,8 +218,6 @@
           {% trans 'Verify document' %}
         </a>
 
-        {# El panel se alcanza desde aqui, no tecleando su URL: para quien no
-           tenga sesion de personal con segundo factor, esa ruta responde 404. #}
         <div class="sidenav-menu-heading">{% trans 'Administration' %}</div>
 
         <a class="nav-link" href="{% url 'admin:index' %}">
