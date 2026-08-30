@@ -41,7 +41,10 @@ ALLOW_ANY_EMAIL_IPCON = os.getenv(
     'ALLOW_ANY_EMAIL_IPCON', 'False').lower() == 'true'
 
 DJANGO_APPS = [
-    'django.contrib.admin',
+    # No es 'django.contrib.admin': esta config instala GeaAdminSite, que
+    # exige sesion con segundo factor y responde 404 a quien no cumple, en vez
+    # de defenderse solo con lo secreta que sea ADMIN_URL. Ver app_core/admin.
+    'app_core.apps.GeaAdminConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.humanize',

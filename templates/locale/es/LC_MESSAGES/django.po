@@ -3293,3 +3293,7 @@ msgstr "archivos"
 #: .\templates\video_masonry\gallery.html:28
 msgid "Page"
 msgstr "Página"
+
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:225
+msgid "Admin panel"
+msgstr "Panel de administración"

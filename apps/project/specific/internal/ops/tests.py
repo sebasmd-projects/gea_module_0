@@ -14,6 +14,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.urls import reverse
 
+from apps.common.utils.testing import login_with_otp
 from apps.project.common.users.models import UserModel
 
 from .models import CommandRunModel
@@ -141,7 +142,7 @@ class AccessTests(TestCase):
         self.command = reverse('admin:ops_command', args=['check'])
 
     def test_a_superuser_gets_in(self):
-        self.client.login(username='ops_root', password=PASSWORD)
+        login_with_otp(self.client, self.superuser)
 
         self.assertEqual(self.client.get(self.console).status_code, 200)
         self.assertEqual(self.client.get(self.command).status_code, 200)
@@ -161,8 +162,17 @@ class AccessTests(TestCase):
     def test_anonymous_does_not(self):
         self.assertNotEqual(self.client.get(self.console).status_code, 200)
 
+    def test_a_superuser_without_the_second_factor_does_not(self):
+        """
+        La consola cuelga del admin, y el admin exige segundo factor
+        verificado: una sesion autenticada a medias no llega hasta aqui.
+        """
+        self.client.force_login(self.superuser)
+
+        self.assertNotEqual(self.client.get(self.console).status_code, 200)
+
     def test_an_unknown_command_page_is_a_404(self):
-        self.client.login(username='ops_root', password=PASSWORD)
+        login_with_otp(self.client, self.superuser)
 
         response = self.client.get(
             reverse('admin:ops_command', args=['dumpdata'])
@@ -181,7 +191,7 @@ class RunningTests(TestCase):
         )
 
     def setUp(self):
-        self.client.login(username='ops_runner', password=PASSWORD)
+        login_with_otp(self.client, self.superuser)
 
     def test_running_check_works_and_is_recorded(self):
         response = self.client.post(
