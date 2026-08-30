@@ -28,20 +28,40 @@ Tres capas, y las tres hacen falta:
 
 ---
 
-## Paso 0. Antes de tocar el VPS: la IP de salida de cPanel
+## Paso 0. Los datos de esta instalación
 
-Todo el cortafuegos depende de este dato, y no es la IP del dominio: es la IP
-**desde la que sale** el servidor web cuando abre una conexión. Puede ser otra,
-y en hosting compartido a veces cambia.
+| Dato | Valor |
+|---|---|
+| Aplicación | `geausa.propensionesabogados.com` |
+| IP del hosting compartido (estática) | **`190.90.160.103`** |
+| Host del Redis | el VPS — **falta elegir nombre** (ver abajo) |
 
-Desde SSH en cPanel, o desde un cron de la propia cuenta:
+Todo el cortafuegos depende de la IP de cPanel, y es la única que se autoriza.
+
+**Una comprobación de un minuto antes de seguir.** La IP que autoriza el
+cortafuegos es la de **salida** —desde la que cPanel abre la conexión—, y en
+hosting compartido no siempre coincide con la de entrada. Desde SSH en cPanel o
+un cron de la cuenta:
 
 ```bash
 curl -s https://ifconfig.io
 ```
 
-Anótala. Si el proveedor no garantiza que sea fija, pregúntale: una IP de salida
-que cambia sin avisar deja la plataforma sin cache de un día para otro.
+Si responde `190.90.160.103`, todo encaja y sigue adelante. Si responde otra
+cosa, **esa** es la que hay que autorizar en el paso 5; anótala, porque si no el
+cortafuegos bloqueará justamente a la aplicación.
+
+**El nombre del Redis.** El VPS es otra máquina, así que no vale
+`geausa.propensionesabogados.com`. Dos opciones:
+
+- Un registro DNS `A` propio, por ejemplo `redis.propensionesabogados.com`
+  apuntando al VPS. Es lo recomendable: si algún día cambias de VPS, cambias el
+  DNS y no tocas el `.env` de producción.
+- La IP del VPS a secas, si prefieres no crear el registro. Funciona igual;
+  solo recuerda que el certificado del paso 2 tiene que llevar esa IP en su
+  `subjectAltName`.
+
+En el resto del documento aparece como `redis.propensionesabogados.com`.
 
 ---
 
@@ -57,7 +77,7 @@ cd /opt/gea-redis
 Se usa una **CA propia** en vez de Let's Encrypt a propósito: no hace falta
 dominio ni renovación automática dentro del contenedor, y el cliente confía en
 un certificado concreto en vez de en cualquier CA pública. Sustituye
-`redis.tudominio.com` por el nombre o la IP con la que se va a conectar cPanel.
+`redis.propensionesabogados.com` por el nombre o la IP con la que se va a conectar cPanel.
 
 ```bash
 cd /opt/gea-redis/tls
@@ -69,9 +89,9 @@ openssl req -x509 -new -nodes -key ca.key -sha256 -days 3650 \
 
 # Certificado del servidor
 openssl genrsa -out redis.key 2048
-openssl req -new -key redis.key -out redis.csr -subj "/CN=redis.tudominio.com"
+openssl req -new -key redis.key -out redis.csr -subj "/CN=redis.propensionesabogados.com"
 
-printf "subjectAltName=DNS:redis.tudominio.com,IP:<IP_DEL_VPS>\nextendedKeyUsage=serverAuth\n" > ext.cnf
+printf "subjectAltName=DNS:redis.propensionesabogados.com,IP:<IP_DEL_VPS>\nextendedKeyUsage=serverAuth\n" > ext.cnf
 
 openssl x509 -req -in redis.csr -CA ca.crt -CAkey ca.key -CAcreateserial \
   -out redis.crt -days 3650 -sha256 -extfile ext.cnf
@@ -188,7 +208,7 @@ Las reglas van en la cadena `DOCKER-USER`, que sí se consulta:
 
 ```bash
 # Solo la IP de salida de cPanel puede llegar al 6380
-sudo iptables -I DOCKER-USER -p tcp --dport 6380 -s <IP_DE_CPANEL> -j RETURN
+sudo iptables -I DOCKER-USER -p tcp --dport 6380 -s 190.90.160.103 -j RETURN
 sudo iptables -I DOCKER-USER 2 -p tcp --dport 6380 -j DROP
 
 # Que sobrevivan al reinicio
@@ -225,7 +245,7 @@ Copia **solo la CA** (`ca.crt`) al servidor de cPanel —nunca `ca.key` ni
 `redis.key`— y añade al `.env`:
 
 ```
-REDIS_URL=rediss://gea:<LA_CLAVE>@redis.tudominio.com:6380/0?ssl_cert_reqs=required&ssl_ca_certs=/home/<usuario>/gea-redis-ca.crt
+REDIS_URL=rediss://gea:<LA_CLAVE>@redis.propensionesabogados.com:6380/0?ssl_cert_reqs=required&ssl_ca_certs=/home/<usuario_cpanel>/gea-redis-ca.crt
 REDIS_KEY_PREFIX=gea
 REDIS_CONNECT_TIMEOUT=3
 REDIS_TIMEOUT=3
