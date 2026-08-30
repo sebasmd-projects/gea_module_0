@@ -142,7 +142,26 @@ class Command(BaseCommand):
         return f'{scheme}://***@{host}'
 
     def _check_roundtrip(self) -> bool:
-        """Escribir y volver a leer, que es lo minimo."""
+        """
+        Escribir y volver a leer, y cuanto cuesta cada cosa.
+
+        Se miden **dos** tiempos, porque no son el mismo gasto y confundirlos
+        lleva a conclusiones equivocadas:
+
+        * **La primera vez** incluye abrir el TCP y negociar el TLS. Eso se
+          paga una vez por proceso, no en cada peticion: django-redis mantiene
+          un pool y las siguientes reutilizan la conexion. Lo paga cada worker
+          nuevo, y en cPanel los workers se reciclan, asi que no es gratis --
+          pero tampoco es lo que cuesta atender una peticion.
+
+        * **Las siguientes** son lo que de verdad paga cada peticion con
+          limite de tasa. Ese es el numero sobre el que hay que decidir.
+
+        Con la conexion ya abierta, el tiempo de una operacion es basicamente
+        la ida y vuelta por la red. Si sale alto, la causa suele ser la
+        distancia fisica entre el servidor web y el Redis, y eso no se arregla
+        configurando: se arregla acercandolos.
+        """
         self._section('2. Ida y vuelta')
 
         key = f'{READ_PREFIX}{uuid.uuid4().hex}'
@@ -151,7 +170,7 @@ class Command(BaseCommand):
         started = time.monotonic()
         cache.set(key, value, timeout=120)
         read = cache.get(key)
-        elapsed = (time.monotonic() - started) * 1000
+        cold = (time.monotonic() - started) * 1000
 
         if read != value:
             self.stdout.write(self.style.ERROR(
@@ -162,18 +181,57 @@ class Command(BaseCommand):
             return False
 
         self.stdout.write(self.style.SUCCESS(
-            f'   Escribe y lee correctamente ({elapsed:.0f} ms ida y vuelta).'
+            '   Escribe y lee correctamente.'
         ))
 
-        if elapsed > 500:
-            self.stdout.write(self.style.WARNING(
-                '   Va lento. Cada peticion con limite de tasa paga esto, y '
-                'con ATOMIC_REQUESTS se paga con una transaccion abierta.'
-            ))
+        # Ya con la conexion abierta: lo que cuesta de verdad cada peticion.
+        samples = []
+
+        for _ in range(5):
+            started = time.monotonic()
+            cache.set(key, value, timeout=120)
+            cache.get(key)
+            samples.append((time.monotonic() - started) * 1000)
 
         cache.delete(key)
 
+        warm = sorted(samples)[len(samples) // 2]
+
+        self.stdout.write(
+            f'   Primera operacion: {cold:.0f} ms '
+            '(incluye abrir conexion y TLS; se paga una vez por worker)'
+        )
+        self.stdout.write(
+            f'   Ya conectado:      {warm:.0f} ms '
+            '(esto es lo que paga cada peticion)'
+        )
+
+        self._comment_on_latency(cold, warm)
+
         return True
+
+    def _comment_on_latency(self, cold, warm):
+        """Que significan esos numeros, que es lo que no se ve solo."""
+        if warm > 200:
+            self.stdout.write(self.style.WARNING(
+                '   Cada peticion con limite de tasa paga esos milisegundos, y '
+                'con ATOMIC_REQUESTS los paga con una transaccion abierta. Con '
+                'la conexion ya hecha, ese tiempo es casi todo distancia '
+                'fisica: no se arregla configurando, se arregla poniendo el '
+                'Redis mas cerca del servidor web.'
+            ))
+        elif warm > 50:
+            self.stdout.write(
+                '   Es un coste asumible para lo que se usa la cache, pero '
+                'tenlo en cuenta antes de cachear nada en el camino critico.'
+            )
+
+        if cold > 800:
+            self.stdout.write(self.style.WARNING(
+                f'   Abrir la conexion cuesta {cold:.0f} ms. Un worker recien '
+                'arrancado lo paga en su primera peticion, asi que si el '
+                'hosting recicla workers a menudo se notara de vez en cuando.'
+            ))
 
     def _check_counter(self) -> bool:
         """``incr``, que es como cuentan los limites de tasa."""
