@@ -105,6 +105,28 @@ uv add <paquete>
 uv export --format=requirements-txt > requirements.txt
 ```
 
+⚠️ **Ese `export` no es opcional, y olvidarlo ya rompió producción.** Hay dos
+ficheros de dependencias y cada uno manda en un sitio distinto:
+
+| Fichero | Quién lo usa | Con qué |
+|---|---|---|
+| `pyproject.toml` + `uv.lock` | Solo **local** | `uv` |
+| `requirements.txt` | **Producción** (cPanel) | `pip` — ahí no hay uv |
+
+El puente entre los dos es ese `uv export`, que es manual. `uv add` **no**
+actualiza `requirements.txt`: si no lo exportas y commiteas, la dependencia
+nunca llega al servidor y el fallo aparece en tiempo de ejecución, lejos de la
+causa. Pasó con `opentimestamps`, declarada el 29 de agosto y exportada el 30:
+en medio, el anclaje en la cadena de bloques fallaba en producción.
+
+Para no repetirlo, antes de desplegar:
+
+```bash
+uv run python manage.py check_requirements
+```
+
+También está en la consola de operaciones como «Dependencias».
+
 ⚠️ **No ejecutes `delete_migrations` ni `rename_migrations`** salvo petición explícita: borran o renombran ficheros de migración de todo el proyecto (`skip_apps.txt` está vacío, así que no protegen nada).
 
 ---

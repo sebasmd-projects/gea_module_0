@@ -193,6 +193,27 @@ COMMANDS = (
         timeout=300,
     ),
     Command(
+        name='check_requirements',
+        title=_('Dependencies'),
+        summary=_(
+            'Checks that requirements.txt carries everything declared in '
+            'pyproject.toml.'
+        ),
+        detail=_(
+            'The project uses two dependency files: pyproject.toml with uv '
+            'locally, and requirements.txt with pip in production, because '
+            'cPanel has no uv. The bridge between them is a manual export, '
+            'and a manual step is a step that gets forgotten. It already '
+            'happened: opentimestamps was declared a day before it reached '
+            'requirements.txt, and in between, production had no library and '
+            'blockchain anchoring failed. The symptom showed up far from the '
+            'cause, which is the worst kind.'
+        ),
+        example=_('Before every deploy, and after adding any dependency.'),
+        risk=RISK_READ_ONLY,
+        timeout=60,
+    ),
+    Command(
         name='check_anchoring',
         title=_('Blockchain anchoring'),
         summary=_(
@@ -204,7 +225,8 @@ COMMANDS = (
             'cause is almost never the code: either the opentimestamps '
             'library is not installed on this server, or the hosting blocks '
             'outbound connections. This tells the two apart, which is what '
-            'decides whether the fix is «uv sync» or a call to the provider.'
+            'decides whether the fix is a pip install of requirements.txt or '
+            'a call to the provider.'
         ),
         example=_('When sealing reports that sending to the blockchain failed.'),
         risk=RISK_READ_ONLY,
