@@ -1,18 +1,18 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Consola de operaciones: ejecucion trazada de comandos permitidos desde el admin.
+# Copyright (C) 2026 ATLAS
+# This file is distributed under the same license as the ATLAS package.
+# Sebastián Morales <sebastian.morales@propensionesabogados.com>, 2026.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ATLAS 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-29 13:33-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2026-08-30 00:00-0500\n"
+"Last-Translator: Sebastián Morales "
+"<sebastian.morales@propensionesabogados.com>\n"
+"Language-Team: Spanish <es@li.org>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,26 +21,26 @@ msgstr ""
 #: .\apps\project\specific\internal\ops\admin.py:86
 #: .\apps\project\specific\internal\ops\models.py:50
 msgid "Status"
-msgstr ""
+msgstr "Estado"
 
 #: .\apps\project\specific\internal\ops\admin.py:138
 #: .\apps\project\specific\internal\ops\apps.py:8
 msgid "Operations console"
-msgstr ""
+msgstr "Consola de operaciones"
 
 #: .\apps\project\specific\internal\ops\admin.py:195
 #, python-format
 msgid "Type \"%(name)s\" to confirm before running it."
-msgstr ""
+msgstr "Escriba \"%(name)s\" para confirmar antes de ejecutarlo."
 
 #: .\apps\project\specific\internal\ops\admin.py:220
 msgid "That command is not allowed."
-msgstr ""
+msgstr "Ese comando no está permitido."
 
 #: .\apps\project\specific\internal\ops\admin.py:240
 #, python-format
 msgid "%(title)s finished in %(seconds)s s."
-msgstr ""
+msgstr "%(title)s terminó en %(seconds)s s."
 
 #: .\apps\project\specific\internal\ops\admin.py:246
 #, python-format
@@ -52,91 +52,91 @@ msgstr ""
 #: .\apps\project\specific\internal\ops\admin.py:253
 #, python-format
 msgid "%(title)s failed with exit code %(code)s."
-msgstr ""
+msgstr "%(title)s falló con código de salida %(code)s."
 
 #: .\apps\project\specific\internal\ops\models.py:24
 msgid "Finished"
-msgstr ""
+msgstr "Terminado"
 
 #: .\apps\project\specific\internal\ops\models.py:25
 msgid "Failed"
-msgstr ""
+msgstr "Fallido"
 
 #: .\apps\project\specific\internal\ops\models.py:26
 msgid "Cut off by timeout"
-msgstr ""
+msgstr "Cortado por tiempo límite"
 
 #: .\apps\project\specific\internal\ops\models.py:27
 msgid "Refused"
-msgstr ""
+msgstr "Rechazado"
 
 #: .\apps\project\specific\internal\ops\models.py:30
 msgid "Command"
-msgstr ""
+msgstr "Comando"
 
 #: .\apps\project\specific\internal\ops\models.py:36
 msgid "Arguments"
-msgstr ""
+msgstr "Argumentos"
 
 #: .\apps\project\specific\internal\ops\models.py:39
 msgid "The values as they were filled in the form."
-msgstr ""
+msgstr "Los valores tal como se rellenaron en el formulario."
 
 #: .\apps\project\specific\internal\ops\models.py:43
 msgid "Command line"
-msgstr ""
+msgstr "Línea de comando"
 
 #: .\apps\project\specific\internal\ops\models.py:46
 msgid "What was actually run, argument by argument."
-msgstr ""
+msgstr "Lo que se ejecutó realmente, argumento por argumento."
 
 #: .\apps\project\specific\internal\ops\models.py:57
 msgid "Exit code"
-msgstr ""
+msgstr "Código de salida"
 
 #: .\apps\project\specific\internal\ops\models.py:63
 msgid "Duration (s)"
-msgstr ""
+msgstr "Duración (s)"
 
 #: .\apps\project\specific\internal\ops\models.py:68
 msgid "Output"
-msgstr ""
+msgstr "Salida"
 
 #: .\apps\project\specific\internal\ops\models.py:77
 msgid "Run by"
-msgstr ""
+msgstr "Ejecutado por"
 
 #: .\apps\project\specific\internal\ops\models.py:85
 msgid "Client IP"
-msgstr ""
+msgstr "IP del cliente"
 
 #: .\apps\project\specific\internal\ops\models.py:99
 msgid "Command run"
-msgstr ""
+msgstr "Ejecución de comando"
 
 #: .\apps\project\specific\internal\ops\models.py:100
 msgid "Command runs"
-msgstr ""
+msgstr "Ejecuciones de comandos"
 
 #: .\apps\project\specific\internal\ops\registry.py:39
 msgid "Read only — only reports, changes nothing"
-msgstr ""
+msgstr "Solo lectura — solo informa, no cambia nada"
 
 #: .\apps\project\specific\internal\ops\registry.py:40
 msgid "Writes — changes data or files"
-msgstr ""
+msgstr "Escribe — cambia datos o archivos"
 
 #: .\apps\project\specific\internal\ops\registry.py:41
 msgid "Dangerous — hard to undo, confirm before running"
-msgstr ""
+msgstr "Peligroso — difícil de deshacer, confirme antes de ejecutar"
 
 #: .\apps\project\specific\internal\ops\registry.py:109
 msgid "Django checks"
-msgstr ""
+msgstr "Comprobaciones de Django"
 
 #: .\apps\project\specific\internal\ops\registry.py:110
 msgid "Looks for configuration problems without touching anything."
-msgstr ""
+msgstr "Busca problemas de configuración sin tocar nada."
 
 #: .\apps\project\specific\internal\ops\registry.py:112
 msgid ""
@@ -146,11 +146,11 @@ msgstr ""
 
 #: .\apps\project\specific\internal\ops\registry.py:116
 msgid "After changing settings.py, to confirm nothing broke."
-msgstr ""
+msgstr "Después de cambiar settings.py, para confirmar que nada se rompió."
 
 #: .\apps\project\specific\internal\ops\registry.py:121
 msgid "Deploy checks"
-msgstr ""
+msgstr "Comprobaciones de despliegue"
 
 #: .\apps\project\specific\internal\ops\registry.py:124
 msgid ""
@@ -160,7 +160,7 @@ msgstr ""
 
 #: .\apps\project\specific\internal\ops\registry.py:133
 msgid "Media storage"
-msgstr ""
+msgstr "Almacenamiento de media"
 
 #: .\apps\project\specific\internal\ops\registry.py:135
 msgid ""
@@ -179,19 +179,19 @@ msgstr ""
 
 #: .\apps\project\specific\internal\ops\registry.py:146
 msgid "After moving the media folder, or after a deploy."
-msgstr ""
+msgstr "Después de mover la carpeta de media, o después de un despliegue."
 
 #: .\apps\project\specific\internal\ops\registry.py:151
 msgid "Files per field"
-msgstr ""
+msgstr "Archivos por campo"
 
 #: .\apps\project\specific\internal\ops\registry.py:154
 msgid "How many files to check per model field."
-msgstr ""
+msgstr "Cuántos archivos comprobar por cada campo del modelo."
 
 #: .\apps\project\specific\internal\ops\registry.py:158
 msgid "Search under"
-msgstr ""
+msgstr "Buscar dentro de"
 
 #: .\apps\project\specific\internal\ops\registry.py:161
 msgid ""
@@ -201,7 +201,7 @@ msgstr ""
 
 #: .\apps\project\specific\internal\ops\registry.py:168
 msgid "Check over HTTP"
-msgstr ""
+msgstr "Comprobar por HTTP"
 
 #: .\apps\project\specific\internal\ops\registry.py:171
 msgid ""
@@ -211,7 +211,7 @@ msgstr ""
 
 #: .\apps\project\specific\internal\ops\registry.py:180
 msgid "Certified documents health"
-msgstr ""
+msgstr "Salud de los documentos certificados"
 
 #: .\apps\project\specific\internal\ops\registry.py:182
 msgid ""
@@ -228,15 +228,15 @@ msgstr ""
 
 #: .\apps\project\specific\internal\ops\registry.py:191
 msgid "Monthly, and after any migration of the media folder."
-msgstr ""
+msgstr "Cada mes, y después de cualquier migración de la carpeta de media."
 
 #: .\apps\project\specific\internal\ops\registry.py:197
 msgid "Anti-scan trap"
-msgstr ""
+msgstr "Trampa anti-escaneo"
 
 #: .\apps\project\specific\internal\ops\registry.py:199
 msgid "Checks that no legitimate route collides with the scanner trap."
-msgstr ""
+msgstr "Comprueba que ninguna ruta legítima colisione con la trampa anti-escaneo."
 
 #: .\apps\project\specific\internal\ops\registry.py:202
 msgid ""
@@ -248,15 +248,15 @@ msgstr ""
 
 #: .\apps\project\specific\internal\ops\registry.py:207
 msgid "Every time COMMON_ATTACK_TERMS changes."
-msgstr ""
+msgstr "Cada vez que cambia COMMON_ATTACK_TERMS."
 
 #: .\apps\project\specific\internal\ops\registry.py:213
 msgid "Migration state"
-msgstr ""
+msgstr "Estado de las migraciones"
 
 #: .\apps\project\specific\internal\ops\registry.py:214
 msgid "Lists which migrations are applied and which are pending."
-msgstr ""
+msgstr "Lista qué migraciones están aplicadas y cuáles pendientes."
 
 #: .\apps\project\specific\internal\ops\registry.py:216
 msgid ""
@@ -266,23 +266,23 @@ msgstr ""
 
 #: .\apps\project\specific\internal\ops\registry.py:219
 msgid "Right after deploying, before running migrate."
-msgstr ""
+msgstr "Justo después de desplegar, antes de ejecutar migrate."
 
 #: .\apps\project\specific\internal\ops\registry.py:224
 msgid "Show plan"
-msgstr ""
+msgstr "Mostrar el plan"
 
 #: .\apps\project\specific\internal\ops\registry.py:226
 msgid "Lists them in the order they would be applied."
-msgstr ""
+msgstr "Las lista en el orden en que se aplicarían."
 
 #: .\apps\project\specific\internal\ops\registry.py:237
 msgid "Apply migrations"
-msgstr ""
+msgstr "Aplicar migraciones"
 
 #: .\apps\project\specific\internal\ops\registry.py:238
 msgid "Brings the database schema up to date with the code."
-msgstr ""
+msgstr "Pone el esquema de la base de datos al día con el código."
 
 #: .\apps\project\specific\internal\ops\registry.py:240
 msgid ""
@@ -292,17 +292,17 @@ msgstr ""
 
 #: .\apps\project\specific\internal\ops\registry.py:243
 msgid "After deploying code that adds fields or constraints."
-msgstr ""
+msgstr "Después de desplegar código que añade campos o restricciones."
 
 #: .\apps\project\specific\internal\ops\registry.py:248
 #: .\apps\project\specific\internal\ops\registry.py:274
 msgid "No questions"
-msgstr ""
+msgstr "Sin preguntas"
 
 #: .\apps\project\specific\internal\ops\registry.py:251
 #: .\apps\project\specific\internal\ops\registry.py:277
 msgid "Required here: there is nobody to answer a prompt."
-msgstr ""
+msgstr "Imprescindible aquí: no hay nadie que conteste a una pregunta."
 
 #: .\apps\project\specific\internal\ops\registry.py:256
 msgid ""
@@ -311,11 +311,11 @@ msgstr ""
 
 #: .\apps\project\specific\internal\ops\registry.py:262
 msgid "Collect static files"
-msgstr ""
+msgstr "Recopilar archivos estáticos"
 
 #: .\apps\project\specific\internal\ops\registry.py:263
 msgid "Publishes the CSS and JS so the browser gets them."
-msgstr ""
+msgstr "Publica el CSS y el JS para que el navegador los reciba."
 
 #: .\apps\project\specific\internal\ops\registry.py:265
 msgid ""
@@ -326,11 +326,11 @@ msgstr ""
 
 #: .\apps\project\specific\internal\ops\registry.py:269
 msgid "After every deploy that touches CSS or JS."
-msgstr ""
+msgstr "Después de cada despliegue que toque CSS o JS."
 
 #: .\apps\project\specific\internal\ops\registry.py:281
 msgid "Clear first"
-msgstr ""
+msgstr "Limpiar primero"
 
 #: .\apps\project\specific\internal\ops\registry.py:284
 msgid ""
@@ -339,11 +339,11 @@ msgstr ""
 
 #: .\apps\project\specific\internal\ops\registry.py:293
 msgid "Compile translations"
-msgstr ""
+msgstr "Compilar traducciones"
 
 #: .\apps\project\specific\internal\ops\registry.py:294
 msgid "Turns the .po catalogs into the .mo files Django reads."
-msgstr ""
+msgstr "Convierte los catálogos .po en los archivos .mo que lee Django."
 
 #: .\apps\project\specific\internal\ops\registry.py:296
 msgid ""
@@ -353,23 +353,23 @@ msgstr ""
 
 #: .\apps\project\specific\internal\ops\registry.py:300
 msgid "After translating with Rosetta or editing a .po by hand."
-msgstr ""
+msgstr "Después de traducir con Rosetta o de editar un .po a mano."
 
 #: .\apps\project\specific\internal\ops\registry.py:305
 msgid "Language"
-msgstr ""
+msgstr "Idioma"
 
 #: .\apps\project\specific\internal\ops\registry.py:309
 msgid "Which catalog to compile."
-msgstr ""
+msgstr "Qué catálogo compilar."
 
 #: .\apps\project\specific\internal\ops\registry.py:316
 msgid "Clear the cache"
-msgstr ""
+msgstr "Vaciar la caché"
 
 #: .\apps\project\specific\internal\ops\registry.py:317
 msgid "Empties the application cache."
-msgstr ""
+msgstr "Vacía la caché de la aplicación."
 
 #: .\apps\project\specific\internal\ops\registry.py:319
 msgid ""
@@ -380,7 +380,7 @@ msgstr ""
 
 #: .\apps\project\specific\internal\ops\registry.py:323
 msgid "After changing data that a page keeps cached."
-msgstr ""
+msgstr "Después de cambiar datos que una página mantiene en caché."
 
 #: .\apps\project\specific\internal\ops\registry.py:327
 msgid ""
@@ -390,11 +390,11 @@ msgstr ""
 
 #: .\apps\project\specific\internal\ops\registry.py:333
 msgid "Daily GEA code"
-msgstr ""
+msgstr "Código diario de GEA"
 
 #: .\apps\project\specific\internal\ops\registry.py:334
 msgid "Issues the daily code and mails it to its recipients."
-msgstr ""
+msgstr "Emite el código diario y lo envía por correo a sus destinatarios."
 
 #: .\apps\project\specific\internal\ops\registry.py:336
 msgid ""
@@ -404,19 +404,19 @@ msgstr ""
 
 #: .\apps\project\specific\internal\ops\registry.py:339
 msgid "The cron did not run and the code for today is missing."
-msgstr ""
+msgstr "El cron no se ejecutó y falta el código de hoy."
 
 #: .\apps\project\specific\internal\ops\registry.py:342
 msgid "This sends real email to the configured recipients."
-msgstr ""
+msgstr "Esto envía correo real a los destinatarios configurados."
 
 #: .\apps\project\specific\internal\ops\registry.py:350
 msgid "Database backup"
-msgstr ""
+msgstr "Copia de seguridad de la base de datos"
 
 #: .\apps\project\specific\internal\ops\registry.py:351
 msgid "Writes a full dump of the database to disk."
-msgstr ""
+msgstr "Escribe un volcado completo de la base de datos en disco."
 
 #: .\apps\project\specific\internal\ops\registry.py:353
 msgid ""
@@ -427,15 +427,15 @@ msgstr ""
 
 #: .\apps\project\specific\internal\ops\registry.py:357
 msgid "Right before applying a risky migration."
-msgstr ""
+msgstr "Justo antes de aplicar una migración arriesgada."
 
 #: .\apps\project\specific\internal\ops\registry.py:362
 msgid "Output folder"
-msgstr ""
+msgstr "Carpeta de salida"
 
 #: .\apps\project\specific\internal\ops\registry.py:365
 msgid "Folder for the dump, relative to the project root."
-msgstr ""
+msgstr "Carpeta para el volcado, relativa a la raíz del proyecto."
 
 #: .\apps\project\specific\internal\ops\registry.py:371
 msgid ""
@@ -446,18 +446,18 @@ msgstr ""
 #: .\apps\project\specific\internal\ops\runner.py:86
 #, python-format
 msgid "%(label)s must be a whole number."
-msgstr ""
+msgstr "%(label)s tiene que ser un número entero."
 
 #: .\apps\project\specific\internal\ops\runner.py:95
 #, python-format
 msgid "%(label)s: \"%(value)s\" is not one of the allowed values."
-msgstr ""
+msgstr "%(label)s: \"%(value)s\" no es uno de los valores permitidos."
 
 #: .\apps\project\specific\internal\ops\runner.py:113
 #, python-format
 msgid "%(label)s contains characters that are not allowed."
-msgstr ""
+msgstr "%(label)s contiene caracteres que no están permitidos."
 
 #: .\apps\project\specific\internal\ops\runner.py:217
 msgid "manage.py could not be found. Check BASE_DIR."
-msgstr ""
+msgstr "No se encontró manage.py. Revise BASE_DIR."
