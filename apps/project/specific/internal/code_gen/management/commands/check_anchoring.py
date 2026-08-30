@@ -6,9 +6,13 @@ El compositor avisa de que el sello se guardo pero el envio fallo, y ahi se
 acaba lo que puede contar una pantalla. La causa esta casi siempre fuera del
 codigo, y son dos muy distintas que conviene no confundir:
 
-* **La libreria no esta.** ``opentimestamps`` esta declarada en el proyecto,
-  pero un despliegue que no volvio a sincronizar dependencias se queda sin
-  ella. Se arregla con ``uv sync``.
+* **La libreria no esta.** Produccion instala con ``pip`` desde
+  ``requirements.txt`` -- en cPanel no hay uv, que es solo para local --, asi
+  que basta con que una dependencia no llegara a ese fichero, o con que el
+  despliegue no volviera a instalar, para que falte. Se arregla instalando
+  ``requirements.txt`` en el entorno virtual de la aplicacion. Y para que no
+  vuelva a pasar en silencio, ``manage.py check_requirements`` compara las dos
+  listas.
 * **La red de salida esta cerrada.** En hosting compartido es lo habitual:
   las conexiones salientes hacia terceros se filtran, y entonces no hay nada
   que arreglar en el codigo -- hay que pedirselo al proveedor o anclar desde
@@ -64,9 +68,10 @@ class Command(BaseCommand):
         else:
             self.stdout.write(self.style.ERROR(
                 'Este servidor NO puede anclar. Mira los detalles de arriba: '
-                'si falla la libreria, ejecuta "uv sync"; si fallan las '
-                'conexiones, es el cortafuegos de salida del hosting y hay '
-                'que pedirselo al proveedor.'
+                'si falla la libreria, reinstala requirements.txt con pip en '
+                'el entorno de la aplicacion; si fallan las conexiones, es el '
+                'cortafuegos de salida del hosting y hay que pedirselo al '
+                'proveedor.'
             ))
 
         return None
@@ -88,8 +93,15 @@ class Command(BaseCommand):
                 f'   NO disponible: {type(error).__name__}: {error}'
             ))
             self.stdout.write(
-                '   Se arregla con "uv sync" en el servidor: la dependencia '
-                'esta declarada, solo falta instalarla.'
+                '   Produccion instala con pip desde requirements.txt. Desde '
+                'cPanel: Setup Python App -> Run Pip Install apuntando a '
+                'requirements.txt, o por SSH activando el entorno de la '
+                'aplicacion y "pip install -r requirements.txt".'
+            )
+            self.stdout.write(
+                '   Comprueba antes con "manage.py check_requirements" que la '
+                'dependencia este en requirements.txt: si no lo esta, '
+                'reinstalar no la traera.'
             )
             return False
 

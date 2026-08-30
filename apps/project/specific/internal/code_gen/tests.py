@@ -189,7 +189,8 @@ class SealAndSendTests(SealAndSendTestCase):
     def test_a_missing_library_is_named_as_such(self):
         """
         Es la otra causa, y su arreglo no esta en esta pantalla ni en la
-        consola: es un «uv sync» en el servidor. Decirlo ahorra la busqueda.
+        consola: produccion instala con pip desde requirements.txt, no con
+        uv, que aqui solo se usa en local. Decirlo ahorra la busqueda.
         """
         with mock.patch(STAMP, side_effect=ImportError(
                 "No module named 'opentimestamps'")):
@@ -199,7 +200,8 @@ class SealAndSendTests(SealAndSendTestCase):
 
         self.assertEqual(response.json()['anchor_result'], 'failed')
         self.assertIn('not installed', detail)
-        self.assertIn('uv sync', detail)
+        self.assertIn('pip', detail)
+        self.assertIn('requirements.txt', detail)
 
         self.summary.refresh_from_db()
         self.assertTrue(self.summary.master_hash)

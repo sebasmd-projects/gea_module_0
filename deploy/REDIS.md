@@ -261,11 +261,30 @@ sirva de algo. Comprobado: con la CA la conexión funciona; sin ella, con
 verificación estricta, el certificado se rechaza y la aplicación sigue en pie
 sin escribir nada.
 
-Instala la dependencia y comprueba:
+**Instala la dependencia. En cPanel es `pip`, no `uv`** — uv es solo para el
+entorno local; lo que se instala en el servidor es `requirements.txt`, y
+`django-redis` ya está ahí:
+
+- Desde el panel: *Setup Python App* → tu aplicación → **Run Pip Install**
+  apuntando a `requirements.txt`.
+- O por SSH, activando el entorno que el propio panel muestra en esa pantalla:
+
+  ```bash
+  source ~/virtualenv/<ruta_de_la_app>/3.11/bin/activate
+  pip install -r requirements.txt
+  ```
+
+Antes de instalar conviene confirmar que el paquete llegó al fichero, porque
+si no está, reinstalar no lo traerá:
 
 ```bash
-uv sync
-uv run python manage.py shell -c "from django.core.cache import cache; cache.set('gea:ping', 'ok', 30); print(cache.get('gea:ping'))"
+python manage.py check_requirements
+```
+
+Y después, la comprobación de que la cache va de verdad:
+
+```bash
+python manage.py shell -c "from django.core.cache import cache; cache.set('gea:ping', 'ok', 30); print(cache.get('gea:ping'))"
 ```
 
 Debe imprimir `ok`. Después, `manage.py clear_cache` sigue funcionando igual, y

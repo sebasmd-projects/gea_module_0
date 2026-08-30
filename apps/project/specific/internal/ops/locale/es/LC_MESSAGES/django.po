@@ -477,3 +477,15 @@ msgstr "Cuando el sellado avisa de que el envío a la cadena de bloques falló."
 #: .\apps\project\specific\internal\ops\registry.py:1
 msgid "Send a test hash"
 msgstr "Enviar una huella de prueba"
+
+#: .\apps\project\specific\internal\ops\registry.py:1
+msgid "Dependencies"
+msgstr "Dependencias"
+
+#: .\apps\project\specific\internal\ops\registry.py:1
+msgid "Checks that requirements.txt carries everything declared in pyproject.toml."
+msgstr "Comprueba que requirements.txt lleve todo lo declarado en pyproject.toml."
+
+#: .\apps\project\specific\internal\ops\registry.py:1
+msgid "Before every deploy, and after adding any dependency."
+msgstr "Antes de cada despliegue, y después de añadir cualquier dependencia."

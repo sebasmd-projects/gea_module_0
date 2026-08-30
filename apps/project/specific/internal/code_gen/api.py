@@ -517,7 +517,9 @@ def _send_to_blockchain(summary):
         return 'failed', str(
             _('Sealed, but the OpenTimestamps library is not installed on '
               'this server (%(reason)s). The seal is saved. This is fixed by '
-              'running «uv sync» on the server, not from here.')
+              'installing requirements.txt with pip on the server, not from '
+              'here — check first with «Dependencies» in the operations '
+              'console that the package actually reached that file.')
         ) % {'reason': error}
     except Exception as error:  # noqa: BLE001
         logger.exception('Unexpected OTS failure for summary %s', summary.pk)
