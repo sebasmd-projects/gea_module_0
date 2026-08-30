@@ -68,9 +68,12 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR(
                 'La cache NO responde. Con django-redis esto no lanza '
                 'excepcion, asi que el sitio sigue en pie pero los limites de '
-                'tasa no se aplican. Revisa REDIS_URL, el cortafuegos del VPS '
-                'y que el contenedor este arriba.'
+                'tasa no se aplican.'
             ))
+
+            if 'redis' in backend.lower():
+                self._diagnose()
+
             return None
 
         if not shared:
@@ -278,5 +281,286 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(
             '   El otro proceso la ve. La cache es compartida.'
         ))
+
+        return True
+
+    # ------------------------------------------------------------------
+    # Diagnostico por capas
+    #
+    # «No responde» no es un diagnostico: entre Django y el Redis del VPS hay
+    # cuatro capas y cada una falla por un motivo distinto y se arregla en un
+    # sitio distinto. Se prueban de abajo arriba y se para en la primera que
+    # rompe, que es la unica que hay que arreglar.
+    # ------------------------------------------------------------------
+    def _diagnose(self):
+        self._section('Por que no responde')
+
+        url = str(settings.CACHES['default'].get('LOCATION', ''))
+
+        parts = self._parse_url(url)
+
+        if not parts:
+            self.stdout.write(self.style.ERROR(
+                '   REDIS_URL no se puede interpretar. Debe ser de la forma '
+                'rediss://usuario:clave@host:6380/0?ssl_cert_reqs=required&'
+                'ssl_ca_certs=/ruta/ca.crt'
+            ))
+            return
+
+        if not self._diag_ca(parts):
+            return
+
+        if not self._diag_dns(parts):
+            return
+
+        if not self._diag_tcp(parts):
+            return
+
+        if not self._diag_tls(parts):
+            return
+
+        self._diag_auth(parts)
+
+    def _parse_url(self, url):
+        from urllib.parse import parse_qs, urlparse
+
+        try:
+            parsed = urlparse(url)
+        except ValueError:
+            return None
+
+        if not parsed.hostname:
+            return None
+
+        query = parse_qs(parsed.query or '')
+
+        return {
+            'scheme': parsed.scheme,
+            'host': parsed.hostname,
+            'port': parsed.port or 6379,
+            'user': parsed.username or 'default',
+            'password': parsed.password or '',
+            'tls': parsed.scheme == 'rediss',
+            'ca': (query.get('ssl_ca_certs') or [''])[0],
+            'cert_reqs': (query.get('ssl_cert_reqs') or [''])[0],
+        }
+
+    def _diag_ca(self, parts) -> bool:
+        """Capa 0: el fichero de la CA, que es cosa de este servidor."""
+        if not parts['tls']:
+            self.stdout.write(self.style.WARNING(
+                '   0. TLS  La URL es redis:// y no rediss://: el trafico y la '
+                'contrasena viajarian en claro por internet.'
+            ))
+            return True
+
+        ca = parts['ca']
+
+        if not ca:
+            self.stdout.write(self.style.WARNING(
+                '   0. CA   Sin ssl_ca_certs en la URL. Con una CA propia, la '
+                'verificacion fallara.'
+            ))
+            return True
+
+        if not os.path.isfile(ca):
+            self.stdout.write(self.style.ERROR(
+                f'   0. CA   NO existe el fichero {ca}'
+            ))
+            self.stdout.write(
+                '           Copia ca.crt del VPS a esa ruta en este servidor. '
+                'Solo ca.crt: nunca ca.key ni redis.key.'
+            )
+            return False
+
+        if not os.access(ca, os.R_OK):
+            self.stdout.write(self.style.ERROR(
+                f'   0. CA   Existe pero no se puede leer: {ca}'
+            ))
+            return False
+
+        self.stdout.write(self.style.SUCCESS(
+            f'   0. CA   legible ({ca})'
+        ))
+
+        return True
+
+    def _diag_dns(self, parts) -> bool:
+        """Capa 1: que el nombre resuelva, y a donde."""
+        import socket as _socket
+
+        host = parts['host']
+
+        try:
+            infos = _socket.getaddrinfo(host, parts['port'],
+                                        proto=_socket.IPPROTO_TCP)
+        except Exception as error:  # noqa: BLE001
+            self.stdout.write(self.style.ERROR(
+                f'   1. DNS  {host} NO resuelve ({error})'
+            ))
+            self.stdout.write(
+                '           Falta el registro A, o todavia no se ha '
+                'propagado. Mientras tanto puedes poner la IP del VPS '
+                'directamente en REDIS_URL, pero el certificado tiene que '
+                'llevar esa IP en su subjectAltName.'
+            )
+            return False
+
+        addresses = sorted({info[4][0] for info in infos})
+
+        self.stdout.write(self.style.SUCCESS(
+            f"   1. DNS  {host} -> {', '.join(addresses)}"
+        ))
+
+        return True
+
+    def _diag_tcp(self, parts) -> bool:
+        """Capa 2: el cortafuegos. Es la que mas falla."""
+        import socket as _socket
+
+        started = time.monotonic()
+
+        try:
+            with _socket.create_connection(
+                (parts['host'], parts['port']), 8
+            ):
+                pass
+        except Exception as error:  # noqa: BLE001
+            elapsed = time.monotonic() - started
+
+            self.stdout.write(self.style.ERROR(
+                f"   2. TCP  sin conexion al puerto {parts['port']} tras "
+                f'{elapsed:.1f}s ({type(error).__name__}: {error})'
+            ))
+            self.stdout.write(
+                '           Es el cortafuegos, y casi siempre por una de dos: '
+                'la regla DOCKER-USER del VPS no lleva la IP de SALIDA de este '
+                'servidor, o el contenedor no esta arriba.'
+            )
+            self.stdout.write(
+                '           Mira cual es la IP de salida real con:  '
+                'curl -s https://ifconfig.io'
+            )
+            self.stdout.write(
+                '           y que esa sea la autorizada en el VPS:  '
+                'sudo iptables -L DOCKER-USER -n --line-numbers'
+            )
+            return False
+
+        elapsed = (time.monotonic() - started) * 1000
+
+        self.stdout.write(self.style.SUCCESS(
+            f'   2. TCP  puerto abierto ({elapsed:.0f} ms)'
+        ))
+
+        return True
+
+    def _diag_tls(self, parts) -> bool:
+        """Capa 3: el certificado y la CA."""
+        if not parts['tls']:
+            return True
+
+        import socket as _socket
+        import ssl as _ssl
+
+        context = _ssl.create_default_context(
+            cafile=parts['ca'] if parts['ca'] else None
+        )
+
+        # Redis no habla HTTP, asi que no hay SNI que validar por nombre mas
+        # alla del propio certificado; se comprueba el nombre igualmente
+        # porque es lo que hara redis-py.
+        try:
+            with _socket.create_connection(
+                (parts['host'], parts['port']), 8
+            ) as raw:
+                with context.wrap_socket(
+                    raw, server_hostname=parts['host']
+                ) as tls:
+                    cert = tls.getpeercert()
+        except _ssl.SSLCertVerificationError as error:
+            self.stdout.write(self.style.ERROR(
+                f'   3. TLS  el certificado NO se acepta ({error.verify_message})'
+            ))
+            self.stdout.write(
+                '           O el ca.crt de este servidor no es el que firmo el '
+                'certificado del VPS, o el nombre con el que se conecta no '
+                'esta en su subjectAltName. Si cambiaste de nombre o de IP, '
+                'hay que reemitir el certificado del paso 2.'
+            )
+            return False
+        except Exception as error:  # noqa: BLE001
+            self.stdout.write(self.style.ERROR(
+                f'   3. TLS  fallo el handshake ({type(error).__name__}: {error})'
+            ))
+            self.stdout.write(
+                '           Si el puerto abre pero el TLS no, comprueba que '
+                'Redis tenga tls-port y no un puerto en claro.'
+            )
+            return False
+
+        names = [
+            value for kind, value in cert.get('subjectAltName', ())
+            if kind in ('DNS', 'IP Address')
+        ]
+
+        self.stdout.write(self.style.SUCCESS(
+            f"   3. TLS  certificado aceptado (vale para: {', '.join(names)})"
+        ))
+
+        return True
+
+    def _diag_auth(self, parts) -> bool:
+        """Capa 4: usuario y contrasena, ya sin la red de por medio."""
+        try:
+            import redis as _redis
+        except Exception:  # noqa: BLE001
+            self.stdout.write(
+                '   4. AUTH sin la libreria redis no se puede comprobar.'
+            )
+            return False
+
+        url = str(settings.CACHES['default'].get('LOCATION', ''))
+
+        try:
+            client = _redis.from_url(
+                url, socket_connect_timeout=8, socket_timeout=8
+            )
+            client.ping()
+        except Exception as error:  # noqa: BLE001
+            message = str(error)
+
+            self.stdout.write(self.style.ERROR(
+                f'   4. AUTH rechazado ({type(error).__name__}: {message})'
+            ))
+
+            if 'WRONGPASS' in message or 'invalid username' in message:
+                self.stdout.write(
+                    '           Usuario o contrasena que no cuadran con el '
+                    '«user gea» del redis.conf. Recuerda que ahi va el SHA-256 '
+                    "de la clave:  printf '%s' 'LA_CLAVE' | sha256sum"
+                )
+            elif 'NOAUTH' in message:
+                self.stdout.write(
+                    '           REDIS_URL va sin credenciales y el usuario '
+                    'default esta apagado, que es lo correcto. Anade '
+                    'usuario:clave a la URL.'
+                )
+            elif 'NOPERM' in message:
+                self.stdout.write(
+                    '           Las credenciales valen pero al usuario le '
+                    'falta permiso. Revisa la linea «user gea» del redis.conf.'
+                )
+
+            return False
+
+        self.stdout.write(self.style.SUCCESS(
+            '   4. AUTH las credenciales valen.'
+        ))
+        self.stdout.write(
+            '           Las cuatro capas responden, asi que el fallo esta en '
+            'la propia cache de Django y no en la conexion. Poco habitual: '
+            'revisa KEY_PREFIX y que el usuario tenga acceso a «gea:*».'
+        )
 
         return True
