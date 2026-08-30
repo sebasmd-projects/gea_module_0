@@ -181,6 +181,29 @@ openssl rand -base64 36                       # la contraseña; guárdala
 printf '%s' 'LA_CONTRASEÑA' | sha256sum       # el hash que va en el fichero
 ```
 
+> ⚠️ **Va el hash, no la contraseña.** Tiene que ser exactamente **64 caracteres
+> hexadecimales en minúscula**. Si pegas ahí la contraseña —que sale en base64,
+> con mayúsculas y símbolos— Redis **no arranca** y el contenedor entra en bucle
+> de reinicio:
+>
+> ```
+> *** FATAL CONFIG FILE ERROR ***
+> Error in user declaration 'gea': The password hash must be exactly 64
+> characters and contain only lowercase hexadecimal characters
+> ```
+>
+> Y una comodidad: si ya habías creado el usuario con `ACL SETUSER gea on
+> '>clave'`, Redis guardó el SHA-256 por ti. `ACL LIST` te lo enseña —el
+> `#…` de esa línea— y puedes copiarlo tal cual al fichero. Así no hay
+> forma de que deje de cuadrar con la contraseña que ya está en `REDIS_URL`.
+
+**Si el contenedor se queda reiniciando**, la causa está siempre en el log, y
+Redis es explícito con los errores de configuración:
+
+```bash
+sudo docker logs --tail 20 gea-redis
+```
+
 ## Paso 4. Docker Compose
 
 `/opt/gea-redis/compose.yaml`:
