@@ -484,6 +484,13 @@ def _send_to_blockchain(summary):
     informa de que quedo sin anclar y se ancla despues, que para eso el anclaje
     es un paso aparte.
 
+    El mensaje de fallo lleva **la causa concreta**, no un «fallo» a secas.
+    Esta pantalla solo la ve personal interno, asi que no hay nada que ocultar,
+    y sin la causa el aviso obliga a ir a buscar ``stderr.log`` en el servidor
+    para averiguar si lo que falta es una libreria o la salida a internet --
+    que son dos arreglos completamente distintos. Para separarlas del todo hay
+    ``manage.py check_anchoring``, disponible en la consola de operaciones.
+
     Returns:
         tuple[str, str]: (resultado, mensaje). El resultado es ``'anchored'``,
         ``'already'`` o ``'failed'``.
@@ -500,15 +507,26 @@ def _send_to_blockchain(summary):
         logger.warning('OTS anchoring failed for summary %s: %s',
                        summary.pk, error)
         return 'failed', str(
-            _('Sealed, but the blockchain calendars did not answer. '
-              'The seal is saved; send it later with «Send to blockchain».')
-        )
-    except Exception:  # noqa: BLE001
+            _('Sealed, but the blockchain calendars did not answer (%(reason)s). '
+              'The seal is saved; send it later with «Send to blockchain». '
+              'Run «Blockchain anchoring» in the operations console to see '
+              'whether this server has the library and outbound access.')
+        ) % {'reason': error}
+    except ImportError as error:
+        logger.exception('OTS library missing for summary %s', summary.pk)
+        return 'failed', str(
+            _('Sealed, but the OpenTimestamps library is not installed on '
+              'this server (%(reason)s). The seal is saved. This is fixed by '
+              'running «uv sync» on the server, not from here.')
+        ) % {'reason': error}
+    except Exception as error:  # noqa: BLE001
         logger.exception('Unexpected OTS failure for summary %s', summary.pk)
         return 'failed', str(
-            _('Sealed, but sending to the blockchain failed. The seal is '
-              'saved; send it later with «Send to blockchain».')
-        )
+            _('Sealed, but sending to the blockchain failed: '
+              '%(kind)s: %(reason)s. The seal is saved; send it later with '
+              '«Send to blockchain». Run «Blockchain anchoring» in the '
+              'operations console for a full diagnosis.')
+        ) % {'kind': type(error).__name__, 'reason': error}
 
     return 'anchored', str(
         _('Sealed and sent to the blockchain. The proof is born pending: it '

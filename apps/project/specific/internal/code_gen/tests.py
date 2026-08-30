@@ -168,6 +168,42 @@ class SealAndSendTests(SealAndSendTestCase):
             'y el envio tiene que quedar disponible para reintentarlo',
         )
 
+    def test_the_failure_says_why_it_failed(self):
+        """
+        Un «fallo» a secas obliga a ir a buscar stderr.log en el servidor para
+        distinguir dos arreglos completamente distintos: instalar una libreria
+        o abrir la salida a internet. La pantalla es solo para personal
+        interno, asi que la causa va en el aviso.
+        """
+        from .services import ots
+
+        with mock.patch(STAMP, side_effect=ots.OTSError(
+                'No OpenTimestamps calendar could be reached.')):
+            response = self.post(self.seal_url, {'anchor': True})
+
+        detail = response.json()['detail']
+
+        self.assertIn('calendar could be reached', detail)
+        self.assertIn('operations console', detail)
+
+    def test_a_missing_library_is_named_as_such(self):
+        """
+        Es la otra causa, y su arreglo no esta en esta pantalla ni en la
+        consola: es un «uv sync» en el servidor. Decirlo ahorra la busqueda.
+        """
+        with mock.patch(STAMP, side_effect=ImportError(
+                "No module named 'opentimestamps'")):
+            response = self.post(self.seal_url, {'anchor': True})
+
+        detail = response.json()['detail']
+
+        self.assertEqual(response.json()['anchor_result'], 'failed')
+        self.assertIn('not installed', detail)
+        self.assertIn('uv sync', detail)
+
+        self.summary.refresh_from_db()
+        self.assertTrue(self.summary.master_hash)
+
     def test_an_unexpected_failure_is_contained_too(self):
         """No solo OTSError: cualquier fallo de red haria el mismo dano."""
         with mock.patch(STAMP,

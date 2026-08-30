@@ -461,3 +461,19 @@ msgstr "%(label)s contiene caracteres que no están permitidos."
 #: .\apps\project\specific\internal\ops\runner.py:217
 msgid "manage.py could not be found. Check BASE_DIR."
 msgstr "No se encontró manage.py. Revise BASE_DIR."
+
+#: .\apps\project\specific\internal\ops\registry.py:1
+msgid "Blockchain anchoring"
+msgstr "Anclaje en la cadena de bloques"
+
+#: .\apps\project\specific\internal\ops\registry.py:1
+msgid "Checks whether this server can send hashes to the OpenTimestamps calendars."
+msgstr "Comprueba si este servidor puede enviar huellas a los calendarios de OpenTimestamps."
+
+#: .\apps\project\specific\internal\ops\registry.py:1
+msgid "When sealing reports that sending to the blockchain failed."
+msgstr "Cuando el sellado avisa de que el envío a la cadena de bloques falló."
+
+#: .\apps\project\specific\internal\ops\registry.py:1
+msgid "Send a test hash"
+msgstr "Enviar una huella de prueba"
