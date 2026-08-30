@@ -133,10 +133,45 @@
             <p class="small text-muted">
               {% trans 'Sealing computes the master hash over the members. It never covers the summary itself — that document does not exist yet when the hash is computed.' %}
             </p>
-            <div class="d-grid">
-              <button type="button" class="btn btn-primary" id="sealSummary"
+
+            {# Dos actos separados. Sellar es nuestro y es instantaneo; enviar
+               sale a la red y puede tardar o fallar, asi que se puede dejar
+               para despues sin volver a sellar. #}
+            <div class="d-grid gap-2">
+              <button type="button" class="btn btn-primary" id="sealAndSend"
+                      data-loading-text="{% trans 'Sealing and sending…' %}">
+                <i class="bi bi-shield-lock"></i>
+                {% trans 'Seal and send to blockchain' %}
+              </button>
+
+              <button type="button" class="btn btn-outline-primary" id="sealSummary"
                       data-loading-text="{% trans 'Sealing…' %}">
-                <i class="bi bi-shield-lock"></i> {% trans 'Seal the box' %}
+                <i class="bi bi-stamp"></i> {% trans 'Seal only' %}
+              </button>
+            </div>
+
+            <p class="small text-muted mt-3 mb-0">
+              {% trans 'Sending is free: OpenTimestamps bundles thousands of hashes into a single Bitcoin transaction. Only the hash travels, never the document.' %}
+            </p>
+          </div>
+        </div>
+
+        {# ============ ENVIAR DESPUES DE HABER SELLADO ============ #}
+        <div class="card mb-4">
+          <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <span><i class="fa-brands fa-bitcoin me-2"></i>{% trans 'Blockchain' %}</span>
+            <span class="badge {% if sent_to_blockchain %}bg-warning text-dark{% else %}bg-secondary{% endif %}"
+                  id="blockchainStatus">{{ blockchain_label }}</span>
+          </div>
+          <div class="card-body">
+            <p class="small text-muted">
+              {% trans 'A sealed box can be sent later: the hash is the same one. The proof is born pending and matures into a Bitcoin block within a few hours, on its own — nothing needs re-stamping.' %}
+            </p>
+            <div class="d-grid">
+              <button type="button" class="btn btn-outline-warning" id="sendToBlockchain"
+                      data-loading-text="{% trans 'Sending…' %}"
+                      {% if not can_send_to_blockchain %}disabled{% endif %}>
+                <i class="bi bi-box-arrow-up"></i> {% trans 'Send to blockchain' %}
               </button>
             </div>
           </div>
@@ -263,6 +298,7 @@
     window.GEA_SUMMARY_CONFIG = {
       membersUrl: '{% url 'code_gen:summary_members' summary.pk %}',
       sealUrl: '{% url 'code_gen:summary_seal' summary.pk %}',
+      anchorUrl: '{% url 'code_gen:summary_anchor' summary.pk %}',
       placementsUrl: '{% url 'code_gen:layout_placements' 0 %}',
       messages: {
         pickLayout: '{% trans 'Choose a stamp layout first.' %}',

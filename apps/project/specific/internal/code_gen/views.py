@@ -546,6 +546,20 @@ class SummaryComposerView(InternalToolAccessMixin, TemplateView):
         context['summary'] = summary
         context['members'] = summary.ordered_members()
         context['anchor_url'] = anchor_url(summary)
+
+        # Estado del envio a la cadena de bloques al pintar la pagina. Despues
+        # lo mantiene al dia el JS con lo que devuelve cada sellado o envio.
+        from .api import _ots_anchor_for_current_hash
+
+        sent = _ots_anchor_for_current_hash(summary)
+
+        context['sent_to_blockchain'] = sent is not None
+        context['blockchain_label'] = (
+            sent.get_status_display() if sent is not None else _('Not sent')
+        )
+        context['can_send_to_blockchain'] = (
+            bool(summary.master_hash) and sent is None
+        )
         context['layout'] = (
             summary.summary_document.stamp_layout
             if summary.summary_document else None

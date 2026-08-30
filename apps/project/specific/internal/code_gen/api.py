@@ -56,6 +56,21 @@ def _parse_body(request):
         )
 
 
+def _wants_anchor(request) -> bool:
+    """
+    Si esta peticion de sellado pide ademas mandar el hash a Bitcoin.
+
+    Ante un cuerpo ilegible se responde que no: dejar de anclar es un paso que
+    se puede dar despues, y anclar por error no se deshace.
+    """
+    payload, _error = _parse_body(request)
+
+    if not isinstance(payload, dict):
+        return False
+
+    return bool(payload.get('anchor'))
+
+
 def _clean_placements(raw):
     """
     Valida y normaliza la lista de posiciones recibida.
@@ -275,6 +290,11 @@ def _summary_payload(summary):
 
     state = summary_anchor_state(summary)
 
+    # Estado del envio a la cadena de bloques, tal como lo necesita el boton:
+    # una caja sellada y no enviada se puede enviar; una ya enviada no, hasta
+    # que se vuelva a sellar con miembros distintos y cambie el master hash.
+    sent = _ots_anchor_for_current_hash(summary)
+
     return {
         'id': str(summary.pk),
         'title': summary.title,
@@ -287,6 +307,12 @@ def _summary_payload(summary):
         ),
         'anchor_url': anchor_url(summary),
         'anchored': state['anchored'],
+        'sent_to_blockchain': sent is not None,
+        'blockchain_label': (
+            str(sent.get_status_display()) if sent is not None
+            else str(_('Not sent'))
+        ),
+        'can_send_to_blockchain': bool(summary.master_hash) and sent is None,
         'members': [
             {
                 'code': member.code,
@@ -422,9 +448,91 @@ def summary_members(request, pk):
     })
 
 
+def _ots_anchor_for_current_hash(summary):
+    """
+    El anclaje en Bitcoin que ya cubre el master hash actual, si lo hay.
+
+    Sirve para no mandar dos veces lo mismo. Se compara contra el hash
+    **actual** a proposito: si la caja se vuelve a sellar porque cambiaron sus
+    miembros, el anclaje viejo cubre un hash que ya no es el suyo y hace falta
+    uno nuevo.
+    """
+    from .models import AnchorStatusChoices, AnchorTypeChoices
+
+    if not summary.master_hash:
+        return None
+
+    return summary.anchors.filter(
+        anchor_type=AnchorTypeChoices.OPENTIMESTAMPS,
+        payload_hash=summary.master_hash,
+        status__in=(
+            AnchorStatusChoices.PENDING,
+            AnchorStatusChoices.CONFIRMED,
+        ),
+    ).first()
+
+
+def _send_to_blockchain(summary):
+    """
+    Manda el master hash a los calendarios de OpenTimestamps.
+
+    Nunca propaga el fallo. Es deliberado y es lo que hace viable el boton de
+    «sellar y enviar»: el sellado es una escritura nuestra que ya esta hecha, y
+    el envio es una llamada de red a servidores de terceros. Si los calendarios
+    no responden, lo que no puede pasar es que se pierda el sello -- con
+    ``ATOMIC_REQUESTS`` una excepcion aqui desharia tambien el sellado. Se
+    informa de que quedo sin anclar y se ancla despues, que para eso el anclaje
+    es un paso aparte.
+
+    Returns:
+        tuple[str, str]: (resultado, mensaje). El resultado es ``'anchored'``,
+        ``'already'`` o ``'failed'``.
+    """
+    from .services import ots
+    from .services.anchoring import anchor_with_ots
+
+    if _ots_anchor_for_current_hash(summary) is not None:
+        return 'already', str(_('It was already sent to the blockchain.'))
+
+    try:
+        anchor_with_ots(summary)
+    except ots.OTSError as error:
+        logger.warning('OTS anchoring failed for summary %s: %s',
+                       summary.pk, error)
+        return 'failed', str(
+            _('Sealed, but the blockchain calendars did not answer. '
+              'The seal is saved; send it later with «Send to blockchain».')
+        )
+    except Exception:  # noqa: BLE001
+        logger.exception('Unexpected OTS failure for summary %s', summary.pk)
+        return 'failed', str(
+            _('Sealed, but sending to the blockchain failed. The seal is '
+              'saved; send it later with «Send to blockchain».')
+        )
+
+    return 'anchored', str(
+        _('Sealed and sent to the blockchain. The proof is born pending: it '
+          'matures into a Bitcoin block within a few hours, on its own.')
+    )
+
+
 @require_http_methods(['POST'])
 def summary_seal(request, pk):
-    """Calcula el master hash de la caja."""
+    """
+    Sella la caja y, si se pide, la manda a la cadena de bloques.
+
+    Son dos actos separados a proposito, y el formulario ofrece los dos:
+
+    * **Solo sellar** calcula el master hash y lo guarda. Es instantaneo y no
+      depende de nadie de fuera.
+    * **Sellar y enviar** hace lo anterior y ademas manda el hash a los
+      calendarios de OpenTimestamps, que es gratis porque juntan miles de
+      hashes en una sola transaccion de Bitcoin.
+
+    Separarlos importa porque el envio sale a la red y puede fallar o tardar,
+    mientras que el sellado no. Una caja sellada sin enviar se puede enviar
+    despues sin volver a sellarla: el hash es el mismo.
+    """
     from apps.project.specific.documents.certificates.models import \
         AegisSummaryModel
 
@@ -440,11 +548,58 @@ def summary_seal(request, pk):
     except MasterHashError as error:
         return JsonResponse({'detail': str(error)}, status=400)
 
+    detail = str(_('Box sealed.'))
+    anchor_result = None
+
+    if _wants_anchor(request):
+        anchor_result, detail = _send_to_blockchain(summary)
+
     summary.refresh_from_db()
 
     return JsonResponse({
-        'detail': str(_('Box sealed.')),
+        'detail': detail,
         'master_hash': digest,
+        'anchor_result': anchor_result,
+        **_summary_payload(summary),
+    })
+
+
+@require_http_methods(['POST'])
+def summary_anchor(request, pk):
+    """
+    Manda a la cadena de bloques una caja que ya estaba sellada.
+
+    Es el segundo tiempo de «solo sellar»: el hash ya existe, aqui solo se
+    envia. Si la caja no esta sellada no hay nada que enviar, y si ya se envio
+    este mismo hash no se manda otra vez.
+    """
+    from apps.project.specific.documents.certificates.models import \
+        AegisSummaryModel
+
+    if not _is_internal(request.user):
+        return _forbidden()
+
+    summary = get_object_or_404(AegisSummaryModel, pk=pk)
+
+    if not summary.master_hash:
+        return JsonResponse(
+            {'detail': str(_('Seal the box before sending it.'))},
+            status=400,
+        )
+
+    anchor_result, detail = _send_to_blockchain(summary)
+
+    if anchor_result == 'anchored':
+        detail = str(
+            _('Sent to the blockchain. The proof is born pending: it matures '
+              'into a Bitcoin block within a few hours, on its own.')
+        )
+
+    summary.refresh_from_db()
+
+    return JsonResponse({
+        'detail': detail,
+        'anchor_result': anchor_result,
         **_summary_payload(summary),
     })
 

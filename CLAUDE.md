@@ -286,6 +286,11 @@ subir PDF (admin «Certify» | code_gen:code_generate)
 
 caja AEGIS: summary.certify_summary() → master.seal_summary() (payload JCS verbatim)
              → anchoring.anchor_with_tsa() (instantáneo) y anchor_with_ots() (madura por cron)
+             El compositor ofrece «sellar y enviar» y «solo sellar»: sellar es una
+             escritura nuestra e instantánea, enviar sale a la red. El envío NUNCA
+             propaga su fallo (con ATOMIC_REQUESTS desharía el sellado); se degrada a
+             aviso y queda disponible en code_gen:summary_anchor. No se manda dos
+             veces el mismo master hash.
 
 consulta pública: certificates:input_document_verification_aegis → OTP por correo
    → OTPSessionMixin → detail → certificates:document_file (única vía de descarga)

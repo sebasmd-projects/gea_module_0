@@ -3297,3 +3297,35 @@ msgstr "Página"
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:225
 msgid "Admin panel"
 msgstr "Panel de administración"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Seal and send to blockchain"
+msgstr "Sellar y enviar a la cadena de bloques"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Sealing and sending…"
+msgstr "Sellando y enviando…"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Seal only"
+msgstr "Solo sellar"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Sending is free: OpenTimestamps bundles thousands of hashes into a single Bitcoin transaction. Only the hash travels, never the document."
+msgstr "Enviar es gratis: OpenTimestamps junta miles de huellas en una sola transacción de Bitcoin. Solo viaja la huella, nunca el documento."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Blockchain"
+msgstr "Cadena de bloques"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Not sent"
+msgstr "Sin enviar"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "A sealed box can be sent later: the hash is the same one. The proof is born pending and matures into a Bitcoin block within a few hours, on its own — nothing needs re-stamping."
+msgstr "Una caja sellada se puede enviar después: la huella es la misma. La prueba nace pendiente y madura sola hasta un bloque de Bitcoin en unas horas, sin reestampar nada."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Send to blockchain"
+msgstr "Enviar a la cadena de bloques"
