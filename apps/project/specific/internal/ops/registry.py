@@ -193,6 +193,28 @@ COMMANDS = (
         timeout=300,
     ),
     Command(
+        name='check_cache',
+        title=_('Cache'),
+        summary=_(
+            'Checks that the cache answers and that it is shared across '
+            'processes.'
+        ),
+        detail=_(
+            'Asking the VPS whether Redis is alive does not answer what '
+            'matters: whether this application reaches it, and whether the '
+            'rate counters are shared. And it cannot be judged by eye, '
+            'because django-redis runs with IGNORE_EXCEPTIONS so an outage '
+            'does not take the login down — the price is that an unreachable '
+            'server returns None instead of raising, and a broken cache looks '
+            'exactly like an empty one. The last check is the one that '
+            'decides: it writes a key and reads it back from another process.'
+        ),
+        example=_('After pointing REDIS_URL at the VPS, and when rate limits '
+                  'seem not to apply.'),
+        risk=RISK_READ_ONLY,
+        timeout=90,
+    ),
+    Command(
         name='check_requirements',
         title=_('Dependencies'),
         summary=_(

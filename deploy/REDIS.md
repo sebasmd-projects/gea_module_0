@@ -330,14 +330,67 @@ si no está, reinstalar no lo traerá:
 python manage.py check_requirements
 ```
 
-Y después, la comprobación de que la cache va de verdad:
+## Paso 8. Comprobar que la cache funciona de verdad
 
 ```bash
-python manage.py shell -c "from django.core.cache import cache; cache.set('gea:ping', 'ok', 30); print(cache.get('gea:ping'))"
+python manage.py check_cache
 ```
 
-Debe imprimir `ok`. Después, `manage.py clear_cache` sigue funcionando igual, y
-la consola de operaciones lo tiene en su lista blanca.
+También en la consola de operaciones, como **«Cache»**, sin necesidad de SSH.
+
+Esto es lo que hay que ejecutar, y no un `PING` al VPS. La pregunta no es si
+Redis está vivo: es si **esta aplicación llega y si los contadores se comparten
+entre procesos**. Un Redis impecable al que la aplicación no alcanza deja los
+límites exactamente como estaban.
+
+Y no se puede juzgar a ojo, porque `IGNORE_EXCEPTIONS` está puesto a propósito
+para que un corte no tumbe el login: **un servidor inalcanzable no da error,
+devuelve `None`**. Una cache rota se parece a una cache vacía.
+
+Las tres salidas posibles, todas reproducidas:
+
+**Bien** — es lo que tiene que salir:
+
+```
+1. Backend            django_redis.cache.RedisCache
+2. Ida y vuelta       Escribe y lee correctamente (44 ms)
+3. Contador (incr)    Cuenta bien: 1, 2.
+4. Caducidad          Las claves caducan.
+5. Compartida         El otro proceso la ve. La cache es compartida.
+
+La cache funciona y se comparte entre procesos.
+```
+
+**Sin `REDIS_URL`** — funciona, pero es por proceso:
+
+```
+1. Backend            django.core.cache.backends.locmem.LocMemCache
+5. Compartida         El otro proceso NO la vio (leyó 'None').
+
+LocMemCache: la cache funciona pero es POR PROCESO.
+```
+
+**Configurado pero inalcanzable** — el caso que `IGNORE_EXCEPTIONS` esconde y
+que hay que saber leer:
+
+```
+2. Ida y vuelta       Se escribió y volvió None. Con IGNORE_EXCEPTIONS un
+                      servidor inalcanzable devuelve None sin lanzar.
+
+La cache NO responde. El sitio sigue en pie pero los límites no se aplican.
+```
+
+Si sale esa tercera, mira en este orden: que el contenedor esté arriba, que la
+regla del paso 5 lleve la IP correcta, y que `REDIS_URL` tenga la contraseña y
+la ruta de la CA bien.
+
+La prueba que decide es la quinta, y es la que justifica todo el montaje:
+escribe una clave y la lee **desde otro proceso**. Con Redis se ve; con
+`LocMemCache` no. Esa diferencia es justo la que separa un límite de tasa real
+de uno que se esquiva abriendo otra pestaña hasta que responda otro worker.
+
+Después, `manage.py clear_cache` sigue funcionando igual, y la consola de
+operaciones lo tiene en su lista blanca.
 
 ---
 

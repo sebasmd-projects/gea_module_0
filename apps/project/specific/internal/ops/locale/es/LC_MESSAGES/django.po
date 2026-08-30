@@ -489,3 +489,15 @@ msgstr "Comprueba que requirements.txt lleve todo lo declarado en pyproject.toml
 #: .\apps\project\specific\internal\ops\registry.py:1
 msgid "Before every deploy, and after adding any dependency."
 msgstr "Antes de cada despliegue, y después de añadir cualquier dependencia."
+
+#: .\apps\project\specific\internal\ops\registry.py:1
+msgid "Cache"
+msgstr "Cache"
+
+#: .\apps\project\specific\internal\ops\registry.py:1
+msgid "Checks that the cache answers and that it is shared across processes."
+msgstr "Comprueba que la cache responde y que se comparte entre procesos."
+
+#: .\apps\project\specific\internal\ops\registry.py:1
+msgid "After pointing REDIS_URL at the VPS, and when rate limits seem not to apply."
+msgstr "Después de apuntar REDIS_URL al VPS, y cuando parezca que los límites de tasa no se aplican."
