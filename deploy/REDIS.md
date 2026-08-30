@@ -32,36 +32,41 @@ Tres capas, y las tres hacen falta:
 
 | Dato | Valor |
 |---|---|
-| Aplicación | `geausa.propensionesabogados.com` |
-| IP del hosting compartido (estática) | **`190.90.160.103`** |
-| Host del Redis | el VPS — **falta elegir nombre** (ver abajo) |
+| Aplicación (cPanel, Conexcol) | `geausa.propensionesabogados.com` |
+| IP del hosting compartido (estática) | **`190.90.160.103`** ← la única que se autoriza |
+| VPS (IlimitadoHost, Webmin) | `sebasmoralesd.com` · **`5.189.155.153`** |
+| Nombre del Redis | `redis.sebasmoralesd.com` → `5.189.155.153` |
 
-Todo el cortafuegos depende de la IP de cPanel, y es la única que se autoriza.
+Cada máquina hace un papel y conviene no mezclarlos: **cPanel es el cliente**
+—desde ahí sale la conexión— y **el VPS es el servidor** que la recibe.
 
-**Una comprobación de un minuto antes de seguir.** La IP que autoriza el
-cortafuegos es la de **salida** —desde la que cPanel abre la conexión—, y en
-hosting compartido no siempre coincide con la de entrada. Desde SSH en cPanel o
-un cron de la cuenta:
+**Comprobación de un minuto antes de tocar nada.** La IP que autoriza el
+cortafuegos es la de **salida** de cPanel, y en hosting compartido no siempre
+coincide con la de entrada. Desde SSH en cPanel o un cron de la cuenta:
 
 ```bash
 curl -s https://ifconfig.io
 ```
 
-Si responde `190.90.160.103`, todo encaja y sigue adelante. Si responde otra
-cosa, **esa** es la que hay que autorizar en el paso 5; anótala, porque si no el
-cortafuegos bloqueará justamente a la aplicación.
+Si responde `190.90.160.103`, todo encaja. Si responde otra cosa, **esa** es la
+que va en el paso 5; anótala, porque si no el cortafuegos bloqueará justamente
+a la aplicación.
 
 **El nombre del Redis.** El VPS es otra máquina, así que no vale
-`geausa.propensionesabogados.com`. Dos opciones:
+`geausa.propensionesabogados.com`. Crea un registro `A`
+`redis.sebasmoralesd.com` → `5.189.155.153` desde Webmin (Servers → BIND DNS
+Server, o el gestor de DNS de IlimitadoHost). Es preferible a usar la IP
+directamente: si algún día cambias de VPS, cambias el DNS y no tocas el `.env`
+de producción.
 
-- Un registro DNS `A` propio, por ejemplo `redis.propensionesabogados.com`
-  apuntando al VPS. Es lo recomendable: si algún día cambias de VPS, cambias el
-  DNS y no tocas el `.env` de producción.
-- La IP del VPS a secas, si prefieres no crear el registro. Funciona igual;
-  solo recuerda que el certificado del paso 2 tiene que llevar esa IP en su
-  `subjectAltName`.
+> **Sobre «IP address 5.189.155.153 (Shared by all servers)».** Ese texto de
+> Webmin significa que el servidor virtual usa la IP compartida de la máquina
+> en vez de una dedicada, y para esto da igual: lo que importa es que el puerto
+> 6380 solo lo pueda alcanzar `190.90.160.103`. Lo que **sí** conviene mirar es
+> si en esa máquina hay otros servicios tuyos escuchando, porque las reglas del
+> paso 5 son específicas del 6380 y no tocan el resto.
 
-En el resto del documento aparece como `redis.propensionesabogados.com`.
+En el resto del documento aparece como `redis.sebasmoralesd.com`.
 
 ---
 
@@ -77,7 +82,7 @@ cd /opt/gea-redis
 Se usa una **CA propia** en vez de Let's Encrypt a propósito: no hace falta
 dominio ni renovación automática dentro del contenedor, y el cliente confía en
 un certificado concreto en vez de en cualquier CA pública. Sustituye
-`redis.propensionesabogados.com` por el nombre o la IP con la que se va a conectar cPanel.
+`redis.sebasmoralesd.com` por el nombre o la IP con la que se va a conectar cPanel.
 
 ```bash
 cd /opt/gea-redis/tls
@@ -89,9 +94,9 @@ openssl req -x509 -new -nodes -key ca.key -sha256 -days 3650 \
 
 # Certificado del servidor
 openssl genrsa -out redis.key 2048
-openssl req -new -key redis.key -out redis.csr -subj "/CN=redis.propensionesabogados.com"
+openssl req -new -key redis.key -out redis.csr -subj "/CN=redis.sebasmoralesd.com"
 
-printf "subjectAltName=DNS:redis.propensionesabogados.com,IP:<IP_DEL_VPS>\nextendedKeyUsage=serverAuth\n" > ext.cnf
+printf "subjectAltName=DNS:redis.sebasmoralesd.com,IP:5.189.155.153\nextendedKeyUsage=serverAuth\n" > ext.cnf
 
 openssl x509 -req -in redis.csr -CA ca.crt -CAkey ca.key -CAcreateserial \
   -out redis.crt -days 3650 -sha256 -extfile ext.cnf
@@ -228,7 +233,7 @@ Esto no es opcional: es el paso que distingue "creo que está cerrado" de "está
 cerrado". **Desde una máquina que no sea cPanel ni el VPS**:
 
 ```bash
-nc -zv <IP_DEL_VPS> 6380     # tiene que dar timeout o rechazo
+nc -zv 5.189.155.153 6380     # tiene que dar timeout o rechazo
 ```
 
 Si contesta, algo de lo anterior no se aplicó. No sigas hasta que dé timeout.
@@ -236,7 +241,7 @@ Si contesta, algo de lo anterior no se aplicó. No sigas hasta que dé timeout.
 Y desde cPanel, que sí tiene que llegar:
 
 ```bash
-openssl s_client -connect <IP_DEL_VPS>:6380 -CAfile ~/gea-redis-ca.crt </dev/null
+openssl s_client -connect 5.189.155.153:6380 -CAfile ~/gea-redis-ca.crt </dev/null
 ```
 
 ## Paso 7. El lado de Django
@@ -245,7 +250,7 @@ Copia **solo la CA** (`ca.crt`) al servidor de cPanel —nunca `ca.key` ni
 `redis.key`— y añade al `.env`:
 
 ```
-REDIS_URL=rediss://gea:<LA_CLAVE>@redis.propensionesabogados.com:6380/0?ssl_cert_reqs=required&ssl_ca_certs=/home/<usuario_cpanel>/gea-redis-ca.crt
+REDIS_URL=rediss://gea:<LA_CLAVE>@redis.sebasmoralesd.com:6380/0?ssl_cert_reqs=required&ssl_ca_certs=/home/<usuario_cpanel>/gea-redis-ca.crt
 REDIS_KEY_PREFIX=gea
 REDIS_CONNECT_TIMEOUT=3
 REDIS_TIMEOUT=3
