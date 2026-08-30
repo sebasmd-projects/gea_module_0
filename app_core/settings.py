@@ -332,29 +332,57 @@ ROSETTA_SHOW_AT_ADMIN_PANEL = True
 
 # Base absoluta del sitio, usada cuando se generan URLs (QR de certificacion)
 # fuera del ciclo de una peticion, por ejemplo desde una accion del admin.
-# TODO(infra): configurar Redis y apuntar CACHES aqui.
-#
+# ==========================================================
+# Cache
+# ==========================================================
 # Sin CACHES definido Django usa LocMemCache, que es **por proceso**. Los
-# limites de tasa del OTP publico (certificates/mixins.py) y el codigo de
-# registro de compradores viven en cache: con N workers los limites son N
-# veces mas laxos y se reinician en cada despliegue. Es el bypass mas facil
-# de la unica superficie no autenticada que tiene la plataforma.
+# limites de tasa del OTP publico (certificates/mixins.py), el codigo de
+# registro de compradores y el cupo de recuperacion de contrasena viven en
+# cache: con N workers los limites son N veces mas laxos y se reinician en
+# cada despliegue. Es el bypass mas facil de la unica superficie no
+# autenticada que tiene la plataforma.
 #
-# El hosting actual (cPanel / Conexcol) no permite levantar Redis, asi que la
-# salida es apuntar a un Redis en un VPS:
+# El hosting (cPanel / Conexcol) no permite levantar Redis, asi que la salida
+# es un Redis en un VPS propio. Instrucciones de montaje: deploy/REDIS.md.
 #
-#     CACHES = {
-#         'default': {
-#             'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-#             'LOCATION': os.getenv('REDIS_URL'),   # rediss://... con TLS
-#             'TIMEOUT': 300,
-#         }
-#     }
-#
-# Requisitos al montarlo: TLS obligatorio (el trafico sale del datacenter),
-# contrasena, y la instancia cerrada por firewall a la IP del servidor web.
-# Mientras tanto los limites siguen siendo por worker: no confiar en ellos
-# como control de seguridad.
+# Sin REDIS_URL se mantiene el comportamiento de siempre, para que un entorno
+# de desarrollo o la propia suite no dependan de tener Redis delante.
+REDIS_URL = os.getenv('REDIS_URL', '').strip()
+
+if REDIS_URL:
+    CACHES = {
+        'default': {
+            # django-redis y no el backend de Django a proposito: es el unico
+            # que trae IGNORE_EXCEPTIONS. El Redis vive en otra maquina y el
+            # trafico sale a internet, asi que un corte de red es cuestion de
+            # tiempo. Con el backend nativo, ese corte convierte en error 500
+            # el login, el OTP publico y la recuperacion de contrasena --
+            # justo las paginas que mas importa que sigan de pie.
+            'BACKEND': 'django_redis.cache.RedisCache',
+            'LOCATION': REDIS_URL,
+            'TIMEOUT': 300,
+            'KEY_PREFIX': os.getenv('REDIS_KEY_PREFIX', 'gea'),
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+
+                # Un Redis caido degrada a "sin cache", no tumba el sitio.
+                # Los contadores de tasa dejan de aplicarse mientras dure
+                # (que es exactamente lo que pasa hoy con LocMemCache), y el
+                # codigo de registro deja de validarse, que falla cerrado.
+                'IGNORE_EXCEPTIONS': True,
+
+                # Un VPS que no responde no puede quedarse colgando la
+                # peticion: con ATOMIC_REQUESTS eso es una transaccion abierta.
+                'SOCKET_CONNECT_TIMEOUT': int(
+                    os.getenv('REDIS_CONNECT_TIMEOUT', 3)
+                ),
+                'SOCKET_TIMEOUT': int(os.getenv('REDIS_TIMEOUT', 3)),
+            },
+        }
+    }
+
+    # Que el fallo se vea en el log en vez de desaparecer sin ruido.
+    DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
 
 PUBLIC_BASE_URL = os.getenv(
     'PUBLIC_BASE_URL',

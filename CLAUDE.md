@@ -412,7 +412,7 @@ Sin build ni SPA. Plantillas Django + Bootstrap 5 por CDN; `templates/raw.html` 
 | Trampa | Detalle |
 |---|---|
 | **Regex catch-all antes que rutas reales** | `apps/common/utils/attack_patterns.py` registra un `re_path` que matchea cualquier término de `COMMON_ATTACK_TERMS` en cualquier posición del path, y `utils` va en la 4.ª posición del URLconf — **antes** de `assets`, `assets_location`, `buyers` y `account`. Un término mal elegido secuestra rutas legítimas y bloquea la IP del usuario. |
-| **`CACHES` no está definido** | Django cae en `LocMemCache`, que es **por proceso**. Los límites de OTP (`certificates/mixins.py`) y el código de registro de compradores viven en cache: con varios workers, los contadores no se comparten y los límites son efectivamente por worker. Si se despliega multi-proceso hay que configurar Redis/Memcached. |
+| **`CACHES` sale de `REDIS_URL`** | Con la variable puesta se usa `django-redis` con `IGNORE_EXCEPTIONS`: un Redis caído degrada a «sin cache» en vez de tumbar el login. Sin la variable, Django cae en `LocMemCache`, que es **por proceso**: los límites de OTP, del código de registro y del cupo de recuperación de contraseña son entonces por worker. Montaje del Redis: [`deploy/REDIS.md`](deploy/REDIS.md). |
 | **`ERROR_TEMPLATE` no está definido** | Varios módulos hacen `settings.ERROR_TEMPLATE` dentro de `try/except` y caen a `'errors_template.html'`. Funciona, pero el `getattr` es engañoso. |
 | **`settings.py` explota si falta una variable** | Muchos `os.getenv(...)` se pasan directamente a `int()` o `.split(',')` sin valor por defecto (`DB_PORT`, `DJANGO_EMAIL_PORT`, `IP_BLOCKED_TIME_IN_MINUTES`, `CORS_ALLOWED_ORIGINS`, `COMMON_ATTACK_TERMS`, `GEA_DAILY_CODE_*`). Sin `.env` completo, el proyecto no arranca. |
 | **`OPTIONS` de la BD se sobrescribe** | En `DATABASES` se define un `OPTIONS` con `charset`/`init_command` y, si `DB_ENGINE` es MySQL, el bloque siguiente **reemplaza el dict entero** (se pierde el `charset` y el `COLLATE utf8mb4_bin`). |
@@ -457,6 +457,15 @@ CORS_ALLOWED_ORIGINS          # lista separada por comas
 COMMON_ATTACK_TERMS           # lista separada por comas → regex catch-all
 IP_BLOCKED_TIME_IN_MINUTES
 MIDDLEWARE_NOT_INCLUDE
+AXES_FAILURE_LIMIT            # por defecto 6, bloqueo por pareja (IP, usuario)
+AXES_COOLOFF_MINUTES          # por defecto 30; nunca dejarlo sin espera
+
+# Cache — ver deploy/REDIS.md
+REDIS_URL                     # rediss://usuario:clave@host:6380/0?ssl_cert_reqs=
+                              # required&ssl_ca_certs=/ruta/ca.crt
+                              # Sin ella, LocMemCache: los límites son por worker
+REDIS_KEY_PREFIX              # por defecto 'gea'
+REDIS_CONNECT_TIMEOUT, REDIS_TIMEOUT   # segundos, por defecto 3
 
 # Negocio / integraciones
 GEA_DAILY_CODE_GENERAL_RECIPIENTS   # lista separada por comas

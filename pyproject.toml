@@ -27,6 +27,7 @@ dependencies = [
     "django-import-export>=4.0",
     "django-otp>=1.5",
     "django-parler>=2.3",
+    "django-redis>=5.4",
     "django-rosetta>=0.10",
     "django-select2>=8.2",
     "django-two-factor-auth>=1.17",
