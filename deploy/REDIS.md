@@ -20,8 +20,10 @@ Tres capas, y las tres hacen falta:
 | TLS con CA propia | Que el tráfico y la contraseña viajen en claro |
 | Usuario ACL acotado | Que una fuga de la clave permita borrar o reconfigurar |
 
-> Lo probado de este documento: la configuración de Django, el `rediss://` con
-> CA propia, el rechazo cuando falta la CA, el usuario ACL y el comportamiento
+> Lo probado de este documento, contra un Redis real: la configuración de
+> Django, el `rediss://` con CA propia, el rechazo cuando falta la CA, el
+> `redis.conf` con sus tres usuarios —incluido que sin `user default off`
+> se entra sin credenciales—, que `clear_cache` funciona, y el comportamiento
 > con Redis caído. Lo no probado aquí, por no haber Docker en el entorno donde
 > se redactó: el `compose.yaml` y las reglas de cortafuegos. Sigue el paso 6,
 > que es el que lo comprueba desde fuera.
@@ -141,6 +143,42 @@ appendonly no
 
 # --- Comandos peligrosos ----------------------------------------------
 rename-command DEBUG ""
+
+# --- Usuarios ----------------------------------------------------------
+# Van AQUI y no con «ACL SETUSER» desde fuera, por dos razones: ACL SAVE
+# necesita un aclfile que no tenemos, y sin persistir, los usuarios creados a
+# mano desaparecen al recrear el contenedor.
+#
+# 1) El usuario «default» viene de fabrica ENCENDIDO, SIN CONTRASENA y con
+#    permiso para todo. Apagarlo es obligatorio: sin esta linea, cualquiera
+#    que alcance el puerto entra sin credenciales y el usuario acotado de
+#    abajo no sirve de nada. Comprobado: antes de apagarlo se podia escribir
+#    y leer la configuracion sin autenticarse.
+user default off
+
+# 2) Un usuario solo para el healthcheck de Docker: sin contrasena, sin
+#    acceso a ninguna clave y con un unico comando. Lo mas que puede hacer
+#    quien lo use es confirmar que hay un Redis vivo.
+user health on nopass resetkeys +ping
+
+# 3) El de la aplicacion. La contrasena va como SHA-256, no en claro:
+#       printf '%s' 'TU_CLAVE' | sha256sum
+#    Solo toca claves «gea:*» -- el prefijo que pone Django -- y no puede
+#    FLUSHALL, CONFIG ni SHUTDOWN.
+#
+#    OJO CON EL ORDEN: las reglas se aplican de izquierda a derecha, asi que
+#    «-@dangerous» tiene que ir ANTES de «+flushdb». Al reves lo revoca, y
+#    entonces «manage.py clear_cache» no vacia nada y el fallo se traga en
+#    silencio. Se necesita flushdb, y no flushall, porque django-redis vacia
+#    asi; flushdb solo afecta a esta base, que es solo de GEA.
+user gea on #PEGA_AQUI_EL_SHA256 ~gea:* +@read +@write +@keyspace -@dangerous +flushdb
+```
+
+Genera el hash de la contraseña **antes** de arrancar:
+
+```bash
+openssl rand -base64 36                       # la contraseña; guárdala
+printf '%s' 'LA_CONTRASEÑA' | sha256sum       # el hash que va en el fichero
 ```
 
 ## Paso 4. Docker Compose
@@ -162,45 +200,56 @@ services:
       # Quien lo cierra es el cortafuegos del paso 5, no Docker.
       - "6380:6380"
     healthcheck:
+      # Con «user default off», un ping sin credenciales responde NOAUTH y el
+      # contenedor se marcaría enfermo estando sano. Va con el usuario del
+      # healthcheck, que no lleva contraseña ni toca ninguna clave.
       test: ["CMD", "redis-cli", "--tls", "--cacert", "/tls/ca.crt",
-             "-p", "6380", "ping"]
+             "-p", "6380", "--user", "health", "--pass", "", "ping"]
       interval: 30s
       timeout: 5s
       retries: 3
 ```
 
-Arranca y crea el usuario de la aplicación:
+Los usuarios ya están en `redis.conf`, así que solo hay que arrancar:
 
 ```bash
 cd /opt/gea-redis
 sudo docker compose up -d
-
-# Contraseña larga y aleatoria; guárdala, no se puede recuperar
-openssl rand -base64 36
-
-sudo docker exec -it gea-redis redis-cli --tls --cacert /tls/ca.crt -p 6380 \
-  ACL SETUSER gea on '><LA_CLAVE_GENERADA>' '~gea:*' \
-  '+@read' '+@write' '+@keyspace' '-@dangerous'
-
-sudo docker exec -it gea-redis redis-cli --tls --cacert /tls/ca.crt -p 6380 \
-  ACL SAVE
+sudo docker compose ps        # debe quedar «healthy» al cabo de un minuto
 ```
 
-Ese usuario puede leer y escribir **solo** claves que empiecen por `gea:` —el
-prefijo que pone Django—, y no puede `FLUSHALL`, ni `CONFIG`, ni `SHUTDOWN`.
-Comprobado:
+Comprueba que ha quedado como debe. Todo esto está verificado contra un Redis
+real con esta misma configuración:
 
-```
-FLUSHALL            -> NOPERM this user has no permissions to run 'flushall'
-CONFIG GET maxmemory-> NOPERM this user has no permissions to run 'config|get'
-GET gea:...         -> funciona
+```bash
+# Sin credenciales: fuera
+sudo docker exec gea-redis redis-cli --tls --cacert /tls/ca.crt -p 6380 PING
+#   -> NOAUTH Authentication required.
+
+# El usuario de la aplicación: lo suyo sí, lo demás no
+sudo docker exec gea-redis redis-cli --tls --cacert /tls/ca.crt -p 6380 \
+  --user gea --pass 'LA_CONTRASEÑA' --no-auth-warning SET gea:ping ok
+#   -> OK
+sudo docker exec gea-redis redis-cli --tls --cacert /tls/ca.crt -p 6380 \
+  --user gea --pass 'LA_CONTRASEÑA' --no-auth-warning FLUSHALL
+#   -> NOPERM ... 'flushall'
+sudo docker exec gea-redis redis-cli --tls --cacert /tls/ca.crt -p 6380 \
+  --user gea --pass 'LA_CONTRASEÑA' --no-auth-warning CONFIG GET maxmemory
+#   -> NOPERM ... 'config|get'
 ```
 
-> `ACL SAVE` necesita un `aclfile` configurado para persistir. Si no lo añades,
-> el usuario se pierde al recrear el contenedor: o bien declaras
-> `aclfile /usr/local/etc/redis/users.acl` en `redis.conf` y montas ese
-> fichero, o bien dejas el `user gea ...` escrito directamente en `redis.conf`.
-> La segunda opción es más simple y es la que recomiendo.
+Resumen de lo que puede cada uno:
+
+| | anónimo | `health` | `gea` |
+|---|---|---|---|
+| `PING` | NOAUTH | **sí** | sí |
+| `GET`/`SET` de `gea:*` | NOAUTH | NOPERM | **sí** |
+| Otras claves | NOAUTH | NOPERM | NOPERM |
+| `FLUSHDB` (lo usa `clear_cache`) | NOAUTH | NOPERM | **sí** |
+| `FLUSHALL`, `CONFIG`, `SHUTDOWN` | NOAUTH | NOPERM | NOPERM |
+
+Como los usuarios viven en `redis.conf`, sobreviven a recrear el contenedor sin
+`ACL SAVE` —que además fallaría, porque no hay `aclfile` configurado.
 
 ## Paso 5. Cortafuegos — el paso que más se falla
 
@@ -326,9 +375,17 @@ sudo docker exec gea-redis redis-cli --tls --cacert /tls/ca.crt -p 6380 DBSIZE
 cd /opt/gea-redis && sudo docker compose pull && sudo docker compose up -d
 ```
 
-**Rotar la contraseña**: `ACL SETUSER gea on '>nueva'` en el contenedor y
-`REDIS_URL` en el `.env` de cPanel. Hazlo en ese orden y en minutos de margen:
-entre una cosa y la otra los límites dejan de aplicarse, no se cae nada.
+**Rotar la contraseña.** Como el usuario vive en `redis.conf`, se cambia el
+hash del fichero y se recrea el contenedor:
+
+```bash
+printf '%s' 'LA_NUEVA' | sha256sum          # el hash nuevo
+sudo nano /opt/gea-redis/redis.conf         # sustituye el de «user gea»
+cd /opt/gea-redis && sudo docker compose up -d --force-recreate
+```
+
+Después, `REDIS_URL` en el `.env` de cPanel. En ese orden y con minutos de
+margen: en medio los límites dejan de aplicarse, pero no se cae nada.
 
 **Volver atrás**: quita `REDIS_URL` del `.env` y reinicia. Django vuelve a
 `LocMemCache` sin tocar código. Es la salida de emergencia si el VPS da
