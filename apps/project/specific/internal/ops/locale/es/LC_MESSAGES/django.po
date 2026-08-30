@@ -479,6 +479,10 @@ msgid "Send a test hash"
 msgstr "Enviar una huella de prueba"
 
 #: .\apps\project\specific\internal\ops\registry.py:1
+msgid "Check the last test send"
+msgstr "Comprobar el último envío de prueba"
+
+#: .\apps\project\specific\internal\ops\registry.py:1
 msgid "Dependencies"
 msgstr "Dependencias"
 

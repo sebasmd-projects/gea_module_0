@@ -248,7 +248,9 @@ COMMANDS = (
             'library is not installed on this server, or the hosting blocks '
             'outbound connections. This tells the two apart, which is what '
             'decides whether the fix is a pip install of requirements.txt or '
-            'a call to the provider.'
+            'a call to the provider. It also reports how the real anchors are '
+            'doing: a proof that has been waiting for days means nothing is '
+            'maturing it, not that the send failed.'
         ),
         example=_('When sealing reports that sending to the blockchain failed.'),
         risk=RISK_READ_ONLY,
@@ -259,8 +261,20 @@ COMMANDS = (
                 label=_('Send a test hash'),
                 kind=KIND_FLAG,
                 help=_(
-                    'Sends a made-up hash for real, to test the whole path. '
+                    'Sends a made-up hash for real, to test the whole path, '
+                    'and keeps the proof so it can be checked later. '
                     'Harmless: it belongs to no document.'
+                ),
+            ),
+            Option(
+                flag='--verify',
+                label=_('Check the last test send'),
+                kind=KIND_FLAG,
+                help=_(
+                    'Goes back to the last test hash and asks the calendars '
+                    'whether it made it into a Bitcoin block. Nobody notifies '
+                    'you when it does, so this is how you find out. Run it a '
+                    'few hours after sending.'
                 ),
             ),
         ],

@@ -6,6 +6,7 @@ Documentos complementarios:
 - [`docs/ROUTES_MAP.md`](docs/ROUTES_MAP.md) — todas las URLs, namespaces, vistas y permisos.
 - [`docs/FEATURES_MAP.md`](docs/FEATURES_MAP.md) — funcionalidades por dominio, modelos y reglas de negocio.
 - [`docs/NORMATIVA.md`](docs/NORMATIVA.md) — qué exigen los reguladores a la certificación, por qué no se adopta W3C VC y qué falta en su lugar.
+- [`docs/ANCLAJE.md`](docs/ANCLAJE.md) — el anclaje temporal explicado de punta a punta: los dos tiempos, quién madura las pruebas, dónde se mira el estado y qué significa cada uno.
 
 Si lo que necesitas es orientarte —qué módulo llama a cuál y por dónde entra una petición—
 empieza por [§4-bis, Mapa de arquitectura](#4-bis-mapa-de-arquitectura-codebase-map).
