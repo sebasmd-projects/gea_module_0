@@ -64,7 +64,7 @@ msgstr "Restablecer su contraseña"
 
 #: .\templates\account\forgot_password.html:36
 msgid "Enter your email or username to receive password reset instructions."
-msgstr ""
+msgstr "Escriba su correo o su nombre de usuario para recibir las instrucciones de restablecimiento."
 "Ingrese su correo electrónico o nombre de usuario para recibir instrucciones "
 "para restablecer su contraseña."
 
@@ -229,7 +229,7 @@ msgstr "(Max: 2000)"
 
 #: .\templates\admin\ops\command.html:6 .\templates\admin\ops\console.html:6
 msgid "Home"
-msgstr ""
+msgstr "Inicio"
 
 #: .\templates\admin\ops\command.html:7 .\templates\admin\ops\console.html:7
 #: .\templates\admin\ops\console.html:37
@@ -240,15 +240,15 @@ msgstr "Observaciones"
 
 #: .\templates\admin\ops\command.html:59
 msgid "What it does"
-msgstr ""
+msgstr "Qué hace"
 
 #: .\templates\admin\ops\command.html:62
 msgid "When you would run it"
-msgstr ""
+msgstr "Cuándo se ejecuta"
 
 #: .\templates\admin\ops\command.html:68
 msgid "Careful"
-msgstr ""
+msgstr "Cuidado"
 
 #: .\templates\admin\ops\command.html:76
 #, fuzzy
@@ -259,7 +259,7 @@ msgstr "Acciones"
 #: .\templates\admin\ops\command.html:117
 #, python-format
 msgid "Type <b>%(name)s</b> to confirm."
-msgstr ""
+msgstr "Escriba <b>%(name)s</b> para confirmar."
 
 #: .\templates\admin\ops\command.html:127
 #, fuzzy
@@ -269,16 +269,16 @@ msgstr "Enviando…"
 
 #: .\templates\admin\ops\command.html:128
 msgid "Run"
-msgstr ""
+msgstr "Ejecutar"
 
 #: .\templates\admin\ops\command.html:134
 #, python-format
 msgid "Cut off after %(seconds)s s."
-msgstr ""
+msgstr "Cortado a los %(seconds)s s."
 
 #: .\templates\admin\ops\command.html:142
 msgid "Output"
-msgstr ""
+msgstr "Salida"
 
 #: .\templates\admin\ops\command.html:148
 #, fuzzy
@@ -294,7 +294,7 @@ msgstr "Previo"
 
 #: .\templates\admin\ops\command.html:160 .\templates\admin\ops\console.html:67
 msgid "When"
-msgstr ""
+msgstr "Cuándo"
 
 #: .\templates\admin\ops\command.html:161 .\templates\admin\ops\console.html:69
 #: .\templates\dashboard\pages\buyers\profitability.html:66
@@ -312,7 +312,7 @@ msgstr "Descripción (ES)"
 
 #: .\templates\admin\ops\command.html:163 .\templates\admin\ops\console.html:71
 msgid "Run by"
-msgstr ""
+msgstr "Ejecutado por"
 
 #: .\templates\admin\ops\console.html:40
 msgid ""
@@ -323,15 +323,15 @@ msgstr ""
 
 #: .\templates\admin\ops\console.html:61
 msgid "Last runs"
-msgstr ""
+msgstr "Últimas ejecuciones"
 
 #: .\templates\admin\ops\console.html:68
 msgid "Command"
-msgstr ""
+msgstr "Comando"
 
 #: .\templates\admin\ops\console.html:91
 msgid "Nothing has been run yet."
-msgstr ""
+msgstr "Todavía no se ha ejecutado nada."
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:20
 #: .\templates\dashboard\pages\buyers\detail_offer.html:25
@@ -1072,7 +1072,7 @@ msgstr "Asistente de Aprobación"
 
 #: .\templates\dashboard\pages\buyers\wizard\offer_wizard_page.html:29
 msgid "Track and advance the purchase order through the approval pipeline"
-msgstr ""
+msgstr "Siga y haga avanzar la orden de compra por el flujo de aprobación"
 "Realizar un seguimiento y avanzar la orden de compra a través del proceso de "
 "aprobación"
 
@@ -1345,7 +1345,7 @@ msgstr "Verificación de documentos"
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:24
 #: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:23
 msgid "Institutional Certificate of Authenticity and Legal Validity"
-msgstr ""
+msgstr "Certificado Institucional de Autenticidad y Validez Jurídica"
 "CERTIFICACIÓN INSTITUCIONAL DE AUTENTICIDAD, ORIGINALIDAD Y VALIDEZ JURÍDICA"
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:39
@@ -1613,7 +1613,7 @@ msgstr "Verificar certificado de documento"
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:24
 msgid "Enter your email to receive a verification code."
-msgstr ""
+msgstr "Escriba su correo para recibir un código de verificación."
 "Introduce tu correo electrónico para recibir un código de verificación."
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:28
@@ -2381,7 +2381,7 @@ msgstr "Vista previa en vivo"
 
 #: .\templates\dashboard\pages\documents\code_gen\layout_list.html:22
 msgid "Reusable positions for the QR and the barcode inside the PDF."
-msgstr ""
+msgstr "Posiciones reutilizables para el QR y el código de barras dentro del PDF."
 "Posiciones reutilizables para el QR y el código de barras dentro del PDF."
 
 #: .\templates\dashboard\pages\documents\code_gen\layout_list.html:40
@@ -2445,7 +2445,7 @@ msgstr ""
 
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:49
 msgid "Drag a box to move it; the offsets update as you go."
-msgstr ""
+msgstr "Arrastre una caja para moverla; los desplazamientos se actualizan sobre la marcha."
 "Arrastra una caja para moverla; los desplazamientos se actualizan sobre la "
 "marcha."
 
@@ -2606,7 +2606,7 @@ msgstr "No se pudo guardar."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:273
 msgid "Member barcodes added. Drag them into place and press Save."
-msgstr ""
+msgstr "Códigos de barras de los miembros añadidos. Arrástrelos a su sitio y pulse Guardar."
 "Códigos de los miembros añadidos. Arrástralos a su sitio y pulsa Guardar."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_form.html:6
@@ -2686,7 +2686,7 @@ msgstr "Nueva caja"
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_list.html:32
 msgid "No boxes yet. Create the first one to start grouping certificates."
-msgstr ""
+msgstr "Todavía no hay cajas. Cree la primera para empezar a agrupar certificados."
 "Todavía no hay cajas. Crea la primera para empezar a agrupar certificados."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_list.html:42
@@ -3051,7 +3051,7 @@ msgstr "INICIO"
 
 #: .\templates\errors_template.html:38
 msgid "If you think this is an error, please contact support:"
-msgstr ""
+msgstr "Si cree que esto es un error, escriba a soporte:"
 "Si cree que se trata de un error, póngase en contacto con el servicio de "
 "asistencia técnica:"
 
@@ -3096,7 +3096,7 @@ msgstr "Procesando…"
 
 #: .\templates\two_factor\core\backup_tokens.html:17
 msgid "Backup tokens can be used when your primary method is not available."
-msgstr ""
+msgstr "Los códigos de respaldo sirven cuando su método principal no está disponible."
 "Los tokens de respaldo se pueden utilizar cuando su método principal no está "
 "disponible."
 
@@ -3110,7 +3110,7 @@ msgstr ""
 
 #: .\templates\two_factor\core\backup_tokens.html:26
 msgid "Only the backup tokens shown below will be valid."
-msgstr ""
+msgstr "Solo serán válidos los códigos de respaldo que se muestran abajo."
 "Sólo los tokens de respaldo que se muestran a continuación serán válidos."
 
 #: .\templates\two_factor\core\backup_tokens.html:35
@@ -3207,7 +3207,7 @@ msgstr "Habilitar autenticación de dos factores"
 
 #: .\templates\two_factor\core\setup.html:34
 msgid "Follow the steps in this wizard to enable two-factor authentication."
-msgstr ""
+msgstr "Siga los pasos de este asistente para activar la verificación en dos pasos."
 "Siga los pasos de este asistente para habilitar la autenticación de dos "
 "factores."
 
@@ -3225,7 +3225,7 @@ msgstr "Copiado al portapapeles"
 
 #: .\templates\two_factor\core\setup.html:56
 msgid "Token validated successfully. Two-factor authentication is now enabled."
-msgstr ""
+msgstr "Código validado correctamente. La verificación en dos pasos ya está activa."
 "Token validado exitosamente. La autenticación de dos factores ahora está "
 "habilitada."
 
@@ -3293,3 +3293,39 @@ msgstr "archivos"
 #: .\templates\video_masonry\gallery.html:28
 msgid "Page"
 msgstr "Página"
+
+#: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:225
+msgid "Admin panel"
+msgstr "Panel de administración"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Seal and send to blockchain"
+msgstr "Sellar y enviar a la cadena de bloques"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Sealing and sending…"
+msgstr "Sellando y enviando…"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Seal only"
+msgstr "Solo sellar"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Sending is free: OpenTimestamps bundles thousands of hashes into a single Bitcoin transaction. Only the hash travels, never the document."
+msgstr "Enviar es gratis: OpenTimestamps junta miles de huellas en una sola transacción de Bitcoin. Solo viaja la huella, nunca el documento."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Blockchain"
+msgstr "Cadena de bloques"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Not sent"
+msgstr "Sin enviar"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "A sealed box can be sent later: the hash is the same one. The proof is born pending and matures into a Bitcoin block within a few hours, on its own — nothing needs re-stamping."
+msgstr "Una caja sellada se puede enviar después: la huella es la misma. La prueba nace pendiente y madura sola hasta un bloque de Bitcoin en unas horas, sin reestampar nada."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Send to blockchain"
+msgstr "Enviar a la cadena de bloques"

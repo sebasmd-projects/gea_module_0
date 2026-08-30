@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .api import (layout_create, layout_placements, preview_symbols,
-                  summary_members, summary_seal)
+                  summary_anchor, summary_members, summary_seal)
 from .views import (CodeDetailView, CodeGeneratorView, CodeHistoryListView,
                     StampLayoutEditView, StampLayoutListView,
                     SummaryComposerView, SummaryCreateView, SummaryListView)
@@ -75,6 +75,13 @@ urlpatterns = [
         "generate/summary/<uuid:pk>/seal/",
         summary_seal,
         name="summary_seal"
+    ),
+
+    # Segundo tiempo de «solo sellar»: mandar a Bitcoin un hash ya sellado.
+    path(
+        "generate/summary/<uuid:pk>/anchor/",
+        summary_anchor,
+        name="summary_anchor"
     ),
 
     path(

@@ -217,6 +217,26 @@
           </div>
           {% trans 'Verify document' %}
         </a>
+
+        {# El panel se alcanza desde aqui, no tecleando su URL: para quien no
+           tenga sesion de personal con segundo factor, esa ruta responde 404. #}
+        <div class="sidenav-menu-heading">{% trans 'Administration' %}</div>
+
+        <a class="nav-link" href="{% url 'admin:index' %}">
+          <div class="nav-link-icon">
+            <i class="fa-solid fa-sliders"></i>
+          </div>
+          {% trans 'Admin panel' %}
+        </a>
+
+        {% if request.user.is_superuser %}
+          <a class="nav-link" href="{% url 'admin:ops_console' %}">
+            <div class="nav-link-icon">
+              <i class="fa-solid fa-terminal"></i>
+            </div>
+            {% trans 'Operations console' %}
+          </a>
+        {% endif %}
       {% endif %}
     </div>
   </div>

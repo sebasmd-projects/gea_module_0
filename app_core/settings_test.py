@@ -12,6 +12,14 @@ sitio, sin tocar los datos reales y sin pedir privilegios.
 ``ATOMIC_REQUESTS`` se apaga porque envuelve cada peticion en una transaccion y
 se lleva mal con las que abre el propio ``TestCase``. ``MEDIA_ROOT`` apunta a un
 directorio temporal para que ninguna prueba escriba en el media de verdad.
+
+El resto de este fichero existe para que **el resultado de la suite no dependa
+del ``.env`` de quien la ejecuta**. ``settings.py`` decide por ``DJANGO_DEBUG``
+si activa el endurecimiento de produccion; con un ``.env`` realista
+(``DJANGO_DEBUG=False``) el cliente de pruebas se come un 301 a https en cada
+peticion y decenas de pruebas fallan sin que nada este roto. Peor aun: pasan a
+verde de nuevo cambiando una variable de entorno, que es justo lo que hace que
+una suite deje de creerse. Aqui se fija lo que las pruebas necesitan.
 """
 
 import tempfile
@@ -39,3 +47,38 @@ PUBLIC_BASE_URL = 'https://geausa.propensionesabogados.com'
 
 # Hashear con Argon2 en cada prueba las hace lentas sin comprobar nada nuevo.
 PASSWORD_HASHERS = ['django.contrib.auth.hashers.MD5PasswordHasher']
+
+# --- Independencia del .env ------------------------------------------------
+# El cliente de pruebas habla http contra el host 'testserver'. Sin esto, con
+# DJANGO_DEBUG=False cada peticion responde 301 antes de llegar a la vista.
+SECURE_SSL_REDIRECT = False
+SECURE_HSTS_SECONDS = 0
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+ALLOWED_HOSTS = ['testserver', 'localhost', '127.0.0.1']
+
+# ManifestStaticFilesStorage exige un manifiesto de collectstatic; sin el,
+# cualquier plantilla con {% static %} revienta al renderizar. En pruebas no
+# aporta nada, y su ausencia no debe decidir si la suite pasa.
+STORAGES = {
+    **globals().get('STORAGES', {}),
+    'staticfiles': {
+        'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
+    },
+}
+
+# ``AxesStandaloneBackend`` va primero en produccion, y exige recibir la
+# peticion: ``authenticate()`` sin ``request`` levanta una excepcion. Eso es
+# correcto ahi -- el unico ``authenticate()`` del proyecto pasa su request --
+# pero ``client.login()`` de Django no la pasa, y lo usan las pruebas de otras
+# apps para colocarse una sesion antes de probar otra cosa. Se apaga aqui y se
+# vuelve a encender solo donde el bloqueo es lo que se esta probando
+# (``apps/common/utils/tests_axes.py``, con override_settings).
+AXES_ENABLED = False
+
+# ``assets/signals.py`` instancia ``ChatGPTAPI()`` **al importar el modulo**, y
+# el constructor revienta si la clave esta vacia: sin clave no arranca ni el
+# proyecto ni la suite, aunque la traduccion automatica sea opcional. Aqui va
+# un valor falso para que las pruebas no dependan de tener una clave real; no
+# se llega a usar porque las pruebas no guardan textos sin traducir.
+CHAT_GPT_API_KEY = 'test-key-not-a-real-openai-key'

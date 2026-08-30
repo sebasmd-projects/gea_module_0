@@ -5,6 +5,7 @@ Documentos complementarios:
 
 - [`docs/ROUTES_MAP.md`](docs/ROUTES_MAP.md) — todas las URLs, namespaces, vistas y permisos.
 - [`docs/FEATURES_MAP.md`](docs/FEATURES_MAP.md) — funcionalidades por dominio, modelos y reglas de negocio.
+- [`docs/NORMATIVA.md`](docs/NORMATIVA.md) — qué exigen los reguladores a la certificación, por qué no se adopta W3C VC y qué falta en su lugar.
 
 Si lo que necesitas es orientarte —qué módulo llama a cuál y por dónde entra una petición—
 empieza por [§4-bis, Mapa de arquitectura](#4-bis-mapa-de-arquitectura-codebase-map).
@@ -285,6 +286,11 @@ subir PDF (admin «Certify» | code_gen:code_generate)
 
 caja AEGIS: summary.certify_summary() → master.seal_summary() (payload JCS verbatim)
              → anchoring.anchor_with_tsa() (instantáneo) y anchor_with_ots() (madura por cron)
+             El compositor ofrece «sellar y enviar» y «solo sellar»: sellar es una
+             escritura nuestra e instantánea, enviar sale a la red. El envío NUNCA
+             propaga su fallo (con ATOMIC_REQUESTS desharía el sellado); se degrada a
+             aviso y queda disponible en code_gen:summary_anchor. No se manda dos
+             veces el mismo master hash.
 
 consulta pública: certificates:input_document_verification_aegis → OTP por correo
    → OTPSessionMixin → detail → certificates:document_file (única vía de descarga)
@@ -322,6 +328,7 @@ Es una superficie de ejecución remota y por eso está acotada en tres puntos:
 `registry.py` (lista blanca de comandos y de sus opciones), `runner.py` (ejecución **en subproceso**,
 nunca dentro de la petición, por `ATOMIC_REQUESTS`) y `models.py::CommandRunModel` (traza de quién
 ejecutó qué). Sólo superusuarios; el guardia aborta con 404, no con 403.
+Al colgar del admin hereda además su puerta: hace falta segundo factor verificado (§6.7).
 
 ### G. Puntos de entrada que no son el navegador
 
@@ -385,7 +392,7 @@ Sin build ni SPA. Plantillas Django + Bootstrap 5 por CDN; `templates/raw.html` 
 4. **Los números de documento de certificados nunca se almacenan en claro**: solo su HMAC (`get_hmac`). Los OTP también se guardan hasheados con HMAC-SHA256 sobre `SECRET_KEY` y se comparan con `constant_time_compare`.
 5. **`email_hash`** (SHA-256 del email normalizado) se recalcula en `UserModel.save()`; los flujos de recuperación de contraseña dependen de él.
 6. **Cada etapa del wizard exige su permiso Django concreto** (`buyers.can_*`). Los permisos están declarados en `OfferModel.Meta.permissions`; añadir una etapa implica migración.
-7. **La `ADMIN_URL` es secreta** y viene de entorno. No la fijes a `/admin/` ni la escribas en el código.
+7. **El admin se protege con la sesión, no con la URL.** `app_core/admin.py::GeaAdminSite` (instalado vía `AdminConfig.default_site`, así que `admin.site` sigue siendo el mismo objeto y ningún `@admin.register` cambia) exige personal activo **con segundo factor verificado**, y a quien no cumple le responde **404**, nunca 403 ni el formulario de login del admin: un 403 confirmaría la ruta. La excepción es el personal interno sin OTP verificado, al que se redirige a `two_factor:setup`. La `ADMIN_URL` sigue viniendo de entorno y no se escribe en el código, pero ya no es el control de acceso. El panel se alcanza desde el enlace del sidenav.
 8. **Un documento certificado son tres archivos**: `source_file` (original sin códigos), `document_file` (con QR y barcode, el que hace fe) y `public_copy_file` (copia distribuible con marca de agua oculta). De cada uno se guardan dos huellas: la exacta (`*_hash`) y la de contenido (`*_content_hash`). No sustituyas ninguno de los tres a mano: usa la acción "Certify" del admin o `services.certification.certify_document()`, que recalcula todo el conjunto.
 9. **El código de barras nunca lleva URLs.** `services.codes.validate_barcode_payload()` rechaza `://`, `:` y los caracteres de URL. Todo lo que no encaje va al QR.
 10. **La huella de contenido ignora deliberadamente la marca de agua**, de modo que el certificado y su copia distribuible comparten `*_content_hash` y se distinguen solo por la marca. Si tocas `canonical_pdf_hash()` invalidas todas las huellas ya emitidas.
@@ -410,6 +417,9 @@ Sin build ni SPA. Plantillas Django + Bootstrap 5 por CDN; `templates/raw.html` 
 | **`settings.py` explota si falta una variable** | Muchos `os.getenv(...)` se pasan directamente a `int()` o `.split(',')` sin valor por defecto (`DB_PORT`, `DJANGO_EMAIL_PORT`, `IP_BLOCKED_TIME_IN_MINUTES`, `CORS_ALLOWED_ORIGINS`, `COMMON_ATTACK_TERMS`, `GEA_DAILY_CODE_*`). Sin `.env` completo, el proyecto no arranca. |
 | **`OPTIONS` de la BD se sobrescribe** | En `DATABASES` se define un `OPTIONS` con `charset`/`init_command` y, si `DB_ENGINE` es MySQL, el bloque siguiente **reemplaza el dict entero** (se pierde el `charset` y el `COLLATE utf8mb4_bin`). |
 | **Allowlist de usuarios hardcodeada** | `OnlySpecificUserMixin.allowed_user_username = ['jose.henry', 'kalichemorales']` en `buyers/views.py` controla el acceso a Orion. |
+| **`django.contrib.sites` NO está instalado** | `get_current_site(request)` cae en `RequestSite` y devuelve la cabecera `Host`, que la pone el cliente. Cualquier URL construida así es envenenable. Por eso el enlace de recuperación de contraseña sale de `PUBLIC_BASE_URL` (invariante 12). Si añades otro correo con enlaces, hazlo igual. |
+| **`axes` no ve el usuario del login** | El login es un wizard de `formtools`: su campo es `auth-username`, no `username`. Sin `AXES_USERNAME_CALLABLE` (`utils/axes_hooks.py`) todos los intentos se guardan con usuario vacío y **cualquier bloqueo por pareja (IP, usuario) degrada en silencio a bloqueo por IP**. Si algún día cambia el prefijo del paso, actualiza `USERNAME_FIELDS`. |
+| **`AxesStandaloneBackend` va primero y exige `request`** | Ese orden es lo que impide que una contraseña correcta se salte el bloqueo, pero hace que `authenticate()` **sin** `request` lance excepción. `client.login()` de Django no la pasa: por eso `settings_test` apaga axes y solo lo encienden sus propias pruebas. |
 | **Llamadas a OpenAI en señales `pre_save`** | La traducción automática de activos y ofertas ocurre **de forma síncrona dentro del guardado** (timeout 20 s). Un fallo o lentitud de la API se traduce en peticiones lentas. No hay cola de tareas. |
 | **`ffmpeg` como dependencia del sistema** | `video_masonry` invoca `ffmpeg` por `subprocess` para quitar el audio de los vídeos. Si no está en el `PATH`, la subida falla. |
 | **`ATOMIC_REQUESTS = True`** | Cada petición es una transacción. Cuidado con operaciones largas (PDF, OpenAI, email) dentro de vistas. |

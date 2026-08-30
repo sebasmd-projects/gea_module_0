@@ -176,33 +176,72 @@
   });
 
   // ----------------------------------------------------------------
-  // Sellado
+  // Sellado y envio a la cadena de bloques
+  //
+  // Son dos actos separados, y por eso hay tres botones y no uno. Sellar es
+  // una escritura nuestra, instantanea. Enviar sale a la red: puede tardar o
+  // fallar, y cuando falla el sello ya esta guardado, asi que el servidor
+  // responde 200 con `anchor_result: 'failed'`. Eso NO es un error de la
+  // operacion -- se avisa en amarillo y el boton de enviar queda disponible.
   // ----------------------------------------------------------------
-  document.getElementById('sealSummary').addEventListener('click', function () {
-    var button = this;
-
+  function runSealAction(button, url, payload) {
     window.GEABusy.wrap(button, null, function () {
-      return send(config.sealUrl, 'POST')
+      return send(url, 'POST', payload)
         .then(function (result) {
           if (!result.ok) {
             notify(result.data.detail || config.messages.saveFailed, 'danger');
             return;
           }
-          notify(result.data.detail, 'success');
+
+          notify(
+            result.data.detail,
+            result.data.anchor_result === 'failed' ? 'warning' : 'success'
+          );
+
           refreshState(result.data);
         })
         .catch(function () {
           notify(config.messages.saveFailed, 'danger');
         });
     });
-  });
+  }
+
+  bindSealButton('sealAndSend', config.sealUrl, { anchor: true });
+  bindSealButton('sealSummary', config.sealUrl, { anchor: false });
+  bindSealButton('sendToBlockchain', config.anchorUrl, {});
+
+  function bindSealButton(id, url, payload) {
+    var button = document.getElementById(id);
+
+    if (!button) { return; }
+
+    button.addEventListener('click', function () {
+      runSealAction(this, url, payload);
+    });
+  }
 
   function refreshState(data) {
     var hash = document.getElementById('masterHash');
     var status = document.getElementById('summaryStatus');
+    var chain = document.getElementById('blockchainStatus');
+    var sendButton = document.getElementById('sendToBlockchain');
 
     if (hash) { hash.textContent = data.master_hash || '—'; }
     if (status) { status.textContent = data.status_label || ''; }
+
+    if (chain && data.blockchain_label) {
+      chain.textContent = data.blockchain_label;
+      chain.className = 'badge ' + (
+        data.sent_to_blockchain ? 'bg-warning text-dark' : 'bg-secondary'
+      );
+    }
+
+    // Solo se puede enviar lo que esta sellado y no se ha enviado ya. Al
+    // resellar con miembros distintos el master hash cambia, el envio anterior
+    // deja de cubrirlo y el boton vuelve a habilitarse solo.
+    if (sendButton && typeof data.can_send_to_blockchain === 'boolean') {
+      sendButton.disabled = !data.can_send_to_blockchain;
+    }
   }
 
   // ----------------------------------------------------------------
