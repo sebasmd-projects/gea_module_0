@@ -1,5 +1,6 @@
 import logging
 import os
+from datetime import timedelta
 from pathlib import Path
 
 from django.utils.translation import gettext_lazy as _
@@ -261,11 +262,57 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'}
 ]
 
+# El backend de axes va **primero**, y el orden no es cosmetico: cada backend
+# se prueba en orden y el primero que devuelve un usuario gana. Con axes en
+# segundo lugar, ``EmailOrUsernameModelBackend`` autenticaba antes y el bloqueo
+# no llegaba a consultarse: durante el bloqueo, una contrasena equivocada daba
+# 429 pero **la correcta entraba igual**. Es decir, el limite estorbaba al
+# usuario legitimo de esa IP y no frenaba a quien acertaba la contrasena.
+# ``AxesStandaloneBackend`` no autentica a nadie: o lanza ``PermissionDenied``
+# porque hay bloqueo, o devuelve ``None`` y cede el paso al siguiente, asi que
+# el login por correo o por usuario sigue funcionando igual.
 AUTHENTICATION_BACKENDS = [
-    f'{UTILS_PATH}.backend.EmailOrUsernameModelBackend',
     'axes.backends.AxesStandaloneBackend',
+    f'{UTILS_PATH}.backend.EmailOrUsernameModelBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+# --- django-axes: freno a la fuerza bruta, sin dejar fuera a la oficina -----
+# axes estaba instalado sin configurar, y sus valores por defecto son
+# ``FAILURE_LIMIT = 3``, ``COOLOFF_TIME = None`` (bloqueo **permanente**),
+# bloqueo **solo por IP** y ``RESET_ON_SUCCESS = False``. En una plataforma
+# cuyo equipo comparte la salida a internet de una oficina, eso es un
+# autobloqueo esperando a ocurrir: una persona tecleando mal su contrasena
+# tres veces deja fuera a todos los demas, para siempre, hasta que alguien
+# entre a la base de datos a mano. Y como los fallos no se olvidan tras un
+# login correcto, la cuenta atras se agota sola con el paso de los meses.
+#
+# Se bloquea la pareja (IP, usuario), no la IP entera: quien se equivoca se
+# frena a si mismo y el resto de la oficina sigue trabajando.
+AXES_LOCKOUT_PARAMETERS = [['ip_address', 'username']]
+
+AXES_FAILURE_LIMIT = int(os.getenv('AXES_FAILURE_LIMIT', 6))
+
+AXES_COOLOFF_TIME = timedelta(
+    minutes=int(os.getenv('AXES_COOLOFF_MINUTES', 30))
+)
+
+# Un login correcto borra los fallos previos de esa pareja. Sin esto, los
+# despistes se acumulan durante meses hasta bloquear a alguien que no ha
+# hecho nada raro.
+AXES_RESET_ON_SUCCESS = True
+
+# Sin esto lo de arriba no sirve: el login es un wizard y su campo se llama
+# ``auth-username``, no ``username``, asi que axes guardaba todos los intentos
+# con usuario vacio. El bloqueo por pareja degradaba a bloqueo por IP, y quien
+# llegaba luego con la contrasena correcta se consultaba como una pareja sin
+# fallos y entraba pese al bloqueo.
+AXES_USERNAME_CALLABLE = f'{UTILS_PATH}.axes_hooks.username'
+
+# Una sola respuesta a "de donde viene esta peticion" y una sola lista blanca,
+# compartidas con la mitigacion anti-escaneo. Ver apps/common/utils/axes_hooks.
+AXES_CLIENT_IP_CALLABLE = f'{UTILS_PATH}.axes_hooks.client_ip'
+AXES_WHITELIST_CALLABLE = f'{UTILS_PATH}.axes_hooks.is_lockout_exempt'
 
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.Argon2PasswordHasher',

@@ -67,6 +67,15 @@ STORAGES = {
     },
 }
 
+# ``AxesStandaloneBackend`` va primero en produccion, y exige recibir la
+# peticion: ``authenticate()`` sin ``request`` levanta una excepcion. Eso es
+# correcto ahi -- el unico ``authenticate()`` del proyecto pasa su request --
+# pero ``client.login()`` de Django no la pasa, y lo usan las pruebas de otras
+# apps para colocarse una sesion antes de probar otra cosa. Se apaga aqui y se
+# vuelve a encender solo donde el bloqueo es lo que se esta probando
+# (``apps/common/utils/tests_axes.py``, con override_settings).
+AXES_ENABLED = False
+
 # ``assets/signals.py`` instancia ``ChatGPTAPI()`` **al importar el modulo**, y
 # el constructor revienta si la clave esta vacia: sin clave no arranca ni el
 # proyecto ni la suite, aunque la traduccion automatica sea opcional. Aqui va
