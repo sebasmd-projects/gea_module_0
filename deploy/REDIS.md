@@ -376,13 +376,29 @@ Las tres salidas posibles, todas reproducidas:
 
 ```
 1. Backend            django_redis.cache.RedisCache
-2. Ida y vuelta       Escribe y lee correctamente (44 ms)
+2. Ida y vuelta       Escribe y lee correctamente.
+                      Primera operacion: 54 ms (conexion y TLS, una vez por worker)
+                      Ya conectado:       1 ms (esto paga cada peticion)
 3. Contador (incr)    Cuenta bien: 1, 2.
 4. Caducidad          Las claves caducan.
 5. Compartida         El otro proceso la ve. La cache es compartida.
 
 La cache funciona y se comparte entre procesos.
 ```
+
+> **Los dos tiempos no son el mismo gasto, y confundirlos lleva a
+> conclusiones equivocadas.** La primera operación incluye abrir el TCP y
+> negociar el TLS: eso se paga **una vez por proceso**, porque django-redis
+> mantiene un pool y las siguientes reutilizan la conexión. Lo paga cada worker
+> nuevo, y en cPanel los workers se reciclan, así que no es gratis — pero no es
+> lo que cuesta atender una petición.
+>
+> El segundo número sí. Con la conexión ya abierta, el tiempo de una operación
+> es básicamente la ida y vuelta por la red, así que **mide la distancia
+> física** entre el servidor web y el Redis. Si sale alto no se arregla
+> configurando: se arregla acercándolos. Por encima de 200 ms el comando avisa,
+> porque con `ATOMIC_REQUESTS` cada uno de esos milisegundos se paga con una
+> transacción abierta.
 
 **Sin `REDIS_URL`** — funciona, pero es por proceso:
 
