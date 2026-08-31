@@ -46,7 +46,7 @@ JCS (RFC 8785) más firma Ed25519. El mapeo desde el registro actual es casi cam
 a campo (`issuer`, `validFrom`, `credentialSubject`, `credentialStatus`, `proof`).
 
 **Cautela:** el registro se firma sobre sus bytes exactos y el master hash de las
-cajas depende de `services/jcs.py`. Reestructurar campos para parecerse a VC
+resúmenes depende de `services/jcs.py`. Reestructurar campos para parecerse a VC
 **invalidaría todas las huellas ya emitidas** (invariantes 10 y 17 de CLAUDE.md).
 La vía sería emitir la VC como representación **adicional**, nunca sustituir el
 registro.

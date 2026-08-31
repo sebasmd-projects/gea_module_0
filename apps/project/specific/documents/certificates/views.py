@@ -574,7 +574,7 @@ def certification_public_key(request):
 
 class AegisSummaryDetailView(OTPProtectedDocumentMixin, DetailView):
     """
-    Pagina publica del resumen: la caja completa y su estado.
+    Pagina publica del resumen: el resumen completa y su estado.
     """
 
     model = AegisSummaryModel

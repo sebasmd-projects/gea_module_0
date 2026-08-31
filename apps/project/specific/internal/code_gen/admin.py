@@ -145,7 +145,7 @@ class StampLayoutModelAdmin(GeneralAdminModel):
             {
                 'fields': ('placement_preview',),
                 'description': _(
-                    'Updates as you edit the placements below. Drag a box to '
+                    'Updates as you edit the placements below. Drag a summary to '
                     'move it: the offsets are written back into the form.'
                 ),
             }

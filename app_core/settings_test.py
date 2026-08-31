@@ -82,3 +82,16 @@ AXES_ENABLED = False
 # un valor falso para que las pruebas no dependan de tener una clave real; no
 # se llega a usar porque las pruebas no guardan textos sin traducir.
 CHAT_GPT_API_KEY = 'test-key-not-a-real-openai-key'
+
+# La suite no escribe en el log de la aplicacion. Con el ``FileHandler`` de
+# produccion, cada ejecucion dejaria rastro en ``stderr.log`` -- incluidas las
+# pruebas que provocan errores a proposito -- y ensuciaria el fichero donde se
+# buscan los fallos de verdad.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'null': {'class': 'logging.NullHandler'},
+    },
+    'root': {'handlers': ['null'], 'level': 'CRITICAL'},
+}

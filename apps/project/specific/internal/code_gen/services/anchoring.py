@@ -48,7 +48,7 @@ def summary_verification_url(summary) -> str:
 
 def anchor_with_tsa(summary, *, url: Optional[str] = None):
     """
-    Sella el master hash de la caja con la autoridad de sellado de tiempo.
+    Sella el master hash del resumen con la autoridad de sellado de tiempo.
 
     Returns:
         CertificationAnchorModel
@@ -161,11 +161,11 @@ def upgrade_pending_anchors(queryset=None) -> dict:
 
 def verify_anchor(anchor) -> dict:
     """
-    Comprueba un anclaje contra el master hash actual de su caja.
+    Comprueba un anclaje contra el master hash actual de su resumen.
 
     Devuelve tanto si el token es internamente valido como si sigue
     correspondiendo al hash de hoy: un anclaje puede ser perfectamente valido
-    y aun asi no acreditar la caja actual, si esta se resello despues.
+    y aun asi no acreditar el resumen actual, si esta se resello despues.
     """
     from ..models import AnchorTypeChoices
 

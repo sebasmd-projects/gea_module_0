@@ -1,9 +1,9 @@
 /*
- * summary_composer.js — composicion de una caja AEGIS.
+ * summary_composer.js — composicion de un resumen AEGIS.
  *
  * Dos cosas a la vez:
  *
- *   - los miembros de la caja (que documentos y con que codigo), y
+ *   - los miembros del resumen (que documentos y con que codigo), y
  *   - donde se estampan sus codigos de barras sobre el PDF del resumen.
  *
  * «Traer los codigos de barras» crea una posicion por miembro, ya enlazada a
@@ -252,7 +252,7 @@
   }
 
   // ----------------------------------------------------------------
-  // El documento de la caja
+  // El documento del resumen
   //
   // Emitir NO espera al anclaje, y esa es la parte que conviene entender: el
   // QR que se estampa lleva la URL de la pagina de anclaje, no la prueba. Esa

@@ -3,7 +3,7 @@
 {% load i18n static %}
 
 {% block title %}
-  <title>{% trans 'New AEGIS box' %}</title>
+  <title>{% trans 'New AEGIS summary' %}</title>
 {% endblock title %}
 
 {% block icons %}
@@ -19,12 +19,12 @@
 {% block main_layout %}
   {% url 'core:index' as dashboard_url %}
   {% url 'code_gen:summary_list' as summaries_url %}
-  {% trans 'New AEGIS box' as page_title %}
-  {% trans 'A box groups several certificates under one summary document that carries all their barcodes.' as page_description %}
+  {% trans 'New AEGIS summary' as page_title %}
+  {% trans 'A summary gathers several certificates into one document that carries all of their barcodes.' as page_description %}
   {% trans 'Dashboard' as dashboard_title %}
-  {% trans 'AEGIS boxes' as summaries_title %}
+  {% trans 'AEGIS summaries' as summaries_title %}
 
-  {% include 'dashboard/partials/header/_header.html' with icon_class='me-2 fa-solid fa-boxes-stacked' page_title=page_title page_description=page_description parent_title=dashboard_title parent_url=dashboard_url breadcrumbs=summaries_title|add:'::'|add:summaries_url|add:' > '|add:page_title %}
+  {% include 'dashboard/partials/header/_header.html' with icon_class='me-2 fa-solid fa-layer-group' page_title=page_title page_description=page_description parent_title=dashboard_title parent_url=dashboard_url breadcrumbs=summaries_title|add:'::'|add:summaries_url|add:' > '|add:page_title %}
 
   <div class="container-xl px-4 mt-n10">
 
@@ -32,7 +32,7 @@
       <div class="col-xl-8">
         <div class="card mb-4">
           <div class="card-header">
-            <i class="fa-solid fa-box me-2"></i>{% trans 'Box details' %}
+            <i class="fa-solid fa-file-lines me-2"></i>{% trans 'Summary details' %}
           </div>
 
           <div class="card-body">
@@ -127,7 +127,7 @@
           <div class="card-body small">
             <ol class="ps-3 mb-0">
               <li class="mb-2">
-                {% trans 'You pick the certificates that go inside the box.' %}
+                {% trans 'You pick the certificates the summary gathers.' %}
               </li>
               <li class="mb-2">
                 {% trans 'You place each member barcode on the summary page, plus the summary own QR and barcode.' %}

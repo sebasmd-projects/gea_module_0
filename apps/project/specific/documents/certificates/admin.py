@@ -643,7 +643,7 @@ class AegisSummaryDocumentInline(admin.TabularInline):
     autocomplete_fields = ('document',)
 
 
-@admin.action(description=_('Seal: compute the master hash of the box'))
+@admin.action(description=_('Seal: compute the master hash of the summary'))
 def action_seal_summaries(modeladmin, request, queryset):
     from apps.project.specific.internal.code_gen.services.master import (
         MasterHashError, seal_summary)
@@ -775,7 +775,7 @@ class AegisSummaryModelAdmin(GeneralAdminModel):
 
             formfield.help_text = format_html(
                 '{} <a href="{}" target="_blank" rel="noopener">{}</a>',
-                _('The asset this box of certificates belongs to.'),
+                _('The asset this summary of certificates belongs to.'),
                 reverse('assets:create'),
                 _('Add a new asset'),
             )

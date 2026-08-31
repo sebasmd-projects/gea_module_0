@@ -25,7 +25,7 @@
   {% trans 'Dashboard' as dashboard_title %}
   {% trans 'AEGIS summaries' as summaries_title %}
 
-  {% include 'dashboard/partials/header/_header.html' with icon_class='me-2 fa-solid fa-boxes-packing' page_title=page_title page_description=page_description parent_title=dashboard_title parent_url=dashboard_url breadcrumbs=summaries_title|add:'::'|add:summaries_url|add:' > '|add:summary.title %}
+  {% include 'dashboard/partials/header/_header.html' with icon_class='me-2 fa-solid fa-layer-group' page_title=page_title page_description=page_description parent_title=dashboard_title parent_url=dashboard_url breadcrumbs=summaries_title|add:'::'|add:summaries_url|add:' > '|add:summary.title %}
 
   <div class="container-xl px-4 mt-n10">
 
@@ -35,7 +35,7 @@
     {# ================= ESTADO ================= #}
     <div class="card mb-4">
       <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-        <span><i class="fa-solid fa-box me-2"></i>{{ summary.title }}</span>
+        <span><i class="fa-solid fa-file-lines me-2"></i>{{ summary.title }}</span>
         <span>
           <span class="badge bg-secondary" id="summaryStatus">{{ summary.get_status_display }}</span>
           {% if summary.public_code %}<code class="ms-2">{{ summary.public_code }}</code>{% endif %}
@@ -60,7 +60,7 @@
       <div class="col-xl-5">
         <div class="card mb-4">
           <div class="card-header d-flex justify-content-between align-items-center">
-            <span><i class="fa-solid fa-list-ol me-2"></i>{% trans 'Documents in the box' %}</span>
+            <span><i class="fa-solid fa-list-ol me-2"></i>{% trans 'Documents in the summary' %}</span>
             <button type="button" class="btn btn-outline-success btn-sm" id="saveMembers"
                     data-loading-text="{% trans 'Saving…' %}">
               <i class="bi bi-check2"></i> {% trans 'Save members' %}
@@ -165,7 +165,7 @@
           </div>
           <div class="card-body">
             <p class="small text-muted">
-              {% trans 'A sealed box can be sent later: the hash is the same one. The proof is born pending and matures into a Bitcoin block within a few hours, on its own — nothing needs re-stamping.' %}
+              {% trans 'A sealed summary can be sent later: the hash is the same one. The proof is born pending and matures into a Bitcoin block within a few hours, on its own — nothing needs re-stamping.' %}
             </p>
             <div class="d-grid">
               <button type="button" class="btn btn-outline-warning" id="sendToBlockchain"
@@ -193,7 +193,7 @@
           </div>
           <div class="card-body">
             <p class="small text-muted">
-              {% trans 'The box also has its own PDF: it carries the master hash, the barcode of every member, and the QR of the anchor page. It does not wait for the blockchain — that QR points at a page that updates itself, so nothing needs re-stamping when the Bitcoin block arrives.' %}
+              {% trans 'The summary has its own PDF: it carries the master hash, the barcode of every member, and the QR of the anchor page. It does not wait for the blockchain — that QR points at a page that updates itself, so nothing needs re-stamping when the Bitcoin block arrives.' %}
             </p>
 
             <div class="d-grid">
@@ -356,10 +356,10 @@
       messages: {
         pickLayout: '{% trans 'Choose a stamp layout first.' %}',
         pickDocument: '{% trans 'Choose a document to add.' %}',
-        alreadyIn: '{% trans 'That document is already in the box.' %}',
+        alreadyIn: '{% trans 'That document is already in the summary.' %}',
         needMembers: '{% trans 'Add at least one document.' %}',
         saveFailed: '{% trans 'It could not be saved.' %}',
-        needSeal: '{% trans 'Seal the box first: the summary carries the master hash inside.' %}',
+        needSeal: '{% trans 'Seal the summary first: it carries the master hash inside.' %}',
         needSource: '{% trans 'Choose the summary PDF without codes.' %}',
         broughtBarcodes: '{% trans 'Member barcodes added. Drag them into place and press Save.' %}'
       }

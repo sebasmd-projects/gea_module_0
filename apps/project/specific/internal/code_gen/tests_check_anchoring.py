@@ -303,7 +303,7 @@ class TestGoingBackOverTheSend(AnchoringCheckTestCase):
 
 class TestRealAnchorState(AnchoringCheckTestCase):
     """
-    El estado de las cajas de verdad, que es lo que de verdad importa.
+    El estado de los resumenes de verdad, que es lo que de verdad importa.
 
     Un envio de prueba dice si el camino esta abierto. Esto dice si lo que se
     sello esta llegando a un bloque, y distingue la espera normal del anclaje
@@ -332,7 +332,7 @@ class TestRealAnchorState(AnchoringCheckTestCase):
     def test_with_no_anchors_it_says_nothing_has_been_anchored(self):
         output = self.run_command()
 
-        self.assertIn('Todavia no se ha anclado ninguna caja', output)
+        self.assertIn('Todavia no se ha anclado ningun resumen', output)
 
     def test_a_recent_pending_anchor_is_normal_waiting(self):
         self.anchor(status=AnchorStatusChoices.PENDING, age_hours=2)

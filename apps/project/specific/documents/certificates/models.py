@@ -721,7 +721,7 @@ class SummaryStatusChoices(models.TextChoices):
 
 class AegisSummaryModel(TimeStampedModel):
     """
-    Documento maestro que integra varios certificados de una misma caja.
+    Documento maestro que integra varios certificados de un mismo resumen.
 
     El resumen (AEGIS-6) no es un certificado mas: es el que los ata. Lleva
     estampado el codigo de barras de cada uno de sus miembros, su propio par
@@ -763,7 +763,7 @@ class AegisSummaryModel(TimeStampedModel):
         null=True
     )
 
-    # ---------- Activo al que pertenece la caja ----------
+    # ---------- Activo al que pertenece el resumen ----------
     asset = models.ForeignKey(
         'assets.AssetModel',
         on_delete=models.SET_NULL,
@@ -771,7 +771,7 @@ class AegisSummaryModel(TimeStampedModel):
         related_name='aegis_summaries',
         blank=True,
         null=True,
-        help_text=_('The asset this box of certificates belongs to.')
+        help_text=_('The asset this summary of certificates belongs to.')
     )
 
     asset_label = models.CharField(
@@ -887,7 +887,7 @@ class AegisSummaryModel(TimeStampedModel):
 
 class AegisSummaryDocumentModel(TimeStampedModel):
     """
-    Un certificado dentro de un resumen, con el codigo que le toca en la caja.
+    Un certificado dentro de un resumen, con el codigo que le toca en el resumen.
     """
 
     summary = models.ForeignKey(
@@ -905,7 +905,7 @@ class AegisSummaryDocumentModel(TimeStampedModel):
     )
 
     code = models.CharField(
-        _('Code in the box'),
+        _('Code in the summary'),
         max_length=30,
         help_text=_('For example AEGIS-1, AEGIS-2…')
     )

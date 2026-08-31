@@ -3,7 +3,7 @@
 Emision del documento resumen (AEGIS-6).
 
 El resumen es el unico documento que lleva **codigos de otros**: sobre su PDF
-se estampa el codigo de barras de cada miembro de la caja, ademas de su propio
+se estampa el codigo de barras de cada miembro del resumen, ademas de su propio
 par QR/barcode y del QR del anclaje.
 
 Orden obligatorio, por la circularidad:
@@ -148,7 +148,7 @@ def certify_summary(summary, *, source_file=None, layout=None,
     Emite y certifica el documento del resumen.
 
     El resumen se guarda como un ``DocumentVerificationModel`` mas —con sus
-    tres archivos y sus huellas— y ademas queda enlazado desde la caja. Asi
+    tres archivos y sus huellas— y ademas queda enlazado desdel resumen. Asi
     hereda gratis la verificacion por archivo, el registro de certificacion y
     la marca de agua.
 
@@ -189,7 +189,7 @@ def certify_summary(summary, *, source_file=None, layout=None,
     document.save()
 
     # El codigo del resumen lleva el master hash en lugar del hash del propio
-    # archivo: es lo que identifica a la caja, no al papel.
+    # archivo: es lo que identifica a el resumen, no al papel.
     options = CodeOptions(
         include_nit=True,
         include_initials_sequence=True,

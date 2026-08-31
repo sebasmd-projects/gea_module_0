@@ -194,7 +194,7 @@ class StampPlacementModel(TimeStampedModel):
         blank=True,
         default='',
         help_text=_(
-            'Only for the member barcode: which document of the box this '
+            'Only for the member barcode: which document of the summary this '
             'position carries (AEGIS-1, AEGIS-2…).'
         )
     )
@@ -255,7 +255,7 @@ class StampPlacementModel(TimeStampedModel):
 
         if self.kind == CodeKindChoices.MEMBER_BARCODE and not self.member_code:
             errors['member_code'] = _(
-                'A member barcode needs to say which document of the box it '
+                'A member barcode needs to say which document of the summary it '
                 'carries.'
             )
 
@@ -451,7 +451,7 @@ class CertificationAnchorModel(TimeStampedModel):
 
     Se ancla el **master hash** de un resumen, nunca un documento ni el
     payload: lo que sale de la plataforma es una sola cifra de 64 caracteres,
-    y esa cifra compromete transitivamente a todos los miembros de la caja.
+    y esa cifra compromete transitivamente a todos los miembros del resumen.
 
     Un mismo hash puede tener varios anclajes a la vez —una TSA cualificada y
     OpenTimestamps, por ejemplo— porque cubren fallos distintos: la TSA es el

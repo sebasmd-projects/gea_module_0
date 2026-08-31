@@ -251,8 +251,8 @@ msgid "Document Certificate"
 msgstr "Certificado de documento"
 
 #: .\apps\project\specific\documents\certificates\admin.py:646
-msgid "Seal: compute the master hash of the box"
-msgstr "Sellar: calcular el master hash de la caja"
+msgid "Seal: compute the master hash of the summary"
+msgstr "Sellar: calcular el master hash del resumen"
 
 #: .\apps\project\specific\documents\certificates\admin.py:668
 #, python-format
@@ -295,8 +295,8 @@ msgstr ""
 
 #: .\apps\project\specific\documents\certificates\admin.py:778
 #: .\apps\project\specific\documents\certificates\models.py:774
-msgid "The asset this box of certificates belongs to."
-msgstr "El activo al que pertenece esta caja de certificados."
+msgid "The asset this summary of certificates belongs to."
+msgstr "El activo al que pertenece este resumen de certificados."
 
 #: .\apps\project\specific\documents\certificates\admin.py:780
 msgid "Add a new asset"
@@ -816,8 +816,8 @@ msgid "Document"
 msgstr "Documento"
 
 #: .\apps\project\specific\documents\certificates\models.py:908
-msgid "Code in the box"
-msgstr "Código dentro de la caja"
+msgid "Code in the summary"
+msgstr "Código dentro del resumen"
 
 #: .\apps\project\specific\documents\certificates\models.py:910
 msgid "For example AEGIS-1, AEGIS-2…"
@@ -998,3 +998,4 @@ msgstr "Certificado de empleado IPCON"
 msgid "Validate employment and institutional certificates issued by IPCON."
 msgstr ""
 "Valida los certificados laborales e institucionales emitidos por IPCON."
+
