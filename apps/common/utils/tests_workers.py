@@ -242,7 +242,7 @@ class TestSurvivalIsTheOneThatDecides(WorkerCheckTestCase):
 
         self.assertNotIn('--spawn', output)
         self.assertNotIn('Todavia no se ha lanzado', output)
-        self.assertIn('No la relances', output)
+        self.assertIn('NO la relances', output)
 
     def test_a_running_probe_says_how_long_is_left(self):
         now = time.time()
@@ -329,3 +329,93 @@ class TestLaunchingTheProbe(WorkerCheckTestCase):
 
         self.assertTrue(guard.exists())
         self.assertIn('denied', guard.read_text())
+
+
+class TestTheProbeDuration(WorkerCheckTestCase):
+    """
+    Que la prueba larga se pueda pedir de verdad.
+
+    Cuando la corta salia bien, el comando decia «dejalo corriendo un dia y
+    vuelve a mirar» sin ofrecer manera de hacerlo: la duracion estaba fija en
+    el codigo. Un consejo que quien lo lee no puede seguir es peor que no
+    darlo, porque parece que falta algo por su parte.
+    """
+
+    def spawn(self, **options):
+        with mock.patch(POPEN) as popen:
+            output = self.run_command(spawn=True, **options)
+
+        return output, popen
+
+    def test_the_requested_duration_reaches_the_process(self):
+        _, popen = self.spawn(minutes=120)
+
+        script = popen.call_args.args[0][2]
+
+        # 120 minutos a un latido cada 30 segundos.
+        self.assertIn('range(240)', script)
+
+    def test_the_duration_is_written_into_the_trace_name(self):
+        """
+        Al leer el rastro mas tarde hay que saber cuanto se esperaba, y puede
+        no ser lo de por defecto. Sin esto, una prueba de un dia que muriera a
+        la media hora se leeria como «aguanto entera».
+        """
+        _, popen = self.spawn(minutes=1440)
+
+        path = popen.call_args.args[0][3]
+
+        self.assertTrue(path.endswith('-1440m.beats'), path)
+
+    def test_an_absurd_duration_is_brought_back_to_something_measurable(self):
+        _, popen = self.spawn(minutes=1)
+
+        script = popen.call_args.args[0][2]
+
+        # Cinco minutos es el minimo: por debajo no se mide nada.
+        self.assertIn('range(10)', script)
+
+    def test_a_long_probe_is_read_against_its_own_duration(self):
+        now = time.time()
+        # El ultimo latido, hace rato: si fuera reciente se leeria como «sigue
+        # vivo» y no como «lo mataron».
+        start = now - 90 * 60
+
+        # Una prueba de un dia que solo vivio 40 minutos NO aguanto entera.
+        self.write_beats(
+            [start + n * 30 for n in range(81)],
+            name='20260830-120000-1440m.beats',
+        )
+
+        output = self.run_command()
+
+        self.assertIn('lo mataron antes de acabar', output)
+        self.assertNotIn('Aguanto la prueba entera', output)
+
+    def test_a_short_probe_that_survives_asks_for_the_long_one(self):
+        now = time.time()
+        start = now - 60 * 60
+
+        self.write_beats(
+            [start + n * 30 for n in range(61)],
+            name='20260830-120000-30m.beats',
+        )
+
+        output = self.run_command(client=open_client())
+
+        self.assertIn('Aguanto la prueba entera', output)
+        self.assertIn('--minutes 1440', output)
+
+    def test_a_long_probe_that_survives_does_not_ask_for_more(self):
+        now = time.time()
+        start = now - 25 * 60 * 60
+
+        self.write_beats(
+            [start + n * 60 for n in range(1441)],
+            name='20260830-120000-1440m.beats',
+        )
+
+        output = self.run_command(client=open_client())
+
+        self.assertIn('Aguanto la prueba entera', output)
+        self.assertNotIn('--minutes 1440', output)

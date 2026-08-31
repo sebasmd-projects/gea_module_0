@@ -241,9 +241,21 @@ COMMANDS = (
                 kind=KIND_FLAG,
                 help=_(
                     'Starts a detached process that does nothing but write '
-                    'the time every 30 seconds for half an hour. Come back '
-                    'later and run this again: what matters is not that it '
-                    'starts, but that it is still alive then.'
+                    'the time every 30 seconds. Come back later and run this '
+                    'again: what matters is not that it starts, but that it '
+                    'is still alive then.'
+                ),
+            ),
+            Option(
+                flag='--minutes',
+                label=_('How long the test should last'),
+                kind=KIND_NUMBER,
+                default=30,
+                help=_(
+                    'Half an hour rules out the hosting that kills everything '
+                    'right away, which is the common case. It says nothing '
+                    'about the one that kills a process now and then, and for '
+                    'that it has to run longer: 1440 is a full day.'
                 ),
             ),
         ],
