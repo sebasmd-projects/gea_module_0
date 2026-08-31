@@ -787,6 +787,130 @@ COMMANDS = (
         ),
     ),
     Command(
+        name='check_health',
+        title=_('Health check'),
+        summary=_('Checks the database, the cache and the mail server, from '
+                  'inside and from outside.'),
+        detail=_(
+            'The two ways of asking do not answer the same thing, and telling '
+            'them apart is the whole point. Asked from inside, it says '
+            'whether the application reaches the database, Redis and the mail '
+            'server. Asked over HTTP, it also crosses the web server, the '
+            'certificate and the DNS. If the local one passes and the HTTP '
+            'one does not, the problem is in front of the application and '
+            'there is nothing to look for in the code. It is the same URL the '
+            'warm-up task hits every three minutes.'
+        ),
+        example=_('Right after a deploy, and whenever the site feels broken '
+                  'without an obvious error.'),
+        risk=RISK_READ_ONLY,
+        area=AREA_DIAGNOSTICS,
+        options=[
+            Option(
+                flag='--http',
+                label=_('Ask over HTTP'),
+                kind=KIND_FLAG,
+                help=_('Requests the real public URL instead of checking '
+                       'inside this process.'),
+            ),
+        ],
+        timeout=90,
+    ),
+    Command(
+        name='show_log',
+        title=_('Application log'),
+        summary=_('Shows the last lines of the log without opening a '
+                  'terminal.'),
+        detail=_(
+            'Reading the log was the last thing that still forced an SSH '
+            'session, and it is the first thing needed when something fails. '
+            'It reads from the end and never loads the whole file. Ask for '
+            'few lines and filter: a log carries traces, paths, IP addresses '
+            'and sometimes email addresses, and whatever is shown here is '
+            'also written into the run history of this very console.'
+        ),
+        example=_('A page returned a 500 and there is no other clue.'),
+        risk=RISK_READ_ONLY,
+        area=AREA_DIAGNOSTICS,
+        options=[
+            Option(
+                flag='--list',
+                label=_('Only list the files'),
+                kind=KIND_FLAG,
+                help=_('Shows the current log and the rotated ones with '
+                       'their size, without printing any content.'),
+            ),
+            Option(
+                flag='--lines',
+                label=_('Lines'),
+                kind=KIND_NUMBER,
+                default=100,
+                help=_('How many lines from the end. The maximum is 2000.'),
+            ),
+            Option(
+                flag='--contains',
+                label=_('Containing'),
+                kind=KIND_TEXT,
+                help=_('Only lines carrying this text. Literal, not a regular '
+                       'expression.'),
+                pattern=r'^[\w .:,;/@\-\[\]()=]{1,80}$',
+            ),
+            Option(
+                flag='--rotated',
+                label=_('Rotated number'),
+                kind=KIND_NUMBER,
+                help=_('Read stderr_old_N.log instead of the current one. '
+                       'Leave it empty for the current log.'),
+            ),
+        ],
+        timeout=90,
+    ),
+    Command(
+        name='rotate_logs',
+        title=_('Rotate the log'),
+        summary=_('Renames the log to stderr_old_N.log when it grows past its '
+                  'size, and drops the oldest ones.'),
+        detail=_(
+            'It does nothing unless the file has passed the limit, so running '
+            'it costs one stat. That is why it is scheduled hourly rather '
+            'than weekly: with a weekly check, one bad day leaves the file at '
+            'tens of megabytes before anyone looks, and the limit means '
+            'nothing. It also keeps only the last few rotated files, because '
+            'the disk here is a fixed quota and a log with no ceiling fills '
+            'it — and when that happens every other write fails too, not just '
+            'the log. The numbering continues from whatever is already there '
+            'instead of starting over, so a file someone referred to in an '
+            'email keeps its name.'
+        ),
+        example=_('It runs on its own every hour; by hand only to force it.'),
+        risk=RISK_WRITES,
+        area=AREA_MAINTENANCE,
+        options=[
+            Option(
+                flag='--force',
+                label=_('Rotate now'),
+                kind=KIND_FLAG,
+                help=_('Rotates even if it has not reached the size.'),
+            ),
+            Option(
+                flag='--max-mb',
+                label=_('Size in MB'),
+                kind=KIND_NUMBER,
+                default=3,
+                help=_('Rotate from this size on.'),
+            ),
+            Option(
+                flag='--keep',
+                label=_('Rotated files to keep'),
+                kind=KIND_NUMBER,
+                default=10,
+                help=_('The older ones are deleted. 0 keeps them all, and '
+                       'fills the disk sooner or later.'),
+            ),
+        ],
+        timeout=120,
+    ),
+    Command(
         name='findstatic',
         title=_('Locate a static file'),
         summary=_('Says which folder a CSS, JS or image file is really being '

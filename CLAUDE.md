@@ -385,7 +385,7 @@ nada, porque más de uno parece inofensivo hasta que se piensa dónde acaba su s
 
 | Entrada | Dónde |
 |---|---|
-| Crons (`django-crontab`) | `settings.CRONJOBS`: `upgrade_ots_anchors` cada 15 min (sin pendientes no sale a la red), código diario 19:00, warm-up cada 3 min |
+| Crons (`django-crontab`) | `settings.CRONJOBS`: `upgrade_ots_anchors` cada 15 min (sin pendientes no sale a la red), código diario 19:00, warm-up cada 3 min, `rotate_logs` cada hora (sin llegar al tope es un `stat`) |
 | Comandos propios | `apps/common/utils/management/commands/` y `code_gen/management/commands/`, `certificates/management/commands/check_certifications.py` |
 | Acciones del admin | «Certify» de `certificates/admin.py`; sellado y anclaje de resúmenes |
 | Endpoints JSON internos | `code_gen/api.py` (disposiciones, miembros del resumen, símbolos de vista previa) |
@@ -499,7 +499,7 @@ Sin build ni SPA. Plantillas Django + Bootstrap 5 por CDN; `templates/raw.html` 
 | **Llamadas a OpenAI en señales `pre_save`** | La traducción automática de activos y ofertas ocurre **de forma síncrona dentro del guardado** (timeout 20 s). Un fallo o lentitud de la API se traduce en peticiones lentas. No hay cola de tareas. |
 | **`ffmpeg` como dependencia del sistema** | `video_masonry` invoca `ffmpeg` por `subprocess` para quitar el audio de los vídeos. Si no está en el `PATH`, la subida falla. |
 | **`ATOMIC_REQUESTS = True`** | Cada petición es una transacción. Cuidado con operaciones largas (PDF, OpenAI, email) dentro de vistas. |
-| **`logging.basicConfig` a `stderr.log`** | Configurado en `settings.py`, sin rotación. |
+| **Rotar el log exige `WatchedFileHandler`** | Rotar es renombrar, y en Linux renombrar no toca a quien ya tiene el fichero abierto: el descriptor sigue apuntando al mismo inodo. Con varios workers y un `FileHandler` normal, tras rotar **todos siguen escribiendo en `stderr_old_N.log`**, el `stderr.log` nuevo no llega a crearse y el «viejo» es el que crece — sin error y sin aviso. `WatchedFileHandler` reabre cuando detecta el renombrado; es lo que sostiene `rotate_logs`. Tampoco vale `RotatingFileHandler`: rota el proceso que escribe, y aquí hay varios. Ver `apps/common/utils/logs.py`. |
 | **Ajustes definidos y nunca leídos** | `MIDDLEWARE_NOT_INCLUDE`, `ADMIN_DELETE_PERMISSION` y `ADMIN_ADD_PERMISSION` se declaran en `settings.py` pero no los consume nadie. No asumas que hacen algo. (`UTILS_DATA_PATH` sí se usa, solo en `delete_migrations`.) |
 
 ---
