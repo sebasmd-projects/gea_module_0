@@ -107,7 +107,7 @@
 
               <div class="d-flex gap-2 mt-4">
                 <button type="submit" class="btn btn-primary"
-                        data-busy-text="{% trans 'Creating…' %}">
+                        data-loading-text="{% trans 'Creating…' %}">
                   <i class="bi bi-plus-lg me-1"></i>{% trans 'Create and compose' %}
                 </button>
                 <a href="{% url 'code_gen:summary_list' %}" class="btn btn-outline-secondary">
@@ -148,8 +148,10 @@
 
 {% block body_custom_js %}
   {{ block.super }}
+  {# busy_buttons.js NO se carga aqui: raw.html ya lo trae para todas las
+     paginas. Cargarlo dos veces registraba dos escuchadores de submit y el
+     segundo cancelaba el envio del primero. #}
   <script src="{% static 'js/searchable_select.js' %}"></script>
-  <script src="{% static 'js/busy_buttons.js' %}"></script>
 
   <script>
     // Salir a dar de alta un activo no debe costar lo ya escrito. Al pulsar
