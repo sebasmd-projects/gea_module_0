@@ -31,22 +31,20 @@ class CertificateUserForm(forms.Form):
 
 
 class DocumentVerificationForm(forms.Form):
-    # Opcional, y con "todos" por defecto.
-    #
-    # Era obligatorio, y eso solo podia producir falsos negativos: el codigo
-    # publico es unico en toda la tabla, asi que el tipo no forma parte de la
-    # identidad -- solo acota la busqueda. Quien tiene el papel delante no
-    # sabe si lo que sostiene es un "Asset Certificate (AEGIS)" o un "Generic
-    # Document", y si elegia mal recibia "Document not found" con un codigo
-    # perfectamente valido en la mano.
-    certificate_type = forms.ChoiceField(
-        choices=[('', _('Any type'))] + list(
-            DocumentCertificateTypeChoices.choices
-        ),
-        required=False,
-        label=_('Certificate type'),
-        help_text=_('Optional: leave it as it is if you are not sure.'),
-    )
+    """
+    Un solo campo: el codigo.
+
+    Habia un desplegable de tipo de certificado, y era obligatorio. Solo podia
+    producir falsos negativos: el codigo publico es ``unique=True`` en toda la
+    tabla, asi que el tipo no forma parte de la identidad -- como mucho acota
+    una busqueda que ya devuelve un unico resultado. Quien tiene el papel
+    delante no sabe si sostiene un "Asset Certificate (AEGIS)" o un "Generic
+    Document", y elegir mal daba "Document not found" con un codigo
+    perfectamente valido en la mano.
+
+    Un campo que no puede mejorar el resultado y si puede estropearlo no es un
+    filtro: es un paso de mas y una forma de equivocarse.
+    """
 
     identifier = forms.CharField(
         label=_('Document Public Code'),

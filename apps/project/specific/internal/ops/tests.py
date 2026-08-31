@@ -37,7 +37,11 @@ class AllowlistTests(TestCase):
         forbidden = (
             'flush', 'sqlflush', 'dumpdata', 'loaddata', 'shell', 'dbshell',
             'delete_migrations', 'rename_migrations', 'createsuperuser',
-            'runserver', 'makemigrations',
+            'changepassword', 'runserver', 'makemigrations', 'diffsettings',
+            'auditlogflush', 'axes_reset_logs', 'axes_reset_failure_logs',
+            'two_factor_disable', 'remove_stale_contenttypes',
+            'generate_certification_key', 'generate_encryption_key',
+            'squashmigrations', 'testserver', 'startapp', 'test',
         )
 
         for name in forbidden:
@@ -46,9 +50,74 @@ class AllowlistTests(TestCase):
                 with self.assertRaises(CommandNotAllowed):
                     run(name, {})
 
+    def test_no_entry_runs_a_forbidden_program_either(self):
+        """
+        La lista blanca es de **programas**, no de nombres de entrada.
+
+        Hay entradas cuyo nombre no coincide con lo que ejecutan --
+        ``crontab_add`` lanza ``crontab``, ``git_pull`` lanza ``git`` -- y sin
+        esta comprobacion nada impediria declarar una entrada llamada
+        ``informe_diario`` que por dentro lanzara ``flush``.
+        """
+        forbidden = {
+            'flush', 'sqlflush', 'dumpdata', 'loaddata', 'shell', 'dbshell',
+            'diffsettings', 'delete_migrations', 'rename_migrations',
+            'createsuperuser', 'changepassword', 'auditlogflush',
+        }
+
+        for name, command in COMMANDS_BY_NAME.items():
+            with self.subTest(command=name):
+                self.assertNotIn(command.program_name, forbidden)
+
+    def test_makemigrations_can_only_ask_never_write(self):
+        """
+        La excepcion razonada: ``makemigrations`` esta, pero solo en modo
+        pregunta. Lo que lo hace seguro son los argumentos fijos, que el
+        operador no puede quitar porque no son opciones.
+        """
+        command = get_command('makemigrations_check')
+
+        self.assertEqual(command.program_name, 'makemigrations')
+        self.assertEqual(command.fixed_args, ('--check', '--dry-run'))
+
+        argv = build_argv(command, {})
+
+        self.assertIn('--check', argv)
+        self.assertIn('--dry-run', argv)
+
+    def test_the_pull_can_never_create_a_merge_commit(self):
+        """
+        ``--ff-only`` es toda la seguridad del pull: sin el, un checkout de
+        produccion con algo editado a mano se queda con un merge que nadie ha
+        revisado.
+        """
+        command = get_command('git_pull')
+
+        self.assertIn('--ff-only', build_argv(command, {}))
+
     def test_an_unknown_command_is_refused(self):
         with self.assertRaises(CommandNotAllowed):
             run('definitely_not_a_command', {})
+
+    def test_only_the_two_declared_binaries_can_run(self):
+        """
+        Si una entrada pudiera nombrar cualquier ejecutable, la lista blanca
+        de comandos no acotaria nada: bastaria con declarar ``bash``.
+        """
+        from .registry import EXEC_GIT, EXEC_MANAGE
+
+        for name, command in COMMANDS_BY_NAME.items():
+            with self.subTest(command=name):
+                self.assertIn(command.executable, (EXEC_MANAGE, EXEC_GIT))
+
+    def test_an_unknown_binary_is_refused(self):
+        rogue = Command(
+            name='rogue', title='x', summary='x', detail='x', example='x',
+            executable='bash',
+        )
+
+        with self.assertRaises(CommandNotAllowed):
+            build_argv(rogue, {})
 
 
 class ArgumentTests(TestCase):
@@ -180,6 +249,92 @@ class AccessTests(TestCase):
         self.assertEqual(response.status_code, 404)
 
 
+class ReachableFromThePanelTests(TestCase):
+    """
+    Que se pueda llegar sin saberse la URL de memoria.
+
+    La consola no es un modelo, asi que el admin no la listaba: habia que
+    escribir la ruta a mano. Una herramienta que hay que recordar no la usa
+    nadie, y su ausencia del menu hacia pensar que no existia.
+    """
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.superuser = UserModel.objects.create_superuser(
+            username='ops_link', email='link@example.com', password=PASSWORD,
+        )
+        cls.staff = UserModel.objects.create_user(
+            username='ops_link_staff', email='ls@example.com',
+            password=PASSWORD,
+            user_type=UserModel.UserTypeChoices.BUYER, is_staff=True,
+        )
+
+    def test_the_admin_index_links_to_the_console(self):
+        login_with_otp(self.client, self.superuser)
+
+        response = self.client.get(reverse('admin:index'))
+
+        self.assertContains(response, reverse('admin:ops_console'))
+
+    def test_the_run_history_links_to_the_console(self):
+        """Son las dos mitades: una lanza, la otra dice que se lanzo."""
+        login_with_otp(self.client, self.superuser)
+
+        response = self.client.get(
+            reverse('admin:ops_commandrunmodel_changelist')
+        )
+
+        self.assertContains(response, reverse('admin:ops_console'))
+
+    def test_the_link_is_not_shown_to_someone_who_cannot_use_it(self):
+        """
+        Un enlace que lleva a un 404 no es una pista util, es una pista de que
+        hay algo ahi.
+        """
+        login_with_otp(self.client, self.staff)
+
+        response = self.client.get(reverse('admin:index'))
+
+        self.assertNotContains(response, reverse('admin:ops_console'))
+
+    def test_the_console_lists_every_declared_command(self):
+        login_with_otp(self.client, self.superuser)
+
+        response = self.client.get(reverse('admin:ops_console'))
+
+        for name in COMMANDS_BY_NAME:
+            with self.subTest(command=name):
+                self.assertContains(
+                    response, reverse('admin:ops_command', args=[name])
+                )
+
+    def test_the_console_ships_what_the_search_and_the_filters_need(self):
+        """
+        Buscar y filtrar pasan por estos tres ganchos. Si un cambio de
+        plantilla se lleva uno por delante, la caja de busqueda sigue ahi y
+        deja de hacer nada -- que es peor que no tenerla.
+        """
+        login_with_otp(self.client, self.superuser)
+
+        response = self.client.get(reverse('admin:ops_console'))
+
+        self.assertContains(response, 'id="ops-search"')
+        self.assertContains(response, 'data-search=')
+        self.assertContains(response, 'data-risk="DANGEROUS"')
+
+    def test_a_command_is_searchable_by_what_it_does(self):
+        """No hace falta saber como se llama para encontrarlo."""
+        login_with_otp(self.client, self.superuser)
+
+        response = self.client.get(reverse('admin:ops_console'))
+        body = response.content.decode().lower()
+
+        # `git_pull` no lleva la palabra "desplegar" en el nombre, pero es lo
+        # que alguien escribiria para buscarlo.
+        self.assertIn('deploy', body)
+        self.assertIn('crontab', body)
+
+
 class RunningTests(TestCase):
     """Ejecutar de verdad, y dejar constancia."""
 
@@ -207,7 +362,9 @@ class RunningTests(TestCase):
         self.assertEqual(record.exit_code, 0)
         self.assertEqual(record.run_by_id, self.superuser.pk)
         self.assertIn('System check', record.output)
-        self.assertEqual(record.command_line, 'check')
+        # Con dos binarios posibles, la linea tiene que decir cual fue: sin
+        # ello `pull --ff-only` y `migrate` se leen igual de sueltos.
+        self.assertEqual(record.command_line, 'manage.py check')
 
     def test_a_dangerous_command_needs_the_typed_confirmation(self):
         url = reverse('admin:ops_command', args=['db_backup'])
@@ -270,10 +427,144 @@ class RegistryTests(TestCase):
                 self.assertTrue(str(command.example))
 
     def test_every_listed_command_actually_exists(self):
+        """
+        Una entrada que apunta a un comando inexistente es una tarjeta que
+        falla al pulsarla, y no se descubre hasta que alguien la pulsa.
+        """
         from django.core.management import get_commands
+
+        from .registry import EXEC_MANAGE
 
         available = set(get_commands())
 
-        for name in COMMANDS_BY_NAME:
+        for name, command in COMMANDS_BY_NAME.items():
+            if command.executable != EXEC_MANAGE:
+                continue
+
             with self.subTest(command=name):
-                self.assertIn(name, available)
+                self.assertIn(command.program_name, available)
+
+    def test_every_command_is_filed_under_a_known_area(self):
+        from .registry import AREA_LABELS
+
+        for name, command in COMMANDS_BY_NAME.items():
+            with self.subTest(command=name):
+                self.assertIn(command.area, AREA_LABELS)
+
+    def test_every_group_has_something_in_it(self):
+        """Un titulo de area sin tarjetas debajo es ruido en la consola."""
+        from .registry import grouped_commands
+
+        for area, label, commands in grouped_commands():
+            with self.subTest(area=area):
+                self.assertTrue(commands)
+
+    def test_the_search_text_finds_a_command_by_what_it_does(self):
+        """
+        El buscador de la consola mira este texto. Si solo llevara el nombre,
+        habria que saber como se llama el comando para encontrarlo -- que es
+        justo lo que no sabe quien lo necesita.
+        """
+        haystack = get_command('sendtestemail').search_text
+
+        for needle in ('email', 'otp', 'mail'):
+            with self.subTest(needle=needle):
+                self.assertIn(needle, haystack)
+
+    def test_positional_options_are_required_and_patterned(self):
+        for name, command in COMMANDS_BY_NAME.items():
+            for option in command.options:
+                if not option.positional:
+                    continue
+
+                with self.subTest(command=name, option=option.name):
+                    # Un posicional que falta corre el comando sin el, y
+                    # `sqlmigrate` sin app hace otra cosa, no nada.
+                    self.assertTrue(option.required)
+                    self.assertTrue(option.pattern)
+
+
+class PositionalArgumentTests(TestCase):
+    """Los argumentos que van sueltos, sin bandera delante."""
+
+    def test_a_positional_goes_at_the_end_without_its_flag(self):
+        argv = build_argv(get_command('sqlmigrate'), {
+            'app_label': 'buyers', 'migration_name': '0012',
+        })
+
+        self.assertEqual(argv[-2:], ['buyers', '0012'])
+        self.assertNotIn('app_label', argv)
+
+    def test_the_order_of_the_positionals_is_the_declared_one(self):
+        """``sqlmigrate 0012 buyers`` no es lo mismo que al reves."""
+        command = get_command('sqlmigrate')
+
+        self.assertEqual(
+            [option.name for option in command.options],
+            ['app_label', 'migration_name'],
+        )
+
+    def test_a_missing_required_value_is_refused(self):
+        with self.assertRaises(ValidationError):
+            build_argv(get_command('sqlmigrate'), {'app_label': 'buyers'})
+
+    def test_a_positional_still_has_to_match_its_pattern(self):
+        """
+        Es lo unico que separa un posicional de una cadena libre en la linea
+        de comandos.
+        """
+        with self.assertRaises(ValidationError):
+            build_argv(get_command('axes_reset_ip'), {'ip': '$(whoami)'})
+
+        with self.assertRaises(ValidationError):
+            build_argv(get_command('findstatic'), {
+                'staticfile': '../../etc/passwd; rm -rf /',
+            })
+
+    def test_a_value_starting_with_a_dash_cannot_pass_as_an_option(self):
+        """
+        El separador ``--``. El patron ya lo impide, pero apoyarse solo en eso
+        deja el argumento a merced de un patron mal escrito.
+        """
+        argv = build_argv(get_command('findstatic'), {
+            'staticfile': 'css/aegis_header.css',
+        })
+
+        self.assertIn('--', argv)
+        self.assertEqual(argv[-1], 'css/aegis_header.css')
+        self.assertLess(argv.index('--'), len(argv) - 1)
+
+
+class GitCommandTests(TestCase):
+    """El otro binario."""
+
+    def test_git_runs_git_and_not_manage_py(self):
+        argv = build_argv(get_command('git_status'), {})
+
+        self.assertEqual(argv[0], 'git')
+        self.assertEqual(argv[1], 'status')
+        self.assertNotIn('manage.py', ' '.join(argv))
+
+    def test_the_printed_line_says_which_program_ran(self):
+        """
+        Sin el nombre del programa, ``pull --ff-only`` y ``migrate`` se leen
+        igual de sueltos en el registro de auditoria.
+        """
+        from .runner import printable_argv
+
+        command = get_command('git_pull')
+
+        self.assertEqual(
+            printable_argv(command, build_argv(command, {})),
+            'git pull --ff-only',
+        )
+
+    def test_a_manage_command_still_reads_as_manage_py(self):
+        from .runner import printable_argv
+
+        command = get_command('check')
+
+        self.assertEqual(
+            printable_argv(command, build_argv(command, {'deploy': True})),
+            'manage.py check --deploy',
+        )

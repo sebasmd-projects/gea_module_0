@@ -1,0 +1,20 @@
+{% extends "admin/change_list.html" %}
+{% load i18n %}
+
+{% comment %}
+  El historial de ejecuciones, con un enlace a la consola.
+
+  Son las dos mitades de lo mismo -- la consola lanza, el historial dice que
+  se lanzo -- y quien llega a una casi siempre quiere la otra. El enlace va en
+  la misma barra que "Anadir", que es donde el admin pone sus acciones y donde
+  se busca sin pensarlo.
+{% endcomment %}
+
+{% block object-tools-items %}
+  <li>
+    <a href="{% url 'admin:ops_console' %}" class="addlink">
+      {% trans 'Operations console' %}
+    </a>
+  </li>
+  {{ block.super }}
+{% endblock %}

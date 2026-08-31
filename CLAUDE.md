@@ -352,11 +352,34 @@ geometría de `pdf_stamp.py`. Si cambias el posicionamiento en Python, actualiza
 
 App sin rutas propias: `urls.py` está vacío a propósito y las páginas cuelgan del admin
 (`admin:ops_console`, `admin:ops_command`, en `ops/admin.py::get_urls`, plantillas en `templates/admin/ops/`).
-Es una superficie de ejecución remota y por eso está acotada en tres puntos:
+Se llega desde el índice del panel y desde el listado de ejecuciones; la entrada del índice la
+inyecta `GeaAdminSite.get_app_list()`, porque la consola no es un modelo y el admin sólo lista
+lo registrado. Sólo se le muestra a quien puede usarla: un enlace que lleva a un 404 no es una
+pista útil, es una pista de que hay algo ahí.
+
+Es una superficie de ejecución remota y por eso está acotada en cuatro puntos:
 `registry.py` (lista blanca de comandos y de sus opciones), `runner.py` (ejecución **en subproceso**,
-nunca dentro de la petición, por `ATOMIC_REQUESTS`) y `models.py::CommandRunModel` (traza de quién
-ejecutó qué). Sólo superusuarios; el guardia aborta con 404, no con 403.
+nunca dentro de la petición, por `ATOMIC_REQUESTS`), `models.py::CommandRunModel` (traza de quién
+ejecutó qué) y el guardia de `admin.py`. Sólo superusuarios; aborta con 404, no con 403.
 Al colgar del admin hereda además su puerta: hace falta segundo factor verificado (§6.7).
+
+Cuatro cosas al añadir un comando:
+
+- **La lista blanca es de programas, no de nombres de entrada.** `name` identifica la tarjeta
+  (va en la URL y en la auditoría) y `program` dice qué se ejecuta de verdad, que no siempre
+  coincide: `crontab_add` y `crontab_remove` son dos entradas del mismo `crontab` porque no
+  tienen el mismo riesgo ni la misma explicación.
+- **`fixed_args` es donde vive la seguridad de una entrada.** `--ff-only` en `git pull`,
+  `--check --dry-run` en `makemigrations`. Si fueran opciones se podrían desmarcar.
+- **Sólo hay dos ejecutables** (`EXEC_MANAGE`, `EXEC_GIT`) y están cerrados. Una ruta libre
+  haría que la lista blanca no acotara nada: bastaría con declarar `bash`.
+- **Todo texto lleva `pattern`.** Sin él, `runner.py` se niega a ejecutar: un campo de texto
+  sin patrón es una cadena libre en la línea de comandos.
+
+El docstring de `registry.py` enumera además lo que **no** está y por qué —`flush`, `dumpdata`,
+`shell`, `diffsettings`, `generate_certification_key`, `auditlogflush`…—; léelo antes de añadir
+nada, porque más de uno parece inofensivo hasta que se piensa dónde acaba su salida (en
+`CommandRunModel`, escrita en una tabla).
 
 ### G. Puntos de entrada que no son el navegador
 

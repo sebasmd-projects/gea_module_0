@@ -180,10 +180,7 @@ class VerificationFormTests(TestCase):
         self.summary = AegisSummaryModel.objects.create(title='Resumen')
 
     def post_identifier(self, identifier):
-        return self.client.post(self.url, {
-            'identifier': identifier,
-            'certificate_type': '',
-        })
+        return self.client.post(self.url, {'identifier': identifier})
 
     def test_a_summary_code_lands_on_the_summary_page(self):
         response = self.post_identifier(self.summary.public_code)
@@ -195,10 +192,11 @@ class VerificationFormTests(TestCase):
             ),
         )
 
-    def test_the_certificate_type_is_optional(self):
+    def test_no_certificate_type_is_needed(self):
         """
-        Era obligatorio, y elegir mal daba "no encontrado" con un codigo
-        valido. Quien tiene el papel delante no sabe de que tipo es.
+        Habia un desplegable obligatorio, y elegir mal daba "no encontrado"
+        con un codigo valido. Quien tiene el papel delante no sabe de que tipo
+        es, y el codigo ya identifica el documento el solo.
         """
         document = DocumentVerificationModel.objects.create(
             document_title='Documento',

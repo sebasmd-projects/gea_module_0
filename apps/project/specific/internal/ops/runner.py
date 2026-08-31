@@ -32,8 +32,8 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from .registry import (KIND_CHOICE, KIND_FLAG, KIND_NUMBER, KIND_TEXT,
-                       get_command)
+from .registry import (EXEC_DISPLAY, EXEC_GIT, EXEC_MANAGE, KIND_CHOICE,
+                       KIND_FLAG, KIND_NUMBER, KIND_TEXT, get_command)
 
 logger = logging.getLogger(__name__)
 
@@ -46,13 +46,41 @@ MAX_OUTPUT_CHARS = 200_000
 
 MANAGE_PY = Path(settings.BASE_DIR) / 'manage.py'
 
-#: Cuantos elementos del argv son el andamiaje (interprete, -X utf8,
-#: manage.py) y no forman parte de lo que el operador pidio.
-PREFIX_LENGTH = 4
+#: Cuantos elementos del argv son el andamiaje y no forman parte de lo que el
+#: operador pidio. Depende del binario, asi que se calcula al construirlo.
+MANAGE_PREFIX_LENGTH = 4
+GIT_PREFIX_LENGTH = 1
 
 
 class CommandNotAllowed(Exception):
     """Se pidio algo que no esta en la lista blanca."""
+
+
+def base_argv(command) -> tuple:
+    """
+    El andamiaje del comando, y cuanto de el no se le ensena al operador.
+
+    Solo hay dos binarios posibles y estan cerrados en el registro. No es una
+    ruta configurable a proposito: si una entrada pudiera nombrar cualquier
+    ejecutable, la lista blanca dejaria de acotar nada.
+
+    Returns:
+        tuple[list, int]: el prefijo del argv y cuantos elementos suyos se
+        quitan al imprimirlo.
+    """
+    if command.executable == EXEC_MANAGE:
+        return (
+            [sys.executable, '-X', 'utf8', str(MANAGE_PY),
+             command.program_name],
+            MANAGE_PREFIX_LENGTH,
+        )
+
+    if command.executable == EXEC_GIT:
+        # Sin ruta absoluta: se resuelve por PATH, como cualquier despliegue
+        # manual. `shell=False` sigue en pie, asi que no hay nada que escapar.
+        return (['git', command.program_name], GIT_PREFIX_LENGTH)
+
+    raise CommandNotAllowed(f'unknown executable: {command.executable}')
 
 
 def build_argv(command, values: dict) -> list:
@@ -62,10 +90,21 @@ def build_argv(command, values: dict) -> list:
     Cada valor pasa por el tipo que el comando declaro. Lo que no encaje se
     rechaza: aqui no se "limpia" nada para que cuele, se para.
 
+    Los posicionales van al final, en el orden en que se declararon, porque un
+    posicional depende del sitio que ocupa: ``sqlmigrate app 0003`` no es lo
+    mismo que ``sqlmigrate 0003 app``.
+
     Raises:
         ValidationError: si algun valor no encaja con lo declarado.
     """
-    argv = [sys.executable, '-X', 'utf8', str(MANAGE_PY), command.name]
+    argv, _prefix = base_argv(command)
+
+    # Lo que el operador no elige ni puede quitar. Va antes que nada suyo, y
+    # es donde se fija lo que hace segura a la entrada: `--ff-only` en el
+    # pull, `--check --dry-run` en makemigrations.
+    argv.extend(str(part) for part in command.fixed_args)
+
+    positionals = []
 
     for option in command.options:
         raw = values.get(option.name, None)
@@ -76,30 +115,31 @@ def build_argv(command, values: dict) -> list:
             continue
 
         if raw in (None, ''):
+            if option.required:
+                raise ValidationError(
+                    _('%(label)s is required.') % {'label': option.label}
+                )
             continue
 
         if option.kind == KIND_NUMBER:
             try:
-                number = int(raw)
+                value = str(int(raw))
             except (TypeError, ValueError):
                 raise ValidationError(
                     _('%(label)s must be a whole number.')
                     % {'label': option.label}
                 )
-            argv.extend([option.flag, str(number)])
-            continue
 
-        if option.kind == KIND_CHOICE:
+        elif option.kind == KIND_CHOICE:
             if str(raw) not in option.choices:
                 raise ValidationError(
                     _('%(label)s: "%(value)s" is not one of the allowed '
                       'values.') % {'label': option.label, 'value': raw}
                 )
-            argv.extend([option.flag, str(raw)])
-            continue
+            value = str(raw)
 
-        if option.kind == KIND_TEXT:
-            text = str(raw).strip()
+        elif option.kind == KIND_TEXT:
+            value = str(raw).strip()
 
             # Sin patron declarado no se acepta texto libre: seria la puerta
             # por la que entra cualquier cosa.
@@ -108,28 +148,49 @@ def build_argv(command, values: dict) -> list:
                     f'{command.name}.{option.name} has no pattern declared'
                 )
 
-            if not re.match(option.pattern, text):
+            if not re.match(option.pattern, value):
                 raise ValidationError(
                     _('%(label)s contains characters that are not allowed.')
                     % {'label': option.label}
                 )
 
-            argv.extend([option.flag, text])
-            continue
+        else:
+            raise CommandNotAllowed(f'unknown option kind: {option.kind}')
 
-        raise CommandNotAllowed(f'unknown option kind: {option.kind}')
+        if option.positional:
+            # Un posicional es el valor a secas; su `flag` solo da nombre al
+            # campo del formulario.
+            positionals.append(value)
+        else:
+            argv.extend([option.flag, value])
+
+    if positionals:
+        # `--` separa banderas de posicionales: sin el, un valor que empiece
+        # por guion se leeria como una opcion. Los patrones ya lo impiden,
+        # pero apoyarse solo en eso deja el argumento a merced de un patron
+        # mal escrito. Solo en manage.py: en git, `--` significa "lo que sigue
+        # es una ruta", que es otra cosa.
+        if command.executable == EXEC_MANAGE:
+            argv.append('--')
+
+        argv.extend(positionals)
 
     return argv
 
 
-def printable_argv(argv: list) -> str:
+def printable_argv(command, argv: list) -> str:
     """
-    La parte del argv que el operador reconoce.
+    La linea tal y como se escribiria a mano.
 
-    Se quita el interprete y la ruta de manage.py: lo util para auditar es
-    que se ejecuto, no donde vive el python de este servidor.
+    Se quita el interprete y la ruta absoluta de manage.py, y se pone en su
+    lugar el nombre corto: lo util para auditar es que se ejecuto, no donde
+    vive el python de este servidor. El nombre del programa si va -- sin el,
+    `git pull --ff-only` y `manage.py migrate` se leerian igual de sueltos.
     """
-    return ' '.join(argv[PREFIX_LENGTH:])
+    _base, prefix_length = base_argv(command)
+    display = EXEC_DISPLAY.get(command.executable, command.executable)
+
+    return ' '.join([display] + argv[prefix_length:])
 
 
 def _clip(text: str) -> str:
@@ -172,7 +233,7 @@ def run(name: str, values: dict) -> dict:
     environment.setdefault('PYTHONIOENCODING', 'utf-8')
     environment.setdefault('PYTHONUTF8', '1')
 
-    logger.info('Ops console running: %s', printable_argv(argv))
+    logger.info('Ops console running: %s', printable_argv(command, argv))
 
     started = time.monotonic()
     timed_out = False
@@ -213,8 +274,11 @@ def run(name: str, values: dict) -> dict:
     except FileNotFoundError:
         return {
             'argv': argv,
-            'printable': printable_argv(argv),
-            'output': _('manage.py could not be found. Check BASE_DIR.'),
+            'printable': printable_argv(command, argv),
+            'output': _(
+                'The program could not be found. For manage.py, check '
+                'BASE_DIR; for git, check that it is on the PATH.'
+            ),
             'exit_code': None,
             'duration': 0.0,
             'timed_out': False,
@@ -224,7 +288,7 @@ def run(name: str, values: dict) -> dict:
 
     return {
         'argv': argv,
-        'printable': printable_argv(argv),
+        'printable': printable_argv(command, argv),
         'output': _clip(output.strip()),
         'exit_code': exit_code,
         'duration': round(duration, 2),

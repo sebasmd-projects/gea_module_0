@@ -25,9 +25,9 @@ from django.utils.translation import gettext_lazy as _
 from apps.common.utils.admin import GeneralAdminModel
 
 from .models import CommandRunModel
-from .registry import (KIND_CHOICE, KIND_FLAG, KIND_NUMBER, RISK_DANGEROUS,
-                       RISK_LABELS, RISK_READ_ONLY, get_command,
-                       grouped_commands)
+from .registry import (KIND_CHOICE, KIND_FLAG, KIND_NUMBER, KIND_TEXT,
+                       RISK_DANGEROUS, RISK_LABELS, RISK_READ_ONLY,
+                       get_command, grouped_commands, risk_facets)
 from .runner import CommandNotAllowed, run
 
 RISK_COLORS = {
@@ -49,6 +49,10 @@ def _client_ip(request):
 @admin.register(CommandRunModel)
 class CommandRunModelAdmin(GeneralAdminModel):
     """Historial de ejecuciones, y la consola colgada de el."""
+
+    # El enlace a la consola vive en la barra de acciones de este listado: es
+    # su otra mitad, y quien llega a una casi siempre quiere la otra.
+    change_list_template = 'admin/ops/commandrunmodel_change_list.html'
 
     list_display = (
         'created', 'command', 'status_badge', 'exit_code',
@@ -137,6 +141,7 @@ class CommandRunModelAdmin(GeneralAdminModel):
             request,
             title=_('Operations console'),
             groups=grouped_commands(),
+            risk_facets=risk_facets(),
             risk_colors=RISK_COLORS,
             recent=CommandRunModel.objects.all()[:10],
         )
@@ -171,6 +176,7 @@ class CommandRunModelAdmin(GeneralAdminModel):
             flag_kind=KIND_FLAG,
             number_kind=KIND_NUMBER,
             choice_kind=KIND_CHOICE,
+            text_kind=KIND_TEXT,
             history=CommandRunModel.objects.filter(command=command.name)[:5],
             console_url=reverse('admin:ops_console'),
         )
