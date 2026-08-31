@@ -23,6 +23,34 @@ Tres reglas, y ninguna es negociable:
 
 El nivel de riesgo no es decorativo: la interfaz obliga a confirmar
 escribiendo el nombre del comando cuando es ``DANGEROUS``.
+
+Lo que NO esta aqui, y por que
+------------------------------
+La lista es larga a proposito, pero tiene fondo. Estos comandos existen en el
+servidor y **no** se exponen, cada uno por una razon concreta:
+
+* ``flush`` y ``sqlflush`` vacian la base de datos entera.
+* ``dumpdata`` la volcaria a una pagina web -- y la salida de la consola se
+  guarda en ``CommandRunModel``, asi que quedaria ademas escrita en una tabla.
+  ``loaddata`` es lo mismo al reves: inyectar registros arbitrarios.
+* ``shell`` y ``dbshell`` son ejecucion de codigo arbitrario. La lista blanca
+  no significaria nada con cualquiera de los dos dentro.
+* ``diffsettings`` imprime los ajustes, con ``SECRET_KEY``, la clave de la
+  base de datos y ``FIELD_ENCRYPTION_KEY``.
+* ``generate_certification_key`` y ``generate_encryption_key`` imprimen claves
+  privadas. Igual: la salida acabaria guardada en una tabla del propio panel.
+* ``createsuperuser`` y ``changepassword`` crean o cambian credenciales; el
+  segundo ademas necesita stdin, que aqui es ``DEVNULL``.
+* ``delete_migrations`` y ``rename_migrations`` borran o renombran ficheros de
+  todo el repositorio.
+* ``auditlogflush``, ``axes_reset_logs`` y ``axes_reset_failure_logs``
+  destruyen el rastro de auditoria.
+* ``two_factor_disable`` le quitaria el segundo factor a un usuario desde una
+  pagina que precisamente exige segundo factor para abrirse.
+* ``remove_stale_contenttypes`` borra en cascada permisos.
+
+Anadir cualquiera de ellos requiere escribirlo a mano aqui, y esa friccion es
+justo el punto.
 """
 
 from dataclasses import dataclass, field
@@ -45,6 +73,43 @@ RISK_LABELS = dict(RISK_CHOICES)
 
 RISK_ORDER = {RISK_READ_ONLY: 0, RISK_WRITES: 1, RISK_DANGEROUS: 2}
 
+# --- Que binario se ejecuta -------------------------------------------
+#
+# Dos, y cerrados. No es una ruta libre a proposito: si una entrada del
+# registro pudiera nombrar cualquier ejecutable, la lista blanca de comandos
+# dejaria de acotar nada -- bastaria con declarar `bash`.
+EXEC_MANAGE = 'manage'
+EXEC_GIT = 'git'
+
+#: Como se escribe cada uno cuando se le ensena al operador. La ruta real del
+#: interprete y de manage.py no aporta nada para auditar: lo util es que se
+#: ejecuto, no donde vive el python de este servidor.
+EXEC_DISPLAY = {
+    EXEC_MANAGE: 'manage.py',
+    EXEC_GIT: 'git',
+}
+
+# --- Areas, para agrupar y filtrar en la consola -----------------------
+AREA_DEPLOY = 'DEPLOY'
+AREA_DIAGNOSTICS = 'DIAGNOSTICS'
+AREA_CERTIFICATION = 'CERTIFICATION'
+AREA_SCHEDULED = 'SCHEDULED'
+AREA_ACCESS = 'ACCESS'
+AREA_MAINTENANCE = 'MAINTENANCE'
+
+AREA_CHOICES = (
+    (AREA_DEPLOY, _('Deploy')),
+    (AREA_DIAGNOSTICS, _('Diagnostics')),
+    (AREA_CERTIFICATION, _('Certification')),
+    (AREA_SCHEDULED, _('Scheduled tasks')),
+    (AREA_ACCESS, _('Access and blocks')),
+    (AREA_MAINTENANCE, _('Maintenance')),
+)
+
+AREA_LABELS = dict(AREA_CHOICES)
+
+AREA_ORDER = {area: index for index, (area, _label) in enumerate(AREA_CHOICES)}
+
 # --- Tipos de parametro ------------------------------------------------
 KIND_FLAG = 'flag'
 KIND_TEXT = 'text'
@@ -64,6 +129,11 @@ class Option:
     choices: tuple = ()
     #: Para ``KIND_TEXT``: solo se aceptan valores que casen con esto.
     pattern: str = ''
+    #: Va suelto al final, sin bandera delante (``findstatic css/x.css``).
+    #: ``flag`` pasa a ser solo el nombre del campo en el formulario.
+    positional: bool = False
+    #: Sin el, el comando no se puede lanzar.
+    required: bool = False
 
     @property
     def name(self) -> str:
@@ -83,15 +153,61 @@ class Command:
     #: Un caso real de cuando se usa.
     example: str
     risk: str = RISK_READ_ONLY
+    area: str = AREA_DIAGNOSTICS
     options: List[Option] = field(default_factory=list)
     #: Segundos antes de cortarlo. La peticion HTTP espera, no hay cola.
     timeout: int = 120
     #: Texto de aviso extra que se pinta en rojo antes de ejecutar.
     warning: str = ''
+    #: Que binario lo ejecuta: ``manage.py`` o ``git``.
+    executable: str = EXEC_MANAGE
+    #: Lo que se ejecuta de verdad, si no coincide con ``name``.
+    #:
+    #: ``name`` identifica la **entrada** del registro -- va en la URL y en el
+    #: registro de auditoria -- y hay entradas distintas para el mismo comando:
+    #: ``crontab add`` y ``crontab remove`` no tienen el mismo riesgo ni la
+    #: misma explicacion, asi que no pueden ser una sola tarjeta con un
+    #: desplegable.
+    program: str = ''
+    #: Argumentos que el operador no elige ni puede quitar.
+    #:
+    #: Es donde se fija lo que hace segura a una entrada: ``--ff-only`` en el
+    #: pull, ``--check --dry-run`` en makemigrations. Si fueran opciones, se
+    #: podrian desmarcar.
+    fixed_args: tuple = ()
+
+    @property
+    def program_name(self) -> str:
+        return self.program or self.name
+
+    @property
+    def display_line(self) -> str:
+        """La invocacion tal y como se escribiria a mano, sin las opciones."""
+        parts = [EXEC_DISPLAY.get(self.executable, self.executable),
+                 self.program_name]
+        parts.extend(str(part) for part in self.fixed_args)
+
+        return ' '.join(parts)
 
     @property
     def needs_confirmation(self) -> bool:
         return self.risk == RISK_DANGEROUS
+
+    @property
+    def area_label(self):
+        return AREA_LABELS.get(self.area, self.area)
+
+    @property
+    def risk_label(self):
+        return RISK_LABELS.get(self.risk, self.risk)
+
+    @property
+    def search_text(self) -> str:
+        """Lo que mira el buscador de la consola."""
+        return ' '.join(str(part) for part in (
+            self.name, self.program_name, self.title,
+            self.summary, self.detail, self.example, self.area_label,
+        )).lower()
 
     def option(self, name: str) -> Optional[Option]:
         for option in self.options:
@@ -101,6 +217,159 @@ class Command:
 
 
 COMMANDS = (
+    # ---------------------------------------------------------------
+    # Despliegue: el codigo que hay en el servidor.
+    # ---------------------------------------------------------------
+    Command(
+        name='git_status',
+        title=_('Working tree state'),
+        summary=_('Shows which branch is deployed and whether anything was '
+                  'edited on the server.'),
+        detail=_(
+            'The question to answer before pulling. A file edited directly on '
+            'the server stops the pull, and finding that out from the error '
+            'message is the slow way. It also says how many commits behind '
+            'the branch is, which is how you know whether a deploy is even '
+            'needed.'
+        ),
+        example=_('Before every deploy, and when a fix does not seem to have '
+                  'landed.'),
+        risk=RISK_READ_ONLY,
+        area=AREA_DEPLOY,
+        executable=EXEC_GIT,
+        program='status',
+        fixed_args=('--short', '--branch'),
+        timeout=60,
+    ),
+    Command(
+        name='git_log',
+        title=_('Deployed commits'),
+        summary=_('Lists the last commits of the deployed code.'),
+        detail=_(
+            'What is actually running on this server, which is not always '
+            'what was merged. If a change is missing here, the deploy did not '
+            'happen — no need to go looking for the bug anywhere else.'
+        ),
+        example=_('To confirm a merged fix really reached production.'),
+        risk=RISK_READ_ONLY,
+        area=AREA_DEPLOY,
+        executable=EXEC_GIT,
+        program='log',
+        fixed_args=('--oneline', '--decorate', '-n', '20'),
+        timeout=60,
+    ),
+    Command(
+        name='git_pull',
+        title=_('Pull the latest code'),
+        summary=_('Brings down what was merged, without ever creating a merge '
+                  'commit.'),
+        detail=_(
+            'It runs with --ff-only, and that is the whole safety of it: if '
+            'the server cannot fast-forward — because something was edited '
+            'here, or the branch diverged — it stops and changes nothing, '
+            'instead of leaving a merge commit on a production checkout that '
+            'nobody will review. Check the working tree state first if it '
+            'refuses. Pulling is not deploying: code that changes models '
+            'needs migrations, and code that changes CSS or JS needs the '
+            'static files collected. Neither happens on its own.'
+        ),
+        example=_('After merging to master, to bring the change to the '
+                  'server.'),
+        risk=RISK_WRITES,
+        area=AREA_DEPLOY,
+        executable=EXEC_GIT,
+        program='pull',
+        fixed_args=('--ff-only',),
+        timeout=300,
+        warning=_(
+            'This changes the running code. Right afterwards: apply '
+            'migrations and collect static files, or the site will be serving '
+            'new code against an old database and old assets.'
+        ),
+    ),
+    Command(
+        name='makemigrations_check',
+        title=_('Pending model changes'),
+        summary=_('Says whether a model was changed without writing its '
+                  'migration.'),
+        detail=_(
+            'It runs with --check --dry-run, so it writes nothing: it only '
+            'answers yes or no. A model changed without its migration is a '
+            'failure that shows up far from its cause — the code deploys '
+            'fine and the database breaks on the first query that touches the '
+            'new field.'
+        ),
+        example=_('Before deploying, together with the migration state.'),
+        risk=RISK_READ_ONLY,
+        area=AREA_DEPLOY,
+        program='makemigrations',
+        fixed_args=('--check', '--dry-run'),
+        timeout=120,
+    ),
+    Command(
+        name='sqlmigrate',
+        title=_('SQL of a migration'),
+        summary=_('Shows the SQL a migration would run, without running it.'),
+        detail=_(
+            'The way to know what a migration is going to do before it does '
+            'it — whether it rewrites a table, whether it locks it, whether '
+            'it drops a column. Reading it takes a minute; undoing a '
+            'migration on a live database does not.'
+        ),
+        example=_('Before applying a migration on a table with a lot of '
+                  'rows.'),
+        risk=RISK_READ_ONLY,
+        area=AREA_DEPLOY,
+        options=[
+            Option(
+                flag='app_label',
+                label=_('App'),
+                kind=KIND_TEXT,
+                positional=True,
+                required=True,
+                help=_('Label of the app, as it appears in the migration '
+                       'state (for example: buyers).'),
+                pattern=r'^[a-z][a-z0-9_]{0,60}$',
+            ),
+            Option(
+                flag='migration_name',
+                label=_('Migration'),
+                kind=KIND_TEXT,
+                positional=True,
+                required=True,
+                help=_('Its number or full name, for example 0012.'),
+                pattern=r'^[A-Za-z0-9_]{1,120}$',
+            ),
+        ],
+        timeout=120,
+    ),
+    Command(
+        name='compress',
+        title=_('Precompile CSS and JS bundles'),
+        summary=_('Builds the compressed bundles django-compressor serves in '
+                  'production.'),
+        detail=_(
+            'With offline compression on, the bundles are not built when a '
+            'page is requested: they have to exist beforehand. If they are '
+            'missing or stale, pages fail with "you have offline compression '
+            'enabled but key is missing". Run it after collecting the static '
+            'files, not before.'
+        ),
+        example=_('After a deploy that touched CSS or JS.'),
+        risk=RISK_WRITES,
+        area=AREA_DEPLOY,
+        options=[
+            Option(
+                flag='--force',
+                label=_('Rebuild everything'),
+                kind=KIND_FLAG,
+                help=_('Rebuilds even what looks up to date. Slower, and the '
+                       'answer when something stale is being served.'),
+            ),
+        ],
+        timeout=600,
+    ),
+
     # ---------------------------------------------------------------
     # Diagnostico: no tocan nada.
     # ---------------------------------------------------------------
@@ -115,6 +384,7 @@ COMMANDS = (
         ),
         example=_('After changing settings.py, to confirm nothing broke.'),
         risk=RISK_READ_ONLY,
+        area=AREA_DIAGNOSTICS,
         options=[
             Option(
                 flag='--deploy',
@@ -145,6 +415,7 @@ COMMANDS = (
         ),
         example=_('After moving the media folder, or after a deploy.'),
         risk=RISK_READ_ONLY,
+        area=AREA_DIAGNOSTICS,
         options=[
             Option(
                 flag='--sample',
@@ -190,6 +461,7 @@ COMMANDS = (
         ),
         example=_('Monthly, and after any migration of the media folder.'),
         risk=RISK_READ_ONLY,
+        area=AREA_CERTIFICATION,
         timeout=300,
     ),
     Command(
@@ -212,6 +484,7 @@ COMMANDS = (
         example=_('After pointing REDIS_URL at the VPS, and when rate limits '
                   'seem not to apply.'),
         risk=RISK_READ_ONLY,
+        area=AREA_DIAGNOSTICS,
         timeout=90,
     ),
     Command(
@@ -233,6 +506,7 @@ COMMANDS = (
         ),
         example=_('Before deciding whether Celery is worth adopting here.'),
         risk=RISK_READ_ONLY,
+        area=AREA_DIAGNOSTICS,
         timeout=120,
         options=[
             Option(
@@ -280,6 +554,7 @@ COMMANDS = (
         ),
         example=_('When something that should run on its own has not run.'),
         risk=RISK_READ_ONLY,
+        area=AREA_SCHEDULED,
         timeout=60,
     ),
     Command(
@@ -299,6 +574,7 @@ COMMANDS = (
         ),
         example=_('When an anchor has been waiting longer than a few hours.'),
         risk=RISK_WRITES,
+        area=AREA_CERTIFICATION,
         timeout=180,
     ),
     Command(
@@ -320,6 +596,7 @@ COMMANDS = (
         ),
         example=_('Before every deploy, and after adding any dependency.'),
         risk=RISK_READ_ONLY,
+        area=AREA_DEPLOY,
         timeout=60,
     ),
     Command(
@@ -341,6 +618,7 @@ COMMANDS = (
         ),
         example=_('When sealing reports that sending to the blockchain failed.'),
         risk=RISK_READ_ONLY,
+        area=AREA_CERTIFICATION,
         timeout=120,
         options=[
             Option(
@@ -380,6 +658,7 @@ COMMANDS = (
         ),
         example=_('Every time COMMON_ATTACK_TERMS changes.'),
         risk=RISK_READ_ONLY,
+        area=AREA_ACCESS,
         timeout=90,
     ),
     Command(
@@ -392,6 +671,7 @@ COMMANDS = (
         ),
         example=_('Right after deploying, before running migrate.'),
         risk=RISK_READ_ONLY,
+        area=AREA_DEPLOY,
         options=[
             Option(
                 flag='--plan',
@@ -416,6 +696,7 @@ COMMANDS = (
         ),
         example=_('After deploying code that adds fields or constraints.'),
         risk=RISK_WRITES,
+        area=AREA_DEPLOY,
         options=[
             Option(
                 flag='--noinput',
@@ -442,6 +723,7 @@ COMMANDS = (
         ),
         example=_('After every deploy that touches CSS or JS.'),
         risk=RISK_WRITES,
+        area=AREA_DEPLOY,
         options=[
             Option(
                 flag='--noinput',
@@ -473,6 +755,7 @@ COMMANDS = (
         ),
         example=_('After translating with Rosetta or editing a .po by hand.'),
         risk=RISK_WRITES,
+        area=AREA_MAINTENANCE,
         options=[
             Option(
                 flag='--locale',
@@ -496,11 +779,338 @@ COMMANDS = (
         ),
         example=_('After changing data that a page keeps cached.'),
         risk=RISK_WRITES,
+        area=AREA_MAINTENANCE,
         timeout=60,
         warning=_(
             'It resets the public OTP rate limits. Do not run it while '
             'someone is hammering the verification page.'
         ),
+    ),
+    Command(
+        name='check_health',
+        title=_('Health check'),
+        summary=_('Checks the database, the cache and the mail server, from '
+                  'inside and from outside.'),
+        detail=_(
+            'The two ways of asking do not answer the same thing, and telling '
+            'them apart is the whole point. Asked from inside, it says '
+            'whether the application reaches the database, Redis and the mail '
+            'server. Asked over HTTP, it also crosses the web server, the '
+            'certificate and the DNS. If the local one passes and the HTTP '
+            'one does not, the problem is in front of the application and '
+            'there is nothing to look for in the code. It is the same URL the '
+            'warm-up task hits every three minutes.'
+        ),
+        example=_('Right after a deploy, and whenever the site feels broken '
+                  'without an obvious error.'),
+        risk=RISK_READ_ONLY,
+        area=AREA_DIAGNOSTICS,
+        options=[
+            Option(
+                flag='--http',
+                label=_('Ask over HTTP'),
+                kind=KIND_FLAG,
+                help=_('Requests the real public URL instead of checking '
+                       'inside this process.'),
+            ),
+        ],
+        timeout=90,
+    ),
+    Command(
+        name='show_log',
+        title=_('Application log'),
+        summary=_('Shows the last lines of the log without opening a '
+                  'terminal.'),
+        detail=_(
+            'Reading the log was the last thing that still forced an SSH '
+            'session, and it is the first thing needed when something fails. '
+            'It reads from the end and never loads the whole file. Ask for '
+            'few lines and filter: a log carries traces, paths, IP addresses '
+            'and sometimes email addresses, and whatever is shown here is '
+            'also written into the run history of this very console.'
+        ),
+        example=_('A page returned a 500 and there is no other clue.'),
+        risk=RISK_READ_ONLY,
+        area=AREA_DIAGNOSTICS,
+        options=[
+            Option(
+                flag='--list',
+                label=_('Only list the files'),
+                kind=KIND_FLAG,
+                help=_('Shows the current log and the rotated ones with '
+                       'their size, without printing any content.'),
+            ),
+            Option(
+                flag='--lines',
+                label=_('Lines'),
+                kind=KIND_NUMBER,
+                default=100,
+                help=_('How many lines from the end. The maximum is 2000.'),
+            ),
+            Option(
+                flag='--contains',
+                label=_('Containing'),
+                kind=KIND_TEXT,
+                help=_('Only lines carrying this text. Literal, not a regular '
+                       'expression.'),
+                pattern=r'^[\w .:,;/@\-\[\]()=]{1,80}$',
+            ),
+            Option(
+                flag='--rotated',
+                label=_('Rotated number'),
+                kind=KIND_NUMBER,
+                help=_('Read stderr_old_N.log instead of the current one. '
+                       'Leave it empty for the current log.'),
+            ),
+        ],
+        timeout=90,
+    ),
+    Command(
+        name='rotate_logs',
+        title=_('Rotate the log'),
+        summary=_('Renames the log to stderr_old_N.log when it grows past its '
+                  'size, and drops the oldest ones.'),
+        detail=_(
+            'It does nothing unless the file has passed the limit, so running '
+            'it costs one stat. That is why it is scheduled hourly rather '
+            'than weekly: with a weekly check, one bad day leaves the file at '
+            'tens of megabytes before anyone looks, and the limit means '
+            'nothing. It also keeps only the last few rotated files, because '
+            'the disk here is a fixed quota and a log with no ceiling fills '
+            'it — and when that happens every other write fails too, not just '
+            'the log. The numbering continues from whatever is already there '
+            'instead of starting over, so a file someone referred to in an '
+            'email keeps its name.'
+        ),
+        example=_('It runs on its own every hour; by hand only to force it.'),
+        risk=RISK_WRITES,
+        area=AREA_MAINTENANCE,
+        options=[
+            Option(
+                flag='--force',
+                label=_('Rotate now'),
+                kind=KIND_FLAG,
+                help=_('Rotates even if it has not reached the size.'),
+            ),
+            Option(
+                flag='--max-mb',
+                label=_('Size in MB'),
+                kind=KIND_NUMBER,
+                default=3,
+                help=_('Rotate from this size on.'),
+            ),
+            Option(
+                flag='--keep',
+                label=_('Rotated files to keep'),
+                kind=KIND_NUMBER,
+                default=10,
+                help=_('The older ones are deleted. 0 keeps them all, and '
+                       'fills the disk sooner or later.'),
+            ),
+        ],
+        timeout=120,
+    ),
+    Command(
+        name='findstatic',
+        title=_('Locate a static file'),
+        summary=_('Says which folder a CSS, JS or image file is really being '
+                  'served from.'),
+        detail=_(
+            'When a page looks broken after a deploy, the question is whether '
+            'the file was collected at all and which copy won. This answers '
+            'both: it lists every place the file appears, in the order Django '
+            'searches them.'
+        ),
+        example=_('A stylesheet 404s, or a change to it does not show up.'),
+        risk=RISK_READ_ONLY,
+        area=AREA_DIAGNOSTICS,
+        options=[
+            Option(
+                flag='staticfile',
+                label=_('Path of the file'),
+                kind=KIND_TEXT,
+                positional=True,
+                required=True,
+                help=_('Relative to the static folder, for example '
+                       'css/aegis_header.css.'),
+                pattern=r'^[A-Za-z0-9/_.\-]{1,200}$',
+            ),
+            Option(
+                flag='--first',
+                label=_('Only the winning copy'),
+                kind=KIND_FLAG,
+                help=_('Stops at the first match, which is the one actually '
+                       'served.'),
+            ),
+        ],
+        timeout=90,
+    ),
+    Command(
+        name='crontab_show',
+        title=_('Installed scheduled lines'),
+        summary=_('Lists the lines django-crontab has written into the '
+                  'crontab.'),
+        detail=_(
+            'What is really installed, as opposed to what CRONJOBS declares. '
+            'The two drift apart on their own: the installed line carries a '
+            'hash of the whole job definition, so changing a schedule leaves '
+            'the old line pointing at a job that no longer exists. Read it '
+            'alongside the scheduled-tasks check, which compares the two.'
+        ),
+        example=_('When something that should run on its own has not run.'),
+        risk=RISK_READ_ONLY,
+        area=AREA_SCHEDULED,
+        program='crontab',
+        fixed_args=('show',),
+        timeout=60,
+    ),
+    Command(
+        name='crontab_add',
+        title=_('Install the scheduled tasks'),
+        summary=_('Writes every job declared in CRONJOBS into the crontab.'),
+        detail=_(
+            'Declaring a task in settings schedules nothing until this runs. '
+            'It is also the fix when a schedule changed: it is safe to run '
+            'repeatedly, because django-crontab removes its own lines before '
+            'writing them again — it never touches lines it did not write.'
+        ),
+        example=_('After deploying a change to CRONJOBS, or when the '
+                  'scheduled-tasks check reports nothing installed.'),
+        risk=RISK_WRITES,
+        area=AREA_SCHEDULED,
+        program='crontab',
+        fixed_args=('add',),
+        timeout=90,
+        warning=_(
+            'It rewrites this account crontab lines for this project. Run the '
+            'scheduled-tasks check afterwards to confirm what ended up there.'
+        ),
+    ),
+    Command(
+        name='crontab_remove',
+        title=_('Uninstall the scheduled tasks'),
+        summary=_('Removes this project lines from the crontab.'),
+        detail=_(
+            'Nothing scheduled runs after this: anchors stop maturing, the '
+            'daily code stops being issued. It is half of the repair when a '
+            'schedule changed — remove, then install — and on its own it is '
+            'only for taking the platform out of service.'
+        ),
+        example=_('Before reinstalling the tasks after changing a schedule.'),
+        risk=RISK_DANGEROUS,
+        area=AREA_SCHEDULED,
+        program='crontab',
+        fixed_args=('remove',),
+        timeout=90,
+        warning=_(
+            'Nothing runs on its own until the tasks are installed again.'
+        ),
+    ),
+    Command(
+        name='axes_list_attempts',
+        title=_('Failed login attempts'),
+        summary=_('Lists the login failures axes is counting right now.'),
+        detail=_(
+            'Where to look when someone says they cannot log in. It tells a '
+            'lockout apart from a wrong password, which look identical from '
+            'the outside. Note that a lockout is per (IP, user) pair, so the '
+            'same person can be locked out from the office and get in from '
+            'their phone.'
+        ),
+        example=_('A user reports that their password stopped working.'),
+        risk=RISK_READ_ONLY,
+        area=AREA_ACCESS,
+        timeout=60,
+    ),
+    Command(
+        name='axes_reset_ip',
+        title=_('Unlock an IP'),
+        summary=_('Clears the login lockout for one IP address.'),
+        detail=_(
+            'The surgical fix when a real user is locked out: it frees that '
+            'address and nobody else. This is about the login lockout, which '
+            'is a different thing from the anti-scan IP block — that one is '
+            'undone from the blocked-IP table or the whitelist, and shows up '
+            'as a plain 404 rather than a login error.'
+        ),
+        example=_('An office got locked out after several typed passwords.'),
+        risk=RISK_WRITES,
+        area=AREA_ACCESS,
+        options=[
+            Option(
+                flag='ip',
+                label=_('IP address'),
+                kind=KIND_TEXT,
+                positional=True,
+                required=True,
+                help=_('The one showing in the failed attempts.'),
+                pattern=r'^[0-9a-fA-F.:]{3,45}$',
+            ),
+        ],
+        timeout=60,
+    ),
+    Command(
+        name='axes_reset',
+        title=_('Unlock every login'),
+        summary=_('Clears all login lockouts at once.'),
+        detail=_(
+            'It frees everyone, an attacker in the middle of guessing '
+            'passwords included. Prefer unlocking a single IP: this one is '
+            'for when the lockout is clearly the platform own fault and '
+            'several people are stuck.'
+        ),
+        example=_('After a change that locked out legitimate users in bulk.'),
+        risk=RISK_DANGEROUS,
+        area=AREA_ACCESS,
+        timeout=60,
+        warning=_(
+            'It also resets the counter of anyone currently guessing '
+            'passwords.'
+        ),
+    ),
+    Command(
+        name='clearsessions',
+        title=_('Expired sessions'),
+        summary=_('Deletes sessions that already expired.'),
+        detail=_(
+            'Django never cleans up the session table on its own, so it only '
+            'grows. It removes nothing that is still valid: nobody gets '
+            'logged out by running this.'
+        ),
+        example=_('Housekeeping, when the session table has grown a lot.'),
+        risk=RISK_WRITES,
+        area=AREA_MAINTENANCE,
+        timeout=300,
+    ),
+    Command(
+        name='sendtestemail',
+        title=_('Send a test email'),
+        summary=_('Sends one message to check the mail settings really work.'),
+        detail=_(
+            'Email fails silently more often than anything else here, and it '
+            'fails where it hurts: the OTP of the public verification, the '
+            'password recovery link, the daily code, the service order. This '
+            'separates a bad configuration from a message that left and was '
+            'filtered — if it arrives, the platform did its part.'
+        ),
+        example=_('After changing the mail settings, or when OTPs are not '
+                  'arriving.'),
+        risk=RISK_WRITES,
+        area=AREA_MAINTENANCE,
+        options=[
+            Option(
+                flag='email',
+                label=_('Recipient'),
+                kind=KIND_TEXT,
+                positional=True,
+                required=True,
+                help=_('An address you can actually check.'),
+                pattern=r'^[A-Za-z0-9._%+\-]{1,64}@[A-Za-z0-9.\-]{1,190}'
+                        r'\.[A-Za-z]{2,20}$',
+            ),
+        ],
+        timeout=120,
+        warning=_('This sends real email.'),
     ),
     Command(
         name='generate_gea_code',
@@ -512,6 +1122,7 @@ COMMANDS = (
         ),
         example=_('The cron did not run and the code for today is missing.'),
         risk=RISK_WRITES,
+        area=AREA_SCHEDULED,
         timeout=180,
         warning=_('This sends real email to the configured recipients.'),
     ),
@@ -530,6 +1141,7 @@ COMMANDS = (
         ),
         example=_('Right before applying a risky migration.'),
         risk=RISK_DANGEROUS,
+        area=AREA_MAINTENANCE,
         options=[
             Option(
                 flag='-o',
@@ -550,6 +1162,11 @@ COMMANDS = (
 
 COMMANDS_BY_NAME = {command.name: command for command in COMMANDS}
 
+# Un nombre duplicado dejaria una entrada inalcanzable desde su URL, en
+# silencio. Con varias entradas apuntando al mismo programa (`crontab add` y
+# `crontab remove`) eso es facil de provocar con un copiar y pegar.
+assert len(COMMANDS_BY_NAME) == len(COMMANDS), 'duplicate command name'
+
 
 def get_command(name: str) -> Optional[Command]:
     """El comando permitido con ese nombre, o ``None`` si no esta en la lista."""
@@ -557,13 +1174,34 @@ def get_command(name: str) -> Optional[Command]:
 
 
 def grouped_commands():
-    """Los comandos agrupados por riesgo, de menos a mas."""
+    """
+    Los comandos agrupados por area, en el orden de ``AREA_CHOICES``.
+
+    Antes se agrupaban por riesgo, que es la unica dimension que habia. Con la
+    lista corta funcionaba; con esta ya no: nadie llega a la consola pensando
+    "quiero algo que escriba", llega pensando "voy a desplegar" o "no llega el
+    correo". El riesgo sigue estando en cada tarjeta -- y se puede filtrar por
+    el -- pero como aviso, que es lo que es.
+    """
     groups = {}
 
     for command in COMMANDS:
-        groups.setdefault(command.risk, []).append(command)
+        groups.setdefault(command.area, []).append(command)
 
     return [
-        (risk, RISK_LABELS[risk], groups.get(risk, []))
-        for risk in sorted(groups, key=lambda r: RISK_ORDER.get(r, 99))
+        (area, AREA_LABELS[area], groups[area])
+        for area in sorted(groups, key=lambda a: AREA_ORDER.get(a, 99))
+    ]
+
+
+def risk_facets():
+    """Los riesgos presentes, con cuantos comandos hay de cada uno."""
+    counts = {}
+
+    for command in COMMANDS:
+        counts[command.risk] = counts.get(command.risk, 0) + 1
+
+    return [
+        (risk, RISK_LABELS[risk], counts[risk])
+        for risk in sorted(counts, key=lambda r: RISK_ORDER.get(r, 99))
     ]

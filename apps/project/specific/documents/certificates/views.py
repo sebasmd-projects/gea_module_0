@@ -297,7 +297,6 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
 
     def form_valid(self, form):
         identifier = form.cleaned_data['identifier']
-        cert_type = form.cleaned_data['certificate_type']
 
         # El formulario es un oraculo: dice si un codigo existe, y los codigos
         # son cortos. Sin tope, probarlos todos es cuestion de tiempo de CPU
@@ -317,7 +316,7 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
         # saberlo. Antes solo se miraba la tabla de documentos, asi que el
         # codigo de un resumen --correcto, y en el papel que el usuario tenia
         # delante-- respondia "Document not found".
-        kind, found = resolve_identifier(identifier, cert_type)
+        kind, found = resolve_identifier(identifier)
 
         if found is None:
             if self.request.user.is_authenticated:

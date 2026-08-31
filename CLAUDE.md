@@ -352,17 +352,40 @@ geometría de `pdf_stamp.py`. Si cambias el posicionamiento en Python, actualiza
 
 App sin rutas propias: `urls.py` está vacío a propósito y las páginas cuelgan del admin
 (`admin:ops_console`, `admin:ops_command`, en `ops/admin.py::get_urls`, plantillas en `templates/admin/ops/`).
-Es una superficie de ejecución remota y por eso está acotada en tres puntos:
+Se llega desde el índice del panel y desde el listado de ejecuciones; la entrada del índice la
+inyecta `GeaAdminSite.get_app_list()`, porque la consola no es un modelo y el admin sólo lista
+lo registrado. Sólo se le muestra a quien puede usarla: un enlace que lleva a un 404 no es una
+pista útil, es una pista de que hay algo ahí.
+
+Es una superficie de ejecución remota y por eso está acotada en cuatro puntos:
 `registry.py` (lista blanca de comandos y de sus opciones), `runner.py` (ejecución **en subproceso**,
-nunca dentro de la petición, por `ATOMIC_REQUESTS`) y `models.py::CommandRunModel` (traza de quién
-ejecutó qué). Sólo superusuarios; el guardia aborta con 404, no con 403.
+nunca dentro de la petición, por `ATOMIC_REQUESTS`), `models.py::CommandRunModel` (traza de quién
+ejecutó qué) y el guardia de `admin.py`. Sólo superusuarios; aborta con 404, no con 403.
 Al colgar del admin hereda además su puerta: hace falta segundo factor verificado (§6.7).
+
+Cuatro cosas al añadir un comando:
+
+- **La lista blanca es de programas, no de nombres de entrada.** `name` identifica la tarjeta
+  (va en la URL y en la auditoría) y `program` dice qué se ejecuta de verdad, que no siempre
+  coincide: `crontab_add` y `crontab_remove` son dos entradas del mismo `crontab` porque no
+  tienen el mismo riesgo ni la misma explicación.
+- **`fixed_args` es donde vive la seguridad de una entrada.** `--ff-only` en `git pull`,
+  `--check --dry-run` en `makemigrations`. Si fueran opciones se podrían desmarcar.
+- **Sólo hay dos ejecutables** (`EXEC_MANAGE`, `EXEC_GIT`) y están cerrados. Una ruta libre
+  haría que la lista blanca no acotara nada: bastaría con declarar `bash`.
+- **Todo texto lleva `pattern`.** Sin él, `runner.py` se niega a ejecutar: un campo de texto
+  sin patrón es una cadena libre en la línea de comandos.
+
+El docstring de `registry.py` enumera además lo que **no** está y por qué —`flush`, `dumpdata`,
+`shell`, `diffsettings`, `generate_certification_key`, `auditlogflush`…—; léelo antes de añadir
+nada, porque más de uno parece inofensivo hasta que se piensa dónde acaba su salida (en
+`CommandRunModel`, escrita en una tabla).
 
 ### G. Puntos de entrada que no son el navegador
 
 | Entrada | Dónde |
 |---|---|
-| Crons (`django-crontab`) | `settings.CRONJOBS`: `upgrade_ots_anchors` cada 15 min (sin pendientes no sale a la red), código diario 19:00, warm-up cada 3 min |
+| Crons (`django-crontab`) | `settings.CRONJOBS`: `upgrade_ots_anchors` cada 15 min (sin pendientes no sale a la red), código diario 19:00, warm-up cada 3 min, `rotate_logs` cada hora (sin llegar al tope es un `stat`) |
 | Comandos propios | `apps/common/utils/management/commands/` y `code_gen/management/commands/`, `certificates/management/commands/check_certifications.py` |
 | Acciones del admin | «Certify» de `certificates/admin.py`; sellado y anclaje de resúmenes |
 | Endpoints JSON internos | `code_gen/api.py` (disposiciones, miembros del resumen, símbolos de vista previa) |
@@ -476,7 +499,7 @@ Sin build ni SPA. Plantillas Django + Bootstrap 5 por CDN; `templates/raw.html` 
 | **Llamadas a OpenAI en señales `pre_save`** | La traducción automática de activos y ofertas ocurre **de forma síncrona dentro del guardado** (timeout 20 s). Un fallo o lentitud de la API se traduce en peticiones lentas. No hay cola de tareas. |
 | **`ffmpeg` como dependencia del sistema** | `video_masonry` invoca `ffmpeg` por `subprocess` para quitar el audio de los vídeos. Si no está en el `PATH`, la subida falla. |
 | **`ATOMIC_REQUESTS = True`** | Cada petición es una transacción. Cuidado con operaciones largas (PDF, OpenAI, email) dentro de vistas. |
-| **`logging.basicConfig` a `stderr.log`** | Configurado en `settings.py`, sin rotación. |
+| **Rotar el log exige `WatchedFileHandler`** | Rotar es renombrar, y en Linux renombrar no toca a quien ya tiene el fichero abierto: el descriptor sigue apuntando al mismo inodo. Con varios workers y un `FileHandler` normal, tras rotar **todos siguen escribiendo en `stderr_old_N.log`**, el `stderr.log` nuevo no llega a crearse y el «viejo» es el que crece — sin error y sin aviso. `WatchedFileHandler` reabre cuando detecta el renombrado; es lo que sostiene `rotate_logs`. Tampoco vale `RotatingFileHandler`: rota el proceso que escribe, y aquí hay varios. Ver `apps/common/utils/logs.py`. |
 | **Ajustes definidos y nunca leídos** | `MIDDLEWARE_NOT_INCLUDE`, `ADMIN_DELETE_PERMISSION` y `ADMIN_ADD_PERMISSION` se declaran en `settings.py` pero no los consume nadie. No asumas que hacen algo. (`UTILS_DATA_PATH` sí se usa, solo en `delete_migrations`.) |
 
 ---

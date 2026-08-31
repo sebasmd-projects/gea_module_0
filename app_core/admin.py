@@ -36,15 +36,19 @@ en ``app_core/apps.py`` -- y no una instancia nueva de ``AdminSite``: asi
 ``@admin.register`` del proyecto se entera del cambio.
 """
 
+import logging
 from functools import update_wrapper
 
 from django.contrib.admin import AdminSite
 from django.http import Http404
 from django.shortcuts import redirect
-from django.urls import reverse
+from django.urls import NoReverseMatch, reverse
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from two_factor.admin import AdminSiteOTPRequiredMixin
+
+logger = logging.getLogger(__name__)
 
 
 class GeaAdminSite(AdminSiteOTPRequiredMixin, AdminSite):
@@ -107,6 +111,57 @@ class GeaAdminSite(AdminSiteOTPRequiredMixin, AdminSite):
             inner = csrf_protect(inner)
 
         return update_wrapper(inner, view)
+
+    def get_app_list(self, request, app_label=None):
+        """
+        El listado del panel, con la consola de operaciones dentro.
+
+        La consola no es un modelo, asi que no aparecia por si sola: el admin
+        solo lista lo registrado, y sus paginas cuelgan de ``get_urls`` de
+        ``CommandRunModelAdmin``. Se llegaba escribiendo la URL a mano, que es
+        tanto como no tenerla -- una herramienta que hay que recordar de
+        memoria no la usa nadie, y su ausencia del menu hacia pensar que no
+        existia.
+
+        Va junto al historial de ejecuciones, que es su otra mitad: la consola
+        lanza, el historial dice que se lanzo.
+        """
+        app_list = super().get_app_list(request, app_label)
+
+        if not (request.user.is_active and request.user.is_superuser):
+            return app_list
+
+        try:
+            console_url = reverse('admin:ops_console', current_app=self.name)
+        except NoReverseMatch:
+            # La app de operaciones puede no estar instalada. No es motivo
+            # para tumbar el panel entero.
+            logger.debug('The operations console is not installed')
+            return app_list
+
+        for app in app_list:
+            models = app.get('models') or []
+
+            for entry in models:
+                if entry.get('object_name') != 'CommandRunModel':
+                    continue
+
+                if any(m.get('admin_url') == console_url for m in models):
+                    return app_list
+
+                models.insert(models.index(entry), {
+                    'name': _('Operations console'),
+                    'object_name': 'OpsConsole',
+                    'admin_url': console_url,
+                    'add_url': None,
+                    'view_only': True,
+                    'perms': {'view': True, 'add': False,
+                              'change': False, 'delete': False},
+                })
+
+                return app_list
+
+        return app_list
 
     def login(self, request, extra_context=None):
         """

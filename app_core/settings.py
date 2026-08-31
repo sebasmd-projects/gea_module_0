@@ -40,7 +40,27 @@ LOGGING = {
     },
     'handlers': {
         'file': {
-            'class': 'logging.FileHandler',
+            # `WatchedFileHandler` y no `FileHandler`, y no es un detalle:
+            # es lo que hace posible rotar el log.
+            #
+            # Rotar es renombrar el fichero. En Linux, renombrar no afecta a
+            # quien lo tiene abierto: el descriptor sigue apuntando al mismo
+            # inodo, ahora con otro nombre. Y aqui la aplicacion corre en
+            # varios procesos, cada uno con el suyo abierto desde que arranco.
+            # Con `FileHandler`, tras rotar todos los workers seguirian
+            # escribiendo en `stderr_old_6.log`, el `stderr.log` nuevo se
+            # quedaria vacio para siempre, y el "viejo" seria el que crece.
+            # Sin error y sin aviso: no se nota hasta que hace falta el log.
+            #
+            # `WatchedFileHandler` comprueba antes de escribir si el fichero
+            # que tiene abierto sigue siendo el que hay en esa ruta, y si no,
+            # lo reabre. Esta pensado exactamente para que rote otro.
+            #
+            # Y rota otro --`manage.py rotate_logs` desde el cron-- en vez de
+            # `RotatingFileHandler`, que rota el proceso que escribe: con
+            # varios workers, dos pueden cruzar el renombrado y partir o
+            # perder el log. Ver `apps/common/utils/logs.py`.
+            'class': 'logging.handlers.WatchedFileHandler',
             'filename': str(LOG_FILE),
             'encoding': 'utf-8',
             'formatter': 'gea',
@@ -546,6 +566,13 @@ CRONJOBS = [
      ['upgrade_ots_anchors']),
     ('0 19 * * *', 'apps.common.utils.cron.generate_and_send_gea_code'),
     ('*/3 * * * *', 'apps.common.utils.cron.warm_gea_app'),
+    # Rota el log al pasar de 3 MB. Cada hora y no una vez por semana: la
+    # revision es un `stat` --sin llegar al tope no hace absolutamente nada--
+    # y con cadencia semanal un dia malo deja el fichero en decenas de megas
+    # antes de que a nadie le toque mirarlo, con lo que el tope de 3 MB no
+    # significaria nada. Lo que hace que esto funcione con varios workers
+    # esta en LOGGING: el handler es WatchedFileHandler.
+    ('0 * * * *', 'django.core.management.call_command', ['rotate_logs']),
 ]
 
 # ChatGPT API Key

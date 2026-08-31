@@ -1,6 +1,20 @@
 {% extends "admin/base_site.html" %}
 {% load i18n %}
 
+{% comment %}
+  La consola de operaciones.
+
+  Con doce comandos bastaba una lista agrupada por riesgo. Con treinta y dos
+  ya no: nadie llega aqui pensando "quiero algo que escriba", llega pensando
+  "voy a desplegar" o "no llega el correo". Por eso se agrupa por area y el
+  riesgo pasa a ser un filtro y un color, que es lo que es -- un aviso, no una
+  taxonomia.
+
+  El buscador y los filtros son de navegador, sin recargar: la lista entera ya
+  esta en la pagina y pedirsela otra vez al servidor para esconder tarjetas
+  seria trabajo de mas y una espera para nada.
+{% endcomment %}
+
 {% block breadcrumbs %}
   <div class="breadcrumbs">
     <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
@@ -32,6 +46,38 @@
       background: rgba(161,127,26,.10);
       border: 1px solid rgba(161,127,26,.35); font-size: .85rem;
     }
+
+    /* --- Buscador y filtros --- */
+    .ops-toolbar {
+      display: flex; flex-wrap: wrap; gap: .75rem; align-items: center;
+      margin-bottom: 1.25rem; padding: .75rem 1rem; border-radius: 4px;
+      background: var(--darkened-bg, #fbfbfb);
+      border: 1px solid var(--hairline-color, #e0e0e0);
+    }
+    .ops-toolbar input[type="search"] {
+      flex: 1 1 18rem; min-width: 12rem; padding: .45rem .6rem;
+      border: 1px solid var(--border-color, #ccc); border-radius: 4px;
+      font-size: .9rem; background: var(--body-bg, #fff);
+      color: var(--body-fg, #333);
+    }
+    .ops-facets { display: flex; flex-wrap: wrap; gap: .35rem; }
+    .ops-facet {
+      padding: .3rem .6rem; border-radius: 999px; cursor: pointer;
+      font-size: .78rem; border: 1px solid var(--hairline-color, #ddd);
+      background: var(--body-bg, #fff); color: var(--body-fg, #333);
+    }
+    .ops-facet[aria-pressed="true"] {
+      border-color: var(--link-fg, #417690);
+      background: var(--link-fg, #417690); color: #fff;
+    }
+    .ops-count { font-size: .8rem; color: var(--body-quiet-color, #666); }
+
+    /* `hidden` es un atributo, pero equivale a `display:none` con la
+       especificidad mas baja que hay: `.ops-card { display: block }` le gana
+       y la tarjeta se queda a la vista. Sin esto el filtro no filtra nada. */
+    .ops-card[hidden], .ops-group[hidden] { display: none !important; }
+    .ops-empty { padding: 1rem; font-size: .88rem;
+                 color: var(--body-quiet-color, #666); }
   </style>
 
   <h1>{% trans 'Operations console' %}</h1>
@@ -44,12 +90,45 @@
     {% endblocktrans %}
   </p>
 
-  {% for risk, label, commands in groups %}
-    <div class="ops-group">
-      <h2 style="color: {{ risk_colors|default_if_none:'' }}">{{ label }}</h2>
+  <div class="ops-toolbar">
+    <input type="search" id="ops-search"
+           placeholder="{% trans 'Search by name, title or what it does…' %}"
+           aria-label="{% trans 'Search commands' %}"
+           autocomplete="off" />
+
+    <div class="ops-facets" role="group"
+         aria-label="{% trans 'Filter by risk' %}">
+      <button type="button" class="ops-facet" data-risk=""
+              aria-pressed="true">{% trans 'All' %}</button>
+      {% for risk, label, total in risk_facets %}
+        <button type="button" class="ops-facet" data-risk="{{ risk }}"
+                aria-pressed="false">{{ label|truncatewords:2 }} ({{ total }})</button>
+      {% endfor %}
+    </div>
+
+    {% comment %}
+      La plantilla del contador viaja en un atributo y no dentro del script:
+      una traduccion con un apostrofe --"n.º %(count)s d'un total de..."--
+      cerraria la cadena de JavaScript y rompería la pagina entera. En un
+      atributo, Django la escapa.
+    {% endcomment %}
+    <span class="ops-count" id="ops-count" aria-live="polite"
+          data-template="{% trans 'Showing %(count)s of %(total)s' %}"></span>
+  </div>
+
+  <p class="ops-empty" id="ops-empty" hidden>
+    {% trans 'No command matches that.' %}
+  </p>
+
+  {% for area, label, commands in groups %}
+    <div class="ops-group" data-area="{{ area }}">
+      <h2>{{ label }}</h2>
 
       {% for command in commands %}
         <a class="ops-card" href="{% url 'admin:ops_command' command.name %}"
+           data-risk="{{ command.risk }}"
+           data-search="{{ command.search_text }}"
+           title="{{ command.risk_label }}"
            style="border-left-color: {% if command.risk == 'READ_ONLY' %}#1a7f37{% elif command.risk == 'WRITES' %}#a17f1a{% else %}#a11a1a{% endif %}">
           <b>{{ command.title }} <code style="font-weight:normal;opacity:.7">{{ command.name }}</code></b>
           <span>{{ command.summary }}</span>
@@ -90,4 +169,73 @@
   {% else %}
     <p>{% trans 'Nothing has been run yet.' %}</p>
   {% endif %}
+
+  <script>
+    (function () {
+      var search = document.getElementById('ops-search');
+      var counter = document.getElementById('ops-count');
+      var empty = document.getElementById('ops-empty');
+      var facets = Array.prototype.slice.call(
+        document.querySelectorAll('.ops-facet')
+      );
+      var cards = Array.prototype.slice.call(
+        document.querySelectorAll('.ops-card')
+      );
+      var groups = Array.prototype.slice.call(
+        document.querySelectorAll('.ops-group')
+      );
+
+      var risk = '';
+
+      // Plantilla con los numeros dentro: traducida en una sola pieza, para
+      // que cada idioma ponga las palabras donde le toque.
+      var template = counter.dataset.template || '%(count)s / %(total)s';
+
+      function matches(card, needle) {
+        if (risk && card.dataset.risk !== risk) { return false; }
+        if (!needle) { return true; }
+        return card.dataset.search.indexOf(needle) !== -1;
+      }
+
+      function apply() {
+        var needle = search.value.trim().toLowerCase();
+        var shown = 0;
+
+        cards.forEach(function (card) {
+          var ok = matches(card, needle);
+          card.hidden = !ok;
+          if (ok) { shown += 1; }
+        });
+
+        // Un area sin ninguna tarjeta visible deja solo su titulo colgando.
+        groups.forEach(function (group) {
+          var visible = group.querySelectorAll('.ops-card:not([hidden])');
+          group.hidden = visible.length === 0;
+        });
+
+        empty.hidden = shown !== 0;
+        counter.textContent = template
+          .replace('%(count)s', shown)
+          .replace('%(total)s', cards.length);
+      }
+
+      search.addEventListener('input', apply);
+
+      facets.forEach(function (button) {
+        button.addEventListener('click', function () {
+          risk = button.dataset.risk || '';
+
+          facets.forEach(function (other) {
+            other.setAttribute(
+              'aria-pressed', other === button ? 'true' : 'false'
+            );
+          });
+
+          apply();
+        });
+      });
+
+      apply();
+    })();
+  </script>
 {% endblock %}

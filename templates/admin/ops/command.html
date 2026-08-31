@@ -51,7 +51,7 @@
   </h1>
 
   <div class="ops-meta">
-    <p><code class="ops-cmdline">manage.py {{ command.name }}</code></p>
+    <p><code class="ops-cmdline">{{ command.display_line }}</code></p>
     <p>{{ command.summary }}</p>
   </div>
 
@@ -85,10 +85,20 @@
             </label>
           {% else %}
             <label for="id_{{ option.name }}">
-              {{ option.label }} <code>{{ option.flag }}</code>
+              {{ option.label }}
+              {% comment %}
+                Un posicional no tiene bandera: su `flag` es solo el nombre del
+                campo. Pintarlo como <code>--algo</code> haria creer que se
+                escribe asi en la linea de comandos, y no es cierto.
+              {% endcomment %}
+              {% if not option.positional %}<code>{{ option.flag }}</code>{% endif %}
+              {% if option.required %}
+                <span style="color:#a11a1a" title="{% trans 'Required' %}">*</span>
+              {% endif %}
             </label>
             {% if option.kind == choice_kind %}
-              <select name="{{ option.name }}" id="id_{{ option.name }}">
+              <select name="{{ option.name }}" id="id_{{ option.name }}"
+                      {% if option.required %}required{% endif %}>
                 {% for choice in option.choices %}
                   <option value="{{ choice }}"
                           {% if choice == option.default %}selected{% endif %}>
@@ -99,10 +109,12 @@
             {% elif option.kind == number_kind %}
               <input type="number" name="{{ option.name }}"
                      id="id_{{ option.name }}"
+                     {% if option.required %}required{% endif %}
                      value="{{ option.default|default_if_none:'' }}" />
             {% else %}
               <input type="text" name="{{ option.name }}"
                      id="id_{{ option.name }}"
+                     {% if option.required %}required{% endif %}
                      value="{{ option.default|default_if_none:'' }}" />
             {% endif %}
           {% endif %}
@@ -141,7 +153,7 @@
   {% if result %}
     <h2>{% trans 'Output' %}</h2>
     <p>
-      <code class="ops-cmdline">manage.py {{ result.command_line }}</code>
+      <code class="ops-cmdline">{{ result.command_line }}</code>
       &nbsp;·&nbsp;
       {{ result.get_status_display }}
       {% if result.exit_code is not None %}
