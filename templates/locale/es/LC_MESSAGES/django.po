@@ -3329,3 +3329,63 @@ msgstr "Una caja sellada se puede enviar después: la huella es la misma. La pru
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
 msgid "Send to blockchain"
 msgstr "Enviar a la cadena de bloques"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Summary document"
+msgstr "Documento del resumen"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Issued"
+msgstr "Emitido"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Not issued"
+msgstr "Sin emitir"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "The box also has its own PDF: it carries the master hash, the barcode of every member, and the QR of the anchor page. It does not wait for the blockchain — that QR points at a page that updates itself, so nothing needs re-stamping when the Bitcoin block arrives."
+msgstr "La caja tiene también su propio PDF: lleva el master hash, el código de barras de cada miembro y el QR de la página de anclaje. No espera a la cadena de bloques — ese QR apunta a una página que se actualiza sola, así que no hay que reestampar nada cuando llegue el bloque de Bitcoin."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Issue document"
+msgstr "Emitir documento"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Reissue document"
+msgstr "Reemitir documento"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Issuing…"
+msgstr "Emitiendo…"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Certified PDF (the one that stands)"
+msgstr "PDF certificado (el que hace fe)"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Public copy (watermarked)"
+msgstr "Copia pública (con marca de agua)"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Public verification page"
+msgstr "Página pública de verificación"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Uses the PDF and the layout chosen on the right. Reissuing keeps the original already stored and redoes the stamping, the fingerprints and the public copy."
+msgstr "Usa el PDF y la disposición elegidos a la derecha. Reemitir conserva el original ya guardado y rehace el estampado, las huellas y la copia pública."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Summary PDF (without codes)"
+msgstr "PDF del resumen (sin códigos)"
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Used for the preview here, and uploaded as the original when you issue the document. Nothing is sent until you press Issue."
+msgstr "Se usa para la vista previa aquí, y se sube como original al emitir el documento. No se envía nada hasta que pulses Emitir."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Seal the box first: the summary carries the master hash inside."
+msgstr "Sella la caja primero: el resumen lleva el master hash dentro."
+
+#: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
+msgid "Choose the summary PDF without codes."
+msgstr "Elige el PDF del resumen sin códigos."

@@ -285,6 +285,41 @@ def layout_create(request):
 # Resumen AEGIS
 # ==========================================================
 
+def _summary_document_payload(summary):
+    """
+    El documento del resumen, si ya se emitio.
+
+    Los archivos no se enlazan nunca por ``MEDIA_URL``: la unica via es
+    ``certificates:document_file``, que comprueba permisos (invariante 13).
+    Aqui se dan sus URL para que el compositor pueda ofrecerlas, no los
+    ficheros.
+    """
+    from django.urls import reverse
+
+    document = summary.summary_document
+
+    if document is None:
+        return None
+
+    return {
+        'id': str(document.pk),
+        'public_code': document.public_code,
+        'code_payload': document.code_payload,
+        'sha256': document.document_hash,
+        'certified_url': reverse(
+            'certificates:document_file',
+            kwargs={'pk': document.pk, 'kind': 'certified'},
+        ),
+        'public_url': reverse(
+            'certificates:document_file',
+            kwargs={'pk': document.pk, 'kind': 'public'},
+        ),
+        'verification_url': reverse(
+            'certificates:summary_detail', kwargs={'pk': summary.pk}
+        ),
+    }
+
+
 def _summary_payload(summary):
     from .services.anchoring import anchor_url, summary_anchor_state
 
@@ -313,6 +348,15 @@ def _summary_payload(summary):
             else str(_('Not sent'))
         ),
         'can_send_to_blockchain': bool(summary.master_hash) and sent is None,
+
+        # El documento del resumen. Emitirlo no espera al anclaje ni tiene por
+        # que: el QR estampado lleva la URL de la pagina de anclaje, no la
+        # prueba, y esa pagina se actualiza sola segun madura (invariante 16).
+        # Por eso se puede emitir en cuanto la caja esta sellada.
+        'issued': summary.summary_document_id is not None,
+        'can_issue': bool(summary.master_hash),
+        'document': _summary_document_payload(summary),
+
         'members': [
             {
                 'code': member.code,
@@ -622,6 +666,126 @@ def summary_anchor(request, pk):
         'anchor_result': anchor_result,
         **_summary_payload(summary),
     })
+
+
+@require_http_methods(['POST'])
+def summary_issue(request, pk):
+    """
+    Emite el documento del resumen: el PDF de la caja, ya certificado.
+
+    Hasta ahora esto no existia como accion. El servicio que lo hace
+    --``services.summary.certify_summary()``-- estaba escrito y completo desde
+    el principio, pero no lo llamaba nadie: se sellaba la caja, se anclaba, y
+    ``summary_document`` se quedaba en ``null``. La caja no tenia papel.
+
+    **No espera al anclaje, y no tiene por que.** El QR que se estampa lleva la
+    URL de la pagina de anclaje, nunca la prueba (invariante 16). Esa pagina se
+    actualiza sola segun madura el anclaje, asi que el PDF se emite una vez,
+    con la caja sellada, y no hay que reestamparlo cuando llegue el bloque de
+    Bitcoin. Emitir «sin blockchain» y luego «con blockchain» seria hacer dos
+    papeles con huellas distintas para la misma caja, y habria que decidir cual
+    de los dos hace fe.
+
+    Se sube el PDF del resumen sin codigos. Al reemitir se puede omitir: se
+    conserva el original que ya estaba guardado, y se rehacen el estampado, las
+    huellas y la copia publica.
+    """
+    from apps.project.specific.documents.certificates.models import \
+        AegisSummaryModel
+
+    from .services.certification import CertificationError
+    from .services.summary import certify_summary
+
+    if not _is_internal(request.user):
+        return _forbidden()
+
+    summary = get_object_or_404(AegisSummaryModel, pk=pk)
+
+    if not summary.master_hash:
+        return JsonResponse(
+            {'detail': str(
+                _('Seal the box before issuing its document: the summary '
+                  'carries the master hash inside.')
+            )},
+            status=400,
+        )
+
+    source_file = request.FILES.get('source_file')
+    existing = summary.summary_document
+
+    if source_file is None and (existing is None or not existing.source_file):
+        return JsonResponse(
+            {'detail': str(
+                _('Upload the summary PDF without codes: there is no original '
+                  'stored yet to stamp over.')
+            )},
+            status=400,
+        )
+
+    layout = _requested_layout(request, existing)
+
+    if layout is None and (existing is None or existing.stamp_layout is None):
+        return JsonResponse(
+            {'detail': str(
+                _('Choose a stamp layout: it decides where each code goes on '
+                  'the page.')
+            )},
+            status=400,
+        )
+
+    try:
+        document, outcome = certify_summary(
+            summary,
+            source_file=source_file,
+            layout=layout,
+            request=request,
+        )
+    except CertificationError as error:
+        return JsonResponse({'detail': str(error)}, status=400)
+    except Exception as error:  # noqa: BLE001
+        # Estampar lee y reescribe un PDF que sube el usuario: un archivo roto
+        # o protegido revienta abajo, y con ATOMIC_REQUESTS eso seria un 500
+        # que ademas desharia lo que hubiera guardado. Se cuenta la causa.
+        logger.exception('Could not issue the summary document %s', summary.pk)
+
+        return JsonResponse(
+            {'detail': str(
+                _('The summary document could not be issued: %(error)s')
+                % {'error': f'{type(error).__name__}: {error}'}
+            )},
+            status=400,
+        )
+
+    summary.refresh_from_db()
+
+    detail = str(
+        _('Summary document issued. Its QR points at the anchor page, which '
+          'updates itself: there is nothing to reissue when the Bitcoin block '
+          'arrives.')
+    )
+
+    return JsonResponse({
+        'detail': detail,
+        'skipped': outcome.skipped,
+        **_summary_payload(summary),
+    })
+
+
+def _requested_layout(request, existing):
+    """
+    La disposicion elegida en el formulario, o la que ya tuviera el documento.
+
+    Devuelve ``None`` cuando no se pidio ninguna, que el llamante distingue de
+    «no hay ninguna» mirando tambien el documento anterior.
+    """
+    from .models import StampLayoutModel
+
+    raw = (request.POST.get('layout') or '').strip()
+
+    if not raw:
+        return None
+
+    return StampLayoutModel.objects.filter(pk=raw, is_active=True).first()
 
 
 @require_http_methods(['GET'])

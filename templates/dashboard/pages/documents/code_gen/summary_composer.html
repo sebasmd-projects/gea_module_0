@@ -176,6 +176,53 @@
             </div>
           </div>
         </div>
+
+        {# ============ EL DOCUMENTO DE LA CAJA ============
+           Emitir no espera al anclaje. El QR estampado lleva la URL de la
+           pagina de anclaje, no la prueba, y esa pagina se actualiza sola
+           cuando el anclaje madura: el PDF se emite una vez y no hay que
+           reestamparlo cuando llegue el bloque de Bitcoin. #}
+        <div class="card mb-4">
+          <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <span><i class="fa-solid fa-file-circle-check me-2"></i>{% trans 'Summary document' %}</span>
+            <span class="badge {% if summary.summary_document %}bg-success{% else %}bg-secondary{% endif %}"
+                  id="documentStatus"
+                  data-issued="{% if summary.summary_document %}true{% else %}false{% endif %}">
+              {% if summary.summary_document %}{% trans 'Issued' %}{% else %}{% trans 'Not issued' %}{% endif %}
+            </span>
+          </div>
+          <div class="card-body">
+            <p class="small text-muted">
+              {% trans 'The box also has its own PDF: it carries the master hash, the barcode of every member, and the QR of the anchor page. It does not wait for the blockchain — that QR points at a page that updates itself, so nothing needs re-stamping when the Bitcoin block arrives.' %}
+            </p>
+
+            <div class="d-grid">
+              <button type="button" class="btn btn-success" id="issueDocument"
+                      data-loading-text="{% trans 'Issuing…' %}"
+                      {% if not summary.master_hash %}disabled{% endif %}>
+                <i class="bi bi-file-earmark-check"></i>
+                <span id="issueDocumentLabel">{% if summary.summary_document %}{% trans 'Reissue document' %}{% else %}{% trans 'Issue document' %}{% endif %}</span>
+              </button>
+            </div>
+
+            <div class="mt-3 small {% if not summary.summary_document %}d-none{% endif %}"
+                 id="documentLinks">
+              <a class="d-block" id="documentCertified" href="#" target="_blank" rel="noopener">
+                <i class="bi bi-download"></i> {% trans 'Certified PDF (the one that stands)' %}
+              </a>
+              <a class="d-block" id="documentPublic" href="#" target="_blank" rel="noopener">
+                <i class="bi bi-download"></i> {% trans 'Public copy (watermarked)' %}
+              </a>
+              <a class="d-block" id="documentVerification" href="#" target="_blank" rel="noopener">
+                <i class="bi bi-search"></i> {% trans 'Public verification page' %}
+              </a>
+            </div>
+
+            <p class="small text-muted mt-3 mb-0">
+              {% trans 'Uses the PDF and the layout chosen on the right. Reissuing keeps the original already stored and redoes the stamping, the fingerprints and the public copy.' %}
+            </p>
+          </div>
+        </div>
       </div>
 
       {# ================= ESTAMPADO ================= #}
@@ -209,12 +256,12 @@
 
             <div class="mb-3">
               <label class="form-label small" for="summarySourceFile">
-                {% trans 'Summary PDF (without codes), to preview over it' %}
+                {% trans 'Summary PDF (without codes)' %}
               </label>
               <input type="file" class="form-control form-control-sm"
                      id="summarySourceFile" accept=".pdf" />
               <div class="form-text">
-                {% trans 'Read in the browser only: it is not uploaded from here.' %}
+                {% trans 'Used for the preview here, and uploaded as the original when you issue the document. Nothing is sent until you press Issue.' %}
               </div>
             </div>
 
@@ -299,13 +346,21 @@
       membersUrl: '{% url 'code_gen:summary_members' summary.pk %}',
       sealUrl: '{% url 'code_gen:summary_seal' summary.pk %}',
       anchorUrl: '{% url 'code_gen:summary_anchor' summary.pk %}',
+      issueUrl: '{% url 'code_gen:summary_issue' summary.pk %}',
       placementsUrl: '{% url 'code_gen:layout_placements' 0 %}',
+      labels: {
+        issued: '{% trans 'Issued' %}',
+        notIssued: '{% trans 'Not issued' %}',
+        reissue: '{% trans 'Reissue document' %}'
+      },
       messages: {
         pickLayout: '{% trans 'Choose a stamp layout first.' %}',
         pickDocument: '{% trans 'Choose a document to add.' %}',
         alreadyIn: '{% trans 'That document is already in the box.' %}',
         needMembers: '{% trans 'Add at least one document.' %}',
         saveFailed: '{% trans 'It could not be saved.' %}',
+        needSeal: '{% trans 'Seal the box first: the summary carries the master hash inside.' %}',
+        needSource: '{% trans 'Choose the summary PDF without codes.' %}',
         broughtBarcodes: '{% trans 'Member barcodes added. Drag them into place and press Save.' %}'
       }
     };

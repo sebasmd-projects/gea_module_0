@@ -479,7 +479,13 @@ CRONJOBS = [
     # Madura las pruebas de OpenTimestamps: nacen sin bloque de Bitcoin y
     # entran en uno al cabo de unas horas. Que aun no este lista no es un
     # error; la pagina de anclaje se actualiza sola cuando confirma.
-    ('15 * * * *', 'django.core.management.call_command',
+    #
+    # Cada 15 minutos y no cada hora porque nadie avisa de que una prueba haya
+    # madurado: preguntar mas a menudo es lo unico que acorta el tiempo entre
+    # que el bloque existe y que la pagina lo muestra. No sale caro: sin
+    # anclajes pendientes el comando termina en una consulta, sin tocar la
+    # red, asi que cuando todo esta confirmado la tarea se apaga sola.
+    ('*/15 * * * *', 'django.core.management.call_command',
      ['upgrade_ots_anchors']),
     ('0 19 * * *', 'apps.common.utils.cron.generate_and_send_gea_code'),
     ('*/3 * * * *', 'apps.common.utils.cron.warm_gea_app'),
