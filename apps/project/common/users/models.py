@@ -523,22 +523,60 @@ class UserPersonalInformationModel(TimeStampedModel):
     def signature_directory_path(instance, filename):
         return f"signature_images/{instance.id} - {instance.get_full_name()}/{date.today().year}-{date.today().month}-{date.today().day}/{filename}"
 
+    def latest_birth_date_of_an_adult(today=None):
+        """
+        La fecha de nacimiento mas reciente que sigue siendo mayor de edad.
+
+        Es decir: hoy, hace dieciocho anos. Nacer **antes** de esa fecha es
+        ser adulto; nacer despues es ser menor.
+
+        Se calcula por calendario y no con ``timedelta(days=18*365)``, que se
+        deja cuatro o cinco dias bisiestos por el camino: con la
+        aproximacion, alguien que cumplio dieciocho ayer seguia constando
+        como menor casi una semana mas.
+        """
+        today = today or timezone.now().date()
+
+        try:
+            return today.replace(year=today.year - 18)
+        except ValueError:
+            # 29 de febrero. Quien nacio ese dia cumple el 28 en los anos que
+            # no son bisiestos, que es el criterio de la mayoria de los
+            # ordenamientos y, en todo caso, el que no deja a nadie fuera.
+            return today.replace(year=today.year - 18, day=28)
+
     def validate_birth_date(value):
+        """
+        Ni del futuro, ni de un menor de edad.
+
+        La comparacion de la edad estaba **al reves**, y no en un caso raro:
+        rechazaba a todo el que pasara de dieciocho anos --con el mensaje de
+        que hay que ser mayor de edad-- y aceptaba a un recien nacido. Una
+        fecha mas antigua significa mas edad, y el ``<`` decia lo contrario.
+
+        Nadie lo noto porque el valor por defecto del campo es exactamente la
+        frontera, el unico punto que pasaba en las dos versiones.
+        """
         today = timezone.now().date()
-        min_date = today - timedelta(days=18*365)
 
         if value > today:
             raise ValidationError(
                 _('The date of birth cannot be a future date.')
             )
 
-        if value < min_date:
+        if value > UserPersonalInformationModel.latest_birth_date_of_an_adult(today):
             raise ValidationError(
                 _('User must be at least 18 years of age.')
             )
 
     def default_birth_date():
-        return timezone.now() - timedelta(days=18 * 365)
+        """
+        Justo la mayoria de edad.
+
+        Tiene que caer del lado que pasa la validacion: es el valor con el
+        que se crea el registro antes de que nadie escriba nada.
+        """
+        return UserPersonalInformationModel.latest_birth_date_of_an_adult()
 
     def default_date_of_expiry():
         return timezone.now() + timedelta(days=365)

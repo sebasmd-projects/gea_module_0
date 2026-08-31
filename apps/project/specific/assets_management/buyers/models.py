@@ -518,6 +518,24 @@ class OfferModel(TimeStampedModel):
         self.save(update_fields=[
                   "profitability_created_by", "profitability_created_at"])
 
+    #: Los campos del cierre de rentabilidad, que ``save()`` limpia en memoria
+    #: cuando deja de haber tres subpagos.
+    #:
+    #: Van en el ``update_fields`` de los tres marcados de subpago porque, sin
+    #: ellos, ese borrado no llegaba a escribirse: ``save(update_fields=...)``
+    #: solo persiste lo que se le nombra. Desmarcar un subpago de una orden ya
+    #: cerrada dejaba en la base ``profitability_paid_at`` con uno de los tres
+    #: en falso, y saltaba la restriccion ``profit_paid_requires_3_subpaids``
+    #: -- un IntegrityError, o sea un error 500, en vez de reabrir la orden.
+    #:
+    #: Hoy el wizard solo marca, nunca desmarca, asi que no se llegaba a ver;
+    #: pero el metodo acepta ``paid=False`` y el primero que conectara un
+    #: boton de deshacer se lo encontraba.
+    _PROFITABILITY_CLOSING_FIELDS = [
+        "profitability_paid_by",
+        "profitability_paid_at",
+    ]
+
     @transaction.atomic
     def mark_rrf_paid(self, user, *, paid: bool = True):
         if not self.profitability_created_at:
@@ -530,7 +548,7 @@ class OfferModel(TimeStampedModel):
             "recovery_repatriation_foundation_paid",
             "recovery_repatriation_foundation_mark_by",
             "recovery_repatriation_foundation_mark_at",
-        ])
+        ] + self._PROFITABILITY_CLOSING_FIELDS)
 
     @transaction.atomic
     def mark_paymaster_paid(self, user, *, paid: bool = True):
@@ -544,7 +562,7 @@ class OfferModel(TimeStampedModel):
             "pay_master_service_paid",
             "pay_master_service_mark_by",
             "pay_master_service_mark_at",
-        ])
+        ] + self._PROFITABILITY_CLOSING_FIELDS)
 
     @transaction.atomic
     def mark_prop_paid(self, user, *, paid: bool = True):
@@ -558,7 +576,7 @@ class OfferModel(TimeStampedModel):
             "propensiones_paid",
             "propensiones_mark_by",
             "propensiones_mark_at",
-        ])
+        ] + self._PROFITABILITY_CLOSING_FIELDS)
 
     @transaction.atomic
     def mark_profitability_paid(self, user):
