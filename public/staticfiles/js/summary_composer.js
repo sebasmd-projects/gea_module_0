@@ -402,10 +402,13 @@
     var html = placementTemplate.innerHTML.replace(/IDX/g, nextIndex);
     nextIndex += 1;
 
-    var holder = document.createElement('tbody');
+    // Un contenedor cualquiera: las posiciones ya no son filas de tabla sino
+    // tarjetas de dos filas, porque en una tabla los ocho campos salian tan
+    // estrechos que se solapaban.
+    var holder = document.createElement('div');
     holder.innerHTML = html.trim();
 
-    var row = holder.querySelector('tr');
+    var row = holder.querySelector('[data-placement-row]');
     if (!row) { return null; }
 
     if (values) {

@@ -284,3 +284,81 @@
   }
 }
 
+
+/* ---------------------------------------------------------------------
+   Posiciones de estampado: una tarjeta por posicion, en dos filas.
+
+   Antes eran filas de una tabla, y con ocho o nueve campos --tipo de codigo,
+   miembro, paginas, cuales, anclaje, X, Y, ancho y alto-- en media columna
+   salian tan estrechos que se solapaban y no se leia ninguno.
+
+   El corte en dos filas no es solo por sitio: agrupa. Arriba, que codigo es y
+   donde va; abajo, cuanto ocupa. Se lee en el orden en que se decide.
+   --------------------------------------------------------------------- */
+.gea-placements {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.gea-placement {
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  border-radius: 0.375rem;
+  padding: 0.6rem 0.75rem;
+  background: var(--bs-body-bg, #fff);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.gea-placement__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.5rem;
+}
+
+/* Cada campo crece, pero nunca por debajo de lo que necesita para leerse:
+   ese minimo es lo que impedia el solapamiento. */
+.gea-placement__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1 1 8.5rem;
+  min-width: 7rem;
+  margin: 0;
+}
+
+.gea-placement__field--narrow {
+  flex: 0 1 7rem;
+}
+
+/* Las medidas son cuatro numeros cortos: no necesitan tanto ancho. */
+.gea-placement__row--size .gea-placement__field {
+  flex: 1 1 6rem;
+  min-width: 5rem;
+}
+
+.gea-placement__label {
+  font-size: 0.72rem;
+  line-height: 1.2;
+  color: var(--bs-secondary-color, #6c757d);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gea-placement__remove {
+  flex: 0 0 auto;
+  align-self: end;
+  padding-bottom: 0.05rem;
+}
+
+/* En pantalla estrecha cada campo ocupa toda la fila: es preferible bajar a
+   que se estrechen hasta no poder leerse, que es de donde se venia. */
+@media (max-width: 36rem) {
+  .gea-placement__field,
+  .gea-placement__row--size .gea-placement__field {
+    flex: 1 1 100%;
+  }
+}

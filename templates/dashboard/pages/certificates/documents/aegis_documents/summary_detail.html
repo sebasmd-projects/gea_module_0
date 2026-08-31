@@ -14,7 +14,11 @@
   <div class="container-md my-5 min-vh-100">
 
     {% url 'certificates:certificates_landing' as landing_url %}
-    {% include 'dashboard/pages/certificates/includes/aegis_header.html' with url=landing_url %}
+    {% url 'certificates:input_document_verification_aegis' as input_url %}
+    {% trans 'Certification' as certification_title %}
+    {% trans 'Verify a document' as verify_title %}
+    {% trans 'AEGIS summary' as here %}
+    {% include 'dashboard/pages/certificates/includes/aegis_header.html' with url=landing_url parent_title=certification_title parent_url=landing_url breadcrumbs=verify_title|add:'::'|add:input_url|add:' > '|add:here %}
 
     <div class="text-center my-4">
       <h1 class="h3">{{ summary.title }}</h1>
