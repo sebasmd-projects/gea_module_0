@@ -89,12 +89,19 @@ De ahí salen dos decisiones de diseño que si no, parecen arbitrarias:
 
 ## 4. Quién madura las pruebas
 
-Nadie lo hace solo. Lo hace un cron, cada hora, en el minuto 15:
+Nadie lo hace solo. Lo hace un cron, cada 15 minutos:
 
 ```python
 # app_core/settings.py
-('15 * * * *', 'django.core.management.call_command', ['upgrade_ots_anchors']),
+('*/15 * * * *', 'django.core.management.call_command', ['upgrade_ots_anchors']),
 ```
+
+Cada 15 minutos y no cada hora porque nadie avisa de que una prueba haya
+madurado: preguntar más a menudo es lo único que acorta el tiempo entre que el
+bloque existe y que la página lo muestra. Y no sale caro, porque **sin anclajes
+pendientes el comando no sale a la red**: una consulta y termina. Cuando la
+última caja confirma, la tarea se queda inactiva sola, sin que haya que
+apagarla.
 
 `upgrade_ots_anchors` recorre los anclajes en `PENDING`, le pregunta a su
 calendario si ya hay camino hasta un bloque, y al que lo tiene le guarda la
@@ -152,6 +159,33 @@ https://blockstream.info/block-height/<numero>
 ```
 
 Eso es lo que hace que la prueba valga: no hay que fiarse de la plataforma.
+
+---
+
+## 5-bis. El documento de la caja no espera al anclaje
+
+Una consecuencia del punto 3 que conviene decir aparte, porque es la que
+decide cómo se emite el papel.
+
+El resumen AEGIS es un documento como los demás —solo que su contenido es
+agrupar a otros— y tiene sus tres archivos: original sin códigos, certificado
+que hace fe, y copia pública con marca de agua. Se emite desde el compositor,
+**en cuanto la caja está sellada**, con o sin anclaje.
+
+Puede hacerlo porque el QR que se estampa lleva `anchor_url(summary)`: una URL
+que existe desde que existe la caja. La página a la que apunta dice «pendiente»
+mientras lo esté y pasa sola a mostrar el bloque cuando madura.
+
+> **Por eso hace falta un solo documento y no dos.** Emitir uno «sin
+> blockchain» y luego otro «con» serían dos PDF de la misma caja con huellas
+> distintas circulando a la vez, y habría que decidir y documentar cuál de los
+> dos hace fe. Con un solo papel no hay nada que decidir: el que hay es el que
+> vale, y la información que cambia con el tiempo vive en la página, no en la
+> tinta.
+
+Reemitir conserva el original guardado y el código público, y rehace el
+estampado, las huellas y la copia. Se hace cuando cambian los miembros de la
+caja —el master hash es otro—, no cuando llega el bloque.
 
 ---
 

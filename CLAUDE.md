@@ -307,13 +307,18 @@ subir PDF (admin «Certify» | code_gen:code_generate)
         └─ record.build_certification_record() + seal_record()   (Ed25519, o HMAC si falta la clave)
    → DocumentVerificationModel: source_file / document_file / public_copy_file
 
-caja AEGIS: summary.certify_summary() → master.seal_summary() (payload JCS verbatim)
+caja AEGIS: master.seal_summary() (payload JCS verbatim)
              → anchoring.anchor_with_tsa() (instantáneo) y anchor_with_ots() (madura por cron)
              El compositor ofrece «sellar y enviar» y «solo sellar»: sellar es una
              escritura nuestra e instantánea, enviar sale a la red. El envío NUNCA
              propaga su fallo (con ATOMIC_REQUESTS desharía el sellado); se degrada a
              aviso y queda disponible en code_gen:summary_anchor. No se manda dos
              veces el mismo master hash.
+             → summary.certify_summary() emite el PDF de la caja (code_gen:summary_issue).
+             Es un DocumentVerificationModel más, con sus tres archivos. NO espera al
+             anclaje y no debe: el QR estampado lleva la URL de la página de anclaje,
+             no la prueba, así que se emite un solo papel y no hay que reestamparlo
+             cuando llegue el bloque. Ver docs/ANCLAJE.md §5-bis.
 
 consulta pública: certificates:input_document_verification_aegis → OTP por correo
    → OTPSessionMixin → detail → certificates:document_file (única vía de descarga)
@@ -357,7 +362,7 @@ Al colgar del admin hereda además su puerta: hace falta segundo factor verifica
 
 | Entrada | Dónde |
 |---|---|
-| Crons (`django-crontab`) | `settings.CRONJOBS`: `upgrade_ots_anchors` cada hora, código diario 19:00, warm-up cada 3 min |
+| Crons (`django-crontab`) | `settings.CRONJOBS`: `upgrade_ots_anchors` cada 15 min (sin pendientes no sale a la red), código diario 19:00, warm-up cada 3 min |
 | Comandos propios | `apps/common/utils/management/commands/` y `code_gen/management/commands/`, `certificates/management/commands/check_certifications.py` |
 | Acciones del admin | «Certify» de `certificates/admin.py`; sellado y anclaje de cajas |
 | Endpoints JSON internos | `code_gen/api.py` (disposiciones, miembros de caja, símbolos de vista previa) |
@@ -423,7 +428,7 @@ Sin build ni SPA. Plantillas Django + Bootstrap 5 por CDN; `templates/raw.html` 
 12. **Las URLs de los artefactos permanentes salen de `PUBLIC_BASE_URL`**, nunca de `request.build_absolute_uri()`: el QR vive dentro del PDF y no puede apuntar al host desde el que se certificó.
 13. **Los archivos de certificación no se enlazan nunca por `MEDIA_URL`.** La única vía es `certificates:document_file`, que comprueba permisos: `source` y `certified` solo para `is_staff`/`is_superuser`; `public` para sesión OTP válida o autenticado. En el servidor hace falta además el `.htaccess` de `deploy/` — sin él el servidor web sigue sirviendo los PDF por su cuenta y estas reglas no pintan nada.
 15. **El master hash de una caja nunca cubre al propio resumen.** Se sella sobre los miembros, luego se emite el resumen llevando ese hash, y solo después se registra su huella. Es la misma circularidad del código de barras y el hash del original, y no tiene otra solución.
-16. **El QR del anclaje lleva una URL, no la prueba.** La página de `certificates:summary_anchor` se actualiza sola según maduran los anclajes; si el bloque de Bitcoin fuera impreso habría que reestampar el PDF cada vez.
+16. **El QR del anclaje lleva una URL, no la prueba.** La página de `certificates:summary_anchor` se actualiza sola según maduran los anclajes; si el bloque de Bitcoin fuera impreso habría que reestampar el PDF cada vez. De ahí que **el documento del resumen se emita en cuanto la caja está sellada**, con o sin anclaje, y que sea uno solo: dos papeles —«sin blockchain» y «con»— serían dos huellas distintas para la misma caja y habría que decidir cuál hace fe.
 17. **El payload maestro se guarda verbatim.** No se reconstruye para verificar: se compara contra los bytes exactos que se hashearon. Cambiar `services/jcs.py` invalidaría todos los master hash ya anclados.
 18. **Una orden aprobada ya no se edita ni se oculta desde las vistas de listado.** Aprobar crea la orden de servicio automáticamente (`OfferModel.save`, bloque B), así que a partir de ahí la orden es un documento vivo con PDF ya enviados a terceros: cambiarle la cantidad o ponerle `display = False` dejaría la base de datos contradiciendo lo repartido. Las reglas de quién puede hacer qué sobre una orden viven en `buyers/access.py`, no repartidas por las vistas. Y todo lo que tenga efecto hacia fuera —mandar la orden de servicio por correo— comprueba el estado **antes** de producir el efecto, no al guardar después.
 14. **La trampa anti-escaneo empareja segmentos completos, no subcadenas.** Antes `env` convertía `/envio/` en trampa y bloqueaba la IP del usuario. Al tocar `COMMON_ATTACK_TERMS`, ejecuta `manage.py check_attack_terms`: comprueba colisiones **respetando el orden del URLconf**, que es lo único que determina si una ruta queda secuestrada de verdad.

@@ -354,6 +354,35 @@ class TestRealAnchorState(AnchoringCheckTestCase):
         self.assertIn('upgrade_ots_anchors', output)
         self.assertIn('El envio salio bien', output)
 
+    def test_maturing_costs_nothing_when_there_is_nothing_pending(self):
+        """
+        La tarea corre cada 15 minutos, y eso solo sale barato si sin
+        pendientes no sale a la red. Cuando la ultima caja confirma, la tarea
+        se apaga sola: una consulta y termina.
+        """
+        self.anchor(status=AnchorStatusChoices.CONFIRMED, age_hours=10)
+
+        out = StringIO()
+
+        with mock.patch(UPGRADE) as upgrade:
+            call_command('upgrade_ots_anchors', stdout=out, no_color=True)
+
+        upgrade.assert_not_called()
+        self.assertIn('No hay anclajes pendientes', out.getvalue())
+
+    def test_maturing_runs_when_something_is_waiting(self):
+        self.anchor(status=AnchorStatusChoices.PENDING, age_hours=3)
+
+        out = StringIO()
+
+        with mock.patch(UPGRADE, return_value={
+            'upgraded': False, 'proof': pending_proof(),
+        }) as upgrade:
+            call_command('upgrade_ots_anchors', stdout=out, no_color=True)
+
+        self.assertTrue(upgrade.called)
+        self.assertIn('Revisados: 1', out.getvalue())
+
     def test_confirmed_and_pending_are_counted_apart(self):
         self.anchor(status=AnchorStatusChoices.CONFIRMED, age_hours=100)
         self.anchor(status=AnchorStatusChoices.CONFIRMED, age_hours=50)

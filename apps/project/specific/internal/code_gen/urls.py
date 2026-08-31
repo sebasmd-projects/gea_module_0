@@ -1,7 +1,8 @@
 from django.urls import path
 
 from .api import (layout_create, layout_placements, preview_symbols,
-                  summary_anchor, summary_members, summary_seal)
+                  summary_anchor, summary_issue, summary_members,
+                  summary_seal)
 from .views import (CodeDetailView, CodeGeneratorView, CodeHistoryListView,
                     StampLayoutEditView, StampLayoutListView,
                     SummaryComposerView, SummaryCreateView, SummaryListView)
@@ -82,6 +83,14 @@ urlpatterns = [
         "generate/summary/<uuid:pk>/anchor/",
         summary_anchor,
         name="summary_anchor"
+    ),
+
+    # Emitir el PDF de la caja. No espera al anclaje: el QR estampado lleva la
+    # URL de la pagina de anclaje, y esa pagina se actualiza sola.
+    path(
+        "generate/summary/<uuid:pk>/issue/",
+        summary_issue,
+        name="summary_issue"
     ),
 
     path(

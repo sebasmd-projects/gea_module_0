@@ -195,12 +195,12 @@
   // operacion -- se avisa en amarillo y el boton de enviar queda disponible.
   // ----------------------------------------------------------------
   function runSealAction(button, url, payload) {
-    window.GEABusy.wrap(button, null, function () {
+    applyWhenIdle(window.GEABusy.wrap(button, null, function () {
       return send(url, 'POST', payload)
         .then(function (result) {
           if (!result.ok) {
             notify(result.data.detail || config.messages.saveFailed, 'danger');
-            return;
+            return null;
           }
 
           notify(
@@ -208,11 +208,32 @@
             result.data.anchor_result === 'failed' ? 'warning' : 'success'
           );
 
-          refreshState(result.data);
+          return result.data;
         })
         .catch(function () {
           notify(config.messages.saveFailed, 'danger');
+          return null;
         });
+    }));
+  }
+
+  /**
+   * Aplicar el estado nuevo cuando el boton ya ha dejado de estar ocupado.
+   *
+   * GEABusy guarda el HTML del boton, lo sustituye por el spinner y al acabar
+   * lo restaura, ademas de re-habilitarlo. Cualquier cambio hecho dentro de
+   * la promesa --deshabilitar «enviar», cambiar la etiqueta a «reemitir»--
+   * se pierde en esa restauracion, y el boton acaba diciendo lo que decia
+   * antes. Su promesa resuelve despues de restaurar, asi que aqui es donde
+   * hay que pintar el resultado.
+   */
+  function applyWhenIdle(pending) {
+    if (!pending || typeof pending.then !== 'function') {
+      return;
+    }
+
+    pending.then(function (data) {
+      if (data) { refreshState(data); }
     });
   }
 
@@ -230,11 +251,131 @@
     });
   }
 
+  // ----------------------------------------------------------------
+  // El documento de la caja
+  //
+  // Emitir NO espera al anclaje, y esa es la parte que conviene entender: el
+  // QR que se estampa lleva la URL de la pagina de anclaje, no la prueba. Esa
+  // pagina se actualiza sola cuando el anclaje madura en un bloque de
+  // Bitcoin, asi que el PDF se emite una vez y no hay que reestamparlo nunca.
+  //
+  // Va como multipart y no como JSON porque sube el PDF original: el mismo
+  // que se esta usando para la vista previa.
+  // ----------------------------------------------------------------
+  function issueDocument(button) {
+    var layout = document.getElementById('summaryLayout');
+    var file = document.getElementById('summarySourceFile');
+    var alreadyIssued = documentIsIssued();
+
+    // Al reemitir se conserva el original que ya estaba guardado, asi que el
+    // archivo solo hace falta la primera vez.
+    if (!alreadyIssued && (!file || !file.files.length)) {
+      notify(config.messages.needSource, 'warning');
+      return;
+    }
+
+    var form = new FormData();
+
+    if (layout && layout.value) {
+      form.append('layout', layout.value);
+    }
+
+    if (file && file.files.length) {
+      form.append('source_file', file.files[0]);
+    }
+
+    applyWhenIdle(window.GEABusy.wrap(button, null, function () {
+      return fetch(config.issueUrl, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'X-CSRFToken': csrfToken() },
+        body: form
+      })
+        .then(function (response) {
+          return response.json().then(function (data) {
+            return { ok: response.ok, data: data };
+          });
+        })
+        .then(function (result) {
+          if (!result.ok) {
+            notify(result.data.detail || config.messages.saveFailed, 'danger');
+            return null;
+          }
+
+          notify(result.data.detail, 'success');
+
+          return result.data;
+        })
+        .catch(function () {
+          notify(config.messages.saveFailed, 'danger');
+          return null;
+        });
+    }));
+  }
+
+  function documentIsIssued() {
+    var badge = document.getElementById('documentStatus');
+
+    return !!(badge && badge.dataset.issued === 'true');
+  }
+
+  var issueButton = document.getElementById('issueDocument');
+
+  if (issueButton) {
+    issueButton.addEventListener('click', function () {
+      issueDocument(this);
+    });
+  }
+
+  function refreshDocument(data) {
+    var badge = document.getElementById('documentStatus');
+    var links = document.getElementById('documentLinks');
+    var button = document.getElementById('issueDocument');
+
+    if (button && typeof data.can_issue === 'boolean') {
+      button.disabled = !data.can_issue;
+    }
+
+    if (badge) {
+      badge.textContent = data.issued
+        ? config.labels.issued : config.labels.notIssued;
+      badge.className = 'badge ' + (data.issued ? 'bg-success' : 'bg-secondary');
+      badge.dataset.issued = data.issued ? 'true' : 'false';
+    }
+
+    var label = document.getElementById('issueDocumentLabel');
+
+    if (data.issued && label) {
+      label.textContent = config.labels.reissue;
+    }
+
+    if (!links) { return; }
+
+    if (!data.document) {
+      links.classList.add('d-none');
+      return;
+    }
+
+    setHref('documentCertified', data.document.certified_url);
+    setHref('documentPublic', data.document.public_url);
+    setHref('documentVerification', data.document.verification_url);
+
+    links.classList.remove('d-none');
+  }
+
+  function setHref(id, url) {
+    var link = document.getElementById(id);
+
+    if (link && url) { link.href = url; }
+  }
+
   function refreshState(data) {
     var hash = document.getElementById('masterHash');
     var status = document.getElementById('summaryStatus');
     var chain = document.getElementById('blockchainStatus');
     var sendButton = document.getElementById('sendToBlockchain');
+
+    refreshDocument(data);
 
     if (hash) { hash.textContent = data.master_hash || '—'; }
     if (status) { status.textContent = data.status_label || ''; }
