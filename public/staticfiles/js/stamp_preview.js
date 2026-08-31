@@ -301,6 +301,21 @@
       }
     }
 
+    // Los codigos de barras de los miembros de un resumen van uno por miembro
+    // y no uno para todos: el ancho de un Code128 depende de cuantos
+    // caracteres lleve, asi que dibujarlos todos iguales diria que caben en el
+    // mismo hueco cuando no es cierto.
+    this.memberSymbols = {};
+
+    var rawMembers = root.getAttribute('data-member-symbols');
+    if (rawMembers) {
+      try {
+        this.memberSymbols = JSON.parse(rawMembers) || {};
+      } catch (error) {
+        this.memberSymbols = {};
+      }
+    }
+
     var raw = root.getAttribute('data-placements');
     if (raw) {
       try {
@@ -746,8 +761,8 @@
       'gea-stamp-preview__box gea-stamp-preview__box--' +
       kindClass(placement.kind);
 
-    // El simbolo de verdad, pegado abajo a la izquierda igual que al estampar.
-    var symbol = this.symbols[placement.kind];
+    // El simbolo de verdad, centrado en su caja igual que al estampar.
+    var symbol = this.symbolFor(placement);
 
     if (symbol && symbol.src) {
       var image = document.createElement('img');
@@ -784,8 +799,25 @@
   /**
    * Coloca el simbolo dentro de la caja y cuenta cuanto ocupa de verdad.
    */
+  /**
+   * El simbolo que corresponde a una posicion.
+   *
+   * Un codigo de barras de miembro usa el suyo cuando se conoce; si no --un
+   * miembro recien anadido que todavia no se ha guardado, por ejemplo-- se
+   * cae al generico, que al menos da una idea del tamano.
+   */
+  StampPreview.prototype.symbolFor = function (placement) {
+    var code = (placement.member_code || '').trim().toUpperCase();
+
+    if (code && this.memberSymbols[code]) {
+      return this.memberSymbols[code];
+    }
+
+    return this.symbols[placement.kind];
+  };
+
   StampPreview.prototype.applySymbolFit = function (box, placement) {
-    var symbol = this.symbols[placement.kind];
+    var symbol = this.symbolFor(placement);
     var image = box.__symbolImage;
 
     if (!symbol || !image) {

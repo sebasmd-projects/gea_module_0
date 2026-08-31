@@ -179,22 +179,62 @@ def sample_symbols(
     *,
     barcode_length: int = BARCODE_SAMPLE_DEFAULT_LENGTH,
     barcode_payload: str = '',
-    qr_payload: str = ''
+    qr_payload: str = '',
+    anchor_payload: str = ''
 ) -> dict:
     """
-    Los dos simbolos que la vista previa sabe dibujar, por tipo de codigo.
+    Un simbolo por tipo de codigo, con lo real cuando lo hay.
 
     Las claves coinciden con ``CodeKindChoices`` para que el JS elija sin
     traducir nada.
+
+    Los dos QR se dibujan por separado --el propio del documento y el del
+    anclaje-- porque no llevan lo mismo: uno apunta a la pagina de
+    verificacion y el otro a la del anclaje. Comparten aspecto, pero no
+    contenido, y en un QR el contenido cambia la densidad del dibujo.
     """
-    qr = qr_sample(qr_payload)
     code = barcode_sample(barcode_length, barcode_payload)
 
     return {
         # Las claves son los valores de CodeKindChoices, no sus nombres.
-        'QR': qr,
+        'QR': qr_sample(qr_payload),
         'BARCODE': code,
-        # El codigo de un miembro del resumen es un codigo de barras.
+        # Sin carga propia del anclaje se cae a la del QR, y de ahi a la
+        # muestra: es mejor un QR parecido que ninguno.
+        'ANCHOR': qr_sample(anchor_payload or qr_payload),
+        # El codigo de un miembro del resumen es un codigo de barras. Este es
+        # el de reserva: los de verdad van uno por miembro, en member_symbols.
         'MEMBER': code,
-        'ANCHOR': qr,
     }
+
+
+def member_symbols(payloads: dict) -> dict:
+    """
+    Un codigo de barras por cada miembro del resumen, con su carga real.
+
+    Hace falta uno por miembro y no uno para todos porque el ancho de un
+    Code128 depende de cuantos caracteres lleve: dibujar todos con el mismo
+    simbolo diria que caben en el mismo hueco, y no es verdad.
+
+    Parameters:
+        payloads (dict): codigo del miembro (``AEGIS-1``) -> su carga real.
+
+    Returns:
+        dict: el mismo indice, con el simbolo dibujado de cada uno.
+    """
+    symbols = {}
+
+    for code, payload in (payloads or {}).items():
+        if not payload:
+            continue
+
+        try:
+            symbols[code] = barcode_sample(payload=payload)
+        except Exception:                  # pragma: no cover - defensivo
+            # Un miembro con una carga que no se pueda dibujar no puede dejar
+            # sin vista previa a los demas: se queda con el de reserva.
+            logger.warning(
+                'Could not draw the barcode of member %s', code, exc_info=True
+            )
+
+    return symbols

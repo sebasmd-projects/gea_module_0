@@ -341,9 +341,17 @@ class CodeDetailView(InternalToolAccessMixin, DetailView):
             context['layout_placements'] = placements_as_data(
                 document.stamp_layout
             )
+            # Este documento ya existe, asi que la vista previa dibuja lo que
+            # lleva de verdad y no una muestra: el ancho de un Code128 depende
+            # de la longitud del codigo, y con una muestra corta parece caber
+            # lo que en el papel se sale.
             context['stamp_preview'] = render_preview_container(
                 placements=placements_as_data(document.stamp_layout),
                 editable=False,
+                barcode_payload=document.code_payload or '',
+                qr_payload=(
+                    document.qr_payload or context['verification_url'] or ''
+                ),
             )
 
         return context
@@ -579,11 +587,48 @@ class SummaryComposerView(InternalToolAccessMixin, TemplateView):
         context['anchor_choices'] = AnchorChoices.choices
         context['layouts'] = StampLayoutModel.objects.filter(is_active=True)
 
+        # Los enlaces al documento los pinta el servidor. Antes salian con
+        # href="#" y solo el JS los rellenaba, y solo despues de emitir: al
+        # entrar en un resumen ya emitido los tres llevaban a la misma pagina.
+        from .api import _summary_document_payload
+
+        context['document'] = _summary_document_payload(summary)
+
         context['stamp_preview'] = render_preview_container(
             row_selector='[data-placement-row]',
             form_scope='#placementTable',
             pdf_input='#summarySourceFile',
             editable=True,
+            **self.real_symbols(summary),
         )
 
         return context
+
+    def real_symbols(self, summary) -> dict:
+        """
+        Lo que de verdad se va a estampar, para que la vista previa no mienta.
+
+        Con simbolos de muestra la vista previa engana justo en lo que se
+        mira: el ancho de un Code128 depende de cuantos caracteres lleve, asi
+        que una muestra corta cabe donde el codigo real no cabria. Con el
+        resumen ya compuesto no hay que adivinar nada, porque los cuatro
+        contenidos existen.
+        """
+        from .services.anchoring import anchor_url, summary_verification_url
+        from .services.summary import master_barcode_payload
+
+        payloads = {'members': {}}
+
+        if summary.master_hash:
+            payloads['barcode_payload'] = master_barcode_payload(summary)
+
+        payloads['qr_payload'] = summary_verification_url(summary)
+        payloads['anchor_payload'] = anchor_url(summary)
+
+        for member in summary.ordered_members():
+            code = (member.document.code_payload or '').strip()
+
+            if code:
+                payloads['members'][member.code] = code
+
+        return payloads
