@@ -28,9 +28,15 @@ La cuarta necesita dos ejecuciones separadas en el tiempo, porque la pregunta
 es literalmente «sigue vivo un rato despues»:
 
     manage.py check_workers            # mira 1, 2 y 3, y lee la prueba anterior
-    manage.py check_workers --spawn    # lanza el proceso de prueba
+    manage.py check_workers --spawn    # lanza el proceso de prueba (media hora)
     # ... media hora despues ...
     manage.py check_workers            # dice cuanto sobrevivio
+
+Media hora descarta el hosting que mata todo enseguida, que es lo mas comun.
+No dice nada del que mata un proceso de vez en cuando, y eso solo se ve
+dejandolo mas tiempo:
+
+    manage.py check_workers --spawn --minutes 1440    # un dia
 """
 
 import os
@@ -62,6 +68,15 @@ PROBE_GOOD_MINUTES = 10
 NOT_LAUNCHED = 'not_launched'
 RUNNING = 'running'
 
+# Margen de la duracion pedida. Por debajo de cinco minutos no se mide nada
+# util; por encima de una semana el rastro crece sin que aporte mas.
+PROBE_MIN_MINUTES = 5
+PROBE_LIMIT_MINUTES = 7 * 24 * 60
+
+# La prueba larga que se sugiere cuando la corta sale bien: un dia entero, que
+# es donde ya se notan los reinicios y los recortes del proveedor.
+PROBE_LONG_MINUTES = 24 * 60
+
 # Lo que un broker de Celery necesita del Redis y la cache no. Cada entrada es
 # (etiqueta, funcion, para que sirve) y se prueba de verdad contra el servidor.
 BROKER_KEY = 'celery'
@@ -77,9 +92,19 @@ class Command(BaseCommand):
             action='store_true',
             help=(
                 'Lanza un proceso de prueba desprendido de la peticion. No '
-                'hace nada salvo escribir la hora cada 30 segundos durante '
-                'media hora. Vuelve a ejecutar el comando mas tarde para ver '
-                'cuanto sobrevivio.'
+                'hace nada salvo escribir la hora cada 30 segundos. Vuelve a '
+                'ejecutar el comando mas tarde para ver cuanto sobrevivio.'
+            ),
+        )
+        parser.add_argument(
+            '--minutes',
+            type=int,
+            default=PROBE_MAX_MINUTES,
+            help=(
+                'Cuanto debe durar la prueba. Media hora descarta el hosting '
+                'que mata todo enseguida, que es lo mas comun, pero no prueba '
+                'que un worker aguante una semana. Para eso hace falta dejarlo '
+                'un dia: --minutes 1440.'
             ),
         )
 
@@ -91,7 +116,7 @@ class Command(BaseCommand):
         verdict['limits'] = self._check_limits()
 
         if options['spawn']:
-            self._spawn_probe()
+            self._spawn_probe(self._requested_minutes(options))
         else:
             verdict['survival'] = self._read_probe()
 
@@ -355,7 +380,13 @@ class Command(BaseCommand):
         except OSError:
             pass
 
-    def _spawn_probe(self):
+    def _requested_minutes(self, options) -> int:
+        """La duracion pedida, acotada a algo que tenga sentido medir."""
+        minutes = options.get('minutes') or PROBE_MAX_MINUTES
+
+        return max(PROBE_MIN_MINUTES, min(PROBE_LIMIT_MINUTES, minutes))
+
+    def _spawn_probe(self, minutes: int):
         """
         Lanzar un proceso desprendido que solo late.
 
@@ -377,12 +408,14 @@ class Command(BaseCommand):
             ))
             return
 
-        beats = directory / f'{timezone.now():%Y%m%d-%H%M%S}.beats'
+        # La duracion va en el nombre: al leer el rastro mas tarde hay que
+        # saber cuanto se esperaba, y puede no ser la de por defecto.
+        beats = directory / f'{timezone.now():%Y%m%d-%H%M%S}-{minutes}m.beats'
 
         script = (
             'import time,sys\n'
             'path=sys.argv[1]\n'
-            f'for i in range({int(PROBE_MAX_MINUTES * 60 / PROBE_BEAT_SECONDS)}):\n'
+            f'for i in range({int(minutes * 60 / PROBE_BEAT_SECONDS)}):\n'
             '    open(path,"a").write(str(time.time())+"\\n")\n'
             f'    time.sleep({PROBE_BEAT_SECONDS})\n'
         )
@@ -406,13 +439,13 @@ class Command(BaseCommand):
             return
 
         self.stdout.write(self.style.SUCCESS(
-            '   Lanzado. Late cada '
-            f'{PROBE_BEAT_SECONDS}s durante {PROBE_MAX_MINUTES} minutos.'
+            f'   Lanzado. Late cada {PROBE_BEAT_SECONDS}s durante '
+            f'{self._say_duration(minutes)}.'
         ))
         self.stdout.write(f'   Deja su rastro en {beats.name}')
         self.stdout.write('')
         self.stdout.write(
-            f'   Vuelve dentro de {PROBE_MAX_MINUTES} minutos y ejecuta el '
+            f'   Vuelve dentro de {self._say_duration(minutes)} y ejecuta el '
             'comando sin marcar nada. Lo que interesa no es que arranque '
             '--eso ya se ve--, sino que siga vivo entonces.'
         )
@@ -434,8 +467,9 @@ class Command(BaseCommand):
 
         if not traces:
             self.stdout.write(
-                '   Todavia no se ha lanzado ninguno. Lanza uno con --spawn y '
-                'vuelve dentro de media hora: es la comprobacion que decide.'
+                '   Todavia no se ha lanzado ninguno. Lanza uno con --spawn '
+                f'y vuelve dentro de {self._say_duration(PROBE_MAX_MINUTES)}: '
+                'es la comprobacion que decide.'
             )
             return NOT_LAUNCHED
 
@@ -461,15 +495,17 @@ class Command(BaseCommand):
 
         lived = (beats[-1] - beats[0]) / 60
         since = (time.time() - beats[-1]) / 60
-        expected = PROBE_MAX_MINUTES
+        expected = self._expected_minutes(trace)
         alive = since < 2
 
         self.stdout.write(
             f'   {len(beats)} latidos en {trace.name}: '
             + (
-                f'lleva {lived:.0f} minutos vivo de los {expected} previstos.'
+                f'lleva {self._say_duration(lived)} vivo de '
+                f'{self._say_duration(expected)} previstos.'
                 if alive else
-                f'vivio {lived:.0f} minutos de los {expected} previstos.'
+                f'vivio {self._say_duration(lived)} de '
+                f'{self._say_duration(expected)} previstos.'
             )
         )
 
@@ -480,37 +516,88 @@ class Command(BaseCommand):
                 '   Sigue vivo ahora mismo, que ya es buena senal.'
             ))
             self.stdout.write(
-                f'   Vuelve dentro de {remaining:.0f} minutos, cuando la '
-                'prueba haya terminado. **No la relances**: lanzar otra '
+                f'   Vuelve dentro de {self._say_duration(remaining)}, cuando '
+                'la prueba haya terminado. NO la relances: lanzar otra '
                 'empezaria a contar de cero y perderia lo andado.'
             )
             return RUNNING
 
         if lived >= expected - 1:
             self.stdout.write(self.style.SUCCESS(
-                '   Aguanto la prueba entera. Este servidor deja vivir a un '
-                'proceso desprendido.'
+                f'   Aguanto la prueba entera ({self._say_duration(expected)}). '
+                'Este servidor deja vivir a un proceso desprendido.'
             ))
-            self.stdout.write(
-                '   Ojo: media hora no son semanas. Antes de fiarlo todo a un '
-                'worker aqui, dejalo corriendo un dia y vuelve a mirar.'
-            )
+            self._suggest_longer(expected)
             return True
 
         if lived >= PROBE_GOOD_MINUTES:
             self.stdout.write(self.style.WARNING(
-                f'   Duro {lived:.0f} minutos y lo mataron antes de acabar. '
-                'Un worker aqui se moriria solo cada tanto, en silencio, y con '
-                'el las tareas que tuviera a medias.'
+                f'   Duro {self._say_duration(lived)} y lo mataron antes de '
+                'acabar. Un worker aqui se moriria solo cada tanto, en '
+                'silencio, y con el las tareas que tuviera a medias.'
             ))
             return False
 
         self.stdout.write(self.style.ERROR(
-            f'   Solo duro {lived:.0f} minutos. Este hosting no deja procesos '
-            'en segundo plano: un worker aqui no se sostiene.'
+            f'   Solo duro {self._say_duration(lived)}. Este hosting no deja '
+            'procesos en segundo plano: un worker aqui no se sostiene.'
         ))
 
         return False
+
+    def _suggest_longer(self, expected: float):
+        """
+        Lo que falta por saber, con el comando para averiguarlo.
+
+        Media hora descarta el hosting que mata todo enseguida, que es lo mas
+        comun, pero no dice nada de si un worker aguanta una semana. Antes
+        este aviso pedia dejarlo corriendo un dia sin ofrecer manera de
+        hacerlo: la duracion estaba fija en el codigo.
+        """
+        if expected >= PROBE_LONG_MINUTES:
+            self.stdout.write(
+                '   Y aguanto una prueba larga, que es lo mas que se puede '
+                'saber sin ponerlo en produccion.'
+            )
+            return
+
+        self.stdout.write(
+            f'   Ojo: {self._say_duration(expected)} no son semanas. Lo que '
+            'esto descarta es el hosting que mata todo enseguida, que es lo '
+            'mas comun, no el que mata un proceso de vez en cuando.'
+        )
+        self.stdout.write(
+            '   Para saber eso, una prueba larga y volver mañana:'
+        )
+        self.stdout.write(
+            f'      manage.py check_workers --spawn --minutes {PROBE_LONG_MINUTES}'
+        )
+
+    def _say_duration(self, minutes: float) -> str:
+        """Minutos, horas o dias, lo que se lea mejor."""
+        if minutes < 90:
+            return f'{minutes:.0f} minutos'
+
+        hours = minutes / 60
+
+        if hours < 48:
+            return f'{hours:.0f} horas'
+
+        return f'{hours / 24:.0f} dias'
+
+    def _expected_minutes(self, trace) -> int:
+        """
+        Cuanto se pidio que durase, leido del nombre del rastro.
+
+        Los rastros anteriores a la opcion --minutes no lo llevan, y para esos
+        vale el valor por defecto, que es lo que se uso al lanzarlos.
+        """
+        parts = trace.stem.rsplit('-', 1)
+
+        if len(parts) == 2 and parts[1].endswith('m') and parts[1][:-1].isdigit():
+            return int(parts[1][:-1])
+
+        return PROBE_MAX_MINUTES
 
     # ------------------------------------------------------------------
     def _conclude(self, verdict, *, spawned):

@@ -548,3 +548,7 @@ msgstr "Pregunta a los calendarios si las pruebas pendientes ya están en un blo
 #: .\apps\project\specific\internal\ops\registry.py:1
 msgid "When an anchor has been waiting longer than a few hours."
 msgstr "Cuando un anclaje lleva esperando más de unas horas."
+
+#: .\apps\project\specific\internal\ops\registry.py:1
+msgid "How long the test should last"
+msgstr "Cuánto debe durar la prueba"
