@@ -4,6 +4,17 @@ Renderizado de los simbolos: Code128 y QR.
 
 Todas las funciones devuelven ``bytes`` PNG para que sirvan indistintamente
 para incrustar en un PDF, guardar en disco o exponer como data URI.
+
+**El fondo es transparente por defecto**, y eso no siempre fue asi. Antes lo
+transparente habia que pedirlo, y solo lo pedia la vista previa: todo lo que
+se estampaba de verdad salia con un rectangulo blanco debajo que tapaba el
+diseño del documento. La vista previa enseñaba una cosa y el papel traia otra.
+
+Con el fondo transparente hay que colocar los codigos sobre zonas claras del
+documento -- un Code128 con las barras negras sobre un fondo oscuro no lo lee
+ningun escaner. Para eso esta el editor de disposiciones, y ahora la vista
+previa dibuja exactamente lo que se va a estampar, asi que el riesgo se ve
+antes de emitir.
 """
 
 import base64
@@ -42,7 +53,7 @@ def png_to_data_uri(png_bytes: bytes) -> str:
 def render_barcode_png(
     text: str,
     *,
-    transparent: bool = False,
+    transparent: bool = True,
     options: Optional[dict] = None
 ) -> bytes:
     """
@@ -79,7 +90,7 @@ def render_barcode_png(
 def render_qr_png(
     text: str,
     *,
-    transparent: bool = False,
+    transparent: bool = True,
     logo_static_path: str = DEFAULT_LOGO_STATIC_PATH,
     box_size: int = 10,
     border: int = 4
