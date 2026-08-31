@@ -18,12 +18,28 @@
  * 2. El estado se limpia en `pageshow`. Al volver con el boton Atras el
  *    navegador restaura la pagina desde la cache y, sin esto, el operador se
  *    encontraria un boton bloqueado para siempre.
+ *
+ * 3. El modulo se instala **una sola vez**, y ademas cada evento `submit` se
+ *    marca al tratarlo. Las dos cosas cubren el mismo fallo desde lados
+ *    distintos, y no sobran: una pagina que cargara este fichero dos veces
+ *    registraba dos escuchadores de captura, y entonces el segundo veia la
+ *    marca que acababa de poner el primero, lo tomaba por un doble clic y
+ *    cancelaba el envio. El formulario no se mandaba nunca, el boton se
+ *    quedaba en «Procesando…» para siempre y en la pestana de red no aparecia
+ *    ninguna peticion: nada que leer en ningun log, porque del lado del
+ *    servidor no llegaba a pasar nada.
  */
 (function () {
   'use strict';
 
+  // Ya instalado por otra copia del fichero: no se registra nada mas.
+  if (window.GEABusy) {
+    return;
+  }
+
   var BUSY_FLAG = 'geaBusy';
   var ORIGINAL_HTML = 'geaOriginalHtml';
+  var HANDLED = '__geaSubmitHandled';
 
   var script = document.currentScript;
 
@@ -120,6 +136,13 @@
       return;
     }
 
+    // Este mismo evento ya lo trato otra copia del modulo. No es un segundo
+    // envio: es el mismo, visto dos veces. Cancelarlo aqui seria matar el
+    // envio bueno, que es exactamente lo que pasaba.
+    if (event[HANDLED]) {
+      return;
+    }
+
     // Segundo envio: se corta aqui. Esta es la proteccion real contra el
     // doble click, no el atributo disabled.
     if (form.dataset.geaSubmitting === 'true') {
@@ -127,6 +150,8 @@
       event.stopImmediatePropagation();
       return;
     }
+
+    event[HANDLED] = true;
 
     // Si el navegador va a rechazar el formulario por validacion nativa no
     // hay envio, y bloquearlo dejaria el boton colgado.
