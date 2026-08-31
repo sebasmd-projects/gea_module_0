@@ -280,23 +280,14 @@
 
             {{ stamp_preview }}
 
-            <div class="table-responsive mt-3" id="placementTable">
-              <table class="table table-sm align-middle small mb-0">
-                <thead>
-                  <tr>
-                    <th>{% trans 'Code kind' %}</th>
-                    <th>{% trans 'Member' %}</th>
-                    <th>{% trans 'Pages' %}</th>
-                    <th>{% trans 'Anchor' %}</th>
-                    <th>X</th>
-                    <th>Y</th>
-                    <th>{% trans 'Width (pt)' %}</th>
-                    <th>{% trans 'Height (pt)' %}</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody id="placementRows"></tbody>
-              </table>
+            {% comment %}
+              Una tarjeta por posicion, no una fila de tabla. Son nueve campos,
+              y en una tabla salian tan estrechos que se solapaban. Repartidos
+              en dos filas cada uno tiene sitio, y el agrupamiento dice algo: la
+              primera es que codigo es y donde va, la segunda cuanto ocupa.
+            {% endcomment %}
+            <div class="mt-3" id="placementTable">
+              <div id="placementRows" class="gea-placements"></div>
             </div>
 
             <button type="button" class="btn btn-outline-secondary btn-sm mt-2" id="addPlacement">
@@ -310,46 +301,86 @@
 
   {% comment %} ================= Row template ================= {% endcomment %}
   <template id="placementRowTemplate">
-    <tr data-placement-row>
-      <td>
+  <div class="gea-placement" data-placement-row>
+
+    {% comment %} Fila 1: que codigo es, de quien, y donde va. {% endcomment %}
+    <div class="gea-placement__row gea-placement__row--what">
+      <label class="gea-placement__field">
+        <span class="gea-placement__label">{% trans 'Code kind' %}</span>
         <select class="form-select form-select-sm" name="placements-IDX-kind">
           {% for value, label in kind_choices %}
             <option value="{{ value }}">{{ label }}</option>
           {% endfor %}
         </select>
-      </td>
-      <td>
+      </label>
+
+      <label class="gea-placement__field gea-placement__field--narrow">
+        <span class="gea-placement__label">{% trans 'Member' %}</span>
         <input type="text" class="form-control form-control-sm"
-               name="placements-IDX-member_code" placeholder="AEGIS-1" size="8" />
-      </td>
-      <td>
+               name="placements-IDX-member_code" placeholder="AEGIS-1" />
+      </label>
+
+      <label class="gea-placement__field">
+        <span class="gea-placement__label">{% trans 'Pages' %}</span>
         <select class="form-select form-select-sm" name="placements-IDX-page_selector">
           {% for value, label in page_selector_choices %}
             <option value="{{ value }}">{{ label }}</option>
           {% endfor %}
         </select>
-        <input type="text" class="form-control form-control-sm mt-1"
+      </label>
+
+      <label class="gea-placement__field gea-placement__field--narrow">
+        <span class="gea-placement__label">{% trans 'Which pages' %}</span>
+        <input type="text" class="form-control form-control-sm"
                name="placements-IDX-page_numbers" placeholder="1, 3" />
-      </td>
-      <td>
+      </label>
+
+      <label class="gea-placement__field">
+        <span class="gea-placement__label">{% trans 'Anchor' %}</span>
         <select class="form-select form-select-sm" name="placements-IDX-anchor">
           {% for value, label in anchor_choices %}
             <option value="{{ value }}">{{ label }}</option>
           {% endfor %}
         </select>
-      </td>
-      <td><input type="number" step="0.5" class="form-control form-control-sm" name="placements-IDX-offset_x" value="28" /></td>
-      <td><input type="number" step="0.5" class="form-control form-control-sm" name="placements-IDX-offset_y" value="28" /></td>
-      <td><input type="number" step="0.5" class="form-control form-control-sm" name="placements-IDX-width" value="216" /></td>
-      <td><input type="number" step="0.5" class="form-control form-control-sm" name="placements-IDX-height" value="54" /></td>
-      <td class="text-center">
+      </label>
+
+      <div class="gea-placement__remove">
         <input type="hidden" name="placements-IDX-is_active" value="true" />
-        <button type="button" class="btn btn-outline-danger btn-sm" data-remove-placement>
+        <button type="button" class="btn btn-outline-danger btn-sm" data-remove-placement
+                title="{% trans 'Remove' %}">
           <i class="bi bi-trash"></i>
         </button>
-      </td>
-    </tr>
-  </template>
+      </div>
+    </div>
+
+    {% comment %} Fila 2: las medidas, en puntos PostScript. {% endcomment %}
+    <div class="gea-placement__row gea-placement__row--size">
+      <label class="gea-placement__field">
+        <span class="gea-placement__label">X</span>
+        <input type="number" step="0.5" class="form-control form-control-sm"
+               name="placements-IDX-offset_x" value="28" />
+      </label>
+
+      <label class="gea-placement__field">
+        <span class="gea-placement__label">Y</span>
+        <input type="number" step="0.5" class="form-control form-control-sm"
+               name="placements-IDX-offset_y" value="28" />
+      </label>
+
+      <label class="gea-placement__field">
+        <span class="gea-placement__label">{% trans 'Width (pt)' %}</span>
+        <input type="number" step="0.5" class="form-control form-control-sm"
+               name="placements-IDX-width" value="216" />
+      </label>
+
+      <label class="gea-placement__field">
+        <span class="gea-placement__label">{% trans 'Height (pt)' %}</span>
+        <input type="number" step="0.5" class="form-control form-control-sm"
+               name="placements-IDX-height" value="54" />
+      </label>
+    </div>
+  </div>
+</template>
 {% endblock main_layout %}
 
 {% block body_custom_js %}

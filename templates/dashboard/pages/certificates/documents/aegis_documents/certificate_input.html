@@ -12,7 +12,9 @@
     <div class="card">
 
         {% url 'certificates:certificates_landing' as landing_url %}
-        {% include 'dashboard/pages/certificates/includes/aegis_header.html' with url=landing_url %}
+        {% trans 'Certification' as certification_title %}
+        {% trans 'Verify a document' as here %}
+        {% include 'dashboard/pages/certificates/includes/aegis_header.html' with url=landing_url parent_title=certification_title parent_url=landing_url breadcrumbs=here %}
 
         <div class="card-body">
             <h1 class="text-center"> {% trans 'Verify Document Certificate' %} </h1>

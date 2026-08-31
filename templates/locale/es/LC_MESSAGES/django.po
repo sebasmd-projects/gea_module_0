@@ -3361,3 +3361,22 @@ msgstr "Sella el resumen primero: el resumen lleva el master hash dentro."
 msgid "Choose the summary PDF without codes."
 msgstr "Elige el PDF del resumen sin códigos."
 
+#: .\templates\dashboard\pages\certificates\includes\aegis_header.html:1
+msgid "Which pages"
+msgstr "Qué páginas"
+
+#: .\templates\dashboard\pages\certificates\includes\aegis_header.html:1
+msgid "AEGIS certification"
+msgstr "Certificación AEGIS"
+
+#: .\templates\dashboard\pages\certificates\includes\aegis_header.html:1
+msgid "Certification"
+msgstr "Certificación"
+
+#: .\templates\dashboard\pages\certificates\includes\aegis_header.html:1
+msgid "Verify a document"
+msgstr "Verificar un documento"
+
+#: .\templates\dashboard\pages\certificates\includes\aegis_header.html:1
+msgid "Verify a person"
+msgstr "Verificar una persona"

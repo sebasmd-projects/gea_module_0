@@ -1,5 +1,80 @@
-{% load static i18n %}
+{% load static i18n custom_filters %}
+{% comment %}
+  Encabezado de las paginas de certificacion.
 
-<a href="{{ url }}">
-    <img src="{% static 'assets/imgs/brands/aegis_header.webp' %}" alt="" class="img-fluid"/>
-</a>
+  El banner hacia de breadcrumb: era la unica forma de volver, y para saberlo
+  habia que pasar el raton por encima y ver que cambiaba el cursor. Un banner
+  que ademas navega no dice a donde lleva ni en que punto estas.
+
+  Ahora el banner sigue siendo un enlace --quien ya lo usaba no pierde nada--
+  pero debajo va un breadcrumb de verdad, con el mismo formato que el resto
+  del panel (`dashboard/partials/header/_header.html`), para no tener dos
+  convenciones distintas en el mismo producto.
+
+  Parametros:
+      url          a donde lleva el banner (obligatorio)
+      parent_title titulo del primer nivel (opcional)
+      parent_url   su enlace (opcional)
+      breadcrumbs  el resto del camino, separado por '>' (opcional).
+                   Cada tramo es "Titulo::/url" o solo "Titulo"; el ultimo se
+                   pinta como el sitio donde estas, sin enlace.
+
+  Ejemplo:
+      {% templatetag openblock %} include '...includes/aegis_header.html' with
+          url=landing_url
+          parent_title='Certificados'
+          parent_url=landing_url
+          breadcrumbs='Verificar documento' {% templatetag closeblock %}
+{% endcomment %}
+
+<div class="aegis-header">
+  {% comment %}
+    Centrado: el banner tiene un ancho propio y en pantalla ancha no llega a
+    los bordes, con lo que quedaba descolgado a la izquierda.
+  {% endcomment %}
+  <a href="{{ url }}" class="aegis-header__banner"
+     title="{% trans 'Back' %}">
+    <img src="{% static 'assets/imgs/brands/aegis_header.webp' %}"
+         alt="{% trans 'AEGIS certification' %}" class="img-fluid" />
+  </a>
+
+  {% if parent_title or breadcrumbs %}
+    <nav aria-label="breadcrumb" class="aegis-header__trail">
+      <ol class="breadcrumb mb-0 justify-content-center flex-wrap">
+        {% if parent_title %}
+          <li class="breadcrumb-item">
+            {% if parent_url %}
+              <a href="{{ parent_url }}">{{ parent_title }}</a>
+            {% else %}
+              {{ parent_title }}
+            {% endif %}
+          </li>
+        {% endif %}
+
+        {% if breadcrumbs %}
+          {% with items=breadcrumbs|split:'>' %}
+            {% for raw in items %}
+              {% with token=raw|trim %}
+                {% with pair=token|split:'::' %}
+                  {% if forloop.last %}
+                    <li class="breadcrumb-item active" aria-current="page">{{ pair.0 }}</li>
+                  {% else %}
+                    <li class="breadcrumb-item">
+                      {% if pair|length > 1 and pair.1 %}
+                        <a href="{{ pair.1 }}">{{ pair.0 }}</a>
+                      {% else %}
+                        {{ pair.0 }}
+                      {% endif %}
+                    </li>
+                  {% endif %}
+                {% endwith %}
+              {% endwith %}
+            {% endfor %}
+          {% endwith %}
+        {% endif %}
+      </ol>
+    </nav>
+  {% endif %}
+</div>
+
+<link rel="stylesheet" href="{% static 'css/aegis_header.css' %}" />

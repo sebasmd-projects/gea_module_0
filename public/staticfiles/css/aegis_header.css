@@ -1,0 +1,59 @@
+/*
+ * aegis_header.css — encabezado de las paginas de certificacion.
+ *
+ * Dos cosas que faltaban.
+ *
+ * El banner tiene un ancho propio y en pantalla ancha no llega a los bordes:
+ * sin centrarlo quedaba descolgado a la izquierda, con todo el hueco al otro
+ * lado. `margin-inline: auto` lo centra sin estirarlo, que es lo que hay que
+ * evitar -- ampliarlo mas alla de su tamano natural lo deja borroso.
+ *
+ * Y el breadcrumb, que antes no existia: el banner era la unica forma de
+ * volver, y para saberlo habia que pasar el raton por encima.
+ */
+
+.aegis-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.aegis-header__banner {
+  display: block;
+  margin-inline: auto;
+  max-width: 100%;
+  line-height: 0;
+}
+
+/* Un enlace que envuelve una imagen no se ve como enlace. Un cambio pequeño
+   al pasar por encima lo dice sin ensuciar la marca. */
+.aegis-header__banner img {
+  transition: opacity 120ms ease;
+}
+
+.aegis-header__banner:hover img,
+.aegis-header__banner:focus-visible img {
+  opacity: 0.88;
+}
+
+.aegis-header__banner:focus-visible {
+  outline: 2px solid var(--bs-primary, #0d6efd);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.aegis-header__trail {
+  width: 100%;
+}
+
+.aegis-header__trail .breadcrumb {
+  font-size: 0.85rem;
+  padding: 0.25rem 0.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aegis-header__banner img {
+    transition: none;
+  }
+}

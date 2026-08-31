@@ -22,8 +22,10 @@
 
     <div class="card shadow-sm">
 
-        {% url 'core:index' as landing_url %}
-        {% include 'dashboard/pages/certificates/includes/aegis_header.html' with url=landing_url %}
+        {% url 'core:index' as dashboard_url %}
+        {% trans 'Dashboard' as dashboard_title %}
+        {% trans 'Certification' as here %}
+        {% include 'dashboard/pages/certificates/includes/aegis_header.html' with url=dashboard_url parent_title=dashboard_title parent_url=dashboard_url breadcrumbs=here %}
 
         <div class="card-body">
 
