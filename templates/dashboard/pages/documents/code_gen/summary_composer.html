@@ -32,7 +32,7 @@
     {% csrf_token %}
     <div id="summaryFeedback"></div>
 
-    {# ================= ESTADO ================= #}
+    {% comment %} ================= ESTADO ================= {% endcomment %}
     <div class="card mb-4">
       <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
         <span><i class="fa-solid fa-file-lines me-2"></i>{{ summary.title }}</span>
@@ -56,7 +56,7 @@
     </div>
 
     <div class="row">
-      {# ================= MIEMBROS ================= #}
+      {% comment %} ================= MIEMBROS ================= {% endcomment %}
       <div class="col-xl-5">
         <div class="card mb-4">
           <div class="card-header d-flex justify-content-between align-items-center">
@@ -106,8 +106,8 @@
             <label class="form-label small" for="candidateSelect">
               {% trans 'Add a certified document' %}
             </label>
-            {# El buscador reemplaza visualmente a este select, que sigue #}
-            {# siendo el que summary_composer.js lee. #}
+            {% comment %} El buscador reemplaza visualmente a este select, que sigue {% endcomment %}
+            {% comment %} siendo el que summary_composer.js lee. {% endcomment %}
             <select class="form-select form-select-sm" id="candidateSelect"
                     data-searchable
                     data-search-placeholder="{% trans 'Search by title or code…' %}"
@@ -126,7 +126,7 @@
           </div>
         </div>
 
-        {# ================= SELLAR ================= #}
+        {% comment %} ================= SELLAR ================= {% endcomment %}
         <div class="card mb-4">
           <div class="card-header"><i class="fa-solid fa-stamp me-2"></i>{% trans 'Seal' %}</div>
           <div class="card-body">
@@ -134,9 +134,11 @@
               {% trans 'Sealing computes the master hash over the members. It never covers the summary itself — that document does not exist yet when the hash is computed.' %}
             </p>
 
-            {# Dos actos separados. Sellar es nuestro y es instantaneo; enviar
-               sale a la red y puede tardar o fallar, asi que se puede dejar
-               para despues sin volver a sellar. #}
+            {% comment %}
+              Dos actos separados. Sellar es nuestro y es instantaneo; enviar
+              sale a la red y puede tardar o fallar, asi que se puede dejar
+              para despues sin volver a sellar.
+            {% endcomment %}
             <div class="d-grid gap-2">
               <button type="button" class="btn btn-primary" id="sealAndSend"
                       data-loading-text="{% trans 'Sealing and sending…' %}">
@@ -156,7 +158,7 @@
           </div>
         </div>
 
-        {# ============ ENVIAR DESPUES DE HABER SELLADO ============ #}
+        {% comment %} ============ ENVIAR DESPUES DE HABER SELLADO ============ {% endcomment %}
         <div class="card mb-4">
           <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
             <span><i class="fa-brands fa-bitcoin me-2"></i>{% trans 'Blockchain' %}</span>
@@ -177,11 +179,13 @@
           </div>
         </div>
 
-        {# ============ EL DOCUMENTO DE LA CAJA ============
-           Emitir no espera al anclaje. El QR estampado lleva la URL de la
-           pagina de anclaje, no la prueba, y esa pagina se actualiza sola
-           cuando el anclaje madura: el PDF se emite una vez y no hay que
-           reestamparlo cuando llegue el bloque de Bitcoin. #}
+        {% comment %}
+          ============ EL DOCUMENTO DE LA CAJA ============
+          Emitir no espera al anclaje. El QR estampado lleva la URL de la
+          pagina de anclaje, no la prueba, y esa pagina se actualiza sola
+          cuando el anclaje madura: el PDF se emite una vez y no hay que
+          reestamparlo cuando llegue el bloque de Bitcoin.
+        {% endcomment %}
         <div class="card mb-4">
           <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
             <span><i class="fa-solid fa-file-circle-check me-2"></i>{% trans 'Summary document' %}</span>
@@ -225,7 +229,7 @@
         </div>
       </div>
 
-      {# ================= ESTAMPADO ================= #}
+      {% comment %} ================= ESTAMPADO ================= {% endcomment %}
       <div class="col-xl-7">
         <div class="card mb-4">
           <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
@@ -295,7 +299,7 @@
     </div>
   </div>
 
-  {# ================= Row template ================= #}
+  {% comment %} ================= Row template ================= {% endcomment %}
   <template id="placementRowTemplate">
     <tr data-placement-row>
       <td>

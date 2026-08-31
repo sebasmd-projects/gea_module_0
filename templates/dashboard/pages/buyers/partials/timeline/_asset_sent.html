@@ -20,7 +20,7 @@
     </p>
 
     <div class="timeline timeline-xs">
-      {# In possession #}
+      {% comment %} In possession {% endcomment %}
       <div class="timeline-item">
         <div class="timeline-item-marker">
           <div class="timeline-item-marker-indicator {{ offer.asset_in_possession_at|yesno:'bg-success,bg-danger' }}"></div>
@@ -36,7 +36,7 @@
         </div>
       </div>
 
-      {# Sent #}
+      {% comment %} Sent {% endcomment %}
       <div class="timeline-item">
         <div class="timeline-item-marker">
           <div class="timeline-item-marker-indicator {{ offer.asset_sent_at|yesno:'bg-success,bg-danger' }}"></div>

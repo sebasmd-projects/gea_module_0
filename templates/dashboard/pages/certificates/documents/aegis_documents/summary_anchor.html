@@ -21,7 +21,7 @@
       <p class="text-muted mb-0">{{ summary.title }}</p>
     </div>
 
-    {# ================= ESTADO ================= #}
+    {% comment %} ================= ESTADO ================= {% endcomment %}
     {% if state.anchored %}
       <div class="alert alert-success">
         <h2 class="h5 alert-heading">
@@ -42,7 +42,7 @@
       </div>
     {% endif %}
 
-    {# ================= MASTER HASH ================= #}
+    {% comment %} ================= MASTER HASH ================= {% endcomment %}
     <div class="card mb-4">
       <div class="card-header"><strong>{% trans 'Master hash' %}</strong></div>
       <div class="card-body">
@@ -83,7 +83,7 @@
       </div>
     </div>
 
-    {# ================= ANCLAJES ================= #}
+    {% comment %} ================= ANCLAJES ================= {% endcomment %}
     <div class="card mb-4">
       <div class="card-header"><strong>{% trans 'Anchors' %}</strong></div>
       <div class="card-body">
@@ -125,7 +125,7 @@
       </div>
     </div>
 
-    {# ================= MIEMBROS ================= #}
+    {% comment %} ================= MIEMBROS ================= {% endcomment %}
     <div class="card mb-4">
       <div class="card-header"><strong>{% trans 'Documents in the summary' %}</strong></div>
       <div class="card-body">
@@ -152,7 +152,7 @@
       </div>
     </div>
 
-    {# ================= ALCANCE ================= #}
+    {% comment %} ================= ALCANCE ================= {% endcomment %}
     <div class="alert alert-light border small">
       <strong>{% trans 'What this proves, and what it does not.' %}</strong>
       {% trans 'It proves WHEN: that this content existed on the stated date, attested by a third party. Who issued it is proven by the platform signature on each certification record. That what the documents claim is TRUE is not proven by any of this.' %}

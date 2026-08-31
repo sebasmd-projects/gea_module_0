@@ -17,7 +17,7 @@
       {% url 'certificates:input_document_verification_aegis' as input_url %}
       {% include 'dashboard/pages/certificates/includes/aegis_header.html' with url=input_url %}
 
-      {# ================== HEADER ================== #}
+      {% comment %} ================== HEADER ================== {% endcomment %}
       <div class="text-center my-4">
         <h1>{% trans 'Document Verification' %}</h1>
         <p class="text-muted">
@@ -25,7 +25,7 @@
         </p>
       </div>
 
-      {# ================== FILE MATCH RESULT ================== #}
+      {% comment %} ================== FILE MATCH RESULT ================== {% endcomment %}
       {% if file_match %}
         <div class="alert {% if file_match.is_exact %}alert-success{% else %}alert-info{% endif %} shadow-sm">
           <h2 class="h5 alert-heading">
@@ -43,15 +43,15 @@
       {% endif %}
 
       <div class="row">
-        {# ================== LEFT COLUMN ================== #}
+        {% comment %} ================== LEFT COLUMN ================== {% endcomment %}
         <div class="col-md-4 text-center">
           {% include "dashboard/pages/certificates/includes/left_column.html" %}
         </div>
 
-        {# ================== RIGHT COLUMN ================== #}
+        {% comment %} ================== RIGHT COLUMN ================== {% endcomment %}
         <div class="col-md-8" style=" background-image: url('{% static 'assets/imgs/brands/background_propensiones.webp' %}'); background-position: center; background-repeat: no-repeat; background-size: contain;">
 
-          {# ================== DOCUMENT METADATA ================== #}
+          {% comment %} ================== DOCUMENT METADATA ================== {% endcomment %}
           <h2 class="mb-3">{% trans 'Verified Document' %}</h2>
 
           <p class="mb-1">
@@ -110,7 +110,7 @@
             </p>
           {% endif %}
 
-          {# ================== CERTIFICATION RECORD (AUDIT) ================== #}
+          {% comment %} ================== CERTIFICATION RECORD (AUDIT) ================== {% endcomment %}
           {% if document.is_certified %}
             <div class="card border-secondary my-4">
               <div class="card-header bg-light">
@@ -123,7 +123,7 @@
                   {% trans 'The record below is what an auditor needs. It states what this certification does and does not attest, and lets anyone check the file they hold without having to come back to this platform.' %}
                 </p>
 
-                {# ---------- What it does / does not attest ---------- #}
+                {% comment %} ---------- What it does / does not attest ---------- {% endcomment %}
                 <div class="row g-3 mb-3">
                   <div class="col-md-6">
                     <div class="border rounded p-2 h-100">
@@ -143,7 +143,7 @@
                   </div>
                 </div>
 
-                {# ---------- Fingerprints ---------- #}
+                {% comment %} ---------- Fingerprints ---------- {% endcomment %}
                 <div class="table-responsive">
                   <table class="table table-sm small mb-2">
                     <thead>
@@ -183,7 +183,7 @@
                   {% trans 'on Windows.' %}
                 </p>
 
-                {# ---------- Downloads ---------- #}
+                {% comment %} ---------- Downloads ---------- {% endcomment %}
                 <div class="d-grid gap-2 d-md-flex">
                   <a class="btn btn-outline-dark btn-sm"
                      href="{% url 'certificates:certification_record' document.pk %}">
@@ -215,7 +215,7 @@
 
           <hr />
 
-          {# ================== LEGAL CERTIFICATION TEXT ================== #}
+          {% comment %} ================== LEGAL CERTIFICATION TEXT ================== {% endcomment %}
           <div style="text-align: justify;">
             {% blocktrans trimmed %}INSTITUTIONAL CERTIFICATION OF AUTHENTICITY, ORIGINALITY AND LEGAL VALIDITY
             PROPENSIONES ABOGADOS INTERNACIONAL S.A.S., a legally constituted entity identified with Tax ID (NIT) 901409813-7, duly incorporated and in full legal capacity under the laws of the Republic of Colombia, acting within the scope of its institutional authority,
@@ -227,7 +227,7 @@
 
           <hr />
 
-          {# ================== SCOPE ================== #}
+          {% comment %} ================== SCOPE ================== {% endcomment %}
           <div style="text-align: justify;">
             {% blocktrans trimmed %}SCOPE OF VALIDATION AND APPLICABLE LEGAL EFFECTS
             This certification and the document it authenticates produce full, enforceable and opposable legal effects. Its legal effectiveness is appropriate and sufficient within verification processes, due diligence, risk analysis, custody, assurance or institutional validation, without implying any waiver, substitution or limitation of the controls that each entity must carry out in accordance with its applicable legal regime.
@@ -236,7 +236,7 @@
 
           <hr />
 
-          {# ================== LEGAL REGIME ================== #}
+          {% comment %} ================== LEGAL REGIME ================== {% endcomment %}
           <div style="text-align: justify;">
             {% blocktrans trimmed %}APPLICABLE LEGAL REGIME
             Private International Law, General Principles of International Law, Vienna Convention on the Law of Treaties (1969), UNIDROIT Principles of International Commercial Contracts, international compliance standards, international AML/CFT regulations, Financial Action Task Force (FATF/GAFI) recommendations, and applicable provisions of the USA PATRIOT Act.{% endblocktrans %}
@@ -244,7 +244,7 @@
 
           <hr />
 
-          {# ================== SIGNATURE ================== #}
+          {% comment %} ================== SIGNATURE ================== {% endcomment %}
           <div class="mt-4">
             
             <img src="{% static 'assets/imgs/firma_jorge.webp' %}" alt="" class="img-fluid" style="max-height: 90px;" />
@@ -258,7 +258,7 @@
             </p>
           </div>
 
-          {# ================== BARCODE ================== #}
+          {% comment %} ================== BARCODE ================== {% endcomment %}
           <div class="text-center my-4">
             <img src="{{ barcode }}" alt="{% trans 'Verification Barcode' %}" style="max-width:100%;" />
           </div>

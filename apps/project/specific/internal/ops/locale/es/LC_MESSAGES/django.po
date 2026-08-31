@@ -524,3 +524,27 @@ msgstr "Comprueba que la cache responde y que se comparte entre procesos."
 #: .\apps\project\specific\internal\ops\registry.py:1
 msgid "After pointing REDIS_URL at the VPS, and when rate limits seem not to apply."
 msgstr "Después de apuntar REDIS_URL al VPS, y cuando parezca que los límites de tasa no se aplican."
+
+#: .\apps\project\specific\internal\ops\registry.py:1
+msgid "Scheduled tasks"
+msgstr "Tareas programadas"
+
+#: .\apps\project\specific\internal\ops\registry.py:1
+msgid "Checks whether the scheduled tasks are actually installed in the crontab."
+msgstr "Comprueba si las tareas programadas están instaladas de verdad en el crontab."
+
+#: .\apps\project\specific\internal\ops\registry.py:1
+msgid "When something that should run on its own has not run."
+msgstr "Cuando algo que debería correr solo no ha corrido."
+
+#: .\apps\project\specific\internal\ops\registry.py:1
+msgid "Mature blockchain proofs"
+msgstr "Madurar pruebas de la cadena de bloques"
+
+#: .\apps\project\specific\internal\ops\registry.py:1
+msgid "Asks the calendars whether the pending proofs are already in a Bitcoin block."
+msgstr "Pregunta a los calendarios si las pruebas pendientes ya están en un bloque de Bitcoin."
+
+#: .\apps\project\specific\internal\ops\registry.py:1
+msgid "When an anchor has been waiting longer than a few hours."
+msgstr "Cuando un anclaje lleva esperando más de unas horas."

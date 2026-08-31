@@ -1,21 +1,21 @@
 {% comment %}
-<!--
-_floating_input.html
+  <!--
+  _floating_input.html
 
-Parámetros esperados:
-    field: el campo (ej: form.username)
-    label: texto del label
-    show_eye: bool (si quieres botón de ojo)
-    eye_target_id: string (id del input a togglear)
+  Parámetros esperados:
+      field: el campo (ej: form.username)
+      label: texto del label
+      show_eye: bool (si quieres botón de ojo)
+      eye_target_id: string (id del input a togglear)
 
-Ejemplos de uso:
-    {% include "account/partials/_floating_input.html" with
-        field=form.password
-        label=_("Password")
-        show_eye=True
-        eye_target_id="id_password"
-    %}
--->
+  Ejemplos de uso:
+      {% include "account/partials/_floating_input.html" with
+          field=form.password
+          label=_("Password")
+          show_eye=True
+          eye_target_id="id_password"
+      %}
+  -->
 {% endcomment %}
 
 {% load i18n custom_filters %}

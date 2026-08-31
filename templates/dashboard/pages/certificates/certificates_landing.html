@@ -27,7 +27,7 @@
 
         <div class="card-body">
 
-            {# ================= TITLE ================= #}
+            {% comment %} ================= TITLE ================= {% endcomment %}
             <div class="text-center mb-5">
                 <h1 class="fw-bold">
                     {% trans 'Available Certifications' %}
@@ -38,10 +38,10 @@
             </div>
 
 
-            {# ================= GRID ================= #}
+            {% comment %} ================= GRID ================= {% endcomment %}
             <div class="row g-4 justify-content-center">
 
-                {# ================= CERTIFICATE CARDS ================= #}
+                {% comment %} ================= CERTIFICATE CARDS ================= {% endcomment %}
                 {% if certificates|length == 0 %}
                     <div class="col-12 text-center">
                         <p class="text-muted">

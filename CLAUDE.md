@@ -421,6 +421,17 @@ Sin build ni SPA. Plantillas Django + Bootstrap 5 por CDN; `templates/raw.html` 
 - Jerarquía: `templates/raw.html` → `templates/dashboard/dashboard_layout_base.html` → página.
 - Filtros y tags propios en `apps/common/utils/templatetags/custom_filters.py`
   (`add_class`, `add_attrs`, `currency`, `active_class`, `is_active`, `collapse_open_class`, `aria_expanded`, `split`, `trim`).
+- **Los comentarios van en `{% comment %}…{% endcomment %}`, nunca en `{# … #}`.**
+  Lo comprueba `apps/common/utils/tests_scripts.py`. Dos trampas al aplicarlo:
+  `{% comment %}` **es una etiqueta**, así que no puede ir antes de
+  `{% extends %}` —que tiene que ser la primera—; y dentro de un bloque
+  `{% comment %}` ya existente no se anida otro, porque el `{% endcomment %}`
+  interior lo cierra antes de tiempo y revive el código comentado.
+- **Un script que ya carga `raw.html` no se vuelve a cargar en una página.**
+  Cargar `busy_buttons.js` dos veces registraba dos escuchadores de `submit`, y
+  el segundo tomaba por doble clic el envío que el primero acababa de marcar:
+  el formulario no se enviaba, el botón se quedaba en «Procesando…» y no había
+  ni petición en la red ni nada en el log. También lo comprueba esa prueba.
 
 ---
 

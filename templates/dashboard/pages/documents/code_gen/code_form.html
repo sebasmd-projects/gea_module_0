@@ -38,12 +38,12 @@
 
       <div class="row">
 
-        {# ============================================================ #}
-        {# ======================= LEFT: FORM ========================= #}
-        {# ============================================================ #}
+        {% comment %} ============================================================ {% endcomment %}
+        {% comment %} ======================= LEFT: FORM ========================= {% endcomment %}
+        {% comment %} ============================================================ {% endcomment %}
         <div class="col-xl-7">
 
-          {# -------- 1. Identification -------- #}
+          {% comment %} -------- 1. Identification -------- {% endcomment %}
           <div class="card mb-4">
             <div class="card-header">
               <i class="fa-regular fa-file-lines me-2"></i>{% trans 'Identification' %}
@@ -78,7 +78,7 @@
             </div>
           </div>
 
-          {# -------- 2. Code segments -------- #}
+          {% comment %} -------- 2. Code segments -------- {% endcomment %}
           <div class="card mb-4">
             <div class="card-header">
               <i class="fa-solid fa-list-check me-2"></i>{% trans 'Code segments' %}
@@ -154,7 +154,7 @@
             </div>
           </div>
 
-          {# -------- 3. Symbols -------- #}
+          {% comment %} -------- 3. Symbols -------- {% endcomment %}
           <div class="card mb-4">
             <div class="card-header">
               <i class="fa-solid fa-qrcode me-2"></i>{% trans 'Symbols' %}
@@ -206,7 +206,7 @@
             </div>
           </div>
 
-          {# -------- 4. Certification -------- #}
+          {% comment %} -------- 4. Certification -------- {% endcomment %}
           <div class="card mb-4">
             <div class="card-header">
               <i class="fa-solid fa-shield-halved me-2"></i>{% trans 'Document certification' %}
@@ -288,9 +288,9 @@
           </div>
         </div>
 
-        {# ============================================================ #}
-        {# ====================== RIGHT: GUIDE ======================== #}
-        {# ============================================================ #}
+        {% comment %} ============================================================ {% endcomment %}
+        {% comment %} ====================== RIGHT: GUIDE ======================== {% endcomment %}
+        {% comment %} ============================================================ {% endcomment %}
         <div class="col-xl-5">
           <div class="card mb-4">
             <div class="card-header">
@@ -311,7 +311,7 @@
           </div>
         </div>
       </div>
-      {# Banco de trabajo de la disposicion, a todo el ancho #}
+      {% comment %} Banco de trabajo de la disposicion, a todo el ancho {% endcomment %}
       <div class="row">
         <div class="col-12">
           {% include 'dashboard/pages/documents/code_gen/partials/_layout_workspace.html' %}

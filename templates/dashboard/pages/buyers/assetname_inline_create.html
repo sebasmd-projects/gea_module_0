@@ -48,8 +48,8 @@
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data" novalidate id="inlineAssetForm">
                         {% csrf_token %}
-                        {# A donde volver tras guardar. La vista solo lo acepta #}
-                        {# si apunta a este mismo sitio. #}
+                        {% comment %} A donde volver tras guardar. La vista solo lo acepta {% endcomment %}
+                        {% comment %} si apunta a este mismo sitio. {% endcomment %}
                         {% if next_url %}
                           <input type="hidden" name="next" value="{{ next_url }}" />
                         {% endif %}
@@ -208,7 +208,7 @@
             </div>
 
             {% if assets %}
-            {# --- LISTADO INLINE DE ASSETS --- #}
+            {% comment %} --- LISTADO INLINE DE ASSETS --- {% endcomment %}
             <div class="card mb-4">
                 <div class="card-header"
                     style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
