@@ -21,7 +21,7 @@
     </p>
 
     <div class="timeline timeline-xs">
-      {# Created #}
+      {% comment %} Created {% endcomment %}
       <div class="timeline-item">
         <div class="timeline-item-marker">
           <div class="timeline-item-marker-indicator {{ offer.created|yesno:'bg-success,bg-danger' }}"></div>
@@ -37,7 +37,7 @@
         </div>
       </div>
 
-      {# Reviewed #}
+      {% comment %} Reviewed {% endcomment %}
       <div class="timeline-item">
         <div class="timeline-item-marker">
           <div class="timeline-item-marker-indicator {{ offer.reviewed_by_timestamp|yesno:'bg-success,bg-danger' }}"></div>
@@ -53,7 +53,7 @@
         </div>
       </div>
 
-      {# Approved #}
+      {% comment %} Approved {% endcomment %}
       <div class="timeline-item">
         <div class="timeline-item-marker">
           <div class="timeline-item-marker-indicator {{ offer.approved_by_timestamp|yesno:'bg-success,bg-danger' }}"></div>

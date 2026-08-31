@@ -3,7 +3,7 @@
 {% load i18n static %}
 
 {% block main_layout %}
-  {# ===== URLs y assets reutilizables ===== #}
+  {% comment %} ===== URLs y assets reutilizables ===== {% endcomment %}
   {% url 'buyers:buyer_index' as purchase_orders_url %}
   {% url 'buyers:buyer_create' as add_purchase_order_url %}
   {% url 'assets:create' as add_asset_url %}

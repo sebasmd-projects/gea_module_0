@@ -1,7 +1,7 @@
 {% comment %} templates/core/partials/core_nav.html {% endcomment %}
 {% load static i18n %}
 
-{# ====================== DESKTOP NAV ====================== #}
+{% comment %} ====================== DESKTOP NAV ====================== {% endcomment %}
 <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white container rounded mt-5"
      id="sidenavAccordion">
 
@@ -20,10 +20,10 @@
 
   {% include 'partials/nav/logo.html' %}
 
-  {# ======== CENTER BUTTONS (MD+) ======== #}
+  {% comment %} ======== CENTER BUTTONS (MD+) ======== {% endcomment %}
   <div class="d-none d-md-flex flex-grow-1 justify-content-center align-items-center gap-2">
 
-    {# ===== Buyers / Suppliers ===== #}
+    {% comment %} ===== Buyers / Suppliers ===== {% endcomment %}
     {% if request.user.is_authenticated %}
       {% if request.user.is_buyer or request.user.is_superuser or perms.users.can_view_buyer %}
         <a href="{% url 'buyers:buyer_index' %}"
@@ -42,7 +42,7 @@
       {% endif %}
     {% endif %}
 
-    {# ===== Certificates Dropdown (PUBLIC) ===== #}
+    {% comment %} ===== Certificates Dropdown (PUBLIC) ===== {% endcomment %}
     <div class="dropdown d-flex align-items-center">
       <button
         class="btn btn-outline-dark fw-semibold dropdown-toggle"
@@ -77,7 +77,7 @@
       </ul>
     </div>
 
-    {# ===== External Logos ===== #}
+    {% comment %} ===== External Logos ===== {% endcomment %}
     <a href="https://propensionesabogados.com/" target="_blank" rel="noopener">
       <img src="https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/propensiones_h.webp"
            alt="Propensiones Abogados"
@@ -92,7 +92,7 @@
 
   </div>
 
-  {# ===== RIGHT SIDE ===== #}
+  {% comment %} ===== RIGHT SIDE ===== {% endcomment %}
   <ul class="navbar-nav align-items-center ms-auto">
     {% include 'partials/nav/language_selector.html' %}
 
@@ -113,7 +113,7 @@
   </ul>
 </nav>
 
-{# ====================== MOBILE OFFCANVAS ====================== #}
+{% comment %} ====================== MOBILE OFFCANVAS ====================== {% endcomment %}
 <nav class="navbar navbar-dark bg-dark d-md-none">
   <div class="offcanvas offcanvas-end text-bg-dark" id="offcanvasDarkNavbar" tabindex="-1">
 
@@ -126,7 +126,7 @@
 
       <ul class="navbar-nav mb-3">
 
-        {# Language #}
+        {% comment %} Language {% endcomment %}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
             <i class="bi bi-translate me-1"></i> {% trans 'Language' %}
@@ -142,7 +142,7 @@
           </ul>
         </li>
 
-        {# Certificates (PUBLIC) #}
+        {% comment %} Certificates (PUBLIC) {% endcomment %}
         <li class="nav-item dropdown mt-2">
           <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
             <i class="bi bi-award me-1"></i> {% trans 'Certificates' %}

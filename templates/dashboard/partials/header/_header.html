@@ -68,9 +68,9 @@
 
       <nav class="mt-4 rounded" aria-label="breadcrumb">
         <ol class="breadcrumb px-3 py-2 rounded mb-0">
-          {# 1) Si viene 'breadcrumbs' (string), lo usamos #}
+          {% comment %} 1) Si viene 'breadcrumbs' (string), lo usamos {% endcomment %}
           {% if breadcrumbs %}
-            {# Opcionalmente pintamos el padre primero si viene #}
+            {% comment %} Opcionalmente pintamos el padre primero si viene {% endcomment %}
             {% if parent_title %}
               <li class="breadcrumb-item">
                 {% if parent_url %}
@@ -81,10 +81,10 @@
               </li>
             {% endif %}
 
-            {# 'breadcrumbs' es un string con ítems separados por '>' #}
+            {% comment %} 'breadcrumbs' es un string con ítems separados por '>' {% endcomment %}
             {% with items=breadcrumbs|split:'>' %}
               {% for raw in items %}
-                {# Cada ítem puede ser "Titulo::/url" o solo "Titulo" #}
+                {% comment %} Cada ítem puede ser "Titulo::/url" o solo "Titulo" {% endcomment %}
                 {% with token=raw|trim %}
                   {% with pair=token|split:'::' %}
                     {% if forloop.last %}
@@ -103,7 +103,7 @@
               {% endfor %}
             {% endwith %}
 
-            {# 2) Si NO viene 'breadcrumbs', mantenemos compat con parent/page_title #}
+            {% comment %} 2) Si NO viene 'breadcrumbs', mantenemos compat con parent/page_title {% endcomment %}
           {% else %}
             {% if parent_title %}
               <li class="breadcrumb-item">

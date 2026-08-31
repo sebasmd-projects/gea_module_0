@@ -249,6 +249,47 @@ COMMANDS = (
         ],
     ),
     Command(
+        name='check_cron',
+        title=_('Scheduled tasks'),
+        summary=_(
+            'Checks whether the scheduled tasks are actually installed in the '
+            'crontab.'
+        ),
+        detail=_(
+            'Declaring a task in CRONJOBS does not schedule it: django-crontab '
+            'writes it into the crontab only when someone runs '
+            '"manage.py crontab add". Until then the list exists in the code '
+            'and nobody runs it — with no error and nothing in the log. There '
+            'is a worse case too: the installed line carries a hash of the '
+            'whole job definition, schedule included, so changing a schedule '
+            'leaves the line pointing at a job that no longer exists. The '
+            'cron fires and runs nothing, and from outside it looks exactly '
+            'like everything working.'
+        ),
+        example=_('When something that should run on its own has not run.'),
+        risk=RISK_READ_ONLY,
+        timeout=60,
+    ),
+    Command(
+        name='upgrade_ots_anchors',
+        title=_('Mature blockchain proofs'),
+        summary=_(
+            'Asks the calendars whether the pending proofs are already in a '
+            'Bitcoin block.'
+        ),
+        detail=_(
+            'This is what the scheduled task does every 15 minutes. Running '
+            'it by hand catches up without waiting — useful when the task was '
+            'not installed, or right after installing it. It is safe to run '
+            'at any time: with nothing pending it does not even reach the '
+            'network, and a proof that has not matured yet is left for the '
+            'next round rather than treated as an error.'
+        ),
+        example=_('When an anchor has been waiting longer than a few hours.'),
+        risk=RISK_WRITES,
+        timeout=180,
+    ),
+    Command(
         name='check_requirements',
         title=_('Dependencies'),
         summary=_(

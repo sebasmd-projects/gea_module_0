@@ -79,6 +79,65 @@ class TestNoScriptIsLoadedTwice(SimpleTestCase):
         self.assertEqual(offenders, [])
 
 
+class TestCommentsUseTheBlockTag(SimpleTestCase):
+    """
+    Convencion del proyecto: los comentarios van en `{% comment %}`.
+
+    Los dos son comentarios validos de Django y ninguno llega al HTML, asi que
+    esto no cambia lo que se sirve. Lo que evita es la mezcla: media plantilla
+    de una forma y media de otra deja al siguiente sin saber cual es la buena.
+    """
+
+    def test_no_template_uses_the_hash_comment(self):
+        offenders = [
+            str(path.relative_to(TEMPLATES))
+            for path in TEMPLATES.rglob('*.html')
+            if '{#' in path.read_text(encoding='utf-8')
+        ]
+
+        self.assertEqual(offenders, [])
+
+    def test_not_even_the_templates_that_live_inside_the_apps(self):
+        """Las apps tambien traen alguna plantilla suelta."""
+        root = Path(settings.BASE_DIR) / 'apps'
+
+        offenders = [
+            str(path.relative_to(root))
+            for path in root.rglob('*.html')
+            if '{#' in path.read_text(encoding='utf-8')
+        ]
+
+        self.assertEqual(offenders, [])
+
+
+class TestEveryTemplateStillParses(SimpleTestCase):
+    """
+    Que ninguna plantilla quede rota, aunque no haya vista que la use.
+
+    Sin esto, una plantilla que solo se pinta en un caso poco frecuente puede
+    quedarse mal durante semanas. Paso al convertir los comentarios a
+    ``{% comment %}``: un fichero tenia comentarios `{# #}` **dentro** de un
+    bloque `{% comment %}` ya existente, y al convertirlos su
+    ``{% endcomment %}`` cerraba el bloque antes de tiempo, dejando vivo el
+    codigo que estaba comentado. Compilar no ejecuta nada, pero encuentra eso.
+    """
+
+    def test_all_of_them_compile(self):
+        from django.template.loader import get_template
+
+        broken = []
+
+        for path in sorted(TEMPLATES.rglob('*.html')):
+            name = str(path.relative_to(TEMPLATES)).replace('\\', '/')
+
+            try:
+                get_template(name)
+            except Exception as error:  # noqa: BLE001
+                broken.append(f'{name}: {type(error).__name__}: {error}')
+
+        self.assertEqual(broken, [])
+
+
 class TestTheBusyAttributeIsTheOneTheCodeReads(SimpleTestCase):
     """
     ``busy_buttons.js`` lee ``data-loading-text``. Un boton que escriba

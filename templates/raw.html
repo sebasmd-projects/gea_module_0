@@ -181,12 +181,12 @@
     
     
     {% block charts_js %}{% endblock charts_js %}
-    {# Spinner y bloqueo en los botones que disparan trabajo largo. #}
+    {% comment %} Spinner y bloqueo en los botones que disparan trabajo largo. {% endcomment %}
     <link rel="stylesheet" href="{% static 'css/busy_buttons.css' %}" />
     <script src="{% static 'js/busy_buttons.js' %}"
             data-default-loading-text="{% trans 'Processing…' %}" defer></script>
 
-    {# Avisos flotantes: se ven con la pagina scrolleada hasta el pie. #}
+    {% comment %} Avisos flotantes: se ven con la pagina scrolleada hasta el pie. {% endcomment %}
     {% include 'partials/toasts.html' %}
 
     {% block body_custom_js %}{% endblock body_custom_js %}

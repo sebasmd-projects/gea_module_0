@@ -367,14 +367,14 @@
                     </td>
 
                     <td>
-                      {# Botón ver detalle #}
+                      {% comment %} Botón ver detalle {% endcomment %}
                       <a href="{% url 'buyers:offer_details' field.id %}"
                         class="btn btn-datatable btn-icon btn-outline-info"
                         aria-label="{% trans 'Details' %}">
                         <i class="fa-solid fa-circle-info"></i>
                       </a>
 
-                      {# Si ya se envió la orden de pago -> candado rojo #}
+                      {% comment %} Si ya se envió la orden de pago -> candado rojo {% endcomment %}
                       {% if field.payment_order_sent_at %}
                         <span class="btn btn-datatable btn-icon disabled"
                               title="{% trans 'Payment order already sent' %}">

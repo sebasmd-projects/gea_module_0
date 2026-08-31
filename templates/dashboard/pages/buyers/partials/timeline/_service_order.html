@@ -19,7 +19,7 @@
     <p class="text-dark">{% trans 'Service Order' %}</p>
 
     <div class="timeline timeline-xs">
-      {# Created (AUTO al aprobar) #}
+      {% comment %} Created (AUTO al aprobar) {% endcomment %}
       <div class="timeline-item">
         <div class="timeline-item-marker">
           <div class="timeline-item-marker-indicator {{ offer.service_order_created_at|yesno:'bg-success,bg-danger' }}"></div>
@@ -36,7 +36,7 @@
       </div>
 
       {% if request.user.is_buyer or request.user.is_superuser %}
-      {# Sent #}
+      {% comment %} Sent {% endcomment %}
       <div class="timeline-item">
         <div class="timeline-item-marker">
           <div class="timeline-item-marker-indicator {{ offer.service_order_sent_at|yesno:'bg-success,bg-danger' }}"></div>

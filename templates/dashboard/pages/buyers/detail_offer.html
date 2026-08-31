@@ -1,7 +1,7 @@
 {% extends 'dashboard/dashboard_layout_base.html' %}
 {% load i18n static custom_filters %}
 
-{# ===== ICONOS / CSS TERCEROS ===== #}
+{% comment %} ===== ICONOS / CSS TERCEROS ===== {% endcomment %}
 {% block simple_datatables %}
   <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
 {% endblock %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block main_layout %}
-    {# ===== URLs y assets reutilizables ===== #}
+    {% comment %} ===== URLs y assets reutilizables ===== {% endcomment %}
     {% url 'buyers:buyer_index' as purchase_orders_url %}
     {% url 'buyers:buyer_create' as add_purchase_order_url %}
     {% url 'assets:create' as add_asset_url %}
@@ -36,10 +36,10 @@
     <!-- TODO: Cards para los usuarios que son HOLDERS (asset holders) -->
     {% if request.user.is_asset_holder or request.user.is_superuser %}
       <div class="row">
-        {# ---- Card: Assets & Service Orders ---- #}
+        ---- Card: Assets & Service Orders ----
         {% include 'dashboard/partials/header/_header_card.html' with icon_class='feather-xl text-green mb-3' icon_data_feather='archive' page_header_title=_('Assets and Service Orders') page_header_image=purchase_orders_image url=holder_index_url %}
 
-        {# ---- Card: Add new asset (solo holders verificados) ---- #}
+        ---- Card: Add new asset (solo holders verificados) ----
         {% if request.user.is_verified_holder %}
           {% include 'dashboard/partials/header/_header_card.html' with icon_class='feather-xl text-green mb-3' icon_data_feather='folder-plus' page_header_title=_('Add New Asset') page_header_image=add_asset_image url=add_asset_location_url %}
         {% endif %}
@@ -63,12 +63,12 @@
 
     <div class="row">
       <div class="col-md-8">
-        {# ====== RESUMEN DE LA OFERTA (tarjeta) ====== #}
+        {% comment %} ====== RESUMEN DE LA OFERTA (tarjeta) ====== {% endcomment %}
         {% include 'dashboard/pages/buyers/partials/_offer_summary_card.html' with offer=offer user=user %}
       </div>
 
       <div class="col-md-4">
-        {# ====== TIMELINE COMPLETO (se compone de parciales) ====== #}
+        {% comment %} ====== TIMELINE COMPLETO (se compone de parciales) ====== {% endcomment %}
         <div class="card">
           <div class="card-header" style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
             <h4 class="text-center text-dark">{% trans 'Timeline' %}</h4>
@@ -76,24 +76,24 @@
           
           <div class="card-body">
             <div class="timeline">
-              {# ---- Purchase Order ---- #}
+              {% comment %} ---- Purchase Order ---- {% endcomment %}
               {% include 'dashboard/pages/buyers/partials/timeline/_purchase_order.html' with offer=offer %}
 
-              {# ---- Service Order ---- #}
+              {% comment %} ---- Service Order ---- {% endcomment %}
               {% include 'dashboard/pages/buyers/partials/timeline/_service_order.html' with offer=offer %}
 
               {% if request.user.is_buyer or request.user.is_superuser %}
-                {# ---- Payment Order ---- #}
+                {% comment %} ---- Payment Order ---- {% endcomment %}
                 {% include 'dashboard/pages/buyers/partials/timeline/_payment_order.html' with offer=offer %}
 
-                {# ---- Asset Sent ---- #}
+                {% comment %} ---- Asset Sent ---- {% endcomment %}
                 {% include 'dashboard/pages/buyers/partials/timeline/_asset_sent.html' with offer=offer %}
 
-                {# ---- Profitability ---- #}
+                {% comment %} ---- Profitability ---- {% endcomment %}
                 {% include 'dashboard/pages/buyers/partials/timeline/_profitability.html' with offer=offer %}
               {% endif %}
 
-              {# ---- End ---- #}
+              {% comment %} ---- End ---- {% endcomment %}
               {% include 'dashboard/pages/buyers/partials/timeline/_end.html' with offer=offer %}
             </div>
           </div>
@@ -103,7 +103,7 @@
   </div>
 {% endblock %}
 
-{# ===== JS ===== #}
+{% comment %} ===== JS ===== {% endcomment %}
 {% block body_custom_js %}
   <script>
     document.addEventListener('DOMContentLoaded', function () {

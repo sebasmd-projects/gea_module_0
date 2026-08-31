@@ -20,7 +20,7 @@
     </p>
 
     <div class="timeline timeline-xs">
-      {# Created #}
+      {% comment %} Created {% endcomment %}
       <div class="timeline-item">
         <div class="timeline-item-marker">
           <div class="timeline-item-marker-indicator {{ offer.profitability_created_at|yesno:'bg-success,bg-danger' }}"></div>
@@ -36,7 +36,7 @@
         </div>
       </div>
 
-      {# Paid #}
+      {% comment %} Paid {% endcomment %}
       <div class="timeline-item">
         <div class="timeline-item-marker">
           <div class="timeline-item-marker-indicator {{ offer.profitability_paid_at|yesno:'bg-success,bg-danger' }}"></div>

@@ -1,4 +1,4 @@
-{# templates/dashboard/pages/buyers/wizard/partials/_offer_approval_wizard.html #}
+{% comment %} templates/dashboard/pages/buyers/wizard/partials/_offer_approval_wizard.html {% endcomment %}
 {% load i18n %}
 <div class="card mb-4" id="create_offer">
 
@@ -6,7 +6,7 @@
     style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);">
     <div class="nav nav-pills nav-justified flex-column flex-xl-row" id="wizardTab" role="tablist">
       <div class="step step-black mb-3 mb-xl-0 w-100">
-        {# 1. Purchase Order #}
+        {% comment %} 1. Purchase Order {% endcomment %}
         <div class="step-item {% if current_step >= 1 %}active{% endif %}">
           <a class="step-item-link text-black {% if current_step >= 1 %}{% else %}disabled{% endif %} {% if current_step == 1 %}active{% endif %}"
             id="wizard1-tab" data-bs-toggle="tab" href="#wizard1" role="tab" aria-controls="wizard1"
@@ -14,7 +14,7 @@
             {% trans 'Purchase Order' %}
           </a>
         </div>
-        {# 2. Service Order #}
+        {% comment %} 2. Service Order {% endcomment %}
         <div class="step-item {% if current_step >= 2 %}active{% endif %}">
           <a class="step-item-link text-black {% if current_step >= 2 %}{% else %}disabled{% endif %} {% if current_step == 2 %}active{% endif %}"
             id="wizard2-tab" data-bs-toggle="tab" href="#wizard2" role="tab" aria-controls="wizard2"
@@ -22,7 +22,7 @@
             {% trans 'Service Order' %}
           </a>
         </div>
-        {# 3. Payment Order #}
+        {% comment %} 3. Payment Order {% endcomment %}
         <div class="step-item {% if current_step >= 3 %}active{% endif %}">
           <a class="step-item-link text-black {% if current_step >= 3 %}{% else %}disabled{% endif %} {% if current_step == 3 %}active{% endif %}"
             id="wizard3-tab" data-bs-toggle="tab" href="#wizard3" role="tab" aria-controls="wizard3"
@@ -30,7 +30,7 @@
             {% trans 'Payment Order' %}
           </a>
         </div>
-        {# 4. Asset sent #}
+        {% comment %} 4. Asset sent {% endcomment %}
         <div class="step-item {% if current_step >= 4 %}active{% endif %}">
           <a class="step-item-link text-black {% if current_step >= 4 %}{% else %}disabled{% endif %} {% if current_step == 4 %}active{% endif %}"
             id="wizard4-tab" data-bs-toggle="tab" href="#wizard4" role="tab" aria-controls="wizard4"
@@ -38,7 +38,7 @@
             {% trans 'Asset sent' %}
           </a>
         </div>
-        {# 5. Profitability #}
+        {% comment %} 5. Profitability {% endcomment %}
         {% if perms.buyers.can_see_profitability_page %}
         <div class="step-item {% if current_step >= 5 %}active{% endif %}">
           <a class="step-item-link text-black {% if current_step >= 5 %}{% else %}disabled{% endif %} {% if current_step == 5 %}active{% endif %}"
@@ -48,7 +48,7 @@
           </a>
         </div>
         {% endif %}
-        {# 6. End #}
+        {% comment %} 6. End {% endcomment %}
         <div class="step-item {% if current_step >= 6 %}active{% endif %}">
           <a class="step-item-link text-black {% if current_step >= 6 %}{% else %}disabled{% endif %} {% if current_step == 6 %}active{% endif %}"
             id="wizard6-tab" data-bs-toggle="tab" href="#wizard6" role="tab" aria-controls="wizard6"
@@ -63,7 +63,7 @@
   <div class="card-body">
     <div class="tab-content" id="cardTabContent">
 
-      {# ======= TAB 1: Purchase Order ======= #}
+      {% comment %} ======= TAB 1: Purchase Order ======= {% endcomment %}
       <div class="tab-pane fade {% if current_step == 1 %}show active{% endif %}" id="wizard1" role="tabpanel"
         aria-labelledby="wizard1-tab">
         <div class="row justify-content-center">
@@ -124,7 +124,7 @@
         </div>
       </div>
 
-      {# ======= TAB 2: Service Order ======= #}
+      {% comment %} ======= TAB 2: Service Order ======= {% endcomment %}
       <div class="tab-pane fade {% if current_step == 2 %}show active{% endif %}" id="wizard2" role="tabpanel"
         aria-labelledby="wizard2-tab">
         <div class="row justify-content-center">
@@ -269,7 +269,7 @@
         </div>
       </div>
 
-      {# ======= TAB 3: Payment Order ======= #}
+      {% comment %} ======= TAB 3: Payment Order ======= {% endcomment %}
       <div class="tab-pane fade {% if current_step == 3 %}show active{% endif %}" id="wizard3" role="tabpanel"
         aria-labelledby="wizard3-tab">
         <div class="row justify-content-center">
@@ -326,7 +326,7 @@
         </div>
       </div>
 
-      {# ======= TAB 4: Asset movement ======= #}
+      {% comment %} ======= TAB 4: Asset movement ======= {% endcomment %}
       <div class="tab-pane fade {% if current_step == 4 %}show active{% endif %}" id="wizard4" role="tabpanel"
         aria-labelledby="wizard4-tab">
         <div class="row justify-content-center">
@@ -383,14 +383,14 @@
         </div>
       </div>
 
-      {# ======= TAB 5: Profitability ======= #}
+      {% comment %} ======= TAB 5: Profitability ======= {% endcomment %}
       <div class="tab-pane fade {% if current_step == 5 %}show active{% endif %}" id="wizard5" role="tabpanel"
         aria-labelledby="wizard5-tab">
         <div class="row justify-content-center">
           <h3 class="text-dark">{% trans 'Profitability' %}</h3>
           <h5 class="card-title">{% trans 'Create' %} &gt; {% trans 'Paid' %} &gt; {% trans 'End' %}</h5>
 
-          {# Profitability Created #}
+          {% comment %} Profitability Created {% endcomment %}
           <div class="border rounded p-3 h-100 my-2 {% if prof_created %}border-green{% endif %}">
             <div class="d-flex justify-content-between align-items-center">
               <div>
@@ -412,7 +412,7 @@
             </div>
           </div>
 
-          {# RRF sub-pago #}
+          {% comment %} RRF sub-pago {% endcomment %}
           <div class="border rounded p-3 h-100 my-2 {% if rrf_paid %}border-green{% endif %}">
             <div class="d-flex justify-content-between align-items-center">
               <div>
@@ -432,7 +432,7 @@
             </div>
           </div>
 
-          {# pay master sub-pago #}
+          {% comment %} pay master sub-pago {% endcomment %}
           <div class="border rounded p-3 h-100 my-2 {% if paymaster_paid %}border-green{% endif %}">
             <div class="d-flex justify-content-between align-items-center">
               <div>
@@ -452,7 +452,7 @@
             </div>
           </div>
 
-          {# Propensiones sub-pago #}
+          {% comment %} Propensiones sub-pago {% endcomment %}
           <div class="border rounded p-3 h-100 my-2 {% if propensiones_paid %}border-green{% endif %}">
             <div class="d-flex justify-content-between align-items-center">
               <div>
@@ -472,7 +472,7 @@
             </div>
           </div>
 
-          {# Profitability Paid (cierre) #}
+          {% comment %} Profitability Paid (cierre) {% endcomment %}
           <div class="border rounded p-3 h-100 my-2 {% if prof_paid %}border-green{% endif %}">
             <div class="d-flex justify-content-between align-items-center">
               <div>
@@ -505,7 +505,7 @@
       </div>
 
 
-      {# ======= TAB 6: End ======= #}
+      {% comment %} ======= TAB 6: End ======= {% endcomment %}
       <div class="tab-pane fade {% if current_step == 6 %}show active{% endif %}" id="wizard6" role="tabpanel"
         aria-labelledby="wizard6-tab">
         <div class="row justify-content-center">

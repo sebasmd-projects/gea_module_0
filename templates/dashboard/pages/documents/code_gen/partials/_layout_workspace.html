@@ -1,12 +1,14 @@
 {% load i18n %}
 
-{# ==========================================================
-   Banco de trabajo de la disposicion de estampado.
+{% comment %}
+  ==========================================================
+  Banco de trabajo de la disposicion de estampado.
 
-   La vista previa pinta la pagina real del PDF elegido arriba (se lee del
-   propio input, sin subirlo) y las cajas se arrastran sobre ella. La tabla y
-   la vista previa son la misma fuente: el JS lee estos inputs.
-   ========================================================== #}
+  La vista previa pinta la pagina real del PDF elegido arriba (se lee del
+  propio input, sin subirlo) y las cajas se arrastran sobre ella. La tabla y
+  la vista previa son la misma fuente: el JS lee estos inputs.
+  ==========================================================
+{% endcomment %}
 
 <div class="card mb-4" id="layoutWorkspace">
   <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
@@ -35,7 +37,7 @@
     </p>
 
     <div class="row">
-      {# -------- Preview -------- #}
+      {% comment %} -------- Preview -------- {% endcomment %}
       <div class="col-lg-6">
         <div data-gea-preview="1"
              id="layoutPreview"
@@ -53,7 +55,7 @@
              data-label-pdffailed="{% trans 'The document could not be rendered; the placements still work.' %}"></div>
       </div>
 
-      {# -------- Table -------- #}
+      {% comment %} -------- Table -------- {% endcomment %}
       <div class="col-lg-6">
         <div class="table-responsive" id="placementTable">
           <table class="table table-sm align-middle small mb-0">
@@ -81,7 +83,7 @@
   </div>
 </div>
 
-{# ================= MODAL: save as a new layout ================= #}
+{% comment %} ================= MODAL: save as a new layout ================= {% endcomment %}
 <div class="modal fade" id="newLayoutModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -128,7 +130,7 @@
   </div>
 </div>
 
-{# ================= Row template ================= #}
+{% comment %} ================= Row template ================= {% endcomment %}
 <template id="placementRowTemplate">
   <tr data-placement-row>
     <td>

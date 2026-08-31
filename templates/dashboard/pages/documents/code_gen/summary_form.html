@@ -148,9 +148,11 @@
 
 {% block body_custom_js %}
   {{ block.super }}
-  {# busy_buttons.js NO se carga aqui: raw.html ya lo trae para todas las
-     paginas. Cargarlo dos veces registraba dos escuchadores de submit y el
-     segundo cancelaba el envio del primero. #}
+  {% comment %}
+    busy_buttons.js NO se carga aqui: raw.html ya lo trae para todas las
+    paginas. Cargarlo dos veces registraba dos escuchadores de submit y el
+    segundo cancelaba el envio del primero.
+  {% endcomment %}
   <script src="{% static 'js/searchable_select.js' %}"></script>
 
   <script>

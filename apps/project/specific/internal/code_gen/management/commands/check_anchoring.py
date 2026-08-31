@@ -259,14 +259,24 @@ class Command(BaseCommand):
 
         hours = (timezone.now() - oldest.created).total_seconds() / 3600
 
+        # Tres bandas, no dos. Antes cualquier cosa por debajo de un dia se
+        # daba por normal, y eso incluia las 15 horas -- muy por encima de la
+        # ventana real de maduracion -- con lo que el comando tranquilizaba
+        # justo cuando habia que mirar.
         if hours > STALE_HOURS:
-            self.stdout.write(self.style.WARNING(
+            self.stdout.write(self.style.ERROR(
                 f'   El mas antiguo lleva {hours:.0f} horas esperando, y con '
-                f'{MATURES_TO_HOURS} suele bastar. El envio salio bien -- la '
-                'prueba esta guardada -- pero nadie la esta madurando: '
-                'comprueba que el cron "upgrade_ots_anchors" corra cada hora, '
-                'y ejecutalo a mano para ponerte al dia.'
+                f'{MATURES_TO_HOURS} suele bastar. El envio salio bien --la '
+                'prueba esta guardada-- pero nadie la esta madurando.'
             ))
+            self._blame_the_cron()
+        elif hours > MATURES_TO_HOURS:
+            self.stdout.write(self.style.WARNING(
+                f'   El mas antiguo lleva {hours:.1f} horas esperando, y la '
+                f'ventana normal acaba en {MATURES_TO_HOURS}. Todavia puede '
+                'ser un calendario lento, pero ya conviene mirar.'
+            ))
+            self._blame_the_cron()
         else:
             self.stdout.write(
                 f'   El mas antiguo lleva {hours:.1f} horas esperando. Es lo '
@@ -277,6 +287,24 @@ class Command(BaseCommand):
         self.stdout.write(
             '   El estado de cada resumen se ve en su pagina de anclaje, que es '
             'la del QR del resumen y se actualiza sola.'
+        )
+
+    def _blame_the_cron(self):
+        """
+        A donde mirar cuando una prueba lleva esperando de mas.
+
+        Casi siempre no es el envio: es que nadie la madura. Declarar la tarea
+        en ``CRONJOBS`` no la programa --hay que instalarla en el crontab--, y
+        anadir una tarea nueva no reinstala las que ya estaban.
+        """
+        self.stdout.write(
+            '   Quien las madura es el cron "upgrade_ots_anchors", y declararlo '
+            'en CRONJOBS no lo programa: hay que instalarlo en el crontab. '
+            '"manage.py check_cron" dice si esta instalado de verdad.'
+        )
+        self.stdout.write(
+            '   Para ponerse al dia ahora mismo, sin esperar al cron: '
+            '"manage.py upgrade_ots_anchors".'
         )
 
     # ------------------------------------------------------------------

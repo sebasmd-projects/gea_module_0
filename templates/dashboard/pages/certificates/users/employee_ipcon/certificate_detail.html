@@ -16,7 +16,7 @@
       {% url 'certificates:input_employee_verification_ipcon' as input_url %}
       {% include 'dashboard/pages/certificates/includes/aegis_header.html' with url=input_url %}
 
-      {# ================== HEADER ================== #}
+      {% comment %} ================== HEADER ================== {% endcomment %}
       <div class="text-center my-4">
         <h1>{% trans 'Verify IPCON Badge' %}</h1>
         <p class="text-muted">
@@ -25,16 +25,16 @@
       </div>
 
       <div class="row">
-        {# ================== LEFT COLUMN ================== #}
+        {% comment %} ================== LEFT COLUMN ================== {% endcomment %}
         <div class="col-md-4 text-center">
           {% include 'dashboard/pages/certificates/includes/left_column.html' %}
         </div>
 
-        {# ================== RIGHT COLUMN ================== #}
+        {% comment %} ================== RIGHT COLUMN ================== {% endcomment %}
         <div class="col-md-8">
-          {# ================== CERTIFICATE DATA ================== #}
+          {% comment %} ================== CERTIFICATE DATA ================== {% endcomment %}
           <div class="row g-3 align-items-start mb-3">
-            {# INFO (8) #}
+            {% comment %} INFO (8) {% endcomment %}
             <div class="{% if certificate.employee_photo %}
                 col-md-8
               {% else %}
@@ -67,7 +67,7 @@
               {% endif %}
             </div>
 
-            {# PHOTO (4) #}
+            {% comment %} PHOTO (4) {% endcomment %}
             {% if certificate.employee_photo %}
               <div class="col-md-4 text-center">
                 <img src="{% url 'certificates:employee_photo' certificate.pk %}" alt="{% trans 'Employee photo' %}" class="img-fluid rounded shadow-sm" style="max-height: 220px; object-fit: cover;" loading="lazy" decoding="async" />
@@ -77,7 +77,7 @@
 
           <hr />
 
-          {# ================== LEGAL TEXT ================== #}
+          {% comment %} ================== LEGAL TEXT ================== {% endcomment %}
           {% if certificate.approved and not certificate.is_revoked %}
             <p style="text-align: justify;">
               {% trans 'This document certifies that' %}
@@ -91,12 +91,12 @@
             </p>
           {% endif %}
 
-          {# ================== BARCODE ================== #}
+          {% comment %} ================== BARCODE ================== {% endcomment %}
           <div class="text-center my-4">
             <img id="barcode" src="{{ barcode }}" alt="Barcode" style="max-width:100%;" />
           </div>
 
-          {# ================== STATUS BLOCK ================== #}
+          {% comment %} ================== STATUS BLOCK ================== {% endcomment %}
           {% if certificate.is_revoked %}
             <div class="alert alert-danger text-center">
               <h3 class="mb-1">

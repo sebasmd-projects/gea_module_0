@@ -1,5 +1,5 @@
-{# templates/dashboard/pages/buyers/wizard/offer_wizard_page.html #}
 {% extends 'dashboard/dashboard_layout_base.html' %}
+{% comment %} templates/dashboard/pages/buyers/wizard/offer_wizard_page.html {% endcomment %}
 {% load i18n static custom_filters %}
 
 {% block simple_datatables %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block main_layout %}
-  {# ===== URLs y assets reutilizables ===== #}
+  {% comment %} ===== URLs y assets reutilizables ===== {% endcomment %}
   {% url 'buyers:buyer_index' as purchase_orders_url %}
   {% url 'buyers:buyer_create' as add_purchase_order_url %}
   {% url 'assets:create' as add_asset_url %}
@@ -33,7 +33,7 @@
   <!-- Main page content -->
   <div class="container-xl px-4 mt-n10">
     <div class="row">
-      {# Cards de cabecera (igual a tu diseño) #}
+      {% comment %} Cards de cabecera (igual a tu diseño) {% endcomment %}
       {% include 'dashboard/partials/header/_header_card.html' with icon_class='feather-xl text-green mb-3' icon_data_feather='file-text' page_header_title=purchase_orders page_header_image=purchase_orders_image url=purchase_orders_url %}
       {% include 'dashboard/partials/header/_header_card.html' with icon_class='feather-xl text-green mb-3' icon_data_feather='file-plus' page_header_title=add_new_purchase_order page_header_image=add_new_purchase_order_image url=add_purchase_order_url %}
       {% include 'dashboard/partials/header/_header_card.html' with icon_class='feather-xl text-green mb-3' icon_data_feather='archive' page_header_title=add_new_asset page_header_image=add_asset_image url=add_asset_url %}
@@ -43,7 +43,7 @@
       <div class="col-md-8 mb-3">
         <div class="row">
           <div class="col-12">
-            {# === AQUÍ se inyecta el wizard completo (tabs+contenido) === #}
+            {% comment %} === AQUÍ se inyecta el wizard completo (tabs+contenido) === {% endcomment %}
             <div id="wizard-shell">
               <div class="card mb-4">
                 <div class="card-body text-center">
@@ -57,7 +57,7 @@
           </div>
 
           <div class="col-12">
-            {# Resumen de la oferta #}
+            {% comment %} Resumen de la oferta {% endcomment %}
             {% include 'dashboard/pages/buyers/partials/_offer_summary_card.html' with offer=offer user=user %}
           </div>
         </div>
