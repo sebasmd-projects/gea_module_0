@@ -160,18 +160,55 @@ cPanel (web)                          VPS (Docker)
                      ◄── resultado  ◄───    escribe el resultado
 ```
 
-Lo que hay que resolver antes de decidirla:
+**Por qué funciona, que no es obvio.** El worker nunca habla con la aplicación
+web, ni ella con él. Los dos hablan con el broker: la web deja un mensaje en
+Redis y el worker lo recoge. No hace falta que se conozcan, ni que estén en la
+misma máquina, ni abrir nada nuevo hacia cPanel.
 
-- El worker necesita **el código de la aplicación** en el VPS: un despliegue
-  más que mantener sincronizado con cPanel.
-- Necesita **acceso a la base de datos** de cPanel (Remote MySQL, con la IP del
-  VPS en la lista blanca). Eso mete la latencia Colombia↔VPS en cada consulta
-  del worker — que no bloquea al usuario, pero hace las tareas más lentas.
-- Los ficheros: si una tarea genera un PDF, tiene que llegar al `MEDIA_ROOT` de
-  cPanel. Habría que subirlo, no escribirlo directamente.
+Y el broker no es interno: es un servicio de red desde el primer día. Está en
+el VPS, en el 6380 con TLS, y el cortafuegos deja entrar exactamente una IP
+—la de cPanel—. Por eso puede servir a los dos lados.
 
-Ninguno es insalvable. Los tres son trabajo real, y conviene contarlos antes de
-empezar y no a mitad.
+**Para un worker en el VPS es incluso más barato**: alcanza el Redis por la red
+de Docker, sin salir a internet. Ni saludo TLS por el cable, ni latencia, ni
+una regla de cortafuegos más. La mitad «broker» del problema desaparece.
+
+**Pero el problema se mueve, no se va.** Hoy la distancia la paga la web al
+hablar con el Redis, y se paga una vez por worker. Con el worker en el VPS, lo
+que queda lejos es lo que el worker más necesita:
+
+- **La base de datos.** MySQL vive en cPanel. Cada consulta del worker cruza
+  Colombia↔VPS, y una tarea que haga veinte consultas paga esa ida y vuelta
+  veinte veces. No bloquea al usuario —para eso se encoló—, pero las tareas se
+  vuelven notablemente más lentas.
+- **Los ficheros.** Un worker en el VPS no puede escribir en el disco de
+  cPanel. Todo lo que produzca un archivo tiene que subirlo, no guardarlo.
+- **El código.** Un despliegue más que mantener sincronizado.
+
+**Qué tarea encaja y cuál no**, con eso en la mano:
+
+| Tarea | Consultas | Ficheros | ¿Encaja en el VPS? |
+|---|---|---|---|
+| Traducción por OpenAI (hoy 20 s dentro de un `pre_save`) | pocas | no | **Sí.** Es además la que más molesta |
+| Envío de correo | pocas | no | **Sí** |
+| Anclaje en OpenTimestamps | pocas | no | Sí, aunque ya está resuelto por cron |
+| Generación de PDF y certificación | varias | **escribe tres** | **No**, mientras no se resuelvan los ficheros |
+
+O sea: un worker en el VPS resuelve hoy lo que de verdad estorba, y deja fuera
+la certificación. Eso no es un impedimento —la certificación se lanza a mano y
+nadie la espera de fondo—, pero conviene saberlo antes y no a mitad.
+
+**Lo que hay que comprobar antes de escribir una línea de código.** ¿Alcanza el
+VPS la base de datos de cPanel? cPanel tiene «Remote MySQL» para autorizar una
+IP, pero muchos hostings compartidos cierran el 3306 hacia fuera de todas
+formas. Desde el VPS:
+
+```bash
+nc -zv 190.90.160.103 3306        # o el host que diga DB_HOST
+```
+
+Si eso no conecta, la opción B se cae entera antes de empezar, y la respuesta
+pasa a ser C. Son treinta segundos y ahorran un rediseño.
 
 ### C. Quedarse con cron — **lo que ya funciona**
 
@@ -188,7 +225,13 @@ perfectamente aceptable.
 
 ## 6. Recomendación
 
-**Primero medir** (§4), porque descarta o abre la opción A sin discusión.
+Dos mediciones, y ninguna cuesta más de unos minutos. Las dos descartan una
+opción entera si salen mal, así que van antes que cualquier código:
+
+| Qué medir | Cómo | Qué descarta si falla |
+|---|---|---|
+| ¿Sobrevive un proceso en cPanel? | `check_workers --spawn`, y volver a mirar media hora después (§4) | La opción A |
+| ¿Alcanza el VPS el MySQL de cPanel? | `nc -zv <DB_HOST> 3306` desde el VPS | La opción B |
 
 Con lo que hoy se sabe, el orden sería:
 
@@ -196,8 +239,17 @@ Con lo que hoy se sabe, el orden sería:
    OpenAI del `pre_save`— sin depender de que el hosting permita nada nuevo, y
    reutiliza lo que ya corre. Es lo más barato y lo menos frágil.
 2. **B (worker en el VPS) si hace falta más.** Cuando el minuto de retraso o la
-   falta de paralelismo estorben de verdad, y asumiendo los tres costes del §5.B.
-3. **A solo si la medición sale bien de sobra**, y aun así con vigilancia.
+   falta de paralelismo estorben de verdad, asumiendo los costes del §5.B y
+   sabiendo que la certificación se queda fuera mientras los ficheros no se
+   resuelvan.
+3. **A solo si la medición sale bien de sobra**, y aun así con vigilancia:
+   CloudLinux mata procesos sin avisar, y un worker que se muere en silencio se
+   lleva por delante las tareas que tuviera a medias.
+
+Un matiz que hace que esto no sea una apuesta: **B y C no compiten en el
+código.** Las dos necesitan lo mismo —la tabla de tareas, la vista que encola,
+el endpoint de estado— y solo cambia quién ejecuta. Empezar por C no cierra la
+puerta a B; es el mismo trabajo hecho antes.
 
 Lo que **no** conviene es adoptar Celery para dejarlo apuntando al Redis actual:
 no arrancaría, y el motivo (`NOPERM` sobre claves que la cache nunca usa) es de
