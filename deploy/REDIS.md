@@ -172,6 +172,21 @@ user health on nopass resetkeys +ping
 #    silencio. Se necesita flushdb, y no flushall, porque django-redis vacia
 #    asi; flushdb solo afecta a esta base, que es solo de GEA.
 user gea on #PEGA_AQUI_EL_SHA256 ~gea:* +@read +@write +@keyspace -@dangerous +flushdb
+
+# 4) Solo si algun dia se monta una cola de tareas (Celery). Mientras no la
+#    haya, esta linea sobra: no se abre lo que no se usa.
+#
+#    Un broker necesita cosas que la cache no: sus propios nombres de clave,
+#    PING (@connection), pub/sub y transacciones. Con la ACL del usuario «gea»
+#    responde NOPERM a las cinco, y el sintoma seria de los peores --el Redis
+#    contesta, la cache va, y las tareas desaparecen sin ruido--, asi que va
+#    aparte y con otra contrasena.
+#
+#    Los tres patrones de clave son los que Celery usa de verdad. NO se pone
+#    «~*»: las ACL de Redis no se acotan por base de datos, asi que un usuario
+#    con «~*» conectado a la base 0 leeria y borraria las claves de la cache
+#    aunque el broker viva en la base 1. Comprobado.
+# user broker on #OTRO_SHA256 ~celery* ~_kombu* ~unacked* &* +@all -@dangerous -@admin
 ```
 
 Genera el hash de la contraseña **antes** de arrancar:

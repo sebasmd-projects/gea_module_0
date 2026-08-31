@@ -55,6 +55,13 @@ PROBE_MAX_MINUTES = 30
 # sobrevivir lo descarta, que es lo que se quiere saber.
 PROBE_GOOD_MINUTES = 10
 
+# Estados de la prueba de supervivencia. Son tres y no dos: «no se ha lanzado»
+# y «esta corriendo ahora» no son lo mismo, y confundirlos hacia que el
+# comando pidiera lanzar una prueba que ya estaba en marcha -- lo que ademas
+# habria reiniciado la medicion.
+NOT_LAUNCHED = 'not_launched'
+RUNNING = 'running'
+
 # Lo que un broker de Celery necesita del Redis y la cache no. Cada entrada es
 # (etiqueta, funcion, para que sirve) y se prueba de verdad contra el servidor.
 BROKER_KEY = 'celery'
@@ -430,7 +437,7 @@ class Command(BaseCommand):
                 '   Todavia no se ha lanzado ninguno. Lanza uno con --spawn y '
                 'vuelve dentro de media hora: es la comprobacion que decide.'
             )
-            return None
+            return NOT_LAUNCHED
 
         trace = traces[-1]
 
@@ -443,7 +450,7 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR(
                 f'   No se pudo leer {trace.name}.'
             ))
-            return None
+            return NOT_LAUNCHED
 
         if not beats:
             self.stdout.write(self.style.ERROR(
@@ -455,21 +462,29 @@ class Command(BaseCommand):
         lived = (beats[-1] - beats[0]) / 60
         since = (time.time() - beats[-1]) / 60
         expected = PROBE_MAX_MINUTES
+        alive = since < 2
 
         self.stdout.write(
-            f'   {len(beats)} latidos en {trace.name}: vivio {lived:.0f} '
-            f'minutos de los {expected} previstos.'
+            f'   {len(beats)} latidos en {trace.name}: '
+            + (
+                f'lleva {lived:.0f} minutos vivo de los {expected} previstos.'
+                if alive else
+                f'vivio {lived:.0f} minutos de los {expected} previstos.'
+            )
         )
 
-        if since < 2:
+        if alive:
+            remaining = max(0, expected - lived)
+
             self.stdout.write(self.style.SUCCESS(
-                '   Sigue vivo ahora mismo.'
+                '   Sigue vivo ahora mismo, que ya es buena senal.'
             ))
             self.stdout.write(
-                f'   Espera a que pasen los {expected} minutos para tener la '
-                'respuesta completa.'
+                f'   Vuelve dentro de {remaining:.0f} minutos, cuando la '
+                'prueba haya terminado. **No la relances**: lanzar otra '
+                'empezaria a contar de cero y perderia lo andado.'
             )
-            return None
+            return RUNNING
 
         if lived >= expected - 1:
             self.stdout.write(self.style.SUCCESS(
@@ -510,11 +525,26 @@ class Command(BaseCommand):
 
         survival = verdict.get('survival')
 
-        if survival is None:
+        if survival == NOT_LAUNCHED:
             self.stdout.write(
                 'Falta lo que decide: que un proceso desprendido sobreviva. '
                 'Lanzalo con --spawn.'
             )
+            return
+
+        if survival == RUNNING:
+            self.stdout.write(
+                'La prueba que decide esta en marcha. Vuelve cuando termine y '
+                'ejecuta esto otra vez sin marcar nada.'
+            )
+
+            if not verdict.get('broker'):
+                self.stdout.write(
+                    'Mientras tanto hay algo que si se puede ir haciendo: el '
+                    'Redis todavia no sirve de broker, y eso se arregla en la '
+                    'ACL sin tocar la cache.'
+                )
+
             return
 
         if not survival:
