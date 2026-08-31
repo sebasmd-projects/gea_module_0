@@ -20,6 +20,13 @@ Lo que fallaba
   insistente podia inflarla hasta pesar megabytes.
 * **Un administrador podia quedarse fuera de su propio panel** por teclear
   mal una URL.
+* **La respuesta contaba el bloqueo.** Un 403 que dice "esta IP esta
+  bloqueada por actividad sospechosa" y ademas ensena el numero de intentos y
+  la hora de expiracion le regala al escaner justo lo que necesita: que hay un
+  bloqueo por IP, que su sonda dio en la trampa y cuando volver. Ahora
+  responde el mismo 404 que cualquier otra pagina que no existe -- la misma
+  regla que ya sigue el admin (invariante 7 de ``CLAUDE.md``): un 403
+  confirma; un 404 no dice nada.
 
 Ver ``apps/common/utils/client_ip.py`` para la resolucion de la IP y las
 exenciones, que ahora viven en un solo sitio.
@@ -35,7 +42,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
-from apps.common.utils.blocking import capped_until, note_attempt
+from apps.common.utils.blocking import block_until, note_attempt
 from apps.common.utils.client_ip import get_client_ip, is_exempt
 from apps.common.utils.models import IPBlockedModel
 from apps.common.utils.views import is_safe_path
@@ -53,11 +60,11 @@ except Exception as error:
     template_name = 'errors_template.html'
 
 class DetectSuspiciousRequestMiddleware:
-    """Deja pasar, o devuelve 403 si la IP esta bloqueada ahora mismo."""
+    """Deja pasar, o devuelve 404 si la IP esta bloqueada ahora mismo."""
 
     def __init__(self, get_response):
         self.get_response = get_response
-        self.block_step = timedelta(
+        self.block_base = timedelta(
             minutes=getattr(settings, 'IP_BLOCKED_TIME_IN_MINUTES', 15)
         )
 
@@ -105,28 +112,48 @@ class DetectSuspiciousRequestMiddleware:
 
         self._note_attempt(blocked_entry, request)
 
-        logger.warning('Blocked IP %s attempted access.', client_ip)
+        # Toda la informacion del bloqueo se queda aqui, en el log del
+        # servidor, que es donde sirve para diagnosticar. La respuesta no
+        # lleva nada de esto.
+        logger.warning(
+            'Blocked IP %s attempted access to %s (attempt %s, until %s).',
+            client_ip,
+            path,
+            (blocked_entry.session_info or {}).get('attempt_count', 1),
+            blocked_entry.blocked_until,
+        )
 
+        return self._not_found(request)
+
+    def _not_found(self, request):
+        """
+        La respuesta para una IP bloqueada: un 404 y nada mas.
+
+        Es **exactamente** la misma pagina que devuelve ``handler404`` para
+        cualquier ruta que no existe, y a proposito: si el bloqueo tuviera su
+        propia pagina, su propio codigo o su propio texto, distinguir las dos
+        seria trivial y el escaner sabria que dio en la trampa.
+
+        Sigue siendo una respuesta util para quien la lee sin ser un bot --
+        pagina de error del producto, con su marca y su "no encontrado", no
+        una pantalla en blanco-- pero no dice que exista un bloqueo, ni
+        cuantos intentos van, ni cuando caduca. Un usuario legitimo pillado
+        por un falso positivo se diagnostica desde ``IPBlockedModel`` y desde
+        el log de arriba, no desde la pantalla del navegador.
+        """
         return render(
             request,
             template_name,
-            status=403,
+            status=404,
             context={
-                'exception': _(
-                    'This IP is temporarily blocked due to suspicious '
-                    'activity.'
-                ),
-                'title': _('Error 403'),
-                'error': _('Access denied due to suspicious activity.'),
-                'status': 403,
+                'exception': '',
+                'title': _('Error 404'),
+                'error': _('Page not found'),
+                'status': 404,
                 'error_image': (
                     'https://geausa.propensionesabogados.com/public/static/'
-                    'assets/imgs/status_errors/403-error-forbidden.svg'
+                    'assets/imgs/status_errors/404-error.svg'
                 ),
-                'attempt_count': (blocked_entry.session_info or {}).get(
-                    'attempt_count', 1
-                ),
-                'blocked_until': blocked_entry.blocked_until,
             },
         )
 
@@ -134,17 +161,20 @@ class DetectSuspiciousRequestMiddleware:
         """
         Anota el intento y alarga el bloqueo, pero con techo.
 
-        El techo es lo importante: antes cada peticion sumaba otro intervalo
-        sin limite, asi que insistir lo volvia perpetuo. Ahora insistir no
-        pasa de ``MAX_BLOCK`` desde ahora.
+        La duracion sale de ``blocking.block_until()``, la misma que usa la
+        vista trampa: duplica en cada intento y no pasa de ``MAX_BLOCK``.
+        Antes aqui se sumaba un intervalo fijo y alli se multiplicaba, asi que
+        el mismo escaner recibia castigos distintos segun por donde entrara.
         """
         try:
             with transaction.atomic():
-                blocked_entry.session_info = note_attempt(
-                    blocked_entry.session_info, request
-                )
-                blocked_entry.blocked_until = capped_until(
-                    self.block_step, current=blocked_entry.blocked_until
+                info = note_attempt(blocked_entry.session_info, request)
+
+                blocked_entry.session_info = info
+                blocked_entry.blocked_until = block_until(
+                    info['attempt_count'],
+                    self.block_base,
+                    current=blocked_entry.blocked_until,
                 )
                 blocked_entry.save(
                     update_fields=['session_info', 'blocked_until']

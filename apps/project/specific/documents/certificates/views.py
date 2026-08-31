@@ -25,7 +25,7 @@ from .models import (AegisSummaryModel, DocumentCopyKind, DocumentTypeChoices,
                      DocumentVerificationModel, UserCertificateTypeChoices,
                      UserVerificationModel)
 from .utils import send_otp_email, track_certificate_view, track_document_view
-from .verification import find_document_by_identifier, identify_uploaded_document
+from .verification import identify_uploaded_document, resolve_identifier
 from django.urls import reverse_lazy
 
 
@@ -299,9 +299,27 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
         identifier = form.cleaned_data['identifier']
         cert_type = form.cleaned_data['certificate_type']
 
-        document = find_document_by_identifier(identifier, cert_type)
+        # El formulario es un oraculo: dice si un codigo existe, y los codigos
+        # son cortos. Sin tope, probarlos todos es cuestion de tiempo de CPU
+        # ajeno. El intento se cuenta antes de buscar, para que acertar y
+        # fallar cuesten lo mismo.
+        if not self.can_try_identifier():
+            form.add_error(
+                'identifier',
+                _('Too many verification attempts. Try again later.')
+            )
+            return self.form_invalid(form)
 
-        if document is None:
+        self.record_identifier_attempt()
+
+        # Un identificador es un identificador: quien lee un codigo impreso no
+        # sabe si detras hay un documento o un resumen, y no tiene por que
+        # saberlo. Antes solo se miraba la tabla de documentos, asi que el
+        # codigo de un resumen --correcto, y en el papel que el usuario tenia
+        # delante-- respondia "Document not found".
+        kind, found = resolve_identifier(identifier, cert_type)
+
+        if found is None:
             if self.request.user.is_authenticated:
                 form.add_error("identifier", _("Document not found."))
             else:
@@ -311,9 +329,12 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
 
         self.request.session.pop(FILE_MATCH_SESSION_KEY, None)
 
+        if kind == 'summary':
+            return redirect('certificates:summary_detail', pk=found.pk)
+
         return redirect(
             'certificates:detail_document_verification_aegis',
-            pk=document.pk
+            pk=found.pk
         )
 
 
@@ -574,7 +595,7 @@ def certification_public_key(request):
 
 class AegisSummaryDetailView(OTPProtectedDocumentMixin, DetailView):
     """
-    Pagina publica del resumen: el resumen completa y su estado.
+    Pagina publica del resumen: sus miembros y su estado de anclaje.
     """
 
     model = AegisSummaryModel

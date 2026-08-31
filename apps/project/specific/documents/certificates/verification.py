@@ -35,7 +35,8 @@ from apps.project.specific.internal.code_gen.services.hashing import (
 from apps.project.specific.internal.code_gen.services.watermark import \
     read_watermark_reference
 
-from .models import DocumentCopyKind, DocumentVerificationModel
+from .models import (AegisSummaryModel, DocumentCopyKind,
+                     DocumentVerificationModel)
 
 logger = logging.getLogger(__name__)
 
@@ -232,3 +233,63 @@ def find_document_by_identifier(identifier: str, certificate_type: str = None):
         pass
 
     return queryset.filter(lookup).first()
+
+
+def find_summary_by_identifier(identifier: str):
+    """
+    Busca un **resumen** por su codigo publico, prefijo de UUID o UUID.
+
+    Un resumen tambien es una cosa certificada con un codigo publico impreso,
+    pero vive en su propia tabla (``apps_certificates_aegis_summary``), no en
+    la de documentos. El formulario publico solo miraba la de documentos, asi
+    que quien tecleaba el codigo de un resumen recibia "Document not found"
+    aunque el codigo fuera correcto y estuviera impreso en el papel que tenia
+    delante.
+
+    Quien lee un codigo no sabe --ni tiene por que saber-- en que tabla se
+    guarda. Un identificador es un identificador.
+
+    Returns:
+        AegisSummaryModel | None
+    """
+    normalized = (identifier or '').strip()
+
+    if not normalized:
+        return None
+
+    lookup = (
+        Q(public_code__iexact=normalized)
+        | Q(uuid_prefix__iexact=normalized)
+    )
+
+    try:
+        lookup |= Q(pk=uuid_module.UUID(normalized))
+    except (ValueError, AttributeError, TypeError):
+        pass
+
+    return AegisSummaryModel.objects.filter(lookup).first()
+
+
+def resolve_identifier(identifier: str, certificate_type: str = None):
+    """
+    Resuelve un identificador a lo que sea que designe.
+
+    Primero un documento, que es el caso comun; despues un resumen. El orden
+    importa poco --los codigos no se solapan-- pero fijarlo evita que el
+    resultado dependa del azar si algun dia se solaparan.
+
+    Returns:
+        tuple[str, object] | tuple[None, None]: ``('document', doc)``,
+        ``('summary', summary)``, o ``(None, None)`` si no hay nada.
+    """
+    document = find_document_by_identifier(identifier, certificate_type)
+
+    if document is not None:
+        return 'document', document
+
+    summary = find_summary_by_identifier(identifier)
+
+    if summary is not None:
+        return 'summary', summary
+
+    return None, None
