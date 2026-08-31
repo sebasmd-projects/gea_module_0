@@ -29,6 +29,20 @@ class OTPSessionMixin:
     OTP_VERIFY_WINDOW = timedelta(minutes=10)
     OTP_MAX_VERIFY_ATTEMPTS_PER_WINDOW = 10
 
+    # Limite del formulario de identificador.
+    #
+    # Faltaba: el OTP estaba limitado por todos lados, pero una vez superado
+    # se podian teclear codigos publicos sin ningun tope durante los 30
+    # minutos que dura el acceso. Y ese formulario es un oraculo -- dice si un
+    # codigo existe -- sobre codigos de 4 caracteres (personas) y 12
+    # (documentos). Con 4 caracteres el espacio se agota a fuerza bruta en
+    # nada; con 12 no, pero un enumerador tampoco tiene por que salir gratis.
+    #
+    # 20 intentos por cada 10 minutos no lo nota nadie que teclee un codigo de
+    # un papel, ni siquiera equivocandose varias veces.
+    IDENTIFIER_WINDOW = timedelta(minutes=10)
+    IDENTIFIER_MAX_ATTEMPTS_PER_WINDOW = 20
+
     # ======================
     # Session helpers
     # ======================
@@ -43,11 +57,18 @@ class OTPSessionMixin:
     # ======================
     def _client_ip(self) -> str:
         """
-        Si NO estás detrás de un proxy confiable configurado, usa REMOTE_ADDR.
-        Si sí lo estás (nginx/cloudflare), idealmente reemplaza esto por una función
-        que valide proxies confiables.
+        La misma respuesta que da el resto del proyecto.
+
+        Aqui habia una segunda implementacion --``REMOTE_ADDR`` a secas-- con
+        un comentario que pedia reemplazarla si algun dia habia un proxy. Ya
+        existe esa funcion: ``apps.common.utils.client_ip.get_client_ip``, que
+        no se cree ``X-Forwarded-For`` salvo que ``TRUSTED_PROXY_DEPTH`` diga
+        cuantos saltos hay. Tener dos respuestas a la misma pregunta es
+        exactamente lo que rompio la mitigacion anti-escaneo en su dia.
         """
-        return self.request.META.get("REMOTE_ADDR", "0.0.0.0")
+        from apps.common.utils.client_ip import get_client_ip
+
+        return get_client_ip(self.request)
 
     # ======================
     # OTP core
@@ -123,6 +144,38 @@ class OTPSessionMixin:
     def record_verify_attempt(self) -> None:
         ttl = int(self.OTP_VERIFY_WINDOW.total_seconds())
         self._incr_counter(self._verify_rate_key(), ttl)
+
+    # ======================
+    # Identifier lookups
+    # ======================
+    def _identifier_rate_key(self) -> str:
+        """
+        Se cuenta por IP, no por sesion.
+
+        La sesion la controla quien busca: basta con tirar la cookie para
+        empezar de cero, asi que un contador por sesion no limita nada frente
+        a un script. Los contadores del OTP se atan a la sesion a proposito
+        --para no castigar a toda una oficina por culpa de uno-- pero ahi el
+        limite protege un secreto que ya llego por correo a un buzon concreto.
+        Aqui no hay tal cosa: lo que se protege es el espacio de codigos, que
+        es comun.
+        """
+        return f'verify:identifier:{self._client_ip()}'
+
+    def can_try_identifier(self) -> bool:
+        ttl = int(self.IDENTIFIER_WINDOW.total_seconds())
+        key = self._identifier_rate_key()
+
+        count = cache.get(key)
+        if count is None:
+            cache.set(key, 0, timeout=ttl)
+            count = 0
+
+        return int(count) < self.IDENTIFIER_MAX_ATTEMPTS_PER_WINDOW
+
+    def record_identifier_attempt(self) -> None:
+        ttl = int(self.IDENTIFIER_WINDOW.total_seconds())
+        self._incr_counter(self._identifier_rate_key(), ttl)
 
     def set_otp_session(self, email: str, otp: str, *, purpose: str = "document_verification"):
         now = timezone.now()

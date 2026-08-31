@@ -12,7 +12,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import View
 
-from apps.common.utils.blocking import capped_until, note_attempt
+from apps.common.utils.blocking import block_duration, block_until, note_attempt
 from apps.common.utils.client_ip import get_client_ip, is_exempt
 from apps.common.utils.models import IPBlockedModel, WhiteListedIPModel
 
@@ -332,7 +332,9 @@ class HttpRequestAttackView(View):
             current_ip=client_ip,
             defaults={
                 'reason': IPBlockedModel.ReasonsChoices.SERVER_HTTP_REQUEST,
-                'blocked_until': timezone.now() + self.time_in_minutes,
+                'blocked_until': timezone.now() + block_duration(
+                    1, self.time_in_minutes
+                ),
                 'session_info': session_data
             }
         )
@@ -340,17 +342,17 @@ class HttpRequestAttackView(View):
         if not created:
             # Update attempt count and paths
             info = note_attempt(blocked_entry.session_info, request)
-            attempt_count = info['attempt_count']
 
-            # El castigo crece con la insistencia, pero con techo: sin el,
-            # seguir picando lo convertia en un bloqueo perpetuo.
-            if attempt_count > 2:
-                block_time = self.time_in_minutes * attempt_count
-            else:
-                block_time = self.time_in_minutes
-
+            # El castigo se duplica en cada intento, con techo. La curva vive
+            # en `blocking.py` porque el middleware aplica exactamente la
+            # misma: tenerla escrita dos veces era lo que hacia que la
+            # duracion dependiera de por donde hubiera entrado la peticion.
             blocked_entry.session_info = info
-            blocked_entry.blocked_until = capped_until(block_time)
+            blocked_entry.blocked_until = block_until(
+                info['attempt_count'],
+                self.time_in_minutes,
+                current=blocked_entry.blocked_until,
+            )
             blocked_entry.save()
 
         return redirect('/')

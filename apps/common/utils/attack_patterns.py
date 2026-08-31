@@ -70,8 +70,28 @@ def build_pattern(terms) -> str:
 
     alternation = '|'.join(re.escape(term) for term in terms)
 
-    # (^|/)  termino  (/|$)   -> segmento completo, con o sin barra final
-    return r'^.*(?:^|/)(?:' + alternation + r')(?:/|$).*$'
+    # (^|/) .? termino (.ext)* (/|$)
+    #
+    # La parte de la extension no es un adorno: sin ella la trampa dejaba
+    # pasar justo lo que mas se escanea. Los terminos se escriben sin
+    # extension --``xmlrpc``, ``wlwmanifest``, ``wp-login``-- pero lo que
+    # llega es ``/xmlrpc.php`` y ``/wlwmanifest.xml``, y exigir barra o fin
+    # justo despues del termino descartaba las dos.
+    #
+    # Se permiten varias (``config.php.bak``) y se acotan a letras y digitos:
+    # sin acotar, ``.*`` volveria a hacer del termino una subcadena suelta y
+    # con ella el autobloqueo de usuarios legitimos. Con esto ``/envio/``
+    # sigue pasando, porque tras ``env`` hace falta punto, barra o fin.
+    #
+    # El punto opcional del principio es por los dotfiles: ``/.env``,
+    # ``/.git/config``, ``/.aws/credentials``. Es de lo mas escaneado que hay
+    # y se colaba por un caracter. No abre la puerta a falsos positivos
+    # --sigue haciendo falta que el segmento sea el termino entero-- y este
+    # proyecto no tiene ninguna ruta que empiece por punto.
+    return (
+        r'^.*(?:^|/)\.?(?:' + alternation +
+        r')(?:\.[A-Za-z0-9]{1,10})*(?:/|$).*$'
+    )
 
 
 def find_conflicts(pattern: str, url_patterns=None) -> list:

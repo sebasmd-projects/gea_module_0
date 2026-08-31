@@ -60,7 +60,7 @@ urlpatterns = [
         CertificationRecordView.as_view(),
         name='certification_record'
     ),
-    # Resumen AEGIS (la caja completa).
+    # Resumen AEGIS: el resumen y los codigos de sus miembros.
     path(
         'verify/aegis/summary/<uuid:pk>/',
         AegisSummaryDetailView.as_view(),

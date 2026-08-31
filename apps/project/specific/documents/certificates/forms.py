@@ -31,9 +31,21 @@ class CertificateUserForm(forms.Form):
 
 
 class DocumentVerificationForm(forms.Form):
+    # Opcional, y con "todos" por defecto.
+    #
+    # Era obligatorio, y eso solo podia producir falsos negativos: el codigo
+    # publico es unico en toda la tabla, asi que el tipo no forma parte de la
+    # identidad -- solo acota la busqueda. Quien tiene el papel delante no
+    # sabe si lo que sostiene es un "Asset Certificate (AEGIS)" o un "Generic
+    # Document", y si elegia mal recibia "Document not found" con un codigo
+    # perfectamente valido en la mano.
     certificate_type = forms.ChoiceField(
-        choices=DocumentCertificateTypeChoices.choices,
-        label=_('Certificate type')
+        choices=[('', _('Any type'))] + list(
+            DocumentCertificateTypeChoices.choices
+        ),
+        required=False,
+        label=_('Certificate type'),
+        help_text=_('Optional: leave it as it is if you are not sure.'),
     )
 
     identifier = forms.CharField(
