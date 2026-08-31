@@ -225,7 +225,35 @@ class TestSurvivalIsTheOneThatDecides(WorkerCheckTestCase):
         output = self.run_command()
 
         self.assertIn('Sigue vivo ahora mismo', output)
-        self.assertIn('Falta lo que decide', output)
+        self.assertIn('esta en marcha', output)
+
+    def test_a_running_probe_is_not_confused_with_a_missing_one(self):
+        """
+        «No se ha lanzado» y «esta corriendo ahora» daban los dos el mismo
+        resultado, asi que el comando pedia lanzar una prueba que ya estaba en
+        marcha. Hacerle caso la habria reiniciado, perdiendo lo andado y
+        dejando la respuesta igual de lejos.
+        """
+        now = time.time()
+
+        self.write_beats([now - 120, now - 90, now - 60, now - 30, now])
+
+        output = self.run_command()
+
+        self.assertNotIn('--spawn', output)
+        self.assertNotIn('Todavia no se ha lanzado', output)
+        self.assertIn('No la relances', output)
+
+    def test_a_running_probe_says_how_long_is_left(self):
+        now = time.time()
+        start = now - 10 * 60
+
+        self.write_beats([start + n * 30 for n in range(21)])
+
+        output = self.run_command()
+
+        # 30 previstos menos los 10 que lleva.
+        self.assertIn('20 minutos', output)
 
     def test_it_reads_the_last_probe(self):
         now = time.time()

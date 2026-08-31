@@ -72,23 +72,34 @@ misma ACL, las cinco responden `NOPERM`:
 > las tareas desaparecerían sin ruido. Por eso `check_workers` prueba comando a
 > comando en vez de dar por bueno que «Redis funciona».
 
-**Cómo se abriría, sin tocar la cache.** Un usuario aparte y una base de datos
-aparte, para que el broker no pueda ni leer ni borrar las claves de la cache:
+**Cómo se abriría, sin tocar la cache.** Un usuario aparte, limitado a los
+nombres de clave que Celery usa de verdad:
 
 ```
 # En redis.conf, junto a los otros usuarios. La contraseña es otra.
-user broker on #<sha256 de otra contraseña> ~* &* +@all -@dangerous -@admin
+user broker on #<sha256 de otra contraseña> ~celery* ~_kombu* ~unacked* &* +@all -@dangerous -@admin
 ```
 
-Y el broker apuntando a otra base de datos que la cache:
+Y apuntándolo a otra base de datos que la cache, por orden:
 
 ```
 CELERY_BROKER_URL=rediss://broker:<clave>@redis.sebasmoralesd.com:6380/1?...
 ```
 
-`~*` y `&*` (todas las claves, todos los canales) son necesarios: Celery no
-deja elegir los nombres de sus claves internas. Se compensa aislándolo en su
-propia base de datos y quitándole `@admin`.
+Verificado contra un Redis real con esa ACL: las cinco operaciones que fallaban
+pasan —`PING`, `LPUSH`/`BRPOP` sobre `celery`, `PUBLISH`, `MULTI`, y las claves
+`unacked`, `_kombu.binding.*` y `celery-task-meta-*`— mientras `FLUSHALL` y
+`CONFIG` siguen denegados.
+
+> **Una corrección, porque este documento decía otra cosa.** La primera versión
+> daba `~*` (todas las claves) y afirmaba que la separación en otra base de
+> datos impedía que el broker tocara la cache. **Es falso, y está comprobado:**
+> las ACL de Redis no se acotan por base de datos, así que un usuario con `~*`
+> que se conecte a la base 0 lee y borra las claves `gea:*` sin problema.
+>
+> Con los tres patrones de arriba sí queda fuera: `GET gea:secreto` responde
+> `NOPERM`. La base de datos aparte sigue siendo buena idea por orden y por si
+> alguien ejecuta un `FLUSHDB`, pero **quien aísla es el patrón de claves**.
 
 ---
 
