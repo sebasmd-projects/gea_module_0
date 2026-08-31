@@ -141,6 +141,43 @@ def summary_verification_payload(summary) -> str:
     return summary_verification_url(summary)
 
 
+def _free_public_code(summary) -> str:
+    """
+    El codigo publico del resumen, si ningun documento lo tiene ya.
+
+    Los dos modelos exigen unicidad por su cuenta, asi que en teoria un
+    documento anterior podria llevar por casualidad el codigo de este resumen.
+    Es improbabilisimo --son doce caracteres al azar-- pero la alternativa a
+    comprobarlo es un IntegrityError al guardar, y eso saldria como un error
+    500 sin explicacion. Devolver cadena vacia deja que el modelo genere uno,
+    que es lo que hacia siempre.
+    """
+    from apps.project.specific.documents.certificates.models import \
+        DocumentVerificationModel
+
+    code = (summary.public_code or '').strip()
+
+    if not code:
+        return ''
+
+    taken = (
+        DocumentVerificationModel.objects
+        .filter(public_code=code)
+        .exclude(pk=summary.summary_document_id)
+        .exists()
+    )
+
+    if taken:
+        logger.warning(
+            'The public code %s of the summary %s is already taken by another '
+            'document; the summary document keeps a code of its own.',
+            code, summary.pk,
+        )
+        return ''
+
+    return code
+
+
 @transaction.atomic
 def certify_summary(summary, *, source_file=None, layout=None,
                     certificate_type=None, request=None):
@@ -178,6 +215,15 @@ def certify_summary(summary, *, source_file=None, layout=None,
                 certificate_type or DocumentCertificateTypeChoices.AEGIS
             ),
             issued_at=summary.issued_at or timezone.localdate(),
+            # El mismo codigo publico que el resumen, no uno nuevo.
+            #
+            # `DocumentVerificationModel.save()` se inventa uno cuando el campo
+            # viene vacio, y eso dejaba dos codigos distintos para una sola
+            # cosa: el listado mostraba el del resumen y el registro del PDF
+            # otro. Quien leyera uno no encontraria el otro. El documento no es
+            # un certificado aparte que alguien vaya a buscar por su cuenta: es
+            # el papel de este resumen, y su QR apunta a la pagina del resumen.
+            public_code=_free_public_code(summary),
         )
 
     if layout is not None:

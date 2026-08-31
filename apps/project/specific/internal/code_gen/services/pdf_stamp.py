@@ -147,7 +147,13 @@ def stamp_pdf(source: bytes, stamps: Iterable[StampSpec]) -> tuple:
                 height=spec.height,
                 mask='auto',
                 preserveAspectRatio=True,
-                anchor='sw',
+                # Centrado, no pegado al vertice inferior izquierdo. Un
+                # simbolo casi nunca tiene la proporcion exacta de la caja que
+                # se le asigna --un Code128 es mas ancho cuanto mas largo es el
+                # codigo--, asi que con 'sw' quedaba descolgado hacia un lado y
+                # el hueco sobrante caia todo al otro. La vista previa hace lo
+                # mismo: si cambia uno, cambia el otro.
+                anchor='c',
             )
 
             overlay.restoreState()

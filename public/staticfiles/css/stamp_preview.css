@@ -150,10 +150,14 @@
 
 /* --- Simbolo de ejemplo dentro de la caja --------------------------- */
 /* Pegado abajo a la izquierda, igual que anchor='sw' al estampar. */
+/* Centrado dentro de la caja, igual que `anchor='c'` en pdf_stamp.py. Un
+   simbolo rara vez tiene la proporcion exacta de su caja, y antes el hueco
+   sobrante caia todo a un lado porque se anclaba abajo a la izquierda. */
 .gea-stamp-preview__symbol {
   position: absolute;
-  left: 0;
-  bottom: 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   display: block;
   object-fit: fill;
   pointer-events: none;

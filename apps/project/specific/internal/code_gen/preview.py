@@ -59,9 +59,20 @@ def render_preview_container(
     page_width: float = DEFAULT_PAGE_WIDTH_PT,
     page_height: float = DEFAULT_PAGE_HEIGHT_PT,
     barcode_payload: str = '',
+    qr_payload: str = '',
+    anchor_payload: str = '',
+    members=None,
 ):
     """
     Devuelve el ``<div>`` que el JS convierte en vista previa.
+
+    **Muestras solo mientras no haya nada de verdad.** Sin documento cargado no
+    queda otra que dibujar un ejemplo de la longitud recomendada, y por eso el
+    editor de disposiciones deja elegir esa longitud a mano. Pero en cuanto el
+    contenido existe --el codigo del documento, el master hash del resumen, la
+    URL del anclaje, el codigo de cada miembro-- hay que dibujar **eso**: el
+    ancho de un Code128 depende de cuantos caracteres lleve, asi que una
+    muestra corta cabe donde el codigo real se sale.
 
     Parameters:
         row_selector (str): selector CSS de las filas del formset, cuando la
@@ -70,8 +81,13 @@ def render_preview_container(
         placements (list | None): posiciones fijas, para el modo solo lectura.
         editable (bool): permite arrastrar y redimensionar las cajas.
         extra_class (str): clases adicionales del contenedor.
-        barcode_payload (str): codigo real a dibujar en la muestra. Vacio
-            dibuja una carga de ejemplo de la longitud recomendada.
+        barcode_payload (str): el codigo de barras real. Vacio dibuja muestra.
+        qr_payload (str): el contenido real del QR propio. Vacio dibuja muestra.
+        anchor_payload (str): el contenido real del QR del anclaje. Vacio usa
+            el del QR propio, y si tampoco hay, la muestra.
+        members (dict | None): codigo de miembro -> su carga real, para los
+            codigos de barras de los miembros de un resumen. Cada uno se dibuja
+            con lo suyo, porque cada uno tiene un ancho distinto.
 
     Returns:
         SafeString: el contenedor listo para insertar en una plantilla.
@@ -83,15 +99,26 @@ def render_preview_container(
     # operador cambia la longitud de la muestra.
     from .services.samples import (BARCODE_SAMPLE_DEFAULT_LENGTH,
                                    BARCODE_SAMPLE_MAX_LENGTH,
-                                   BARCODE_SAMPLE_MIN_LENGTH, sample_symbols)
+                                   BARCODE_SAMPLE_MIN_LENGTH, member_symbols,
+                                   sample_symbols)
 
     try:
-        symbols = sample_symbols(barcode_payload=barcode_payload)
+        symbols = sample_symbols(
+            barcode_payload=barcode_payload,
+            qr_payload=qr_payload,
+            anchor_payload=anchor_payload,
+        )
     except Exception:                      # pragma: no cover - defensivo
         # Una muestra que no se pueda dibujar no puede tumbar la pagina: sin
         # simbolos la vista previa vuelve a las cajas de color de siempre.
         logger.warning('Sample symbols unavailable', exc_info=True)
         symbols = {}
+
+    try:
+        by_member = member_symbols(members or {})
+    except Exception:                      # pragma: no cover - defensivo
+        logger.warning('Member symbols unavailable', exc_info=True)
+        by_member = {}
 
     return format_html(
         '<div data-gea-preview="1" class="{}" '
@@ -105,7 +132,7 @@ def render_preview_container(
         'data-label-resize="{}" data-label-fitted="{}" '
         'data-label-exact="{}" data-label-samplelength="{}" '
         'data-label-samplehint="{}" '
-        'data-symbols="{}" data-symbols-url="{}" '
+        'data-symbols="{}" data-member-symbols="{}" data-symbols-url="{}" '
         'data-sample-length="{}" data-sample-min="{}" '
         'data-sample-max="{}"></div>',
         extra_class,
@@ -128,6 +155,7 @@ def render_preview_container(
         labels['samplelength'],
         labels['samplehint'],
         json.dumps(symbols),
+        json.dumps(by_member),
         reverse('code_gen:preview_symbols'),
         BARCODE_SAMPLE_DEFAULT_LENGTH,
         BARCODE_SAMPLE_MIN_LENGTH,

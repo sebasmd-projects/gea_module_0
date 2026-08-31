@@ -358,3 +358,61 @@ class TestWhenThingsGoWrong(SummaryIssueTestCase):
 
         self.summary.refresh_from_db()
         self.assertIsNone(self.summary.summary_document)
+
+
+class TestThePublicCode(SummaryIssueTestCase):
+    """
+    Un resumen y su documento son una sola cosa para quien los mira.
+
+    `DocumentVerificationModel.save()` se inventa un codigo publico cuando el
+    campo viene vacio, y eso dejaba dos codigos distintos: el listado mostraba
+    uno y el registro del PDF otro. Quien leyera el del papel no encontraria el
+    del listado.
+    """
+
+    def test_the_document_carries_the_code_of_its_summary(self):
+        self.seal()
+        self.issue()
+
+        self.summary.refresh_from_db()
+
+        self.assertEqual(
+            self.summary.summary_document.public_code,
+            self.summary.public_code,
+        )
+
+    def test_reissuing_does_not_change_it(self):
+        self.seal()
+        self.issue()
+
+        self.summary.refresh_from_db()
+        before = self.summary.summary_document.public_code
+
+        self.issue(upload=False)
+
+        self.summary.refresh_from_db()
+        self.assertEqual(self.summary.summary_document.public_code, before)
+
+    def test_a_code_already_taken_does_not_break_the_issue(self):
+        """
+        Improbabilisimo --son doce caracteres al azar-- pero la alternativa a
+        comprobarlo es un IntegrityError al guardar, que saldria como un 500
+        sin explicacion.
+        """
+        DocumentVerificationModel.objects.create(
+            document_title='Otro documento cualquiera',
+            issued_at=date(2026, 1, 15),
+            public_code=self.summary.public_code,
+        )
+
+        self.seal()
+        response = self.issue()
+
+        self.assertEqual(response.status_code, 200, response.content)
+
+        self.summary.refresh_from_db()
+        document = self.summary.summary_document
+
+        self.assertIsNotNone(document)
+        self.assertTrue(document.public_code)
+        self.assertNotEqual(document.public_code, self.summary.public_code)
