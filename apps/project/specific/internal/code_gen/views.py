@@ -372,7 +372,7 @@ class StampLayoutEditView(InternalToolAccessMixin, TemplateView):
     Editor de una disposicion con vista previa en vivo.
 
     El formset y la vista previa comparten los mismos inputs: el JS lee las
-    filas y repinta al vuelo, y al arrastrar una caja escribe de vuelta los
+    filas y repinta al vuelo, y al arrastrar un resumen escribe de vuelta los
     desplazamientos.
     """
 
@@ -454,7 +454,7 @@ class SummaryListView(InternalToolAccessMixin, ListView):
 
 class SummaryCreateView(InternalToolAccessMixin, CreateView):
     """
-    Alta de una caja AEGIS sin pasar por el admin.
+    Alta de un resumen AEGIS sin pasar por el admin.
 
     Hasta ahora el unico camino era el admin: la lista decia "creala desde el
     admin y componla aqui", que obliga a saltar entre dos interfaces para una
@@ -510,7 +510,7 @@ class SummaryCreateView(InternalToolAccessMixin, CreateView):
 
         messages.success(
             self.request,
-            _('Box created. Now add the certificates it contains.')
+            _('Summary created. Now add the certificates it gathers.')
         )
 
         return response
@@ -523,10 +523,10 @@ class SummaryCreateView(InternalToolAccessMixin, CreateView):
 
 class SummaryComposerView(InternalToolAccessMixin, TemplateView):
     """
-    Compone la caja: elige los documentos, coloca sus codigos y sella.
+    Compone el resumen: elige los documentos, coloca sus codigos y sella.
 
     Los codigos de barras de los miembros se arrastran igual que los propios;
-    la diferencia es que cada caja sabe de que documento viene.
+    la diferencia es que cada resumen sabe de que documento viene.
     """
 
     template_name = 'dashboard/pages/documents/code_gen/summary_composer.html'
@@ -565,7 +565,7 @@ class SummaryComposerView(InternalToolAccessMixin, TemplateView):
             if summary.summary_document else None
         )
 
-        # Candidatos: certificados que todavia no estan en la caja.
+        # Candidatos: certificados que todavia no estan en el resumen.
         context['candidates'] = (
             DocumentVerificationModel.objects
             .filter(certification_status='CERTIFIED')

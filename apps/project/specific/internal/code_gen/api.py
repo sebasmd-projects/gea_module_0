@@ -144,7 +144,7 @@ def _clean_placements(raw):
         if kind in MEMBER_KINDS and not member_code:
             return None, str(
                 _('Placement %(number)s: a member barcode must say which '
-                  'document of the box it carries.')
+                  'document of the summary it carries.')
                 % {'number': index}
             )
 
@@ -326,7 +326,7 @@ def _summary_payload(summary):
     state = summary_anchor_state(summary)
 
     # Estado del envio a la cadena de bloques, tal como lo necesita el boton:
-    # una caja sellada y no enviada se puede enviar; una ya enviada no, hasta
+    # un resumen sellado y no enviada se puede enviar; una ya enviada no, hasta
     # que se vuelva a sellar con miembros distintos y cambie el master hash.
     sent = _ots_anchor_for_current_hash(summary)
 
@@ -352,7 +352,7 @@ def _summary_payload(summary):
         # El documento del resumen. Emitirlo no espera al anclaje ni tiene por
         # que: el QR estampado lleva la URL de la pagina de anclaje, no la
         # prueba, y esa pagina se actualiza sola segun madura (invariante 16).
-        # Por eso se puede emitir en cuanto la caja esta sellada.
+        # Por eso se puede emitir en cuanto el resumen esta sellada.
         'issued': summary.summary_document_id is not None,
         'can_issue': bool(summary.master_hash),
         'document': _summary_document_payload(summary),
@@ -373,7 +373,7 @@ def _summary_payload(summary):
 @require_http_methods(['GET', 'PATCH'])
 def summary_members(request, pk):
     """
-    GET: miembros de la caja. PATCH: reemplaza el conjunto.
+    GET: miembros del resumen. PATCH: reemplaza el conjunto.
 
     Igual que con las posiciones, el PATCH sustituye la lista entera: es lo
     que envia el compositor y evita casar identificadores en el cliente.
@@ -426,7 +426,7 @@ def summary_members(request, pk):
         if code in seen_codes:
             return JsonResponse(
                 {'detail': str(
-                    _('The code %(code)s is repeated in the box.')
+                    _('The code %(code)s is repeated in the summary.')
                     % {'code': code})},
                 status=400
             )
@@ -487,7 +487,7 @@ def summary_members(request, pk):
     summary.refresh_from_db()
 
     return JsonResponse({
-        'detail': str(_('Members updated. The box needs sealing again.')),
+        'detail': str(_('Members updated. The summary needs sealing again.')),
         **_summary_payload(summary),
     })
 
@@ -497,7 +497,7 @@ def _ots_anchor_for_current_hash(summary):
     El anclaje en Bitcoin que ya cubre el master hash actual, si lo hay.
 
     Sirve para no mandar dos veces lo mismo. Se compara contra el hash
-    **actual** a proposito: si la caja se vuelve a sellar porque cambiaron sus
+    **actual** a proposito: si el resumen se vuelve a sellar porque cambiaron sus
     miembros, el anclaje viejo cubre un hash que ya no es el suyo y hace falta
     uno nuevo.
     """
@@ -583,7 +583,7 @@ def _send_to_blockchain(summary):
 @require_http_methods(['POST'])
 def summary_seal(request, pk):
     """
-    Sella la caja y, si se pide, la manda a la cadena de bloques.
+    Sella el resumen y, si se pide, la manda a la cadena de bloques.
 
     Son dos actos separados a proposito, y el formulario ofrece los dos:
 
@@ -594,7 +594,7 @@ def summary_seal(request, pk):
       hashes en una sola transaccion de Bitcoin.
 
     Separarlos importa porque el envio sale a la red y puede fallar o tardar,
-    mientras que el sellado no. Una caja sellada sin enviar se puede enviar
+    mientras que el sellado no. Un resumen sellado sin enviar se puede enviar
     despues sin volver a sellarla: el hash es el mismo.
     """
     from apps.project.specific.documents.certificates.models import \
@@ -612,7 +612,7 @@ def summary_seal(request, pk):
     except MasterHashError as error:
         return JsonResponse({'detail': str(error)}, status=400)
 
-    detail = str(_('Box sealed.'))
+    detail = str(_('Summary sealed.'))
     anchor_result = None
 
     if _wants_anchor(request):
@@ -631,10 +631,10 @@ def summary_seal(request, pk):
 @require_http_methods(['POST'])
 def summary_anchor(request, pk):
     """
-    Manda a la cadena de bloques una caja que ya estaba sellada.
+    Manda a la cadena de bloques un resumen que ya estaba sellada.
 
     Es el segundo tiempo de «solo sellar»: el hash ya existe, aqui solo se
-    envia. Si la caja no esta sellada no hay nada que enviar, y si ya se envio
+    envia. Si el resumen no esta sellada no hay nada que enviar, y si ya se envio
     este mismo hash no se manda otra vez.
     """
     from apps.project.specific.documents.certificates.models import \
@@ -647,7 +647,7 @@ def summary_anchor(request, pk):
 
     if not summary.master_hash:
         return JsonResponse(
-            {'detail': str(_('Seal the box before sending it.'))},
+            {'detail': str(_('Seal the summary before sending it.'))},
             status=400,
         )
 
@@ -671,19 +671,19 @@ def summary_anchor(request, pk):
 @require_http_methods(['POST'])
 def summary_issue(request, pk):
     """
-    Emite el documento del resumen: el PDF de la caja, ya certificado.
+    Emite el documento del resumen: el PDF del resumen, ya certificado.
 
     Hasta ahora esto no existia como accion. El servicio que lo hace
     --``services.summary.certify_summary()``-- estaba escrito y completo desde
-    el principio, pero no lo llamaba nadie: se sellaba la caja, se anclaba, y
+    el principio, pero no lo llamaba nadie: se sellaba el resumen, se anclaba, y
     ``summary_document`` se quedaba en ``null``. La caja no tenia papel.
 
     **No espera al anclaje, y no tiene por que.** El QR que se estampa lleva la
     URL de la pagina de anclaje, nunca la prueba (invariante 16). Esa pagina se
     actualiza sola segun madura el anclaje, asi que el PDF se emite una vez,
-    con la caja sellada, y no hay que reestamparlo cuando llegue el bloque de
+    con el resumen sellado, y no hay que reestamparlo cuando llegue el bloque de
     Bitcoin. Emitir «sin blockchain» y luego «con blockchain» seria hacer dos
-    papeles con huellas distintas para la misma caja, y habria que decidir cual
+    papeles con huellas distintas para el mismo resumen, y habria que decidir cual
     de los dos hace fe.
 
     Se sube el PDF del resumen sin codigos. Al reemitir se puede omitir: se
@@ -704,7 +704,7 @@ def summary_issue(request, pk):
     if not summary.master_hash:
         return JsonResponse(
             {'detail': str(
-                _('Seal the box before issuing its document: the summary '
+                _('Seal the summary before issuing its document: it '
                   'carries the master hash inside.')
             )},
             status=400,
@@ -795,7 +795,7 @@ def preview_symbols(request):
 
     La vista previa necesita el simbolo *de verdad* para poder avisar de que el
     ancho declarado no es el que se ocupa: al estampar se conserva la
-    proporcion, asi que una caja demasiado baja deja ancho sin usar. Con la
+    proporcion, asi que un resumen demasiado baja deja ancho sin usar. Con la
     imagen y su tamano natural, el JS calcula exactamente lo mismo que
     ``pdf_stamp`` va a dibujar.
 

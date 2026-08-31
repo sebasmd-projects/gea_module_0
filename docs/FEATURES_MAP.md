@@ -93,7 +93,7 @@ user (datos + user_type) → security → contact → code
 | `AssetModel` | `apps_assets_asset` | Activo: imagen, categoría, descripciones y observaciones bilingües; PK UUID |
 
 - `AssetModel.asset_name` es **OneToOne** con `AssetsNamesModel` (un nombre ↔ un activo).
-- `asset_total_quantity_by_type()` agrega existencias desde `AssetLocationModel` por tipo de cantidad (unidades / cajas).
+- `asset_total_quantity_by_type()` agrega existencias desde `AssetLocationModel` por tipo de cantidad (unidades / resúmenes).
 - Alta rápida desde el dashboard: `assets:create` crea **nombre + activo en línea** en una sola pantalla; `assets:add_category` añade categorías.
 - Import/export CSV, HTML, JSON, TSV, XLS, XLSX en el admin (`django-import-export`).
 - Señales: borrado del archivo de imagen al eliminar o reemplazar el activo.
@@ -183,7 +183,7 @@ Vista `buyers:profitability_view` (`ProfitabilityTemplateView`):
 - Listado de órdenes con `profitability_created_at` establecido.
 - Contadores **en curso** vs **pagadas** (una orden se considera pagada cuando los tres subpagos están marcados).
 - **Gráfico de 12 meses**: órdenes creadas por mes (`TruncMonth` sobre `created`) frente a órdenes cerradas por mes (sobre `profitability_paid_at`).
-- **Tabla de activos** con totales por cajas/unidades, nombres localizados según el idioma activo y *tokens* de filtrado en cliente (`img:yes|no`, `qty:U`, `qty:B`, `zero:yes|no`). Se omiten activos con stock cero en ambos tipos.
+- **Tabla de activos** con totales por resúmenes/unidades, nombres localizados según el idioma activo y *tokens* de filtrado en cliente (`img:yes|no`, `qty:U`, `qty:B`, `zero:yes|no`). Se omiten activos con stock cero en ambos tipos.
 
 Los tres subpagos que componen la liquidación:
 
@@ -304,7 +304,7 @@ reconstruye**.
 ### Vista previa del estampado
 
 `public/staticfiles/js/stamp_preview.js` dibuja una página a escala y coloca
-una caja por posición. **Replica exactamente
+un resumen por posición. **Replica exactamente
 `services/pdf_stamp.py::_resolve_position`**, y ambas implementaciones se
 contrastan con casos aleatorios sobre los seis anclajes: si se toca una, hay
 que tocar la otra.
@@ -319,7 +319,7 @@ Se usa en cinco sitios, con el mismo componente:
 | Dashboard, listado de disposiciones | Solo lectura, desde `preview_data` |
 | Dashboard, detalle del código | Solo lectura |
 
-En modo editable se puede **arrastrar una caja**: el JS convierte el
+En modo editable se puede **arrastrar un resumen**: el JS convierte el
 desplazamiento a puntos y escribe de vuelta `offset_x`/`offset_y` respetando el
 anclaje (con anclaje derecho, mover a la izquierda *aumenta* el offset). Una
 posición que se sale de la página se pinta en rojo discontinuo.
@@ -334,12 +334,12 @@ clavado tras el primer pixel. El repintado completo va en `pointerup`.
 Con `data-pdf-input`, el componente pinta la página real del PDF elegido,
 renderizada con **pdf.js** en el navegador: el archivo se lee del propio input,
 **no se sube para esto**. De ahí salen el tamaño real de página (que manda
-sobre el selector de tamaños) y el número de páginas, y con eso las cajas se
+sobre el selector de tamaños) y el número de páginas, y con eso los resúmenes se
 muestran **solo en las páginas donde de verdad caen** (`appliesToPage`, espejo
 de `resolved_pages`).
 
 ⚠️ pdf.js no admite dos `render()` simultáneos sobre el mismo lienzo: hay que
-cancelar la tarea anterior antes de lanzar la siguiente. Las cajas se recolocan
+cancelar la tarea anterior antes de lanzar la siguiente. Las resúmenes se recolocan
 en cuanto se conoce la geometría, sin esperar a que el lienzo termine, para que
 un fallo del render no deje la vista a medias. Si pdf.js no carga, se sigue
 trabajando sobre la página en blanco y se avisa.
@@ -568,10 +568,10 @@ Dos variantes (`KindChoices`): `GENERAL` (facilitador, representante, tenedor) y
 
 ## 12-bis. Resumen AEGIS, master hash y anclaje temporal
 
-### La caja
+### El resumen
 
 `AegisSummaryModel` agrupa N certificados bajo un único **master hash**, y
-`AegisSummaryDocumentModel` les asigna su código dentro de la caja (AEGIS-1…).
+`AegisSummaryDocumentModel` les asigna su código dentro del resumen (AEGIS-1…).
 Solo entran documentos **certificados**: uno sin certificar no tiene huella.
 
 ### El master hash
@@ -593,7 +593,7 @@ de calcularlo.
 El payload se guarda **verbatim**: `sha256sum` sobre los bytes descargados en
 `certificates:summary_master_payload` da la cifra anclada.
 `verify_master_hash()` distingue dos fallos: registro corrupto (el hash no
-corresponde a los bytes) y caja modificada tras sellarse (los bytes ya no
+corresponde a los bytes) y resumen modificado tras sellarse (los bytes ya no
 describen a los miembros).
 
 ### El documento resumen

@@ -1,21 +1,21 @@
 # apps/project/specific/internal/code_gen/tests_summary_issue.py
 """
-Emitir el documento de la caja, y que no espere a la cadena de bloques.
+Emitir el documento del resumen, y que no espere a la cadena de bloques.
 
 El resumen AEGIS es un documento como los demas --solo que su contenido es
 agrupar a otros-- y como tal tiene sus tres archivos: el original sin codigos,
 el certificado que hace fe y la copia publica con marca de agua. El servicio
 que los produce estaba escrito y completo desde el principio; lo que no habia
-era nada que lo llamara. Se sellaba la caja, se anclaba, y ``summary_document``
-se quedaba en ``null``: la caja no tenia papel.
+era nada que lo llamara. Se sellaba el resumen, se anclaba, y ``summary_document``
+se quedaba en ``null``: el resumen no tenia papel.
 
 **Lo que se comprueba aqui, sobre todo, es que emitir no dependa del anclaje.**
 Es la razon de que baste con un documento y no hagan falta dos. El QR que se
 estampa lleva la URL de la pagina de anclaje, nunca la prueba (invariante 16),
 y esa pagina se actualiza sola cuando el anclaje madura en un bloque de
-Bitcoin. Asi que el PDF se emite una vez, con la caja sellada, y no hay nada
+Bitcoin. Asi que el PDF se emite una vez, con el resumen sellado, y no hay nada
 que reestampar despues. Dos papeles --uno «sin blockchain» y otro «con»--
-serian dos huellas distintas para la misma caja, y habria que decidir cual de
+serian dos huellas distintas para el mismo resumen, y habria que decidir cual de
 los dos hace fe.
 
 Nada de aqui sale a internet.
@@ -64,7 +64,7 @@ def an_upload(name='resumen.pdf'):
 
 
 class SummaryIssueTestCase(TestCase):
-    """Una caja con un miembro y una disposicion que usa los cuatro simbolos."""
+    """Un resumen con un miembro y una disposicion que usa los cuatro simbolos."""
 
     def setUp(self):
         self.staff = UserModel.objects.create_user(
@@ -81,7 +81,7 @@ class SummaryIssueTestCase(TestCase):
             code_payload='GEA-1-20260115-ABCD',
         )
 
-        self.summary = AegisSummaryModel.objects.create(title='Caja de prueba')
+        self.summary = AegisSummaryModel.objects.create(title='Resumen de prueba')
 
         AegisSummaryDocumentModel.objects.create(
             summary=self.summary, document=self.member, code='AEGIS-1',
@@ -130,9 +130,9 @@ class SummaryIssueTestCase(TestCase):
         return self.client.post(self.url, data)
 
 
-class TestIssuingNeedsASealedBox(SummaryIssueTestCase):
+class TestIssuingNeedsASealedSummary(SummaryIssueTestCase):
 
-    def test_an_unsealed_box_has_no_document_to_issue(self):
+    def test_an_unsealed_summary_has_no_document_to_issue(self):
         """
         El resumen lleva el master hash dentro de su codigo de barras: sin
         sellar, no hay nada que estampar.
@@ -140,7 +140,7 @@ class TestIssuingNeedsASealedBox(SummaryIssueTestCase):
         response = self.issue()
 
         self.assertEqual(response.status_code, 400)
-        self.assertIn('Seal the box', response.json()['detail'])
+        self.assertIn('Seal the summary', response.json()['detail'])
 
         self.summary.refresh_from_db()
         self.assertIsNone(self.summary.summary_document)
@@ -167,11 +167,11 @@ class TestIssuingDoesNotWaitForTheBlockchain(SummaryIssueTestCase):
     La razon de que baste con un documento.
 
     El QR estampado lleva la URL de la pagina de anclaje, no la prueba, y esa
-    pagina se actualiza sola. Asi que emitir con la caja recien sellada --sin
+    pagina se actualiza sola. Asi que emitir con el resumen recien sellado --sin
     ningun anclaje todavia-- produce el papel definitivo.
     """
 
-    def test_a_box_with_no_anchor_at_all_still_gets_its_document(self):
+    def test_a_summary_with_no_anchor_at_all_still_gets_its_document(self):
         self.seal()
 
         self.assertFalse(self.summary.anchors.exists())
@@ -261,7 +261,7 @@ class TestTheDocumentThatComesOut(SummaryIssueTestCase):
         )
         self.assertNotIn('/media/', links['certified_url'])
 
-    def test_the_box_reports_itself_as_issued(self):
+    def test_the_summary_reports_itself_as_issued(self):
         payload, _ = self.issued()
 
         self.assertTrue(payload['issued'])
@@ -332,7 +332,7 @@ class TestWhenThingsGoWrong(SummaryIssueTestCase):
     def test_a_failed_issue_leaves_no_half_made_document(self):
         """
         ``certify_summary`` es atomica: o sale el documento entero o no sale
-        ninguno. Una caja con un documento a medias diria que esta certificada
+        ninguno. Un resumen con un documento a medias diria que esta certificado
         sin tener papel.
         """
         self.seal()

@@ -1,4 +1,3 @@
-import logging
 import os
 from datetime import timedelta
 from pathlib import Path
@@ -11,9 +10,67 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-logging.basicConfig(
-    filename='stderr.log', format='%(asctime)s - %(levelname)s - %(message)s', encoding='utf-8'
-)
+# Registro de la aplicacion.
+#
+# Antes esto era un `logging.basicConfig(filename='stderr.log', ...)` con ruta
+# **relativa**, y eso tenia dos problemas que solo se notan cuando hace falta
+# el log, que es el peor momento para descubrirlos:
+#
+# 1. La ruta relativa depende del directorio de trabajo del proceso, que bajo
+#    Passenger en cPanel no es necesariamente la raiz del proyecto. El fichero
+#    que uno abre para mirar podia no ser el que la aplicacion escribia.
+# 2. `basicConfig` solo toca el logger raiz. Django configura los suyos por su
+#    cuenta, y `django.request` --el que registra los errores 500-- acaba
+#    dependiendo de que la propagacion siga intacta. Bastaba con que algo
+#    ajustara el logger `django` para que los errores dejaran de aparecer.
+#
+# Ahora la ruta es absoluta y la configuracion es explicita: los errores de
+# peticion se escriben siempre, y se ve de que peticion venian.
+LOG_FILE = Path(os.getenv('DJANGO_LOG_FILE') or (BASE_DIR / 'stderr.log'))
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'gea': {
+            'format': (
+                '%(asctime)s - %(levelname)s - %(name)s - %(message)s'
+            ),
+        },
+    },
+    'handlers': {
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': str(LOG_FILE),
+            'encoding': 'utf-8',
+            'formatter': 'gea',
+        },
+    },
+    'root': {
+        'handlers': ['file'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        # Los 500 y los avisos de peticion. Sin `propagate: False` se
+        # escribirian dos veces: aqui y otra vez por la raiz.
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        # El acceso del servidor de desarrollo no aporta nada al fichero.
+        'django.server': {
+            'handlers': [],
+            'level': 'CRITICAL',
+            'propagate': False,
+        },
+        'apps': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 

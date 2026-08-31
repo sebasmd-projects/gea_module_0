@@ -3,7 +3,7 @@
 Alta de un activo y vuelta a donde se venia.
 
 El alta acepta un ``next`` para que quien llega desde otro formulario -- el de
-una caja AEGIS -- regrese alli con el activo ya seleccionado. Un ``next`` es
+un resumen AEGIS -- regrese alli con el activo ya seleccionado. Un ``next`` es
 justo el sitio por donde se cuela una redireccion abierta, asi que la mitad de
 estas pruebas van a eso.
 
@@ -22,7 +22,7 @@ PASSWORD = 'pw-for-tests-123'
 
 
 class AssetCreationReturnTests(TestCase):
-    """Ida y vuelta entre el alta de activos y el alta de una caja."""
+    """Ida y vuelta entre el alta de activos y el alta de un resumen."""
 
     @classmethod
     def setUpTestData(cls):

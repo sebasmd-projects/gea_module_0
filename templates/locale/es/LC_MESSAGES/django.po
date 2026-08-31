@@ -1701,8 +1701,8 @@ msgid "Timestamp anchor"
 msgstr "Anclaje temporal"
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:29
-msgid "The content of this box is proven to have existed since:"
-msgstr "Está probado que el contenido de esta caja existía desde:"
+msgid "The content of this summary is proven to have existed since:"
+msgstr "Está probado que el contenido de este resumen existía desde:"
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:33
 msgid "A third party attested the date. It is not this platform saying so."
@@ -1713,13 +1713,8 @@ msgid "Not anchored yet"
 msgstr "Todavía sin anclar"
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:40
-msgid ""
-"The box is sealed but no external timestamp confirms its date yet. This page "
-"updates on its own as anchors arrive: the printed code never needs reissuing."
-msgstr ""
-"La caja está sellada pero todavía ningún sello externo confirma su fecha. "
-"Esta página se actualiza sola según llegan los anclajes: el código impreso "
-"no hay que volver a emitirlo nunca."
+msgid "The summary is sealed but no external timestamp confirms its date yet. This page updates on its own as anchors arrive: the printed code never needs reissuing."
+msgstr "El resumen está sellada pero todavía ningún sello externo confirma su fecha. Esta página se actualiza sola según llegan los anclajes: el código impreso no hay que volver a emitirlo nunca."
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:47
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_detail.html:36
@@ -1729,14 +1724,8 @@ msgid "Master hash"
 msgstr "Master hash"
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:50
-msgid ""
-"One figure that commits to the fingerprints of every document in the box. It "
-"is the only thing that leaves the platform: never the documents, never their "
-"content."
-msgstr ""
-"Una sola cifra que compromete las huellas de todos los documentos de la "
-"caja. Es lo único que sale de la plataforma: nunca los documentos, nunca su "
-"contenido."
+msgid "One figure that commits to the fingerprints of every document in the summary. It is the only thing that leaves the platform: never the documents, never their content."
+msgstr "Una sola cifra que compromete las huellas de todos los documentos del resumen. Es lo único que sale de la plataforma: nunca los documentos, nunca su contenido."
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:56
 msgid "Algorithm"
@@ -1750,8 +1739,8 @@ msgstr "Canonicalización"
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:130
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_detail.html:53
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:63
-msgid "Documents in the box"
-msgstr "Documentos de la caja"
+msgid "Documents in the summary"
+msgstr "Documentos del resumen"
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:65
 msgid "Sealed at"
@@ -2290,11 +2279,8 @@ msgid "Stamp layout"
 msgstr "Disposición de estampado"
 
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:23
-msgid ""
-"Where the QR and the barcode land inside the PDF. Drag a box to move it."
-msgstr ""
-"Dónde caen el QR y el código de barras dentro del PDF. Arrastra una caja "
-"para moverla."
+msgid "Where the QR and the barcode land inside the PDF. Drag a box to move it."
+msgstr "Dónde caen el QR y el código de barras dentro del PDF. Arrastra un resumen para moverla."
 
 #: .\templates\dashboard\pages\documents\code_gen\layout_form.html:25
 #: .\templates\dashboard\pages\documents\code_gen\layout_list.html:6
@@ -2435,19 +2421,12 @@ msgid "Save and create"
 msgstr "Guardar y crear"
 
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:34
-msgid ""
-"Upload the PDF above to see it here. Drag a box to move it; the table "
-"updates with it. Boxes are only shown on the pages where they actually land."
-msgstr ""
-"Sube el PDF arriba para verlo aquí. Arrastra una caja para moverla; la tabla "
-"se actualiza con ella. Las cajas solo se muestran en las páginas donde "
-"realmente caen."
+msgid "Upload the PDF above to see it here. Drag a box to move it; the table updates with it. Boxes are only shown on the pages where they actually land."
+msgstr "Sube el PDF arriba para verlo aquí. Arrastra un resumen para moverla; la tabla se actualiza con ella. Las cajas solo se muestran en las páginas donde realmente caen."
 
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:49
 msgid "Drag a box to move it; the offsets update as you go."
-msgstr "Arrastre una caja para moverla; los desplazamientos se actualizan sobre la marcha."
-"Arrastra una caja para moverla; los desplazamientos se actualizan sobre la "
-"marcha."
+msgstr "Arrastre un resumen para moverla; los desplazamientos se actualizan sobre la marcha.Arrastra un resumen para moverla; los desplazamientos se actualizan sobre la marcha."
 
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:52
 msgid "Rendering the document…"
@@ -2496,6 +2475,7 @@ msgstr ""
 #: .\templates\dashboard\pages\documents\code_gen\summary_list.html:5
 #: .\templates\dashboard\pages\documents\code_gen\summary_list.html:14
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:204
+#: .\templates\dashboard\pages\documents\code_gen\summary_form.html:25
 msgid "AEGIS summaries"
 msgstr "Resúmenes AEGIS"
 
@@ -2562,7 +2542,7 @@ msgstr "Sellando…"
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:139
 msgid "Seal the box"
-msgstr "Sellar la caja"
+msgstr "Sellar el resumen"
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:150
 msgid "Codes on the summary"
@@ -2593,8 +2573,8 @@ msgid "Choose a document to add."
 msgstr "Elige un documento para añadir."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:270
-msgid "That document is already in the box."
-msgstr "Ese documento ya está en la caja."
+msgid "That document is already in the summary."
+msgstr "Ese documento ya está en el resumen."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:271
 msgid "Add at least one document."
@@ -2611,24 +2591,16 @@ msgstr "Códigos de barras de los miembros añadidos. Arrástrelos a su sitio y 
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_form.html:6
 #: .\templates\dashboard\pages\documents\code_gen\summary_form.html:22
-msgid "New AEGIS box"
-msgstr "Nueva caja AEGIS"
+msgid "New AEGIS summary"
+msgstr "Nuevo resumen AEGIS"
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_form.html:23
-msgid ""
-"A box groups several certificates under one summary document that carries "
-"all their barcodes."
-msgstr ""
-"Una caja agrupa varios certificados bajo un documento resumen que lleva "
-"todos sus códigos de barras."
-
-#: .\templates\dashboard\pages\documents\code_gen\summary_form.html:25
-msgid "AEGIS boxes"
-msgstr "Cajas AEGIS"
+msgid "A summary gathers several certificates into one document that carries all of their barcodes."
+msgstr "Un resumen reúne varios certificados en un documento que lleva todos sus códigos de barras."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_form.html:43
-msgid "Box details"
-msgstr "Datos de la caja"
+msgid "Summary details"
+msgstr "Datos del resumen"
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_form.html:82
 msgid "Add a new asset"
@@ -2643,8 +2615,8 @@ msgid "What happens next"
 msgstr "Qué viene después"
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_form.html:139
-msgid "You pick the certificates that go inside the box."
-msgstr "Eliges los certificados que van dentro de la caja."
+msgid "You pick the certificates the summary gathers."
+msgstr "Eliges los certificados que van dentro del resumen."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_form.html:142
 msgid ""
@@ -2673,21 +2645,20 @@ msgstr ""
 "sellado, así que no hay que reestampar nada."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_list.html:15
-msgid "Boxes that group several certificates under one master hash."
-msgstr "Cajas que agrupan varios certificados bajo un único master hash."
+msgid "Summaries that gather several certificates under one master hash."
+msgstr "Resúmenes que agrupan varios certificados bajo un único master hash."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_list.html:24
 msgid "Summaries"
 msgstr "Resúmenes"
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_list.html:26
-msgid "New box"
-msgstr "Nueva caja"
+msgid "New summary"
+msgstr "Nuevo resumen"
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_list.html:32
-msgid "No boxes yet. Create the first one to start grouping certificates."
-msgstr "Todavía no hay cajas. Cree la primera para empezar a agrupar certificados."
-"Todavía no hay cajas. Crea la primera para empezar a agrupar certificados."
+msgid "No summaries yet. Create the first one to start gathering certificates."
+msgstr "Todavía no hay resúmenes. Cree la primera para empezar a agrupar certificados.Todavía no hay resúmenes. Crea la primera para empezar a agrupar certificados."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_list.html:42
 msgid "Members"
@@ -3323,8 +3294,8 @@ msgid "Not sent"
 msgstr "Sin enviar"
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
-msgid "A sealed box can be sent later: the hash is the same one. The proof is born pending and matures into a Bitcoin block within a few hours, on its own — nothing needs re-stamping."
-msgstr "Una caja sellada se puede enviar después: la huella es la misma. La prueba nace pendiente y madura sola hasta un bloque de Bitcoin en unas horas, sin reestampar nada."
+msgid "A sealed summary can be sent later: the hash is the same one. The proof is born pending and matures into a Bitcoin block within a few hours, on its own — nothing needs re-stamping."
+msgstr "Un resumen sellado se puede enviar después: la huella es la misma. La prueba nace pendiente y madura sola hasta un bloque de Bitcoin en unas horas, sin reestampar nada."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
 msgid "Send to blockchain"
@@ -3344,7 +3315,7 @@ msgstr "Sin emitir"
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
 msgid "The box also has its own PDF: it carries the master hash, the barcode of every member, and the QR of the anchor page. It does not wait for the blockchain — that QR points at a page that updates itself, so nothing needs re-stamping when the Bitcoin block arrives."
-msgstr "La caja tiene también su propio PDF: lleva el master hash, el código de barras de cada miembro y el QR de la página de anclaje. No espera a la cadena de bloques — ese QR apunta a una página que se actualiza sola, así que no hay que reestampar nada cuando llegue el bloque de Bitcoin."
+msgstr "El resumen tiene también su propio PDF: lleva el master hash, el código de barras de cada miembro y el QR de la página de anclaje. No espera a la cadena de bloques — ese QR apunta a una página que se actualiza sola, así que no hay que reestampar nada cuando llegue el bloque de Bitcoin."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
 msgid "Issue document"
@@ -3384,8 +3355,9 @@ msgstr "Se usa para la vista previa aquí, y se sube como original al emitir el 
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
 msgid "Seal the box first: the summary carries the master hash inside."
-msgstr "Sella la caja primero: el resumen lleva el master hash dentro."
+msgstr "Sella el resumen primero: el resumen lleva el master hash dentro."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:1
 msgid "Choose the summary PDF without codes."
 msgstr "Elige el PDF del resumen sin códigos."
+

@@ -15,7 +15,7 @@ Un anclaje prueba **una sola cosa**: que un dato concreto ya existía en una
 fecha. Ni que sea cierto, ni que lo firmara quien dice, ni que nadie lo haya
 copiado. Solo que *ya existía*.
 
-Ese dato es el **master hash** de una caja AEGIS: 64 caracteres que resumen a
+Ese dato es el **master hash** de un resumen AEGIS: 64 caracteres que resumen a
 todos sus miembros. No sale de la plataforma ni el documento, ni el payload, ni
 un nombre. Sube el hash y nada más, así que anclar no publica información de
 nadie: quien vea la cadena de bloques ve una cifra que no significa nada sin el
@@ -100,7 +100,7 @@ Cada 15 minutos y no cada hora porque nadie avisa de que una prueba haya
 madurado: preguntar más a menudo es lo único que acorta el tiempo entre que el
 bloque existe y que la página lo muestra. Y no sale caro, porque **sin anclajes
 pendientes el comando no sale a la red**: una consulta y termina. Cuando la
-última caja confirma, la tarea se queda inactiva sola, sin que haya que
+último resumen confirma, la tarea se queda inactiva sola, sin que haya que
 apagarla.
 
 `upgrade_ots_anchors` recorre los anclajes en `PENDING`, le pregunta a su
@@ -162,7 +162,7 @@ Eso es lo que hace que la prueba valga: no hay que fiarse de la plataforma.
 
 ---
 
-## 5-bis. El documento de la caja no espera al anclaje
+## 5-bis. El documento del resumen no espera al anclaje
 
 Una consecuencia del punto 3 que conviene decir aparte, porque es la que
 decide cómo se emite el papel.
@@ -170,22 +170,22 @@ decide cómo se emite el papel.
 El resumen AEGIS es un documento como los demás —solo que su contenido es
 agrupar a otros— y tiene sus tres archivos: original sin códigos, certificado
 que hace fe, y copia pública con marca de agua. Se emite desde el compositor,
-**en cuanto la caja está sellada**, con o sin anclaje.
+**en cuanto el resumen está sellado**, con o sin anclaje.
 
 Puede hacerlo porque el QR que se estampa lleva `anchor_url(summary)`: una URL
-que existe desde que existe la caja. La página a la que apunta dice «pendiente»
+que existe desde que existe el resumen. La página a la que apunta dice «pendiente»
 mientras lo esté y pasa sola a mostrar el bloque cuando madura.
 
 > **Por eso hace falta un solo documento y no dos.** Emitir uno «sin
-> blockchain» y luego otro «con» serían dos PDF de la misma caja con huellas
+> blockchain» y luego otro «con» serían dos PDF de el mismo resumen con huellas
 > distintas circulando a la vez, y habría que decidir y documentar cuál de los
 > dos hace fe. Con un solo papel no hay nada que decidir: el que hay es el que
 > vale, y la información que cambia con el tiempo vive en la página, no en la
 > tinta.
 
 Reemitir conserva el original guardado y el código público, y rehace el
-estampado, las huellas y la copia. Se hace cuando cambian los miembros de la
-caja —el master hash es otro—, no cuando llega el bloque.
+estampado, las huellas y la copia. Se hace cuando cambian los miembros del
+resumen —el master hash es otro—, no cuando llega el bloque.
 
 ---
 
@@ -251,13 +251,13 @@ normal las primeras horas. Solo avisa cuando pasa de un día.
 | `PENDING`, unas horas | Compromiso hecho, sin bloque todavía | Esperar. Es el estado normal |
 | `PENDING`, días | El envío salió bien, pero nadie madura la prueba | Comprobar que el cron `upgrade_ots_anchors` corre; ejecutarlo a mano |
 | `CONFIRMED` con bloque | La fecha está probada contra Bitcoin | Nada. La página de anclaje ya lo muestra |
-| «El anclaje es válido, pero cubre un master hash anterior» | La caja se volvió a sellar después de anclarse | Volver a anclar: el anclaje viejo sigue siendo cierto, pero de la caja de entonces |
+| «El anclaje es válido, pero cubre un master hash anterior» | El resumen se volvió a sellar después de anclarse | Volver a anclar: el anclaje viejo sigue siendo cierto, pero del resumen de entonces |
 
 ---
 
 ## 8. Las dos vías, y por qué hay dos
 
-Una caja puede llevar dos anclajes a la vez, y cubren fallos distintos.
+Un resumen puede llevar dos anclajes a la vez, y cubren fallos distintos.
 
 | | **TSA (RFC 3161)** | **OpenTimestamps (Bitcoin)** |
 |---|---|---|
@@ -284,7 +284,7 @@ plenamente cualificada.
 | Envío, lectura y maduración de una prueba | `code_gen/services/ots.py` |
 | Fachada: crear anclajes, madurar, verificar | `code_gen/services/anchoring.py` |
 | Sellado de tiempo por TSA | `code_gen/services/tsa.py` |
-| Master hash de la caja | `code_gen/services/master.py` |
+| Master hash del resumen | `code_gen/services/master.py` |
 | Guardado del anclaje | `code_gen/models.py::CertificationAnchorModel` |
 | Cron horario | `upgrade_ots_anchors` (en `settings.CRONJOBS`) |
 | Diagnóstico | `check_anchoring` (consola de operaciones) |

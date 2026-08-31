@@ -26,7 +26,7 @@
       <div class="alert alert-success">
         <h2 class="h5 alert-heading">
           <i class="bi bi-clock-history me-1"></i>
-          {% trans 'The content of this box is proven to have existed since:' %}
+          {% trans 'The content of this summary is proven to have existed since:' %}
           {{ state.attested_since|date:'d/m/Y H:i' }} UTC
         </h2>
         <p class="mb-0 small">
@@ -37,7 +37,7 @@
       <div class="alert alert-secondary">
         <h2 class="h5 alert-heading">{% trans 'Not anchored yet' %}</h2>
         <p class="mb-0 small">
-          {% trans 'The box is sealed but no external timestamp confirms its date yet. This page updates on its own as anchors arrive: the printed code never needs reissuing.' %}
+          {% trans 'The summary is sealed but no external timestamp confirms its date yet. This page updates on its own as anchors arrive: the printed code never needs reissuing.' %}
         </p>
       </div>
     {% endif %}
@@ -47,7 +47,7 @@
       <div class="card-header"><strong>{% trans 'Master hash' %}</strong></div>
       <div class="card-body">
         <p class="small text-muted">
-          {% trans 'One figure that commits to the fingerprints of every document in the box. It is the only thing that leaves the platform: never the documents, never their content.' %}
+          {% trans 'One figure that commits to the fingerprints of every document in the summary. It is the only thing that leaves the platform: never the documents, never their content.' %}
         </p>
 
         <p class="text-break mb-3"><code>{{ summary.master_hash|default:'—' }}</code></p>
@@ -59,7 +59,7 @@
           <dt class="col-sm-4">{% trans 'Canonicalization' %}</dt>
           <dd class="col-sm-8">JCS / RFC 8785</dd>
 
-          <dt class="col-sm-4">{% trans 'Documents in the box' %}</dt>
+          <dt class="col-sm-4">{% trans 'Documents in the summary' %}</dt>
           <dd class="col-sm-8">{{ members|length }}</dd>
 
           <dt class="col-sm-4">{% trans 'Sealed at' %}</dt>
@@ -127,7 +127,7 @@
 
     {# ================= MIEMBROS ================= #}
     <div class="card mb-4">
-      <div class="card-header"><strong>{% trans 'Documents in the box' %}</strong></div>
+      <div class="card-header"><strong>{% trans 'Documents in the summary' %}</strong></div>
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-sm small align-middle mb-0">

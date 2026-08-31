@@ -1,6 +1,6 @@
 # apps/project/specific/internal/code_gen/services/master.py
 """
-Master hash de una caja AEGIS.
+Master hash de un resumen AEGIS.
 
 Un resumen (AEGIS-6) integra N certificados. El master hash es la huella del
 conjunto: una sola cifra que compromete transitivamente las huellas de todos
@@ -42,12 +42,12 @@ HASH_ALGORITHM = 'SHA-256'
 
 
 class MasterHashError(Exception):
-    """No se puede sellar la caja."""
+    """No se puede sellar el resumen."""
 
 
 def build_master_payload(summary) -> dict:
     """
-    Construye el payload canonico de una caja.
+    Construye el payload canonico de un resumen.
 
     Parameters:
         summary: instancia de ``AegisSummaryModel``.
@@ -57,7 +57,7 @@ def build_master_payload(summary) -> dict:
 
     Raises:
         MasterHashError: si algun miembro no esta certificado o le falta la
-        huella. Sellar una caja incompleta produciria un hash que no acredita
+        huella. Sellar un resumen incompleta produciria un hash que no acredita
         lo que dice acreditar.
     """
     members = list(summary.ordered_members())
@@ -134,7 +134,7 @@ def compute_master_hash(payload: dict) -> tuple:
 
 def seal_summary(summary, *, issued_at=None) -> str:
     """
-    Sella la caja: calcula el master hash y lo guarda con su payload exacto.
+    Sella el resumen: calcula el master hash y lo guarda con su payload exacto.
 
     El payload se almacena verbatim, no reconstruido: asi un auditor puede
     recalcular el hash sobre los mismos bytes anos despues, aunque para
@@ -174,7 +174,7 @@ def verify_master_hash(summary) -> dict:
     - ``stored_matches_payload``: el hash guardado corresponde a los bytes
       guardados. Si falla, el registro esta corrupto.
     - ``payload_matches_members``: el payload guardado sigue describiendo a los
-      miembros actuales. Si falla, la caja cambio despues de sellarse — que es
+      miembros actuales. Si falla, el resumen cambio despues de sellarse — que es
       exactamente lo que el sello debe delatar.
     """
     result = {

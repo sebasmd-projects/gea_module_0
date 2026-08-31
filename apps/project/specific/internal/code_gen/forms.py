@@ -270,7 +270,7 @@ class CodeGeneratorForm(forms.Form):
         self.fields['certificate_type'].help_text = _(
             'What kind of document this is. It is shown on the public '
             'verification page, under the document title. Use "Asset '
-            'Certificate (AEGIS)" for the certificates of a box of assets, '
+            'Certificate (AEGIS)" for the certificates of a summary of assets, '
             'and "Generic Document" for anything else.'
         )
 
@@ -433,7 +433,7 @@ StampPlacementFormSet = inlineformset_factory(
 
 class AegisSummaryForm(forms.ModelForm):
     """
-    Alta de una caja AEGIS fuera del admin.
+    Alta de un resumen AEGIS fuera del admin.
 
     Solo pide lo que hace falta para empezar a componerla: el resto -- codigo
     publico, secuencia, sello, documento resumen -- lo pone la plataforma, y
@@ -478,7 +478,7 @@ class AegisSummaryForm(forms.ModelForm):
         })
 
         self.fields['title'].help_text = _(
-            'How this box is identified internally, e.g. "AEGIS box - '
+            'How this summary is identified internally, e.g. "AEGIS summary - '
             'Zimbabwe gold micro-ingots".'
         )
         self.fields['asset_label'].help_text = _(

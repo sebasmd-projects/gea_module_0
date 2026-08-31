@@ -240,7 +240,7 @@ class Command(BaseCommand):
 
         if not confirmed and not pending_count:
             self.stdout.write(
-                '   Todavia no se ha anclado ninguna caja desde este servidor.'
+                '   Todavia no se ha anclado ningun resumen desde este servidor.'
             )
             return
 
@@ -275,7 +275,7 @@ class Command(BaseCommand):
             )
 
         self.stdout.write(
-            '   El estado de cada caja se ve en su pagina de anclaje, que es '
+            '   El estado de cada resumen se ve en su pagina de anclaje, que es '
             'la del QR del resumen y se actualiza sola.'
         )
 

@@ -47,7 +47,7 @@ STAMP = 'apps.project.specific.internal.code_gen.services.ots.stamp'
 
 
 class SealAndSendTestCase(TestCase):
-    """Una caja con un miembro certificado, lista para sellar."""
+    """Un resumen con un miembro certificado, lista para sellar."""
 
     def setUp(self):
         self.staff = UserModel.objects.create_user(
@@ -61,7 +61,7 @@ class SealAndSendTestCase(TestCase):
         )
 
         self.summary = AegisSummaryModel.objects.create(
-            title='Caja de prueba',
+            title='Resumen de prueba',
         )
 
         AegisSummaryDocumentModel.objects.create(
@@ -255,7 +255,7 @@ class SendLaterTests(SealAndSendTestCase):
     def test_resealing_with_a_new_hash_can_be_sent_again(self):
         """
         Si cambian los miembros, el master hash cambia y el envio anterior
-        cubre un hash que ya no es el de la caja: hace falta enviar de nuevo.
+        cubre un hash que ya no es el del resumen: hace falta enviar de nuevo.
         """
         self.post(self.seal_url, {'anchor': False})
 
