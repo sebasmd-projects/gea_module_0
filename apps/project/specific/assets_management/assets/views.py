@@ -4,11 +4,11 @@ from django.contrib import messages
 from django.db import transaction
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import CreateView, TemplateView
 
+from apps.common.utils.functions import safe_next
 from apps.project.specific.assets_management.assets_location.models import (
     AssetLocationModel, LocationModel)
 from apps.project.specific.assets_management.assets_location.views import \
@@ -59,19 +59,13 @@ def _safe_next(request) -> str:
     Sin esta comprobacion cualquiera podria mandar a un usuario autenticado a
     ``/buyer/asset/add/?next=https://otro-sitio/`` y usarnos de trampolin. Se
     aceptan unicamente rutas de este host.
+
+    La comprobacion vive ahora en ``apps.common.utils.functions.safe_next``,
+    porque estaba escrita tres veces y **la cuarta faltaba**: el wizard de
+    registro redirigia a donde le dijeran, con la sesion ya abierta. Se
+    conserva este nombre para no tocar las llamadas.
     """
-    candidate = request.POST.get('next') or request.GET.get('next') or ''
-
-    if not candidate:
-        return ''
-
-    allowed = url_has_allowed_host_and_scheme(
-        url=candidate,
-        allowed_hosts={request.get_host()},
-        require_https=request.is_secure(),
-    )
-
-    return candidate if allowed else ''
+    return safe_next(request)
 
 
 def _with_query(url: str, **params) -> str:
