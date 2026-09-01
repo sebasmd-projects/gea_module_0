@@ -16,6 +16,7 @@ from django.core.cache import cache
 from django.test import TestCase
 from django.urls import reverse
 
+from apps.common.utils.tests_throttling import dead_cache
 from apps.project.common.users.models import UserModel
 
 from .views import ForgotPasswordFormView
@@ -81,14 +82,87 @@ class PasswordResetRateLimitTests(TestCase):
         for _ in range(PER_TARGET + 2):
             self.request_reset('ana@example.com')
 
+        UserModel.objects.create_user(
+            username='beto', email='beto@example.com', password=PASSWORD,
+        )
         sent_before = len(mail.outbox)
 
-        self.request_reset('ana@example.com', ip='198.51.100.7')
+        self.request_reset('beto@example.com', ip='198.51.100.7')
 
         self.assertEqual(
             len(mail.outbox), sent_before + 1,
             'una IP distinta no puede heredar el bloqueo de otra',
         )
+
+    def test_changing_the_ip_does_not_refill_a_mailbox(self):
+        """
+        Esto es lo que fallaba, y la prueba de arriba lo daba por bueno.
+
+        La llave del cupo por destinatario era `{ip}:{identificador}`, o sea
+        que el cupo no era del buzon: era de la pareja. Tres correos, cambio
+        de IP, tres mas. Con un puñado de salidas a internet --que es lo que
+        cuesta una botnet o un movil en modo avion-- el limite no limitaba
+        nada, y el destinatario no elige la IP de quien le escribe.
+        """
+        for _ in range(PER_TARGET + 2):
+            self.request_reset('ana@example.com')
+
+        sent_before = len(mail.outbox)
+
+        for index in range(5):
+            self.request_reset('ana@example.com', ip=f'198.51.100.{index}')
+
+        self.assertEqual(
+            len(mail.outbox), sent_before,
+            'el cupo de un buzon tiene que ser del buzon, no de la pareja '
+            '(IP, buzon)',
+        )
+
+
+class PasswordResetWithoutCacheTests(TestCase):
+    """
+    Con Redis caido, el formulario no manda nada.
+
+    Es la decision incomoda de las dos: recuperar la contrasena deja de estar
+    disponible durante la averia. Pero lo que este cupo impide es llenar el
+    buzon de un tercero --alguien que no ha hecho nada y que no puede
+    defenderse-- y eso no se deshace cuando vuelve Redis. La averia si.
+    """
+
+    def setUp(self):
+        cache.clear()
+        self.url = reverse('account:forgot_password')
+        UserModel.objects.create_user(
+            username='ana', email='ana@example.com', password=PASSWORD,
+        )
+
+    def test_no_email_goes_out(self):
+        with dead_cache():
+            self.client.post(
+                self.url, {'email_or_username': 'ana@example.com'},
+                REMOTE_ADDR=SOMEONE,
+            )
+
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_the_answer_still_does_not_say_who_has_an_account(self):
+        """
+        Cerrar el cupo no puede convertirse en un oraculo por la puerta de
+        atras: si la respuesta cambiara al cortar, comparar las dos diria si
+        la cuenta existe.
+        """
+        with dead_cache():
+            known = self.client.post(
+                self.url, {'email_or_username': 'ana@example.com'},
+                REMOTE_ADDR=SOMEONE,
+            )
+            unknown = self.client.post(
+                self.url, {'email_or_username': 'nadie@example.com'},
+                REMOTE_ADDR=SOMEONE,
+            )
+
+        self.assertEqual(known.status_code, unknown.status_code)
+        self.assertEqual(known.content, unknown.content)
 
 
 class PasswordResetDoesNotLeakAccountsTests(TestCase):

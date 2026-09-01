@@ -477,9 +477,21 @@ if REDIS_URL:
                 'CLIENT_CLASS': 'django_redis.client.DefaultClient',
 
                 # Un Redis caido degrada a "sin cache", no tumba el sitio.
-                # Los contadores de tasa dejan de aplicarse mientras dure
-                # (que es exactamente lo que pasa hoy con LocMemCache), y el
-                # codigo de registro deja de validarse, que falla cerrado.
+                #
+                # Ojo con lo que significa esto exactamente, porque es
+                # contraintuitivo y ya costo un fallo: `django-redis` no
+                # **lanza** la excepcion, la **devuelve como `None`**. Un
+                # `try/except` alrededor de una operacion de cache por tanto
+                # no se entera de nada, y `cache.get(k) or 0` da `0`, que es
+                # menos que cualquier limite. Los contadores de tasa dejaban
+                # de aplicarse en silencio: ni excepcion, ni log, ni sintoma.
+                #
+                # Ya no. Todos pasan por `apps.common.utils.throttling`, que
+                # detecta la averia por el valor que devuelve `incr` --entero
+                # si la cache vive, `None` si no-- y decide **por cupo**:
+                # cerrado donde el limite es el control (codigos publicos,
+                # envio de correos a terceros), abierto y con la razon escrita
+                # donde no lo es. Lee ese modulo antes de tocar esta linea.
                 'IGNORE_EXCEPTIONS': True,
 
                 # Un VPS que no responde no puede quedarse colgando la

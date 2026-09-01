@@ -127,16 +127,15 @@ class IdentifierThrottleTests(TestCase):
         view = self.make_view()
 
         for _ in range(OTPSessionMixin.IDENTIFIER_MAX_ATTEMPTS_PER_WINDOW):
-            self.assertTrue(view.can_try_identifier())
-            view.record_identifier_attempt()
+            self.assertTrue(view.spend_identifier_attempt())
 
     def test_it_stops_after_the_limit(self):
         view = self.make_view()
 
         for _ in range(OTPSessionMixin.IDENTIFIER_MAX_ATTEMPTS_PER_WINDOW):
-            view.record_identifier_attempt()
+            view.spend_identifier_attempt()
 
-        self.assertFalse(view.can_try_identifier())
+        self.assertFalse(view.spend_identifier_attempt())
 
     def test_a_new_session_does_not_reset_the_counter(self):
         """
@@ -145,19 +144,20 @@ class IdentifierThrottleTests(TestCase):
         view = self.make_view()
 
         for _ in range(OTPSessionMixin.IDENTIFIER_MAX_ATTEMPTS_PER_WINDOW):
-            view.record_identifier_attempt()
+            view.spend_identifier_attempt()
 
         fresh = self.make_view()
 
-        self.assertFalse(fresh.can_try_identifier())
+        self.assertFalse(fresh.spend_identifier_attempt())
 
     def test_another_ip_is_not_punished(self):
         view = self.make_view()
 
         for _ in range(OTPSessionMixin.IDENTIFIER_MAX_ATTEMPTS_PER_WINDOW):
-            view.record_identifier_attempt()
+            view.spend_identifier_attempt()
 
-        self.assertTrue(self.make_view(ip='198.51.100.9').can_try_identifier())
+        self.assertTrue(
+            self.make_view(ip='198.51.100.9').spend_identifier_attempt())
 
 
 class VerificationFormTests(TestCase):

@@ -9,7 +9,9 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.crypto import constant_time_compare
-from django.core.cache import cache
+
+from apps.common.utils.throttling import RateLimit
+
 
 class OTPSessionMixin:
     OTP_SESSION_KEY = "document_otp"
@@ -42,6 +44,60 @@ class OTPSessionMixin:
     # un papel, ni siquiera equivocandose varias veces.
     IDENTIFIER_WINDOW = timedelta(minutes=10)
     IDENTIFIER_MAX_ATTEMPTS_PER_WINDOW = 20
+
+    # ======================
+    # Los tres cupos
+    # ======================
+    # Los tres se llevaban a mano leyendo `cache.get` y comparando. Con
+    # `IGNORE_EXCEPTIONS` puesto en la cache, un Redis caido devuelve `None` en
+    # lugar de lanzar, `None or 0` es `0`, y los tres dejaban de aplicarse **en
+    # silencio**: ni excepcion, ni log, ni sintoma. `RateLimit` detecta la
+    # averia por el valor que devuelve `incr` y decide por cupo, no en bloque.
+
+    #: Envio del OTP, por destinatario. Falla cerrado: el correo sale hacia un
+    #: buzon ajeno, y quien lo pide elige su IP mientras que quien lo recibe
+    #: no. Por eso el `scope` es el correo y no lleva la IP dentro.
+    otp_send_throttle = RateLimit(
+        'otp_send_to',
+        limit=OTP_MAX_SENDS_PER_WINDOW,
+        window=int(OTP_SEND_WINDOW.total_seconds()),
+    )
+
+    #: Y el mismo envio, por origen. Sin este, el cupo por destinatario se
+    #: esquiva cambiando de destinatario: 3 correos a cada direccion de una
+    #: lista sigue siendo una lista entera. Numero mayor porque una oficina
+    #: entera comparte salida a internet.
+    otp_send_ip_throttle = RateLimit(
+        'otp_send_from',
+        limit=OTP_MAX_SENDS_PER_WINDOW * 5,
+        window=int(OTP_SEND_WINDOW.total_seconds()),
+    )
+
+    #: Verificacion del codigo recibido. **El unico que falla abierto**, y por
+    #: una diferencia real: aqui no se adivina nada de otro. El codigo se
+    #: acaba de mandar al buzon de quien teclea, vive 10 minutos, y la sesion
+    #: se bloquea a los 5 fallos con un contador que va **en la sesion**, o
+    #: sea en la base de datos, que no depende de Redis. Este cupo es la
+    #: segunda linea, no la unica; cerrarlo durante una averia dejaria tirado
+    #: a quien tiene el codigo correcto delante sin cerrar ninguna puerta que
+    #: siga abierta.
+    otp_verify_throttle = RateLimit(
+        'otp_verify',
+        limit=OTP_MAX_VERIFY_ATTEMPTS_PER_WINDOW,
+        window=int(OTP_VERIFY_WINDOW.total_seconds()),
+        fail_open=True,
+        reason='the 5-attempt lockout lives in the session, which is in the DB',
+    )
+
+    #: Codigos publicos. Falla cerrado, y es el caso mas claro de todos: este
+    #: limite **es** el control -- no hay nada mas entre un desconocido y
+    #: recorrer un espacio de 4 caracteres. Y lo que se enumera no se
+    #: desenumera cuando vuelve Redis.
+    identifier_throttle = RateLimit(
+        'identifier_lookup',
+        limit=IDENTIFIER_MAX_ATTEMPTS_PER_WINDOW,
+        window=int(IDENTIFIER_WINDOW.total_seconds()),
+    )
 
     # ======================
     # Session helpers
@@ -80,102 +136,60 @@ class OTPSessionMixin:
             digestmod=hashlib.sha256,
         ).hexdigest()
 
-    # NUEVO: llaves de cache
-    def _send_rate_key(self, email: str) -> str:
-        ip = self._client_ip()
-        return f"otp:send:{ip}:{email}"
-
-    def _verify_rate_key(self) -> str:
-        ip = self._client_ip()
-        # amarra a sesión para no penalizar a todos por la misma IP
-        sid = self.request.session.session_key or "nosid"
-        return f"otp:verify:{ip}:{sid}"
-
-    def _incr_counter(self, key: str, ttl_seconds: int) -> int:
+    def spend_otp_send(self, email: str) -> bool:
         """
-        contador atómico si cache soporta incr. Fallback seguro.
-        """
-        try:
-            added = cache.add(key, 0, timeout=ttl_seconds)
-            # si no existía, quedó en 0, ahora incr a 1
-            return cache.incr(key)
-        except Exception:
-            # fallback no-atómico (menos ideal)
-            v = cache.get(key, 0) or 0
-            v = int(v) + 1
-            cache.set(key, v, timeout=ttl_seconds)
-            return v
+        Gasta una unidad del cupo de envios y dice si se puede mandar.
 
-    def can_send_otp(self, email: str) -> tuple[bool, int]:
-        """
-        Rate limit real: max N envíos por ventana por ip+email.
-        Returns: (allowed, seconds_remaining_estimate)
+        Antes esto eran dos llamadas --``can_send_otp()`` para preguntar y
+        ``record_send_otp()`` para anotar despues del envio-- y esa separacion
+        era el fallo: entre una y otra hay una peticion HTTP, una plantilla y
+        un SMTP. Dos peticiones simultaneas preguntaban las dos antes de que
+        ninguna anotara, y las dos pasaban.
+
+        Se anota **antes** de mandar. Un correo que no llega por un fallo del
+        SMTP gasta cupo, y esta bien que lo gaste: el reintento tiene su boton
+        de reenvio, con su espera aparte.
+
+        Returns:
+            bool: ``True`` si el envio puede seguir adelante.
         """
         email = (email or "").strip().lower()
-        key = self._send_rate_key(email)
-        ttl = int(self.OTP_SEND_WINDOW.total_seconds())
 
-        count = cache.get(key)
-        if count is None:
-            cache.set(key, 0, timeout=ttl)
-            count = 0
+        # Los dos, no el primero que sobre: en corto, uno se quedaria sin
+        # contar y el cupo dependeria del orden de evaluacion.
+        to_ok = self.otp_send_throttle.consume(self.request, scope=email)
+        from_ok = self.otp_send_ip_throttle.consume(self.request)
 
-        if int(count) >= self.OTP_MAX_SENDS_PER_WINDOW:
-            # aproximación: no tenemos exacto remaining, pero estimamos por TTL restante si backend lo permite
-            return False, int(self.OTP_SEND_WINDOW.total_seconds())
-        return True, 0
+        return to_ok and from_ok
 
-    def record_send_otp(self, email: str) -> None:
-        email = (email or "").strip().lower()
-        ttl = int(self.OTP_SEND_WINDOW.total_seconds())
-        self._incr_counter(self._send_rate_key(email), ttl)
+    def _verify_scope(self) -> str:
+        """
+        El cupo de verificacion se ata a la sesion, no a la direccion.
 
-    def can_verify_attempt(self) -> bool:
-        ttl = int(self.OTP_VERIFY_WINDOW.total_seconds())
-        key = self._verify_rate_key()
+        Es la excepcion, y tiene su motivo: aqui no se adivina nada de otro
+        --el codigo llego al buzon de quien teclea-- asi que contar por IP
+        castigaria a una oficina entera por culpa de uno solo. En los demas
+        cupos manda la IP, porque lo que se protege es comun.
+        """
+        return f'{self._client_ip()}:{self.request.session.session_key or "nosid"}'
 
-        count = cache.get(key)
-        if count is None:
-            cache.set(key, 0, timeout=ttl)
-            count = 0
-
-        return int(count) < self.OTP_MAX_VERIFY_ATTEMPTS_PER_WINDOW
-
-    def record_verify_attempt(self) -> None:
-        ttl = int(self.OTP_VERIFY_WINDOW.total_seconds())
-        self._incr_counter(self._verify_rate_key(), ttl)
+    def spend_verify_attempt(self) -> bool:
+        return self.otp_verify_throttle.consume(
+            self.request, scope=self._verify_scope())
 
     # ======================
     # Identifier lookups
     # ======================
-    def _identifier_rate_key(self) -> str:
+    def spend_identifier_attempt(self) -> bool:
         """
-        Se cuenta por IP, no por sesion.
+        Un intento del formulario de codigos publicos.
 
-        La sesion la controla quien busca: basta con tirar la cookie para
-        empezar de cero, asi que un contador por sesion no limita nada frente
-        a un script. Los contadores del OTP se atan a la sesion a proposito
-        --para no castigar a toda una oficina por culpa de uno-- pero ahi el
-        limite protege un secreto que ya llego por correo a un buzon concreto.
-        Aqui no hay tal cosa: lo que se protege es el espacio de codigos, que
-        es comun.
+        Se cuenta por IP --el ``scope`` por defecto-- y no por sesion: la
+        sesion la controla quien busca, y tirar la cookie para empezar de cero
+        es una linea de script. Lo que se protege aqui no es el secreto de
+        nadie en concreto, es el espacio de codigos, que es comun.
         """
-        return f'verify:identifier:{self._client_ip()}'
-
-    def can_try_identifier(self) -> bool:
-        ttl = int(self.IDENTIFIER_WINDOW.total_seconds())
-        key = self._identifier_rate_key()
-
-        count = cache.get(key)
-        if count is None:
-            cache.set(key, 0, timeout=ttl)
-            count = 0
-
-        return int(count) < self.IDENTIFIER_MAX_ATTEMPTS_PER_WINDOW
-
-    def record_identifier_attempt(self) -> None:
-        ttl = int(self.IDENTIFIER_WINDOW.total_seconds())
-        self._incr_counter(self._identifier_rate_key(), ttl)
+        return self.identifier_throttle.consume(self.request)
 
     def set_otp_session(self, email: str, otp: str, *, purpose: str = "document_verification"):
         now = timezone.now()
@@ -256,11 +270,8 @@ class OTPSessionMixin:
             return False
 
         # NUEVO: rate limit real de verificación (server-side)
-        if not self.can_verify_attempt():
+        if not self.spend_verify_attempt():
             return False
-
-        # registra intento siempre
-        self.record_verify_attempt()
 
         ok = constant_time_compare(
             data.get("otp_hash", ""),
