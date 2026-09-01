@@ -12,7 +12,6 @@ dependencies = [
     "django-admin-sortable2>=2.2",
     "django-auditlog>=3.0",
     "django-axes>=7.0",
-    "django-betterforms>=2.0",
     "django-ckeditor-5>=0.2",
     "django-compressor>=4.4",
     "django-cors-headers>=4.3",
