@@ -16,7 +16,6 @@ from pathlib import Path
 
 from django.conf import settings
 from django.contrib import messages
-from django.core.cache import cache
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import send_mail
 from django.shortcuts import redirect, render
@@ -26,6 +25,7 @@ from django.views.generic import DetailView, TemplateView, View
 from formtools.wizard.views import SessionWizardView
 
 from apps.common.utils.client_ip import get_client_ip
+from apps.common.utils.throttling import RateLimit
 
 from .forms import (ConfirmationForm, ContactForm, DescriptionForm,
                     LegalHolderForm, NaturalHolderForm, RequestTypeForm)
@@ -160,26 +160,34 @@ class PQRSWizardView(SessionWizardView):
         return gathered
 
     # ------------------------------------------------------------------
-    def _rate_key(self):
-        return f'pqrs:submit:{get_client_ip(self.request)}'
-
-    def _within_rate_limit(self) -> bool:
-        return (cache.get(self._rate_key()) or 0) < MAX_PER_WINDOW
-
-    def _record_submission(self):
-        key = self._rate_key()
-
-        try:
-            cache.add(key, 0, timeout=WINDOW_SECONDS)
-            cache.incr(key)
-        except Exception:
-            # Sin cache no se limita, pero tampoco se cae: el derecho de
-            # peticion no puede depender de que Redis conteste.
-            logger.warning('Could not record the PQRS submission rate')
+    #: El unico cupo del proyecto que falla **abierto**, y la razon esta
+    #: escrita al lado porque no es obvia.
+    #:
+    #: Lo que hay al otro lado de este formulario no es un secreto que alguien
+    #: pueda adivinar: es el derecho de peticion del articulo 23 de la
+    #: Constitucion, y el de habeas data de la Ley 1581. Un titular que quiere
+    #: que le supriman sus datos y se encuentra el formulario cerrado no tiene
+    #: otra puerta -- y el plazo legal corre desde que radica, no desde que
+    #: nuestra cache vuelve. El limite existe contra el spam, y el spam se
+    #: absorbe: son filas en una tabla que alguien mira, y se acaba cuando se
+    #: acaba la averia.
+    #:
+    #: La comparacion con los demas cupos es la que decide: los otros impiden
+    #: enumerar codigos o llenar el buzon de un tercero, y ese dano no se
+    #: deshace cuando vuelve Redis. Este si.
+    throttle = RateLimit(
+        'pqrs_submit',
+        limit=MAX_PER_WINDOW,
+        window=WINDOW_SECONDS,
+        fail_open=True,
+        reason='filing a PQRS is a legal right; the cost of abuse is spam we absorb',
+    )
 
     # ------------------------------------------------------------------
     def done(self, form_list, **kwargs):
-        if not self._within_rate_limit():
+        # Se gasta antes de construir nada: el intento cuenta aunque la
+        # radicacion falle despues.
+        if not self.throttle.consume(self.request):
             messages.error(
                 self.request,
                 _('Too many requests from this connection. Try again later, '
@@ -193,7 +201,6 @@ class PQRSWizardView(SessionWizardView):
 
         request_object = self._build(data)
 
-        self._record_submission()
         self._send_acknowledgement(request_object)
         self._notify_the_team(request_object)
 

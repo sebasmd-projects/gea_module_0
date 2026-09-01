@@ -279,9 +279,13 @@ class Command(BaseCommand):
                 except (OSError, TypeError):
                     source = ''
 
+            # Todos los cupos pasan ya por `RateLimit`, asi que basta con
+            # buscar la clase o una llamada a `.consume()` / `spend_*()`. Los
+            # nombres sueltos de antes --`can_send_otp`, `_within_rate`...--
+            # eran seis implementaciones distintas del mismo contador, que es
+            # justo lo que se unifico.
             throttle_markers = (
-                'RateLimit', 'can_send_otp', 'can_try_identifier',
-                '_within_rate', 'RESET_MAX_SENDS', '_can_send_reset',
+                'RateLimit', 'throttle', '.consume(', 'spend_',
             )
 
             if any(marker in source for marker in throttle_markers):

@@ -27,6 +27,8 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
+from apps.common.utils.tests_throttling import dead_cache
+
 from .models import UserCertificateTypeChoices, UserVerificationModel
 from .views import InputEmployeeIPCONFormView
 
@@ -145,6 +147,35 @@ class TestSweepingIsNotPossible(IPCONMixin, TestCase):
         response = self.lookup('1234567890', kind='CC')
 
         self.assertContains(response, 'Too many verification attempts')
+
+
+class TestARedisOutageDoesNotReopenTheSweep(IPCONMixin, TestCase):
+    """
+    El limite que cierra este agujero vivia en cache, y la cache va con
+    ``IGNORE_EXCEPTIONS``: con Redis caido devolvia ``None``, ``None or 0``
+    era ``0``, y el barrido volvia a estar disponible **en silencio** durante
+    toda la averia.
+
+    Que sea silencioso es lo peor: una plantilla enumerada durante un corte
+    esta enumerada para siempre, y no queda constancia de nada. Por eso este
+    cupo falla cerrado -- prefiere que la consulta no este disponible mientras
+    dure una averia que ya es una averia.
+    """
+
+    def test_the_form_stops_answering(self):
+        with dead_cache():
+            response = self.lookup(self.certificate.public_code)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Too many verification attempts')
+
+    def test_it_works_again_when_the_cache_comes_back(self):
+        with dead_cache():
+            self.lookup(self.certificate.public_code)
+
+        response = self.lookup(self.certificate.public_code)
+
+        self.assertEqual(response.status_code, 302)
 
 
 class TestAQueryThatIdentifiesNobodyFindsNobody(IPCONMixin, TestCase):

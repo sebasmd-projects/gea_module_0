@@ -25,6 +25,7 @@ from formtools.wizard.views import SessionWizardView
 
 from apps.common.utils.client_ip import get_client_ip
 from apps.common.utils.functions import safe_next
+from apps.common.utils.throttling import RateLimit
 from apps.common.utils.models import GeaDailyUniqueCode
 from apps.project.common.users.models import UserModel
 
@@ -132,8 +133,22 @@ class GeaUserRegisterWizardView(SessionWizardView):
     def _buyer_cache_key(self, email: str) -> str:
         return f"gea:buyer_reg_code:{email}"
 
-    def _buyer_rate_key(self, ip: str, email: str) -> str:
-        return f"gea:buyer_reg_rate:{ip}:{email}"
+    # El cupo de envios del codigo de registro.
+    #
+    # Va por destinatario (`scope=email`) y no por `{ip}:{email}`, que era la
+    # llave anterior: quien manda los correos elige su IP, quien los recibe no.
+    # Con la IP dentro, tres correos y a otra direccion.
+    #
+    # Falla **cerrado**: sin cache no se manda. Es lo que corresponde --el
+    # correo sale hacia un tercero-- y ademas es lo unico coherente, porque el
+    # codigo se guarda en esa misma cache: con Redis caido el envio saldria
+    # pero el codigo no se podria comprobar despues. Cortar antes de mandar es
+    # preferible a mandar un codigo que ya se sabe que no va a servir.
+    buyer_code_throttle = RateLimit(
+        'buyer_code_send',
+        limit=BUYER_MAX_SENDS_IN_WINDOW,
+        window=BUYER_SEND_RATE_TTL_SECONDS,
+    )
 
     def _send_buyer_code(self, *, email: str) -> None:
         """
@@ -144,11 +159,7 @@ class GeaUserRegisterWizardView(SessionWizardView):
         if not email:
             raise ValueError(_("Invalid email."))
 
-        ip = self.request.META.get("REMOTE_ADDR", "0.0.0.0")
-        rate_key = self._buyer_rate_key(ip, email)
-        bucket = cache.get(rate_key) or {"count": 0}
-
-        if bucket["count"] >= self.BUYER_MAX_SENDS_IN_WINDOW:
+        if not self.buyer_code_throttle.consume(self.request, scope=email):
             raise ValueError(
                 _("Too many code requests. Please try again later."))
 
@@ -158,9 +169,6 @@ class GeaUserRegisterWizardView(SessionWizardView):
         )
         cache.set(self._buyer_cache_key(email), code,
                   timeout=self.BUYER_CODE_TTL_SECONDS)
-
-        bucket["count"] += 1
-        cache.set(rate_key, bucket, timeout=self.BUYER_SEND_RATE_TTL_SECONDS)
 
         subject = _("Your GEA registration code")
         message = _(
@@ -397,11 +405,30 @@ class ForgotPasswordFormView(View):
             'title': _('Reset Your Password'),
         })
 
-    def _reset_target_key(self, ip: str, identifier: str) -> str:
-        return f"gea:pwd_reset_rate:{ip}:{identifier}"
-
-    def _reset_ip_key(self, ip: str) -> str:
-        return f"gea:pwd_reset_ip:{ip}"
+    # Los dos cupos pasan por `RateLimit`, que **falla cerrado**: si la cache
+    # no responde no se manda nada.
+    #
+    # Antes se leia la cache directamente, y con `IGNORE_EXCEPTIONS` un Redis
+    # caido devuelve `None` en lugar de lanzar: `None or 0` es `0`, `0 >= 3` es
+    # falso, y el limite dejaba de aplicarse **en silencio**. Lo que impide es
+    # llenar el buzon de un tercero, o sea dano a alguien que no ha hecho nada;
+    # que la recuperacion de contrasena no este disponible durante una averia
+    # es peor de explicar, pero se acaba con la averia.
+    #
+    # El de destinatario va por `scope`, sin la IP dentro. Antes la llave era
+    # `{ip}:{identifier}`, y eso convertia el limite en decorativo: tres
+    # correos por IP hacia el mismo buzon, y cambiar de IP daba tres mas. El
+    # cupo de un buzon tiene que ser del buzon.
+    reset_by_target = RateLimit(
+        'reset_target',
+        limit=RESET_MAX_SENDS_PER_TARGET,
+        window=RESET_RATE_TTL_SECONDS,
+    )
+    reset_by_ip = RateLimit(
+        'reset_ip',
+        limit=RESET_MAX_SENDS_PER_IP,
+        window=RESET_RATE_TTL_SECONDS,
+    )
 
     def _within_send_quota(self, request, identifier: str) -> bool:
         """
@@ -414,25 +441,15 @@ class ForgotPasswordFormView(View):
         Returns:
             bool: True si hay cupo. Consume una unidad de ambos contadores.
         """
-        ip = get_client_ip(request)
+        # Se consumen los dos, no el primero que sobre: evaluar en corto
+        # dejaria uno sin contar.
+        target_ok = self.reset_by_target.consume(request, scope=identifier)
+        ip_ok = self.reset_by_ip.consume(request)
 
-        target_key = self._reset_target_key(ip, identifier)
-        ip_key = self._reset_ip_key(ip)
-
-        target_count = cache.get(target_key) or 0
-        ip_count = cache.get(ip_key) or 0
-
-        if (target_count >= self.RESET_MAX_SENDS_PER_TARGET
-                or ip_count >= self.RESET_MAX_SENDS_PER_IP):
+        if not (target_ok and ip_ok):
             logger.warning(
-                'Password reset rate limit hit from %s', ip,
-            )
+                'Password reset rate limit hit from %s', get_client_ip(request))
             return False
-
-        cache.set(target_key, target_count + 1,
-                  timeout=self.RESET_RATE_TTL_SECONDS)
-        cache.set(ip_key, ip_count + 1,
-                  timeout=self.RESET_RATE_TTL_SECONDS)
 
         return True
 

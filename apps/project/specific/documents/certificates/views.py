@@ -197,8 +197,7 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
             return redirect(self.request.path)
 
         email = otp_state.get("email", "")
-        allowed_send, _wait = self.can_send_otp(email)
-        if not allowed_send:
+        if not self.spend_otp_send(email):
             messages.warning(self.request, _(
                 "Too many code requests. Try again later."))
             return redirect(self.request.path)
@@ -206,8 +205,6 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
         otp = generate_otp()
         self.update_otp(otp)
         send_otp_email(email, otp)
-
-        self.record_send_otp(email)
 
         messages.success(self.request, _(
             "A new verification code has been sent to your email."))
@@ -324,9 +321,7 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
     def _handle_email_step(self, form):
         email = form.cleaned_data["email"]
 
-        allowed_send, _wait = self.can_send_otp(email)
-
-        if not allowed_send:
+        if not self.spend_otp_send(email):
             form.add_error("email", _(
                 "Too many code requests. Try again later."))
             return self.form_invalid(form)
@@ -334,8 +329,6 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
         otp = generate_otp()
         self.set_otp_session(email, otp, purpose="document_verification")
         send_otp_email(email, otp)
-
-        self.record_send_otp(email)
 
         return redirect(self.request.path)
 
@@ -356,14 +349,12 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
         # son cortos. Sin tope, probarlos todos es cuestion de tiempo de CPU
         # ajeno. El intento se cuenta antes de buscar, para que acertar y
         # fallar cuesten lo mismo.
-        if not self.can_try_identifier():
+        if not self.spend_identifier_attempt():
             form.add_error(
                 'identifier',
                 _('Too many verification attempts. Try again later.')
             )
             return self.form_invalid(form)
-
-        self.record_identifier_attempt()
 
         # Un identificador es un identificador: quien lee un codigo impreso no
         # sabe si detras hay un documento o un resumen, y no tiene por que
