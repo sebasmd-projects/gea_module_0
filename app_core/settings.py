@@ -134,7 +134,18 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'auditlog',
     'axes',
-    'betterforms',
+    # 'betterforms' estaba aqui sin que nada lo usara.
+    #
+    # Lo arrastraba `django-two-factor-auth`, que hasta la 1.15 lo necesitaba
+    # para sus formularios. Desde entonces ya no, pero el paquete se quedo
+    # declarado como dependencia directa y en INSTALLED_APPS. Nadie del
+    # proyecto lo importa, y ningun paquete instalado tampoco -- comprobado
+    # sobre el entorno, no sobre la documentacion.
+    #
+    # Costaba un aviso en cada arranque, en cada comando y en cada linea del
+    # log: su `__init__` llama a `pkg_resources`, que esta en retirada. Un
+    # aviso permanente que no significa nada es peor que ninguno, porque
+    # ensena a no leerlos.
     'compressor',
     'corsheaders',
     'django_crontab',

@@ -65,7 +65,21 @@ class MediaAsset(TimeStampedModel):
             raise ValidationError({"file": _("File exceeds ") + str(DEFAULT_MAX_MB) + _("MB.")})
 
     def save(self, *args, **kwargs):
-        # Derivar tipo y tamaño de forma consistente (sin signals)
+        """
+        Deriva el tipo y el tamano, y aplica el limite. **Sin senales.**
+
+        Habia ademas un ``pre_save`` en ``signals.py`` que hacia esto mismo, y
+        de paso normalizaba dos campos de categorias. La migracion 0003 borro
+        esos campos y la senal siguio escribiendolos: desde entonces, guardar
+        **cualquier** media reventaba con ``AttributeError: 'MediaAsset'
+        object has no attribute 'categories'``. La galeria llevaba sin admitir
+        una sola subida.
+
+        La senal se ha quitado entera en vez de arreglarla: no aportaba nada
+        que no estuviera ya aqui salvo el limite de tamano, que se ha traido.
+        Tener la misma derivacion en dos sitios es justo lo que permitio que
+        una de las dos se quedara atras sin que nadie lo notara.
+        """
         if self.file:
             inferred = self.infer_media_type()
             if not inferred:
@@ -74,6 +88,15 @@ class MediaAsset(TimeStampedModel):
 
             size = getattr(self.file, "size", None)
             self.size_bytes = int(size) if size is not None else 0
+
+            # El limite tambien aqui y no solo en `clean()`: `save()` no llama
+            # a `clean()`, asi que sin esto un archivo enorme creado desde
+            # codigo --una importacion, un comando-- entraria igual.
+            if size is not None and size > DEFAULT_MAX_BYTES:
+                raise ValidationError(
+                    _("The file exceeds %(max_mb)dMB.")
+                    % {"max_mb": DEFAULT_MAX_MB}
+                )
 
         super().save(*args, **kwargs)
 

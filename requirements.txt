@@ -272,7 +272,6 @@ django==4.2.27 \
     #   django-appconf
     #   django-auditlog
     #   django-axes
-    #   django-betterforms
     #   django-ckeditor-5
     #   django-compressor
     #   django-cors-headers
@@ -307,9 +306,6 @@ django-auditlog==3.4.1 \
 django-axes==8.1.0 \
     --hash=sha256:50117de17d189497a01d0544a9977b5136764c513085cf15138084de9dd81993 \
     --hash=sha256:92cae514b6270d4b76c7afa657d5988c28b7c6ac1ce367c368eea2dd976199e7
-    # via gea-module-0
-django-betterforms==2.0.0 \
-    --hash=sha256:43edd7a60a6b4cd838fd5e2425553b462f902d57f9f292d4e937125a87815a42
     # via gea-module-0
 django-ckeditor-5==0.2.19 \
     --hash=sha256:627e0752d15c915665444b34b4d376855187a93660bdc9193d6b10c856ef843b \

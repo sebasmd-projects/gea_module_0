@@ -7,7 +7,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
@@ -24,6 +24,7 @@ from django.utils.crypto import get_random_string
 from formtools.wizard.views import SessionWizardView
 
 from apps.common.utils.client_ip import get_client_ip
+from apps.common.utils.functions import safe_next
 from apps.common.utils.models import GeaDailyUniqueCode
 from apps.project.common.users.models import UserModel
 
@@ -240,24 +241,51 @@ class GeaUserRegisterWizardView(SessionWizardView):
             referred = None
 
         try:
-            user = UserModel.objects.create_user(
-                username=step_data[STEP_USER]["username"],
-                email=email,
-                first_name=step_data[STEP_USER]["first_name"],
-                last_name=step_data[STEP_USER]["last_name"],
-                password=step_data[STEP_SECURITY]["password"],
-                user_type=user_type,
-                phone_number_code=step_data[STEP_CONTACT]["phone_number_code"],
-                phone_number=step_data[STEP_CONTACT]["phone_number"],
-                referred=referred,
-            )
+            # El `atomic()` interior es lo que hace que este `except` sirva
+            # para algo.
+            #
+            # Con `ATOMIC_REQUESTS = True` la peticion entera ya es una
+            # transaccion, asi que un IntegrityError la deja marcada como rota:
+            # capturarlo y seguir no vale de nada, porque **la siguiente
+            # consulta** --y repintar el formulario hace varias-- revienta con
+            # `TransactionManagementError`. Registrarse con un correo que ya
+            # existia daba un 500 en vez del mensaje que hay escrito aqui
+            # mismo, y el mensaje llevaba escrito desde el principio.
+            #
+            # Un `atomic()` anidado es un savepoint: al salir el error se
+            # deshace solo hasta ahi y la transaccion de fuera sigue viva.
+            with transaction.atomic():
+                user = UserModel.objects.create_user(
+                    username=step_data[STEP_USER]["username"],
+                    email=email,
+                    first_name=step_data[STEP_USER]["first_name"],
+                    last_name=step_data[STEP_USER]["last_name"],
+                    password=step_data[STEP_SECURITY]["password"],
+                    user_type=user_type,
+                    phone_number_code=step_data[STEP_CONTACT]["phone_number_code"],
+                    phone_number=step_data[STEP_CONTACT]["phone_number"],
+                    referred=referred,
+                )
         except IntegrityError as e:
+            # `email_hash` y no `email`: el correo va cifrado y su unique no
+            # llega a dispararse nunca (dos cifrados del mismo texto son bytes
+            # distintos). Quien impide de verdad dos cuentas con el mismo
+            # correo es el unique del hash, y por eso es su nombre el que
+            # aparece en el error.
             if "email_hash" in str(e):
                 form = self.get_form(
                     step=STEP_CONTACT, data=self.storage.get_step_data(STEP_CONTACT))
                 form.add_error("email", _(
                     "A user with this email already exists."))
                 return self.render(form)
+
+            if "username" in str(e):
+                form = self.get_form(
+                    step=STEP_USER, data=self.storage.get_step_data(STEP_USER))
+                form.add_error("username", _(
+                    "A user with this username already exists."))
+                return self.render(form)
+
             raise
 
         auth_user = authenticate(
@@ -273,7 +301,16 @@ class GeaUserRegisterWizardView(SessionWizardView):
             cache.delete(self._buyer_cache_key(email))
 
         # Redirects
-        next_url = self.request.GET.get("next")
+        #
+        # El destino se comprueba: `redirect(self.request.GET["next"])` a pelo
+        # era un redirector abierto, y de los peores que hay. El enlace se
+        # manda con una excusa creible --"registrate aqui"--, la victima se
+        # registra **de verdad** en esta plataforma, y acaba en un sitio ajeno
+        # recien autenticada (el `login()` de arriba ya paso) y con nuestra
+        # `Referer` detras, que es lo que hace creible una pantalla pidiendole
+        # la contrasena otra vez.
+        next_url = safe_next(self.request)
+
         if next_url:
             return redirect(next_url)
 
