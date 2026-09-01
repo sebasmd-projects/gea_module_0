@@ -78,9 +78,37 @@
     .ops-card[hidden], .ops-group[hidden] { display: none !important; }
     .ops-empty { padding: 1rem; font-size: .88rem;
                  color: var(--body-quiet-color, #666); }
+
+    /* Distintivo de "solo desarrollo". La consola se ve igual en el portatil
+       y en produccion, y confundirlas es como se ejecuta en el sitio
+       equivocado. */
+    .ops-dev {
+      display: inline-block; margin-left: .35rem; padding: .05rem .4rem;
+      border-radius: 3px; font-size: .68rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .03em;
+      background: rgba(65,118,144,.14); color: var(--link-fg, #417690);
+      border: 1px solid rgba(65,118,144,.35);
+    }
+    .ops-env {
+      padding: .75rem 1rem; margin-bottom: 1.25rem; border-radius: 4px;
+      font-size: .85rem;
+      background: rgba(65,118,144,.10);
+      border: 1px solid rgba(65,118,144,.35);
+    }
   </style>
 
   <h1>{% trans 'Operations console' %}</h1>
+
+  {% if is_debug %}
+    <p class="ops-env">
+      {% blocktrans trimmed %}
+        This is a development environment (DEBUG is on). It shows commands
+        that production does not: creating an app, writing migrations,
+        rebuilding the translation catalogs. They write into the repository,
+        which is why they are not offered on a server.
+      {% endblocktrans %}
+    </p>
+  {% endif %}
 
   <p class="ops-note">
     {% blocktrans trimmed %}
@@ -130,7 +158,7 @@
            data-search="{{ command.search_text }}"
            title="{{ command.risk_label }}"
            style="border-left-color: {% if command.risk == 'READ_ONLY' %}#1a7f37{% elif command.risk == 'WRITES' %}#a17f1a{% else %}#a11a1a{% endif %}">
-          <b>{{ command.title }} <code style="font-weight:normal;opacity:.7">{{ command.name }}</code></b>
+          <b>{{ command.title }} <code style="font-weight:normal;opacity:.7">{{ command.name }}</code>{% if command.is_debug_only %}<span class="ops-dev">{% trans 'dev' %}</span>{% endif %}</b>
           <span>{{ command.summary }}</span>
         </a>
       {% endfor %}

@@ -24,39 +24,196 @@ Tres reglas, y ninguna es negociable:
 El nivel de riesgo no es decorativo: la interfaz obliga a confirmar
 escribiendo el nombre del comando cuando es ``DANGEROUS``.
 
+Tres niveles de disponibilidad
+------------------------------
+No todos los comandos que tienen sentido en un portatil lo tienen en
+produccion. ``start_app`` escribe ficheros nuevos en el repositorio: en
+desarrollo es la forma normal de crear una app, en produccion no hay ninguna
+razon legitima para hacerlo desde una pagina web. Por eso cada entrada declara
+cuando esta disponible:
+
+* ``AVAILABILITY_ALWAYS`` -- en desarrollo y en produccion.
+* ``AVAILABILITY_DEBUG_ONLY`` -- solo con ``DEBUG = True``.
+* Y un tercer nivel que no es un valor sino una ausencia: lo que no esta en
+  ``COMMANDS`` no existe para la consola, pase lo que pase (``NEVER_EXPOSED``,
+  mas abajo).
+
+**El filtro vive en ``get_command()``, no en la plantilla.** Esconder una
+tarjeta no es un control: si la comprobacion estuviera solo en la consola,
+bastaria con teclear la URL del comando. Al filtrar en el registro, el
+ejecutor recibe ``None`` y levanta ``CommandNotAllowed``, y la pagina responde
+404 -- igual que un comando que no existe, que es exactamente lo que es en ese
+entorno.
+
+``DEBUG`` viene de una variable de entorno y una variable de entorno se puede
+equivocar. Por eso la separacion por entorno **no** es donde se apoya la
+seguridad: lo peligroso de verdad no esta en ningun nivel, esta fuera de la
+lista. La separacion por entorno es para lo que es meramente inapropiado en
+produccion, no para lo que seria un desastre si ``DEBUG`` quedara mal puesto.
+
 Lo que NO esta aqui, y por que
 ------------------------------
-La lista es larga a proposito, pero tiene fondo. Estos comandos existen en el
-servidor y **no** se exponen, cada uno por una razon concreta:
+``NEVER_EXPOSED`` recoge lo que no se expone en ningun entorno, con su razon
+al lado, y hay una prueba que comprueba que ninguno se ha colado en
+``COMMANDS``. Tres familias:
 
-* ``flush`` y ``sqlflush`` vacian la base de datos entera.
-* ``dumpdata`` la volcaria a una pagina web -- y la salida de la consola se
-  guarda en ``CommandRunModel``, asi que quedaria ademas escrita en una tabla.
-  ``loaddata`` es lo mismo al reves: inyectar registros arbitrarios.
-* ``shell`` y ``dbshell`` son ejecucion de codigo arbitrario. La lista blanca
-  no significaria nada con cualquiera de los dos dentro.
-* ``diffsettings`` imprime los ajustes, con ``SECRET_KEY``, la clave de la
-  base de datos y ``FIELD_ENCRYPTION_KEY``.
-* ``generate_certification_key`` y ``generate_encryption_key`` imprimen claves
-  privadas. Igual: la salida acabaria guardada en una tabla del propio panel.
-* ``createsuperuser`` y ``changepassword`` crean o cambian credenciales; el
-  segundo ademas necesita stdin, que aqui es ``DEVNULL``.
-* ``delete_migrations`` y ``rename_migrations`` borran o renombran ficheros de
-  todo el repositorio.
-* ``auditlogflush``, ``axes_reset_logs`` y ``axes_reset_failure_logs``
-  destruyen el rastro de auditoria.
-* ``two_factor_disable`` le quitaria el segundo factor a un usuario desde una
-  pagina que precisamente exige segundo factor para abrirse.
-* ``remove_stale_contenttypes`` borra en cascada permisos.
+**Cumplimiento regulatorio.** ``auditlogflush``, ``axes_reset_logs`` y
+``axes_reset_failure_logs`` destruyen el rastro de quien hizo que y cuando. La
+certificacion de esta plataforma se apoya en poder demostrar la integridad de
+lo que registra (ver ``docs/NORMATIVA.md``); un boton que borra la auditoria
+--y que ademas dejaria su propia huella en ``CommandRunModel``, contando que
+alguien borro la auditoria-- no es una herramienta de operacion, es un riesgo
+sin contrapartida. Si algun dia hace falta purgar por retencion de datos, eso
+es una politica escrita y un procedimiento con dos personas, no un clic.
 
-Anadir cualquiera de ellos requiere escribirlo a mano aqui, y esa friccion es
-justo el punto.
+**Ejecucion arbitraria y secretos.** ``shell`` y ``dbshell`` vacian de sentido
+la lista blanca entera. ``diffsettings`` imprime ``SECRET_KEY``, la clave de la
+base de datos y ``FIELD_ENCRYPTION_KEY``. ``generate_certification_key`` y
+``generate_encryption_key`` imprimen claves privadas. Todos comparten el mismo
+agravante: **la salida de la consola se guarda en ``CommandRunModel``**, asi
+que lo que se imprima queda ademas escrito en una tabla que se lee desde el
+propio panel. Un secreto que pasa por aqui deja de serlo.
+
+**Destructivos o sin sentido remoto.** ``flush`` y ``sqlflush`` vacian la base
+entera; ``dumpdata`` la volcaria a esa misma tabla y ``loaddata`` (y el
+``import`` de import_export) inyectaria registros arbitrarios;
+``delete_migrations`` y ``rename_migrations`` borran ficheros de todo el
+repositorio; ``createsuperuser``, ``changepassword`` y ``addstatictoken``
+crean o cambian credenciales; ``two_factor_disable`` le quitaria el segundo
+factor a alguien desde una pagina que exige segundo factor para abrirse;
+``remove_stale_contenttypes`` borra permisos en cascada; ``runserver``,
+``testserver`` y ``startproject`` no significan nada en un servidor ya
+arrancado.
+
+Anadir cualquiera de ellos requiere quitarlo de ``NEVER_EXPOSED`` y escribirlo
+a mano en ``COMMANDS``, y la prueba obliga a que sea deliberado.
+
+Hay un tercer cajon, ``NOT_USEFUL_HERE``, para lo que no es peligroso sino
+simplemente inutil en este proyecto (``startapp``, ``createcachetable``...).
+Va aparte para que ``NEVER_EXPOSED`` siga diciendo una sola cosa. Y entre los
+tres el inventario esta **completo**: una prueba comprueba que todo comando
+instalado aparece en alguno, de modo que actualizar una dependencia y que
+traiga comandos nuevos sea una decision que alguien toma, y no algo que pasa
+inadvertido.
 """
 
 from dataclasses import dataclass, field
 from typing import List, Optional
 
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+
+# --- Cuando esta disponible cada comando -------------------------------
+AVAILABILITY_ALWAYS = 'ALWAYS'
+AVAILABILITY_DEBUG_ONLY = 'DEBUG'
+
+AVAILABILITY_CHOICES = (
+    (AVAILABILITY_ALWAYS, _('Always')),
+    (AVAILABILITY_DEBUG_ONLY, _('Development only')),
+)
+
+AVAILABILITY_LABELS = dict(AVAILABILITY_CHOICES)
+
+#: Lo que no se expone en ningun entorno, y por que.
+#:
+#: No es documentacion suelta: ``tests.py`` comprueba que ninguno aparezca en
+#: ``COMMANDS``, ni por su nombre de entrada ni como ``program``. Anadir uno
+#: obliga a quitarlo de aqui primero, que es la friccion que se busca.
+NEVER_EXPOSED = {
+    # --- Cumplimiento regulatorio: destruyen el rastro de auditoria ---
+    'auditlogflush': _(
+        'Destroys the audit trail the certification relies on. Purging by '
+        'retention policy is a written procedure, not a button.'
+    ),
+    'axes_reset_logs': _('Destroys the record of access attempts.'),
+    'axes_reset_failure_logs': _('Destroys the record of failed logins.'),
+
+    # --- Ejecucion arbitraria y secretos ---
+    'shell': _('Arbitrary code execution: it voids the whole allowlist.'),
+    'dbshell': _('Arbitrary SQL: it voids the whole allowlist.'),
+    'diffsettings': _(
+        'Prints SECRET_KEY, the database password and FIELD_ENCRYPTION_KEY — '
+        'and the output is stored in CommandRunModel.'
+    ),
+    'generate_certification_key': _(
+        'Prints a private key, which would end up written in a table.'
+    ),
+    'generate_encryption_key': _(
+        'Prints the PII encryption key, which would end up written in a table.'
+    ),
+
+    # --- Destructivos con los datos ---
+    'flush': _('Empties the entire database.'),
+    'sqlflush': _('Prints the SQL that empties the entire database.'),
+    'dumpdata': _(
+        'Would dump every record into CommandRunModel, encrypted PII '
+        'included.'
+    ),
+    'loaddata': _('Injects arbitrary records.'),
+    'import': _('Bulk data injection from a web page.'),
+    'export': _('Bulk data extraction into the run history.'),
+    'delete_migrations': _('Deletes migration files across the repository.'),
+    'rename_migrations': _('Renames migration files across the repository.'),
+    'remove_stale_contenttypes': _('Cascades into deleting permissions.'),
+
+    # --- Credenciales y segundo factor ---
+    'createsuperuser': _('Creates credentials from a web page.'),
+    'changepassword': _(
+        'Changes credentials, and needs stdin, which here is DEVNULL.'
+    ),
+    'addstatictoken': _('Mints second-factor backup tokens for a user.'),
+    'two_factor_disable': _(
+        'Would strip the second factor from a user, from a page that requires '
+        'a second factor to open.'
+    ),
+
+    # --- Sin sentido en un servidor ya arrancado ---
+    'runserver': _('There is already a server running.'),
+    'testserver': _('Starts a throwaway server with fixture data.'),
+    'startproject': _('Creates a new project; meaningless here.'),
+    'ping_google': _('This project publishes no sitemap.'),
+
+    # --- Rastro de auditoria, por la puerta de atras ---
+    'auditlogmigratejson': _(
+        'Rewrites the audit table wholesale. It is a one-off upgrade step to '
+        'run with a backup in hand, not a button on a panel.'
+    ),
+}
+
+#: Lo que simplemente no aporta nada aqui, y por que.
+#:
+#: Es un tercer cajon a proposito. Sin el habria que meter en
+#: ``NEVER_EXPOSED`` cosas que no son peligrosas --solo inutiles en este
+#: proyecto-- y esa lista dejaria de leerse como lo que es: la de lo que no se
+#: puede permitir. Separarlas mantiene cada una diciendo una sola cosa.
+#:
+#: Existe ademas para que el inventario este **completo**: hay una prueba que
+#: comprueba que todo comando instalado aparece en uno de los tres sitios, de
+#: modo que actualizar una dependencia y que traiga comandos nuevos sea una
+#: decision que alguien toma, y no algo que pasa inadvertido.
+NOT_USEFUL_HERE = {
+    'startapp': _(
+        'Superseded by start_app, which sets the dotted name, the urls.py '
+        'and the locale folder this project needs.'
+    ),
+    'createcachetable': _(
+        'This project caches in Redis, or in memory when there is none. '
+        'There is no cache table to create.'
+    ),
+    'mtime_cache': _(
+        'A warm-up helper for django-compressor. Precompiling the bundles '
+        'with compress already covers what a deploy needs.'
+    ),
+    'squashmigrations': _(
+        'Migration surgery belongs in an editor with the diff in front of '
+        'you, and the result goes through git.'
+    ),
+    'optimizemigration': _('Same as squashing: it rewrites source code.'),
+    'axes_reset_ip_username': _(
+        'Covered by the two entries that are here: unlocking an address and '
+        'unlocking a person.'
+    ),
+}
 
 # --- Niveles de riesgo -------------------------------------------------
 RISK_READ_ONLY = 'READ_ONLY'
@@ -154,6 +311,11 @@ class Command:
     example: str
     risk: str = RISK_READ_ONLY
     area: str = AREA_DIAGNOSTICS
+    #: Cuando esta disponible. ``DEBUG_ONLY`` es para lo que tiene sentido en
+    #: un portatil y ninguno en produccion -- crear una app, reescribir los
+    #: catalogos de traduccion --, no para lo peligroso: eso no esta en la
+    #: lista siquiera.
+    availability: str = AVAILABILITY_ALWAYS
     options: List[Option] = field(default_factory=list)
     #: Segundos antes de cortarlo. La peticion HTTP espera, no hay cola.
     timeout: int = 120
@@ -192,6 +354,18 @@ class Command:
     @property
     def needs_confirmation(self) -> bool:
         return self.risk == RISK_DANGEROUS
+
+    @property
+    def is_debug_only(self) -> bool:
+        return self.availability == AVAILABILITY_DEBUG_ONLY
+
+    @property
+    def is_available(self) -> bool:
+        """Si este entorno lo admite ahora mismo."""
+        if self.availability == AVAILABILITY_ALWAYS:
+            return True
+
+        return bool(getattr(settings, 'DEBUG', False))
 
     @property
     def area_label(self):
@@ -1050,6 +1224,60 @@ COMMANDS = (
         timeout=60,
     ),
     Command(
+        name='axes_reset_username',
+        title=_('Unlock one person'),
+        summary=_('Clears the login lockout for one username, from any '
+                  'address.'),
+        detail=_(
+            'The lockout is per (IP, user) pair, so someone locked out at the '
+            'office is still locked out from there after moving to their '
+            'phone and back. This frees that person everywhere without '
+            'touching anyone else who shares their address.'
+        ),
+        example=_('A user is still locked out after changing network.'),
+        risk=RISK_WRITES,
+        area=AREA_ACCESS,
+        options=[
+            Option(
+                flag='username',
+                label=_('Username'),
+                kind=KIND_TEXT,
+                positional=True,
+                required=True,
+                help=_('As it appears in the failed attempts.'),
+                pattern=r'^[A-Za-z0-9._@\-]{1,150}$',
+            ),
+        ],
+        timeout=60,
+    ),
+    Command(
+        name='two_factor_status',
+        title=_('Second-factor status'),
+        summary=_('Says whether a user has their second factor set up.'),
+        detail=_(
+            'It changes nothing and shows no secret: only whether the device '
+            'is registered. It is the first question to answer when someone '
+            'says they cannot get into the panel, because the admin turns '
+            'away anyone without a verified second factor — and it does so '
+            'with a 404, which from outside looks like the page not existing.'
+        ),
+        example=_('Someone reports the admin URL "does not exist" for them.'),
+        risk=RISK_READ_ONLY,
+        area=AREA_ACCESS,
+        options=[
+            Option(
+                flag='username',
+                label=_('Username'),
+                kind=KIND_TEXT,
+                positional=True,
+                required=True,
+                help=_('Whose status to check.'),
+                pattern=r'^[A-Za-z0-9._@\-]{1,150}$',
+            ),
+        ],
+        timeout=60,
+    ),
+    Command(
         name='axes_reset',
         title=_('Unlock every login'),
         summary=_('Clears all login lockouts at once.'),
@@ -1128,6 +1356,161 @@ COMMANDS = (
     ),
 
     # ---------------------------------------------------------------
+    # Solo en desarrollo.
+    #
+    # Nada de esto es peligroso -- lo peligroso no esta en la lista, esta en
+    # NEVER_EXPOSED --; es que no tiene sentido en produccion. Escriben en el
+    # repositorio, y un repositorio de produccion se despliega, no se edita:
+    # un fichero creado ahi no esta en git y desaparece en el siguiente
+    # `git pull` o queda estorbando para siempre.
+    # ---------------------------------------------------------------
+    Command(
+        name='start_app',
+        title=_('Create an app'),
+        summary=_('Creates a new app with the project layout already set up.'),
+        detail=_(
+            'It writes the app with its full dotted name, its urls.py and its '
+            'locale folder, which is what makes it fit this project — a plain '
+            'startapp leaves the name wrong and the URLconf empty. It does '
+            'not register it: adding it to the right group in settings.py is '
+            'still a manual step, and that ordering decides the URLconf and '
+            'LOCALE_PATHS order.'
+        ),
+        example=_('Starting a new domain area, on a development machine.'),
+        risk=RISK_WRITES,
+        area=AREA_MAINTENANCE,
+        availability=AVAILABILITY_DEBUG_ONLY,
+        options=[
+            Option(
+                flag='path',
+                label=_('Path of the app'),
+                kind=KIND_TEXT,
+                positional=True,
+                required=True,
+                help=_('For example apps/project/specific/documents/reports.'),
+                pattern=r'^[A-Za-z0-9/_\-]{1,200}$',
+            ),
+        ],
+        timeout=120,
+        warning=_(
+            'It writes new files into the repository. They are not in git '
+            'until someone commits them.'
+        ),
+    ),
+    Command(
+        name='makemigrations',
+        title=_('Write migrations'),
+        summary=_('Writes the migration files for the model changes.'),
+        detail=_(
+            'The writing version of the pending-changes check. It belongs on '
+            'a development machine because a migration is source code: it '
+            'goes through git, gets reviewed and gets deployed. Generated on '
+            'the server it is a file nobody has seen, which the next pull '
+            'either wipes out or conflicts with.'
+        ),
+        example=_('After changing a model, before committing.'),
+        risk=RISK_WRITES,
+        area=AREA_DEPLOY,
+        availability=AVAILABILITY_DEBUG_ONLY,
+        timeout=180,
+        warning=_(
+            'A migration is source code: commit it, do not leave it on a '
+            'server.'
+        ),
+    ),
+    Command(
+        name='makemessages',
+        title=_('Extract translatable text'),
+        summary=_('Rewrites the .po catalogs with the strings found in the '
+                  'code.'),
+        detail=_(
+            'It rewrites every catalog in the project, so it belongs where '
+            'the result can be reviewed and committed. It also needs gettext '
+            'installed. On the server the useful half is the other one — '
+            'compiling the catalogs — which is available everywhere.'
+        ),
+        example=_('After adding text wrapped in gettext, on a development '
+                  'machine.'),
+        risk=RISK_WRITES,
+        area=AREA_MAINTENANCE,
+        availability=AVAILABILITY_DEBUG_ONLY,
+        options=[
+            Option(
+                flag='--locale',
+                label=_('Language'),
+                kind=KIND_CHOICE,
+                choices=('es', 'en'),
+                default='es',
+                help=_('Which catalog to rebuild.'),
+            ),
+        ],
+        timeout=300,
+    ),
+    Command(
+        name='inspectdb',
+        title=_('Models from the schema'),
+        summary=_('Prints the models that would match the tables already in '
+                  'the database.'),
+        detail=_(
+            'Reads the schema and writes nothing. It is for comparing what '
+            'the database really has against what the code declares, when the '
+            'two have drifted apart. The output is a draft, never something '
+            'to paste in as is.'
+        ),
+        example=_('Chasing a mismatch between a table and its model.'),
+        risk=RISK_READ_ONLY,
+        area=AREA_DIAGNOSTICS,
+        availability=AVAILABILITY_DEBUG_ONLY,
+        timeout=120,
+    ),
+    Command(
+        name='sqlsequencereset',
+        title=_('SQL to fix the sequences'),
+        summary=_('Prints the SQL that puts the auto-increment counters back '
+                  'in place.'),
+        detail=_(
+            'It only prints: nothing runs. It is what is needed after loading '
+            'rows with explicit ids, when the counter is left behind and the '
+            'next insert collides with an existing row.'
+        ),
+        example=_('After importing data with fixed ids into a development '
+                  'database.'),
+        risk=RISK_READ_ONLY,
+        area=AREA_DIAGNOSTICS,
+        availability=AVAILABILITY_DEBUG_ONLY,
+        options=[
+            Option(
+                flag='app_label',
+                label=_('App'),
+                kind=KIND_TEXT,
+                positional=True,
+                required=True,
+                help=_('Label of the app, for example buyers.'),
+                pattern=r'^[a-z][a-z0-9_]{0,60}$',
+            ),
+        ],
+        timeout=120,
+    ),
+    Command(
+        name='test',
+        title=_('Run the test suite'),
+        summary=_('Runs the tests against SQLite in memory.'),
+        detail=_(
+            'They run with app_core.settings_test because the MySQL user on '
+            'cPanel cannot create the test_ database — which is also why '
+            'this is a development-only entry. Half of the suite reproduces '
+            'holes that were already closed, so a red result is worth reading '
+            'before assuming the test is stale.'
+        ),
+        example=_('Before pushing, on a development machine.'),
+        risk=RISK_READ_ONLY,
+        area=AREA_DIAGNOSTICS,
+        availability=AVAILABILITY_DEBUG_ONLY,
+        fixed_args=('--settings=app_core.settings_test',),
+        timeout=900,
+    ),
+
+    # ---------------------------------------------------------------
     # Dificiles de deshacer.
     # ---------------------------------------------------------------
     Command(
@@ -1169,8 +1552,35 @@ assert len(COMMANDS_BY_NAME) == len(COMMANDS), 'duplicate command name'
 
 
 def get_command(name: str) -> Optional[Command]:
-    """El comando permitido con ese nombre, o ``None`` si no esta en la lista."""
-    return COMMANDS_BY_NAME.get(name)
+    """
+    El comando permitido con ese nombre, o ``None``.
+
+    ``None`` tambien para un comando que existe pero no esta disponible en
+    este entorno. Es a proposito: el filtro tiene que estar **aqui** y no en
+    la plantilla, porque esconder una tarjeta no es un control -- bastaria con
+    teclear la URL. Devolviendo ``None``, el ejecutor levanta
+    ``CommandNotAllowed`` y la pagina responde 404, que es exactamente lo que
+    ese comando es en este entorno: algo que no existe.
+    """
+    command = COMMANDS_BY_NAME.get(name)
+
+    if command is None or not command.is_available:
+        return None
+
+    return command
+
+
+def all_commands(include_unavailable: bool = False):
+    """
+    Los comandos del registro.
+
+    Por defecto solo los que este entorno admite. ``include_unavailable`` es
+    para las pruebas y para revisar el registro entero, nunca para ejecutar.
+    """
+    if include_unavailable:
+        return list(COMMANDS)
+
+    return [command for command in COMMANDS if command.is_available]
 
 
 def grouped_commands():
@@ -1185,7 +1595,7 @@ def grouped_commands():
     """
     groups = {}
 
-    for command in COMMANDS:
+    for command in all_commands():
         groups.setdefault(command.area, []).append(command)
 
     return [
@@ -1198,10 +1608,11 @@ def risk_facets():
     """Los riesgos presentes, con cuantos comandos hay de cada uno."""
     counts = {}
 
-    for command in COMMANDS:
+    for command in all_commands():
         counts[command.risk] = counts.get(command.risk, 0) + 1
 
     return [
         (risk, RISK_LABELS[risk], counts[risk])
         for risk in sorted(counts, key=lambda r: RISK_ORDER.get(r, 99))
+        if counts.get(risk)
     ]

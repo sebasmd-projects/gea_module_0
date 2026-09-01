@@ -363,7 +363,40 @@ nunca dentro de la petición, por `ATOMIC_REQUESTS`), `models.py::CommandRunMode
 ejecutó qué) y el guardia de `admin.py`. Sólo superusuarios; aborta con 404, no con 403.
 Al colgar del admin hereda además su puerta: hace falta segundo factor verificado (§6.7).
 
-Cuatro cosas al añadir un comando:
+**Los comandos se separan por entorno.** Cada entrada declara `availability`:
+`AVAILABILITY_ALWAYS` o `AVAILABILITY_DEBUG_ONLY`. Lo segundo es para lo que tiene
+sentido en un portátil y ninguno en un servidor —`start_app`, `makemigrations`,
+`makemessages`, `inspectdb`, `sqlsequencereset`, `test`—, todo lo cual escribe en el
+repositorio: lo que se cree ahí no está en git y el siguiente `git pull` lo borra o
+choca con él. **El filtro vive en `get_command()`, no en la plantilla**: esconder una
+tarjeta no es un control, porque basta con teclear la URL. Al filtrar en el registro,
+el runner recibe `None`, levanta `CommandNotAllowed` y la página responde 404.
+
+⚠️ La separación por entorno **no** es donde se apoya la seguridad. `DEBUG` sale de una
+variable de entorno y una variable se puede equivocar; por eso nada marcado `DANGEROUS`
+puede ser `DEBUG_ONLY` (hay una prueba que lo impide). Lo peligroso no está en ningún
+nivel: está fuera de la lista.
+
+**Los tres cajones, y el inventario completo.** Todo comando instalado está en uno:
+
+| Cajón | Qué es | Ejemplos |
+|---|---|---|
+| `COMMANDS` | Expuesto, con su nivel de entorno | `migrate`, `git_pull`, `start_app` (dev) |
+| `NEVER_EXPOSED` | Prohibido siempre, con su razón | `auditlogflush`, `shell`, `diffsettings` |
+| `NOT_USEFUL_HERE` | No es peligroso, no aporta nada | `startapp`, `createcachetable` |
+
+Una prueba comprueba que **no queda ninguno sin decidir**: actualizar una dependencia
+que traiga comandos nuevos falla el test, para que sea una decisión de alguien y no un
+descuido. Si falla, la respuesta no es añadir el comando: es leer qué hace y meterlo en
+el cajón que le toque, con su razón escrita.
+
+Lo excluido por **cumplimiento regulatorio** va aparte y merece leerse: `auditlogflush`,
+`axes_reset_logs` y `axes_reset_failure_logs` destruyen el rastro de quién hizo qué, en
+el que se apoya la certificación ([`docs/NORMATIVA.md`](docs/NORMATIVA.md)) — y dejarían
+su propia huella en `CommandRunModel`, contando que alguien borró la auditoría. Si algún
+día hace falta purgar por retención, eso es un procedimiento escrito, no un clic.
+
+Cuatro cosas más al añadir un comando:
 
 - **La lista blanca es de programas, no de nombres de entrada.** `name` identifica la tarjeta
   (va en la URL y en la auditoría) y `program` dice qué se ejecuta de verdad, que no siempre
