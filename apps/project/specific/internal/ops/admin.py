@@ -137,12 +137,18 @@ class CommandRunModelAdmin(GeneralAdminModel):
     def console_view(self, request):
         self._guard(request)
 
+        from django.conf import settings
+
         context = self._base_context(
             request,
             title=_('Operations console'),
             groups=grouped_commands(),
             risk_facets=risk_facets(),
             risk_colors=RISK_COLORS,
+            # Para decir en voz alta en que entorno se esta. La consola se ve
+            # igual en el portatil y en produccion, y confundirlas es como se
+            # ejecuta en el sitio equivocado.
+            is_debug=bool(settings.DEBUG),
             recent=CommandRunModel.objects.all()[:10],
         )
 

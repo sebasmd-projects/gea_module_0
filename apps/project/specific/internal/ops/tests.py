@@ -50,6 +50,97 @@ class AllowlistTests(TestCase):
                 with self.assertRaises(CommandNotAllowed):
                     run(name, {})
 
+    def test_nothing_in_the_never_list_is_reachable(self):
+        """
+        ``NEVER_EXPOSED`` no es documentacion suelta.
+
+        Recoge lo que no se expone en ningun entorno --por cumplimiento
+        regulatorio, por ser ejecucion arbitraria, o por destructivo-- con su
+        razon al lado. Esta prueba es lo que impide que uno vuelva a colarse
+        en un copiar y pegar: para anadirlo hay que quitarlo de ahi primero,
+        y eso obliga a leer por que estaba.
+        """
+        from .registry import NEVER_EXPOSED
+
+        for name, reason in NEVER_EXPOSED.items():
+            with self.subTest(command=name):
+                self.assertIsNone(get_command(name), reason)
+
+                with self.assertRaises(CommandNotAllowed):
+                    run(name, {})
+
+    def test_no_entry_runs_a_program_from_the_never_list(self):
+        """
+        La lista blanca es de **programas**, no de nombres de entrada.
+
+        Hay entradas cuyo nombre no coincide con lo que ejecutan, asi que sin
+        esto nada impediria declarar una entrada llamada ``informe_diario``
+        que por dentro lanzara ``auditlogflush``.
+        """
+        from .registry import NEVER_EXPOSED
+
+        for name, command in COMMANDS_BY_NAME.items():
+            with self.subTest(command=name):
+                self.assertNotIn(command.program_name, NEVER_EXPOSED)
+
+    def test_every_never_listed_command_says_why(self):
+        from .registry import NEVER_EXPOSED
+
+        for name, reason in NEVER_EXPOSED.items():
+            with self.subTest(command=name):
+                self.assertTrue(str(reason).strip())
+
+    def test_every_installed_command_has_been_decided_on(self):
+        """
+        El inventario esta completo, y esa es la idea.
+
+        Todo comando instalado tiene que estar en uno de los tres sitios:
+        expuesto en ``COMMANDS``, prohibido en ``NEVER_EXPOSED``, o descartado
+        por inutil en ``NOT_USEFUL_HERE``. Sin esto, actualizar una
+        dependencia que trae comandos nuevos los dejaria fuera en silencio --
+        y "fuera" es el lado seguro, pero nadie habria decidido nada, y el dia
+        que uno de ellos hiciera falta nadie sabria que existe.
+
+        Si esta prueba falla, la respuesta no es anadir el comando: es leer
+        que hace y meterlo en el cajon que le toque, con su razon escrita.
+        """
+        from django.core.management import get_commands
+
+        from .registry import NEVER_EXPOSED, NOT_USEFUL_HERE
+
+        installed = set(get_commands())
+        decided = (
+            {command.program_name for command in COMMANDS_BY_NAME.values()}
+            | set(NEVER_EXPOSED)
+            | set(NOT_USEFUL_HERE)
+        )
+
+        self.assertEqual(
+            installed - decided, set(),
+            'these commands are installed and nobody decided what to do with '
+            'them; put each in COMMANDS, NEVER_EXPOSED or NOT_USEFUL_HERE',
+        )
+
+    def test_the_three_lists_do_not_overlap(self):
+        """
+        Un comando en dos cajones a la vez es una contradiccion sin resolver:
+        uno de los dos textos miente sobre lo que se hace con el.
+        """
+        from .registry import NEVER_EXPOSED, NOT_USEFUL_HERE
+
+        exposed = {c.program_name for c in COMMANDS_BY_NAME.values()}
+
+        self.assertEqual(exposed & set(NEVER_EXPOSED), set())
+        self.assertEqual(exposed & set(NOT_USEFUL_HERE), set())
+        self.assertEqual(set(NEVER_EXPOSED) & set(NOT_USEFUL_HERE), set())
+
+    def test_every_discarded_command_says_why(self):
+        from .registry import NOT_USEFUL_HERE
+
+        for name, reason in NOT_USEFUL_HERE.items():
+            with self.subTest(command=name):
+                self.assertTrue(str(reason).strip())
+
     def test_no_entry_runs_a_forbidden_program_either(self):
         """
         La lista blanca es de **programas**, no de nombres de entrada.
@@ -118,6 +209,104 @@ class AllowlistTests(TestCase):
 
         with self.assertRaises(CommandNotAllowed):
             build_argv(rogue, {})
+
+
+class AvailabilityByEnvironmentTests(TestCase):
+    """
+    Lo que tiene sentido en un portatil y ninguno en un servidor.
+
+    ``start_app`` crea ficheros en el repositorio: en desarrollo es la forma
+    normal de empezar una app, en produccion no hay ninguna razon legitima
+    para hacerlo desde una pagina web -- lo que se cree ahi no esta en git, y
+    el siguiente ``git pull`` lo borra o choca con el.
+
+    Lo que importa de estas pruebas es **donde** se aplica el filtro. Si
+    estuviera solo en la plantilla, esconder la tarjeta no impediria nada:
+    bastaria con teclear la URL del comando.
+    """
+
+    DEV_ONLY = ('start_app', 'makemigrations', 'makemessages', 'test')
+
+    def test_they_are_not_in_the_registry_lookup_in_production(self):
+        with self.settings(DEBUG=False):
+            for name in self.DEV_ONLY:
+                with self.subTest(command=name):
+                    self.assertIsNone(get_command(name))
+
+    def test_the_runner_refuses_them_in_production(self):
+        """El filtro de verdad: no basta con no pintar la tarjeta."""
+        with self.settings(DEBUG=False):
+            for name in self.DEV_ONLY:
+                with self.subTest(command=name):
+                    with self.assertRaises(CommandNotAllowed):
+                        run(name, {})
+
+    def test_they_come_back_in_development(self):
+        with self.settings(DEBUG=True):
+            for name in self.DEV_ONLY:
+                with self.subTest(command=name):
+                    self.assertIsNotNone(get_command(name))
+
+    def test_the_console_does_not_list_them_in_production(self):
+        from .registry import grouped_commands
+
+        with self.settings(DEBUG=False):
+            listed = {
+                command.name
+                for _area, _label, commands in grouped_commands()
+                for command in commands
+            }
+
+        self.assertFalse(listed & set(self.DEV_ONLY))
+
+    def test_the_console_lists_them_in_development(self):
+        from .registry import grouped_commands
+
+        with self.settings(DEBUG=True):
+            listed = {
+                command.name
+                for _area, _label, commands in grouped_commands()
+                for command in commands
+            }
+
+        self.assertTrue(set(self.DEV_ONLY).issubset(listed))
+
+    def test_the_ones_that_matter_on_a_server_are_always_there(self):
+        """
+        La otra mitad. Separar por entorno no puede dejar sin herramientas al
+        servidor, que es donde de verdad hacen falta.
+        """
+        needed = (
+            'migrate', 'collectstatic', 'git_pull', 'check_health',
+            'show_log', 'rotate_logs', 'crontab_add', 'upgrade_ots_anchors',
+            'axes_reset_ip', 'db_backup',
+        )
+
+        with self.settings(DEBUG=False):
+            for name in needed:
+                with self.subTest(command=name):
+                    self.assertIsNotNone(get_command(name))
+
+    def test_no_dangerous_command_relies_on_the_environment(self):
+        """
+        ``DEBUG`` sale de una variable de entorno, y una variable se puede
+        equivocar. Por eso la separacion por entorno es para lo *inapropiado*,
+        no para lo peligroso: nada marcado como DANGEROUS puede estar apoyado
+        en que DEBUG sea falso, porque el dia que este mal puesto no habria
+        nada detras.
+        """
+        from .registry import COMMANDS, RISK_DANGEROUS
+
+        for command in COMMANDS:
+            if command.risk != RISK_DANGEROUS:
+                continue
+
+            with self.subTest(command=command.name):
+                self.assertFalse(
+                    command.is_debug_only,
+                    'a dangerous command must be excluded outright, not '
+                    'hidden behind DEBUG',
+                )
 
 
 class ArgumentTests(TestCase):
@@ -297,16 +486,59 @@ class ReachableFromThePanelTests(TestCase):
 
         self.assertNotContains(response, reverse('admin:ops_console'))
 
-    def test_the_console_lists_every_declared_command(self):
+    def test_the_console_lists_every_command_this_environment_allows(self):
+        """
+        Todos los disponibles, y solo esos.
+
+        Las pruebas corren con ``DEBUG = False``, o sea como produccion: los
+        de desarrollo no pueden aparecer, y que no aparezcan es la mitad
+        visible del filtro -- la que de verdad manda esta en
+        ``get_command()``, y la cubre ``AvailabilityByEnvironmentTests``.
+        """
+        from .registry import all_commands
+
         login_with_otp(self.client, self.superuser)
 
         response = self.client.get(reverse('admin:ops_console'))
 
-        for name in COMMANDS_BY_NAME:
-            with self.subTest(command=name):
+        for command in all_commands():
+            with self.subTest(command=command.name):
                 self.assertContains(
-                    response, reverse('admin:ops_command', args=[name])
+                    response,
+                    reverse('admin:ops_command', args=[command.name]),
                 )
+
+    def test_the_console_hides_the_development_ones(self):
+        login_with_otp(self.client, self.superuser)
+
+        response = self.client.get(reverse('admin:ops_console'))
+
+        hidden = [
+            command for command in COMMANDS_BY_NAME.values()
+            if command.is_debug_only
+        ]
+
+        self.assertTrue(hidden, 'there should be development-only commands')
+
+        for command in hidden:
+            with self.subTest(command=command.name):
+                self.assertNotContains(
+                    response,
+                    reverse('admin:ops_command', args=[command.name]),
+                )
+
+    def test_a_development_command_page_is_a_404_in_production(self):
+        """
+        Lo que hace que esconder la tarjeta no sea la unica barrera: la URL
+        directa tampoco lleva a ninguna parte.
+        """
+        login_with_otp(self.client, self.superuser)
+
+        response = self.client.get(
+            reverse('admin:ops_command', args=['start_app'])
+        )
+
+        self.assertEqual(response.status_code, 404)
 
     def test_the_console_ships_what_the_search_and_the_filters_need(self):
         """

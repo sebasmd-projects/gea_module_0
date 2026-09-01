@@ -55,6 +55,23 @@
     <p>{{ command.summary }}</p>
   </div>
 
+  {% if command.is_debug_only %}
+    {% comment %}
+      Se llega aqui solo con DEBUG puesto -- `get_command()` devuelve None en
+      produccion y la pagina es un 404 --, asi que esto no es un aviso de que
+      podria no estar: es para que quede claro por que no aparece en el
+      servidor cuando alguien lo busque alli.
+    {% endcomment %}
+    <div class="ops-block">
+      <b>{% trans 'Development only' %}:</b>
+      {% blocktrans trimmed %}
+        this command writes into the repository, so it is not offered on a
+        server. Its result belongs in git, reviewed and deployed like any
+        other change.
+      {% endblocktrans %}
+    </div>
+  {% endif %}
+
   <div class="ops-block">
     <p style="margin-top:0"><b>{% trans 'What it does' %}</b></p>
     <p>{{ command.detail }}</p>
