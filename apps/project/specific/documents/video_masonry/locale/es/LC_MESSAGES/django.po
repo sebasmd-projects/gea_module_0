@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-02 19:50-0500\n"
+"POT-Creation-Date: 2026-09-01 07:54-0500\n"
 "PO-Revision-Date: 2026-02-02 20:05+0000\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,12 +35,11 @@ msgstr "El archivo excede el tamaño máximo"
 msgid "MB."
 msgstr "MB."
 
-#: .\apps\project\specific\documents\video_masonry\models.py:72
-#: .\apps\project\specific\documents\video_masonry\signals.py:49
+#: .\apps\project\specific\documents\video_masonry\models.py:86
 msgid "File type not allowed."
 msgstr "Tipo de archivo no permitido."
 
-#: .\apps\project\specific\documents\video_masonry\signals.py:64
+#: .\apps\project\specific\documents\video_masonry\models.py:97
 #, python-format
 msgid "The file exceeds %(max_mb)dMB."
 msgstr "El archivo excede el tamaño %(max_mb)d MB."

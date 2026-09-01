@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ATLAS 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 13:10-0500\n"
+"POT-Creation-Date: 2026-09-01 07:54-0500\n"
 "PO-Revision-Date: 2024-12-15 02:02-0500\n"
 "Last-Translator: Sebastián Morales "
 "<sebastian.morales@propensionesabogados.com>\n"
@@ -49,8 +49,16 @@ msgid "Live preview"
 msgstr "Vista previa en vivo"
 
 #: .\apps\project\specific\internal\code_gen\admin.py:148
-msgid "Updates as you edit the placements below. Drag a box to move it: the offsets are written back into the form."
-msgstr "Se actualiza mientras editas las posiciones de abajo. Arrastra un resumen para moverla: los desplazamientos se escriben de vuelta en el formulario."
+#, fuzzy
+#| msgid ""
+#| "Updates as you edit the placements below. Drag a box to move it: the "
+#| "offsets are written back into the form."
+msgid ""
+"Updates as you edit the placements below. Drag a summary to move it: the "
+"offsets are written back into the form."
+msgstr ""
+"Se actualiza mientras editas las posiciones de abajo. Arrastra un resumen "
+"para moverla: los desplazamientos se escriben de vuelta en el formulario."
 
 #: .\apps\project\specific\internal\code_gen\admin.py:159
 msgid "Placements"
@@ -64,102 +72,193 @@ msgstr "No tienes permiso para hacer esto."
 msgid "Malformed JSON body."
 msgstr "El cuerpo JSON está mal formado."
 
-#: .\apps\project\specific\internal\code_gen\api.py:68
+#: .\apps\project\specific\internal\code_gen\api.py:83
 msgid "\"placements\" must be a list."
 msgstr "\"placements\" tiene que ser una lista."
 
-#: .\apps\project\specific\internal\code_gen\api.py:75
+#: .\apps\project\specific\internal\code_gen\api.py:90
 #, python-format
 msgid "Placement %(number)s is not an object."
 msgstr "La posición %(number)s no es un objeto."
 
-#: .\apps\project\specific\internal\code_gen\api.py:85
+#: .\apps\project\specific\internal\code_gen\api.py:100
 #, python-format
 msgid "Placement %(number)s: unknown code kind."
 msgstr "Posición %(number)s: tipo de código desconocido."
 
-#: .\apps\project\specific\internal\code_gen\api.py:91
+#: .\apps\project\specific\internal\code_gen\api.py:106
 #, python-format
 msgid "Placement %(number)s: unknown anchor."
 msgstr "Posición %(number)s: anclaje desconocido."
 
-#: .\apps\project\specific\internal\code_gen\api.py:97
+#: .\apps\project\specific\internal\code_gen\api.py:112
 #, python-format
 msgid "Placement %(number)s: unknown page selector."
 msgstr "Posición %(number)s: selector de páginas desconocido."
 
-#: .\apps\project\specific\internal\code_gen\api.py:111
+#: .\apps\project\specific\internal\code_gen\api.py:126
 #, python-format
 msgid "Placement %(number)s: the measurements must be numbers."
 msgstr "Posición %(number)s: las medidas tienen que ser números."
 
-#: .\apps\project\specific\internal\code_gen\api.py:117
+#: .\apps\project\specific\internal\code_gen\api.py:132
 #, python-format
 msgid "Placement %(number)s: width and height must be at least 1 pt."
 msgstr "Posición %(number)s: el ancho y el alto deben ser de al menos 1 pt."
 
-#: .\apps\project\specific\internal\code_gen\api.py:123
+#: .\apps\project\specific\internal\code_gen\api.py:138
 #, python-format
 msgid "Placement %(number)s: opacity must be between 0 and 1."
 msgstr "Posición %(number)s: la opacidad debe estar entre 0 y 1."
 
-#: .\apps\project\specific\internal\code_gen\api.py:131
-#, python-format
-msgid "Placement %(number)s: a member barcode must say which document of the box it carries."
-msgstr "Posición %(number)s: un código de barras de miembro tiene que indicar qué documento del resumen lleva."
+#: .\apps\project\specific\internal\code_gen\api.py:146
+#, fuzzy, python-format
+#| msgid ""
+#| "Placement %(number)s: a member barcode must say which document of the box "
+#| "it carries."
+msgid ""
+"Placement %(number)s: a member barcode must say which document of the "
+"summary it carries."
+msgstr ""
+"Posición %(number)s: un código de barras de miembro tiene que indicar qué "
+"documento del resumen lleva."
 
-#: .\apps\project\specific\internal\code_gen\api.py:207
+#: .\apps\project\specific\internal\code_gen\api.py:222
 msgid "Stamp layout updated."
 msgstr "Disposición de estampado actualizada."
 
-#: .\apps\project\specific\internal\code_gen\api.py:229
+#: .\apps\project\specific\internal\code_gen\api.py:244
 msgid "The layout name is required."
 msgstr "El nombre de la disposición es obligatorio."
 
-#: .\apps\project\specific\internal\code_gen\api.py:239
+#: .\apps\project\specific\internal\code_gen\api.py:254
 msgid "A layout with this name already exists."
 msgstr "Ya existe una disposición con este nombre."
 
-#: .\apps\project\specific\internal\code_gen\api.py:262
+#: .\apps\project\specific\internal\code_gen\api.py:277
 msgid "Stamp layout created."
 msgstr "Disposición de estampado creada."
 
-#: .\apps\project\specific\internal\code_gen\api.py:331
+#: .\apps\project\specific\internal\code_gen\api.py:348
+#: .\apps\project\specific\internal\code_gen\views.py:566
+msgid "Not sent"
+msgstr ""
+
+#: .\apps\project\specific\internal\code_gen\api.py:401
 msgid "\"members\" must be a list."
 msgstr "«members» tiene que ser una lista."
 
-#: .\apps\project\specific\internal\code_gen\api.py:341
+#: .\apps\project\specific\internal\code_gen\api.py:411
 #, python-format
 msgid "Member %(number)s is not an object."
 msgstr "El miembro %(number)s no es un objeto."
 
-#: .\apps\project\specific\internal\code_gen\api.py:352
+#: .\apps\project\specific\internal\code_gen\api.py:422
 #, python-format
 msgid "Member %(number)s has no code."
 msgstr "El miembro %(number)s no tiene código."
 
-#: .\apps\project\specific\internal\code_gen\api.py:359
+#: .\apps\project\specific\internal\code_gen\api.py:429
 #, python-format
 msgid "The code %(code)s is repeated in the summary."
 msgstr "El código %(code)s está repetido en el resumen."
 
-#: .\apps\project\specific\internal\code_gen\api.py:373
+#: .\apps\project\specific\internal\code_gen\api.py:443
 #, python-format
 msgid "Member %(code)s points to a document that does not exist."
 msgstr "El miembro %(code)s apunta a un documento que no existe."
 
-#: .\apps\project\specific\internal\code_gen\api.py:381
+#: .\apps\project\specific\internal\code_gen\api.py:451
 #, python-format
 msgid "%(code)s is not certified: it has no fingerprint to include."
 msgstr "%(code)s no está certificado: no tiene huella que incluir."
 
-#: .\apps\project\specific\internal\code_gen\api.py:420
+#: .\apps\project\specific\internal\code_gen\api.py:490
 msgid "Members updated. The summary needs sealing again."
 msgstr "Miembros actualizados. Hay que volver a sellar el resumen."
 
-#: .\apps\project\specific\internal\code_gen\api.py:446
+#: .\apps\project\specific\internal\code_gen\api.py:546
+msgid "It was already sent to the blockchain."
+msgstr ""
+
+#: .\apps\project\specific\internal\code_gen\api.py:554
+#, python-format
+msgid ""
+"Sealed, but the blockchain calendars did not answer (%(reason)s). The seal "
+"is saved; send it later with «Send to blockchain». Run «Blockchain "
+"anchoring» in the operations console to see whether this server has the "
+"library and outbound access."
+msgstr ""
+
+#: .\apps\project\specific\internal\code_gen\api.py:562
+#, python-format
+msgid ""
+"Sealed, but the OpenTimestamps library is not installed on this server "
+"(%(reason)s). The seal is saved. This is fixed by installing "
+"requirements.txt with pip on the server, not from here — check first with "
+"«Dependencies» in the operations console that the package actually reached "
+"that file."
+msgstr ""
+
+#: .\apps\project\specific\internal\code_gen\api.py:571
+#, python-format
+msgid ""
+"Sealed, but sending to the blockchain failed: %(kind)s: %(reason)s. The seal "
+"is saved; send it later with «Send to blockchain». Run «Blockchain "
+"anchoring» in the operations console for a full diagnosis."
+msgstr ""
+
+#: .\apps\project\specific\internal\code_gen\api.py:578
+msgid ""
+"Sealed and sent to the blockchain. The proof is born pending: it matures "
+"into a Bitcoin block within a few hours, on its own."
+msgstr ""
+
+#: .\apps\project\specific\internal\code_gen\api.py:615
 msgid "Summary sealed."
 msgstr "Resumen sellado."
+
+#: .\apps\project\specific\internal\code_gen\api.py:650
+#, fuzzy
+#| msgid "Seal the summary before anchoring it."
+msgid "Seal the summary before sending it."
+msgstr "Sella el resumen antes de anclarlo."
+
+#: .\apps\project\specific\internal\code_gen\api.py:658
+msgid ""
+"Sent to the blockchain. The proof is born pending: it matures into a Bitcoin "
+"block within a few hours, on its own."
+msgstr ""
+
+#: .\apps\project\specific\internal\code_gen\api.py:707
+#, fuzzy
+#| msgid "Seal the summary before issuing its document."
+msgid ""
+"Seal the summary before issuing its document: it carries the master hash "
+"inside."
+msgstr "Sella el resumen antes de emitir su documento."
+
+#: .\apps\project\specific\internal\code_gen\api.py:719
+msgid ""
+"Upload the summary PDF without codes: there is no original stored yet to "
+"stamp over."
+msgstr ""
+
+#: .\apps\project\specific\internal\code_gen\api.py:730
+msgid "Choose a stamp layout: it decides where each code goes on the page."
+msgstr ""
+
+#: .\apps\project\specific\internal\code_gen\api.py:753
+#, fuzzy, python-format
+#| msgid "The stored token could not be parsed."
+msgid "The summary document could not be issued: %(error)s"
+msgstr "No se pudo interpretar el token almacenado."
+
+#: .\apps\project\specific\internal\code_gen\api.py:762
+msgid ""
+"Summary document issued. Its QR points at the anchor page, which updates "
+"itself: there is nothing to reissue when the Bitcoin block arrives."
+msgstr ""
 
 #: .\apps\project\specific\internal\code_gen\apps.py:8
 msgid "Code generation and document certification"
@@ -327,8 +426,21 @@ msgid "Accepted formats: %(formats)s."
 msgstr "Formatos aceptados: %(formats)s."
 
 #: .\apps\project\specific\internal\code_gen\forms.py:271
-msgid "What kind of document this is. It is shown on the public verification page, under the document title. Use \"Asset Certificate (AEGIS)\" for the certificates of a box of assets, and \"Generic Document\" for anything else."
-msgstr "Qué clase de documento es. Aparece en la página pública de verificación, debajo del título. Usa «Certificado de activo (AEGIS)» para los certificados de un resumen de activos, y «Documento genérico» para todo lo demás."
+#, fuzzy
+#| msgid ""
+#| "What kind of document this is. It is shown on the public verification "
+#| "page, under the document title. Use \"Asset Certificate (AEGIS)\" for the "
+#| "certificates of a box of assets, and \"Generic Document\" for anything "
+#| "else."
+msgid ""
+"What kind of document this is. It is shown on the public verification page, "
+"under the document title. Use \"Asset Certificate (AEGIS)\" for the "
+"certificates of a summary of assets, and \"Generic Document\" for anything "
+"else."
+msgstr ""
+"Qué clase de documento es. Aparece en la página pública de verificación, "
+"debajo del título. Usa «Certificado de activo (AEGIS)» para los certificados "
+"de un resumen de activos, y «Documento genérico» para todo lo demás."
 
 #: .\apps\project\specific\internal\code_gen\forms.py:290
 #: .\apps\project\specific\internal\code_gen\services\certification.py:203
@@ -378,8 +490,16 @@ msgid "No asset matches."
 msgstr "Ningún activo coincide."
 
 #: .\apps\project\specific\internal\code_gen\forms.py:481
-msgid "How this box is identified internally, e.g. \"AEGIS box - Zimbabwe gold micro-ingots\"."
-msgstr "Cómo se identifica este resumen internamente, p. ej. «Caja AEGIS - microlingotes de oro de Zimbabue»."
+#, fuzzy
+#| msgid ""
+#| "How this box is identified internally, e.g. \"AEGIS box - Zimbabwe gold "
+#| "micro-ingots\"."
+msgid ""
+"How this summary is identified internally, e.g. \"AEGIS summary - Zimbabwe "
+"gold micro-ingots\"."
+msgstr ""
+"Cómo se identifica este resumen internamente, p. ej. «Caja AEGIS - "
+"microlingotes de oro de Zimbabue»."
 
 #: .\apps\project\specific\internal\code_gen\forms.py:485
 msgid ""
@@ -490,8 +610,16 @@ msgid "Member code"
 msgstr "Código del miembro"
 
 #: .\apps\project\specific\internal\code_gen\models.py:197
-msgid "Only for the member barcode: which document of the box this position carries (AEGIS-1, AEGIS-2…)."
-msgstr "Solo para el código de barras de miembro: qué documento del resumen lleva esta posición (AEGIS-1, AEGIS-2…)."
+#, fuzzy
+#| msgid ""
+#| "Only for the member barcode: which document of the box this position "
+#| "carries (AEGIS-1, AEGIS-2…)."
+msgid ""
+"Only for the member barcode: which document of the summary this position "
+"carries (AEGIS-1, AEGIS-2…)."
+msgstr ""
+"Solo para el código de barras de miembro: qué documento del resumen lleva "
+"esta posición (AEGIS-1, AEGIS-2…)."
 
 #: .\apps\project\specific\internal\code_gen\models.py:203
 msgid "Pages"
@@ -532,8 +660,12 @@ msgid "Opacity"
 msgstr "Opacidad"
 
 #: .\apps\project\specific\internal\code_gen\models.py:258
-msgid "A member barcode needs to say which document of the box it carries."
-msgstr "Un código de barras de miembro tiene que indicar qué documento del resumen lleva."
+#, fuzzy
+#| msgid "A member barcode needs to say which document of the box it carries."
+msgid "A member barcode needs to say which document of the summary it carries."
+msgstr ""
+"Un código de barras de miembro tiene que indicar qué documento del resumen "
+"lleva."
 
 #: .\apps\project\specific\internal\code_gen\models.py:264
 msgid "Provide at least one page number for this selector."
@@ -685,7 +817,9 @@ msgstr "Tamaño de página"
 
 #: .\apps\project\specific\internal\code_gen\preview.py:27
 msgid "Drag a box to move it; the offsets update as you go."
-msgstr "Arrastra un resumen para moverla; los desplazamientos se actualizan sobre la marcha."
+msgstr ""
+"Arrastra un resumen para moverla; los desplazamientos se actualizan sobre la "
+"marcha."
 
 #: .\apps\project\specific\internal\code_gen\preview.py:28
 msgid "Rendering the document…"
@@ -713,8 +847,12 @@ msgstr ""
 
 #: .\apps\project\specific\internal\code_gen\preview.py:39
 #, python-format
-msgid "The symbol keeps its proportion, so it uses %(w)s x %(h)s pt of the %(bw)s x %(bh)s pt box."
-msgstr "El símbolo conserva su proporción, así que ocupa %(w)s x %(h)s pt del resumen de %(bw)s x %(bh)s pt."
+msgid ""
+"The symbol keeps its proportion, so it uses %(w)s x %(h)s pt of the %(bw)s x "
+"%(bh)s pt box."
+msgstr ""
+"El símbolo conserva su proporción, así que ocupa %(w)s x %(h)s pt del "
+"resumen de %(bw)s x %(bh)s pt."
 
 #: .\apps\project\specific\internal\code_gen\preview.py:42
 msgid "The symbol fills the box exactly."
@@ -921,7 +1059,7 @@ msgid "Real code for this document."
 msgstr "Código real de este documento."
 
 #: .\apps\project\specific\internal\code_gen\services\summary.py:52
-#: .\apps\project\specific\internal\code_gen\services\summary.py:169
+#: .\apps\project\specific\internal\code_gen\services\summary.py:206
 msgid "Seal the summary before issuing its document."
 msgstr "Sella el resumen antes de emitir su documento."
 
@@ -992,10 +1130,10 @@ msgstr "Algunas posiciones no coincidieron con ninguna página: %(items)s"
 msgid "Document certified. Public code: %(code)s"
 msgstr "Documento certificado. Código público: %(code)s"
 
-#: .\apps\project\specific\internal\code_gen\views.py:431
+#: .\apps\project\specific\internal\code_gen\views.py:439
 msgid "Stamp layout saved."
 msgstr "Disposición de estampado guardada."
 
-#: .\apps\project\specific\internal\code_gen\views.py:513
+#: .\apps\project\specific\internal\code_gen\views.py:521
 msgid "Summary created. Now add the certificates it gathers."
 msgstr "Resumen creado. Ahora añade los certificados que contiene."

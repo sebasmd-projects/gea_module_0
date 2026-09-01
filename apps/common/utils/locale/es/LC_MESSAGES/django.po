@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 13:33-0500\n"
+"POT-Creation-Date: 2026-09-01 07:54-0500\n"
 "PO-Revision-Date: 2025-09-11 02:27-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,22 +39,15 @@ msgstr "Tiempos"
 msgid "Other"
 msgstr "Otros"
 
-#: .\apps\common\utils\functions\chatgpt_api.py:23
-msgid "CHAT_GPT_API_KEY not configured"
-msgstr "API KEY de CHAT GPT no establecida"
+#: .\apps\common\utils\middleware\block_suspicious_request.py:150
+#: .\apps\common\utils\views.py:129
+msgid "Error 404"
+msgstr "Error 404"
 
-#: .\apps\common\utils\middleware\block_suspicious_request.py:116
-msgid "This IP is temporarily blocked due to suspicious activity."
-msgstr "Esta IP está bloqueada temporalmente debido a actividad sospechosa."
-
-#: .\apps\common\utils\middleware\block_suspicious_request.py:119
-#: .\apps\common\utils\views.py:113
-msgid "Error 403"
-msgstr "Error 403"
-
-#: .\apps\common\utils\middleware\block_suspicious_request.py:120
-msgid "Access denied due to suspicious activity."
-msgstr "Acceso denegado debido a actividad sospechosa."
+#: .\apps\common\utils\middleware\block_suspicious_request.py:151
+#: .\apps\common\utils\views.py:130
+msgid "Page not found"
+msgstr "Página no encontrada"
 
 #: .\apps\common\utils\models.py:20
 msgid "Spanish"
@@ -152,6 +145,10 @@ msgstr "bloqueado hasta"
 msgid "session information"
 msgstr "información de la sesión"
 
+#: .\apps\common\utils\tests_toasts.py:67
+msgid "Saved."
+msgstr ""
+
 #: .\apps\common\utils\views.py:81
 msgid "Error 400"
 msgstr "Error 400"
@@ -168,17 +165,13 @@ msgstr "Error 401"
 msgid "Unauthorized Access"
 msgstr "Acceso no Autorizado"
 
+#: .\apps\common\utils\views.py:113
+msgid "Error 403"
+msgstr "Error 403"
+
 #: .\apps\common\utils\views.py:114
 msgid "Forbidden Access"
 msgstr "Acceso Prohibido"
-
-#: .\apps\common\utils\views.py:129
-msgid "Error 404"
-msgstr "Error 404"
-
-#: .\apps\common\utils\views.py:130
-msgid "Page not found"
-msgstr "Página no encontrada"
 
 #: .\apps\common\utils\views.py:144
 msgid "Error 500"
@@ -203,3 +196,12 @@ msgstr "Error 504"
 #: .\apps\common\utils\views.py:175
 msgid "Gateway Timeout"
 msgstr "Tiempo de Espera Agotado del Gateway"
+
+#~ msgid "CHAT_GPT_API_KEY not configured"
+#~ msgstr "API KEY de CHAT GPT no establecida"
+
+#~ msgid "This IP is temporarily blocked due to suspicious activity."
+#~ msgstr "Esta IP está bloqueada temporalmente debido a actividad sospechosa."
+
+#~ msgid "Access denied due to suspicious activity."
+#~ msgstr "Acceso denegado debido a actividad sospechosa."

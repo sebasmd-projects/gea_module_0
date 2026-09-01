@@ -176,11 +176,6 @@
        se lee siempre, que es lo que hace falta en unos enlaces que tienen que
        poder encontrarse. */
     .hero-legal-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 1040;              /* por debajo del botón de contacto (1050) */
       padding: 0.6rem 0;
       background: rgba(0, 0, 0, 0.82);
       backdrop-filter: blur(2px);
@@ -215,7 +210,7 @@
     }
   </style>
   {% include 'core/partials/whatsapp.html' %}
-  <main class="main">
+  <main class="main min-vh-100">
     <!-- Hero Section -->
     <div id="hero" class="hero">
       <div class="hero-video">
@@ -245,19 +240,12 @@
 {% endblock %}
 
 {% block footer %}
-  {% comment %}
-    La portada no tenia pie de ninguna clase, asi que era la unica pagina de
-    la plataforma desde la que no se llegaba a la politica de datos ni a
-    radicar un PQRS -- y es justo la que ve alguien que no tiene cuenta, que
-    es quien mas probablemente necesita ambas cosas.
-
-    No se reutiliza `partials/footer/footer.html` porque es un pie blanco de
-    panel y esto es un video a sangre: quedaria una banda blanca debajo del
-    hero. Va superpuesto abajo, discreto, sin robarle sitio al video.
-  {% endcomment %}
   <footer class="hero-legal-bar">
     <div class="container-xl px-4 text-center small">
       {% include 'partials/footer/_legal_links.html' %}
+    </div>
+    <div class="container-xl px-4 text-center small">      
+      © 2024 - {% now "Y" %} Propensiones Abogados. | Made, Design by <a href="http://wa.me/573002954040" target="_blank" rel="noopener noreferrer">Sebastian Morales & Carlos Morales</a>
     </div>
   </footer>
 {% endblock footer %}

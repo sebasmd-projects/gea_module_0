@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-25 17:46-0500\n"
+"POT-Creation-Date: 2026-09-01 07:54-0500\n"
 "PO-Revision-Date: 2026-01-06 23:16+0000\n"
 "Last-Translator: Sebastian Morales <cto@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,12 +19,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.3\n"
 
-#: .\apps\common\core\templates\core\index.html:18
-#: .\apps\common\core\templates\core\index.html:24
+#: .\apps\common\core\templates\core\index.html:17
+#: .\apps\common\core\templates\core\index.html:23
 msgid "Secure platform for historical assets"
 msgstr "Plataforma para los activos historicos"
 
-#: .\apps\common\core\templates\core\index.html:33
+#: .\apps\common\core\templates\core\index.html:32
 msgid ""
 "Comprehensive, exclusive and secure platform for buying and selling "
 "historical assets. Official U.S. purchasing platform."
@@ -32,7 +32,7 @@ msgstr ""
 "Plataforma exclusiva y segura para la compraventa de activos históricos. "
 "Plataforma de compras oficial de EE. UU."
 
-#: .\apps\common\core\templates\core\index.html:43
+#: .\apps\common\core\templates\core\index.html:42
 msgid ""
 "Official and exclusive platform for the purchase and sale of US historical "
 "assets."
@@ -40,7 +40,7 @@ msgstr ""
 "Plataforma completa, exclusiva y segura para la compra y venta de activos "
 "históricos. Plataforma de compras oficial de EE. UU."
 
-#: .\apps\common\core\templates\core\index.html:56
+#: .\apps\common\core\templates\core\index.html:55
 msgid ""
 "Exclusive and official platform for the secure purchase of US historical "
 "assets."
@@ -48,58 +48,1249 @@ msgstr ""
 "Plataforma exclusiva y oficial para la compra segura de activos históricos "
 "de EE. UU."
 
-#: .\apps\common\core\templates\core\index.html:183
+#: .\apps\common\core\templates\core\index.html:228
 msgid "Your browser does not support HTML5 video."
 msgstr "Su navegador no soporta vídeo HTML5."
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:18
+#: .\apps\common\core\templates\core\partials\core_nav.html:19
 msgid "Toggle navigation"
 msgstr "Alternar navegación"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:33
-#: .\apps\common\core\templates\core\partials\core_nav.html:185
+#: .\apps\common\core\templates\core\partials\core_nav.html:36
+#: .\apps\common\core\templates\core\partials\core_nav.html:194
 msgid "Buyers"
 msgstr "Compradores"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:41
-#: .\apps\common\core\templates\core\partials\core_nav.html:190
+#: .\apps\common\core\templates\core\partials\core_nav.html:44
+#: .\apps\common\core\templates\core\partials\core_nav.html:199
 msgid "Suppliers"
 msgstr "Proveedores"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:55
-#: .\apps\common\core\templates\core\partials\core_nav.html:63
-#: .\apps\common\core\templates\core\partials\core_nav.html:149
-#: .\apps\common\core\templates\core\partials\core_nav.html:154
+#: .\apps\common\core\templates\core\partials\core_nav.html:59
+#: .\apps\common\core\templates\core\partials\core_nav.html:67
+#: .\apps\common\core\templates\core\partials\core_nav.html:158
+#: .\apps\common\core\templates\core\partials\core_nav.html:163
 msgid "Certificates"
 msgstr "Certificados"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:74
-#: .\apps\common\core\templates\core\partials\core_nav.html:163
+#: .\apps\common\core\templates\core\partials\core_nav.html:78
+#: .\apps\common\core\templates\core\partials\core_nav.html:172
 msgid "AEGIS Certification (PDF)"
 msgstr "Certificación AEGIS (PDF)"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:103
-#: .\apps\common\core\templates\core\partials\core_nav.html:198
+#: .\apps\common\core\templates\core\partials\core_nav.html:109
+#: .\apps\common\core\templates\core\partials\core_nav.html:207
 msgid "Login"
 msgstr "Iniciar Sesión"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:108
-#: .\apps\common\core\templates\core\partials\core_nav.html:201
+#: .\apps\common\core\templates\core\partials\core_nav.html:114
+#: .\apps\common\core\templates\core\partials\core_nav.html:210
 msgid "Register"
 msgstr "Registro"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:122
+#: .\apps\common\core\templates\core\partials\core_nav.html:129
 msgid "Menu"
 msgstr "Menú"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:133
+#: .\apps\common\core\templates\core\partials\core_nav.html:141
 msgid "Language"
 msgstr "Idioma"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:194
+#: .\apps\common\core\templates\core\partials\core_nav.html:203
 msgid "Logout"
 msgstr "Cerrar Sesión"
 
 #: .\apps\common\core\templates\core\partials\whatsapp.html:51
 msgid "Contact Us Now"
 msgstr "Contáctanos"
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:16
+#: .\apps\common\core\templates\core\tyc\cookies.html:17
+msgid "Cookie policy"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:22
+#: .\apps\common\core\templates\core\tyc\data_policy.html:24
+#: .\apps\common\core\templates\core\tyc\privacy.html:24
+#: .\apps\common\core\templates\core\tyc\terms.html:29
+msgid "Starting draft."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:23
+msgid ""
+"This text was written from the platform's actual behaviour, but it has not "
+"been reviewed by counsel. Read it, correct it and approve it before treating "
+"it as published policy."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:30
+msgid "What this covers"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:33
+msgid ""
+"This policy explains the cookies and similar technologies used by GEA, the "
+"platform of Propensiones Abogados available at "
+"geausa.propensionesabogados.com and its subdomains."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:40
+msgid "What we do not use"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:43
+msgid ""
+"We state this first because it is the part that usually matters: this "
+"platform carries no analytics, no advertising pixels and no session "
+"recording. There is no Google Analytics, no Meta Pixel, no Hotjar and no "
+"equivalent. We do not profile visitors, and we do not sell or share browsing "
+"data with anyone for advertising."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:52
+msgid "The cookies we do set"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:55
+msgid ""
+"All of them are strictly necessary: without them you cannot log in, and "
+"forms cannot be submitted safely. None of them are used to track you across "
+"other sites."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:65
+msgid "Cookie"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:66
+msgid "What it is for"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:67
+msgid "How long it lasts"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:73
+msgid ""
+"Keeps you logged in as you move between pages. Without it, every page would "
+"ask for your password again."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:74
+msgid "Until the session expires or you log out"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:78
+msgid ""
+"Confirms that a form was submitted from this site and not from a page "
+"someone else controls."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:79
+#: .\apps\common\core\templates\core\tyc\cookies.html:84
+msgid "1 year"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:83
+msgid "Remembers whether you chose Spanish or English."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:89
+msgid "Third parties that see your connection"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:92
+msgid ""
+"Some resources — stylesheets, icon fonts, JavaScript libraries — are served "
+"from public content delivery networks. They set no cookies of ours, but by "
+"definition they receive your IP address and browser details, because that is "
+"how your browser fetches a file from them."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:101
+msgid "Bootstrap, icons and other libraries."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:102
+msgid "icon set."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:103
+msgid "the jQuery library, served by Google."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:104
+msgid "web fonts, where used."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:108
+#: .\apps\common\core\templates\core\tyc\data_policy.html:366
+#: .\apps\common\core\templates\core\tyc\terms.html:184
+msgid "Note for review."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:109
+msgid ""
+"Loading jQuery from Google's CDN gives Google the IP address of every "
+"visitor on the pages that use it, without anything being gained over hosting "
+"the same file ourselves. Serving those libraries from our own static files "
+"would remove that flow entirely, and would also make the platform work when "
+"a CDN is unreachable."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:118
+msgid "Forms hosted by third parties"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:121
+msgid ""
+"Some pages inside the platform embed forms served by JotForm. What you type "
+"into one of those forms, including any file you attach, is sent to and "
+"stored by that provider, not by us. Their own privacy terms apply to that "
+"data in addition to ours."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:129
+msgid "How to control cookies"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:132
+msgid ""
+"Every browser lets you see, block and delete cookies from its settings. "
+"Blocking the three listed above will stop you from logging in and from "
+"submitting forms, because they are what makes those operations work at all — "
+"it is not a restriction we impose, it is what they are for."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:140
+#: .\apps\common\core\templates\core\tyc\terms.html:267
+msgid "Changes"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\cookies.html:143
+msgid ""
+"If we add any tool that measures or tracks use of the platform, this policy "
+"will be updated before that tool is switched on, and consent will be "
+"requested where the law requires it. The version and date at the top say "
+"which text is in force."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:18
+#: .\apps\common\core\templates\core\tyc\data_policy.html:19
+msgid "Personal data processing policy"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:25
+msgid ""
+"Written on the structure of a real policy and filled in from what the "
+"platform actually does. It has not been reviewed by counsel, and the "
+"identification details of the controller are placeholders. Do not publish it "
+"as approved policy until the firm has gone through it."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:33
+msgid "General"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:36
+msgid ""
+"PROPENSIONES ABOGADOS, identified with NIT [pending], with its main address "
+"in [city] (hereinafter, \"Propensiones\"), operator of the GEA platform, has "
+"adopted this personal data processing policy in compliance with the "
+"constitutional and legal provisions in force, recognising the importance of "
+"guaranteeing the security, privacy and confidentiality of the personal data "
+"of its clients, users, employees, suppliers, partners and every other group "
+"whose information it processes."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:47
+msgid "Applicable rules"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:50
+msgid "Article 15 of the Political Constitution of Colombia"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:51
+msgid "Statutory Law 1266 of 2008"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:52
+msgid "Law 1273 of 2009"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:53
+msgid "Statutory Law 1581 of 2012"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:54
+msgid "Decree 1377 of 2013"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:55
+msgid "Decrees 1727 of 2009, 2952 of 2010 and 886 of 2014"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:56
+msgid ""
+"Title V of the Single Circular of the Superintendence of Industry and "
+"Commerce"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:57
+msgid "Constitutional Court judgments C-1011 of 2008 and C-748 of 2011"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:60
+msgid "Purpose of this policy"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:63
+msgid ""
+"To protect the constitutional right of habeas data, guaranteeing that the "
+"people whose data we hold can know it, update it and correct it. "
+"Propensiones only stores and processes data that has been authorised by its "
+"owner, and applies the security measures needed to protect it."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:71
+msgid "Definitions"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:74
+#: .\apps\common\core\templates\core\tyc\data_policy.html:151
+msgid "Authorisation"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:75
+msgid ""
+"The prior, express and informed consent given by the data owner for their "
+"data to be processed."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:77
+msgid "Data owner (titular)"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:78
+msgid "The natural person whose personal data is processed."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:80
+msgid "Controller (responsable)"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:81
+msgid ""
+"Whoever decides on the processing of the data. For this platform, "
+"Propensiones Abogados."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:83
+msgid "Processor (encargado)"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:84
+msgid "Whoever processes data on behalf of the controller."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:86
+#: .\apps\common\core\templates\core\tyc\privacy.html:59
+msgid "Sensitive data"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:87
+msgid ""
+"Data affecting the intimacy of its owner, or whose misuse may lead to "
+"discrimination."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:89
+msgid "Transfer"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:90
+msgid ""
+"Sending data to a recipient who is itself a controller, inside or outside "
+"the country."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:92
+msgid "Transmission"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:93
+msgid ""
+"Communicating data so that a processor handles it on the controller behalf."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:96
+msgid "Principles"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:99
+msgid ""
+"Processing follows the principles of legality, freedom, purpose, accuracy, "
+"transparency, restricted access and circulation, security, confidentiality "
+"and time limitation, as set out in article 4 of Law 1581 of 2012."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:107
+msgid "What data we collect"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:110
+msgid ""
+"This section describes what the platform actually asks for, grouped by why "
+"it is asked."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:119
+msgid "Group"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:120
+msgid "Data"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:125
+msgid "Account"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:126
+msgid ""
+"Username, names and surnames, email address, mobile number and country code, "
+"user type, and who referred you if anyone did."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:129
+msgid "Identity"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:130
+msgid ""
+"Date of birth, nationality, passport or identity number, issuing authority "
+"and dates, a photograph of the identity document, and a signature image."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:133
+msgid "Address"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:134
+msgid "Country, department, city, street address and postal code."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:137
+msgid "Activity on the platform"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:138
+msgid ""
+"Assets and locations registered, purchase orders and their approval history, "
+"documents certified, and who viewed or downloaded which file and when."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:141
+msgid "Security"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:142
+msgid ""
+"IP address, browser details, login attempts, and the record of every change "
+"made through the platform."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:145
+msgid "Requests (PQRS)"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:146
+msgid ""
+"What you write in the request form, the identification you give to prove who "
+"you are, and any document you attach."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:154
+msgid ""
+"Propensiones requests the prior, express and informed consent of the data "
+"owner. That authorisation is recorded, together with when it was given, so "
+"that it can be produced later as article 9 of Law 1581 requires. "
+"Authorisation is not needed where the data is requested by a public body "
+"exercising its legal functions, where the data is public, in cases of "
+"medical urgency, for authorised historical or statistical purposes, or in "
+"relation to the civil registry."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:165
+msgid "Sensitive data and data of minors"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:168
+msgid ""
+"Where sensitive data is involved, the owner is told that they are not "
+"obliged to authorise it, which data is sensitive, and what it will be used "
+"for. The platform is not intended for minors and does not knowingly collect "
+"their data; where it were necessary, it would be handled through their legal "
+"representative and after hearing the minor, as articles 6 and 12 of Decree "
+"1377 of 2013 require."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:178
+msgid "Purposes"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:181
+msgid ""
+"Create and maintain your account, and let you into the areas that correspond "
+"to your role."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:182
+msgid ""
+"Verify your identity before giving access to, or changing, personal data — "
+"including for requests filed through the PQRS form."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:183
+msgid ""
+"Register historical assets and their physical locations, and keep the "
+"inventory."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:184
+msgid ""
+"Process purchase orders through their approval stages, and issue the "
+"resulting documents."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:185
+msgid ""
+"Issue and verify certified documents, including the public verification "
+"portal."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:186
+msgid ""
+"Send operational communications: verification codes, password recovery, "
+"service orders and answers to requests."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:187
+msgid ""
+"Comply with legal obligations and with orders from administrative or "
+"judicial authorities."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:188
+msgid ""
+"Keep the platform secure: detect abuse, block automated attacks and keep an "
+"audit trail of what was done and by whom."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:191
+msgid "How long we keep it"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:194
+msgid ""
+"Data is processed while the relationship with the owner lasts, plus the "
+"period required by the applicable law. Two categories last longer, for a "
+"reason worth stating plainly:"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:203
+msgid ""
+"<b>Certified documents and their fingerprints.</b> A certificate whose "
+"record is deleted stops being verifiable, which defeats the point of having "
+"issued it."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:210
+msgid ""
+"<b>The audit trail.</b> The record of who did what is what allows the firm "
+"to show it acted correctly, including towards the person asking."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:217
+msgid "Rights of the data owner"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:220
+msgid "Know, update and correct your data."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:221
+msgid "Ask for proof of the authorisation you gave."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:222
+msgid "Be told what use is being made of your data."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:223
+msgid ""
+"File complaints with the Superintendence of Industry and Commerce for "
+"breaches of the rules."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:224
+msgid ""
+"Withdraw the authorisation or ask for your data to be deleted, where no "
+"legal or contractual duty requires it to be kept."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:225
+msgid "Consult your data free of charge."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:229
+msgid ""
+"These rights may be exercised by the owner, by their successors, by a "
+"representative with proof of the representation, or under a stipulation in "
+"favour of another, as article 20 of Decree 1377 of 2013 sets out."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:236
+msgid "Security measures"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:239
+msgid ""
+"Beyond the general commitment, these are the specific measures in place, so "
+"that the statement can be checked rather than taken on trust:"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:246
+msgid ""
+"Identity data — passport number, date of birth, nationality, address and "
+"telephone — is stored encrypted, not in readable form."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:247
+msgid ""
+"Certificate document numbers are never stored in the clear: only a keyed "
+"hash of them is kept."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:248
+msgid "Access to the administration panel requires a verified second factor."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:249
+msgid ""
+"Repeated failed logins are throttled, and automated scanning is blocked."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:250
+msgid ""
+"Certified files are not served as plain links: every download goes through a "
+"check of who is asking."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:251
+msgid "Changes to records are logged, with who made them and when."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:254
+msgid "Duties as controller and as processor"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:257
+msgid ""
+"Propensiones assumes the duties of a controller under article 17 of Law "
+"1581, and, where it processes data on behalf of a third party, those of a "
+"processor under article 18. Where both roles coincide, both sets of duties "
+"apply."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:265
+msgid "Queries and claims"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:268
+msgid ""
+"Requests are filed through the PQRS form on this site, and each one is given "
+"a reference number and a due date at the moment it comes in."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:277
+msgid "Type"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:278
+msgid "Term"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:279
+msgid "Extension"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:284
+msgid "Query (article 14)"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:285
+msgid "10 business days"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:286
+msgid "5 further business days, with reasons given"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:289
+msgid "Claim (article 15)"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:290
+msgid "15 business days"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:291
+msgid "8 further business days, with reasons given"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:297
+msgid ""
+"Both terms are counted in business days from the day after the request is "
+"received. An incomplete claim is returned for amendment within 5 days; if "
+"two months pass without an answer, the claim is treated as withdrawn. Where "
+"Propensiones is not the competent party, the request is passed on and the "
+"person is told."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:306
+#: .\apps\common\core\templates\core\tyc\terms.html:277
+#, fuzzy
+#| msgid "Contact Us Now"
+msgid "Contact"
+msgstr "Contáctanos"
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:309
+#: .\apps\common\core\templates\core\tyc\terms.html:280
+msgid "PQRS form:"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:309
+#: .\apps\common\core\templates\core\tyc\terms.html:280
+msgid "file a request"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:310
+#: .\apps\common\core\templates\core\tyc\terms.html:281
+msgid "Email:"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:313
+msgid "Third parties and processors"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:316
+msgid ""
+"Propensiones requires the third parties it works with to comply with the "
+"Colombian personal data regime, and may ask them to show that compliance "
+"before, during and after the relationship."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:323
+msgid "International transfers"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:326
+msgid ""
+"Operating this platform involves sending certain data outside Colombia. Each "
+"case is listed with what actually leaves, because the difference matters:"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:336
+msgid "Recipient"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:337
+msgid "What is sent"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:338
+msgid "Why"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:344
+msgid ""
+"The text of asset names, descriptions and observations, at the moment they "
+"are saved."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:345
+msgid "Automatic translation between Spanish and English."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:348
+msgid "OpenTimestamps calendars"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:349
+msgid "Only a SHA-256 hash."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:349
+msgid "Never the document, and never its content."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:350
+msgid "Time anchoring of certified documents."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:354
+msgid ""
+"What is typed into the forms embedded on certain pages, including "
+"attachments."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:355
+msgid "Forms hosted by that provider."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:358
+msgid "Content delivery networks"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:359
+msgid "Your IP address and browser details, by the fact of requesting a file."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:360
+msgid "Serving libraries, fonts and icons."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:367
+msgid ""
+"The transfer to OpenAI is the one that deserves a decision rather than a "
+"disclosure. Names and descriptions of assets are free text: if someone types "
+"personal data into a description, it leaves the country with it. Options are "
+"to keep it and cover it with the transfer instruments the SIC requires, to "
+"restrict which fields are translated, or to translate only on explicit "
+"request instead of automatically on every save."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:377
+#: .\apps\common\core\templates\core\tyc\terms.html:116
+msgid "Automatic translation"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:380
+msgid ""
+"Some texts in the platform are translated automatically between Spanish and "
+"English. That translation is machine-generated: it is a convenience, not a "
+"certified translation, and it is not reviewed by a person before being "
+"shown. Where a text has legal or contractual effect, the version written by "
+"its author is the one that governs."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:389
+msgid "Changes to this policy"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:392
+msgid ""
+"This policy may be modified to adapt it to new practices or to legal "
+"developments. Any update is published on this page with the date it comes "
+"into force, shown at the top of this document."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:399
+msgid "Effective date"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\data_policy.html:402
+msgid ""
+"This policy takes effect from the date of its approval, shown at the top of "
+"this document."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\privacy.html:18
+#: .\apps\common\core\templates\core\tyc\privacy.html:19
+msgid "Privacy notice"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\privacy.html:25
+msgid ""
+"Pending review by the firm. The controller's identification details are "
+"placeholders."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\privacy.html:32
+msgid ""
+"This is the short notice required by article 15 of Decree 1377 of 2013. The "
+"full detail is in the personal data processing policy."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\privacy.html:38
+msgid "Who is responsible"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\privacy.html:41
+msgid ""
+"PROPENSIONES ABOGADOS, NIT [pending], with address at [address], operator of "
+"the GEA platform. Contact: info@propensionesabogados.com."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\privacy.html:47
+msgid "What we do with your data"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\privacy.html:50
+msgid ""
+"We collect and process personal data in order to: create and maintain your "
+"account; verify your identity; register historical assets and their "
+"locations; process purchase orders; issue and verify certified documents; "
+"send you the communications the service requires; comply with legal "
+"obligations; and keep the platform secure."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\privacy.html:62
+msgid ""
+"Where sensitive data is requested, you are not obliged to give it, and you "
+"will be told which data it is and what it is for before it is collected."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\privacy.html:69
+msgid "Your rights"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\privacy.html:72
+msgid ""
+"You may know, update and correct your data; ask for proof of the "
+"authorisation you gave; be told what use is made of it; withdraw the "
+"authorisation or ask for deletion, where no legal or contractual duty "
+"requires it to be kept; consult it free of charge; and file a complaint with "
+"the Superintendence of Industry and Commerce."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\privacy.html:81
+msgid "How to exercise them"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\privacy.html:84
+msgid ""
+"Through the PQRS form on this site. Each request gets a reference number and "
+"a due date at the moment it is filed: queries are answered within 10 "
+"business days and claims within 15, in both cases counted from the day after "
+"the request comes in."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\privacy.html:93
+msgid "File a request"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\privacy.html:96
+msgid "Where the full policy is"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\privacy.html:99
+msgid ""
+"The personal data processing policy sets out what data we hold, why, how "
+"long for, what security measures apply, and which data leaves the country "
+"and to whom."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\privacy.html:107
+msgid "Read the full policy"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:23
+#: .\apps\common\core\templates\core\tyc\terms.html:24
+msgid "Terms and conditions"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:30
+msgid ""
+"A starting point, not approved terms. The sections on what a certification "
+"proves and on automatic translation were written to match what the platform "
+"actually does; the rest needs the firm's review, and the dispute resolution "
+"section in particular needs a decision, not just a redraft."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:39
+msgid "Who we are and what this is"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:42
+msgid ""
+"GEA is the platform operated by Propensiones Abogados for managing "
+"historical assets — bonds, gold, high denomination banknotes and similar — "
+"and for issuing and verifying certified documents. By creating an account or "
+"using the platform you accept these terms."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:50
+msgid "Who may use it"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:53
+msgid ""
+"The platform is for adults with legal capacity. Registration requires a code "
+"supplied by the firm: it is not open sign-up, and an account is personal and "
+"non-transferable. You are responsible for what is done from your account, "
+"which is why a second factor is available and required for internal roles."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:62
+msgid "What you may not do"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:65
+msgid "Register assets or documents you have no right over."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:66
+msgid "Upload content that is unlawful, or that infringes third party rights."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:67
+msgid "Try to reach data or areas that do not correspond to your role."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:68
+msgid "Automate access, scan the platform, or interfere with its operation."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:69
+msgid ""
+"Present a certified copy as if it were something other than what section 5 "
+"describes."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:72
+msgid "Your content"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:75
+msgid ""
+"What you upload stays yours. You give Propensiones the permission needed to "
+"store it, process it and show it to whoever the platform's rules allow, for "
+"the purpose you uploaded it for. You are responsible for having the right to "
+"upload it."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:83
+msgid "What a certification proves — and what it does not"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:86
+msgid "This is the section to read twice."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:87
+msgid ""
+"A GEA certification proves <b>integrity</b>: that a file has not changed "
+"since it was registered, and that it existed no later than a given moment. "
+"It says nothing about whether what the document claims is <b>true</b>, nor "
+"about the authenticity, ownership, value or legal validity of any asset it "
+"describes."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:97
+msgid ""
+"In concrete terms: certifying a document that states an asset is worth a "
+"certain amount proves that the document said so on that date. It does not "
+"verify the amount, the asset, or the claim. The certification record issued "
+"with every document says the same thing in its own terms, and that record "
+"governs over any summary of it."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:107
+msgid ""
+"Presenting a certified document as if it proved the truth of its contents is "
+"a misuse of the service, and Propensiones may cancel a certification and "
+"close the account of anyone who does so."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:114
+msgid "Automatic features, stated plainly"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:119
+msgid ""
+"Names and descriptions are translated between Spanish and English by an "
+"automated system, without human review. It is a convenience for reading, not "
+"a certified or sworn translation, and it may be wrong. Where a text has "
+"legal or contractual effect, the version written by its author is the one "
+"that governs. Do not rely on a machine translation for a decision that "
+"matters."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:129
+msgid "Time anchoring"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:132
+msgid ""
+"Certain documents are anchored in time using a timestamping authority and "
+"the Bitcoin blockchain. What is published is only a cryptographic hash — "
+"never the document, and never its content. The anchor proves that a given "
+"file existed no later than a certain moment. It proves nothing about who "
+"wrote it, whether it is true, or what it is worth."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:142
+msgid ""
+"Anchoring in a block is not instantaneous: proofs are issued pending and "
+"mature over the following hours. A document is fully usable in the meantime; "
+"the anchoring page shows the current state at any time."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:149
+msgid "Availability"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:152
+msgid ""
+"We work to keep the platform available, but we do not guarantee "
+"uninterrupted service. Maintenance, third party failures and causes outside "
+"our control may interrupt it. Nothing here creates a service level "
+"commitment unless it has been agreed separately in writing."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:160
+msgid "Copyright and takedown"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:163
+msgid ""
+"We respect intellectual property. If you believe content on the platform "
+"infringes your copyright, send a notice to the address in section 14 "
+"including: your signature; identification of the protected work; "
+"identification of the material you say infringes it and where it is; your "
+"contact details; a statement that you believe in good faith that the use is "
+"unauthorised; and a statement that the information is accurate and that you "
+"are entitled to act on behalf of the rights holder."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:176
+msgid ""
+"Material that is the subject of a valid notice is removed promptly, and "
+"accounts that repeatedly infringe may be terminated. Whoever uploaded the "
+"material is told, and may reply."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:185
+msgid ""
+"The DMCA is United States law, and its safe harbour protects providers "
+"subject to that jurisdiction; registering an agent with the US Copyright "
+"Office only makes sense if the service is offered there. In Colombia the "
+"applicable framework is Law 23 of 1982 and Law 1915 of 2018. A takedown "
+"procedure is worth having either way — this one — but calling it \"DMCA\" "
+"does not by itself bring the safe harbour with it."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:195
+msgid "Suspension and termination"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:198
+msgid ""
+"We may suspend or close an account that breaches these terms. Closing an "
+"account does not delete certifications already issued, nor the audit trail: "
+"both have to survive for the platform to keep doing what it is for. Section "
+"9 of the data policy explains why."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:206
+msgid "Liability"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:209
+msgid ""
+"Propensiones is liable for its own wilful misconduct and gross negligence, "
+"as the applicable law provides. It is not liable for decisions taken on the "
+"basis of an automatic translation, nor for the use a third party makes of a "
+"certified document contrary to section 5, nor for the content that users "
+"themselves upload."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:218
+msgid "Personal data"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:221
+msgid ""
+"Handling of personal data is governed by the personal data processing "
+"policy, which forms part of these terms."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:225
+msgid "Read the data policy"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:228
+msgid "Governing law and disputes"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:231
+msgid ""
+"These terms are governed by Colombian law. Any dispute shall first be raised "
+"through the PQRS form, so that it can be resolved directly. If it is not "
+"resolved, the parties may attempt conciliation before an authorised "
+"conciliation centre before going to court. Failing that, the dispute goes "
+"before the ordinary Colombian courts."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:241
+msgid "Note for review: the arbitration clause does not port."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:243
+msgid ""
+"The standard United States clause — binding individual arbitration before "
+"AAA or JAMS, waiver of jury trial, waiver of class actions — is not a matter "
+"of swapping the administrator for a local one:"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:250
+msgid ""
+"There is no jury in Colombian civil procedure, so that waiver means nothing."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:251
+msgid ""
+"Group and class actions are governed by Law 472 of 1998 and are of "
+"constitutional rank; they are not waived in an adhesion contract."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:252
+msgid ""
+"In consumer matters the Superintendence of Industry and Commerce holds "
+"jurisdiction under Law 1480 of 2011, and a clause that tries to close that "
+"door risks being held abusive and ineffective."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:253
+msgid ""
+"Real arbitration here runs under Law 1563 of 2012, before a chamber of "
+"commerce arbitration centre, at a cost that only makes sense above a certain "
+"amount in dispute."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:256
+msgid ""
+"What is written above is a graduated clause — direct claim, conciliation, "
+"then courts — which is the usual arrangement here. If the firm wants "
+"arbitration, it belongs in the contracts signed with counterparties for "
+"specific transactions, with its seat, rules and amount threshold set out, "
+"rather than in the general terms of a platform."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:270
+msgid ""
+"We may modify these terms. Material changes are notified through the "
+"platform or by email, with the date they come into force. The version and "
+"date at the top say which text is in force."
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:282
+msgid "Copyright notices:"
+msgstr ""
+
+#: .\apps\common\core\templates\core\tyc\terms.html:282
+msgid "designated contact, pending"
+msgstr ""

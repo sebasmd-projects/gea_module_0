@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-02 19:50-0500\n"
+"POT-Creation-Date: 2026-09-01 07:54-0500\n"
 "PO-Revision-Date: 2026-01-06 23:16+0000\n"
 "Last-Translator: Sebastian Morales <cto@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1041,52 +1041,52 @@ msgstr "Masculino"
 msgid "Female"
 msgstr "Femenino"
 
-#: .\apps\project\common\users\models.py:532
+#: .\apps\project\common\users\models.py:564
 msgid "The date of birth cannot be a future date."
 msgstr "La fecha de nacimiento no puede ser una fecha futura."
 
-#: .\apps\project\common\users\models.py:537
+#: .\apps\project\common\users\models.py:569
 msgid "User must be at least 18 years of age."
 msgstr "Debes tener al menos 18 años de edad."
 
-#: .\apps\project\common\users\models.py:561
+#: .\apps\project\common\users\models.py:599
 msgid "Birth Date"
 msgstr "Fecha de nacimiento"
 
-#: .\apps\project\common\users\models.py:567
+#: .\apps\project\common\users\models.py:605
 msgid "Gender"
 msgstr "Género"
 
-#: .\apps\project\common\users\models.py:574
+#: .\apps\project\common\users\models.py:612
 msgid "Citizenship"
 msgstr "Ciudadanía"
 
-#: .\apps\project\common\users\models.py:579
+#: .\apps\project\common\users\models.py:617
 msgid "Passport Identification"
 msgstr "Identificación del pasaporte"
 
-#: .\apps\project\common\users\models.py:584
+#: .\apps\project\common\users\models.py:622
 msgid "Date of Issue"
 msgstr "Fecha de emisión"
 
-#: .\apps\project\common\users\models.py:589
+#: .\apps\project\common\users\models.py:627
 msgid "Issuing Authority"
 msgstr "Autoridad emisora"
 
-#: .\apps\project\common\users\models.py:594
+#: .\apps\project\common\users\models.py:632
 msgid "Date of Expiry"
 msgstr "Fecha de vencimiento"
 
-#: .\apps\project\common\users\models.py:605
+#: .\apps\project\common\users\models.py:643
 msgid "Passport Image"
 msgstr "Imagen del pasaporte"
 
-#: .\apps\project\common\users\models.py:610
+#: .\apps\project\common\users\models.py:648
 msgid "Beneficiary signature"
 msgstr "Firma del beneficiario"
 
-#: .\apps\project\common\users\models.py:623
-#: .\apps\project\common\users\models.py:624
+#: .\apps\project\common\users\models.py:661
+#: .\apps\project\common\users\models.py:662
 msgid "User Personal Information"
 msgstr "Información personal del usuario"
 

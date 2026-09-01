@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-25 17:46-0500\n"
+"POT-Creation-Date: 2026-09-01 07:54-0500\n"
 "PO-Revision-Date: 2025-09-15 17:14-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -112,6 +112,7 @@ msgstr "Referido por"
 
 #: .\apps\project\common\account\forms\common_register_form.py:112
 #: .\apps\project\common\account\forms\common_register_form.py:116
+#: .\apps\project\common\account\views.py:76
 msgid "Password"
 msgstr "Contraseña"
 
@@ -164,23 +165,35 @@ msgstr "Este campo es obligatorio."
 msgid "New password"
 msgstr "Contraseña nueva"
 
+#: .\apps\project\common\account\views.py:75
+msgid "Your details"
+msgstr ""
+
 #: .\apps\project\common\account\views.py:77
+msgid "Contact"
+msgstr ""
+
+#: .\apps\project\common\account\views.py:78
+msgid "Verification code"
+msgstr ""
+
+#: .\apps\project\common\account\views.py:96
 msgid "Register"
 msgstr "Registrarse"
 
-#: .\apps\project\common\account\views.py:140
+#: .\apps\project\common\account\views.py:179
 msgid "Invalid email."
 msgstr "Correo electrónico no válido."
 
-#: .\apps\project\common\account\views.py:148
+#: .\apps\project\common\account\views.py:183
 msgid "Too many code requests. Please try again later."
 msgstr "Demasiadas solicitudes de código. Inténtalo más tarde."
 
-#: .\apps\project\common\account\views.py:160
+#: .\apps\project\common\account\views.py:192
 msgid "Your GEA registration code"
 msgstr "Tu código de registro en GEA"
 
-#: .\apps\project\common\account\views.py:162
+#: .\apps\project\common\account\views.py:194
 #, python-format
 msgid ""
 "Your registration code is:\n"
@@ -195,24 +208,30 @@ msgstr ""
 "\n"
 "Este código caduca en %(minutes)s minutos."
 
-#: .\apps\project\common\account\views.py:190
+#: .\apps\project\common\account\views.py:222
 msgid "We sent a verification code to your email."
 msgstr "Hemos enviado un código de verificación a tu correo."
 
-#: .\apps\project\common\account\views.py:230
+#: .\apps\project\common\account\views.py:262
 msgid "Invalid or expired code."
 msgstr "Código no válido o caducado."
 
-#: .\apps\project\common\account\views.py:255
+#: .\apps\project\common\account\views.py:306
 msgid "A user with this email already exists."
 msgstr "Ya existe un usuario con este correo electrónico."
 
-#: .\apps\project\common\account\views.py:320
-#: .\apps\project\common\account\views.py:348
+#: .\apps\project\common\account\views.py:313
+#, fuzzy
+#| msgid "A user with this email already exists."
+msgid "A user with this username already exists."
+msgstr "Ya existe un usuario con este correo electrónico."
+
+#: .\apps\project\common\account\views.py:424
+#: .\apps\project\common\account\views.py:514
 msgid "Reset Your Password"
 msgstr "Restablece tu contraseña"
 
-#: .\apps\project\common\account\views.py:331
+#: .\apps\project\common\account\views.py:484
 msgid ""
 "If an account exists with the provided email/username, you will receive "
 "password reset instructions shortly."
@@ -220,11 +239,11 @@ msgstr ""
 "Si existe una cuenta con el correo o el usuario indicados, recibirás en "
 "breve las instrucciones para restablecer la contraseña."
 
-#: .\apps\project\common\account\views.py:337
+#: .\apps\project\common\account\views.py:490
 msgid "Check Your Email"
 msgstr "Revisa tu correo"
 
-#: .\apps\project\common\account\views.py:339
+#: .\apps\project\common\account\views.py:492
 msgid ""
 "We've sent password reset instructions to your email. Please check your "
 "inbox and follow the link to reset your password."
@@ -232,13 +251,13 @@ msgstr ""
 "Hemos enviado a tu correo las instrucciones para restablecer la contraseña. "
 "Revisa tu bandeja de entrada y sigue el enlace para restablecerla."
 
-#: .\apps\project\common\account\views.py:366
-#: .\apps\project\common\account\views.py:413
+#: .\apps\project\common\account\views.py:532
+#: .\apps\project\common\account\views.py:579
 msgid "Set New Password"
 msgstr "Establece una contraseña nueva"
 
-#: .\apps\project\common\account\views.py:371
-#: .\apps\project\common\account\views.py:386
+#: .\apps\project\common\account\views.py:537
+#: .\apps\project\common\account\views.py:552
 msgid ""
 "The password reset link is invalid or has expired. Please request a new "
 "password reset."
@@ -246,7 +265,7 @@ msgstr ""
 "El enlace para restablecer la contraseña no es válido o ha caducado. "
 "Solicita uno nuevo."
 
-#: .\apps\project\common\account\views.py:400
+#: .\apps\project\common\account\views.py:566
 msgid ""
 "Your password has been reset successfully. You can now log in with your new "
 "password."
@@ -254,19 +273,19 @@ msgstr ""
 "Tu contraseña se ha restablecido correctamente. Ya puedes iniciar sesión con "
 "la contraseña nueva."
 
-#: .\apps\project\common\account\views.py:447
+#: .\apps\project\common\account\views.py:622
 #, python-format
 msgid "Password Reset Request for %(site)s"
 msgstr "Solicitud de restablecimiento de contraseña para %(site)s"
 
-#: .\apps\project\common\account\views.py:477
+#: .\apps\project\common\account\views.py:656
 msgid "You must be logged in to change your password."
 msgstr "Tienes que haber iniciado sesión para cambiar tu contraseña."
 
-#: .\apps\project\common\account\views.py:495
+#: .\apps\project\common\account\views.py:674
 msgid "Your password has been changed successfully!"
 msgstr "¡Tu contraseña se ha cambiado correctamente!"
 
-#: .\apps\project\common\account\views.py:508
+#: .\apps\project\common\account\views.py:687
 msgid "Change Password"
 msgstr "Cambiar contraseña"

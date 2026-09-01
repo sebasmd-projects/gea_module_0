@@ -1,0 +1,511 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-01 07:54-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: .\apps\project\common\pqrs\admin.py:32
+msgid "deadline"
+msgstr ""
+
+#: .\apps\project\common\pqrs\admin.py:37
+msgid "Overdue"
+msgstr ""
+
+#: .\apps\project\common\pqrs\admin.py:38
+msgid "Due within 3 business days"
+msgstr ""
+
+#: .\apps\project\common\pqrs\admin.py:39
+msgid "Open"
+msgstr ""
+
+#: .\apps\project\common\pqrs\admin.py:101
+msgid "Filing"
+msgstr ""
+
+#: .\apps\project\common\pqrs\admin.py:105
+msgid "Who is filing"
+msgstr ""
+
+#: .\apps\project\common\pqrs\admin.py:111
+msgid "Where to reach them"
+msgstr ""
+
+#: .\apps\project\common\pqrs\admin.py:116
+msgid "The request"
+msgstr ""
+
+#: .\apps\project\common\pqrs\admin.py:119
+msgid "Handling"
+msgstr ""
+
+#: .\apps\project\common\pqrs\admin.py:123
+msgid "Record of the authorisation"
+msgstr ""
+
+#: .\apps\project\common\pqrs\admin.py:128
+msgid ""
+"Article 9 of Law 1581 requires keeping proof of the authorisation. A ticked "
+"box is not proof unless when and from where is recorded."
+msgstr ""
+
+#: .\apps\project\common\pqrs\admin.py:151
+msgid "Deadline"
+msgstr ""
+
+#: .\apps\project\common\pqrs\admin.py:168
+#, python-format
+msgid "%(days)s business days overdue"
+msgstr ""
+
+#: .\apps\project\common\pqrs\admin.py:171
+#: .\apps\project\common\pqrs\admin.py:174
+#, python-format
+msgid "%(days)s business days left"
+msgstr ""
+
+#: .\apps\project\common\pqrs\admin.py:182
+msgid "Who"
+msgstr ""
+
+#: .\apps\project\common\pqrs\admin.py:188
+msgid "Extend the deadline (once, as the law allows)"
+msgstr ""
+
+#: .\apps\project\common\pqrs\admin.py:203
+#, python-format
+msgid ""
+"%(count)s extended. Remember the law also requires telling the person why "
+"and giving them the new date."
+msgstr ""
+
+#: .\apps\project\common\pqrs\admin.py:209
+#, python-format
+msgid "%(count)s were already extended: the law allows one extension only."
+msgstr ""
+
+#: .\apps\project\common\pqrs\apps.py:8 .\apps\project\common\pqrs\views.py:140
+msgid "Requests and complaints (PQRS)"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:56
+#, python-format
+msgid "Only these formats are accepted: %(formats)s."
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:62
+#, python-format
+msgid "The file is too large. The maximum is %(size)s MB."
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:73
+#: .\apps\project\common\pqrs\views.py:93
+msgid "Type of request"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:77
+msgid ""
+"Access and query are answered within 10 business days. The rest are handled "
+"as claims, within 15."
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:83
+msgid "Who is filing it"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:94
+#: .\apps\project\common\pqrs\models.py:155
+msgid "Identification type"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:95
+msgid "-- Select one --"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:99
+#: .\apps\project\common\pqrs\models.py:162
+msgid "Identification number"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:101
+#: .\apps\project\common\pqrs\models.py:165
+msgid "Country"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:102
+#: .\apps\project\common\pqrs\models.py:166
+msgid "City"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:103
+#: .\apps\project\common\pqrs\models.py:167
+msgid "Address"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:105
+#: .\apps\project\common\pqrs\models.py:169
+msgid "Email address"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:106
+msgid "Confirm email address"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:109
+msgid "Code"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:110
+#: .\apps\project\common\pqrs\models.py:172
+msgid "Mobile"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:128
+msgid "The emails do not match."
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:136
+#: .\apps\project\common\pqrs\models.py:143
+msgid "Names"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:137
+#: .\apps\project\common\pqrs\models.py:145
+msgid "Surnames"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:140
+#: .\apps\project\common\pqrs\models.py:176
+msgid "Identity document"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:143
+msgid ""
+"Optional, but it speeds things up: we have to be sure who is asking before "
+"handing over or changing personal data."
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:161
+#: .\apps\project\common\pqrs\models.py:149
+msgid "Company name"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:163
+#: .\apps\project\common\pqrs\models.py:151
+msgid "Legal representative"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:166
+#: .\apps\project\common\pqrs\models.py:183
+msgid "Certificate of existence and legal representation"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:169
+msgid "It is what shows the representative can act for the company."
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:185
+#: .\apps\project\common\pqrs\models.py:105
+msgid "NIT"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:200
+msgid "Description of the request"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:205
+msgid ""
+"Say what happened and what you are asking for. If it is about a specific "
+"record, quoting its reference saves a round trip."
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:218
+msgid "Use the contact details I gave above"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:224
+#: .\apps\project\common\pqrs\models.py:194
+msgid "Contact email"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:226
+#: .\apps\project\common\pqrs\models.py:196
+msgid "Contact mobile"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:228
+#: .\apps\project\common\pqrs\models.py:198
+msgid "Landline"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:245
+msgid "Give at least one way to reach you, or tick the box above."
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:259
+msgid "I accept the personal data processing policy"
+msgstr ""
+
+#: .\apps\project\common\pqrs\forms.py:263
+msgid ""
+"Without accepting the policy we cannot process the request: handling your "
+"data needs your authorisation."
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:65
+msgid "Access"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:66
+msgid "Update"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:67
+msgid "Rectification"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:68
+msgid "Deletion"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:69
+msgid "Petition"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:70
+msgid "Complaint"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:71
+msgid "Query"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:98
+msgid "Natural person"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:99
+msgid "Legal entity"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:102
+msgid "Citizen ID"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:103
+msgid "Foreign ID"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:104
+msgid "Passport"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:108
+msgid "Received"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:109
+msgid "In progress"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:110
+msgid "Awaiting amendment"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:111
+#: .\apps\project\common\pqrs\models.py:230
+msgid "Extended"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:112
+msgid "Answered"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:113
+msgid "Transferred to another authority"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:114
+msgid "Withdrawn"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:120
+msgid "Reference number"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:125
+msgid "What the person quotes when asking about their request."
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:129
+msgid "Request type"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:135
+msgid "Person type"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:171
+msgid "Phone code"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:179
+msgid "To prove who is making the request."
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:189
+#: .\apps\project\common\pqrs\views.py:95
+msgid "Description"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:192
+msgid "Use the contact details above"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:201
+msgid "Terms accepted"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:207
+msgid "Terms accepted at"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:209
+msgid "Submitted from"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:213
+msgid "Status"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:221
+msgid "Received on"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:224
+msgid "Due on"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:227
+msgid "Calculated in business days when it comes in."
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:233
+msgid "Answered at"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:240
+msgid "Answered by"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:243
+msgid "Answer"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:246
+msgid "Internal notes"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:247
+msgid "Not shown to the person who filed the request."
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:326
+msgid "This request has already been extended once."
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:335
+msgid "An answer cannot be empty."
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:365
+#: .\apps\project\common\pqrs\models.py:367
+msgid "Required for a natural person."
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:370
+#: .\apps\project\common\pqrs\models.py:373
+msgid "Required for a legal entity."
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:379
+msgid "Give at least one way to reach you, or use the details above."
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:385
+msgid "The data processing terms must be accepted."
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:429
+msgid "Could not allocate a reference number."
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:436
+msgid "PQRS request"
+msgstr ""
+
+#: .\apps\project\common\pqrs\models.py:437
+msgid "PQRS requests"
+msgstr ""
+
+#: .\apps\project\common\pqrs\views.py:94
+msgid "Your details"
+msgstr ""
+
+#: .\apps\project\common\pqrs\views.py:96
+msgid "How to reach you"
+msgstr ""
+
+#: .\apps\project\common\pqrs\views.py:97
+msgid "Confirmation"
+msgstr ""
+
+#: .\apps\project\common\pqrs\views.py:193
+msgid ""
+"Too many requests from this connection. Try again later, or write to us "
+"directly."
+msgstr ""
+
+#: .\apps\project\common\pqrs\views.py:260
+#, python-format
+msgid "We received your request %(radicado)s"
+msgstr ""
+
+#: .\apps\project\common\pqrs\views.py:264
+#, python-format
+msgid ""
+"We received your request.\n"
+"\n"
+"Reference: %(radicado)s\n"
+"Type: %(kind)s\n"
+"Received on: %(received)s\n"
+"We will answer by: %(due)s\n"
+"\n"
+"Quote the reference if you need to ask about it.\n"
+msgstr ""
+
+#: .\apps\project\common\pqrs\views.py:300
+#, python-format
+msgid "New PQRS: %(radicado)s"
+msgstr ""
+
+#: .\apps\project\common\pqrs\views.py:303
+#, python-format
+msgid ""
+"%(kind)s from %(name)s.\n"
+"Due by %(due)s.\n"
+msgstr ""
