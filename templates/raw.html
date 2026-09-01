@@ -29,6 +29,25 @@
       <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
       <!-- CSS scroll behavior -->
       <link rel="stylesheet" href="{% static 'css/scroll_behavior.css' %}">
+      {% block feather_js %}
+        {% comment %}
+          Feather se carga aqui, una sola vez, y **antes** que scripts.js.
+
+          Estaba en tres plantillas sueltas --el layout de cuenta, la de
+          errores y el sidenav del panel--, asi que en toda pagina que no
+          incluyera una de las tres, `scripts.js` reventaba con
+          `feather is not defined`. Y como esa llamada es la primera linea de
+          su `DOMContentLoaded`, la excepcion abortaba el manejador entero:
+          en esas paginas no habia tooltips, ni popovers, ni boton de plegar
+          el menu lateral.
+
+          Los iconos `data-feather` aparecen en el sidenav, en el desplegable
+          de usuario, en la cabecera y en la pagina de error: no es de una
+          seccion, es transversal. Su sitio es el mismo que el de Bootstrap.
+        {% endcomment %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"
+                crossorigin="anonymous"></script>
+      {% endblock feather_js %}
       {% block main_js %}
         <!-- Main JS -->
         <script src="{% static 'js/scripts.js' %}"></script>

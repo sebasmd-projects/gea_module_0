@@ -1,6 +1,23 @@
 window.addEventListener('DOMContentLoaded', event => {
-    // Activate feather
-    feather.replace();
+    // Activate feather, si esta.
+    //
+    // La comprobacion no es una cortesia. Este fichero se carga desde
+    // `raw.html`, o sea en **todas** las paginas, y feather solo se cargaba en
+    // tres plantillas sueltas. En el resto --la portada, la verificacion de
+    // certificados, las paginas AEGIS-- esta linea lanzaba
+    // `ReferenceError: feather is not defined`.
+    //
+    // Y una excepcion aqui no se queda en un mensaje de consola: aborta el
+    // manejador entero, asi que todo lo que viene despues no llegaba a
+    // ejecutarse nunca. En esas paginas se quedaban muertos los tooltips, los
+    // popovers, el resaltado del enlace activo y --el que se nota-- el boton
+    // que pliega el menu lateral.
+    //
+    // Los iconos son decoracion; el menu no. Que falte una libreria de
+    // adorno no puede llevarse por delante la navegacion.
+    if (typeof feather !== 'undefined') {
+        feather.replace();
+    }
 
     // Enable tooltips globally
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
