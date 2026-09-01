@@ -8,6 +8,7 @@ Documentos complementarios:
 - [`docs/NORMATIVA.md`](docs/NORMATIVA.md) — qué exigen los reguladores a la certificación, por qué no se adopta W3C VC y qué falta en su lugar.
 - [`docs/SEGURIDAD.md`](docs/SEGURIDAD.md) — checklist de despliegue en dos minutos, y la auditoría con lo que se encontró y por qué importa.
 - [`docs/ANCLAJE.md`](docs/ANCLAJE.md) — el anclaje temporal explicado de punta a punta: los dos tiempos, quién madura las pruebas, dónde se mira el estado y qué significa cada uno.
+- [`docs/verificar-certificado.html`](docs/verificar-certificado.html) — **para enseñar fuera**, no para desarrollar: el recorrido público de verificación paso a paso, con capturas anotadas, qué se entrega y qué se puede compartir. Es el mismo recorrido que describen los otros documentos, contado para un titular o un auditor. Se regenera con el guion que documenta su propio pie; si cambian esas pantallas, las capturas se quedan viejas.
 
 Si lo que necesitas es orientarte —qué módulo llama a cuál y por dónde entra una petición—
 empieza por [§4-bis, Mapa de arquitectura](#4-bis-mapa-de-arquitectura-codebase-map).
