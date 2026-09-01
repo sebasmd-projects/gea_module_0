@@ -36,16 +36,7 @@
       </p>
 
       {% comment %} ---------- Indicador de pasos ---------- {% endcomment %}
-      <ol class="pqrs-steps list-unstyled d-flex flex-wrap gap-2 mb-4">
-        {% for key, label in steps_labels %}
-          <li class="pqrs-step flex-fill
-                     {% if key == current_step %}pqrs-step--current{% endif %}"
-              {% if key == current_step %}aria-current="step"{% endif %}>
-            <span class="pqrs-step__number">{{ forloop.counter }}</span>
-            <span class="pqrs-step__label">{{ label }}</span>
-          </li>
-        {% endfor %}
-      </ol>
+      {% include 'partials/_wizard_steps.html' %}
 
       <form method="post" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
@@ -144,31 +135,4 @@
   </div>
 </div>
 
-<style>
-  .pqrs-steps { counter-reset: paso; }
-  .pqrs-step {
-    display: flex; align-items: center; gap: .5rem;
-    min-width: 8rem; padding: .5rem .75rem;
-    border: 1px solid var(--bs-border-color, #dee2e6);
-    border-radius: .5rem; font-size: .78rem; color: #6c757d;
-  }
-  .pqrs-step__number {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 1.5rem; height: 1.5rem; flex: 0 0 1.5rem;
-    border-radius: 50%; background: #e9ecef; font-weight: 600;
-  }
-  .pqrs-step--current {
-    border-color: var(--bs-primary, #0d6efd);
-    color: var(--bs-primary, #0d6efd);
-    font-weight: 600;
-  }
-  .pqrs-step--current .pqrs-step__number {
-    background: var(--bs-primary, #0d6efd); color: #fff;
-  }
-  /* En movil el indicador ocupa mas que el formulario: se deja solo el paso
-     actual, que es la unica informacion que se necesita ahi. */
-  @media (max-width: 575.98px) {
-    .pqrs-step:not(.pqrs-step--current) { display: none; }
-  }
-</style>
 {% endblock %}

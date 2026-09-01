@@ -65,6 +65,19 @@ class GeaUserRegisterWizardView(SessionWizardView):
         (STEP_CODE, UniqueCodeForm),
     ]
 
+    #: Como se llama cada paso de cara a quien rellena.
+    #:
+    #: El formulario solo decia "Paso 1 / 4", que dice cuantos faltan pero no
+    #: de que van. En un registro que acaba pidiendo un codigo que llega por
+    #: correo --o que da un asesor-- saber que eso viene al final cambia si se
+    #: empieza ahora o cuando se tenga el codigo delante.
+    STEP_LABELS = (
+        (STEP_USER, _('Your details')),
+        (STEP_SECURITY, _('Password')),
+        (STEP_CONTACT, _('Contact')),
+        (STEP_CODE, _('Verification code')),
+    )
+
     # --- Buyer email code settings ---
     BUYER_CODE_TTL_SECONDS = 10 * 60          # 10 min
     BUYER_SEND_RATE_TTL_SECONDS = 5 * 60      # 5 min window
@@ -85,6 +98,12 @@ class GeaUserRegisterWizardView(SessionWizardView):
         ctx["step_index"] = self.steps.step1
         # no llames get_form_list() custom (no existe) ni uses cleaned aquí
         ctx["step_count"] = len(super().get_form_list())
+
+        # Los dos nombres que espera `partials/_wizard_steps.html`, el mismo
+        # indicador que usa el wizard de PQRS.
+        ctx["steps_labels"] = self.STEP_LABELS
+        ctx["current_step"] = self.steps.current
+
         return ctx
 
     # -------------------------

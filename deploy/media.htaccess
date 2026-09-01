@@ -8,16 +8,24 @@
 #   certificates/      los tres PDF de cada certificacion y las fotos
 #   passport_images/   documentos de identidad (PII)
 #   signature_images/  firmas manuscritas (PII)
+#   pqrs/              cedulas y certificados que adjunta quien radica un PQRS
 #
 # Todo eso se entrega por vistas de Django que si comprueban permisos.
 # El resto de media sigue sirviendose directo.
+#
+# Sobre `pqrs/`: se cayo de esta lista cuando se creo la app, y es el peor
+# sitio donde olvidarlo. El formulario es publico y sin sesion, asi que
+# cualquiera puede depositar ahi un documento de identidad; la ruta lleva el
+# radicado, pero un radicado **no es un secreto**: viaja por correo, por
+# WhatsApp y por captura de pantalla, y esta impreso en el propio acuse.
+# `manage.py check_security` comprueba que no vuelva a faltar ninguno.
 
 # --- Bloqueo por ruta, relativo a este directorio -------------------
 # Se usa mod_rewrite y no RedirectMatch porque las reglas quedan relativas a
 # MEDIA_ROOT: si el directorio cambia de sitio, siguen valiendo.
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteRule ^(certificates|passport_images|signature_images)(/|$) - [R=404,L]
+    RewriteRule ^(certificates|passport_images|signature_images|pqrs)(/|$) - [R=404,L]
 </IfModule>
 
 # Respaldo por si mod_rewrite no estuviera activo.
@@ -25,6 +33,7 @@
     RedirectMatch 404 ^/public/media/certificates/
     RedirectMatch 404 ^/public/media/passport_images/
     RedirectMatch 404 ^/public/media/signature_images/
+    RedirectMatch 404 ^/public/media/pqrs/
 </IfModule>
 
 # --- Nada de lo subido se ejecuta nunca ----------------------------

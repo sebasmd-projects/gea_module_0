@@ -167,6 +167,52 @@
         padding: 1.5rem 1.25rem;
       }
     }
+
+    /* Barra legal sobre el hero.
+       Superpuesta y no debajo, para no partir el vídeo a sangre.
+
+       Banda opaca y no degradado: el fondo es un vídeo, y con un degradado el
+       texto queda legible en unos fotogramas y no en otros. Una banda sólida
+       se lee siempre, que es lo que hace falta en unos enlaces que tienen que
+       poder encontrarse. */
+    .hero-legal-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1040;              /* por debajo del botón de contacto (1050) */
+      padding: 0.6rem 0;
+      background: rgba(0, 0, 0, 0.82);
+      backdrop-filter: blur(2px);
+    }
+
+    .hero-legal-bar a {
+      color: #f4d88b;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .hero-legal-bar a:hover,
+    .hero-legal-bar a:focus {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    /* El separador entre enlaces, que no es un enlace. */
+    .hero-legal-bar > div {
+      color: rgba(255, 255, 255, 0.55);
+      line-height: 1.8;
+      /* Sitio para el botón flotante de contacto, que va abajo a la derecha
+         y taparía el último enlace. */
+      padding-right: 12rem;
+    }
+
+    @media (max-width: 991.98px) {
+      .hero-legal-bar > div {
+        padding-right: 0;
+        padding-bottom: 3.5rem;   /* el botón pasa a estar encima */
+      }
+    }
   </style>
   {% include 'core/partials/whatsapp.html' %}
   <main class="main">
@@ -197,6 +243,24 @@
     <!-- /Hero Section -->
   </main>
 {% endblock %}
+
+{% block footer %}
+  {% comment %}
+    La portada no tenia pie de ninguna clase, asi que era la unica pagina de
+    la plataforma desde la que no se llegaba a la politica de datos ni a
+    radicar un PQRS -- y es justo la que ve alguien que no tiene cuenta, que
+    es quien mas probablemente necesita ambas cosas.
+
+    No se reutiliza `partials/footer/footer.html` porque es un pie blanco de
+    panel y esto es un video a sangre: quedaria una banda blanca debajo del
+    hero. Va superpuesto abajo, discreto, sin robarle sitio al video.
+  {% endcomment %}
+  <footer class="hero-legal-bar">
+    <div class="container-xl px-4 text-center small">
+      {% include 'partials/footer/_legal_links.html' %}
+    </div>
+  </footer>
+{% endblock footer %}
 
 {% block custom_css %}
   <link rel="stylesheet" href="{% static 'css/hero.css' %}" />

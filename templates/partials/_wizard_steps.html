@@ -1,0 +1,57 @@
+{% load i18n %}
+
+{% comment %}
+  El indicador de pasos de un wizard, para los dos que hay.
+
+  Espera dos cosas en el contexto:
+    steps_labels   pares (clave, etiqueta) en orden
+    current_step   la clave del paso que se esta pintando
+
+  Se pinta siempre, tambien en el primero: saber cuantos quedan es lo que
+  evita que alguien empiece a rellenar creyendo que es una caja de texto y lo
+  abandone a la mitad. El registro solo decia "Paso 1 / 4", que dice cuantos
+  faltan pero no de que van -- y en un registro que pide documento de
+  identidad y codigo por correo, saber que eso viene despues cambia si lo
+  empiezas ahora o cuando tengas el correo delante.
+
+  El CSS va aqui dentro y no en un fichero estatico a proposito: no hay mas
+  que un wizard por pagina, asi que no se duplica, y asi el indicador entra
+  sin tener que acordarse de un `collectstatic`.
+{% endcomment %}
+
+<ol class="wizard-steps list-unstyled d-flex flex-wrap gap-2 mb-4">
+  {% for key, label in steps_labels %}
+    <li class="wizard-step flex-fill {% if key == current_step %}wizard-step--current{% endif %}"
+        {% if key == current_step %}aria-current="step"{% endif %}>
+      <span class="wizard-step__number">{{ forloop.counter }}</span>
+      <span class="wizard-step__label">{{ label }}</span>
+    </li>
+  {% endfor %}
+</ol>
+
+<style>
+  .wizard-step {
+    display: flex; align-items: center; gap: .5rem;
+    min-width: 8rem; padding: .5rem .75rem;
+    border: 1px solid var(--bs-border-color, #dee2e6);
+    border-radius: .5rem; font-size: .78rem; color: #6c757d;
+  }
+  .wizard-step__number {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 1.5rem; height: 1.5rem; flex: 0 0 1.5rem;
+    border-radius: 50%; background: #e9ecef; font-weight: 600;
+  }
+  .wizard-step--current {
+    border-color: var(--bs-primary, #0d6efd);
+    color: var(--bs-primary, #0d6efd);
+    font-weight: 600;
+  }
+  .wizard-step--current .wizard-step__number {
+    background: var(--bs-primary, #0d6efd); color: #fff;
+  }
+  /* En movil el indicador ocupa mas que el formulario: se deja solo el paso
+     actual, que es la unica informacion que se necesita ahi. */
+  @media (max-width: 575.98px) {
+    .wizard-step:not(.wizard-step--current) { display: none; }
+  }
+</style>
