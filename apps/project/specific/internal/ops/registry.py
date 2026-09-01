@@ -819,6 +819,27 @@ COMMANDS = (
         ],
     ),
     Command(
+        name='check_security',
+        title=_('Security check'),
+        summary=_(
+            'Repeats the security audit over the code as it is right now.'
+        ),
+        detail=_(
+            'It looks at what a report cannot: whether a view added since '
+            'then went out without access control, whether a public form '
+            'accepts POST with no attempt limit, whether any shell execution '
+            'or string-built SQL appeared. Every public view has to be on a '
+            'list with the reason it is public, so a new one shows up here '
+            'the first time this runs rather than when somebody finds it. It '
+            'does not replace "check --deploy", which looks at Django\'s own '
+            'settings; this looks at what is specific to this project.'
+        ),
+        example=_('Before every deploy, together with the dependency check.'),
+        risk=RISK_READ_ONLY,
+        area=AREA_ACCESS,
+        timeout=120,
+    ),
+    Command(
         name='check_attack_terms',
         title=_('Anti-scan trap'),
         summary=_(

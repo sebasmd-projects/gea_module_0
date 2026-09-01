@@ -14,10 +14,56 @@ segun lo que se eligio en el paso 1, y el que no toca ni se envia ni se
 valida.
 """
 
+import os
+
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from .models import PQRSRequest, RequestTypeChoices
+
+#: Lo que se admite como soporte de identidad.
+#:
+#: Es una lista de permitidos, no de prohibidos: lo que no se reconoce no
+#: entra. Sin ella, este formulario --publico, sin sesion y con dos campos de
+#: fichero-- acepta cualquier cosa de cualquier tamano, y la guarda.
+ALLOWED_UPLOAD_EXTENSIONS = ('.pdf', '.jpg', '.jpeg', '.png', '.webp')
+
+#: Un documento de identidad fotografiado no pasa de aqui. El tope existe
+#: tanto por el disco --que en cPanel es una cuota fija-- como porque subir
+#: ficheros enormes en bucle es la forma barata de llenarlo.
+MAX_UPLOAD_BYTES = 10 * 1024 * 1024
+
+
+class SupportingDocumentField(forms.FileField):
+    """
+    Un adjunto con su tipo y su tamano comprobados.
+
+    Va en una clase y no en un ``clean_<campo>`` por formulario porque son dos
+    campos en dos formularios distintos, y la validacion que se escribe dos
+    veces es la que acaba existiendo una.
+    """
+
+    def clean(self, data, initial=None):
+        uploaded = super().clean(data, initial)
+
+        if not uploaded:
+            return uploaded
+
+        extension = os.path.splitext(uploaded.name or '')[1].lower()
+
+        if extension not in ALLOWED_UPLOAD_EXTENSIONS:
+            raise forms.ValidationError(
+                _('Only these formats are accepted: %(formats)s.')
+                % {'formats': ', '.join(ALLOWED_UPLOAD_EXTENSIONS)}
+            )
+
+        if (uploaded.size or 0) > MAX_UPLOAD_BYTES:
+            raise forms.ValidationError(
+                _('The file is too large. The maximum is %(size)s MB.')
+                % {'size': MAX_UPLOAD_BYTES // (1024 * 1024)}
+            )
+
+        return uploaded
 
 
 class RequestTypeForm(forms.Form):
@@ -90,7 +136,7 @@ class NaturalHolderForm(HolderBaseForm):
     first_name = forms.CharField(label=_('Names'), max_length=150)
     last_name = forms.CharField(label=_('Surnames'), max_length=150)
 
-    identity_document = forms.FileField(
+    identity_document = SupportingDocumentField(
         label=_('Identity document'),
         required=False,
         help_text=_(
@@ -116,7 +162,7 @@ class LegalHolderForm(HolderBaseForm):
     legal_representative = forms.CharField(
         label=_('Legal representative'), max_length=200)
 
-    legal_existence_document = forms.FileField(
+    legal_existence_document = SupportingDocumentField(
         label=_('Certificate of existence and legal representation'),
         required=False,
         help_text=_(
