@@ -4,10 +4,10 @@
   <div class="container-xl px-4">
     <div class="row">
       <div class="col-md-6 small text-black">
-        &copy;{% now 'M Y' %} <a class="px-1 sitename" href="https://propensionesabogados.com/" target="_blank">Propensiones Abogados Internacional.</a> {% trans 'Your unconditional ally. All Rights Reserved.' %} {% trans 'Created by' %} <a href="https://propensionesabogados.com/" target="_blank">Propensiones Abogados Internacional</a>
+        &copy; 2024 -{% now 'Y' %} <a class="px-1 sitename" href="https://propensionesabogados.com/" target="_blank">Propensiones Abogados Internacional.</a> {% trans 'Your unconditional ally. All Rights Reserved.' %}
       </div>
 
-      <!-- 
+      <!--  
             © 2024 - {% now "Y" %}
 
             Autores:
@@ -54,13 +54,13 @@
             Contacto de los autores:
             sebasmoralesd@gmail.com | sebastian@sebasmoralesd.com | +57 300 295 4040
             tuneuromarca@gmail.com | +57 320 407 7611
-             -->
+              -->
 
       <div class="col-md-6 text-md-end small text-black footer-legal">
         {% include 'partials/footer/_legal_links.html' %}
       </div>
       <div class="container-xl px-4 text-center small text-black footer-legal">
-        © 2024 -{% now 'Y' %} Propensiones Abogados. | Made, Design by <a href="http://wa.me/573002954040" target="_blank" rel="noopener noreferrer">Sebastian Morales & Carlos Morales</a>
+        {% include 'partials/footer/_made_design.html' %}
       </div>
     </div>
   </div>
