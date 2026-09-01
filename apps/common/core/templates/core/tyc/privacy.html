@@ -1,0 +1,110 @@
+{% extends 'core/tyc/_legal_base.html' %}
+{% load i18n %}
+
+{% comment %}
+  Aviso de privacidad.
+
+  No repite la politica de tratamiento: es el resumen corto que exige el
+  articulo 15 del Decreto 1377 --identidad del responsable, tratamiento y
+  finalidad, derechos, y donde consultar la politica completa-- y remite al
+  documento largo para lo demas.
+
+  Se mantienen como dos paginas y no una porque cumplen funciones distintas:
+  el aviso es lo que se enseña **en el momento de recoger** el dato, y tiene
+  que poder leerse entero de una vez; la politica es el documento de
+  referencia al que apunta la autorizacion.
+{% endcomment %}
+
+{% block document_title %}{% trans 'Privacy notice' %}{% endblock %}
+{% block document_heading %}{% trans 'Privacy notice' %}{% endblock %}
+
+{% block document_body %}
+
+  <div class="legal__draft">
+    <b>{% trans 'Starting draft.' %}</b>
+    {% blocktrans trimmed %}
+      Pending review by the firm. The controller's identification details are
+      placeholders.
+    {% endblocktrans %}
+  </div>
+
+  <p>
+    {% blocktrans trimmed %}
+      This is the short notice required by article 15 of Decree 1377 of 2013.
+      The full detail is in the personal data processing policy.
+    {% endblocktrans %}
+  </p>
+
+  <h2>1. {% trans 'Who is responsible' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      PROPENSIONES ABOGADOS, NIT [pending], with address at [address], operator
+      of the GEA platform. Contact: info@propensionesabogados.com.
+    {% endblocktrans %}
+  </p>
+
+  <h2>2. {% trans 'What we do with your data' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      We collect and process personal data in order to: create and maintain
+      your account; verify your identity; register historical assets and their
+      locations; process purchase orders; issue and verify certified
+      documents; send you the communications the service requires; comply with
+      legal obligations; and keep the platform secure.
+    {% endblocktrans %}
+  </p>
+
+  <h2>3. {% trans 'Sensitive data' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      Where sensitive data is requested, you are not obliged to give it, and
+      you will be told which data it is and what it is for before it is
+      collected.
+    {% endblocktrans %}
+  </p>
+
+  <h2>4. {% trans 'Your rights' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      You may know, update and correct your data; ask for proof of the
+      authorisation you gave; be told what use is made of it; withdraw the
+      authorisation or ask for deletion, where no legal or contractual duty
+      requires it to be kept; consult it free of charge; and file a complaint
+      with the Superintendence of Industry and Commerce.
+    {% endblocktrans %}
+  </p>
+
+  <h2>5. {% trans 'How to exercise them' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      Through the PQRS form on this site. Each request gets a reference number
+      and a due date at the moment it is filed: queries are answered within 10
+      business days and claims within 15, in both cases counted from the day
+      after the request comes in.
+    {% endblocktrans %}
+  </p>
+
+  <p>
+    <a href="{% url 'pqrs:new' %}">{% trans 'File a request' %}</a>
+  </p>
+
+  <h2>6. {% trans 'Where the full policy is' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      The personal data processing policy sets out what data we hold, why, how
+      long for, what security measures apply, and which data leaves the
+      country and to whom.
+    {% endblocktrans %}
+  </p>
+
+  <p>
+    <a href="{% url 'core:data_policy' %}">{% trans 'Read the full policy' %}</a>
+  </p>
+
+{% endblock %}

@@ -1,0 +1,408 @@
+{% extends 'core/tyc/_legal_base.html' %}
+{% load i18n %}
+
+{% comment %}
+  Politica de tratamiento de datos personales.
+
+  Sigue la estructura de la politica de la Fundacion Attlas que se tomo como
+  referencia --mismos capitulos, mismo orden-- pero el contenido esta
+  reescrito sobre lo que **esta plataforma** hace de verdad: que datos pide,
+  donde acaban, y que sale hacia fuera. Una politica que no coincide con el
+  codigo es peor que no tenerla, porque promete lo que no se cumple.
+
+  Los tres apartados que no salen de la plantilla y salen del inventario del
+  codigo son el 8 (finalidades), el 11 (seguridad) y el 16 (transferencias):
+  ahi estan OpenAI y los calendarios de OpenTimestamps.
+{% endcomment %}
+
+{% block document_title %}{% trans 'Personal data processing policy' %}{% endblock %}
+{% block document_heading %}{% trans 'Personal data processing policy' %}{% endblock %}
+
+{% block document_body %}
+
+  <div class="legal__draft">
+    <b>{% trans 'Starting draft.' %}</b>
+    {% blocktrans trimmed %}
+      Written on the structure of a real policy and filled in from what the
+      platform actually does. It has not been reviewed by counsel, and the
+      identification details of the controller are placeholders. Do not
+      publish it as approved policy until the firm has gone through it.
+    {% endblocktrans %}
+  </div>
+
+  <h2>1. {% trans 'General' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      PROPENSIONES ABOGADOS, identified with NIT [pending], with its main
+      address in [city] (hereinafter, "Propensiones"), operator of the GEA
+      platform, has adopted this personal data processing policy in compliance
+      with the constitutional and legal provisions in force, recognising the
+      importance of guaranteeing the security, privacy and confidentiality of
+      the personal data of its clients, users, employees, suppliers, partners
+      and every other group whose information it processes.
+    {% endblocktrans %}
+  </p>
+
+  <h2>2. {% trans 'Applicable rules' %}</h2>
+
+  <ul>
+    <li>{% trans 'Article 15 of the Political Constitution of Colombia' %}</li>
+    <li>{% trans 'Statutory Law 1266 of 2008' %}</li>
+    <li>{% trans 'Law 1273 of 2009' %}</li>
+    <li>{% trans 'Statutory Law 1581 of 2012' %}</li>
+    <li>{% trans 'Decree 1377 of 2013' %}</li>
+    <li>{% trans 'Decrees 1727 of 2009, 2952 of 2010 and 886 of 2014' %}</li>
+    <li>{% trans 'Title V of the Single Circular of the Superintendence of Industry and Commerce' %}</li>
+    <li>{% trans 'Constitutional Court judgments C-1011 of 2008 and C-748 of 2011' %}</li>
+  </ul>
+
+  <h2>3. {% trans 'Purpose of this policy' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      To protect the constitutional right of habeas data, guaranteeing that
+      the people whose data we hold can know it, update it and correct it.
+      Propensiones only stores and processes data that has been authorised by
+      its owner, and applies the security measures needed to protect it.
+    {% endblocktrans %}
+  </p>
+
+  <h2>4. {% trans 'Definitions' %}</h2>
+
+  <dl>
+    <dt>{% trans 'Authorisation' %}</dt>
+    <dd>{% trans 'The prior, express and informed consent given by the data owner for their data to be processed.' %}</dd>
+
+    <dt>{% trans 'Data owner (titular)' %}</dt>
+    <dd>{% trans 'The natural person whose personal data is processed.' %}</dd>
+
+    <dt>{% trans 'Controller (responsable)' %}</dt>
+    <dd>{% trans 'Whoever decides on the processing of the data. For this platform, Propensiones Abogados.' %}</dd>
+
+    <dt>{% trans 'Processor (encargado)' %}</dt>
+    <dd>{% trans 'Whoever processes data on behalf of the controller.' %}</dd>
+
+    <dt>{% trans 'Sensitive data' %}</dt>
+    <dd>{% trans 'Data affecting the intimacy of its owner, or whose misuse may lead to discrimination.' %}</dd>
+
+    <dt>{% trans 'Transfer' %}</dt>
+    <dd>{% trans 'Sending data to a recipient who is itself a controller, inside or outside the country.' %}</dd>
+
+    <dt>{% trans 'Transmission' %}</dt>
+    <dd>{% trans 'Communicating data so that a processor handles it on the controller behalf.' %}</dd>
+  </dl>
+
+  <h2>5. {% trans 'Principles' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      Processing follows the principles of legality, freedom, purpose,
+      accuracy, transparency, restricted access and circulation, security,
+      confidentiality and time limitation, as set out in article 4 of Law 1581
+      of 2012.
+    {% endblocktrans %}
+  </p>
+
+  <h2>6. {% trans 'What data we collect' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      This section describes what the platform actually asks for, grouped by
+      why it is asked.
+    {% endblocktrans %}
+  </p>
+
+  <table class="legal__table">
+    <thead>
+      <tr>
+        <th>{% trans 'Group' %}</th>
+        <th>{% trans 'Data' %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{% trans 'Account' %}</td>
+        <td>{% trans 'Username, names and surnames, email address, mobile number and country code, user type, and who referred you if anyone did.' %}</td>
+      </tr>
+      <tr>
+        <td>{% trans 'Identity' %}</td>
+        <td>{% trans 'Date of birth, nationality, passport or identity number, issuing authority and dates, a photograph of the identity document, and a signature image.' %}</td>
+      </tr>
+      <tr>
+        <td>{% trans 'Address' %}</td>
+        <td>{% trans 'Country, department, city, street address and postal code.' %}</td>
+      </tr>
+      <tr>
+        <td>{% trans 'Activity on the platform' %}</td>
+        <td>{% trans 'Assets and locations registered, purchase orders and their approval history, documents certified, and who viewed or downloaded which file and when.' %}</td>
+      </tr>
+      <tr>
+        <td>{% trans 'Security' %}</td>
+        <td>{% trans 'IP address, browser details, login attempts, and the record of every change made through the platform.' %}</td>
+      </tr>
+      <tr>
+        <td>{% trans 'Requests (PQRS)' %}</td>
+        <td>{% trans 'What you write in the request form, the identification you give to prove who you are, and any document you attach.' %}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>7. {% trans 'Authorisation' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      Propensiones requests the prior, express and informed consent of the
+      data owner. That authorisation is recorded, together with when it was
+      given, so that it can be produced later as article 9 of Law 1581
+      requires. Authorisation is not needed where the data is requested by a
+      public body exercising its legal functions, where the data is public,
+      in cases of medical urgency, for authorised historical or statistical
+      purposes, or in relation to the civil registry.
+    {% endblocktrans %}
+  </p>
+
+  <h3>{% trans 'Sensitive data and data of minors' %}</h3>
+
+  <p>
+    {% blocktrans trimmed %}
+      Where sensitive data is involved, the owner is told that they are not
+      obliged to authorise it, which data is sensitive, and what it will be
+      used for. The platform is not intended for minors and does not knowingly
+      collect their data; where it were necessary, it would be handled through
+      their legal representative and after hearing the minor, as articles 6
+      and 12 of Decree 1377 of 2013 require.
+    {% endblocktrans %}
+  </p>
+
+  <h2>8. {% trans 'Purposes' %}</h2>
+
+  <ul>
+    <li>{% trans 'Create and maintain your account, and let you into the areas that correspond to your role.' %}</li>
+    <li>{% trans 'Verify your identity before giving access to, or changing, personal data — including for requests filed through the PQRS form.' %}</li>
+    <li>{% trans 'Register historical assets and their physical locations, and keep the inventory.' %}</li>
+    <li>{% trans 'Process purchase orders through their approval stages, and issue the resulting documents.' %}</li>
+    <li>{% trans 'Issue and verify certified documents, including the public verification portal.' %}</li>
+    <li>{% trans 'Send operational communications: verification codes, password recovery, service orders and answers to requests.' %}</li>
+    <li>{% trans 'Comply with legal obligations and with orders from administrative or judicial authorities.' %}</li>
+    <li>{% trans 'Keep the platform secure: detect abuse, block automated attacks and keep an audit trail of what was done and by whom.' %}</li>
+  </ul>
+
+  <h2>9. {% trans 'How long we keep it' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      Data is processed while the relationship with the owner lasts, plus the
+      period required by the applicable law. Two categories last longer, for a
+      reason worth stating plainly:
+    {% endblocktrans %}
+  </p>
+
+  <ul>
+    <li>
+      {% blocktrans trimmed %}
+        <b>Certified documents and their fingerprints.</b> A certificate whose
+        record is deleted stops being verifiable, which defeats the point of
+        having issued it.
+      {% endblocktrans %}
+    </li>
+    <li>
+      {% blocktrans trimmed %}
+        <b>The audit trail.</b> The record of who did what is what allows the
+        firm to show it acted correctly, including towards the person asking.
+      {% endblocktrans %}
+    </li>
+  </ul>
+
+  <h2>10. {% trans 'Rights of the data owner' %}</h2>
+
+  <ul>
+    <li>{% trans 'Know, update and correct your data.' %}</li>
+    <li>{% trans 'Ask for proof of the authorisation you gave.' %}</li>
+    <li>{% trans 'Be told what use is being made of your data.' %}</li>
+    <li>{% trans 'File complaints with the Superintendence of Industry and Commerce for breaches of the rules.' %}</li>
+    <li>{% trans 'Withdraw the authorisation or ask for your data to be deleted, where no legal or contractual duty requires it to be kept.' %}</li>
+    <li>{% trans 'Consult your data free of charge.' %}</li>
+  </ul>
+
+  <p>
+    {% blocktrans trimmed %}
+      These rights may be exercised by the owner, by their successors, by a
+      representative with proof of the representation, or under a stipulation
+      in favour of another, as article 20 of Decree 1377 of 2013 sets out.
+    {% endblocktrans %}
+  </p>
+
+  <h2>11. {% trans 'Security measures' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      Beyond the general commitment, these are the specific measures in place,
+      so that the statement can be checked rather than taken on trust:
+    {% endblocktrans %}
+  </p>
+
+  <ul>
+    <li>{% trans 'Identity data — passport number, date of birth, nationality, address and telephone — is stored encrypted, not in readable form.' %}</li>
+    <li>{% trans 'Certificate document numbers are never stored in the clear: only a keyed hash of them is kept.' %}</li>
+    <li>{% trans 'Access to the administration panel requires a verified second factor.' %}</li>
+    <li>{% trans 'Repeated failed logins are throttled, and automated scanning is blocked.' %}</li>
+    <li>{% trans 'Certified files are not served as plain links: every download goes through a check of who is asking.' %}</li>
+    <li>{% trans 'Changes to records are logged, with who made them and when.' %}</li>
+  </ul>
+
+  <h2>12. {% trans 'Duties as controller and as processor' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      Propensiones assumes the duties of a controller under article 17 of Law
+      1581, and, where it processes data on behalf of a third party, those of
+      a processor under article 18. Where both roles coincide, both sets of
+      duties apply.
+    {% endblocktrans %}
+  </p>
+
+  <h2>13. {% trans 'Queries and claims' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      Requests are filed through the PQRS form on this site, and each one is
+      given a reference number and a due date at the moment it comes in.
+    {% endblocktrans %}
+  </p>
+
+  <table class="legal__table">
+    <thead>
+      <tr>
+        <th>{% trans 'Type' %}</th>
+        <th>{% trans 'Term' %}</th>
+        <th>{% trans 'Extension' %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{% trans 'Query (article 14)' %}</td>
+        <td>{% trans '10 business days' %}</td>
+        <td>{% trans '5 further business days, with reasons given' %}</td>
+      </tr>
+      <tr>
+        <td>{% trans 'Claim (article 15)' %}</td>
+        <td>{% trans '15 business days' %}</td>
+        <td>{% trans '8 further business days, with reasons given' %}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    {% blocktrans trimmed %}
+      Both terms are counted in business days from the day after the request
+      is received. An incomplete claim is returned for amendment within 5
+      days; if two months pass without an answer, the claim is treated as
+      withdrawn. Where Propensiones is not the competent party, the request is
+      passed on and the person is told.
+    {% endblocktrans %}
+  </p>
+
+  <h2>14. {% trans 'Contact' %}</h2>
+
+  <ul>
+    <li>{% trans 'PQRS form:' %} <a href="{% url 'pqrs:new' %}">{% trans 'file a request' %}</a></li>
+    <li>{% trans 'Email:' %} info@propensionesabogados.com</li>
+  </ul>
+
+  <h2>15. {% trans 'Third parties and processors' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      Propensiones requires the third parties it works with to comply with the
+      Colombian personal data regime, and may ask them to show that compliance
+      before, during and after the relationship.
+    {% endblocktrans %}
+  </p>
+
+  <h2>16. {% trans 'International transfers' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      Operating this platform involves sending certain data outside Colombia.
+      Each case is listed with what actually leaves, because the difference
+      matters:
+    {% endblocktrans %}
+  </p>
+
+  <table class="legal__table">
+    <thead>
+      <tr>
+        <th>{% trans 'Recipient' %}</th>
+        <th>{% trans 'What is sent' %}</th>
+        <th>{% trans 'Why' %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>OpenAI (EE. UU.)</td>
+        <td>{% trans 'The text of asset names, descriptions and observations, at the moment they are saved.' %}</td>
+        <td>{% trans 'Automatic translation between Spanish and English.' %}</td>
+      </tr>
+      <tr>
+        <td>{% trans 'OpenTimestamps calendars' %}</td>
+        <td><b>{% trans 'Only a SHA-256 hash.' %}</b> {% trans 'Never the document, and never its content.' %}</td>
+        <td>{% trans 'Time anchoring of certified documents.' %}</td>
+      </tr>
+      <tr>
+        <td>JotForm</td>
+        <td>{% trans 'What is typed into the forms embedded on certain pages, including attachments.' %}</td>
+        <td>{% trans 'Forms hosted by that provider.' %}</td>
+      </tr>
+      <tr>
+        <td>{% trans 'Content delivery networks' %}</td>
+        <td>{% trans 'Your IP address and browser details, by the fact of requesting a file.' %}</td>
+        <td>{% trans 'Serving libraries, fonts and icons.' %}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="legal__note">
+    <b>{% trans 'Note for review.' %}</b>
+    {% blocktrans trimmed %}
+      The transfer to OpenAI is the one that deserves a decision rather than a
+      disclosure. Names and descriptions of assets are free text: if someone
+      types personal data into a description, it leaves the country with it.
+      Options are to keep it and cover it with the transfer instruments the
+      SIC requires, to restrict which fields are translated, or to translate
+      only on explicit request instead of automatically on every save.
+    {% endblocktrans %}
+  </div>
+
+  <h2>17. {% trans 'Automatic translation' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      Some texts in the platform are translated automatically between Spanish
+      and English. That translation is machine-generated: it is a convenience,
+      not a certified translation, and it is not reviewed by a person before
+      being shown. Where a text has legal or contractual effect, the version
+      written by its author is the one that governs.
+    {% endblocktrans %}
+  </p>
+
+  <h2>18. {% trans 'Changes to this policy' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      This policy may be modified to adapt it to new practices or to legal
+      developments. Any update is published on this page with the date it
+      comes into force, shown at the top of this document.
+    {% endblocktrans %}
+  </p>
+
+  <h2>19. {% trans 'Effective date' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      This policy takes effect from the date of its approval, shown at the top
+      of this document.
+    {% endblocktrans %}
+  </p>
+
+{% endblock %}

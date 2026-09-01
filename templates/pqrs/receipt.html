@@ -1,0 +1,93 @@
+{% extends 'account/layout/account.html' %}
+{% load static i18n %}
+
+{% comment %}
+  Comprobante de radicacion.
+
+  No lleva ni un dato personal dentro, y es deliberado: la URL contiene el
+  radicado, y un radicado circula por correo, por WhatsApp y en capturas de
+  pantalla. Cualquiera que lo tenga puede abrir esta pagina, asi que lo unico
+  que puede enseñar es lo que el propio radicado ya implica -- que existe una
+  solicitud, de que tipo, y hasta cuando hay para contestarla.
+
+  El nombre, el documento y la descripcion se quedan fuera.
+{% endcomment %}
+
+{% block title %}<title>{% trans 'Request filed' %} — GEA</title>{% endblock %}
+
+{% block layout_content %}
+<div class="min-vh-100 d-flex flex-column align-items-center justify-content-center container-xl px-3 py-4">
+  <div class="card mx-auto" style="max-width: 620px; width: 100%;">
+
+    <div class="card-header text-center">
+      <a href="{% url 'core:index' %}">
+        <img src="{% static 'assets/imgs/logos/gea_logo_gold.webp' %}"
+             class="img-fluid" alt="GEA" style="max-width: 200px;" />
+      </a>
+    </div>
+
+    <div class="card-body p-4 text-center">
+      <div class="mb-3" style="font-size: 2.5rem; line-height: 1;">✓</div>
+
+      <h1 class="h5 mb-3">{% trans 'Your request has been filed' %}</h1>
+
+      <p class="text-muted small">
+        {% blocktrans trimmed %}
+          Keep this reference. Quote it if you need to ask us about your
+          request.
+        {% endblocktrans %}
+      </p>
+
+      <p class="my-4">
+        <code class="fs-4 px-3 py-2 border rounded d-inline-block">{{ pqrs.radicado }}</code>
+      </p>
+
+      <dl class="row text-start small mb-4">
+        <dt class="col-6 text-muted fw-normal">{% trans 'Type' %}</dt>
+        <dd class="col-6">{{ pqrs.get_request_type_display }}</dd>
+
+        <dt class="col-6 text-muted fw-normal">{% trans 'Received on' %}</dt>
+        <dd class="col-6">{{ pqrs.received_on|date:"d/m/Y" }}</dd>
+
+        <dt class="col-6 text-muted fw-normal">{% trans 'We will answer by' %}</dt>
+        <dd class="col-6"><b>{{ pqrs.due_on|date:"d/m/Y" }}</b></dd>
+
+        <dt class="col-6 text-muted fw-normal">{% trans 'Status' %}</dt>
+        <dd class="col-6">{{ pqrs.get_status_display }}</dd>
+      </dl>
+
+      {% comment %}
+        Se dice el plazo y de donde sale. Un "le responderemos pronto" no
+        compromete a nada; una fecha con su articulo detras, si.
+      {% endcomment %}
+      <p class="text-muted small mb-4">
+        {% if pqrs.is_complaint %}
+          {% blocktrans trimmed %}
+            Claims are answered within 15 business days (Law 1581 of 2012,
+            article 15). If we need longer we will tell you why and give you a
+            new date, which cannot go beyond 8 further business days.
+          {% endblocktrans %}
+        {% else %}
+          {% blocktrans trimmed %}
+            Queries are answered within 10 business days (Law 1581 of 2012,
+            article 14). If we need longer we will tell you why and give you a
+            new date, which cannot go beyond 5 further business days.
+          {% endblocktrans %}
+        {% endif %}
+      </p>
+
+      <p class="text-muted small mb-4">
+        {% blocktrans trimmed %}
+          We also sent this reference to the email address you gave us. If it
+          does not arrive, check your spam folder before filing again — a
+          second request does not speed the first one up.
+        {% endblocktrans %}
+      </p>
+
+      <a href="{% url 'core:index' %}" class="btn btn-outline-secondary">
+        {% trans 'Back to the site' %}
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

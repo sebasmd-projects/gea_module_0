@@ -1,0 +1,152 @@
+{% extends 'core/tyc/_legal_base.html' %}
+{% load i18n %}
+
+{% comment %}
+  Politica de cookies.
+
+  Es corta porque la plataforma **no rastrea**: no hay Google Analytics, ni
+  Meta Pixel, ni Hotjar, ni ninguna herramienta de medicion. Se comprobo sobre
+  el codigo, no sobre lo que se recuerda haber instalado.
+
+  Eso tiene una consecuencia que conviene no perder: si algun dia se anade
+  analitica, este documento deja de ser cierto **y** aparece la obligacion de
+  pedir consentimiento antes de cargarla. La lista de abajo es corta hoy; el
+  dia que crezca, crece tambien lo que hay que hacer.
+{% endcomment %}
+
+{% block document_title %}{% trans 'Cookie policy' %}{% endblock %}
+{% block document_heading %}{% trans 'Cookie policy' %}{% endblock %}
+
+{% block document_body %}
+
+  <div class="legal__draft">
+    <b>{% trans 'Starting draft.' %}</b>
+    {% blocktrans trimmed %}
+      This text was written from the platform's actual behaviour, but it has
+      not been reviewed by counsel. Read it, correct it and approve it before
+      treating it as published policy.
+    {% endblocktrans %}
+  </div>
+
+  <h2>1. {% trans 'What this covers' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      This policy explains the cookies and similar technologies used by GEA,
+      the platform of Propensiones Abogados available at
+      geausa.propensionesabogados.com and its subdomains.
+    {% endblocktrans %}
+  </p>
+
+  <h2>2. {% trans 'What we do not use' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      We state this first because it is the part that usually matters: this
+      platform carries no analytics, no advertising pixels and no session
+      recording. There is no Google Analytics, no Meta Pixel, no Hotjar and no
+      equivalent. We do not profile visitors, and we do not sell or share
+      browsing data with anyone for advertising.
+    {% endblocktrans %}
+  </p>
+
+  <h2>3. {% trans 'The cookies we do set' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      All of them are strictly necessary: without them you cannot log in, and
+      forms cannot be submitted safely. None of them are used to track you
+      across other sites.
+    {% endblocktrans %}
+  </p>
+
+  <table class="legal__table">
+    <thead>
+      <tr>
+        <th>{% trans 'Cookie' %}</th>
+        <th>{% trans 'What it is for' %}</th>
+        <th>{% trans 'How long it lasts' %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>sessionid</code></td>
+        <td>{% trans 'Keeps you logged in as you move between pages. Without it, every page would ask for your password again.' %}</td>
+        <td>{% trans 'Until the session expires or you log out' %}</td>
+      </tr>
+      <tr>
+        <td><code>csrftoken</code></td>
+        <td>{% trans 'Confirms that a form was submitted from this site and not from a page someone else controls.' %}</td>
+        <td>{% trans '1 year' %}</td>
+      </tr>
+      <tr>
+        <td><code>django_language</code></td>
+        <td>{% trans 'Remembers whether you chose Spanish or English.' %}</td>
+        <td>{% trans '1 year' %}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>4. {% trans 'Third parties that see your connection' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      Some resources — stylesheets, icon fonts, JavaScript libraries — are
+      served from public content delivery networks. They set no cookies of
+      ours, but by definition they receive your IP address and browser
+      details, because that is how your browser fetches a file from them.
+    {% endblocktrans %}
+  </p>
+
+  <ul>
+    <li><code>cdn.jsdelivr.net</code>, <code>cdnjs.cloudflare.com</code> — {% trans 'Bootstrap, icons and other libraries.' %}</li>
+    <li><code>kit.fontawesome.com</code> — {% trans 'icon set.' %}</li>
+    <li><code>ajax.googleapis.com</code> — {% trans 'the jQuery library, served by Google.' %}</li>
+    <li><code>fonts.googleapis.com</code>, <code>fonts.gstatic.com</code> — {% trans 'web fonts, where used.' %}</li>
+  </ul>
+
+  <div class="legal__note">
+    <b>{% trans 'Note for review.' %}</b>
+    {% blocktrans trimmed %}
+      Loading jQuery from Google's CDN gives Google the IP address of every
+      visitor on the pages that use it, without anything being gained over
+      hosting the same file ourselves. Serving those libraries from our own
+      static files would remove that flow entirely, and would also make the
+      platform work when a CDN is unreachable.
+    {% endblocktrans %}
+  </div>
+
+  <h2>5. {% trans 'Forms hosted by third parties' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      Some pages inside the platform embed forms served by JotForm. What you
+      type into one of those forms, including any file you attach, is sent to
+      and stored by that provider, not by us. Their own privacy terms apply to
+      that data in addition to ours.
+    {% endblocktrans %}
+  </p>
+
+  <h2>6. {% trans 'How to control cookies' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      Every browser lets you see, block and delete cookies from its settings.
+      Blocking the three listed above will stop you from logging in and from
+      submitting forms, because they are what makes those operations work at
+      all — it is not a restriction we impose, it is what they are for.
+    {% endblocktrans %}
+  </p>
+
+  <h2>7. {% trans 'Changes' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      If we add any tool that measures or tracks use of the platform, this
+      policy will be updated before that tool is switched on, and consent will
+      be requested where the law requires it. The version and date at the top
+      say which text is in force.
+    {% endblocktrans %}
+  </p>
+
+{% endblock %}

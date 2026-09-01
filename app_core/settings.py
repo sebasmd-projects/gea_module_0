@@ -1,4 +1,5 @@
 import os
+from datetime import date
 from datetime import timedelta
 from pathlib import Path
 
@@ -178,6 +179,7 @@ PROJECT_ASSETS_MANAGEMENT_APPS = [
 PROJECT_COMMON_APPS = [
     'apps.project.common.account',
     'apps.project.common.notifications',
+    'apps.project.common.pqrs',
     'apps.project.common.users',
 ]
 
@@ -584,6 +586,28 @@ CRONJOBS = [
     # significaria nada. Lo que hace que esto funcione con varios workers
     # esta en LOGGING: el handler es WatchedFileHandler.
     ('0 * * * *', 'django.core.management.call_command', ['rotate_logs']),
+]
+
+# --- Documentos legales: version y fecha de vigencia -------------------
+#
+# Van aqui y no dentro de cada plantilla porque el articulo 18 de la propia
+# politica obliga a publicar la fecha de entrada en vigor de cada
+# modificacion, y sin version no se puede demostrar que texto acepto alguien
+# el dia que se registro. Repartidas por las plantillas, actualizar una y
+# olvidar otra es cuestion de tiempo.
+LEGAL_DOCUMENT_VERSIONS = {
+    'terms': {'version': '1.0.0-borrador', 'date': date(2026, 9, 1)},
+    'data_policy': {'version': '1.0.0-borrador', 'date': date(2026, 9, 1)},
+    'privacy': {'version': '1.0.0-borrador', 'date': date(2026, 9, 1)},
+    'cookies': {'version': '1.0.0-borrador', 'date': date(2026, 9, 1)},
+}
+
+# A quien avisar cuando entra una PQRS. Sin destinatarios no se avisa a nadie
+# y la solicitud se queda esperando en el panel -- con su plazo corriendo.
+PQRS_NOTIFICATION_RECIPIENTS = [
+    correo.strip()
+    for correo in (os.getenv('PQRS_NOTIFICATION_RECIPIENTS') or '').split(',')
+    if correo.strip()
 ]
 
 # ChatGPT API Key
