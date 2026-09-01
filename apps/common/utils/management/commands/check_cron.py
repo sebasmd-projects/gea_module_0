@@ -34,6 +34,7 @@ lo que hay que comprobar es que la linea siga apuntando al hash correcto.
 import hashlib
 import json
 import os
+import subprocess
 import re
 import shutil
 
@@ -219,10 +220,25 @@ class Command(BaseCommand):
 
             executable = found
 
+        # `subprocess.run` con lista, no `os.popen` con una f-string.
+        #
+        # `os.popen` lanza una shell, y ahi la ruta del ejecutable se
+        # interpola dentro de una linea de comandos. Hoy esa ruta sale de
+        # `settings` y no del usuario, asi que no es explotable -- pero es
+        # ejecucion por shell sin ninguna necesidad, en un comando que ademas
+        # se puede lanzar desde la consola de operaciones. Sin shell no hay
+        # nada que escapar, y de paso el 2>&1 deja de ser sintaxis de shell y
+        # pasa a ser un argumento del propio subproceso.
         try:
-            with os.popen(f'{executable} -l 2>&1') as handle:
-                output = handle.read()
-        except OSError as error:
+            completed = subprocess.run(
+                [executable, '-l'],
+                capture_output=True,
+                text=True,
+                timeout=15,
+                stdin=subprocess.DEVNULL,
+            )
+            output = (completed.stdout or '') + (completed.stderr or '')
+        except (OSError, subprocess.SubprocessError) as error:
             return [], str(error)
 
         # «no crontab for <usuario>» no es un error: es un crontab vacio.

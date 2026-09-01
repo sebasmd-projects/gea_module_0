@@ -418,6 +418,27 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 SESSION_COOKIE_AGE = 7200
 
+# La cookie de sesion no se lee desde JavaScript. Django ya lo trae asi por
+# defecto; se fija explicito porque es de las cosas que se desactivan sin
+# querer al depurar algo y nadie vuelve a mirarlas.
+SESSION_COOKIE_HTTPONLY = True
+
+# `Lax` y no `None`: la cookie no viaja en peticiones cruzadas de otros
+# sitios, que es la mitad de la defensa contra CSRF cuando un token se
+# escapa. No se pone `Strict` porque romperia volver a la plataforma desde un
+# enlace de correo -- el de recuperacion de contrasena, por ejemplo -- y una
+# sesion que se cae al llegar desde el correo se acaba resolviendo aflojando
+# esto del todo.
+SESSION_COOKIE_SAMESITE = 'Lax'
+
+# Cuanto puede pesar un envio, aparte de los ficheros. Django trae 2,5 MB por
+# defecto; se fija explicito por lo mismo que arriba.
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024
+
+# Cuantos ficheros admite un solo envio. Sin tope, una peticion con miles de
+# ficheros abre miles de descriptores antes de que nadie valide nada.
+DATA_UPLOAD_MAX_NUMBER_FILES = 20
+
 ROSETTA_SHOW_AT_ADMIN_PANEL = True
 
 # Base absoluta del sitio, usada cuando se generan URLs (QR de certificacion)

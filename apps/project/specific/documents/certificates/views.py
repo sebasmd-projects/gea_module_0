@@ -9,6 +9,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, FormView, TemplateView
 
+from apps.common.utils.throttling import RateLimit
 from apps.project.specific.internal.code_gen.services.record import (
     document_status, key_id, public_key_b64, record_filename, record_json)
 
@@ -30,46 +31,99 @@ from django.urls import reverse_lazy
 
 
 class InputEmployeeIPCONFormView(FormView):
+    """
+    Consulta publica de un certificado de persona.
+
+    Es el formulario **mas expuesto** de la plataforma y el que menos
+    protegido estaba: publico, sin OTP, y devolviendo nombre, apellidos y
+    fotografia de un empleado a quien acierte un codigo de cuatro caracteres.
+
+    Cuatro caracteres sobre A-Z0-9 son 1.679.616 combinaciones. Sin ningun
+    freno eso no es un secreto, es un rato de barrido -- y lo que sale del
+    otro lado no son codigos, es la plantilla entera del despacho con sus
+    fotos. El mismo formulario acepta ademas numeros de documento, con lo que
+    sirve para comprobar si una persona concreta tiene credencial.
+
+    El limite por IP es lo que convierte el barrido en inviable sin estorbar a
+    quien verifica una credencial que tiene en la mano.
+    """
+
     template_name = 'dashboard/pages/certificates/users/employee_ipcon/certificate_input.html'
 
     form_class = CertificateUserForm
 
-    def form_valid(self, form):
-        document_type = form.cleaned_data['document_type']
-        document_number = form.cleaned_data['document_number'].strip()
-        certificate_type = UserCertificateTypeChoices.EM_IPCON
+    #: Generoso para una persona con una credencial delante, inutil para
+    #: recorrer un espacio de un millon y medio.
+    throttle = RateLimit('ipcon_lookup', limit=15, window=10 * 60)
 
-        if document_type in [DocumentTypeChoices.PA, DocumentTypeChoices.CC]:
-            document = get_hmac(document_number.upper())
+    def build_filters(self, document_type, document_number):
+        """
+        Traduce lo tecleado a un filtro, o devuelve ``None``.
 
-        filters = {
-            'certificate_type': certificate_type,
-        }
+        ``None`` cuando lo escrito no corresponde a **ningun** identificador
+        conocido, y eso arregla un fallo aparte: antes, un codigo de longitud
+        distinta de 4, 8 o 36 dejaba el filtro con solo el tipo de
+        certificado, y el ``.get()`` acababa devolviendo un certificado
+        cualquiera --si solo habia uno-- o reventando con
+        ``MultipleObjectsReturned``. Una consulta que no identifica a nadie
+        tiene que no encontrar nada, no encontrar a alguien.
+        """
+        filters = {'certificate_type': UserCertificateTypeChoices.EM_IPCON}
 
         if document_type == DocumentTypeChoices.PA:
-            filters['document_number_pa_hash'] = document
-        elif document_type == DocumentTypeChoices.CC:
-            filters['document_number_cc_hash'] = document
+            filters['document_number_pa_hash'] = get_hmac(
+                document_number.upper())
+            return filters
 
-        if len(document_number) == 4 and document_type == DocumentTypeChoices.UNIQUE_CODE:
-            filters['public_code'] = document_number
-        elif len(document_number) == 8 and document_type == DocumentTypeChoices.UNIQUE_CODE:
-            filters['uuid_prefix'] = document_number
-        elif len(document_number) == 36 and document_type == DocumentTypeChoices.UNIQUE_CODE:
-            filters['public_uuid'] = document_number
+        if document_type == DocumentTypeChoices.CC:
+            filters['document_number_cc_hash'] = get_hmac(
+                document_number.upper())
+            return filters
 
-        try:
-            certificate = UserVerificationModel.objects.get(
-                **filters
+        if document_type == DocumentTypeChoices.UNIQUE_CODE:
+            by_length = {4: 'public_code', 8: 'uuid_prefix', 36: 'public_uuid'}
+            field = by_length.get(len(document_number))
+
+            if not field:
+                return None
+
+            filters[field] = document_number
+            return filters
+
+        return None
+
+    def form_valid(self, form):
+        document_number = form.cleaned_data['document_number'].strip()
+        document_type = form.cleaned_data['document_type']
+
+        # Se consume el cupo **antes** de buscar, para que acertar y fallar
+        # cuesten lo mismo: contando solo los fallos, enumerar sale gratis en
+        # cuanto se encuentra el primer codigo valido.
+        if not self.throttle.consume(self.request):
+            form.add_error(
+                'document_number',
+                _('Too many verification attempts. Try again later.'),
             )
-            return redirect(
-                'certificates:detail_employee_verification_ipcon',
-                pk=certificate.id
-            )
+            return self.form_invalid(form)
 
-        except UserVerificationModel.DoesNotExist:
+        filters = self.build_filters(document_type, document_number)
+
+        certificate = (
+            UserVerificationModel.objects.filter(**filters).first()
+            if filters else None
+        )
+
+        if certificate is None:
+            # El mismo mensaje para "no existe" y para "lo que escribiste no
+            # es un identificador": distinguirlos le diria al que barre que
+            # formato tiene que probar.
             form.add_error('document_number', _('ID Number not found.'))
             return self.form_invalid(form)
+
+        return redirect(
+            'certificates:detail_employee_verification_ipcon',
+            pk=certificate.id,
+        )
 
 
 class EmployeeIPCONDetailView(DetailView):
