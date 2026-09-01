@@ -1033,15 +1033,30 @@ class ServiceOrderRecipient(TimeStampedModel):
                 name="so_recipient_user_or_type",
                 check=~(Q(user__isnull=True) & Q(user_type__isnull=True)),
             ),
+            # Sin `condition=`, y no es una relajacion: es lo que hace que
+            # existan.
+            #
+            # MariaDB no admite restricciones unicas condicionales, y no falla
+            # al migrar: **avisa y no las crea**. En produccion, sobre
+            # MariaDB, estas dos no existian, asi que el mismo destinatario
+            # podia anadirse dos veces a la misma orden y recibir la orden de
+            # servicio por duplicado. El aviso sale en cada `migrate`
+            # (`models.W036`) y es facil darlo por ruido.
+            #
+            # La condicion sobraba: en SQL un indice unico **ya** admite
+            # varios NULL, porque NULL nunca es igual a NULL. Un unico llano
+            # sobre (offer, user) permite todas las filas que quieran con
+            # `user` nulo --las que apuntan a un tipo-- y prohibe repetir un
+            # usuario concreto, que es exactamente lo que se queria. Igual
+            # para (offer, user_type). Vale en MySQL, MariaDB, PostgreSQL y
+            # SQLite por igual.
             models.UniqueConstraint(
                 fields=["offer", "user"],
                 name="uniq_so_recipient_user",
-                condition=Q(user__isnull=False),
             ),
             models.UniqueConstraint(
                 fields=["offer", "user_type"],
                 name="uniq_so_recipient_type",
-                condition=Q(user_type__isnull=False),
             ),
         ]
 

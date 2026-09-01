@@ -18,12 +18,55 @@ class IndexTemplateView(TemplateView):
     template_name = "core/index.html"
 
 
-class PrivacyTemplateView(TemplateView):
+class LegalDocumentView(TemplateView):
+    """
+    Base de los documentos legales.
+
+    Todos comparten dos cosas y por eso comparten vista: **la fecha de
+    vigencia** y **la version**. No son adorno -- el articulo 18 de la propia
+    politica obliga a publicar la fecha de entrada en vigor de cada
+    modificacion, y sin version no se puede demostrar que texto acepto alguien
+    el dia que se registro.
+
+    Las fechas viven en ``settings`` y no en la plantilla para que cambiarlas
+    no dependa de acordarse de tocar cuatro ficheros.
+    """
+
+    document_key = None
+
+    def get_context_data(self, **kwargs):
+        from django.conf import settings
+
+        context = super().get_context_data(**kwargs)
+
+        versions = getattr(settings, 'LEGAL_DOCUMENT_VERSIONS', {})
+        current = versions.get(self.document_key, {})
+
+        context['document_version'] = current.get('version', '1.0.0')
+        context['document_date'] = current.get('date')
+        context['document_key'] = self.document_key
+
+        return context
+
+
+class PrivacyTemplateView(LegalDocumentView):
     template_name = "core/tyc/privacy.html"
+    document_key = 'privacy'
 
 
-class TermsTemplateView(TemplateView):
+class TermsTemplateView(LegalDocumentView):
     template_name = "core/tyc/terms.html"
+    document_key = 'terms'
+
+
+class CookiesTemplateView(LegalDocumentView):
+    template_name = "core/tyc/cookies.html"
+    document_key = 'cookies'
+
+
+class DataPolicyTemplateView(LegalDocumentView):
+    template_name = "core/tyc/data_policy.html"
+    document_key = 'data_policy'
 
 
 class PortfolioTemplateView(TemplateView):

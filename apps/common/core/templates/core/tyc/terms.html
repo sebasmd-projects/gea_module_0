@@ -1,0 +1,285 @@
+{% extends 'core/tyc/_legal_base.html' %}
+{% load i18n %}
+
+{% comment %}
+  Terminos y condiciones.
+
+  Dos apartados son los que de verdad importan aqui y no salen de ninguna
+  plantilla:
+
+  * El 5, sobre que acredita una certificacion. El invariante 11 del proyecto
+    dice que la plataforma prueba integridad, **no veracidad**, y el propio
+    registro de certificacion lo lleva escrito en `scope.does_not_attest`.
+    Unos terminos que dieran a entender lo contrario contradirian al producto
+    en el punto que mas caro sale.
+  * El 6, sobre la traduccion automatica y el anclaje. Es donde se acotan los
+    claims: la IA traduce, no certifica; la cadena de bloques prueba un
+    momento, no un contenido.
+
+  Sobre resolucion de controversias, ver la nota del apartado 12: la clausula
+  de arbitraje estadounidense no se adapta, no porta.
+{% endcomment %}
+
+{% block document_title %}{% trans 'Terms and conditions' %}{% endblock %}
+{% block document_heading %}{% trans 'Terms and conditions' %}{% endblock %}
+
+{% block document_body %}
+
+  <div class="legal__draft">
+    <b>{% trans 'Starting draft.' %}</b>
+    {% blocktrans trimmed %}
+      A starting point, not approved terms. The sections on what a
+      certification proves and on automatic translation were written to match
+      what the platform actually does; the rest needs the firm's review, and
+      the dispute resolution section in particular needs a decision, not just
+      a redraft.
+    {% endblocktrans %}
+  </div>
+
+  <h2>1. {% trans 'Who we are and what this is' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      GEA is the platform operated by Propensiones Abogados for managing
+      historical assets — bonds, gold, high denomination banknotes and
+      similar — and for issuing and verifying certified documents. By
+      creating an account or using the platform you accept these terms.
+    {% endblocktrans %}
+  </p>
+
+  <h2>2. {% trans 'Who may use it' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      The platform is for adults with legal capacity. Registration requires a
+      code supplied by the firm: it is not open sign-up, and an account is
+      personal and non-transferable. You are responsible for what is done from
+      your account, which is why a second factor is available and required for
+      internal roles.
+    {% endblocktrans %}
+  </p>
+
+  <h2>3. {% trans 'What you may not do' %}</h2>
+
+  <ul>
+    <li>{% trans 'Register assets or documents you have no right over.' %}</li>
+    <li>{% trans 'Upload content that is unlawful, or that infringes third party rights.' %}</li>
+    <li>{% trans 'Try to reach data or areas that do not correspond to your role.' %}</li>
+    <li>{% trans 'Automate access, scan the platform, or interfere with its operation.' %}</li>
+    <li>{% trans 'Present a certified copy as if it were something other than what section 5 describes.' %}</li>
+  </ul>
+
+  <h2>4. {% trans 'Your content' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      What you upload stays yours. You give Propensiones the permission needed
+      to store it, process it and show it to whoever the platform's rules
+      allow, for the purpose you uploaded it for. You are responsible for
+      having the right to upload it.
+    {% endblocktrans %}
+  </p>
+
+  <h2>5. {% trans 'What a certification proves — and what it does not' %}</h2>
+
+  <div class="legal__note">
+    <b>{% trans 'This is the section to read twice.' %}</b>
+    {% blocktrans trimmed %}
+      A GEA certification proves <b>integrity</b>: that a file has not changed
+      since it was registered, and that it existed no later than a given
+      moment. It says nothing about whether what the document claims is
+      <b>true</b>, nor about the authenticity, ownership, value or legal
+      validity of any asset it describes.
+    {% endblocktrans %}
+  </div>
+
+  <p>
+    {% blocktrans trimmed %}
+      In concrete terms: certifying a document that states an asset is worth a
+      certain amount proves that the document said so on that date. It does
+      not verify the amount, the asset, or the claim. The certification record
+      issued with every document says the same thing in its own terms, and
+      that record governs over any summary of it.
+    {% endblocktrans %}
+  </p>
+
+  <p>
+    {% blocktrans trimmed %}
+      Presenting a certified document as if it proved the truth of its
+      contents is a misuse of the service, and Propensiones may cancel a
+      certification and close the account of anyone who does so.
+    {% endblocktrans %}
+  </p>
+
+  <h2>6. {% trans 'Automatic features, stated plainly' %}</h2>
+
+  <h3>{% trans 'Automatic translation' %}</h3>
+
+  <p>
+    {% blocktrans trimmed %}
+      Names and descriptions are translated between Spanish and English by an
+      automated system, without human review. It is a convenience for reading,
+      not a certified or sworn translation, and it may be wrong. Where a text
+      has legal or contractual effect, the version written by its author is
+      the one that governs. Do not rely on a machine translation for a
+      decision that matters.
+    {% endblocktrans %}
+  </p>
+
+  <h3>{% trans 'Time anchoring' %}</h3>
+
+  <p>
+    {% blocktrans trimmed %}
+      Certain documents are anchored in time using a timestamping authority
+      and the Bitcoin blockchain. What is published is only a cryptographic
+      hash — never the document, and never its content. The anchor proves that
+      a given file existed no later than a certain moment. It proves nothing
+      about who wrote it, whether it is true, or what it is worth.
+    {% endblocktrans %}
+  </p>
+
+  <p>
+    {% blocktrans trimmed %}
+      Anchoring in a block is not instantaneous: proofs are issued pending and
+      mature over the following hours. A document is fully usable in the
+      meantime; the anchoring page shows the current state at any time.
+    {% endblocktrans %}
+  </p>
+
+  <h2>7. {% trans 'Availability' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      We work to keep the platform available, but we do not guarantee
+      uninterrupted service. Maintenance, third party failures and causes
+      outside our control may interrupt it. Nothing here creates a service
+      level commitment unless it has been agreed separately in writing.
+    {% endblocktrans %}
+  </p>
+
+  <h2>8. {% trans 'Copyright and takedown' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      We respect intellectual property. If you believe content on the platform
+      infringes your copyright, send a notice to the address in section 14
+      including: your signature; identification of the protected work;
+      identification of the material you say infringes it and where it is;
+      your contact details; a statement that you believe in good faith that
+      the use is unauthorised; and a statement that the information is
+      accurate and that you are entitled to act on behalf of the rights
+      holder.
+    {% endblocktrans %}
+  </p>
+
+  <p>
+    {% blocktrans trimmed %}
+      Material that is the subject of a valid notice is removed promptly, and
+      accounts that repeatedly infringe may be terminated. Whoever uploaded
+      the material is told, and may reply.
+    {% endblocktrans %}
+  </p>
+
+  <div class="legal__note">
+    <b>{% trans 'Note for review.' %}</b>
+    {% blocktrans trimmed %}
+      The DMCA is United States law, and its safe harbour protects providers
+      subject to that jurisdiction; registering an agent with the US Copyright
+      Office only makes sense if the service is offered there. In Colombia the
+      applicable framework is Law 23 of 1982 and Law 1915 of 2018. A takedown
+      procedure is worth having either way — this one — but calling it "DMCA"
+      does not by itself bring the safe harbour with it.
+    {% endblocktrans %}
+  </div>
+
+  <h2>9. {% trans 'Suspension and termination' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      We may suspend or close an account that breaches these terms. Closing an
+      account does not delete certifications already issued, nor the audit
+      trail: both have to survive for the platform to keep doing what it is
+      for. Section 9 of the data policy explains why.
+    {% endblocktrans %}
+  </p>
+
+  <h2>10. {% trans 'Liability' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      Propensiones is liable for its own wilful misconduct and gross
+      negligence, as the applicable law provides. It is not liable for
+      decisions taken on the basis of an automatic translation, nor for the
+      use a third party makes of a certified document contrary to section 5,
+      nor for the content that users themselves upload.
+    {% endblocktrans %}
+  </p>
+
+  <h2>11. {% trans 'Personal data' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      Handling of personal data is governed by the personal data processing
+      policy, which forms part of these terms.
+    {% endblocktrans %}
+    <a href="{% url 'core:data_policy' %}">{% trans 'Read the data policy' %}</a>.
+  </p>
+
+  <h2>12. {% trans 'Governing law and disputes' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      These terms are governed by Colombian law. Any dispute shall first be
+      raised through the PQRS form, so that it can be resolved directly. If it
+      is not resolved, the parties may attempt conciliation before an
+      authorised conciliation centre before going to court. Failing that, the
+      dispute goes before the ordinary Colombian courts.
+    {% endblocktrans %}
+  </p>
+
+  <div class="legal__note">
+    <b>{% trans 'Note for review: the arbitration clause does not port.' %}</b>
+    <p>
+      {% blocktrans trimmed %}
+        The standard United States clause — binding individual arbitration
+        before AAA or JAMS, waiver of jury trial, waiver of class actions — is
+        not a matter of swapping the administrator for a local one:
+      {% endblocktrans %}
+    </p>
+    <ul>
+      <li>{% trans 'There is no jury in Colombian civil procedure, so that waiver means nothing.' %}</li>
+      <li>{% trans 'Group and class actions are governed by Law 472 of 1998 and are of constitutional rank; they are not waived in an adhesion contract.' %}</li>
+      <li>{% trans 'In consumer matters the Superintendence of Industry and Commerce holds jurisdiction under Law 1480 of 2011, and a clause that tries to close that door risks being held abusive and ineffective.' %}</li>
+      <li>{% trans 'Real arbitration here runs under Law 1563 of 2012, before a chamber of commerce arbitration centre, at a cost that only makes sense above a certain amount in dispute.' %}</li>
+    </ul>
+    <p>
+      {% blocktrans trimmed %}
+        What is written above is a graduated clause — direct claim,
+        conciliation, then courts — which is the usual arrangement here. If
+        the firm wants arbitration, it belongs in the contracts signed with
+        counterparties for specific transactions, with its seat, rules and
+        amount threshold set out, rather than in the general terms of a
+        platform.
+      {% endblocktrans %}
+    </p>
+  </div>
+
+  <h2>13. {% trans 'Changes' %}</h2>
+
+  <p>
+    {% blocktrans trimmed %}
+      We may modify these terms. Material changes are notified through the
+      platform or by email, with the date they come into force. The version
+      and date at the top say which text is in force.
+    {% endblocktrans %}
+  </p>
+
+  <h2>14. {% trans 'Contact' %}</h2>
+
+  <ul>
+    <li>{% trans 'PQRS form:' %} <a href="{% url 'pqrs:new' %}">{% trans 'file a request' %}</a></li>
+    <li>{% trans 'Email:' %} info@propensionesabogados.com</li>
+    <li>{% trans 'Copyright notices:' %} [{% trans 'designated contact, pending' %}]</li>
+  </ul>
+
+{% endblock %}

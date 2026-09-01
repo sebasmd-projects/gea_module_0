@@ -1,0 +1,121 @@
+{% extends 'raw.html' %}
+{% load static i18n %}
+
+{% comment %}
+  Base de los cuatro documentos legales.
+
+  Comparten cabecera, indice, tipografia y el pie con la version y la fecha de
+  vigencia. Eso ultimo no es adorno: la propia politica obliga a publicar la
+  fecha de entrada en vigor de cada modificacion, y sin version no se puede
+  demostrar que texto acepto alguien el dia que se registro.
+
+  El aviso de borrador va arriba y no abajo a proposito. Estos textos son un
+  punto de partida redactado sobre la estructura de una politica real; quien
+  los publique tiene que haberlos leido, no encontrarse la advertencia despues
+  de haberlos dado por buenos.
+{% endcomment %}
+
+{% block title %}<title>{% block document_title %}{% endblock %} — GEA</title>{% endblock %}
+
+{% block content %}
+<div class="legal">
+  <header class="legal__header">
+    <a href="{% url 'core:index' %}" class="legal__logo">
+      <img src="{% static 'assets/imgs/logos/gea_logo_gold.webp' %}" alt="GEA" />
+    </a>
+
+    <nav class="legal__nav" aria-label="{% trans 'Legal documents' %}">
+      <a href="{% url 'core:terms' %}"
+         {% if document_key == 'terms' %}aria-current="page"{% endif %}>{% trans 'Terms' %}</a>
+      <a href="{% url 'core:data_policy' %}"
+         {% if document_key == 'data_policy' %}aria-current="page"{% endif %}>{% trans 'Data policy' %}</a>
+      <a href="{% url 'core:privacy' %}"
+         {% if document_key == 'privacy' %}aria-current="page"{% endif %}>{% trans 'Privacy' %}</a>
+      <a href="{% url 'core:cookies' %}"
+         {% if document_key == 'cookies' %}aria-current="page"{% endif %}>{% trans 'Cookies' %}</a>
+      <a href="{% url 'pqrs:new' %}">{% trans 'PQRS' %}</a>
+    </nav>
+  </header>
+
+  <main class="legal__body">
+    <h1>{% block document_heading %}{% endblock %}</h1>
+
+    <p class="legal__meta">
+      {% trans 'Version' %} {{ document_version }}
+      {% if document_date %}
+        · {% trans 'In force since' %} {{ document_date|date:"d/m/Y" }}
+      {% endif %}
+    </p>
+
+    {% block document_body %}{% endblock %}
+
+    <hr />
+
+    <p class="legal__meta">
+      {% blocktrans trimmed %}
+        Propensiones Abogados · GEA. Questions about this document, or about
+        your personal data, go through the PQRS form.
+      {% endblocktrans %}
+      <a href="{% url 'pqrs:new' %}">{% trans 'File a request' %}</a>
+    </p>
+  </main>
+</div>
+
+<style>
+  .legal {
+    max-width: 52rem; margin: 0 auto; padding: 1.5rem 1.25rem 4rem;
+    font-family: "Metropolis", system-ui, sans-serif; line-height: 1.65;
+    color: #212529;
+  }
+  .legal__header {
+    display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;
+    justify-content: space-between; padding-bottom: 1rem;
+    border-bottom: 1px solid #dee2e6; margin-bottom: 2rem;
+  }
+  .legal__logo img { max-width: 160px; height: auto; }
+  .legal__nav { display: flex; flex-wrap: wrap; gap: .25rem 1rem; font-size: .85rem; }
+  .legal__nav a { color: #6c757d; text-decoration: none; }
+  .legal__nav a:hover { text-decoration: underline; }
+  .legal__nav a[aria-current="page"] { color: #212529; font-weight: 600; }
+
+  .legal__body h1 { font-size: 1.6rem; margin-bottom: .35rem; }
+  .legal__body h2 {
+    font-size: 1.1rem; margin-top: 2.25rem; margin-bottom: .6rem;
+    padding-bottom: .3rem; border-bottom: 1px solid #e9ecef;
+  }
+  .legal__body h3 { font-size: .98rem; margin-top: 1.5rem; margin-bottom: .4rem; }
+  .legal__body p, .legal__body li { font-size: .92rem; }
+  .legal__body ul, .legal__body ol { padding-left: 1.25rem; }
+  .legal__body li { margin-bottom: .35rem; }
+  .legal__body dt { font-weight: 600; margin-top: .6rem; font-size: .92rem; }
+  .legal__body dd { margin-left: 0; padding-left: 1rem; font-size: .92rem;
+                    color: #495057; }
+
+  .legal__meta { font-size: .8rem; color: #6c757d; }
+
+  .legal__note {
+    padding: .85rem 1rem; border-radius: .4rem; font-size: .87rem;
+    background: rgba(161,127,26,.10); border: 1px solid rgba(161,127,26,.35);
+    margin: 1.25rem 0;
+  }
+  .legal__draft {
+    padding: .85rem 1rem; border-radius: .4rem; font-size: .87rem;
+    background: rgba(161,26,26,.07); border: 1px solid rgba(161,26,26,.35);
+    margin-bottom: 1.75rem;
+  }
+
+  .legal__table { width: 100%; border-collapse: collapse; font-size: .85rem;
+                  margin: 1rem 0; }
+  .legal__table th, .legal__table td {
+    text-align: left; padding: .5rem .6rem; border-bottom: 1px solid #e9ecef;
+    vertical-align: top;
+  }
+  .legal__table th { background: #f8f9fa; font-weight: 600; }
+
+  .legal__body table { display: block; overflow-x: auto; }
+
+  @media print {
+    .legal__nav, .legal__draft { display: none; }
+  }
+</style>
+{% endblock %}

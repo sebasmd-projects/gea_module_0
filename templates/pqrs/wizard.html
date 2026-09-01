@@ -1,0 +1,174 @@
+{% extends 'account/layout/account.html' %}
+{% load static i18n custom_filters %}
+
+{% comment %}
+  Formulario publico de PQRS, en cinco pasos.
+
+  Extiende el layout de cuenta y no el del panel porque es publico: quien
+  ejerce sus derechos sobre sus datos casi nunca es usuario de la plataforma,
+  y de hecho quien pide que se los supriman por definicion no quiere serlo.
+
+  El indicador de pasos se pinta siempre, tambien en el primero: saber que
+  quedan cuatro es lo que evita que alguien empiece a rellenar creyendo que
+  es una caja de texto y lo abandone a la mitad.
+{% endcomment %}
+
+{% block title %}<title>{% trans 'Requests and complaints (PQRS)' %} — GEA</title>{% endblock %}
+
+{% block layout_content %}
+<div class="min-vh-100 d-flex flex-column align-items-center justify-content-center container-xl px-3 px-md-5 py-4">
+  <div class="card mx-auto" style="max-width: 860px; width: 100%;">
+
+    <div class="card-header text-center">
+      <a href="{% url 'core:index' %}">
+        <img src="{% static 'assets/imgs/logos/gea_logo_gold.webp' %}"
+             class="img-fluid" alt="GEA" style="max-width: 220px;" />
+      </a>
+    </div>
+
+    <div class="card-body p-4">
+      <h1 class="h4 mb-2">{% trans 'Requests and complaints (PQRS)' %}</h1>
+      <p class="text-muted small mb-4">
+        {% blocktrans trimmed %}
+          If you have a question, claim, complaint or suggestion, fill in this
+          form and we will get back to you within the legal term.
+        {% endblocktrans %}
+      </p>
+
+      {% comment %} ---------- Indicador de pasos ---------- {% endcomment %}
+      <ol class="pqrs-steps list-unstyled d-flex flex-wrap gap-2 mb-4">
+        {% for key, label in steps_labels %}
+          <li class="pqrs-step flex-fill
+                     {% if key == current_step %}pqrs-step--current{% endif %}"
+              {% if key == current_step %}aria-current="step"{% endif %}>
+            <span class="pqrs-step__number">{{ forloop.counter }}</span>
+            <span class="pqrs-step__label">{{ label }}</span>
+          </li>
+        {% endfor %}
+      </ol>
+
+      <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        {{ wizard.management_form }}
+
+        {% if wizard.form.non_field_errors %}
+          <div class="alert alert-danger" role="alert">
+            {% for error in wizard.form.non_field_errors %}
+              <p class="mb-0">{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% comment %}
+          El resumen del ultimo paso. Es la unica pantalla donde el titular
+          puede ver un dato mal tecleado antes de enviarlo, y el correo que
+          escribio ahi es la unica via por la que le llegara la respuesta.
+        {% endcomment %}
+        {% if current_step == 'confirm' and summary %}
+          <div class="border rounded p-3 mb-4 bg-light">
+            <h2 class="h6 mb-3">{% trans 'Check your details' %}</h2>
+            <dl class="row mb-0 small">
+              {% for key, value in summary.items %}
+                {% if value and key != 'confirm_email' %}
+                  <dt class="col-sm-5 text-muted fw-normal">{{ key|cut:"_"|title }}</dt>
+                  <dd class="col-sm-7">{{ value }}</dd>
+                {% endif %}
+              {% endfor %}
+            </dl>
+          </div>
+        {% endif %}
+
+        {% for field in wizard.form %}
+          <div class="mb-3">
+            <label class="form-label" for="{{ field.id_for_label }}">
+              {{ field.label }}
+              {% if field.field.required %}
+                <span class="text-danger" title="{% trans 'Required' %}">*</span>
+              {% endif %}
+            </label>
+
+            {% if field.field.widget.input_type == 'checkbox' %}
+              <div class="form-check">
+                {{ field }}
+              </div>
+            {% elif field.field.widget.input_type == 'radio' %}
+              {{ field }}
+            {% else %}
+              {{ field|add_class:"form-control" }}
+            {% endif %}
+
+            {% if field.help_text %}
+              <div class="form-text">{{ field.help_text }}</div>
+            {% endif %}
+
+            {% for error in field.errors %}
+              <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+
+        <div class="d-flex justify-content-between align-items-center mt-4">
+          {% if wizard.steps.prev %}
+            <button type="submit" class="btn btn-outline-secondary"
+                    name="wizard_goto_step" value="{{ wizard.steps.prev }}"
+                    formnovalidate>
+              {% trans 'Back' %}
+            </button>
+          {% else %}
+            <a href="{% url 'core:index' %}" class="btn btn-outline-secondary">
+              {% trans 'Cancel' %}
+            </a>
+          {% endif %}
+
+          <button type="submit" class="btn btn-primary"
+                  data-loading-text="{% trans 'Sending…' %}">
+            {% if current_step == 'confirm' %}
+              {% trans 'Submit request' %}
+            {% else %}
+              {% trans 'Continue' %}
+            {% endif %}
+          </button>
+        </div>
+      </form>
+
+      <p class="text-muted small mt-4 mb-0">
+        {% blocktrans trimmed with policy=policy_url %}
+          The personal data you give us here is handled under our personal
+          data processing policy.
+        {% endblocktrans %}
+        <a href="{% url 'core:data_policy' %}">
+          {% trans 'Read the policy' %}
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .pqrs-steps { counter-reset: paso; }
+  .pqrs-step {
+    display: flex; align-items: center; gap: .5rem;
+    min-width: 8rem; padding: .5rem .75rem;
+    border: 1px solid var(--bs-border-color, #dee2e6);
+    border-radius: .5rem; font-size: .78rem; color: #6c757d;
+  }
+  .pqrs-step__number {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 1.5rem; height: 1.5rem; flex: 0 0 1.5rem;
+    border-radius: 50%; background: #e9ecef; font-weight: 600;
+  }
+  .pqrs-step--current {
+    border-color: var(--bs-primary, #0d6efd);
+    color: var(--bs-primary, #0d6efd);
+    font-weight: 600;
+  }
+  .pqrs-step--current .pqrs-step__number {
+    background: var(--bs-primary, #0d6efd); color: #fff;
+  }
+  /* En movil el indicador ocupa mas que el formulario: se deja solo el paso
+     actual, que es la unica informacion que se necesita ahi. */
+  @media (max-width: 575.98px) {
+    .pqrs-step:not(.pqrs-step--current) { display: none; }
+  }
+</style>
+{% endblock %}

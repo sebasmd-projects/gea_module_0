@@ -32,6 +32,8 @@ from django.db import IntegrityError, transaction
 from django.test import TestCase
 from django.utils import timezone
 
+from apps.project.common.users.models import UserModel
+
 from .models import OfferModel
 from .tests import OfferFixtureMixin
 
@@ -449,6 +451,106 @@ class TestMarkingIsIdempotent(WorkflowMixin, TestCase):
         offer.refresh_from_db()
 
         self.assertEqual(offer.approved_by_timestamp, first)
+
+
+class TestTheRecipientConstraintsExistInProduction(WorkflowMixin, TestCase):
+    """
+    Una restriccion que no llega a crearse no protege nada.
+
+    Las dos de ``ServiceOrderRecipient`` llevaban ``condition=``, y **MariaDB
+    no admite unicos condicionales**: al migrar no falla, avisa y sigue
+    (``models.W036``). En produccion, sobre MariaDB, no existian -- asi que el
+    mismo destinatario podia anadirse dos veces a una orden y recibir la orden
+    de servicio por duplicado.
+
+    Lo peor del caso es que en desarrollo **funcionaba**: SQLite si admite
+    indices parciales, asi que una prueba de comportamiento pasaba en local y
+    el agujero seguia abierto en el servidor. Por eso aqui se comprueba
+    tambien la *forma* de la restriccion y no solo lo que hace.
+    """
+
+    def recipient_constraints(self):
+        from .models import ServiceOrderRecipient
+
+        return [
+            constraint
+            for constraint in ServiceOrderRecipient._meta.constraints
+            if constraint.__class__.__name__ == 'UniqueConstraint'
+        ]
+
+    def test_none_of_them_is_conditional(self):
+        """
+        La comprobacion que no depende del motor con el que se prueba. Un
+        `condition=` aqui vuelve a dejarlas fuera de produccion en silencio.
+        """
+        for constraint in self.recipient_constraints():
+            with self.subTest(constraint=constraint.name):
+                self.assertIsNone(
+                    constraint.condition,
+                    'MariaDB silently skips conditional unique constraints',
+                )
+
+    def test_the_same_person_cannot_be_added_twice(self):
+        from django.db import IntegrityError
+
+        from .models import ServiceOrderRecipient
+
+        offer = self.approve(self.make_offer())
+
+        ServiceOrderRecipient.objects.create(
+            offer=offer, user=self.staff, added_by=self.staff)
+
+        with self.assertRaises(IntegrityError):
+            ServiceOrderRecipient.objects.create(
+                offer=offer, user=self.staff, added_by=self.staff)
+
+    def test_the_same_role_cannot_be_added_twice(self):
+        from django.db import IntegrityError
+
+        from .models import ServiceOrderRecipient
+
+        offer = self.approve(self.make_offer())
+        role = UserModel.UserTypeChoices.HOLDER
+
+        ServiceOrderRecipient.objects.create(
+            offer=offer, user_type=role, added_by=self.staff)
+
+        with self.assertRaises(IntegrityError):
+            ServiceOrderRecipient.objects.create(
+                offer=offer, user_type=role, added_by=self.staff)
+
+    def test_several_rows_can_still_point_at_a_role_instead_of_a_person(self):
+        """
+        La otra mitad, y la razon de que la condicion sobrara: un unico llano
+        admite todas las filas que quieran con `user` nulo, porque NULL nunca
+        es igual a NULL. Si esto fallara, quitar la condicion habria roto el
+        caso normal.
+        """
+        from .models import ServiceOrderRecipient
+
+        offer = self.approve(self.make_offer())
+
+        ServiceOrderRecipient.objects.create(
+            offer=offer, user_type=UserModel.UserTypeChoices.HOLDER,
+            added_by=self.staff)
+        ServiceOrderRecipient.objects.create(
+            offer=offer, user_type=UserModel.UserTypeChoices.BUYER,
+            added_by=self.staff)
+
+        self.assertEqual(offer.so_recipients.count(), 2)
+
+    def test_the_same_person_can_be_on_two_different_offers(self):
+        from .models import ServiceOrderRecipient
+
+        first = self.approve(self.make_offer())
+        second = self.approve(self.make_offer(quantity=20))
+
+        ServiceOrderRecipient.objects.create(
+            offer=first, user=self.staff, added_by=self.staff)
+        ServiceOrderRecipient.objects.create(
+            offer=second, user=self.staff, added_by=self.staff)
+
+        self.assertEqual(ServiceOrderRecipient.objects.count(), 2)
 
 
 class TestApprovalNeedsItsPeople(WorkflowMixin, TestCase):
