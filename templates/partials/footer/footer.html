@@ -58,14 +58,10 @@
             tuneuromarca@gmail.com | +57 320 407 7611
             -->
 
-            
-            {% comment %}
-               <!-- <div class="col-md-6 text-md-end small text-black">
-                  <a href="{% url 'core:privacy' %}">{% trans 'Privacy Policy' %}</a>
-                  &middot;
-                  <a href="{% url 'core:terms' %}">{% trans 'Terms & Conditions' %}</a>
-              </div> -->
-            {% endcomment %}
+
+            <div class="col-md-6 text-md-end small text-black footer-legal">
+                {% include 'partials/footer/_legal_links.html' %}
+            </div>
         </div>
     </div>
 </footer>

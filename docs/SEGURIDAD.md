@@ -138,7 +138,39 @@ una cédula.
 Lanzar es lo que *no* hace en producción, y una prueba que simulara una
 excepción habría pasado en verde sobre el código roto.
 
-### 4. Restricción única que no existía en producción · ALTO · corregido
+### 4. Los adjuntos del PQRS los servía el servidor web · ALTO · corregido
+
+**Dónde:** `deploy/media.htaccess`, y `pqrs/models.py::identity_document_path`.
+
+El formulario de PQRS es **público y sin sesión**, y sus adjuntos son
+documentos de identidad: cédula, pasaporte, certificado de existencia. Van a
+`MEDIA_ROOT/pqrs/`, y esa carpeta **no estaba en la lista de bloqueadas**. Se
+cayó al crear la app.
+
+El invariante 13 dice que lo sensible no se sirve por `MEDIA_URL`, pero ese
+invariante no lo aplica Django: lo aplica el `.htaccess`. Un fichero que Apache
+entrega antes de que Django lo vea no pasa por ningún control, por muchas
+comprobaciones que tenga la vista.
+
+La ruta lleva el radicado, pero **un radicado no es un secreto**: va impreso en
+el acuse, viaja por correo y por captura de pantalla, y la página del
+comprobante es pública a propósito. Apoyar la confidencialidad de una cédula en
+eso es no apoyarla en nada.
+
+**Corregido:** `pqrs/` bloqueado por los dos mecanismos —`mod_rewrite` y el
+respaldo `RedirectMatch`, porque en hosting compartido nadie garantiza que el
+primero esté activo.
+
+**Y para que no vuelva a pasar:** `check_security` tiene una sección nueva que
+recorre **todos** los campos de fichero del proyecto, saca a qué carpeta
+escribe cada uno y comprueba que esté bloqueada o declarada como servible con
+su razón. Un campo nuevo aparece ahí la primera vez que se ejecuta.
+
+La validación de tipo y tamaño de esos mismos adjuntos es el hallazgo nº 5, y
+ya estaba corregida; esto es la otra mitad —qué pasa con el fichero **después**
+de aceptarlo.
+
+### 5. Restricción única que no existía en producción · ALTO · corregido
 
 **Dónde:** `buyers/models.py::ServiceOrderRecipient`
 
@@ -153,7 +185,7 @@ En desarrollo funcionaba, que es lo peor: SQLite sí admite índices parciales.
 admite varios `NULL`— así que quitarla no relaja nada: es lo que hace que
 existan.
 
-### 5. Subidas públicas sin validar · ALTO · corregido
+### 6. Subidas públicas sin validar · ALTO · corregido
 
 **Dónde:** `pqrs/forms.py`
 
@@ -164,7 +196,7 @@ cualquier peso, y quedaba guardada.
 **Corregido:** lista de permitidos (`.pdf .jpg .jpeg .png .webp`) y tope de
 10 MB, en un campo compartido por los dos formularios.
 
-### 6. Ejecución por shell innecesaria · MEDIO · corregido
+### 7. Ejecución por shell innecesaria · MEDIO · corregido
 
 **Dónde:** `check_cron.py`
 
@@ -176,7 +208,7 @@ puede lanzar desde la consola de operaciones.
 **Corregido:** `subprocess.run([executable, '-l'])`, sin shell. Sin shell no
 hay nada que escapar.
 
-### 7. Ajustes de sesión implícitos · MEDIO · corregido
+### 8. Ajustes de sesión implícitos · MEDIO · corregido
 
 `SESSION_COOKIE_HTTPONLY` y `SESSION_COOKIE_SAMESITE` dependían del valor por
 defecto de Django. Son de las cosas que se desactivan sin querer al depurar y
@@ -228,3 +260,10 @@ No son fallos, son cosas que alguien tiene que decidir:
 5. **`DATA_UPLOAD_MAX_NUMBER_FIELDS = 15000`**, quince veces el valor por
    defecto de Django. Si fue por un formset concreto, conviene saber cuál;
    si no, bajarlo.
+6. **`asset/` y `offer/` los sirve el servidor web.** No son documentos de
+   identidad —son fotos de activos y de órdenes—, pero sí son el inventario de
+   un cliente concreto, y la ruta lleva el nombre del activo. Hoy se pintan con
+   `<img>` en el panel del tenedor y en la ficha de una orden, así que
+   bloquearlas sin poner antes una vista que las entregue deja esas páginas con
+   los huecos rotos: no es un cambio de una línea. Están declaradas en
+   `check_security` con esa razón para que el aviso no tape a uno nuevo.

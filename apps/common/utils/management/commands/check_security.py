@@ -6,7 +6,7 @@ Un informe se lee una vez y se archiva; lo que hace falta es poder repetirlo.
 Este comando comprueba lo que se reviso a mano, y lo hace **sobre el codigo
 que hay ahora**, no sobre lo que decia el informe.
 
-Las cinco comprobaciones son las que ya sacaron algo real:
+Las seis comprobaciones son las que ya sacaron algo real:
 
 1. **Vistas publicas sin guardia**, contrastadas con una lista de las que lo
    son a proposito. Una vista nueva sin control aparece aqui la primera vez
@@ -16,7 +16,10 @@ Las cinco comprobaciones son las que ya sacaron algo real:
    caracteres sin ningun freno.
 3. **Ejecucion por shell** (``os.system``, ``os.popen``, ``shell=True``).
 4. **SQL construido con cadenas.**
-5. **Ajustes de produccion** que dependen de que ``DEBUG`` este apagado.
+5. **Carpetas de subidas que reparte el servidor web** por su cuenta, sin
+   pasar por Django. `pqrs/` se cayo de esa lista al crear la app, y ahi es
+   donde un formulario publico deposita cedulas.
+6. **Ajustes de produccion** que dependen de que ``DEBUG`` este apagado.
 
 No sustituye a `manage.py check --deploy`, que mira los ajustes de Django.
 Esto mira lo que es propio de este proyecto.
@@ -26,6 +29,7 @@ Esto mira lo que es propio de este proyecto.
 
 import ast
 import re
+import textwrap
 from pathlib import Path
 
 from django.conf import settings
@@ -96,6 +100,39 @@ THROTTLED_FORMS = {
 SHELL_CALLS = re.compile(r'os\.system\(|os\.popen\(|shell\s*=\s*True')
 STRING_SQL = re.compile(r'cursor\.execute\(\s*[f\'"].*%s*[\'"]\s*%|\.raw\(\s*f')
 
+#: Carpetas de `MEDIA_ROOT` que **si** puede repartir el servidor web.
+#:
+#: Es la misma forma que `INTENTIONALLY_PUBLIC` y por el mismo motivo: la
+#: pregunta "¿esto puede servirse directo?" hay que contestarla al crear el
+#: campo, no cuando alguien encuentra el fichero. Lo que no este aqui tiene
+#: que estar bloqueado en `deploy/media.htaccess`.
+#:
+#: Que exista esta comprobacion viene de que `pqrs/` se cayo de esa lista al
+#: crear la app. El formulario es publico y sin sesion, o sea que cualquiera
+#: puede depositar ahi una cedula, y la carpeta se servia por URL. La ruta
+#: lleva el radicado, pero un radicado no es un secreto: va en el acuse, viaja
+#: por correo y por captura de pantalla.
+PUBLICLY_SERVABLE_MEDIA = {
+    # Las dos que se sirven en linea hoy, con etiqueta `<img>`, en el panel del
+    # tenedor y en la ficha de una orden. Bloquearlas sin poner antes una vista
+    # que las entregue dejaria esas paginas con los huecos rotos, asi que no es
+    # un cambio de una linea. **No es que esten bien**: son fotos del inventario
+    # de un cliente concreto, y la ruta lleva el nombre del activo. Esta anotado
+    # como decision pendiente en docs/SEGURIDAD.md.
+    'asset': 'fotos de catalogo; se pintan con <img> en el panel',
+    'offer': 'imagen adjunta a una orden; se pinta con <img> en su ficha',
+
+    'media_assets': 'la galeria multimedia, que es para verse',
+    'video_masonry': 'idem',
+    'logos': 'imagenes de marca',
+}
+
+#: Donde se declara el bloqueo, para leerlo y contrastarlo.
+MEDIA_HTACCESS = 'deploy/media.htaccess'
+
+#: Marcador para un campo cuyo destino no se pudo leer. Se avisa, no se salta.
+UNKNOWN_PREFIX = '?'
+
 
 class Command(BaseCommand):
     help = 'Comprueba la superficie de seguridad propia de este proyecto.'
@@ -114,6 +151,7 @@ class Command(BaseCommand):
         self._check_throttles()
         self._check_shell_calls()
         self._check_string_sql()
+        self._check_uploads_are_not_served()
         self._check_settings()
 
         self.stdout.write('')
@@ -143,6 +181,173 @@ class Command(BaseCommand):
     def _finding(self, message):
         self.findings.append(message)
         self.stdout.write(self.style.ERROR(f'   AVISO {message}'))
+
+    # ------------------------------------------------------------------
+    def _upload_prefixes(self):
+        """
+        La primera carpeta de cada campo de fichero del proyecto.
+
+        Se saca del `upload_to`, que puede ser una cadena o una funcion. Si es
+        una funcion no se puede llamar --necesitaria una instancia-- asi que
+        se lee su codigo **con AST**: la primera cadena que no sea el
+        docstring es siempre el principio de la ruta.
+
+        Con AST y no con una expresion regular porque eso ya fallo aqui: una
+        regular sobre el texto entero leia tambien el docstring, y de un
+        "Path format: offer/..." sacaba el prefijo equivocado. El docstring
+        habla de la ruta, pero no es la ruta.
+        """
+        import inspect
+
+        from django.apps import apps as django_apps
+
+        prefixes = {}
+
+        for model in django_apps.get_models():
+            if not model.__module__.startswith('apps.'):
+                continue
+
+            for field in model._meta.get_fields():
+                upload_to = getattr(field, 'upload_to', None)
+
+                if not upload_to:
+                    continue
+
+                if callable(upload_to):
+                    prefix = self._prefix_from_function(upload_to, inspect)
+                else:
+                    prefix = str(upload_to).strip('/').split('/')[0]
+
+                label = f'{model._meta.label}.{field.name}'
+
+                # Un campo cuyo destino no se sabe leer se **avisa**, no se
+                # salta. Saltarlo lo dejaria fuera de la comprobacion sin que
+                # nadie lo supiera, que es la forma de fallo que esta seccion
+                # existe para evitar.
+                prefixes.setdefault(prefix or UNKNOWN_PREFIX, []).append(label)
+
+        return prefixes
+
+    @classmethod
+    def _prefix_from_function(cls, upload_to, inspect):
+        """
+        La carpeta que devuelve una funcion de `upload_to`.
+
+        Se mira **lo que se devuelve**, no la primera cadena que aparezca. Un
+        `ast.walk` recorre en anchura y no en orden de codigo, asi que "la
+        primera cadena" de esta funcion:
+
+            name_src = ... or "asset"
+            return os.path.join("offer", slug, ...)
+
+        era `asset`, que es un valor por defecto de un nombre y no una
+        carpeta. La ruta esta en el `return`, y ahi es donde hay que mirar.
+        """
+        try:
+            source = inspect.getsource(upload_to)
+        except (OSError, TypeError):
+            return None
+
+        try:
+            tree = ast.parse(textwrap.dedent(source))
+        except SyntaxError:
+            return None
+
+        function = tree.body[0]
+
+        # `path = os.path.join(...)` y luego `return path`: se resuelve el
+        # nombre a lo ultimo que se le asigno. Dos de los cuatro campos del
+        # proyecto estan escritos asi, y sin esto se quedaban **sin mirar**,
+        # que en una comprobacion de seguridad es peor que un falso positivo.
+        assigned = {}
+
+        for node in ast.walk(function):
+            if isinstance(node, ast.Assign):
+                for target in node.targets:
+                    if isinstance(target, ast.Name):
+                        assigned[target.id] = node.value
+
+        for node in ast.walk(function):
+            if not isinstance(node, ast.Return) or node.value is None:
+                continue
+
+            value = node.value
+
+            if isinstance(value, ast.Name):
+                value = assigned.get(value.id)
+
+            prefix = cls._prefix_of(value) if value is not None else None
+
+            if prefix:
+                return prefix
+
+        return None
+
+    @staticmethod
+    def _prefix_of(value):
+        """El primer segmento de una expresion que construye una ruta."""
+        # return 'carpeta/lo-que-sea'
+        if isinstance(value, ast.Constant) and isinstance(value.value, str):
+            return value.value.strip('/').split('/')[0] or None
+
+        # return f'pqrs/{radicado}/identidad/{filename}'
+        if isinstance(value, ast.JoinedStr):
+            for part in value.values:
+                if isinstance(part, ast.Constant) and isinstance(part.value, str):
+                    return part.value.strip('/').split('/')[0] or None
+            return None
+
+        # return os.path.join('offer', slug, ...)  |  Path('x') / y
+        if isinstance(value, ast.Call) and value.args:
+            return Command._prefix_of(value.args[0])
+
+        return None
+
+    def _check_uploads_are_not_served(self):
+        """
+        Que ninguna carpeta de subidas la reparta el servidor web por su cuenta.
+
+        El control de acceso de Django no pinta nada sobre un fichero que
+        Apache sirve antes de que Django lo vea (invariante 13). Y lo que se
+        sube aqui no son fotos de catalogo: son cedulas, pasaportes y firmas.
+        """
+        self._section('5. Carpetas de subidas que serviria el servidor web')
+
+        blocked_file = Path(settings.BASE_DIR) / MEDIA_HTACCESS
+
+        if not blocked_file.exists():
+            self._finding(
+                f'No existe {MEDIA_HTACCESS}: sin el, el servidor web reparte '
+                'todo MEDIA_ROOT y el control de acceso de Django no pinta '
+                'nada.'
+            )
+            return
+
+        rules = blocked_file.read_text(encoding='utf-8')
+
+        for prefix, fields in sorted(self._upload_prefixes().items()):
+            if prefix == UNKNOWN_PREFIX:
+                self._finding(
+                    f'No se pudo leer a que carpeta escriben: '
+                    f'{", ".join(fields)}. Miralo a mano y, si hace falta, '
+                    'ensena a `_prefix_from_function` la forma nueva.'
+                )
+                continue
+
+            if prefix in PUBLICLY_SERVABLE_MEDIA:
+                continue
+
+            if re.search(rf'\b{re.escape(prefix)}\b', rules):
+                self._ok(f'{prefix}/ esta bloqueado en {MEDIA_HTACCESS}.')
+                continue
+
+            self._finding(
+                f'{prefix}/ ({", ".join(fields)}) no esta bloqueado en '
+                f'{MEDIA_HTACCESS} ni declarado como publico. Cualquiera con '
+                'la URL se lo descarga sin pasar por Django. Si de verdad '
+                'puede servirse directo, ponlo en PUBLICLY_SERVABLE_MEDIA con '
+                'su razon.'
+            )
 
     # ------------------------------------------------------------------
     def _own_views(self):
@@ -356,7 +561,7 @@ class Command(BaseCommand):
 
     # ------------------------------------------------------------------
     def _check_settings(self):
-        self._section('5. Ajustes del entorno')
+        self._section('6. Ajustes del entorno')
 
         self.stdout.write(
             '   (esta seccion depende de donde se ejecute: para que valga, '

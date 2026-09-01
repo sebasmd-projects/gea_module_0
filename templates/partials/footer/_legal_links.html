@@ -1,0 +1,30 @@
+{% load i18n %}
+
+{% comment %}
+  Los enlaces legales, en un solo sitio.
+
+  Estaban escritos dos veces --en este pie y en uno del panel-- y **los dos
+  comentados**, asi que en toda la plataforma no habia forma de llegar a la
+  politica de privacidad, a la de datos, a la de cookies ni a radicar un PQRS.
+  Escribirlos una vez es lo que impide que vuelvan a divergir: el pie del panel
+  ya se habia quedado atras, con otro nombre de empresa dentro.
+
+  Que sean alcanzables no es cosmetico. La Ley 1581 exige que el titular pueda
+  ejercer sus derechos, y el articulo 23 de la Constitucion que pueda
+  peticionar; un documento que existe pero al que no se llega desde ninguna
+  pagina no cumple ninguna de las dos cosas. Por eso van en el pie, que sale en
+  todas: la publica, el login, el registro y el panel.
+
+  El PQRS va **primero y destacado**, porque es el unico que no es un texto
+  para leer sino una accion que alguien necesita hacer.
+{% endcomment %}
+
+<a href="{% url 'pqrs:new' %}" class="fw-semibold">{% trans 'Requests and complaints (PQRS)' %}</a>
+&middot;
+<a href="{% url 'core:data_policy' %}">{% trans 'Data processing policy' %}</a>
+&middot;
+<a href="{% url 'core:privacy' %}">{% trans 'Privacy Policy' %}</a>
+&middot;
+<a href="{% url 'core:cookies' %}">{% trans 'Cookie policy' %}</a>
+&middot;
+<a href="{% url 'core:terms' %}">{% trans 'Terms & Conditions' %}</a>
