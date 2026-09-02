@@ -1004,3 +1004,11 @@ msgstr "Certificado de empleado IPCON"
 msgid "Validate employment and institutional certificates issued by IPCON."
 msgstr ""
 "Valida los certificados laborales e institucionales emitidos por IPCON."
+
+#: apps/project/specific/documents/certificates/utils.py
+msgid "Verification at Propensiones (GEA): here is the 6-digit verification code you requested"
+msgstr "Verificación en Propensiones (GEA): aquí tienes el código de verificación de 6 dígitos que has solicitado"
+
+#: apps/project/specific/documents/certificates/utils.py
+msgid "Use the following code to validate the certifications."
+msgstr "Utiliza el siguiente código para validar las certificaciones."

@@ -264,6 +264,8 @@ Reglas que se deducen del grafo — respétalas al añadir código:
 | Usuario, PII cifrada, geografía | `apps/project/common/users/models.py` |
 | Registro por wizard, recuperar contraseña | `apps/project/common/account/views.py` + `forms/` |
 | **Entrar con código al correo** | `account/login_view.py` (los pasos) + `account/otp_login.py` (el código) + `account/emails.py` |
+| **El correo con el código, para los dos sitios** | `apps/common/utils/otp_email.py` + `templates/email/otp_email.html` |
+| **Contador de intentos fallidos (las tres puertas)** | `apps/common/utils/login_attempts.py` |
 | Catálogo de activos y traducción automática | `assets/models.py`, `assets/signals.py` |
 | Ubicaciones e inventario por ubicación | `assets_location/models.py`, `views.py` |
 | **Flujo de 12 etapas de una orden** | `buyers/models.py` (`status_code`, `mark_*`, `CheckConstraint`) |
@@ -288,31 +290,50 @@ código diario (`GeaDailyUniqueCode`, emitido por cron a las 19:00). `email_hash
 código de acceso, porque el correo va cifrado con Fernet y `filter(email=...)` devuelve cero siempre.
 
 `two_factor:login` lo sirve **`GeaLoginView`** (`account/login_view.py`), que es el asistente de
-`django-two-factor-auth` con dos pasos más:
+`django-two-factor-auth` con un paso más:
 
 ```
-auth      usuario y contraseña      ← siempre presente
-otp_id    a quién mandar el código  ─┐ solo en modo código
-otp_code  el código de seis cifras  ─┘
-token     el segundo factor, si lo hay
-backup    el código de respaldo
+auth    usuario y contraseña             ← siempre presente
+otp     usuario/correo **y** el código   ← solo en modo código
+token   el segundo factor, si lo hay
+backup  el código de respaldo
 ```
 
-Tres cosas que hay que entender antes de tocarlo:
+Los seis recorridos posibles, que están probados de punta a punta en `tests_login_paths.py`:
+
+| Se entra con… | Sin 2FA | Con 2FA |
+|---|---|---|
+| Contraseña correcta | dentro | pantalla del 2FA → dentro |
+| Tres contraseñas falladas → código | dentro | pantalla del 2FA → dentro |
+| Código pedido a propósito | dentro | pantalla del 2FA → dentro |
+
+Y en cualquiera de ellos, un fallo suma al **mismo** contador hasta `AXES_FAILURE_LIMIT` → bloqueo.
+
+Cuatro cosas que hay que entender antes de tocarlo:
 
 - **El código sustituye a la contraseña, no al segundo factor.** Por eso vive dentro del asistente:
   deja el usuario autenticado en el primer paso y el TOTP se sigue pidiendo después. Una vista aparte
   que llamara a `login()` convertiría el acceso al correo de alguien en una forma de saltarse su 2FA.
+- **El código es una sola pantalla**, con el identificador y las seis cifras a la vez, un botón que
+  manda el correo (`send_code`, atendido en `post()` antes de validar nada) y otro que entra. Pedir el
+  código no puede exigir un código que aún no existe, de ahí que el envío no pase por el formulario.
 - **El paso `auth` no sale nunca de la lista**, ni siquiera al ofrecer el código. Si saliera, un envío
   de contraseña posterior no llegaría a validarse, `django-axes` no contaría ese fallo y su bloqueo
   --seis intentos-- no se alcanzaría jamás desde el navegador: la comodidad habría apagado el freno.
   La oferta se hace **una sola vez** por intento (`OFFERED_KEY`) por el mismo motivo.
 - **Preguntar por un usuario no dice si existe.** La pantalla contesta lo mismo para una cuenta real
-  y para una inventada, y el correo solo sale si hay a quién mandárselo.
+  y para una inventada, y el correo solo sale si hay a quién mandárselo. Por eso el aviso «te hemos
+  enviado un código» se decide con `requested` y no con `code_hash`: con el hash, el aviso
+  desaparecería justo para los identificadores que no existen.
 
 El código se guarda hasheado (HMAC-SHA256 sobre `SECRET_KEY`) en la sesión, que va en base de datos:
 sigue en pie aunque Redis se caiga. El envío pasa por dos cupos de `RateLimit` que **fallan cerrados**,
 uno por destinatario y otro por origen.
+
+**Los tres caminos cuentan en el mismo contador.** Contraseña, código y segundo factor apuntan sus
+fallos con `apps/common/utils/login_attempts.py::note_failure()` y consultan el bloqueo con
+`is_locked_out()` **antes** de comparar nada. Antes solo contaba la contraseña, así que el camino más
+barato para quien atacaba --seis cifras, quince minutos de vida-- era justo el que no dejaba rastro.
 
 **2. Activo → ubicación → inventario**
 `AssetsNamesModel` 1:1 `AssetModel` (FK a `AssetCategoryModel`) → señal `pre_save` que traduce es↔en
@@ -545,7 +566,8 @@ Sin build ni SPA. Plantillas Django + Bootstrap 5 por CDN; `templates/raw.html` 
 19. **La duración de un bloqueo por IP se calcula en un solo sitio.** `blocking.block_duration()` duplica en cada intento (15 min → 30 → 1 h → … → tope de 24 h en `MAX_BLOCK`), y la usan tanto la vista trampa como el middleware. Había dos políticas —una multiplicaba, la otra sumaba un intervalo fijo— así que el castigo dependía de por dónde hubiera entrado la petición. La duración sale del contador de intentos, no de lo que quedara del bloqueo anterior, y nunca se acorta uno en curso.
 20. **Una IP bloqueada recibe un 404, y sólo eso.** Es byte a byte la misma página que cualquier ruta que no existe: sin mencionar el bloqueo, sin `attempt_count` y sin `blocked_until`. Un 403 que se anuncia le confirma al escáner que hay bloqueo por IP, que su sonda dio en la trampa y cuándo volver — la misma razón por la que el admin responde 404 (invariante 7). Todo lo que sirve para diagnosticar está en el log del servidor y en `IPBlockedModel`.
 21. **Ningún contador de intentos se lleva leyendo la caché a mano.** Todos pasan por `RateLimit` (`apps/common/utils/throttling.py`), y por una razón concreta: con `IGNORE_EXCEPTIONS` puesto, `django-redis` **devuelve `None` en vez de lanzar**, así que `cache.get(k) or 0` da `0` y cualquier comparación contra un límite pasa. Eso apagaba los seis contadores durante cualquier avería de Redis, sin excepción, sin log y sin síntoma. `RateLimit` detecta la caída por lo que devuelve `incr` y **falla cerrado por defecto**; `fail_open=True` exige una `reason` escrita —el constructor lanza `ValueError` si falta— porque la decisión depende de qué impide el límite, no del límite. Y el cupo de un destinatario va por `scope`, nunca con la IP dentro de la llave: quien manda elige su IP, quien recibe no. Ver `docs/SEGURIDAD.md` §3.
-22. **El código por correo entra en el asistente de acceso, no lo rodea.** Dos consecuencias que no se pueden romper. Una: los pasos `otp_id`/`otp_code` dejan el usuario autenticado igual que el de contraseña, y el segundo factor se sigue pidiendo después — sacar esto a una vista propia que llamara a `login()` haría que el acceso al correo de alguien bastara para saltarse su 2FA. Y dos: el paso `auth` **no sale nunca** de la lista de pasos. Quitarlo al ofrecer el código haría que los envíos de contraseña posteriores no llegaran a validarse, `django-axes` no contaría esos fallos y su bloqueo de seis intentos no se alcanzaría desde el navegador; la oferta llegaría antes que el freno y de paso lo apagaría. Por lo mismo la oferta se hace una sola vez por intento. Lo cubre `account/tests_login_otp.py`.
+22. **El código por correo entra en el asistente de acceso, no lo rodea.** Dos consecuencias que no se pueden romper. Una: el paso `otp` deja el usuario autenticado igual que el de contraseña, y el segundo factor se sigue pidiendo después — sacar esto a una vista propia que llamara a `login()` haría que el acceso al correo de alguien bastara para saltarse su 2FA. Y dos: el paso `auth` **no sale nunca** de la lista de pasos. Quitarlo al ofrecer el código haría que los envíos de contraseña posteriores no llegaran a validarse, `django-axes` no contaría esos fallos y su bloqueo de seis intentos no se alcanzaría desde el navegador; la oferta llegaría antes que el freno y de paso lo apagaría. Por lo mismo la oferta se hace una sola vez por intento. Lo cubren `account/tests_login_otp.py` y `account/tests_login_paths.py`.
+23. **Las tres puertas del acceso cuentan sus fallos en el mismo sitio.** Contraseña, código al correo y segundo factor pasan todos por `apps/common/utils/login_attempts.py`: `note_failure()` dispara `user_login_failed` --que es la interfaz de `django-axes`, no se escribe en sus tablas a mano-- y `is_locked_out()` se consulta **antes** de comparar el código o el token. Apuntar sin consultar deja el bloqueo escrito en una tabla y a quien ataca dentro. Dos detalles que parecen menores y no lo son: el contador va por lo **tecleado** al identificarse (guardado en `ATTEMPT_KEY`), no por `get_user().get_username()` --que devuelve el correo, porque `USERNAME_FIELD` es el correo-- o serían dos cuentas atrás para el mismo intruso; y el tope de cinco intentos por código no sustituye a nada, porque se esquiva pidiendo otro código. Lo cubre `account/tests_login_lockout.py`.
 
 ---
 
@@ -563,6 +585,7 @@ Sin build ni SPA. Plantillas Django + Bootstrap 5 por CDN; `templates/raw.html` 
 | **`axes` no ve el usuario del login** | El login es un wizard de `formtools`: su campo es `auth-username`, no `username`. Sin `AXES_USERNAME_CALLABLE` (`utils/axes_hooks.py`) todos los intentos se guardan con usuario vacío y **cualquier bloqueo por pareja (IP, usuario) degrada en silencio a bloqueo por IP**. Si algún día cambia el prefijo del paso, actualiza `USERNAME_FIELDS`. |
 | **Un paso nuevo del login se toma por sesión caducada** | El asistente da por hecho que solo el **primer** paso está antes de identificarse: `step_requires_authentication()` devuelve `step != FIRST_STEP`. Como `expired` mira `authentication_time`, que todavía no existe, cualquier otro paso previo a la identificación sale caducado: al enviar el código el asistente reiniciaba el almacén y volvía a pedir el correo **sin validar y sin error en pantalla** — parecía que el botón no hacía nada. `GeaLoginView` lo corrige devolviendo `False` para `otp_id` y `otp_code`. |
 | **El prefijo del asistente sale del nombre de la clase** | `formtools` lo deriva con `normalize_name(cls.__name__)`, así que heredar de `LoginView` con otro nombre renombra el campo oculto que envía la página (`login_view-current_step`) y la clave del almacén en la sesión. `GeaLoginView.get_prefix()` lo fija a `login_view` para que ni la plantilla ni un acceso a medias se rompan en el despliegue. |
+| **`totp()` devuelve un entero, no una cadena** | Uno de cada diez códigos TOTP sale con un dígito menos --`071536` se convierte en `71536`-- y el formulario lo rechaza. Una prueba que genere el token así falla una vez de cada diez sin que nada esté roto, que es la clase de prueba que acaba ignorándose. En `tests_login_paths.py` se rellena con `f'{value:06d}'`. |
 | **`default_device()` busca el nombre literal `default`** | `two_factor.utils.default_device()` recorre los dispositivos y devuelve el que se llama exactamente `default`, que es el que pone el asistente de alta. Un `TOTPDevice` creado a mano con otro nombre **no cuenta como segundo factor**: en una prueba, eso la deja pasando sin comprobar nada. |
 | **`AxesStandaloneBackend` va primero y exige `request`** | Ese orden es lo que impide que una contraseña correcta se salte el bloqueo, pero hace que `authenticate()` **sin** `request` lance excepción. `client.login()` de Django no la pasa: por eso `settings_test` apaga axes y solo lo encienden sus propias pruebas. |
 | **Llamadas a OpenAI en señales `pre_save`** | La traducción automática de activos y ofertas ocurre **de forma síncrona dentro del guardado** (timeout 20 s). Un fallo o lentitud de la API se traduce en peticiones lentas. No hay cola de tareas. Sin `CHAT_GPT_API_KEY` **no falla**: `ChatGPTAPI` se queda sin cliente y `translate()` devuelve el texto original — antes el constructor lanzaba `ValueError` y, como las señales lo instancian a nivel de módulo y `models.py` las importa, una integración opcional sin configurar impedía arrancar el proyecto entero. En `DEBUG` tampoco sale a la red y devuelve el original (devolvía `src`, o sea la cadena `"es"`, y así se guardaba). |
@@ -606,8 +629,11 @@ MIDDLEWARE_NOT_INCLUDE
 AXES_FAILURE_LIMIT            # por defecto 6, bloqueo por pareja (IP, usuario)
 AXES_COOLOFF_MINUTES          # por defecto 30; nunca dejarlo sin espera
 LOGIN_OTP_TTL_MINUTES         # por defecto 15; cuánto dura el código de acceso
-LOGIN_OTP_CONTACT_EMAIL       # por defecto info@propensionesabogados.com;
-                              # el «ponte en contacto con nosotros» del correo
+OTP_TTL_MINUTES               # por defecto 15; el de la verificación documental
+OTP_CONTACT_EMAIL             # por defecto info@propensionesabogados.com; el
+                              # «ponte en contacto con nosotros» de los DOS
+                              # correos. Una sola variable a propósito: dos
+                              # ajustes para la misma dirección divergen
 
 # Cache — ver deploy/REDIS.md
 REDIS_URL                     # rediss://usuario:clave@host:6380/0?ssl_cert_reqs=

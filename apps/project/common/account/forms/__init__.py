@@ -3,4 +3,4 @@ from .buyers_register_form import BuyerContactForm
 from .forgot_password_form import ForgotPasswordStep1Form, ForgotPasswordStep2Form
 from .suppliers_register_form import SupplierContactForm
 from .common_register_form import UserInformationForm, SecurityInformationForm, UniqueCodeForm
-from .login_otp_form import LoginOTPIdentifierForm, LoginOTPCodeForm
+from .login_otp_form import LoginOTPForm

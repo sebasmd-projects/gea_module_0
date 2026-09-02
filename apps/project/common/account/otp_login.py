@@ -42,6 +42,7 @@ from django.utils import timezone
 from django.utils.crypto import constant_time_compare
 
 from apps.common.utils.functions import sha256_hex
+from apps.common.utils.otp_email import contact_email as shared_contact_email
 from apps.common.utils.throttling import RateLimit
 
 logger = logging.getLogger(__name__)
@@ -87,9 +88,10 @@ def ttl_minutes() -> int:
     return int(getattr(settings, 'LOGIN_OTP_TTL_MINUTES', DEFAULT_TTL_MINUTES))
 
 
-def contact_email() -> str:
-    return getattr(
-        settings, 'LOGIN_OTP_CONTACT_EMAIL', 'info@propensionesabogados.com')
+#: La dirección de contacto la decide un solo sitio, el del correo, para que
+#: los dos mensajes --el del acceso y el de la verificación-- no puedan acabar
+#: diciendo direcciones distintas.
+contact_email = shared_contact_email
 
 
 def generate_code() -> str:
@@ -175,6 +177,9 @@ def issue(request, identifier: str) -> bool:
         'code_hash': '',
         'expires_at': (now + timedelta(minutes=ttl_minutes())).isoformat(),
         'attempts': 0,
+        # Que se pidió, no que se emitió. Es lo único que la pantalla puede
+        # mirar sin contestar distinto según exista la cuenta o no.
+        'requested': True,
     }
 
     if not user:
@@ -207,6 +212,43 @@ def issue(request, identifier: str) -> bool:
 
 def state_of(request):
     return request.session.get(SESSION_KEY) or {}
+
+
+def remember_identifier(request, identifier: str) -> None:
+    """
+    Guarda a quién se le pedirá el código, sin emitir ninguno.
+
+    Lo usa el botón «entrar con un código» cuando ya había algo escrito en el
+    campo de usuario: se arrastra a la pantalla siguiente para no obligar a
+    teclearlo dos veces. No manda nada ni gasta cupo.
+    """
+    state = state_of(request)
+    state['identifier'] = (identifier or '').strip().lower()
+    request.session[SESSION_KEY] = state
+
+
+def has_live_code(request) -> bool:
+    """
+    Si en esta sesión se ha **pedido** un código que aún no ha caducado.
+
+    Lo mira la pantalla para decidir si dice «te hemos enviado un código» o
+    «pulsa para que te lo enviemos». Se mira `requested`, no `code_hash`, y esa
+    diferencia es justamente la que impide que la pantalla conteste distinto
+    para una cuenta real y para una inventada: cuando no hay a quién mandarlo
+    no se emite nada, pero la petición queda igual de anotada. Con `code_hash`,
+    el aviso desaparecería sólo para los identificadores que no existen y la
+    pantalla sería un comprobador de cuentas.
+    """
+    state = state_of(request)
+
+    if not state.get('requested'):
+        return False
+
+    try:
+        return timezone.datetime.fromisoformat(
+            state.get('expires_at')) > timezone.now()
+    except (TypeError, ValueError):
+        return False
 
 
 def entered_identifier(request) -> str:

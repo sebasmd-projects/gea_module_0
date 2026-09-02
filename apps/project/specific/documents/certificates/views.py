@@ -204,7 +204,11 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
 
         otp = generate_otp()
         self.update_otp(otp)
-        send_otp_email(email, otp)
+        # La duración se pasa desde donde se aplica: así el correo no puede
+        # prometer quince minutos mientras la sesión caduca a los diez.
+        send_otp_email(
+            email, otp,
+            minutes=int(self.OTP_TTL.total_seconds() // 60))
 
         messages.success(self.request, _(
             "A new verification code has been sent to your email."))
@@ -328,7 +332,11 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
 
         otp = generate_otp()
         self.set_otp_session(email, otp, purpose="document_verification")
-        send_otp_email(email, otp)
+        # La duración se pasa desde donde se aplica: así el correo no puede
+        # prometer quince minutos mientras la sesión caduca a los diez.
+        send_otp_email(
+            email, otp,
+            minutes=int(self.OTP_TTL.total_seconds() // 60))
 
         return redirect(self.request.path)
 

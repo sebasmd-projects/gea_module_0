@@ -78,6 +78,28 @@ class GeaUserRegisterWizardView(SessionWizardView):
         (STEP_CODE, _('Verification code')),
     )
 
+    #: Título y frase de cada paso. Van aquí y no repartidos por la plantilla
+    #: para que el registro y el acceso digan las cosas con la misma voz y se
+    #: puedan traducir de una vez.
+    STEP_COPY = {
+        STEP_USER: (
+            _('Your details'),
+            _('Tell us who you are and what kind of account you need.'),
+        ),
+        STEP_SECURITY: (
+            _('Choose a password'),
+            _('It protects your assets and your orders: make it a long one.'),
+        ),
+        STEP_CONTACT: (
+            _('How we reach you'),
+            _('We will use this email for your account and its notices.'),
+        ),
+        STEP_CODE: (
+            _('Verification code'),
+            _('The last step: the code that confirms the account is yours.'),
+        ),
+    }
+
     # --- Buyer email code settings ---
     BUYER_CODE_TTL_SECONDS = 10 * 60          # 10 min
     BUYER_SEND_RATE_TTL_SECONDS = 5 * 60      # 5 min window
@@ -95,14 +117,21 @@ class GeaUserRegisterWizardView(SessionWizardView):
         ctx = super().get_context_data(form=form, **kwargs)
         ctx["title"] = _("Register")
         ctx["step_key"] = self.steps.current
-        ctx["step_index"] = self.steps.step1
-        # no llames get_form_list() custom (no existe) ni uses cleaned aquí
-        ctx["step_count"] = len(super().get_form_list())
 
         # Los dos nombres que espera `partials/_wizard_steps.html`, el mismo
-        # indicador que usa el wizard de PQRS.
+        # indicador que usa el wizard de PQRS. Ese indicador dice ya en qué
+        # paso se está y de qué van los demás, así que el «Paso 2 / 4» que
+        # había al lado --`step_index` y `step_count`-- repetía la mitad de
+        # esa información y no añadía ninguna.
         ctx["steps_labels"] = self.STEP_LABELS
         ctx["current_step"] = self.steps.current
+
+        # Qué se pide en este paso y por qué, en la misma cabecera que usa la
+        # pantalla de acceso. Un wizard que sólo dice «Paso 2 / 4» obliga a
+        # deducir de los campos qué está pidiendo; decirlo arriba es lo que
+        # evita abandonar a la mitad al llegar a algo que no se esperaba.
+        ctx["step_title"], ctx["step_lead"] = self.STEP_COPY.get(
+            self.steps.current, (_('Create your account'), ''))
 
         return ctx
 

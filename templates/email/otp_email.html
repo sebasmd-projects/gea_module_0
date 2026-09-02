@@ -1,6 +1,13 @@
 {% load i18n %}
 {% comment %}
-  El correo con el código de acceso.
+  El correo que lleva un código de seis cifras.
+
+  Uno solo para los dos sitios que mandan códigos --entrar en la plataforma y
+  consultar un certificado--, porque lo único que cambia entre ellos es el
+  asunto y la frase que dice para qué sirve el código. Eran dos correos
+  distintos y el de la verificación era texto plano sin logos, que es
+  exactamente lo contrario de lo que le hace falta a quien acaba de escanear
+  un QR de un papel y no reconoce el remitente.
 
   Maquetado con tablas y estilos en línea a propósito: los clientes de correo
   no traen hoja de estilos externa, Outlook ignora la mayor parte del CSS
@@ -29,8 +36,10 @@
 
         <tr>
           <td style="padding:26px 28px 6px;color:#12203a;font-size:16px;line-height:1.5;">
-            <p style="margin:0 0 16px;">{% blocktrans %}Hi {{ usuario }}:{% endblocktrans %}</p>
-            <p style="margin:0 0 4px;">{% trans "Use the following code to sign in to your account." %}</p>
+            <p style="margin:0 0 16px;">
+              {% if usuario %}{% blocktrans %}Hi {{ usuario }}:{% endblocktrans %}{% else %}{% trans "Hi:" %}{% endif %}
+            </p>
+            <p style="margin:0 0 4px;">{{ instruccion }}</p>
           </td>
         </tr>
 
@@ -54,16 +63,28 @@
         </tr>
 
         <tr>
-          <td style="padding:16px 28px 22px;border-top:1px solid #ebe6da;color:#8c877c;font-size:12px;line-height:1.5;">
+          <td style="padding:16px 28px 22px;border-top:1px solid #ebe6da;color:#8c877c;font-size:12px;line-height:1.6;">
             {% comment %}
               El pie corto: quién manda esto y el aviso de que nadie va a
               pedir el código. Esa frase es la que corta la estafa más común
               --una llamada diciendo «léeme el código que te acaba de
               llegar»--, así que va en el propio correo y no solo en la web.
+
+              Debajo, la misma línea de autoría del pie del sitio, con sus
+              enlaces en pestaña nueva.
             {% endcomment %}
-            Propensiones Abogados Internacional S.A.S. · GEA<br>
+            Propensiones Abogados Internacional S.A.S. &middot; GEA<br>
             {% blocktrans %}This is an automated message. <strong>Nobody from the firm will ever ask you
             for this code</strong> by phone, WhatsApp or email.{% endblocktrans %}
+
+            <div style="margin-top:12px;padding-top:12px;border-top:1px solid #ebe6da;">
+              &copy; 2024 - {% now 'Y' %}
+              <a href="https://propensionesabogados.com/" target="_blank" rel="noopener noreferrer"
+                 style="color:#8c877c;text-decoration:underline;">Propensiones Abogados</a>.
+              {% trans "Made, Design by" %}
+              <a href="https://wa.me/573002954040" target="_blank" rel="noopener noreferrer"
+                 style="color:#8c877c;text-decoration:underline;">Sebastian Morales &amp; Carlos Morales</a>
+            </div>
           </td>
         </tr>
 

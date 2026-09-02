@@ -7,17 +7,20 @@
 {% endblock %}
 
 {% block layout_content %}
-<div class="min-vh-100 d-flex flex-column align-items-center justify-content-center container-xl px-5">
-  <div class="card mx-auto" style="max-width: 800px; width: 100%;">
-    <div class="card-header text-center">
-      <a href="{% url 'core:index' %}">
-          <img src="https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/gea_logo_gold.webp"
-          class="card-img-top img-fluid" alt="..." style="max-width: fit-content;" />
+<div class="min-vh-100 d-flex flex-column align-items-center justify-content-center container-xl px-3 px-md-5 py-4">
+  <div class="card auth-card mx-auto shadow-sm border-0" style="max-width: 800px; width: 100%;">
+    <div class="card-header bg-white border-0 text-center pt-4 pb-0">
+      <a href="{% url 'core:index' %}" aria-label="{% trans 'Go to the home page' %}">
+        <img src="{% static 'assets/imgs/logos/gea_logo_gold.webp' %}"
+             class="img-fluid auth-logo" alt="GEA" />
       </a>
+
+      <h1 class="h5 fw-bold mt-3 mb-1">{{ step_title }}</h1>
+      <p class="text-muted small mb-0">{{ step_lead }}</p>
     </div>
 
-    <div class="card-body">
-      <form method="POST">
+    <div class="card-body px-4 px-md-5 pt-4">
+      <form method="POST" novalidate>
         {{ wizard.form.media.css }}
         {% csrf_token %}
         {{ wizard.management_form }}
@@ -30,19 +33,17 @@
           </div>
         {% endif %}
 
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <div class="text-muted small">
-            {% trans "Step" %} {{ step_index }} / {{ step_count }}
-          </div>
-        </div>
-
+        {% comment %}
+          El indicador de pasos ya dice en cuál se está y de qué van los
+          demás, así que el «Paso 2 / 4» de al lado repetía la mitad de esa
+          información y no añadía ninguna.
+        {% endcomment %}
         {% include 'partials/_wizard_steps.html' %}
 
         <div class="row g-1">
           {% with "account/partials/_floating_input.html" as floating_input %}
 
             {% if step_key == "user" %}
-              <h4 class="mt-2">{% trans "User information" %}</h4>
               <div class="col-md-4">
                 {% include floating_input with field=wizard.form.username label=_("Username*") %}
               </div>
@@ -61,7 +62,6 @@
             {% endif %}
 
             {% if step_key == "security" %}
-              <h4 class="mt-2">{% trans "Security information" %}</h4>
               <div class="col-md-6">
                 {% include floating_input with field=wizard.form.password label=_("Password*") show_eye=True eye_target_id="register_password" %}
               </div>
@@ -71,7 +71,6 @@
             {% endif %}
 
             {% if step_key == "contact" %}
-              <h4 class="mt-2">{% trans "Contact information" %}</h4>
               <div class="col-md-2">
                 {% include floating_input with field=wizard.form.phone_number_code label=_("Code*") %}
               </div>
@@ -95,7 +94,6 @@
             {% endif %}
 
             {% if step_key == "code" %}
-              <h4 class="mt-2">{% trans "Unique code" %}</h4>
               <div class="col-md-6">
                 {% include floating_input with field=wizard.form.unique_code label=_("Unique Code*") show_eye=True eye_target_id="register_unique_code" %}
               </div>
@@ -117,38 +115,55 @@
           {% endwith %}
         </div>
 
-        <div class="d-grid gap-2 mt-3">
+        <div class="d-grid gap-2 mt-4">
+          {% comment %}
+            El botón que avanza va **primero** en el HTML aunque se pinte a la
+            derecha: el navegador dispara el primer botón de envío al pulsar
+            Intro, y con «Atrás» delante rellenar un campo y dar a Intro
+            devolvía al paso anterior perdiendo lo escrito. `order-*` de
+            Bootstrap deja el orden visual como toca.
+          {% endcomment %}
           <div class="d-flex gap-2">
+            <button type="submit"
+                    class="btn btn-success btn-lg fw-semibold order-2 {% if wizard.steps.prev %}w-50{% else %}w-100{% endif %}">
+              {% if step_key == "code" %}{% trans "Create account" %}{% else %}{% trans "Continue" %}{% endif %}
+            </button>
             {% if wizard.steps.prev %}
-              <button
-                type="submit"
-                name="wizard_goto_step"
-                value="{{ wizard.steps.prev }}"
-                class="btn btn-outline-secondary w-50"
-                formnovalidate
-
-              >
+              <button type="submit" name="wizard_goto_step" formnovalidate
+                      value="{{ wizard.steps.prev }}"
+                      class="btn btn-outline-secondary btn-lg order-1 w-50">
                 {% trans "Back" %}
               </button>
             {% endif %}
-            <button type="submit" class="btn btn-success {% if wizard.steps.prev %}w-50{% else %}w-100{% endif %}">
-              {% if step_key == "code" %}{% trans "Register" %}{% else %}{% trans "Continue" %}{% endif %}
-            </button>
           </div>
 
-          {% comment %}
-            El `href` estaba vacio, y un href vacio recarga la pagina actual:
-            "¿ya tienes cuenta? entra" devolvia al registro. El destino es el
-            login de dos factores, que es el unico que hay.
-          {% endcomment %}
-          <a class="btn btn-outline-dark" href="{% url 'two_factor:login' %}">
-            {% trans 'Do you already have an account? Sign in' %}
-          </a>
         </div>
       </form>
     </div>
+
+    <div class="card-footer bg-white border-0 px-4 px-md-5 pb-4 pt-0">
+      <div class="small text-center text-muted">
+        {% comment %}
+          El `href` estaba vacio, y un href vacio recarga la pagina actual:
+          "¿ya tienes cuenta? entra" devolvia al registro. El destino es el
+          login de dos factores, que es el unico que hay.
+        {% endcomment %}
+        {% trans 'Do you already have an account?' %}
+        <a href="{% url 'two_factor:login' %}" class="fw-semibold text-decoration-none">
+          {% trans 'Sign in' %}
+        </a>
+      </div>
+    </div>
   </div>
 </div>
+
+<style>
+  .auth-card { border-radius: 1rem; }
+  .auth-logo { max-width: 190px; }
+  .auth-card .btn-success { background-color: #12203a; border-color: #12203a; }
+  .auth-card .btn-success:hover,
+  .auth-card .btn-success:focus { background-color: #1d355f; border-color: #1d355f; }
+</style>
 {% endblock %}
 
 {% block body_custom_js %}

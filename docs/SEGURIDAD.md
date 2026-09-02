@@ -264,6 +264,27 @@ validarse, axes no contaría esos fallos y su bloqueo de seis intentos no se
 alcanzaría nunca desde el navegador. La ayuda al despistado habría desactivado
 el freno al que ataca. Está fijado en una prueba.
 
+**Y ahora cuenta las tres puertas, no solo una.** Se puede entrar de tres
+formas --contraseña, código al correo y, si lo hay, el segundo factor-- y hasta
+ahora solo la primera alimentaba el contador de axes: las otras dos no pasan
+por `authenticate()`, así que sus fallos no llegaban a ninguna parte. Eso dejaba
+el freno del revés. Quien probara códigos de seis cifras tenía barra libre --el
+tope de cinco intentos por código se esquiva pidiendo otro-- y quien probara
+segundos factores también; el camino más barato para quien atacaba era justo el
+que no dejaba rastro, mientras que el bloqueo solo estorbaba a quien de verdad
+había olvidado su contraseña. Hoy los tres pasan por
+`apps/common/utils/login_attempts.py`, que apunta el fallo por la señal de axes
+--su interfaz, para no replicar sus ajustes-- y **consulta el bloqueo antes** de
+comparar nada: apuntar sin consultar deja el bloqueo escrito en una tabla y a
+quien ataca dentro.
+
+Un detalle que parece menor: el contador va por lo **tecleado** al
+identificarse, no por el usuario resuelto. `UserModel.USERNAME_FIELD` es el
+correo, así que quien entra como «ana» y falla el segundo factor alimentaría
+una cuenta atrás distinta de la del primer paso — y dos contadores para el
+mismo intruso son ninguno, porque basta con alternar de puerta para no agotar
+ninguna.
+
 **Qué no cuenta.** Preguntar por un usuario contesta lo mismo exista o no, y
 el correo sólo sale si hay a quién mandárselo. La pantalla del código dice «se
 ha enviado» en los dos casos, incluso cuando el cupo lo impidió: decir ahí que
@@ -279,6 +300,15 @@ sesión lo esquiva quien borre la cookie.
 destinatario y otro por origen: sin el primero, teclear el usuario de otro en
 bucle le llena el buzón, y quien recibe no eligió nada; sin el segundo, se
 recorre una lista de usuarios mandando tres a cada uno.
+
+**El correo, uno solo para los dos códigos.** El de la verificación documental
+era un `send_mail` de tres líneas en texto plano, sin logos y sin el aviso de
+que nadie del despacho pide el código. Va a quien acaba de escanear el QR de un
+papel, no es usuario de la plataforma y no tiene por qué reconocer el
+remitente: justo a quien menos contexto tiene se le mandaba el mensaje que
+menos se parece a algo. Hoy los dos usan la misma plantilla
+(`apps/common/utils/otp_email.py`) y solo cambian el asunto y la frase que dice
+para qué es el código.
 
 **Lo que queda fuera de la plataforma.** Que el correo del titular esté a su
 vez protegido. El aviso del pie del mensaje —*nadie del despacho te pedirá este

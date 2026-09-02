@@ -3720,3 +3720,51 @@ msgstr "¿No has solicitado este código? Ponte en contacto con nosotros."
 #: templates/two_factor/core/login.html templates/email/login_otp_email.html
 msgid "This is an automated message. <strong>Nobody from the firm will ever ask you\n            for this code</strong> by phone, WhatsApp or email."
 msgstr "Este mensaje es automático. <strong>Nadie del despacho te pedirá este código</strong>\n            por teléfono, por WhatsApp ni por correo."
+
+#: templates/two_factor/core/login.html templates/email/otp_email.html templates/account/gea_register.html
+msgid "Go to the home page"
+msgstr "Ir a la página de inicio"
+
+#: templates/two_factor/core/login.html templates/email/otp_email.html templates/account/gea_register.html
+msgid "Show or hide the password"
+msgstr "Mostrar u ocultar la contraseña"
+
+#: templates/two_factor/core/login.html templates/email/otp_email.html templates/account/gea_register.html
+msgid "Sign in with a code"
+msgstr "Entrar con un código"
+
+#: templates/two_factor/core/login.html templates/email/otp_email.html templates/account/gea_register.html
+msgid "Resend"
+msgstr "Reenviar"
+
+#: templates/two_factor/core/login.html templates/email/otp_email.html templates/account/gea_register.html
+msgid "Enter your username or email and press «Send code». The code will arrive at the email address on your account."
+msgstr "Escribe tu usuario o correo y pulsa «Enviar código». El código llegará a la dirección de tu cuenta."
+
+#: templates/two_factor/core/login.html templates/email/otp_email.html templates/account/gea_register.html
+msgid "Too many failed attempts from this connection. Please wait a few minutes before trying again."
+msgstr "Demasiados intentos fallidos desde esta conexión. Espera unos minutos antes de volver a intentarlo."
+
+#: templates/two_factor/core/login.html templates/email/otp_email.html templates/account/gea_register.html
+msgid "Use a backup token"
+msgstr "Usar un código de respaldo"
+
+#: templates/two_factor/core/login.html templates/email/otp_email.html templates/account/gea_register.html
+msgid "Do you already have an account?"
+msgstr "¿Ya tienes una cuenta?"
+
+#: templates/two_factor/core/login.html templates/email/otp_email.html templates/account/gea_register.html
+msgid "Sign in"
+msgstr "Iniciar sesión"
+
+#: templates/two_factor/core/login.html templates/email/otp_email.html templates/account/gea_register.html
+msgid "Create account"
+msgstr "Crear cuenta"
+
+#: templates/two_factor/core/login.html templates/email/otp_email.html templates/account/gea_register.html
+msgid "Hi:"
+msgstr "Hola:"
+
+#: templates/two_factor/core/login.html templates/email/otp_email.html templates/account/gea_register.html
+msgid "Made, Design by"
+msgstr "Made, Design by"
