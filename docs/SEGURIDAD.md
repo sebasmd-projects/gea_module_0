@@ -28,6 +28,7 @@ Los cuatro están también en la consola de operaciones.
 | ☐ | `FIELD_ENCRYPTION_KEY` es la misma de siempre | Cambiarla **inutiliza toda la PII ya cifrada**. No se rota sin migrar los datos |
 | ☐ | El `.htaccess` de `deploy/` está en la carpeta de media | Sin él el servidor web reparte los PDF por su cuenta y el control de acceso no pinta nada |
 | ☐ | `migrate` y `collectstatic` ejecutados | Una restricción sin migrar no existe; un JS sin recoger no llega |
+| ☐ | El correo sale de verdad | Desde que el acceso se puede hacer con un código enviado al buzón, un servidor de correo caído no es una molestia: es gente que no entra. `DJANGO_EMAIL_*` completas y una prueba de envío |
 
 ### Después de desplegar
 
@@ -240,6 +241,50 @@ Merece decirse: la mayor parte del proyecto aguantó la revisión.
   403— al que no cumple.
 - **Contraseñas:** Argon2 primero.
 - **Cookies:** no hay analítica ni pixels.
+
+---
+
+## El acceso con código al correo
+
+Se añadió después de la auditoría, así que conviene dejar escrito qué sostiene
+y qué no.
+
+**Qué sustituye.** La contraseña, y sólo la contraseña. El código va **dentro**
+del asistente de dos factores, en el lugar del formulario de credenciales:
+quien tenga un dispositivo TOTP configurado sigue pasando por él después. Si
+esto viviera en una vista aparte que llamara a `login()`, el acceso al buzón de
+alguien bastaría para saltarse su segundo factor. Eso no es una comodidad, es
+una puerta trasera, y es la razón de que el código sea más largo de lo que
+parecería necesario.
+
+**Qué no apaga.** El freno de `django-axes`. El paso de contraseña no
+desaparece de la lista cuando se ofrece el código, y la oferta se hace una sola
+vez: si desapareciera, los envíos posteriores de contraseña no llegarían a
+validarse, axes no contaría esos fallos y su bloqueo de seis intentos no se
+alcanzaría nunca desde el navegador. La ayuda al despistado habría desactivado
+el freno al que ataca. Está fijado en una prueba.
+
+**Qué no cuenta.** Preguntar por un usuario contesta lo mismo exista o no, y
+el correo sólo sale si hay a quién mandárselo. La pantalla del código dice «se
+ha enviado» en los dos casos, incluso cuando el cupo lo impidió: decir ahí que
+no salió delataría que la cuenta existe.
+
+**Dónde vive el código.** Hasheado con HMAC-SHA256 sobre `SECRET_KEY`, nunca
+en claro, y en la sesión —que aquí va en base de datos, así que sobrevive a una
+caída de Redis—. Caduca a los 15 minutos, vale una sola vez y se **tira** —no
+sólo se corta la pantalla— tras cinco intentos: un tope que sólo cerrara la
+sesión lo esquiva quien borre la cookie.
+
+**Los dos cupos de envío** fallan cerrados, como los demás (§3). Uno va por
+destinatario y otro por origen: sin el primero, teclear el usuario de otro en
+bucle le llena el buzón, y quien recibe no eligió nada; sin el segundo, se
+recorre una lista de usuarios mandando tres a cada uno.
+
+**Lo que queda fuera de la plataforma.** Que el correo del titular esté a su
+vez protegido. El aviso del pie del mensaje —*nadie del despacho te pedirá este
+código*— es lo único que se puede hacer contra la estafa habitual, la llamada
+diciendo «léeme el código que te acaba de llegar». Va en el propio correo y no
+sólo en la web, porque es ahí donde se lee en el momento en que importa.
 
 ---
 

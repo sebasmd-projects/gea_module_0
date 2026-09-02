@@ -1,0 +1,73 @@
+{% load i18n %}
+{% comment %}
+  El correo con el código de acceso.
+
+  Maquetado con tablas y estilos en línea a propósito: los clientes de correo
+  no traen hoja de estilos externa, Outlook ignora la mayor parte del CSS
+  moderno, y Gmail recorta lo que hay dentro de una etiqueta <style>. Lo que
+  aquí parece anticuado es lo único que se ve igual en todos.
+
+  Los logos van por `cid:`, incrustados en el propio mensaje: un `src` remoto
+  lo bloquean Gmail y Outlook hasta que el destinatario da permiso, y el
+  mensaje llegaría con dos huecos rotos justo encima del código.
+{% endcomment %}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+       style="background:#f4f2ec;margin:0;padding:24px 12px;font-family:Arial,Helvetica,sans-serif;">
+  <tr>
+    <td align="center">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+             style="max-width:560px;background:#ffffff;border:1px solid #ded8cb;border-radius:6px;">
+
+        <tr>
+          <td align="center" style="padding:26px 28px 18px;border-bottom:1px solid #ebe6da;">
+            <img src="cid:propensiones" alt="Propensiones Abogados Internacional"
+                 width="200" style="display:block;border:0;max-width:200px;height:auto;margin:0 auto 12px;">
+            <img src="cid:gea" alt="GEA"
+                 width="120" style="display:block;border:0;max-width:120px;height:auto;margin:0 auto;">
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:26px 28px 6px;color:#12203a;font-size:16px;line-height:1.5;">
+            <p style="margin:0 0 16px;">{% blocktrans %}Hi {{ usuario }}:{% endblocktrans %}</p>
+            <p style="margin:0 0 4px;">{% trans "Use the following code to sign in to your account." %}</p>
+          </td>
+        </tr>
+
+        <tr>
+          <td align="center" style="padding:14px 28px 20px;">
+            <div style="display:inline-block;background:#f3f0e8;border:1px solid #ded8cb;border-radius:6px;
+                        padding:16px 30px;font-family:'Courier New',Courier,monospace;font-size:32px;
+                        font-weight:bold;letter-spacing:8px;color:#12203a;">{{ codigo }}</div>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:0 28px 22px;color:#6b6559;font-size:14px;line-height:1.55;">
+            <p style="margin:0 0 16px;">{% blocktrans %}This code expires in {{ tiempo }} minutes.{% endblocktrans %}</p>
+            <p style="margin:0;">
+              {% trans "Did not request this code? Get in touch with us." %}
+              <a href="mailto:{{ correo_contacto }}" target="_blank" rel="noopener noreferrer"
+                 style="color:#1d4e8f;">{{ correo_contacto }}</a>
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:16px 28px 22px;border-top:1px solid #ebe6da;color:#8c877c;font-size:12px;line-height:1.5;">
+            {% comment %}
+              El pie corto: quién manda esto y el aviso de que nadie va a
+              pedir el código. Esa frase es la que corta la estafa más común
+              --una llamada diciendo «léeme el código que te acaba de
+              llegar»--, así que va en el propio correo y no solo en la web.
+            {% endcomment %}
+            Propensiones Abogados Internacional S.A.S. · GEA<br>
+            {% blocktrans %}This is an automated message. <strong>Nobody from the firm will ever ask you
+            for this code</strong> by phone, WhatsApp or email.{% endblocktrans %}
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>

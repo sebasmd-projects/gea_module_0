@@ -39,7 +39,7 @@ Provisto por `django-two-factor-auth` (`two_factor.urls`).
 
 | Ruta | Nombre | Vista | Acceso |
 |---|---|---|---|
-| `account/login/` | `two_factor:login` | `LoginView` | Público (`settings.LOGIN_URL`) |
+| `account/login/` | `two_factor:login` | **`GeaLoginView`** (`account/login_view.py`) | Público (`settings.LOGIN_URL`) |
 | `account/two_factor/setup/` | `two_factor:setup` | `SetupView` | Autenticado |
 | `account/two_factor/qrcode/` | `two_factor:qr` | `QRGeneratorView` | Autenticado |
 | `account/two_factor/setup/complete/` | `two_factor:setup_complete` | `SetupCompleteView` | Autenticado |
@@ -49,6 +49,18 @@ Provisto por `django-two-factor-auth` (`two_factor.urls`).
 
 Plantillas sobreescritas en `templates/two_factor/`.
 `RedirectAuthenticatedUserMiddleware` redirige a `core:index` si un usuario ya autenticado visita `two_factor:login`.
+
+**El acceso es nuestro, la ruta es de la biblioteca.** `app_core/urls.py` sustituye
+la entrada `login` **dentro** del `include` de `two_factor.urls`, para que
+`two_factor:login` siga resolviendo al mismo sitio: registrar la vista fuera del
+namespace habría dejado dos rutas y `reverse('two_factor:login')` --que usan
+`LOGIN_URL`, el middleware y media plantilla-- habría seguido apuntando a la de
+la biblioteca. `GeaLoginView` mantiene además el prefijo `login_view` del
+asistente, que es el nombre del campo oculto que envía la página.
+
+El asistente tiene cinco pasos, no dos: `auth`, `otp_id`, `otp_code`, `token` y
+`backup`. Los dos del medio son la entrada por código enviado al correo; ver
+`apps/project/common/account/otp_login.py`.
 
 ---
 

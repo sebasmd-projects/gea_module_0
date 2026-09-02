@@ -3668,3 +3668,55 @@ msgstr "Página"
 
 #~ msgid "Not sent"
 #~ msgstr "Sin enviar"
+
+#: templates/two_factor/core/login.html templates/email/login_otp_email.html
+msgid "Sign in with a code sent to my email"
+msgstr "Entrar con un código enviado a mi correo"
+
+#: templates/two_factor/core/login.html templates/email/login_otp_email.html
+msgid "Enter your username or email and we will send you a six-digit code to sign in without your password."
+msgstr "Escribe tu usuario o correo y te enviaremos un código de seis dígitos para entrar sin la contraseña."
+
+#: templates/two_factor/core/login.html templates/email/login_otp_email.html
+msgid "Send code"
+msgstr "Enviar código"
+
+#: templates/two_factor/core/login.html templates/email/login_otp_email.html
+msgid "Sign in with my password instead"
+msgstr "Prefiero entrar con mi contraseña"
+
+#: templates/two_factor/core/login.html templates/email/login_otp_email.html
+msgid "A one-time code has been sent to your email"
+msgstr "Se ha enviado un código OTP a tu correo"
+
+#: templates/two_factor/core/login.html templates/email/login_otp_email.html
+msgid "After several failed password attempts we sent you a code so you can sign in without getting locked out."
+msgstr "Tras varios intentos fallidos con la contraseña te hemos enviado un código para que puedas entrar sin quedarte bloqueado."
+
+#: templates/two_factor/core/login.html templates/email/login_otp_email.html
+msgid "The code expires in %(minutes)s minutes."
+msgstr "El código caduca en %(minutes)s minutos."
+
+#: templates/two_factor/core/login.html templates/email/login_otp_email.html
+msgid "Send a new code"
+msgstr "Enviar un código nuevo"
+
+#: templates/two_factor/core/login.html templates/email/login_otp_email.html
+msgid "Hi %(usuario)s:"
+msgstr "Hola %(usuario)s:"
+
+#: templates/two_factor/core/login.html templates/email/login_otp_email.html
+msgid "Use the following code to sign in to your account."
+msgstr "Utiliza el siguiente código para iniciar sesión en tu cuenta."
+
+#: templates/two_factor/core/login.html templates/email/login_otp_email.html
+msgid "This code expires in %(tiempo)s minutes."
+msgstr "Este código caduca en %(tiempo)s minutos."
+
+#: templates/two_factor/core/login.html templates/email/login_otp_email.html
+msgid "Did not request this code? Get in touch with us."
+msgstr "¿No has solicitado este código? Ponte en contacto con nosotros."
+
+#: templates/two_factor/core/login.html templates/email/login_otp_email.html
+msgid "This is an automated message. <strong>Nobody from the firm will ever ask you\n            for this code</strong> by phone, WhatsApp or email."
+msgstr "Este mensaje es automático. <strong>Nadie del despacho te pedirá este código</strong>\n            por teléfono, por WhatsApp ni por correo."

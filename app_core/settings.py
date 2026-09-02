@@ -214,6 +214,14 @@ LOGIN_URL = 'two_factor:login'
 
 LOGIN_REDIRECT_URL = 'core:index'
 
+# Entrada por código enviado al correo. Cuánto dura el código y a quién
+# escribir si a alguien le llega uno que no ha pedido, que es la señal de que
+# otro está intentando entrar en su cuenta.
+LOGIN_OTP_TTL_MINUTES = int(os.getenv('LOGIN_OTP_TTL_MINUTES', 15))
+
+LOGIN_OTP_CONTACT_EMAIL = os.getenv(
+    'LOGIN_OTP_CONTACT_EMAIL', 'info@propensionesabogados.com')
+
 # Django Parler and i18n
 LOCALE_PATHS = [
     app_path / 'locale' for app_path in [BASE_DIR / app.replace('.', '/') for app in ALL_CUSTOM_APPS]

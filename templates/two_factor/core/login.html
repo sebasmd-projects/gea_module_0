@@ -93,6 +93,121 @@
             {% trans 'Forgot your password?' %}
           </a>
         </div>
+
+        {% comment %}
+          La otra puerta. Va aquí abajo y no arriba porque la contraseña sigue
+          siendo el camino normal; esto es la alternativa, no la primera
+          opción.
+
+          `formnovalidate` en los cuatro botones que sólo cambian de modo: son
+          botones de envío dentro del mismo formulario, así que sin él el
+          navegador exige antes los campos marcados `required` y pedir el
+          código obligaría a escribir primero la contraseña que precisamente
+          no se recuerda. No se salta nada: el servidor no valida ese
+          formulario en esta rama, sólo cambia de paso.
+        {% endcomment %}
+        <div class="d-grid mb-1">
+          <button type="submit" name="use_otp" value="1" formnovalidate
+                  class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-envelope-check me-1"></i>
+            {% trans 'Sign in with a code sent to my email' %}
+          </button>
+        </div>
+
+        {% elif wizard.steps.current == 'otp_id' %}
+        {% comment %} Paso 1 del código: a quién mandarlo. {% endcomment %}
+        <p class="text-muted small mb-3">
+          {% blocktrans trimmed %}
+            Enter your username or email and we will send you a six-digit code
+            to sign in without your password.
+          {% endblocktrans %}
+        </p>
+
+        {% trans 'Username or Email' as username_or_email %}
+        <div class="input-group mb-2">
+          <input id="id_otp_id-identifier" type="text" class="form-control"
+                 placeholder="{{ username_or_email }}" aria-label="{{ username_or_email }}"
+                 name="otp_id-identifier" autocomplete="username" required autofocus
+                 value="{{ form.identifier.value|default:'' }}" />
+          <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+        </div>
+
+        {% if form.identifier.errors %}
+        <div class="text-danger small mb-2">
+          {% for error in form.identifier.errors %}{{ error }}{% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="d-grid mb-2">
+          <button type="submit" class="btn btn-success">{% trans 'Send code' %}</button>
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" name="use_password" value="1" formnovalidate
+                  class="btn btn-link btn-sm text-decoration-none">
+            {% trans 'Sign in with my password instead' %}
+          </button>
+        </div>
+
+        {% elif wizard.steps.current == 'otp_code' %}
+        {% comment %}
+          Paso 2 del código. El aviso dice siempre lo mismo, se haya mandado
+          el correo o no: decir aquí «esa cuenta no existe» convertiría la
+          pantalla en un comprobador de cuentas.
+        {% endcomment %}
+        <div class="alert alert-success py-2 small" role="status">
+          <i class="bi bi-envelope-check me-1"></i>
+          {% trans 'A one-time code has been sent to your email' %}
+          {% if otp_identifier %}
+          <div class="fw-semibold mt-1">{{ otp_identifier }}</div>
+          {% endif %}
+        </div>
+
+        {% if password_failures >= otp_failures_before_offer %}
+        <p class="text-muted small mb-3">
+          {% blocktrans trimmed %}
+            After several failed password attempts we sent you a code so you can
+            sign in without getting locked out.
+          {% endblocktrans %}
+        </p>
+        {% endif %}
+
+        {% trans 'Verification code' as code_label %}
+        <div class="input-group mb-2">
+          <input id="id_otp_code-code" type="text" class="form-control text-center"
+                 placeholder="{{ code_label }}" aria-label="{{ code_label }}"
+                 name="otp_code-code" inputmode="numeric" pattern="[0-9]*"
+                 autocomplete="one-time-code" maxlength="6" required autofocus
+                 style="letter-spacing:.4em;font-size:1.25rem;" />
+        </div>
+
+        {% if form.code.errors %}
+        <div class="text-danger small mb-2">
+          {% for error in form.code.errors %}{{ error }}{% endfor %}
+        </div>
+        {% endif %}
+
+        <p class="text-muted small mb-3">
+          {% blocktrans trimmed with minutes=otp_minutes %}
+            The code expires in {{ minutes }} minutes.
+          {% endblocktrans %}
+        </p>
+
+        <div class="d-grid mb-2">
+          <button type="submit" class="btn btn-success">{% trans 'Sign in' %}</button>
+        </div>
+
+        <div class="d-grid gap-1">
+          <button type="submit" name="use_otp" value="1" formnovalidate
+                  class="btn btn-link btn-sm text-decoration-none">
+            {% trans 'Send a new code' %}
+          </button>
+          <button type="submit" name="use_password" value="1" formnovalidate
+                  class="btn btn-link btn-sm text-decoration-none">
+            {% trans 'Sign in with my password instead' %}
+          </button>
+        </div>
+
         {% elif wizard.steps.current == 'token' %}
         {% include "two_factor/_wizard_forms.html" %}
 
@@ -117,7 +232,14 @@
         </div>
         {% endif %}
 
+        {% comment %}
+          Los pasos del código traen sus propios botones --«Enviar código»,
+          «Entrar»-- así que el «Siguiente» genérico sobra ahí: dos botones de
+          envío seguidos hacen dudar de cuál es el que vale.
+        {% endcomment %}
+        {% if wizard.steps.current not in otp_step_names %}
         {% include "two_factor/_wizard_actions.html" %}
+        {% endif %}
       </form>
 
       {% block 'backup_tokens' %}
@@ -155,6 +277,13 @@
     const passwordInput = document.getElementById('id_auth-password');
     const togglePassword = document.getElementById('togglePassword');
     const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+
+    // Los pasos del código no traen campo de contraseña, así que aquí no hay
+    // nada que mostrar ni ocultar. Sin esta salida, el `addEventListener`
+    // sobre `null` revienta el script entero en esas dos pantallas.
+    if (!passwordInput || !togglePassword || !togglePasswordIcon) {
+      return;
+    }
 
     togglePassword.addEventListener('click', () => {
       const isPassword = passwordInput.type === 'password';
