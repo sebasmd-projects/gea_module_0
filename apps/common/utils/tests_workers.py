@@ -33,7 +33,7 @@ from unittest import mock
 from django.core.management import call_command
 from django.test import SimpleTestCase, override_settings
 
-GET_CONNECTION = 'django_redis.get_redis_connection'
+FROM_URL = 'redis.Redis.from_url'
 POPEN = (
     'apps.common.utils.management.commands.check_workers.subprocess.Popen'
 )
@@ -45,18 +45,15 @@ class Denied(Exception):
 
 def cache_only_client():
     """
-    Un Redis con la ACL de la cache: escribe en gea:* y nada mas.
+    Un Redis con la ACL de la **cache**, al que se le pide hacer de broker.
 
     Reproduce lo que hace el servidor de verdad con
-    ``~gea:* +@read +@write +@keyspace -@dangerous +flushdb``, que es la ACL
-    que hay hoy en produccion.
+    ``~gea:* +@read +@write +@keyspace -@dangerous +flushdb``: las cinco
+    operaciones del broker responden NOPERM. Es lo que sale si alguien apunta
+    ``CELERY_BROKER_URL`` a las credenciales de la cache, que es el atajo
+    tentador y el que no funciona.
     """
     client = mock.Mock()
-
-    def set_(key, *args, **kwargs):
-        if not str(key).startswith('gea:'):
-            raise Denied('no permissions to access one of the keys')
-        return True
 
     def refuse_key(key, *args, **kwargs):
         raise Denied('no permissions to access one of the keys')
@@ -64,9 +61,9 @@ def cache_only_client():
     def refuse_command(*args, **kwargs):
         raise Denied('no permissions to run the command')
 
-    client.set.side_effect = set_
     client.lpush.side_effect = refuse_key
     client.brpop.side_effect = refuse_key
+    client.get.side_effect = refuse_key
     client.ping.side_effect = refuse_command
     client.publish.side_effect = refuse_command
     client.pipeline.side_effect = refuse_command
@@ -74,10 +71,37 @@ def cache_only_client():
     return client
 
 
-def open_client():
-    """Un Redis que deja hacer de todo: el broker de otra base de datos."""
+def broker_client():
+    """
+    El usuario del broker bien puesto: lo suyo si, la cache no.
+
+    ``~celery* ~_kombu* ~unacked* &* +@all -@dangerous -@admin``. Lo que
+    distingue este de `wide_open_client` es la ultima linea: leer una clave de
+    la cache responde NOPERM.
+    """
     client = mock.Mock()
     client.brpop.return_value = None
+
+    def refuse_cache_keys(key, *args, **kwargs):
+        raise Denied('no permissions to access one of the keys')
+
+    client.get.side_effect = refuse_cache_keys
+
+    return client
+
+
+def wide_open_client():
+    """
+    Un broker con ``~*``: funciona, y ademas alcanza las claves de la cache.
+
+    Es el error que ya se cometio una vez -- dar ``~*`` y dar por hecho que la
+    base de datos aparte separaba. No separa: las ACL de Redis no se acotan por
+    base.
+    """
+    client = mock.Mock()
+    client.brpop.return_value = None
+    client.get.return_value = None
+
     return client
 
 
@@ -88,13 +112,13 @@ class WorkerCheckTestCase(SimpleTestCase):
         self.media = tempfile.TemporaryDirectory()
         self.addCleanup(self.media.cleanup)
 
-    def run_command(self, *, client=None, redis_url='redis://x', **options):
+    def run_command(self, *, client=None, broker_url='redis://x/1', **options):
         out = StringIO()
 
         with override_settings(MEDIA_ROOT=self.media.name,
-                               REDIS_URL=redis_url):
-            with mock.patch(GET_CONNECTION,
-                            return_value=client or cache_only_client()):
+                               CELERY_BROKER_URL=broker_url):
+            with mock.patch(FROM_URL,
+                            return_value=client or broker_client()):
                 call_command('check_workers', stdout=out, stderr=out,
                              no_color=True, **options)
 
@@ -109,6 +133,53 @@ class WorkerCheckTestCase(SimpleTestCase):
         return target
 
 
+class TestAnUndeclaredLibraryIsNotAGreenTests(WorkerCheckTestCase):
+    """
+    Que `import celery` funcione no significa que este declarada.
+
+    Es un verde que esconde un problema: si no esta en `requirements.txt`,
+    esta porque alguien la instalo a mano en el servidor, y el proximo entorno
+    que se levante desde ese fichero no la va a traer. La misma trampa que ya
+    rompio produccion con `opentimestamps`, solo que del reves.
+    """
+
+    def run_with_celery(self, *, declared):
+        fake = mock.Mock()
+        fake.__version__ = '5.6.3'
+
+        requirements = Path(self.media.name) / 'requirements.txt'
+        requirements.write_text(
+            'django==4.2\ncelery==5.6.3\n' if declared else 'django==4.2\n')
+
+        out = StringIO()
+
+        with override_settings(MEDIA_ROOT=self.media.name,
+                               BASE_DIR=self.media.name,
+                               CELERY_BROKER_URL='redis://x/1'):
+            with mock.patch.dict('sys.modules', {'celery': fake}):
+                with mock.patch(FROM_URL, return_value=broker_client()):
+                    call_command('check_workers', stdout=out, stderr=out,
+                                 no_color=True)
+
+        return out.getvalue()
+
+    def test_an_undeclared_library_is_flagged(self):
+        output = self.run_with_celery(declared=False)
+
+        self.assertIn('NO esta declarada en requirements.txt', output)
+
+    def test_it_says_how_to_declare_it(self):
+        output = self.run_with_celery(declared=False)
+
+        self.assertIn('uv export --format=requirements-txt', output)
+
+    def test_a_declared_library_says_nothing(self):
+        output = self.run_with_celery(declared=True)
+
+        self.assertIn('celery disponible', output)
+        self.assertNotIn('NO esta declarada', output)
+
+
 class TestBrokerIsNotTheCache(WorkerCheckTestCase):
     """
     Que el Redis vaya como cache no dice nada sobre el broker.
@@ -117,43 +188,165 @@ class TestBrokerIsNotTheCache(WorkerCheckTestCase):
     las tareas desaparecerian sin ruido.
     """
 
-    def test_the_cache_acl_is_reported_as_not_enough_for_a_broker(self):
+    def test_a_working_broker_is_reported_as_usable(self):
         output = self.run_command()
 
-        self.assertIn('NO como broker', output)
+        self.assertIn('sirve de broker', output)
+
+    def test_the_cache_credentials_do_not_pass(self):
+        """
+        El atajo tentador: apuntar CELERY_BROKER_URL al usuario de la cache.
+        Responde NOPERM a las cinco.
+        """
+        output = self.run_command(client=cache_only_client())
+
         self.assertIn('0 de 5', output)
 
     def test_each_denial_says_what_it_breaks(self):
-        """
-        Un NOPERM a secas no dice que arreglar. Cada uno lleva su motivo.
-        """
-        output = self.run_command()
+        """Un NOPERM a secas no dice que arreglar. Cada uno lleva su motivo."""
+        output = self.run_command(client=cache_only_client())
 
-        self.assertIn('~gea:*', output)          # las claves
+        self.assertIn('~celery*', output)        # las claves
         self.assertIn('@connection', output)     # el ping
         self.assertIn('@pubsub', output)         # los resultados
         self.assertIn('@transaction', output)    # no perder mensajes
 
-    def test_ping_is_not_used_to_decide_whether_redis_answers(self):
+    def test_without_a_broker_url_there_is_nothing_to_test_yet(self):
         """
-        La ACL de la cache no da @connection, asi que PING responde NOPERM con
-        el servidor perfectamente vivo. Usarlo como prueba de conexion daria
-        «no se pudo conectar» sobre un Redis que funciona.
+        Y se dice asi, no como un fallo: mientras no haya cola, no hay nada
+        roto. Lo que no puede hacer es callarse que el broker lleva
+        credenciales propias.
         """
-        output = self.run_command()
+        output = self.run_command(broker_url='')
 
-        self.assertNotIn('No se pudo conectar', output)
+        self.assertIn('No hay CELERY_BROKER_URL', output)
+        self.assertIn('CELERY_BROKER_URL=rediss://broker:', output)
+
+    def test_it_does_not_test_the_broker_with_the_cache_connection(self):
+        """
+        La razon de ser de esta tanda.
+
+        Antes se probaba con `get_redis_connection('default')` --el usuario de
+        la cache, en la base 0--, asi que la comprobacion no podia dar verde ni
+        con el broker perfectamente montado, y su propia conclusion mandaba a
+        arreglar algo que ya estaba arreglado.
+        """
+        out = StringIO()
+
+        with override_settings(MEDIA_ROOT=self.media.name,
+                               CELERY_BROKER_URL='redis://x/1'):
+            with mock.patch(FROM_URL, return_value=broker_client()):
+                with mock.patch('django_redis.get_redis_connection') as cache:
+                    call_command('check_workers', stdout=out, stderr=out,
+                                 no_color=True)
+
+        self.assertFalse(
+            cache.called,
+            'el broker no se prueba con la conexion de la cache',
+        )
+
+
+class TestUnreachableIsNotTheSameAsForbiddenTests(WorkerCheckTestCase):
+    """
+    «No llego» y «llegue y me dijeron que no» son diagnosticos distintos.
+
+    Sin separarlos, un servidor apagado --o una CA mal puesta, o el
+    cortafuegos-- salia como «0 de 5» con cinco explicaciones sobre permisos
+    que faltan: cinco veces la respuesta equivocada, porque la ACL podia estar
+    perfecta. Esa confusion es justo la que este comando existe para evitar.
+    """
+
+    def unreachable_client(self):
+        import redis
+
+        client = mock.Mock()
+        client.ping.side_effect = redis.exceptions.ConnectionError(
+            'Error 111 connecting to redis.example.com:6380')
+
+        return client
+
+    def bad_password_client(self):
+        import redis
+
+        client = mock.Mock()
+        client.ping.side_effect = redis.exceptions.AuthenticationError(
+            'WRONGPASS invalid username-password pair')
+
+        return client
+
+    def test_a_server_that_does_not_answer_is_not_blamed_on_the_acl(self):
+        output = self.run_command(client=self.unreachable_client())
+
+        self.assertIn('No se llega al servidor', output)
+        self.assertIn('no dice nada de la ACL', output)
+
+    def test_it_does_not_list_five_permission_problems(self):
+        """Cinco explicaciones sobre la ACL cuando el problema es la red."""
+        output = self.run_command(client=self.unreachable_client())
+
+        self.assertNotIn('@pubsub', output)
+        self.assertNotIn('0 de 5', output)
+
+    def test_it_does_not_claim_the_cache_is_isolated_either(self):
+        """
+        Si no se llega al servidor, la prueba de aislamiento tampoco se ha
+        hecho. Contarla como superada seria dar por bueno lo que no se ha
+        podido mirar.
+        """
+        output = self.run_command(client=self.unreachable_client())
+
+        self.assertNotIn('que es lo correcto', output)
+        self.assertNotIn('no alcanza la cache', output)
+
+    def test_a_wrong_password_says_it_is_the_password(self):
+        output = self.run_command(client=self.bad_password_client())
+
+        self.assertIn('No se pudo autenticar', output)
+        self.assertIn('no son los de la cache', output)
+
+    def test_a_noperm_on_ping_is_still_judged_as_an_acl_problem(self):
+        """
+        Un NOPERM sobre PING si es una respuesta del servidor: hay Redis
+        delante y lo que falta es un permiso. Ese caso tiene que seguir
+        contandose entre los cinco.
+        """
+        output = self.run_command(client=cache_only_client())
+
         self.assertIn('PING: DENEGADO', output)
+        self.assertIn('0 de 5', output)
 
-    def test_an_open_broker_is_reported_as_usable(self):
-        output = self.run_command(client=open_client())
 
-        self.assertIn('sirve de broker tal como esta', output)
+class TestTheBrokerDoesNotReachTheCache(WorkerCheckTestCase):
+    """
+    Que funcione no basta: tiene que no llegar a las claves de la cache.
 
-    def test_without_redis_there_is_no_broker(self):
-        output = self.run_command(redis_url='')
+    Es un error ya cometido. La primera version del documento daba ``~*`` al
+    broker y daba por hecho que ponerlo en otra base de datos lo separaba de la
+    cache. **Las ACL de Redis no se acotan por base de datos**, asi que ese
+    usuario, conectado a la base 0, leia y borraba las claves ``gea:*`` -- entre
+    ellas los contadores de intentos de acceso.
+    """
 
-        self.assertIn('No hay REDIS_URL', output)
+    def test_a_broker_that_cannot_read_the_cache_passes(self):
+        output = self.run_command(client=broker_client())
+
+        self.assertIn('DENEGADO, que es lo correcto', output)
+        self.assertIn('no alcanza la cache', output)
+
+    def test_a_broker_that_reads_the_cache_is_not_good_enough(self):
+        output = self.run_command(client=wide_open_client())
+
+        self.assertIn('PERMITIDO', output)
+        self.assertNotIn('no alcanza la cache', output)
+
+    def test_it_says_that_another_database_does_not_fix_it(self):
+        """
+        Porque es justo la conclusion equivocada a la que se llega solo, y la
+        que ya se escribio una vez en la documentacion.
+        """
+        output = self.run_command(client=wide_open_client())
+
+        self.assertIn('no se acotan por base', output)
 
 
 class TestSurvivalIsTheOneThatDecides(WorkerCheckTestCase):
@@ -211,7 +404,7 @@ class TestSurvivalIsTheOneThatDecides(WorkerCheckTestCase):
 
         self.write_beats([start + n * 30 for n in range(61)])
 
-        output = self.run_command(client=open_client())
+        output = self.run_command(client=broker_client())
 
         self.assertIn('Aguanto la prueba entera', output)
         self.assertIn('puede sostener un worker', output)
@@ -275,9 +468,9 @@ class TestSurvivalIsTheOneThatDecides(WorkerCheckTestCase):
 
         self.write_beats([start + n * 30 for n in range(61)])
 
-        output = self.run_command()
+        output = self.run_command(broker_url='')
 
-        self.assertIn('todavia no sirve de broker', output)
+        self.assertIn('Falta el broker', output)
         self.assertNotIn('puede sostener un worker', output)
 
 
@@ -401,7 +594,7 @@ class TestTheProbeDuration(WorkerCheckTestCase):
             name='20260830-120000-30m.beats',
         )
 
-        output = self.run_command(client=open_client())
+        output = self.run_command(client=broker_client())
 
         self.assertIn('Aguanto la prueba entera', output)
         self.assertIn('--minutes 1440', output)
@@ -415,7 +608,7 @@ class TestTheProbeDuration(WorkerCheckTestCase):
             name='20260830-120000-1440m.beats',
         )
 
-        output = self.run_command(client=open_client())
+        output = self.run_command(client=broker_client())
 
         self.assertIn('Aguanto la prueba entera', output)
         self.assertNotIn('--minutes 1440', output)
