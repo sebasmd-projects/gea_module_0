@@ -70,6 +70,9 @@ INTENTIONALLY_PUBLIC = {
     'certificates:summary_master_payload': 'payload publico del anclaje',
     'certificates:certification_public_key': 'clave publica de verificacion',
     'certificates:document_file': 'comprueba permisos dentro (files.can_access)',
+    'account:login':
+        'la pantalla de acceso; sus frenos son axes para la contrasena y '
+        'otp_login.send_throttle para el codigo por correo',
     'account:register': 'alta de cuenta; exige codigo',
     'account:logout': 'cerrar sesion',
     'account:forgot_password': 'recuperacion; limitada por IP y destinatario',

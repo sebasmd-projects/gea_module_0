@@ -83,7 +83,37 @@ admin_urls: List[UrlItem] = [
 ]
 
 # ==== Two-Factor ====
-two_factor_urls: List[UrlItem] = [path("", include(tf_urls))]
+#
+# El acceso lo sirve una vista propia: el asistente de la biblioteca más la
+# entrada por código al correo.
+#
+# La sustitución se hace **dentro de la lista de la biblioteca**, no poniendo
+# una ruta antes del `include`. Esa ruta de fuera habría respondido en
+# `/account/login/`, pero `two_factor:login` --que es como la nombran las
+# plantillas, los redirectores y `LOGIN_URL`-- habría seguido resolviendo a la
+# vista original: el espacio de nombres lo aplica el `include`, así que lo que
+# queda fuera no entra en él. Se cambia la entrada y se conserva el nombre.
+from apps.project.common.account.login_view import GeaLoginView  # noqa: E402
+
+_tf_patterns, _tf_namespace = tf_urls
+
+
+def _with_our_login(entry):
+    """La misma entrada, con nuestra vista dentro."""
+    if getattr(entry, 'name', None) != 'login':
+        return entry
+
+    # Se reutiliza el patrón de la biblioteca en vez de reescribir la ruta a
+    # mano: así, si algún día cambia `account/login/`, cambia aquí también y no
+    # quedan dos verdades sobre dónde está el acceso.
+    return URLPattern(
+        entry.pattern, GeaLoginView.as_view(), entry.default_args, entry.name)
+
+
+two_factor_urls: List[UrlItem] = [
+    path("", include(
+        ([_with_our_login(entry) for entry in _tf_patterns], _tf_namespace))),
+]
 
 
 # ==== URL patterns finales (orden explícito) ====

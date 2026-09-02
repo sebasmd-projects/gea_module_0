@@ -289,3 +289,11 @@ msgstr "¡Tu contraseña se ha cambiado correctamente!"
 #: .\apps\project\common\account\views.py:687
 msgid "Change Password"
 msgstr "Cambiar contraseña"
+
+#: apps/project/common/account/forms/login_otp_form.py apps/project/common/account/emails.py
+msgid "The code is not valid or has expired. Request a new one."
+msgstr "El código no es válido o ha caducado. Solicita uno nuevo."
+
+#: apps/project/common/account/forms/login_otp_form.py apps/project/common/account/emails.py
+msgid "Sign in to Propensiones (GEA): here is the 6-digit verification code you requested"
+msgstr "Inicio de sesión en Propensiones (GEA): aquí tienes el código de verificación de 6 dígitos que has solicitado"
