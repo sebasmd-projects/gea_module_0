@@ -174,7 +174,8 @@ user health on nopass resetkeys +ping
 user gea on #PEGA_AQUI_EL_SHA256 ~gea:* +@read +@write +@keyspace -@dangerous +flushdb
 
 # 4) Solo si algun dia se monta una cola de tareas (Celery). Mientras no la
-#    haya, esta linea sobra: no se abre lo que no se usa.
+#    haya, esta linea sobra: no se abre lo que no se usa. El paso 9 lo explica
+#    entero -- contrasena, base de datos y como comprobarlo.
 #
 #    Un broker necesita cosas que la cache no: sus propios nombres de clave,
 #    PING (@connection), pub/sub y transacciones. Con la ACL del usuario «gea»
@@ -445,6 +446,112 @@ de uno que se esquiva abriendo otra pestaña hasta que responda otro worker.
 
 Después, `manage.py clear_cache` sigue funcionando igual, y la consola de
 operaciones lo tiene en su lista blanca.
+
+---
+
+## Paso 9. El broker de la cola de tareas (solo si se monta Celery)
+
+Este paso **no hace falta para la cache**. Se hace el día que se saque de la
+petición el trabajo lento —la traducción por OpenAI dentro de una señal
+`pre_save`, los PDF, el envío de correo, el anclaje— y se necesite una cola.
+
+Lo que hay que entender antes de tocar nada: **el usuario `gea` no vale**. Está
+acotado a `~gea:*` y a `+@read +@write +@keyspace`, y un broker necesita otras
+claves y otros comandos. Con esas credenciales responde `NOPERM` a las cinco
+operaciones que un broker hace:
+
+| Operación | Para qué | Qué le falta al usuario `gea` |
+|---|---|---|
+| `PING` | saber si el servidor sigue ahí | `@connection` |
+| `LPUSH celery` | encolar el trabajo | los nombres de clave: `celery`, `_kombu.binding.*`, `unacked` |
+| `BRPOP` | repartirlo entre workers | ídem |
+| `PUBLISH` | resultados y control de los workers | `@pubsub` |
+| `MULTI`/`EXEC` | no perder un mensaje a medio repartir | `@transaction` |
+
+> **El síntoma de dejarlo a medias es de los peores**: el Redis responde, la
+> cache va perfecta, y las tareas desaparecen sin ruido. Por eso
+> `check_workers` prueba comando a comando en vez de dar por bueno que «Redis
+> funciona».
+
+### 9.1 Otra contraseña
+
+Otra, no la de la cache. Si un día se filtra la del worker, no debe abrir
+también los contadores de límite.
+
+```bash
+openssl rand -base64 36                       # la contraseña; guárdala
+printf '%s' 'LA_CONTRASEÑA_DEL_BROKER' | sha256sum
+```
+
+### 9.2 El usuario, en `redis.conf`
+
+Va junto a los otros tres, por la misma razón que ellos: `ACL SETUSER` desde
+fuera no persiste sin `aclfile`, y los usuarios creados a mano desaparecerían
+al recrear el contenedor.
+
+```conf
+user broker on #PEGA_AQUI_EL_OTRO_SHA256 ~celery* ~_kombu* ~unacked* &* +@all -@dangerous -@admin
+```
+
+Cada trozo de esa línea está ahí por algo:
+
+| Trozo | Por qué |
+|---|---|
+| `~celery*` | la cola (`celery`), el buzón de control (`celery.pidbox`) y los resultados (`celery-task-meta-*`) |
+| `~_kombu*` | los enlaces que kombu mantiene (`_kombu.binding.*`) |
+| `~unacked*` | los mensajes repartidos y aún sin confirmar (`unacked`, `unacked_index`, `unacked_mutex`) |
+| `&*` | los canales de pub/sub. No son almacenamiento: por ahí no se lee ni se borra nada |
+| `+@all -@dangerous -@admin` | todo lo que necesita, menos `FLUSHALL`, `CONFIG`, `SHUTDOWN` y compañía |
+
+> ⚠️ **No pongas `~*`, y la base de datos aparte no te salva de ello.** Es un
+> error que ya se cometió en este documento. **Las ACL de Redis no se acotan
+> por base de datos**: un usuario con `~*` que se conecte a la base 0 lee y
+> borra las claves `gea:*` tan tranquilo — entre ellas los contadores de
+> intentos de acceso. Quien aísla es el patrón de claves; la base aparte es
+> orden, no control. `check_workers` lo comprueba expresamente.
+
+Recrea el contenedor para que lo tome:
+
+```bash
+cd /opt/gea-redis && sudo docker compose up -d --force-recreate
+```
+
+### 9.3 Comprobarlo desde el propio VPS
+
+```bash
+# Lo suyo, sí
+sudo docker exec gea-redis redis-cli --tls --cacert /tls/ca.crt -p 6380 \
+  --user broker --pass 'LA_CONTRASEÑA_DEL_BROKER' --no-auth-warning -n 1 \
+  LPUSH celery x
+#   -> 1
+
+# La cache, no
+sudo docker exec gea-redis redis-cli --tls --cacert /tls/ca.crt -p 6380 \
+  --user broker --pass 'LA_CONTRASEÑA_DEL_BROKER' --no-auth-warning \
+  GET gea:loquesea
+#   -> NOPERM ... keys
+```
+
+Esa segunda es la que importa y la que más se olvida.
+
+### 9.4 El lado de Django
+
+Al `.env` de cPanel, **además** de `REDIS_URL` y sin sustituirla. Fíjate en las
+dos diferencias: el usuario y la base de datos (`/1`, no `/0`).
+
+```
+CELERY_BROKER_URL=rediss://broker:<LA_CONTRASEÑA_DEL_BROKER>@redis.sebasmoralesd.com:6380/1?ssl_cert_reqs=required&ssl_ca_certs=/home/<usuario_cpanel>/gea-redis-ca.crt
+```
+
+Y se comprueba con:
+
+```bash
+python manage.py check_workers
+```
+
+También en la consola de operaciones, como **«Background workers»**. Sin
+`CELERY_BROKER_URL` puesta el comando lo dice y no da nada por malo: mientras
+no haya cola, no hay nada roto.
 
 ---
 

@@ -16,8 +16,12 @@ Cuatro cosas, y las cuatro tienen que salir bien:
 
 1. **Que la libreria este.** La mas facil, y la unica que se arregla con pip.
 2. **Que el Redis sirva de broker.** Que sirva de cache no basta: un broker
-   necesita otras claves y otros comandos, y la ACL actual esta escrita para
-   la cache. Es el fallo que mas despista, porque el Redis «funciona».
+   necesita otras claves y otros comandos, y la ACL de la cache esta escrita
+   para la cache. Es el fallo que mas despista, porque el Redis «funciona».
+   Se prueba con las credenciales **del broker** (``CELERY_BROKER_URL``), no
+   con las de la cache: probarlo con las de la cache no mide si el Redis
+   serviria de broker, mide que el usuario de la cache no vale para eso -- que
+   ya se sabe, y que no cambia por mucho que se arregle la ACL.
 3. **Que quepan mas procesos.** Un worker ocupa sitio en un limite compartido
    con los procesos que atienden la web.
 4. **Que un proceso desprendido sobreviva.** La de verdad. Muchos hostings
@@ -77,10 +81,11 @@ PROBE_LIMIT_MINUTES = 7 * 24 * 60
 # es donde ya se notan los reinicios y los recortes del proveedor.
 PROBE_LONG_MINUTES = 24 * 60
 
-# Lo que un broker de Celery necesita del Redis y la cache no. Cada entrada es
-# (etiqueta, funcion, para que sirve) y se prueba de verdad contra el servidor.
+# El nombre con el que empiezan las claves de prueba del broker. Tiene que
+# empezar por «celery» para caer dentro de `~celery*`, que es uno de los tres
+# patrones que se le conceden: una prueba con otro nombre estaria midiendo un
+# permiso que el broker de verdad no necesita.
 BROKER_KEY = 'celery'
-KOMBU_KEY = '_kombu.binding.celery'
 
 
 class Command(BaseCommand):
@@ -151,22 +156,50 @@ class Command(BaseCommand):
             f'   celery disponible ({celery.__version__}).'
         ))
 
+        if not self._is_declared('celery'):
+            # Un verde que esconde un problema. Que la libreria importe aqui
+            # solo dice que **hoy** esta en este entorno; si no esta declarada,
+            # esta porque alguien la instalo a mano, y el proximo entorno que
+            # se levante desde `requirements.txt` no la va a traer. Es la misma
+            # trampa que ya rompio produccion con `opentimestamps`, del reves.
+            self.stdout.write(self.style.WARNING(
+                '   Pero NO esta declarada en requirements.txt: esta instalada '
+                'a mano. Produccion instala con pip desde ese fichero, asi que '
+                'el dia que se rehaga el entorno la cola se queda sin libreria.'
+            ))
+            self.stdout.write(
+                '      Se arregla declarandola y reexportando:'
+            )
+            self.stdout.write(
+                '         uv add celery && uv export --format=requirements-txt '
+                '> requirements.txt'
+            )
+
         return True
 
+    def _is_declared(self, package: str) -> bool:
+        """
+        Si el paquete esta en ``requirements.txt``, que es lo que instala
+        produccion.
+
+        Se mira ese fichero y no ``pyproject.toml`` porque es el que manda en
+        el servidor: en cPanel no hay `uv`. Si no se puede leer, se calla --un
+        aviso que no se puede fundamentar es ruido.
+        """
+        target = Path(settings.BASE_DIR) / 'requirements.txt'
+
+        try:
+            declared = target.read_text(encoding='utf-8').lower()
+        except OSError:
+            return True
+
+        return any(
+            line.split('==')[0].split('[')[0].strip() == package
+            for line in declared.splitlines()
+            if line.strip() and not line.lstrip().startswith('#')
+        )
+
     # ------------------------------------------------------------------
-    def _redis_client(self):
-        """
-        Conexion cruda al Redis, sin la capa de cache.
-
-        Hay que saltarse la cache a proposito: ``django-redis`` prefija las
-        claves con ``gea:`` y se traga los errores con ``IGNORE_EXCEPTIONS``,
-        que es justo lo que aqui hay que ver. Un broker escribe claves con sus
-        propios nombres y sin prefijo.
-        """
-        from django_redis import get_redis_connection
-
-        return get_redis_connection('default')
-
     def _try(self, label, operation, explains):
         """Ejecutar una operacion del broker y contar que dijo el servidor."""
         try:
@@ -182,64 +215,143 @@ class Command(BaseCommand):
 
         return True
 
+    def _broker_client(self):
+        """
+        Conexion con las credenciales **del broker**, que no son las de la cache.
+
+        Es la diferencia que hace util a esta comprobacion. Probar el broker
+        con el usuario de la cache no mide si el Redis serviria de broker: mide
+        que el usuario de la cache no sirve para eso, que ya se sabe de
+        antemano y no cambia por mucho que se arregle la ACL. Con esa conexion
+        la comprobacion no podia dar verde nunca, ni con el broker perfectamente
+        montado, y su propia conclusion mandaba a arreglar algo que ya estaba
+        arreglado.
+        """
+        import redis
+
+        return redis.Redis.from_url(
+            settings.CELERY_BROKER_URL,
+            socket_connect_timeout=5,
+            socket_timeout=5,
+        )
+
+    def _broker_answers(self, client) -> bool:
+        """
+        Que al otro lado haya un Redis que conteste, antes de juzgar la ACL.
+
+        Sin esta separacion, un servidor apagado --o una CA mal puesta, o el
+        cortafuegos-- salia como «0 de 5» con cinco explicaciones sobre
+        permisos que faltan. Cinco veces la respuesta equivocada: la ACL puede
+        estar perfecta y el problema ser que no se llega. Esa confusion es
+        justo la que este comando existe para evitar.
+
+        La distincion la da el tipo de error. Un NOPERM llega como
+        ``ResponseError`` --el servidor contesto, y contesto que no-- mientras
+        que un servidor inalcanzable llega como ``ConnectionError`` o
+        ``TimeoutError``, que no son respuestas suyas.
+        """
+        import redis
+
+        try:
+            client.ping()
+        except redis.exceptions.AuthenticationError as error:
+            self.stdout.write(self.style.ERROR(
+                f'   No se pudo autenticar: {error}'
+            ))
+            self.stdout.write(
+                '      El usuario o la contrasena de CELERY_BROKER_URL no son '
+                'los del usuario «broker» de redis.conf. Ojo: no son los de la '
+                'cache, son otros.'
+            )
+            return False
+        except (redis.exceptions.ConnectionError,
+                redis.exceptions.TimeoutError) as error:
+            self.stdout.write(self.style.ERROR(
+                f'   No se llega al servidor: {type(error).__name__}: {error}'
+            ))
+            self.stdout.write(
+                '      Esto no dice nada de la ACL, que puede estar perfecta. '
+                'Mira el host y el puerto de CELERY_BROKER_URL, la ruta de la '
+                'CA y la regla del cortafuegos (deploy/REDIS.md, paso 5).'
+            )
+            return False
+        except Exception:  # noqa: BLE001
+            # Cualquier otra cosa --tipicamente NOPERM sobre PING-- si es una
+            # respuesta del servidor: hay Redis y ya lo juzgan las cinco
+            # comprobaciones, que lo cuentan con su explicacion.
+            pass
+
+        return True
+
     def _check_broker(self):
         """
         Que el Redis valga de broker, que no es lo mismo que valer de cache.
 
-        La ACL de ``deploy/REDIS.md`` esta escrita para la cache: limita las
-        claves a ``~gea:*`` y da ``+@read +@write +@keyspace``. Un broker de
-        Celery escribe claves con **sus** nombres (``celery``,
-        ``_kombu.binding.*``, ``unacked``), usa **pub/sub** para los resultados
-        y **transacciones** para no perder mensajes. Nada de eso encaja.
+        La ACL de la cache en ``deploy/REDIS.md`` limita las claves a
+        ``~gea:*`` y da ``+@read +@write +@keyspace``. Un broker de Celery
+        escribe claves con **sus** nombres (``celery``, ``_kombu.binding.*``,
+        ``unacked``), usa **pub/sub** para los resultados y **transacciones**
+        para no perder mensajes. Nada de eso encaja, y por eso el broker lleva
+        usuario propio (paso 9 de ese documento).
 
-        El sintoma es de los peores: el Redis responde, la cache va, y las
-        tareas desaparecen sin ruido. Por eso se prueba comando a comando en
-        vez de dar por hecho que «Redis funciona».
+        El sintoma de tenerlo mal es de los peores: el Redis responde, la cache
+        va, y las tareas desaparecen sin ruido. Por eso se prueba comando a
+        comando en vez de dar por hecho que «Redis funciona».
         """
         self._section('2. Redis como broker (no como cache)')
 
-        if not getattr(settings, 'REDIS_URL', ''):
+        if not getattr(settings, 'CELERY_BROKER_URL', ''):
             self.stdout.write(
-                '   No hay REDIS_URL. Sin Redis no hay broker; mira '
-                'deploy/REDIS.md.'
+                '   No hay CELERY_BROKER_URL, asi que no hay nada que probar '
+                'todavia.'
+            )
+            self.stdout.write(
+                '   El broker NO usa las credenciales de la cache: el usuario '
+                '«gea» esta acotado a ~gea:* y responde NOPERM a las cinco '
+                'operaciones que hace un broker --PING, encolar, repartir, '
+                'pub/sub y transacciones--. Lleva su propio usuario, su propia '
+                'contrasena y su propia base de datos.'
+            )
+            self.stdout.write(
+                '   Se monta en cinco minutos siguiendo deploy/REDIS.md '
+                '(paso 9) y se declara asi:'
+            )
+            self.stdout.write(
+                '      CELERY_BROKER_URL=rediss://broker:<clave>@'
+                'redis.sebasmoralesd.com:6380/1?ssl_cert_reqs=required&'
+                'ssl_ca_certs=<ruta de la CA>'
             )
             return False
 
-        # Ojo con usar PING para saber si hay conexion: la ACL de la cache no
-        # da @connection, asi que PING responde NOPERM aunque el servidor este
-        # perfectamente. Se comprueba escribiendo una clave de las suyas, que
-        # es lo que la cache hace de verdad.
         try:
-            client = self._redis_client()
-            client.set('gea:worker-probe', b'1', ex=30)
+            client = self._broker_client()
         except Exception as error:  # noqa: BLE001
             self.stdout.write(self.style.ERROR(
-                f'   No se pudo conectar: {type(error).__name__}: {error}'
+                f'   CELERY_BROKER_URL no se pudo interpretar: '
+                f'{type(error).__name__}: {error}'
             ))
-            self.stdout.write(
-                '   Comprueba primero la cache con "manage.py check_cache".'
-            )
+            return False
+
+        if not self._broker_answers(client):
             return False
 
         probe = f'{BROKER_KEY}.probe.{uuid.uuid4().hex[:8]}'
 
         checks = [
             (
-                'Escribir fuera de gea:*',
-                lambda: client.lpush(probe, b'x'),
-                'La ACL limita las claves a ~gea:*, y un broker usa las suyas. '
-                'Hay que anadir sus patrones al usuario, o darle un usuario y '
-                'una base de datos aparte.',
-            ),
-            (
                 'PING',
                 lambda: client.ping(),
-                'La ACL de la cache no da @connection. La cache nunca hace '
-                'ping, pero un broker lo usa para saber si el servidor sigue '
-                'ahi.',
+                'Al usuario del broker le falta @connection. Un broker lo usa '
+                'para saber si el Redis sigue ahi.',
             ),
             (
-                'Cola de mensajes (LPUSH/BRPOP)',
+                'Claves propias del broker (LPUSH)',
+                lambda: client.lpush(probe, b'x'),
+                'Al usuario le faltan los patrones de clave que Celery usa de '
+                'verdad: ~celery* ~_kombu* ~unacked*.',
+            ),
+            (
+                'Cola de mensajes (BRPOP)',
                 lambda: client.brpop(probe, timeout=1),
                 'Es como se reparte el trabajo entre workers. Sin esto no hay '
                 'cola.',
@@ -248,14 +360,14 @@ class Command(BaseCommand):
                 'Pub/sub (PUBLISH)',
                 lambda: client.publish(f'{probe}.channel', b'x'),
                 'Celery lo usa para los resultados y para hablar con los '
-                'workers. La ACL de la cache no da @pubsub.',
+                'workers. Hace falta @pubsub y el patron de canales &*.',
             ),
             (
                 'Transacciones (MULTI/EXEC)',
                 lambda: client.pipeline(transaction=True).llen(
                     probe).execute(),
-                'Es lo que evita perder un mensaje a medio repartir. La ACL '
-                'de la cache no da @transaction.',
+                'Es lo que evita perder un mensaje a medio repartir. Hace '
+                'falta @transaction.',
             ),
         ]
 
@@ -270,18 +382,65 @@ class Command(BaseCommand):
         except Exception:  # noqa: BLE001
             pass
 
-        if allowed == len(checks):
+        isolated = self._check_broker_isolation(client)
+
+        if allowed < len(checks):
+            self.stdout.write(self.style.WARNING(
+                f'   {allowed} de {len(checks)}. Al usuario del broker le '
+                'falta algo. La linea que lo abre entera esta en '
+                'deploy/REDIS.md, paso 9.'
+            ))
+            return False
+
+        if not isolated:
+            # Que funcione no basta: un broker que ademas puede leer y borrar
+            # las claves de la cache convierte cualquier fuga de su clave en
+            # borrar los contadores de intentos.
+            return False
+
+        self.stdout.write(self.style.SUCCESS(
+            '   El Redis sirve de broker, y el broker no alcanza la cache.'
+        ))
+
+        return True
+
+    def _check_broker_isolation(self, client):
+        """
+        Que el broker **no** alcance las claves de la cache.
+
+        Esta se cuenta al reves que las otras: aqui lo bueno es que responda
+        NOPERM. Y no sobra, porque es un error que ya se cometio: la primera
+        version del documento daba `~*` al broker y daba por hecho que ponerlo
+        en otra base de datos lo separaba de la cache. **Las ACL de Redis no se
+        acotan por base de datos**, asi que ese usuario, conectado a la base 0,
+        leia y borraba las claves `gea:*` sin problema -- entre ellas los
+        contadores de intentos de acceso.
+
+        Quien aisla es el patron de claves. La base aparte sigue siendo buena
+        idea por orden, pero no es el control.
+        """
+        prefix = getattr(settings, 'REDIS_KEY_PREFIX', None) or 'gea'
+        target = f'{prefix}:worker-probe-isolation'
+
+        try:
+            client.get(target)
+        except Exception:  # noqa: BLE001
             self.stdout.write(self.style.SUCCESS(
-                '   El Redis sirve de broker tal como esta.'
+                f'   Leer las claves de la cache ({target}): DENEGADO, que es '
+                'lo correcto.'
             ))
             return True
 
-        self.stdout.write(self.style.WARNING(
-            f'   {allowed} de {len(checks)}. El Redis funciona como cache '
-            'pero NO como broker: la ACL esta escrita para la cache. Se abre '
-            'sin tocar la cache dandole al broker su propio usuario y su '
-            'propia base de datos (ver deploy/REDIS.md).'
+        self.stdout.write(self.style.ERROR(
+            f'   Leer las claves de la cache ({target}): PERMITIDO. El usuario '
+            'del broker llega a las claves de la cache.'
         ))
+        self.stdout.write(
+            '      Probablemente lleve ~* en vez de los tres patrones de '
+            'Celery. Ponerlo en otra base de datos NO lo arregla: las ACL de '
+            'Redis no se acotan por base. Con ~* , una fuga de la clave del '
+            'broker borra los contadores de intentos de acceso.'
+        )
 
         return False
 
@@ -627,9 +786,9 @@ class Command(BaseCommand):
 
             if not verdict.get('broker'):
                 self.stdout.write(
-                    'Mientras tanto hay algo que si se puede ir haciendo: el '
-                    'Redis todavia no sirve de broker, y eso se arregla en la '
-                    'ACL sin tocar la cache.'
+                    'Mientras tanto hay algo que si se puede ir haciendo: '
+                    'darle al broker su usuario y su base de datos, sin tocar '
+                    'la cache (deploy/REDIS.md, paso 9).'
                 )
 
             return
@@ -648,10 +807,15 @@ class Command(BaseCommand):
 
         if not verdict.get('broker'):
             self.stdout.write(self.style.WARNING(
-                'El servidor sostiene un proceso, pero el Redis todavia no '
-                'sirve de broker. Es lo siguiente que hay que arreglar, y se '
-                'arregla en la ACL sin tocar la cache.'
+                'El servidor sostiene un proceso, y eso era lo que no se '
+                'sabia. Falta el broker.'
             ))
+            self.stdout.write(
+                'Se abre sin tocar la cache: un usuario propio en redis.conf, '
+                'su propia contrasena y la base 1. Esta escrito paso a paso en '
+                'deploy/REDIS.md (paso 9), y se declara en el .env con '
+                'CELERY_BROKER_URL. Vuelve a ejecutar esto despues.'
+            )
             return
 
         self.stdout.write(self.style.SUCCESS(

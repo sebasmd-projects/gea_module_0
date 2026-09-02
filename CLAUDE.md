@@ -640,6 +640,11 @@ REDIS_URL                     # rediss://usuario:clave@host:6380/0?ssl_cert_reqs
                               # required&ssl_ca_certs=/ruta/ca.crt
                               # Sin ella, LocMemCache: los límites son por worker
 REDIS_KEY_PREFIX              # por defecto 'gea'
+CELERY_BROKER_URL             # vacía mientras no haya cola de tareas. NO es
+                              # REDIS_URL: el broker lleva su propio usuario y
+                              # su propia base (deploy/REDIS.md §9), porque el
+                              # de la cache está acotado a ~gea:* y responde
+                              # NOPERM a las cinco operaciones de un broker
 REDIS_CONNECT_TIMEOUT, REDIS_TIMEOUT   # segundos, por defecto 3
 
 # Negocio / integraciones

@@ -72,8 +72,10 @@ misma ACL, las cinco responden `NOPERM`:
 > las tareas desaparecerían sin ruido. Por eso `check_workers` prueba comando a
 > comando en vez de dar por bueno que «Redis funciona».
 
-**Cómo se abriría, sin tocar la cache.** Un usuario aparte, limitado a los
-nombres de clave que Celery usa de verdad:
+**Cómo se abre, sin tocar la cache.** Un usuario aparte, limitado a los
+nombres de clave que Celery usa de verdad. El procedimiento completo —con la
+contraseña, la base de datos y las comprobaciones— está en
+[`deploy/REDIS.md`](../deploy/REDIS.md), **paso 9**:
 
 ```
 # En redis.conf, junto a los otros usuarios. La contraseña es otra.
@@ -85,6 +87,13 @@ Y apuntándolo a otra base de datos que la cache, por orden:
 ```
 CELERY_BROKER_URL=rediss://broker:<clave>@redis.sebasmoralesd.com:6380/1?...
 ```
+
+> **Esa variable es la que `check_workers` mira.** No es un detalle de
+> despliegue: el comando prueba el broker **con las credenciales del broker**,
+> y sin ella no tiene nada que probar. Durante un tiempo probaba con la
+> conexión de la cache —el usuario `gea`, en la base 0—, así que decía «0 de 5»
+> y mandaba a arreglar la ACL… incluso con la ACL ya bien puesta. Una
+> comprobación que no puede dar verde no mide nada.
 
 Verificado contra un Redis real con esa ACL: las cinco operaciones que fallaban
 pasan —`PING`, `LPUSH`/`BRPOP` sobre `celery`, `PUBLISH`, `MULTI`, y las claves

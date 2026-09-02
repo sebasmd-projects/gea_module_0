@@ -476,6 +476,21 @@ ROSETTA_SHOW_AT_ADMIN_PANEL = True
 # de desarrollo o la propia suite no dependan de tener Redis delante.
 REDIS_URL = os.getenv('REDIS_URL', '').strip()
 
+# El broker de la cola de tareas, si algun dia la hay. **Es otra URL, no la de
+# arriba**, y esa es toda la cuestion: el usuario `gea` de la cache esta acotado
+# a `~gea:*` y a `+@read +@write +@keyspace`, y un broker necesita sus propios
+# nombres de clave, PING, pub/sub y transacciones. Con las credenciales de la
+# cache, un broker responde NOPERM a las cinco.
+#
+# Va aparte tambien en la base de datos (`/1`), aunque quien de verdad aisla es
+# el patron de claves: las ACL de Redis no se acotan por base de datos, asi que
+# un usuario con `~*` conectado a la base 0 leeria las claves de la cache.
+#
+# Vacio mientras no se monte la cola. `manage.py check_workers` lo usa para
+# comprobar si el Redis serviria de broker; sin el, esa comprobacion no puede
+# dar verde por mucho que la ACL este bien. Ver deploy/REDIS.md, paso 9.
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', '').strip()
+
 if REDIS_URL:
     CACHES = {
         'default': {
