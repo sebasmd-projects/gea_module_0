@@ -16,7 +16,12 @@ from apps.common.utils.throttling import RateLimit
 class OTPSessionMixin:
     OTP_SESSION_KEY = "document_otp"
 
-    OTP_TTL = timedelta(minutes=10)
+    #: Cuánto dura el código. Quince minutos, los mismos que el del acceso:
+    #: son dos códigos de seis cifras que llegan al correo y no hay razón
+    #: para que uno caduque antes que el otro. Diez daba justo para no
+    #: encontrarlo en la carpeta de no deseado.
+    OTP_TTL = timedelta(
+        minutes=int(getattr(settings, 'OTP_TTL_MINUTES', 15)))
     OTP_RESEND_COOLDOWN = timedelta(minutes=1)
 
     # NUEVO: antifuerza bruta

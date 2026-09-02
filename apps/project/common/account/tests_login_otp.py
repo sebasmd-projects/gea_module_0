@@ -58,17 +58,19 @@ class LoginOTPMixin:
         return self.client.post(self.url, data, REMOTE_ADDR=IP, **extra)
 
     def ask_for_code(self, identifier='ana'):
-        """Pulsa «entrar con código» y pide uno para ese identificador."""
+        """Pulsa «entrar con un código» y luego «enviar» para ese usuario."""
         self.post({'use_otp': '1'})
         return self.post({
-            'login_view-current_step': 'otp_id',
-            'otp_id-identifier': identifier,
+            'login_view-current_step': 'otp',
+            'otp-identifier': identifier,
+            'send_code': '1',
         })
 
-    def submit_code(self, code):
+    def submit_code(self, code, identifier='ana'):
         return self.post({
-            'login_view-current_step': 'otp_code',
-            'otp_code-code': code,
+            'login_view-current_step': 'otp',
+            'otp-identifier': identifier,
+            'otp-code': code,
         })
 
 
@@ -166,7 +168,7 @@ class ItDoesNotSayWhoExistsTests(LoginOTPMixin, TestCase):
         unknown = self.ask_for_code('no-existe-en-absoluto')
 
         self.assertEqual(known.status_code, unknown.status_code)
-        self.assertIn('otp_code', unknown.content.decode())
+        self.assertIn('otp-code', unknown.content.decode())
 
     def test_no_email_goes_out_for_an_unknown_identifier(self):
         self.ask_for_code('no-existe-en-absoluto')
@@ -175,7 +177,7 @@ class ItDoesNotSayWhoExistsTests(LoginOTPMixin, TestCase):
 
     def test_a_wrong_code_says_the_same_for_both(self):
         self.ask_for_code('no-existe-en-absoluto')
-        unknown = self.submit_code('000000')
+        unknown = self.submit_code('000000', 'no-existe-en-absoluto')
 
         self.assertEqual(unknown.status_code, 200)
         self.assertNotIn('_auth_user_id', self.client.session)

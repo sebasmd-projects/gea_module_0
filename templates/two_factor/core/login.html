@@ -1,270 +1,252 @@
 {% extends "two_factor/_base.html" %}
 
-{% load i18n static two_factor_tags custom_filters %}
+{% load i18n static two_factor_tags %}
+
+{% comment %}
+  La pantalla de acceso, con sus cuatro caras: contraseña, código al correo,
+  segundo factor y código de respaldo.
+
+  Dos reglas que sostienen el maquetado y que conviene no romper:
+
+  1. **Cada pantalla tiene su botón primario, y va el primero.** El asistente
+     de la biblioteca trae un «Siguiente» genérico al final; aquí se sustituye
+     por «Iniciar sesión», «Enviar el código» o «Verificar», que es lo que
+     alguien busca con la vista. Y va antes que los secundarios en el HTML
+     porque el navegador dispara el **primer** botón de envío al pulsar Intro:
+     con el orden al revés, dar a Intro en la contraseña llevaba a pedir un
+     código.
+
+  2. **Los botones que sólo cambian de pantalla llevan `formnovalidate`.** Son
+     envíos del mismo formulario, así que sin él el navegador exige antes los
+     campos `required` y pedir el código obligaría a escribir primero la
+     contraseña que precisamente no se recuerda.
+{% endcomment %}
 
 {% block extra_media %}
 {{ form.media }}
 {% endblock %}
 
-{% block body_properties %}style="background-image: linear-gradient(to bottom, #c79c44 0%, #c89d46 50%, #f4d88b 100%);"{% endblock body_properties %}
-
 {% block layout_content %}
 
-<div class="min-vh-100 d-flex align-items-center justify-content-center container-xl px-5">
-  
-  <div class="card mx-auto" style="max-width: 400px; width: 100%;">
+<div class="min-vh-100 d-flex align-items-center justify-content-center container-xl px-3 px-md-5 py-4">
 
-    <div class="card-header text-center">
-      <a href="{% url 'core:index' %}">
-        <img src="https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/gea_logo_gold.webp"
-          class="card-img-top img-fluid" alt="..." style="max-width: fit-content;" />
+  <div class="card auth-card mx-auto shadow-sm border-0" style="max-width: 430px; width: 100%;">
+
+    <div class="card-header bg-white border-0 text-center pt-4 pb-0">
+      <a href="{% url 'core:index' %}" aria-label="{% trans 'Go to the home page' %}">
+        <img src="{% static 'assets/imgs/logos/gea_logo_gold.webp' %}"
+             class="img-fluid auth-logo" alt="GEA" />
       </a>
-      {% if wizard.steps.current == 'auth' %}
-      {% elif wizard.steps.current == 'token' %}
-      <p>
-        {{ device|as_verbose_action }}
-      </p>
-      {% elif wizard.steps.current == 'backup' %}
-      <p>
-        {% blocktrans trimmed %}Use this form for entering backup tokens for logging in.
-        These tokens have been generated for you to print and keep safe. Please
-        enter one of these backup tokens to login to your account.{% endblocktrans %}
-      </p>
-      {% endif %}
+
+      <h1 class="h5 fw-bold mt-3 mb-1">{{ step_title }}</h1>
+      <p class="text-muted small mb-0">{{ step_lead }}</p>
     </div>
 
-    <div class="card-body p-5">
-      <form action="" method="post">
+    <div class="card-body px-4 px-md-5 pt-4 pb-4">
+
+      {% if locked_out %}
+      <div class="alert alert-danger py-2 small d-flex gap-2" role="alert">
+        <i class="bi bi-shield-exclamation flex-shrink-0"></i>
+        <div>
+          {% blocktrans trimmed %}
+            Too many failed attempts from this connection. Please wait a few
+            minutes before trying again.
+          {% endblocktrans %}
+        </div>
+      </div>
+      {% endif %}
+
+      <form action="" method="post" novalidate>
 
         {% csrf_token %}
 
         {{ wizard.management_form }}
 
         {% if form.non_field_errors %}
-        <div class="alert alert-danger" role="alert">
-          <ul>
-            {% for error in form.non_field_errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-          </ul>
-        </div>
-        {% endif %}
-
-        {% if wizard.steps.current == 'auth' %}
-        <!-- Form Group (username)-->
-        {% trans 'Username or Email' as username_or_email %}
-        <div class="input-group mb-3">
-          <input id="id_auth-username" type="text" class="form-control" placeholder="{{ username_or_email }}"
-            aria-label="Username" required name="auth-username" />
-          <button class="btn btn-outline-dark" type="button" id="id_auth-username_icon">
-            <i class="bi bi-person" id="id_auth-username_icon"></i>
-          </button>
-        </div>
-
-        {% if form.username.errors %}
-        <div class="text-danger small">
-          {% for error in form.username.errors %}
-          {{ error }}
+        <div class="alert alert-danger py-2 small" role="alert">
+          {% for error in form.non_field_errors %}
+          <div>{{ error }}</div>
           {% endfor %}
         </div>
         {% endif %}
 
-        <!-- Form Group (password)-->
-        <div class="input-group mb-3">
-          {% trans 'Password' as pass %}
-          <input id="id_auth-password" type="password" class="form-control" placeholder="{{ pass }}"
-            aria-label="Password" name="auth-password" required />
-          <button class="btn btn-outline-dark" type="button" id="togglePassword">
+        {% comment %} ---------- 1. Usuario y contraseña ---------- {% endcomment %}
+        {% if wizard.steps.current == 'auth' %}
+
+        {% trans 'Username or Email' as username_or_email %}
+        <div class="form-floating mb-2">
+          <input id="id_auth-username" name="auth-username" type="text"
+                 class="form-control{% if form.username.errors %} is-invalid{% endif %}"
+                 placeholder=" " autocomplete="username" required autofocus
+                 value="{{ form.username.value|default:'' }}" />
+          <label for="id_auth-username">{{ username_or_email }}</label>
+          {% for error in form.username.errors %}
+          <div class="invalid-feedback">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        {% trans 'Password' as password_label %}
+        <div class="input-group mb-2">
+          <div class="form-floating">
+            <input id="id_auth-password" name="auth-password" type="password"
+                   class="form-control{% if form.password.errors %} is-invalid{% endif %}"
+                   placeholder=" " autocomplete="current-password" required />
+            <label for="id_auth-password">{{ password_label }}</label>
+          </div>
+          <button class="btn btn-outline-secondary" type="button" id="togglePassword"
+                  tabindex="-1" aria-label="{% trans 'Show or hide the password' %}">
             <i class="bi bi-eye-slash" id="togglePasswordIcon"></i>
           </button>
         </div>
+        {% for error in form.password.errors %}
+        <div class="text-danger small mb-2">{{ error }}</div>
+        {% endfor %}
 
-        {% if form.password.errors %}
-        <div class="text-danger small">
-          {% for error in form.password.errors %}
-          {{ error }}
-          {% endfor %}
-        </div>
-        {% endif %}
-
-        <!-- Form Group (forgot password link)-->
-        <div class="mb-3">
-          <a class="small" href="{% url 'account:forgot_password' %}" rel="noopener noreferrer">
-            {% trans 'Forgot your password?' %}
-          </a>
-        </div>
-
-        {% comment %}
-          La otra puerta. Va aquí abajo y no arriba porque la contraseña sigue
-          siendo el camino normal; esto es la alternativa, no la primera
-          opción.
-
-          `formnovalidate` en los cuatro botones que sólo cambian de modo: son
-          botones de envío dentro del mismo formulario, así que sin él el
-          navegador exige antes los campos marcados `required` y pedir el
-          código obligaría a escribir primero la contraseña que precisamente
-          no se recuerda. No se salta nada: el servidor no valida ese
-          formulario en esta rama, sólo cambia de paso.
-        {% endcomment %}
-        <div class="d-grid mb-1">
-          <button type="submit" name="use_otp" value="1" formnovalidate
-                  class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-envelope-check me-1"></i>
-            {% trans 'Sign in with a code sent to my email' %}
+        <div class="d-grid mt-3">
+          <button type="submit" class="btn btn-success btn-lg fw-semibold">
+            {% trans 'Sign in' %}
           </button>
         </div>
 
-        {% elif wizard.steps.current == 'otp_id' %}
-        {% comment %} Paso 1 del código: a quién mandarlo. {% endcomment %}
-        <p class="text-muted small mb-3">
-          {% blocktrans trimmed %}
-            Enter your username or email and we will send you a six-digit code
-            to sign in without your password.
-          {% endblocktrans %}
-        </p>
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <a class="small text-decoration-none" href="{% url 'account:forgot_password' %}"
+             rel="noopener noreferrer">
+            {% trans 'Forgot your password?' %}
+          </a>
+          <button type="submit" name="use_otp" value="1" formnovalidate
+                  class="btn btn-link btn-sm p-0 text-decoration-none">
+            <i class="bi bi-envelope-check me-1"></i>{% trans 'Sign in with a code' %}
+          </button>
+        </div>
+
+        {% comment %} ---------- 2. El código al correo ---------- {% endcomment %}
+        {% elif wizard.steps.current == otp_step_name %}
 
         {% trans 'Username or Email' as username_or_email %}
         <div class="input-group mb-2">
-          <input id="id_otp_id-identifier" type="text" class="form-control"
-                 placeholder="{{ username_or_email }}" aria-label="{{ username_or_email }}"
-                 name="otp_id-identifier" autocomplete="username" required autofocus
-                 value="{{ form.identifier.value|default:'' }}" />
-          <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-        </div>
-
-        {% if form.identifier.errors %}
-        <div class="text-danger small mb-2">
-          {% for error in form.identifier.errors %}{{ error }}{% endfor %}
-        </div>
-        {% endif %}
-
-        <div class="d-grid mb-2">
-          <button type="submit" class="btn btn-success">{% trans 'Send code' %}</button>
-        </div>
-
-        <div class="d-grid">
-          <button type="submit" name="use_password" value="1" formnovalidate
-                  class="btn btn-link btn-sm text-decoration-none">
-            {% trans 'Sign in with my password instead' %}
+          <div class="form-floating">
+            {{ form.identifier }}
+            <label for="{{ form.identifier.id_for_label }}">{{ username_or_email }}</label>
+          </div>
+          {% comment %}
+            El botón de enviar vive pegado al campo del identificador porque es
+            lo que hace con él. Suelto al final de la pantalla se confundía con
+            el de entrar.
+          {% endcomment %}
+          <button type="submit" name="{{ otp_send_action }}" value="1" formnovalidate
+                  class="btn btn-outline-dark text-nowrap">
+            <i class="bi bi-send me-1"></i>{% if otp_code_sent %}{% trans 'Resend' %}{% else %}{% trans 'Send code' %}{% endif %}
           </button>
         </div>
+        {% for error in form.identifier.errors %}
+        <div class="text-danger small mb-2">{{ error }}</div>
+        {% endfor %}
 
-        {% elif wizard.steps.current == 'otp_code' %}
+        {% if otp_code_sent %}
         {% comment %}
-          Paso 2 del código. El aviso dice siempre lo mismo, se haya mandado
-          el correo o no: decir aquí «esa cuenta no existe» convertiría la
-          pantalla en un comprobador de cuentas.
+          El aviso dice siempre lo mismo, se haya mandado el correo o no: decir
+          aquí «esa cuenta no existe» convertiría la pantalla en un comprobador
+          de cuentas.
         {% endcomment %}
-        <div class="alert alert-success py-2 small" role="status">
-          <i class="bi bi-envelope-check me-1"></i>
-          {% trans 'A one-time code has been sent to your email' %}
-          {% if otp_identifier %}
-          <div class="fw-semibold mt-1">{{ otp_identifier }}</div>
-          {% endif %}
+        <div class="alert alert-success py-2 small d-flex gap-2 mb-3" role="status">
+          <i class="bi bi-envelope-check flex-shrink-0"></i>
+          <div>
+            {% trans 'A one-time code has been sent to your email' %}
+            {% if password_failures >= otp_failures_before_offer %}
+            <div class="mt-1">
+              {% blocktrans trimmed %}
+                After several failed password attempts we sent you a code so you
+                can sign in without getting locked out.
+              {% endblocktrans %}
+            </div>
+            {% endif %}
+          </div>
         </div>
-
-        {% if password_failures >= otp_failures_before_offer %}
+        {% else %}
         <p class="text-muted small mb-3">
           {% blocktrans trimmed %}
-            After several failed password attempts we sent you a code so you can
-            sign in without getting locked out.
+            Enter your username or email and press «Send code». The code will
+            arrive at the email address on your account.
           {% endblocktrans %}
         </p>
         {% endif %}
 
         {% trans 'Verification code' as code_label %}
-        <div class="input-group mb-2">
-          <input id="id_otp_code-code" type="text" class="form-control text-center"
-                 placeholder="{{ code_label }}" aria-label="{{ code_label }}"
-                 name="otp_code-code" inputmode="numeric" pattern="[0-9]*"
-                 autocomplete="one-time-code" maxlength="6" required autofocus
-                 style="letter-spacing:.4em;font-size:1.25rem;" />
+        <div class="form-floating mb-2">
+          {{ form.code }}
+          <label for="{{ form.code.id_for_label }}">{{ code_label }}</label>
         </div>
-
-        {% if form.code.errors %}
-        <div class="text-danger small mb-2">
-          {% for error in form.code.errors %}{{ error }}{% endfor %}
-        </div>
-        {% endif %}
+        {% for error in form.code.errors %}
+        <div class="text-danger small mb-2">{{ error }}</div>
+        {% endfor %}
 
         <p class="text-muted small mb-3">
+          <i class="bi bi-clock me-1"></i>
           {% blocktrans trimmed with minutes=otp_minutes %}
             The code expires in {{ minutes }} minutes.
           {% endblocktrans %}
         </p>
 
-        <div class="d-grid mb-2">
-          <button type="submit" class="btn btn-success">{% trans 'Sign in' %}</button>
+        <div class="d-grid">
+          <button type="submit" class="btn btn-success btn-lg fw-semibold">
+            {% trans 'Sign in' %}
+          </button>
         </div>
 
-        <div class="d-grid gap-1">
-          <button type="submit" name="use_otp" value="1" formnovalidate
-                  class="btn btn-link btn-sm text-decoration-none">
-            {% trans 'Send a new code' %}
-          </button>
+        <div class="text-center mt-3">
           <button type="submit" name="use_password" value="1" formnovalidate
-                  class="btn btn-link btn-sm text-decoration-none">
-            {% trans 'Sign in with my password instead' %}
+                  class="btn btn-link btn-sm p-0 text-decoration-none">
+            <i class="bi bi-key me-1"></i>{% trans 'Sign in with my password instead' %}
           </button>
         </div>
 
-        {% elif wizard.steps.current == 'token' %}
-        {% include "two_factor/_wizard_forms.html" %}
+        {% comment %} ---------- 3. Segundo factor y respaldo ---------- {% endcomment %}
+        {% elif wizard.steps.current == 'token' or wizard.steps.current == 'backup' %}
 
-        {% elif wizard.steps.current == 'backup' %}
-        {% include "two_factor/_wizard_forms.html" %}
-
+        {% if wizard.steps.current == 'token' and device %}
+        <p class="text-muted small mb-3">{{ device|as_verbose_action }}</p>
         {% endif %}
 
+        {% include "two_factor/_wizard_forms.html" %}
 
-        <input type="submit" value="" hidden />
+        <div class="d-grid mt-3">
+          <button type="submit" class="btn btn-success btn-lg fw-semibold">
+            {% trans 'Verify' %}
+          </button>
+        </div>
 
         {% if other_devices %}
-        <p class="text-center">
+        <p class="text-center text-muted small mt-3 mb-2">
           {% trans "Or, alternatively, use one of your other authentication methods:" %}
         </p>
         <div class="d-grid gap-2">
           {% for other in other_devices %}
-          <button name="challenge_device" value="{{ other.persistent_id }}" class="btn btn-secondary" type="submit">
+          <button name="challenge_device" value="{{ other.persistent_id }}" formnovalidate
+                  class="btn btn-outline-secondary btn-sm" type="submit">
             {{ other|as_action }}
           </button>
           {% endfor %}
         </div>
         {% endif %}
 
-        {% comment %}
-          Los pasos del código traen sus propios botones --«Enviar código»,
-          «Entrar»-- así que el «Siguiente» genérico sobra ahí: dos botones de
-          envío seguidos hacen dudar de cuál es el que vale.
-        {% endcomment %}
-        {% if wizard.steps.current not in otp_step_names %}
-        {% include "two_factor/_wizard_actions.html" %}
+        {% if backup_tokens and wizard.steps.current == 'token' %}
+        <div class="text-center mt-3">
+          <button name="wizard_goto_step" type="submit" value="backup" formnovalidate
+                  class="btn btn-link btn-sm p-0 text-decoration-none">
+            {% trans "Use a backup token" %}
+          </button>
+        </div>
+        {% endif %}
+
         {% endif %}
       </form>
 
-      {% block 'backup_tokens' %}
-      {% if backup_tokens %}
-      <hr>
-      <div class="backup_tokens_form">
-        <form action="" method="post">
-          {% csrf_token %}
-          <p>{% trans "As a last resort, you can use a backup token:" %}</p>
-          <p>
-            <button name="wizard_goto_step" type="submit" value="backup" class="btn btn-sm btn-secondary btn-block">
-              {% trans "Use Backup Token" %}
-            </button>
-          </p>
-        </form>
-      </div>
-      {% endif %}
-      {% endblock %}
-
     </div>
 
-    <div class="card-footer px-5 py-4">
-      <div class="small text-center">
+    <div class="card-footer bg-white border-0 px-4 px-md-5 pb-4 pt-0">
+      <div class="small text-center text-muted">
         {% trans "New user?" %}
-        <a href="{% url 'account:register' %}">
+        <a href="{% url 'account:register' %}" class="fw-semibold text-decoration-none">
           {% trans "Create an account!" %}
         </a>
       </div>
@@ -272,15 +254,25 @@
   </div>
 </div>
 
+<style>
+  .auth-card { border-radius: 1rem; }
+  .auth-logo { max-width: 190px; }
+  .auth-card .form-floating > label { color: #6c757d; }
+  .auth-card .btn-success { background-color: #12203a; border-color: #12203a; }
+  .auth-card .btn-success:hover,
+  .auth-card .btn-success:focus { background-color: #1d355f; border-color: #1d355f; }
+</style>
+
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const passwordInput = document.getElementById('id_auth-password');
     const togglePassword = document.getElementById('togglePassword');
     const togglePasswordIcon = document.getElementById('togglePasswordIcon');
 
-    // Los pasos del código no traen campo de contraseña, así que aquí no hay
-    // nada que mostrar ni ocultar. Sin esta salida, el `addEventListener`
-    // sobre `null` revienta el script entero en esas dos pantallas.
+    // Los pasos del código y del segundo factor no traen campo de contraseña,
+    // así que aquí no hay nada que mostrar ni ocultar. Sin esta salida, el
+    // `addEventListener` sobre `null` revienta el script entero en esas
+    // pantallas.
     if (!passwordInput || !togglePassword || !togglePasswordIcon) {
       return;
     }

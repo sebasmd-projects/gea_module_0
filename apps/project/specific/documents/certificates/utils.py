@@ -3,11 +3,11 @@
 from datetime import timedelta
 
 from django.conf import settings
-from django.core.mail import send_mail
 from django.http import HttpRequest
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from apps.common.utils.otp_email import send_otp_email as send_otp_email_template
 from apps.project.common.users.models import UserModel
 
 from .functions import get_client_ip
@@ -105,25 +105,31 @@ def track_document_view(
     )
 
 
-def send_otp_email(email: str, otp: str) -> None:
+def send_otp_email(email: str, otp: str, minutes: int = 15) -> None:
     """
-    Send OTP email.
+    Manda el código de verificación documental.
+
+    Es el mismo correo que el del acceso --misma maqueta, mismos logos, mismo
+    pie--, y esa es la gracia: llega a quien acaba de escanear el QR de un
+    papel, no es usuario de la plataforma y no tiene por qué reconocer el
+    remitente. Antes era un ``send_mail`` de tres líneas en texto plano, sin
+    logos y sin el aviso de que nadie del despacho pide el código; justo al
+    revés de lo que necesita quien menos contexto tiene.
 
     Parameters:
-        email (str): Recipient email
-        otp (str): One-time password
+        email: a quién.
+        otp: el código.
+        minutes: cuánto dura, para decirlo en el mensaje. Lo pasa quien llama
+            para que el correo no pueda prometer una duración distinta de la
+            que de verdad se aplica.
     """
-    subject = _('Your document verification code')
-    message = _(
-        'Your verification code is:\n\n'
-        '{otp}\n\n'
-        'This code expires in 10 minutes.'
-    ).format(otp=otp)
-
-    send_mail(
-        subject=subject,
-        message=message,
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[email],
-        fail_silently=False,
+    send_otp_email_template(
+        to=email,
+        subject=_(
+            'Verification at Propensiones (GEA): here is the 6-digit '
+            'verification code you requested'
+        ),
+        instruction=_('Use the following code to validate the certifications.'),
+        code=otp,
+        minutes=minutes,
     )

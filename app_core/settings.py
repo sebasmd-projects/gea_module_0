@@ -214,13 +214,21 @@ LOGIN_URL = 'two_factor:login'
 
 LOGIN_REDIRECT_URL = 'core:index'
 
-# Entrada por código enviado al correo. Cuánto dura el código y a quién
-# escribir si a alguien le llega uno que no ha pedido, que es la señal de que
-# otro está intentando entrar en su cuenta.
+# --- Los códigos de seis cifras que se mandan por correo --------------------
+# Hay dos: el que deja entrar en la plataforma y el que abre la consulta
+# pública de un certificado. Duran lo mismo --quince minutos, lo bastante para
+# ir a buscar el correo a la carpeta de no deseado-- y cada uno tiene su
+# variable, porque son dos decisiones distintas aunque hoy coincidan.
 LOGIN_OTP_TTL_MINUTES = int(os.getenv('LOGIN_OTP_TTL_MINUTES', 15))
 
-LOGIN_OTP_CONTACT_EMAIL = os.getenv(
-    'LOGIN_OTP_CONTACT_EMAIL', 'info@propensionesabogados.com')
+OTP_TTL_MINUTES = int(os.getenv('OTP_TTL_MINUTES', 15))
+
+# A quién escribir si a alguien le llega un código que no ha pedido, que es la
+# señal de que otro está intentando entrar en su cuenta. **Una sola variable
+# para los dos correos**: son el mismo mensaje con distinto motivo, y dos
+# ajustes para la misma dirección acaban divergiendo el día que se cambie uno.
+OTP_CONTACT_EMAIL = os.getenv(
+    'OTP_CONTACT_EMAIL', 'info@propensionesabogados.com')
 
 # Django Parler and i18n
 LOCALE_PATHS = [

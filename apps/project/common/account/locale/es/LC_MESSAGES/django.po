@@ -297,3 +297,67 @@ msgstr "El código no es válido o ha caducado. Solicita uno nuevo."
 #: apps/project/common/account/forms/login_otp_form.py apps/project/common/account/emails.py
 msgid "Sign in to Propensiones (GEA): here is the 6-digit verification code you requested"
 msgstr "Inicio de sesión en Propensiones (GEA): aquí tienes el código de verificación de 6 dígitos que has solicitado"
+
+#: apps/project/common/account/login_view.py apps/project/common/account/views.py
+msgid "Use the following code to sign in to your account."
+msgstr "Utiliza el siguiente código para iniciar sesión en tu cuenta."
+
+#: apps/project/common/account/login_view.py apps/project/common/account/views.py
+msgid "Too many failed attempts. Please wait before trying again."
+msgstr "Demasiados intentos fallidos. Espera un momento antes de volver a intentarlo."
+
+#: apps/project/common/account/login_view.py apps/project/common/account/views.py
+msgid "Sign in with a code"
+msgstr "Entrar con un código"
+
+#: apps/project/common/account/login_view.py apps/project/common/account/views.py
+msgid "We send a six-digit code to the email on your account."
+msgstr "Enviamos un código de seis dígitos al correo de tu cuenta."
+
+#: apps/project/common/account/login_view.py apps/project/common/account/views.py
+msgid "Two-step verification"
+msgstr "Verificación en dos pasos"
+
+#: apps/project/common/account/login_view.py apps/project/common/account/views.py
+msgid "Enter the code from your authentication app."
+msgstr "Escribe el código de tu aplicación de autenticación."
+
+#: apps/project/common/account/login_view.py apps/project/common/account/views.py
+msgid "Backup token"
+msgstr "Código de respaldo"
+
+#: apps/project/common/account/login_view.py apps/project/common/account/views.py
+msgid "Enter one of the backup tokens you saved when you set up two-step verification."
+msgstr "Escribe uno de los códigos de respaldo que guardaste al configurar la verificación en dos pasos."
+
+#: apps/project/common/account/login_view.py apps/project/common/account/views.py
+msgid "Sign in"
+msgstr "Iniciar sesión"
+
+#: apps/project/common/account/login_view.py apps/project/common/account/views.py
+msgid "Enter your credentials to access GEA."
+msgstr "Escribe tus credenciales para entrar en GEA."
+
+#: apps/project/common/account/login_view.py apps/project/common/account/views.py
+msgid "Choose a password"
+msgstr "Elige una contraseña"
+
+#: apps/project/common/account/login_view.py apps/project/common/account/views.py
+msgid "It protects your assets and your orders: make it a long one."
+msgstr "Protege tus activos y tus órdenes: que sea larga."
+
+#: apps/project/common/account/login_view.py apps/project/common/account/views.py
+msgid "How we reach you"
+msgstr "Cómo te contactamos"
+
+#: apps/project/common/account/login_view.py apps/project/common/account/views.py
+msgid "We will use this email for your account and its notices."
+msgstr "Usaremos este correo para tu cuenta y sus avisos."
+
+#: apps/project/common/account/login_view.py apps/project/common/account/views.py
+msgid "The last step: the code that confirms the account is yours."
+msgstr "El último paso: el código que confirma que la cuenta es tuya."
+
+#: apps/project/common/account/login_view.py apps/project/common/account/views.py
+msgid "Create your account"
+msgstr "Crea tu cuenta"
