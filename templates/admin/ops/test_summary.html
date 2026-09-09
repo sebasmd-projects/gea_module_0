@@ -113,12 +113,16 @@
     /* Filas de barras. El resalte al pasar por encima coge la fila entera y no
        los 14px de la barra, que es un objetivo demasiado fino para el ratón.
 
-       Sin `tabindex`: una fila es texto, no un control. Un `<div tabindex="0">`
-       sin papel ni comportamiento es una parada de tabulación que no hace
-       nada, y quien navega con teclado se encuentra dentro de un div anónimo.
-       Lo que la fila dice ya está escrito en ella --la etiqueta y el número--
-       y otra vez en la tabla gemela; el resalte es una comodidad del ratón, no
-       una vía de lectura. */
+       Las filas no son focalizables, y es a propósito: una fila es texto, no
+       un control. Un div al que se le pone índice de tabulación, sin papel ni
+       comportamiento, es una parada que no hace nada — quien navega con
+       teclado se encuentra dentro de un div anónimo. Lo que la fila dice ya
+       está escrito en ella --la etiqueta y el número-- y otra vez en la tabla
+       gemela; el resalte es una comodidad del ratón, no una vía de lectura.
+
+       (El ejemplo va contado con palabras y sin la etiqueta literal a
+       propósito: el analizador de HTML lee dentro de este comentario y toma
+       por marcado de verdad cualquier etiqueta que se escriba aquí.) */
     .tsum-rows { display: grid; gap: 2px; }
     .tsum-row { display: grid; grid-template-columns: 15rem 1fr auto;
                 gap: .75rem; align-items: center; padding: .2rem .35rem;
