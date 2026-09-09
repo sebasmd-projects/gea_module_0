@@ -128,7 +128,8 @@ class WorkerCheckTestCase(SimpleTestCase):
         """Dejar el rastro de un proceso que latio en esos momentos."""
         target = Path(self.media.name) / 'worker_probe' / name
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text('\n'.join(str(moment) for moment in moments))
+        target.write_text(
+            '\n'.join(str(moment) for moment in moments), encoding='utf-8')
 
         return target
 
@@ -149,7 +150,8 @@ class TestAnUndeclaredLibraryIsNotAGreenTests(WorkerCheckTestCase):
 
         requirements = Path(self.media.name) / 'requirements.txt'
         requirements.write_text(
-            'django==4.2\ncelery==5.6.3\n' if declared else 'django==4.2\n')
+            'django==4.2\ncelery==5.6.3\n' if declared else 'django==4.2\n',
+            encoding='utf-8')
 
         out = StringIO()
 
@@ -521,7 +523,7 @@ class TestLaunchingTheProbe(WorkerCheckTestCase):
         guard = Path(self.media.name) / 'worker_probe' / '.htaccess'
 
         self.assertTrue(guard.exists())
-        self.assertIn('denied', guard.read_text())
+        self.assertIn('denied', guard.read_text(encoding='utf-8'))
 
 
 class TestTheProbeDuration(WorkerCheckTestCase):

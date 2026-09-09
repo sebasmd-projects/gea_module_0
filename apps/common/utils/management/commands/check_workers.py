@@ -502,7 +502,19 @@ class Command(BaseCommand):
         return True
 
     def _count_own_processes(self):
-        """Procesos de este usuario, leidos de /proc para no depender de ps."""
+        """
+        Procesos de este usuario, leidos de /proc para no depender de ps.
+
+        ``os.getuid`` **no existe en Windows**, y estaba fuera del try: en un
+        portatil de desarrollo esto no fallaba con un numero raro, reventaba el
+        comando entero con un AttributeError. Y con el, la suite. Aqui no hay
+        nada que medir en Windows --el limite de procesos que importa es el del
+        hosting-- asi que se contesta «no lo se», que es la respuesta honesta y
+        la que el comando ya sabe pintar.
+        """
+        if not hasattr(os, 'getuid'):
+            return None
+
         uid = os.getuid()
         count = 0
 
@@ -575,7 +587,7 @@ class Command(BaseCommand):
             'import time,sys\n'
             'path=sys.argv[1]\n'
             f'for i in range({int(minutes * 60 / PROBE_BEAT_SECONDS)}):\n'
-            '    open(path,"a").write(str(time.time())+"\\n")\n'
+            '    open(path,"a",encoding="utf-8").write(str(time.time())+"\\n")\n'
             f'    time.sleep({PROBE_BEAT_SECONDS})\n'
         )
 
@@ -637,7 +649,7 @@ class Command(BaseCommand):
         try:
             beats = [
                 float(line) for line in
-                trace.read_text().split() if line.strip()
+                trace.read_text(encoding='utf-8').split() if line.strip()
             ]
         except (OSError, ValueError):
             self.stdout.write(self.style.ERROR(

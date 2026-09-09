@@ -92,6 +92,28 @@ uv run python manage.py check_attack_terms
 uv run python manage.py test --settings=app_core.settings_test
 ```
 
+La misma suite, guardando lo que normalmente se tira —qué prueba, de qué app,
+cuánto tardó, cómo acabó— y midiendo la cobertura:
+
+```bash
+uv run python manage.py test_report
+```
+
+El resultado se lee en el panel, en «Resumen de pruebas» (§4-bis.F). Dos cosas
+que hay que saber antes de tocarlo:
+
+- **`coverage` es opcional.** No está en `requirements.txt` a propósito: es
+  herramienta de desarrollo y el servidor no la necesita. Sin ella el comando
+  hace el informe de resultados y lo dice, en vez de fallar. Para tenerla,
+  `uv add coverage` **y** el `uv export` de siempre, o `check_requirements` la
+  echará en falta.
+- **La cobertura descuenta las pruebas y las migraciones.** Un fichero de
+  pruebas se ejecuta entero por definición, así que contarlo sube el
+  porcentaje por escribir más pruebas de lo mismo: con ellas dentro este
+  proyecto daba un 76 %, sin ellas da el 67 % de verdad. Un número que se
+  infla solo se usa para decidir dónde no hace falta mirar, que es justo
+  donde hay que mirar.
+
 Volcado UTF-8 completo de la base de datos:
 
 ```bash
@@ -470,6 +492,33 @@ El docstring de `registry.py` enumera además lo que **no** está y por qué —
 nada, porque más de uno parece inofensivo hasta que se piensa dónde acaba su salida (en
 `CommandRunModel`, escrita en una tabla).
 
+**El resumen de pruebas** (`admin:ops_test_summary`, plantilla
+`templates/admin/ops/test_summary.html`, datos en `ops/summary.py`) es la otra
+página que cuelga del admin. Lee el último informe de
+`MEDIA_ROOT/test_reports/latest.json` —lo escribe `manage.py test_report`— y lo
+pinta: la cifra de cabecera, cómo acabó la suite, cuántas pruebas tiene cada
+app, la cobertura por app y las diez más lentas.
+
+Cuatro decisiones que no son de gusto:
+
+- **Está cerrada en producción, con 404, igual que el comando.** Allí no hay ni
+  puede haber un informe recién hecho, porque la suite se ejecuta con
+  `settings_test`. Lo que se vería sería el de un portátil, con la fecha en
+  letra pequeña y la cifra grande, leída como el estado del servidor.
+- **El color nunca va solo.** En la paleta de estado el verde de «pasa» y el
+  rojo de «falla» se separan un ΔE de 4 bajo deuteranopia: para bastante gente
+  son el mismo color. Cada uno lleva su icono, su etiqueta y su número escrito.
+- **Cada gráfica tiene su tabla**, detrás de un botón. Una barra que sólo se lee
+  pasando el ratón no se lee con el teclado, ni se copia, ni se imprime.
+- **No hay biblioteca de gráficas.** Las barras son cajas con un ancho en tanto
+  por ciento que calcula `summary.py`; traer una por CDN sería un script de
+  fuera más —con su `integrity`, y aquí no hay build que lo genere— para pintar
+  lo que hacen cuatro reglas de CSS.
+
+El informe se guarda bajo `MEDIA_ROOT` con su `.htaccess`: lleva nombres de
+módulos, rutas del proyecto y la primera línea de cada traza, o sea un mapa del
+código, y colgando de ahí sin eso se serviría solo (invariante 13).
+
 ### G. Puntos de entrada que no son el navegador
 
 | Entrada | Dónde |
@@ -731,6 +780,20 @@ IPBlockedModel / WhiteListedIPModel
 
 - Rama principal: `master`.
 - **Las pruebas viven en `apps/<app>/tests/`**, un paquete por app, con ficheros `test_*.py`. Estaban sueltas al lado del código (`tests_login.py`, `tests_workflow.py`…) y en `utils/` llegaron a ser diecinueve ficheros mezclados con los módulos, lo que hacía que abrir la carpeta no dijera nada. El descubrimiento de `unittest` recorre paquetes, así que sigue encontrándolas sin configurar nada; lo único que hace falta es el `__init__.py` y que el nombre empiece por `test`. Un módulo de prueba que importe del suyo usa `..` (`from ..models import …`), y de un hermano, `.` (`from .test_buyers import …`).
-- No hay CI ni linters configurados, pero **todas las apps con lógica tienen pruebas** (~493). Las que más peso llevan: `buyers/` (control de acceso del flujo **y** las tres capas del flujo de 12 etapas, con las `CheckConstraint` probadas por `QuerySet.update()` para saltarse `save()` y `clean()`), `users/` (el correo cifrado no se puede consultar: por eso existe `email_hash`), `account/` (login por HTTP y wizard de registro), `common/utils/` (bloqueos, trampa anti-escaneo, rotación del log, `safe_next`), e `internal/ops/`. Las únicas sin contenido son `notifications/` (app vacía a propósito) y los `tests.py` de apps sin lógica propia. Se ejecutan con `--settings=app_core.settings_test` (SQLite en memoria), porque el usuario de MySQL en cPanel no puede crear la base `test_*`. La otra carpeta `tests` con contenido es `buyers/functions/tests/dummy_offer.py` (fixture para probar la generación de PDFs a mano).
+  `app_core/tests/` sigue la misma regla: era el último `tests_*.py` suelto, y se veía en el resumen
+  de pruebas, que lo agrupaba como una app llamada `app_core.tests_admin`.
+- **La suite corre también en Windows.** Lo que la rompía no era lógica: `os.getuid` no existe allí y
+  reventaba `check_workers` entero, y `open()` sin `encoding` usa cp1252, donde cualquier tilde en un
+  log corta la prueba con un `UnicodeEncodeError` que no tiene que ver con lo que se probaba. Se
+  encontró ejecutando con `PYTHONWARNDEFAULTENCODING=1`, no adivinando. Lo que de verdad es de POSIX
+  —los permisos `rw-------`, que Windows no tiene— se marca con `posix_only`
+  (`apps/common/utils/testing.py`) en vez de borrarse: saltarlo dice la verdad, quitarlo diría que a
+  nadie le importa, y en el servidor, que es Linux, importa.
+- **Ojo con `os.environ` dentro de una prueba.** El corredor del informe
+  (`apps/common/utils/test_runner.py`) lee su destino **al construirse** justo por esto: una prueba
+  que quitaba `GEA_TEST_REPORT` y no lo devolvía dejaba la suite entera en verde y sin informe, y el
+  fallo no se veía ejecutando ese fichero solo. Si tocas el entorno en una prueba, devuélvelo como
+  estaba.
+- No hay CI ni linters configurados, pero **todas las apps con lógica tienen pruebas** (778). Las que más peso llevan: `buyers/` (control de acceso del flujo **y** las tres capas del flujo de 12 etapas, con las `CheckConstraint` probadas por `QuerySet.update()` para saltarse `save()` y `clean()`), `users/` (el correo cifrado no se puede consultar: por eso existe `email_hash`), `account/` (login por HTTP y wizard de registro), `common/utils/` (bloqueos, trampa anti-escaneo, rotación del log, `safe_next`), e `internal/ops/`. Las únicas sin contenido son `notifications/` (app vacía a propósito) y los `tests.py` de apps sin lógica propia. Se ejecutan con `--settings=app_core.settings_test` (SQLite en memoria), porque el usuario de MySQL en cPanel no puede crear la base `test_*`. La otra carpeta `tests` con contenido es `buyers/functions/tests/dummy_offer.py` (fixture para probar la generación de PDFs a mano).
 - Los mensajes de commit son informales y en español/inglés mezclado.
 - El historial reciente muestra la plataforma pasando por un ciclo de desactivación ("standby mode") y reactivación.

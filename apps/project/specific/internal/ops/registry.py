@@ -1536,6 +1536,41 @@ COMMANDS = (
         fixed_args=('--settings=app_core.settings_test',),
         timeout=900,
     ),
+    Command(
+        name='test_report',
+        title=_('Test summary'),
+        summary=_('Runs the suite and writes the summary the charts read.'),
+        detail=_(
+            'The same suite as the entry above, but keeping what it usually '
+            'throws away: which test, from which app, how long it took and '
+            'how it ended. It also measures coverage when coverage is '
+            'installed — it is a development tool and is not in '
+            'requirements.txt, so without it the run still produces the '
+            'result summary and says the coverage was not measured. It runs '
+            'in a subprocess of its own because coverage has to start before '
+            'Django imports anything.'
+        ),
+        example=_('Before a release, to see which app is thin on tests.'),
+        risk=RISK_READ_ONLY,
+        area=AREA_DIAGNOSTICS,
+        availability=AVAILABILITY_DEBUG_ONLY,
+        options=[
+            Option(
+                flag='--no-coverage',
+                label=_('Skip coverage'),
+                kind=KIND_FLAG,
+                help=_('Only the results. Runs noticeably faster.'),
+            ),
+            Option(
+                flag='--html',
+                label=_('Also the navigable HTML'),
+                kind=KIND_FLAG,
+                help=_('Writes htmlcov/, which is what shows the missing '
+                       'line. Only useful on a machine you can browse.'),
+            ),
+        ],
+        timeout=900,
+    ),
 
     # ---------------------------------------------------------------
     # Dificiles de deshacer.

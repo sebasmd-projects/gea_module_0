@@ -151,7 +151,7 @@ class TestSendKeepsTheProof(AnchoringCheckTestCase):
         guard = self.saved_proofs()[0].parent / '.htaccess'
 
         self.assertTrue(guard.exists())
-        self.assertIn('denied', guard.read_text())
+        self.assertIn('denied', guard.read_text(encoding='utf-8'))
 
     def test_it_says_the_commitment_exists_and_the_block_does_not(self):
         """

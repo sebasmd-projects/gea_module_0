@@ -107,6 +107,14 @@
         rebuilding the translation catalogs. They write into the repository,
         which is why they are not offered on a server.
       {% endblocktrans %}
+      <br>
+      {% comment %}
+        El enlace solo se pinta donde la pagina existe. En produccion responde
+        404 --la suite no se puede ejecutar alli-- y un enlace que lleva a un
+        404 no es una pista util: es una pista de que hay algo ahi.
+      {% endcomment %}
+      <a href="{% url 'admin:ops_test_summary' %}">
+        {% trans 'See the last test summary →' %}</a>
     </p>
   {% endif %}
 

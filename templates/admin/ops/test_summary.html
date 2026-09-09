@@ -1,0 +1,484 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% comment %}
+  El resumen de la última ejecución de la suite.
+
+  Cuatro gráficas y ninguna biblioteca. Las barras son cajas con un ancho en
+  tanto por ciento que calcula la vista; el navegador ya sabe dibujar
+  rectángulos. Traer una biblioteca de gráficas por CDN significaría un script
+  de fuera más --con su `integrity`, y aquí no hay build que lo genere-- para
+  pintar lo que hacen cuatro reglas de CSS.
+
+  Tres cosas que parecen detalles y son las que hacen que se pueda leer:
+
+  * **El color nunca va solo.** En la paleta de estado el verde de «pasa» y el
+    rojo de «falla» se separan un ΔE de 4 bajo deuteranopia: para bastante
+    gente son el mismo color. Por eso cada uno lleva su icono y su etiqueta, y
+    por eso el número está siempre escrito.
+  * **Cada gráfica tiene su tabla.** El botón la enseña. Una barra que sólo se
+    puede leer pasando el ratón no se puede leer con el teclado, ni copiar, ni
+    imprimir.
+  * **El texto no se pinta del color de la serie.** Los azules y amarillos de
+    una barra son ilegibles como texto sobre el fondo. La identidad la lleva
+    el punto de color que va al lado, no la letra.
+{% endcomment %}
+
+{% block breadcrumbs %}
+  <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; <a href="{{ console_url }}">{% trans 'Operations console' %}</a>
+    &rsaquo; {% trans 'Test summary' %}
+  </div>
+{% endblock %}
+
+{% block content %}
+  <style>
+    {% comment %}
+      Los colores de las marcas se declaran aquí y no se heredan del admin: el
+      admin tiene tokens de interfaz (fondos, enlaces, bordes), no de datos.
+      Los tres bloques son los tres estados del tema: claro por defecto, el
+      ajuste del sistema, y el interruptor del propio admin, que tiene que
+      ganar en los dos sentidos.
+    {% endcomment %}
+    .tsum {
+      --surface: var(--body-bg, #fff);
+      --ink: var(--body-fg, #303030);
+      --ink-quiet: var(--body-quiet-color, #666);
+      --rule: var(--hairline-color, #e8e8e8);
+
+      --series: #2a78d6;          /* la única serie categórica que hay */
+      --track: #cde2fb;           /* el hueco de la barra, mismo tono */
+      --good: #0ca30c;
+      --warning: #fab219;
+      --serious: #ec835a;
+      --critical: #d03b3b;
+      --muted: #898781;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:where(:not([data-theme="light"])) .tsum {
+        --series: #3987e5;
+        --track: #184f95;
+      }
+    }
+    :root[data-theme="dark"] .tsum {
+      --series: #3987e5;
+      --track: #184f95;
+    }
+
+    /* --- cabecera --- */
+    .tsum-head { display: flex; flex-wrap: wrap; gap: 2rem;
+                 align-items: flex-end; margin: .5rem 0 1.5rem; }
+    .tsum-hero { font-size: 3rem; line-height: 1; font-weight: 600; }
+    .tsum-hero small { display: block; margin-top: .35rem;
+                       font-size: .85rem; font-weight: 400;
+                       color: var(--ink-quiet); }
+    .tsum-meta { font-size: .8rem; color: var(--ink-quiet); line-height: 1.7; }
+    .tsum-meta code { font-size: .78rem; }
+
+    /* --- fichas --- */
+    .tsum-tiles { display: flex; flex-wrap: wrap; gap: .5rem;
+                  margin-bottom: 2rem; }
+    /* Con tope: los desenlaces que no ocurrieron no se pintan, asi que en una
+       suite verde quedan dos fichas. Sin `max-width` se reparten la pantalla
+       entera y dos numeros pequenos ocupan media pagina. */
+    .tsum-tile { flex: 1 1 8rem; max-width: 14rem; padding: .7rem .9rem;
+                 border-radius: 4px; border: 1px solid var(--rule); }
+    .tsum-tile b { display: block; font-size: 1.5rem; font-weight: 600; }
+    .tsum-tile span { display: block; margin-top: .15rem; font-size: .78rem;
+                      color: var(--ink-quiet); }
+    .tsum-dot { display: inline-block; width: .6rem; height: .6rem;
+                border-radius: 50%; margin-right: .35rem;
+                vertical-align: baseline; }
+
+    /* --- gráficas --- */
+    .tsum-fig { margin: 0 0 2.25rem; }
+    .tsum-fig h2 { font-size: 1rem; margin: 0 0 .15rem; }
+    .tsum-fig p.cap { margin: 0 0 .85rem; font-size: .8rem;
+                      color: var(--ink-quiet); }
+
+    /* La barra apilada: el hueco de 2px lo hace el fondo, no un borde.
+       Un borde alrededor de cada tramo es tinta que no es dato. */
+    .tsum-stack { display: flex; height: 22px; border-radius: 3px;
+                  overflow: hidden; background: var(--surface); gap: 2px; }
+    .tsum-stack > i { display: block; }
+    .tsum-stack > i:first-child { border-radius: 3px 0 0 3px; }
+    .tsum-stack > i:last-child { border-radius: 0 3px 3px 0; }
+
+    .tsum-legend { display: flex; flex-wrap: wrap; gap: .25rem 1.1rem;
+                   margin-top: .6rem; font-size: .8rem; }
+    .tsum-legend span { color: var(--ink); }
+    .tsum-legend em { font-style: normal; color: var(--ink-quiet); }
+
+    /* Filas de barras. El resalte al pasar por encima coge la fila entera y no
+       los 14px de la barra, que es un objetivo demasiado fino para el ratón.
+
+       Las filas no son focalizables, y es a propósito: una fila es texto, no
+       un control. Un div al que se le pone índice de tabulación, sin papel ni
+       comportamiento, es una parada que no hace nada — quien navega con
+       teclado se encuentra dentro de un div anónimo. Lo que la fila dice ya
+       está escrito en ella --la etiqueta y el número-- y otra vez en la tabla
+       gemela; el resalte es una comodidad del ratón, no una vía de lectura.
+
+       (El ejemplo va contado con palabras y sin la etiqueta literal a
+       propósito: el analizador de HTML lee dentro de este comentario y toma
+       por marcado de verdad cualquier etiqueta que se escriba aquí.) */
+    .tsum-rows { display: grid; gap: 2px; }
+    .tsum-row { display: grid; grid-template-columns: 15rem 1fr auto;
+                gap: .75rem; align-items: center; padding: .2rem .35rem;
+                border-radius: 3px; font-size: .82rem; }
+    .tsum-row:hover { background: var(--rule); }
+    .tsum-row > .k { overflow: hidden; text-overflow: ellipsis;
+                     white-space: nowrap; }
+    .tsum-row > .k em { font-style: normal; color: var(--ink-quiet); }
+    .tsum-row > .v { text-align: right; font-variant-numeric: tabular-nums;
+                     color: var(--ink); white-space: nowrap; }
+    /* La barra: 4px redondeados en la punta, cuadrada en la línea de base. */
+    .tsum-bar { height: 14px; }
+    .tsum-bar > i { display: block; height: 100%; background: var(--series);
+                    border-radius: 0 4px 4px 0; }
+    /* El medidor: mismo tono, un paso más claro, para que el hueco se lea. */
+    .tsum-meter { height: 14px; border-radius: 0 4px 4px 0;
+                  background: var(--track); }
+    .tsum-meter > i { display: block; height: 100%; background: var(--series);
+                      border-radius: 0 4px 4px 0; }
+
+    /* --- tablas gemelas --- */
+    .tsum-toggle { margin-top: .7rem; font-size: .78rem; padding: .25rem .6rem;
+                   border-radius: 999px; cursor: pointer;
+                   border: 1px solid var(--rule);
+                   background: var(--surface); color: var(--ink); }
+    .tsum-table { width: 100%; border-collapse: collapse; font-size: .8rem;
+                  margin-top: .7rem; }
+    .tsum-table th, .tsum-table td { padding: .3rem .5rem; text-align: left;
+                                     border-bottom: 1px solid var(--rule); }
+    .tsum-table td.n { text-align: right;
+                       font-variant-numeric: tabular-nums; }
+    .tsum-table[hidden] { display: none !important; }
+
+    /* --- lo que no pasa --- */
+    .tsum-fail { padding: .6rem .8rem; margin-bottom: .4rem; border-radius: 4px;
+                 border: 1px solid var(--rule);
+                 border-left: 3px solid var(--critical); font-size: .82rem; }
+    .tsum-fail b { display: block; }
+    .tsum-fail code { display: block; margin-top: .25rem; font-size: .76rem;
+                      color: var(--ink-quiet); word-break: break-word; }
+
+    .tsum-note { padding: .75rem 1rem; margin-bottom: 1.5rem; border-radius: 4px;
+                 font-size: .85rem; background: rgba(65,118,144,.10);
+                 border: 1px solid rgba(65,118,144,.35); }
+
+    @media (max-width: 720px) {
+      .tsum-row { grid-template-columns: 9rem 1fr auto; }
+    }
+  </style>
+
+  {% comment %}
+    Sin `<h1>` propio: el admin ya pinta uno con `title` en su bloque
+    `content_title`, y poner otro deja el titulo dos veces seguidas.
+  {% endcomment %}
+  <div class="tsum">
+    {% if not summary %}
+      <p class="tsum-note">
+        {% blocktrans trimmed %}
+          There is no report yet. It is written by the “Test summary”
+          command, which runs the suite and keeps what it usually throws
+          away: which test, from which app, how long it took and how it
+          ended.
+        {% endblocktrans %}
+      </p>
+      <p>
+        <a class="button" href="{{ command_url }}">
+          {% trans 'Run it now' %}</a>
+      </p>
+      <p style="font-size:.82rem">
+        {% trans 'Or, from a terminal:' %}
+        <code>manage.py test_report</code>
+      </p>
+
+    {% else %}
+      {% comment %}
+        La cifra que encabeza. Va en la misma tipografía que todo lo demás y
+        con las cifras proporcionales de siempre: `tabular-nums` a este tamaño
+        deja los números sueltos.
+      {% endcomment %}
+      <div class="tsum-head">
+        <div class="tsum-hero">
+          {{ summary.pass_rate }}%
+          <small>
+            {% blocktrans trimmed with total=summary.total %}
+              of {{ total }} tests
+            {% endblocktrans %}
+            {% if summary.red %}
+              · <b style="color:var(--critical)">✕</b>
+              {% blocktrans trimmed with red=summary.red %}
+                {{ red }} in red
+              {% endblocktrans %}
+            {% endif %}
+          </small>
+        </div>
+
+        <div class="tsum-meta">
+          <div>{{ summary.meta.created|slice:":19" }} ·
+               {{ summary.meta.duration }} s</div>
+          <div>Python {{ summary.meta.python }} ·
+               {{ summary.meta.platform }} ·
+               <code>{{ summary.meta.settings }}</code></div>
+          <div>{% trans 'Scope:' %} {{ summary.meta.label }}</div>
+        </div>
+      </div>
+
+      <div class="tsum-tiles">
+        {% for row in summary.outcomes %}
+          <div class="tsum-tile">
+            <b>{{ row.count }}</b>
+            <span>
+              <i class="tsum-dot" style="background:var(--{{ row.tone }})"
+                 aria-hidden="true"></i>{{ row.icon }} {{ row.label }}
+            </span>
+          </div>
+        {% endfor %}
+        {% if summary.coverage %}
+          <div class="tsum-tile">
+            <b>{{ summary.coverage.total }}%</b>
+            <span>
+              <i class="tsum-dot" style="background:var(--series)"
+                 aria-hidden="true"></i>{% trans 'Coverage' %}
+            </span>
+          </div>
+        {% endif %}
+      </div>
+
+      {% comment %}=== 1. Cómo acabó ==================================={% endcomment %}
+      <div class="tsum-fig">
+        <h2>{% trans 'How the suite ended' %}</h2>
+        <p class="cap">
+          {% trans 'A skipped test is not a passing test: it checked nothing.' %}
+        </p>
+
+        {% comment %}
+          La barra va oculta a los lectores de pantalla, y no por descuido: la
+          leyenda de justo debajo dice exactamente lo mismo --icono, etiqueta,
+          numero y porcentaje de cada desenlace-- en texto. Ponerle un
+          `role="img"` con una etiqueta sintetizada seria leer dos veces lo
+          mismo, y la segunda peor redactada.
+        {% endcomment %}
+        <div class="tsum-stack" aria-hidden="true">
+          {% for row in summary.outcomes %}
+            <i style="width:{{ row.percent }}%;background:var(--{{ row.tone }})"
+               title="{{ row.label }}: {{ row.count }} ({{ row.percent }}%)"></i>
+          {% endfor %}
+        </div>
+
+        <div class="tsum-legend">
+          {% for row in summary.outcomes %}
+            <span>
+              <i class="tsum-dot" style="background:var(--{{ row.tone }})"
+                 aria-hidden="true"></i>{{ row.icon }} {{ row.label }}
+              <em>{{ row.count }} · {{ row.percent }}%</em>
+            </span>
+          {% endfor %}
+        </div>
+      </div>
+
+      {% comment %}=== 2. Por app ====================================={% endcomment %}
+      <div class="tsum-fig">
+        <h2>{% trans 'Tests per app' %}</h2>
+        <p class="cap">
+          {% trans 'Measured against the app with the most, not against the total: with thirteen apps, measuring against the total leaves every bar glued to the axis.' %}
+        </p>
+
+        <div class="tsum-rows">
+          {% for row in summary.apps %}
+            <div class="tsum-row"
+                 title="{% blocktrans trimmed with app=row.app total=row.total red=row.red %}{{ app }}: {{ total }} tests, {{ red }} in red{% endblocktrans %}">
+              <div class="k">{{ row.app }}</div>
+              <div class="tsum-bar"><i style="width:{{ row.width }}%"></i></div>
+              <div class="v">
+                {{ row.total }}{% if row.red %}
+                  <b style="color:var(--critical)">✕ {{ row.red }}</b>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <button type="button" class="tsum-toggle" data-table="t-apps"
+                aria-expanded="false"
+                data-hide="{% trans 'Hide the table' %}">{% trans 'See as a table' %}</button>
+        <table class="tsum-table" id="t-apps" hidden>
+          <thead>
+            <tr>
+              <th>{% trans 'App' %}</th>
+              <th class="n">{% trans 'Tests' %}</th>
+              <th class="n">{% trans 'In red' %}</th>
+              <th class="n">{% trans 'Skipped' %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in summary.apps %}
+              <tr>
+                <td>{{ row.app }}</td>
+                <td class="n">{{ row.total }}</td>
+                <td class="n">{{ row.red }}</td>
+                <td class="n">{{ row.skipped }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      {% comment %}=== 3. Cobertura =================================={% endcomment %}
+      <div class="tsum-fig">
+        <h2>{% trans 'Coverage per app' %}</h2>
+
+        {% if summary.coverage %}
+          <p class="cap">
+            {% blocktrans trimmed with covered=summary.coverage.covered statements=summary.coverage.statements %}
+              {{ covered }} of {{ statements }} statements. Thinnest first,
+              which is the order you would work in.
+            {% endblocktrans %}
+          </p>
+
+          <div class="tsum-rows">
+            {% for row in summary.coverage.apps %}
+              <div class="tsum-row"
+                   title="{{ row.app }}: {{ row.percent }}% ({{ row.covered }}/{{ row.statements }})">
+                <div class="k">{{ row.app }}</div>
+                <div class="tsum-meter"><i style="width:{{ row.percent }}%"></i></div>
+                <div class="v">{{ row.percent }}%</div>
+              </div>
+            {% endfor %}
+          </div>
+
+          <button type="button" class="tsum-toggle" data-table="t-cov"
+                  aria-expanded="false"
+                data-hide="{% trans 'Hide the table' %}">{% trans 'See as a table' %}</button>
+          <table class="tsum-table" id="t-cov" hidden>
+            <thead>
+              <tr>
+                <th>{% trans 'App' %}</th>
+                <th class="n">{% trans 'Coverage' %}</th>
+                <th class="n">{% trans 'Covered' %}</th>
+                <th class="n">{% trans 'Statements' %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in summary.coverage.apps %}
+                <tr>
+                  <td>{{ row.app }}</td>
+                  <td class="n">{{ row.percent }}%</td>
+                  <td class="n">{{ row.covered }}</td>
+                  <td class="n">{{ row.statements }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p class="cap">
+            {% blocktrans trimmed %}
+              This run did not measure coverage. It is a development tool and
+              is not in requirements.txt, so the server does not carry it:
+              install it with <code>uv add coverage</code> and run the command
+              again without “Skip coverage”.
+            {% endblocktrans %}
+          </p>
+        {% endif %}
+      </div>
+
+      {% comment %}=== 4. Las lentas ================================={% endcomment %}
+      <div class="tsum-fig">
+        <h2>{% trans 'The ten slowest' %}</h2>
+        <p class="cap">
+          {% trans 'The useful figure is which one is slow, not what the whole suite takes.' %}
+        </p>
+
+        <div class="tsum-rows">
+          {% for row in summary.slowest %}
+            <div class="tsum-row" title="{{ row.id }}">
+              <div class="k">{{ row.name }}<br><em>{{ row.where }}</em></div>
+              <div class="tsum-bar"><i style="width:{{ row.width }}%"></i></div>
+              <div class="v">{{ row.seconds }} s</div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <button type="button" class="tsum-toggle" data-table="t-slow"
+                aria-expanded="false"
+                data-hide="{% trans 'Hide the table' %}">{% trans 'See as a table' %}</button>
+        <table class="tsum-table" id="t-slow" hidden>
+          <thead>
+            <tr>
+              <th>{% trans 'Test' %}</th>
+              <th class="n">{% trans 'Seconds' %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in summary.slowest %}
+              <tr>
+                <td><code>{{ row.id }}</code></td>
+                <td class="n">{{ row.seconds }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      {% comment %}=== 5. Lo que no pasa ============================={% endcomment %}
+      {% if summary.failures %}
+        <div class="tsum-fig">
+          <h2>{% trans 'What does not pass' %}</h2>
+          <p class="cap">
+            {% trans 'The last line of each one. The whole traceback is in the run output.' %}
+          </p>
+
+          {% for row in summary.failures %}
+            <div class="tsum-fail"
+                 style="border-left-color:var(--{{ row.tone }})">
+              <b>{{ row.icon }} {{ row.name }}</b>
+              <code>{{ row.where }}</code>
+              <code>{{ row.detail }}</code>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <p style="font-size:.82rem">
+        <a class="button" href="{{ command_url }}">
+          {% trans 'Run it again' %}</a>
+      </p>
+    {% endif %}
+  </div>
+
+  <script>
+    (function () {
+      {% comment %}
+        Cada gráfica tiene su tabla gemela. No es un adorno: una barra que
+        solo se lee con el raton no se lee con el teclado, ni se copia, ni se
+        imprime.
+      {% endcomment %}
+      {% comment %}
+        Las dos etiquetas del boton viajan en atributos y no dentro del
+        script. Una traduccion con un apostrofe --"Amagar-ho"-- cerraria la
+        cadena de JavaScript y se llevaria por delante la pagina entera; en un
+        atributo, Django la escapa.
+      {% endcomment %}
+      var buttons = document.querySelectorAll('.tsum-toggle');
+
+      Array.prototype.forEach.call(buttons, function (button) {
+        var show = button.textContent;
+        var hide = button.dataset.hide;
+
+        button.addEventListener('click', function () {
+          var table = document.getElementById(button.dataset.table);
+
+          if (!table) { return; }
+
+          table.hidden = !table.hidden;
+          button.setAttribute('aria-expanded', String(!table.hidden));
+          button.textContent = table.hidden ? show : hide;
+        });
+      });
+    }());
+  </script>
+{% endblock %}

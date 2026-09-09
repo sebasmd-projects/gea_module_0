@@ -1,4 +1,4 @@
-# app_core/tests_admin.py
+# app_core/tests/test_admin.py
 """
 La puerta del admin: se entra con sesion, no sabiendo la URL.
 
@@ -9,7 +9,7 @@ partir de ahi solo faltaban credenciales. Cada prueba de aqui fija una de las
 cuatro respuestas posibles, que es lo que decide si la ruta sigue siendo un
 secreto que importa:
 
-    manage.py test app_core --settings=app_core.settings_test
+    manage.py test app_core.tests.test_admin --settings=app_core.settings_test
 """
 
 from django.contrib.auth.models import Permission
