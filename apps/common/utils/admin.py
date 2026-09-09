@@ -1,10 +1,14 @@
 import json
+from datetime import timedelta
 
+from django.conf import settings
 from django.contrib import admin, messages
+from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportActionModelAdmin
 
+from .blocking import block_duration, describe_duration
 from .models import GeaDailyUniqueCode, IPBlockedModel, WhiteListedIPModel
 
 
@@ -59,57 +63,183 @@ class GeaDailyUniqueCodeAdmin(admin.ModelAdmin):
 
 @admin.register(IPBlockedModel)
 class IPBlockedModelAdmin(GeneralAdminModel):
-    list_display = ('current_ip', 'session_info', 'attempt_count_display', 'reason', 'is_active',
-                    'blocked_until', 'created', 'updated')
-    list_filter = ('is_active', 'reason')
-    search_fields = ('current_ip', 'reason', 'session_info')
-    readonly_fields = ('pretty_session_info', 'created',
-                       'updated', 'attempt_count_display')
+    """
+    La tabla de bloqueos, para poder leerla sin abrir cada fila.
+
+    Antes la primera columna era el ``session_info`` entero --un JSON crudo,
+    con cabeceras y parametros dentro, en la celda-- y todo lo demas habia que
+    deducirlo de el. No se podia ordenar por intentos, ni filtrar las que
+    vienen de un proveedor cloud, ni ver de un vistazo si un bloqueo sigue en
+    pie. El JSON esta ahora donde le corresponde: dentro de la ficha, como
+    rastro crudo, y en el listado van las columnas.
+
+    El orden es por **fecha de alta y despues por actualizacion**, de lo mas
+    nuevo a lo mas viejo. Y las columnas son ordenables: para ver «lo ultimo
+    que se movio» basta con pulsar en `last detection`, que es una fecha
+    distinta de `updated` -- esa la mueve cualquier guardado, incluido uno
+    hecho a mano desde aqui.
+    """
+
+    list_display = (
+        'current_ip', 'block_state', 'attempt_count', 'unique_paths',
+        'origin', 'reason', 'matched_pattern', 'agent', 'first_seen',
+        'last_seen',
+    )
+    list_display_links = ('current_ip',)
+    ordering = ('-created', '-updated')
+    date_hierarchy = 'created'
+
+    list_filter = (
+        'is_datacenter', 'reason', 'is_active', 'country', 'network_owner',
+        'created',
+    )
+    search_fields = (
+        'current_ip', 'user_agent', 'matched_pattern', 'network_owner',
+        'session_info',
+    )
+
+    readonly_fields = (
+        'pretty_session_info', 'created', 'updated', 'first_seen', 'last_seen',
+        'attempt_count', 'unique_paths', 'user_agent', 'matched_pattern',
+        'country', 'network_owner', 'is_datacenter', 'block_state',
+        'block_length',
+    )
+
     fieldsets = (
         (
-            _('Information'), {
+            _('Block'), {
                 'fields': (
                     'current_ip',
                     'reason',
                     'is_active',
-                    'pretty_session_info'
+                    'block_state',
+                    'blocked_until',
+                    'block_length',
                 )
+            }
+        ),
+        (
+            _('Activity'), {
+                'fields': (
+                    'attempt_count',
+                    'unique_paths',
+                    'matched_pattern',
+                    'user_agent',
+                    'first_seen',
+                    'last_seen',
+                )
+            }
+        ),
+        (
+            _('Origin'), {
+                'fields': (
+                    'is_datacenter',
+                    'network_owner',
+                    'country',
+                ),
+                'description': _(
+                    'Where the address lives. A person browses from a home or '
+                    'office address; a server does not browse. This is a hint '
+                    'for reading the row, never a reason to block on its own: '
+                    'a commercial VPN comes out of the same ranges.'
+                ),
+            }
+        ),
+        (
+            _('Raw trail'), {
+                'fields': ('pretty_session_info',),
+                'classes': ('collapse',),
             }
         ),
         (
             _('Times'), {
-                'fields': (
-                    'created',
-                    'updated',
-                    'blocked_until',
-                ),
-                'classes': (
-                    'collapse',
-                )
+                'fields': ('created', 'updated'),
+                'classes': ('collapse',),
             }
         ),
         (
             _('Other'), {
-                'fields': (
-                    'language',
-                    'default_order',
-                ),
-                'classes': (
-                    'collapse',
-                )
+                'fields': ('language', 'default_order'),
+                'classes': ('collapse',),
             }
         ),
     )
 
+    # ------------------------------------------------------------------
+    @admin.display(description=_('blocked'), boolean=False,
+                   ordering='blocked_until')
+    def block_state(self, obj):
+        """
+        Si el bloqueo esta en pie **ahora**, y cuanto le queda.
+
+        Se calcula al pintar la fila, asi que se actualiza solo: no hay
+        columna que mantener ni cron que la corrija. `is_active` por si sola
+        decia «bloqueada» para siempre, porque nadie la baja cuando el reloj
+        pasa -- y eso hacia que la tabla enseñara como activos bloqueos
+        caducados hace meses.
+        """
+        if obj.is_currently_blocked:
+            return mark_safe(
+                '<span style="color:#b02a37;font-weight:600;">&#9679; '
+                + _('Blocked') + '</span><br>'
+                + '<span style="color:#6c757d;font-size:.85em;">'
+                + describe_duration(obj.time_remaining) + ' '
+                + _('left') + '</span>'
+            )
+
+        if not obj.is_active:
+            return mark_safe(
+                '<span style="color:#6c757d;">&#9675; ' + _('Disabled')
+                + '</span>')
+
+        return mark_safe(
+            '<span style="color:#198754;">&#9675; ' + _('Expired') + '</span>')
+
+    @admin.display(description=_('block length'))
+    def block_length(self, obj):
+        """Cuanto duraria el proximo bloqueo con los intentos que lleva."""
+        base = timedelta(
+            minutes=getattr(settings, 'IP_BLOCKED_TIME_IN_MINUTES', 15))
+
+        return describe_duration(
+            block_duration(max(1, obj.attempt_count), base))
+
+    @admin.display(description=_('origin'), ordering='network_owner')
+    def origin(self, obj):
+        """Proveedor y pais, o un guion si no se sabe."""
+        parts = []
+
+        if obj.is_datacenter:
+            parts.append(
+                '<span style="color:#b02a37;font-weight:600;">'
+                + (obj.network_owner or _('datacenter')) + '</span>')
+        elif obj.network_owner:
+            parts.append(obj.network_owner)
+
+        if obj.country:
+            parts.append(
+                '<span style="color:#6c757d;">' + obj.country + '</span>')
+
+        return mark_safe(' &middot; '.join(parts)) if parts else '—'
+
+    @admin.display(description=_('user agent'), ordering='user_agent')
+    def agent(self, obj):
+        """El agente, recortado: entero rompe el ancho de la tabla."""
+        if not obj.user_agent:
+            return '—'
+
+        short = obj.user_agent[:60]
+
+        if len(obj.user_agent) > 60:
+            short += '…'
+
+        return mark_safe(
+            f'<span title="{escape(obj.user_agent)}">{escape(short)}</span>')
+
+    @admin.display(description=_('Raw trail'))
     def pretty_session_info(self, obj):
-        formatted = json.dumps(obj.session_info, indent=4)
-        return mark_safe(f"<pre>{formatted}</pre>")
-
-    def attempt_count_display(self, obj):
-        return obj.session_info.get('attempt_count', 0)
-
-    pretty_session_info.short_description = "Session Information"
-    attempt_count_display.short_description = "Attempt Count"
+        formatted = json.dumps(obj.session_info, indent=4, ensure_ascii=False)
+        return mark_safe(f"<pre>{escape(formatted)}</pre>")
 
 
 @admin.register(WhiteListedIPModel)
