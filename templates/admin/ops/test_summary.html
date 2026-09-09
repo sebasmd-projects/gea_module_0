@@ -110,14 +110,20 @@
     .tsum-legend span { color: var(--ink); }
     .tsum-legend em { font-style: normal; color: var(--ink-quiet); }
 
-    /* Filas de barras. La fila entera es el objetivo del ratón y del foco,
-       no los 22px de la barra. */
+    /* Filas de barras. El resalte al pasar por encima coge la fila entera y no
+       los 14px de la barra, que es un objetivo demasiado fino para el ratón.
+
+       Sin `tabindex`: una fila es texto, no un control. Un `<div tabindex="0">`
+       sin papel ni comportamiento es una parada de tabulación que no hace
+       nada, y quien navega con teclado se encuentra dentro de un div anónimo.
+       Lo que la fila dice ya está escrito en ella --la etiqueta y el número--
+       y otra vez en la tabla gemela; el resalte es una comodidad del ratón, no
+       una vía de lectura. */
     .tsum-rows { display: grid; gap: 2px; }
     .tsum-row { display: grid; grid-template-columns: 15rem 1fr auto;
                 gap: .75rem; align-items: center; padding: .2rem .35rem;
                 border-radius: 3px; font-size: .82rem; }
-    .tsum-row:hover, .tsum-row:focus-visible { background: var(--rule);
-                                               outline: none; }
+    .tsum-row:hover { background: var(--rule); }
     .tsum-row > .k { overflow: hidden; text-overflow: ellipsis;
                      white-space: nowrap; }
     .tsum-row > .k em { font-style: normal; color: var(--ink-quiet); }
@@ -246,8 +252,14 @@
           {% trans 'A skipped test is not a passing test: it checked nothing.' %}
         </p>
 
-        <div class="tsum-stack" role="img"
-             aria-label="{% for r in summary.outcomes %}{{ r.label }} {{ r.count }}. {% endfor %}">
+        {% comment %}
+          La barra va oculta a los lectores de pantalla, y no por descuido: la
+          leyenda de justo debajo dice exactamente lo mismo --icono, etiqueta,
+          numero y porcentaje de cada desenlace-- en texto. Ponerle un
+          `role="img"` con una etiqueta sintetizada seria leer dos veces lo
+          mismo, y la segunda peor redactada.
+        {% endcomment %}
+        <div class="tsum-stack" aria-hidden="true">
           {% for row in summary.outcomes %}
             <i style="width:{{ row.percent }}%;background:var(--{{ row.tone }})"
                title="{{ row.label }}: {{ row.count }} ({{ row.percent }}%)"></i>
@@ -274,7 +286,7 @@
 
         <div class="tsum-rows">
           {% for row in summary.apps %}
-            <div class="tsum-row" tabindex="0"
+            <div class="tsum-row"
                  title="{% blocktrans trimmed with app=row.app total=row.total red=row.red %}{{ app }}: {{ total }} tests, {{ red }} in red{% endblocktrans %}">
               <div class="k">{{ row.app }}</div>
               <div class="tsum-bar"><i style="width:{{ row.width }}%"></i></div>
@@ -326,7 +338,7 @@
 
           <div class="tsum-rows">
             {% for row in summary.coverage.apps %}
-              <div class="tsum-row" tabindex="0"
+              <div class="tsum-row"
                    title="{{ row.app }}: {{ row.percent }}% ({{ row.covered }}/{{ row.statements }})">
                 <div class="k">{{ row.app }}</div>
                 <div class="tsum-meter"><i style="width:{{ row.percent }}%"></i></div>
@@ -379,7 +391,7 @@
 
         <div class="tsum-rows">
           {% for row in summary.slowest %}
-            <div class="tsum-row" tabindex="0" title="{{ row.id }}">
+            <div class="tsum-row" title="{{ row.id }}">
               <div class="k">{{ row.name }}<br><em>{{ row.where }}</em></div>
               <div class="tsum-bar"><i style="width:{{ row.width }}%"></i></div>
               <div class="v">{{ row.seconds }} s</div>

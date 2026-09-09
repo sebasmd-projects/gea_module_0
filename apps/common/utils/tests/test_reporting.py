@@ -43,7 +43,11 @@ def sample_case():
     class Sample(unittest.TestCase):
 
         def test_it_passes(self):
-            self.assertTrue(True)
+            # Sin asercion: una prueba que no levanta nada pasa, y aqui lo que
+            # hace falta es justamente un desenlace `passed` que contar. Un
+            # `assertTrue(True)` seria una asercion cuyo valor es constante,
+            # o sea ruido con aspecto de comprobacion.
+            pass
 
         def test_it_fails(self):
             self.fail('a proposito')
