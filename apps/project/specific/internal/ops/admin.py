@@ -28,6 +28,7 @@ from .models import CommandRunModel
 from .registry import (KIND_CHOICE, KIND_FLAG, KIND_NUMBER, KIND_TEXT,
                        RISK_DANGEROUS, RISK_LABELS, RISK_READ_ONLY,
                        get_command, grouped_commands, risk_facets)
+from .summary import latest_report, shape
 from .runner import CommandNotAllowed, run
 
 RISK_COLORS = {
@@ -112,6 +113,16 @@ class CommandRunModelAdmin(GeneralAdminModel):
                 self.admin_site.admin_view(self.console_view),
                 name='ops_console',
             ),
+            # Va **antes** que `console/<str:name>/`. Hoy no colisionan
+            # --`<str:name>` no captura barras y esta ruta lleva un tramo
+            # mas-- pero el dia que se convierta en `<path:name>` la colision
+            # seria silenciosa: el resumen pasaria a ser un comando que no
+            # existe, o sea un 404.
+            path(
+                'console/summary/tests/',
+                self.admin_site.admin_view(self.test_summary_view),
+                name='ops_test_summary',
+            ),
             path(
                 'console/<str:name>/',
                 self.admin_site.admin_view(self.command_view),
@@ -154,6 +165,42 @@ class CommandRunModelAdmin(GeneralAdminModel):
 
         return TemplateResponse(
             request, 'admin/ops/console.html', context
+        )
+
+    def test_summary_view(self, request):
+        """
+        El resumen de la última ejecución de la suite.
+
+        Cerrada en produccion igual que el comando que la alimenta, y por el
+        mismo motivo: la suite se ejecuta con ``settings_test`` porque el
+        usuario de MySQL en cPanel no puede crear la base ``test_``, asi que
+        alli no hay --ni puede haber-- un informe recien hecho. Lo que se
+        veria seria el de un portatil, con la fecha en letra pequena y la
+        cifra grande, leida como el estado del servidor. Un dato viejo
+        presentado como fresco es peor que ninguno.
+
+        Aborta con 404 y no con 403, como el resto de la consola: un 403
+        confirma que la ruta existe.
+        """
+        from django.conf import settings
+
+        self._guard(request)
+
+        if not settings.DEBUG:
+            raise Http404
+
+        report = latest_report()
+
+        context = self._base_context(
+            request,
+            title=_('Test summary'),
+            summary=shape(report),
+            console_url=reverse('admin:ops_console'),
+            command_url=reverse('admin:ops_command', args=['test_report']),
+        )
+
+        return TemplateResponse(
+            request, 'admin/ops/test_summary.html', context
         )
 
     def command_view(self, request, name):

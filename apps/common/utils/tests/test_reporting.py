@@ -144,28 +144,48 @@ class TheReportIsOnlyWrittenWhenAskedTests(SimpleTestCase):
     El corredor no es el de por defecto y aun asi puede acabar siendolo por un
     ajuste. Si escribiera siempre, cada ejecucion de la suite dejaria un
     fichero suelto donde apuntara la variable de la vez anterior.
+
+    Ojo con lo que hay debajo: estas pruebas tocan la MISMA variable de
+    entorno que el corredor que las esta ejecutando. Quitarla y no devolverla
+    hace que la suite entera termine en verde y sin informe --paso-- y ademas
+    no se ve ejecutando este fichero solo, porque ahi no hay informe que
+    escribir. De ahi `_take_over`, y de ahi tambien que el corredor lea el
+    destino al construirse y no al escribir.
     """
 
+    def _take_over(self, value):
+        """Toma la variable durante la prueba y la devuelve como estaba."""
+        previous = os.environ.get(REPORT_ENV)
+
+        def restore():
+            if previous is None:
+                os.environ.pop(REPORT_ENV, None)
+            else:
+                os.environ[REPORT_ENV] = previous
+
+        self.addCleanup(restore)
+
+        if value is None:
+            os.environ.pop(REPORT_ENV, None)
+        else:
+            os.environ[REPORT_ENV] = value
+
     def test_without_the_variable_nothing_is_written(self):
-        runner = JSONReportRunner()
-        result = run_sample()
+        self._take_over(None)
 
         with tempfile.TemporaryDirectory() as directory:
-            os.environ.pop(REPORT_ENV, None)
-            runner._write_report(result, 0.0)
+            runner = JSONReportRunner()
+            runner._write_report(run_sample(), 0.0)
 
             self.assertEqual(list(Path(directory).iterdir()), [])
 
     def test_with_the_variable_the_totals_add_up(self):
-        runner = JSONReportRunner()
-        result = run_sample()
-
         with tempfile.TemporaryDirectory() as directory:
             target = Path(directory) / 'sub' / 'informe.json'
-            os.environ[REPORT_ENV] = str(target)
-            self.addCleanup(os.environ.pop, REPORT_ENV, None)
+            self._take_over(str(target))
 
-            runner._write_report(result, 0.0)
+            runner = JSONReportRunner()
+            runner._write_report(run_sample(), 0.0)
 
             payload = json.loads(target.read_text(encoding='utf-8'))
 
@@ -173,6 +193,25 @@ class TheReportIsOnlyWrittenWhenAskedTests(SimpleTestCase):
         self.assertEqual(sum(payload['totals'].values()), payload['total'])
         self.assertEqual(payload['totals'][PASSED], 1)
         self.assertEqual(payload['totals'][FAILED], 1)
+
+    def test_the_destination_is_read_before_the_suite_runs(self):
+        """
+        La regla que hace que lo de arriba no pueda repetirse: el corredor fija
+        el destino al construirse. Una prueba que cambie la variable a mitad de
+        la suite --y las hay legitimas-- ya no puede desviar el informe.
+        """
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / 'el-bueno.json'
+            self._take_over(str(target))
+
+            runner = JSONReportRunner()
+
+            # Una prueba cualquiera, a mitad de la suite, se lleva la variable.
+            os.environ.pop(REPORT_ENV, None)
+
+            runner._write_report(run_sample(), 0.0)
+
+            self.assertTrue(target.exists())
 
 
 APPS = [

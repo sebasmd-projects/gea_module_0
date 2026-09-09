@@ -147,6 +147,23 @@ class JSONReportRunner(DiscoverRunner):
     pide ``manage.py test_report``, que es quien lo va a leer.
     """
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # El destino se lee **una vez, al construir el corredor**, y no al
+        # escribir. Entre una cosa y otra corre la suite entera, y una prueba
+        # que toque `os.environ` --las hay, y es legitimo: el respaldo cifrado
+        # se prueba poniendo y quitando su contrasena-- cambiaria adonde va el
+        # informe, o lo haria desaparecer.
+        #
+        # No es hipotetico: paso. Una prueba de este mismo modulo hacia
+        # `os.environ.pop(REPORT_ENV)` para comprobar que sin la variable no
+        # se escribe nada, y no la devolvia. La suite entera terminaba en
+        # verde y sin informe, y el fallo no se veia ejecutando ese fichero
+        # solo. Leerlo al principio hace que ninguna prueba pueda quitar el
+        # suelo de debajo del corredor que la esta ejecutando.
+        self.report_target = os.environ.get(REPORT_ENV)
+
     def get_resultclass(self):
         # `--debug-sql` y `--pdb` sustituyen la clase de resultado por las
         # suyas. Si alguien las pide, ganan ellas y no hay informe: es mejor
@@ -162,7 +179,7 @@ class JSONReportRunner(DiscoverRunner):
         return result
 
     def _write_report(self, result, started):
-        target = os.environ.get(REPORT_ENV)
+        target = self.report_target
 
         if not target or not hasattr(result, 'records'):
             return

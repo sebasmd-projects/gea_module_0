@@ -71,10 +71,26 @@ RUNNER = 'apps.common.utils.test_runner.JSONReportRunner'
 #: producción, las pruebas intentarían crear la base ``test_`` en MySQL.
 TEST_SETTINGS = 'app_core.settings_test'
 
-#: Qué mide la cobertura. ``.`` mediría también el entorno virtual y las
-#: migraciones, y un porcentaje que incluye a Django no dice nada de este
-#: proyecto.
-COVERAGE_SOURCE = 'apps'
+#: Qué mide la cobertura: el código del proyecto y nada más. Con ``.`` entran
+#: el entorno virtual y Django entero, y un porcentaje que incluye a Django no
+#: dice nada de este proyecto.
+COVERAGE_SOURCE = 'apps,app_core'
+
+#: Lo que se descuenta, y esto sí cambia la cifra de arriba abajo.
+#:
+#: * **Las propias pruebas.** Un fichero de pruebas se ejecuta entero por
+#:   definición, así que contarlo sube la cobertura justo por escribir más
+#:   pruebas de lo mismo. Medido con ellas dentro, este proyecto daba un 76%;
+#:   sin ellas, la cifra es la de verdad. Un número que se infla solo es peor
+#:   que ninguno, porque se usa para decidir dónde no hace falta mirar.
+#: * **Las migraciones.** Son un histórico: la mayoría no se vuelve a
+#:   ejecutar nunca y no hay nada que probar en ellas.
+COVERAGE_OMIT = ','.join((
+    '*/tests/*',
+    '*/tests.py',
+    '*/migrations/*',
+    '*/settings_test.py',
+))
 
 
 def _timeout_for(seconds):
@@ -182,7 +198,9 @@ class Command(BaseCommand):
         if with_coverage:
             # `-m coverage` y no el ejecutable `coverage`: asi se usa el del
             # entorno virtual que esta ejecutando esto, sin depender del PATH.
-            argv += ['-m', 'coverage', 'run', f'--source={COVERAGE_SOURCE}']
+            argv += ['-m', 'coverage', 'run',
+                     f'--source={COVERAGE_SOURCE}',
+                     f'--omit={COVERAGE_OMIT}']
 
         argv += [
             str(manage), 'test',
@@ -302,8 +320,13 @@ class Command(BaseCommand):
         ``.../internal/code_gen`` no caiga en ``.../internal``.
         """
         prefixes = sorted(
-            ((app.replace('.', '/') + '/', app[len('apps.'):])
-             for app in settings.ALL_CUSTOM_APPS),
+            [(app.replace('.', '/') + '/', app[len('apps.'):])
+             for app in settings.ALL_CUSTOM_APPS]
+            # `app_core` no es una app instalada, es la configuración del
+            # proyecto: ajustes, URLconf, el admin propio. Tiene código real y
+            # dejarlo en «otros» lo esconde justo donde vive el guardia del
+            # panel.
+            + [('app_core/', 'app_core')],
             key=lambda pair: -len(pair[0]),
         )
 
