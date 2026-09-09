@@ -140,3 +140,140 @@ def note_attempt(info: dict, request) -> dict:
     info['referer'] = request.META.get('HTTP_REFERER')
 
     return info
+
+
+# ==========================================================
+# De un `session_info` a las columnas de la fila
+# ==========================================================
+
+def apply_to_entry(entry, info: dict, request=None, *, pattern=None) -> None:
+    """
+    Vuelca en las columnas de la fila lo que dice su ``session_info``.
+
+    Existe para que las columnas se deriven **en un solo sitio**. Son datos
+    duplicados a propósito --el JSON sigue teniendo el rastro entero-- y esa
+    clase de duplicación sólo se sostiene si hay una única función que la
+    escribe. Con dos, la tabla acabaría diciendo cuatro intentos donde el JSON
+    dice nueve, y a partir de ahí no se puede creer ninguno de los dos.
+
+    No guarda: quien llama decide cuándo, dentro de su propia transacción.
+
+    Parameters:
+        entry: la instancia de ``IPBlockedModel``.
+        info: su ``session_info`` ya actualizado.
+        request: la petición, si se tiene; de ella sale el user-agent.
+        pattern: qué disparó el bloqueo, si quien llama lo sabe.
+    """
+    from apps.common.utils import netintel
+
+    info = info or {}
+    now = timezone.now()
+
+    entry.attempt_count = int(info.get('attempt_count', 0))
+
+    # Rutas **distintas**, no total de intentos. Es lo que separa a quien
+    # recarga diez veces la misma URL mal escrita de quien recorre un
+    # diccionario: la primera es una persona, la segunda no.
+    entry.unique_paths = len(set(info.get('paths') or []))
+
+    entry.first_seen = entry.first_seen or entry.created or now
+    entry.last_seen = now
+
+    agent = (
+        (request.META.get('HTTP_USER_AGENT') if request else None)
+        or info.get('user_agent')
+        or ''
+    )
+    entry.user_agent = agent[:500]
+
+    if pattern:
+        entry.matched_pattern = str(pattern)[:150]
+
+    # La red sólo se mira una vez: no cambia entre intentos, y la tabla de
+    # prefijos se recorre entera en cada consulta.
+    if not entry.network_owner and not entry.country:
+        intel = netintel.describe(entry.current_ip)
+
+        entry.network_owner = (intel['network_owner'] or '')[:100]
+        entry.is_datacenter = intel['is_datacenter']
+        entry.country = (intel['country'] or '')[:2]
+
+
+#: Los campos que toca `apply_to_entry`, para pasarlos a `update_fields` y no
+#: reescribir la fila entera --ni pisar un cambio hecho a mano desde el admin
+#: mientras la petición estaba en curso.
+DERIVED_FIELDS = (
+    'attempt_count', 'unique_paths', 'first_seen', 'last_seen',
+    'user_agent', 'matched_pattern', 'network_owner', 'is_datacenter',
+    'country',
+)
+
+
+# ==========================================================
+# Decir una duracion en voz alta
+# ==========================================================
+
+#: Las unidades, de mayor a menor, con los segundos que vale cada una. Los
+#: años y los meses son los del calendario medio (365.2425 días), porque aquí
+#: sirven para leer «2 meses» de un vistazo, no para calcular un vencimiento.
+_UNITS = (
+    ('year', 'years', 'año', 'años', 31556952),
+    ('month', 'months', 'mes', 'meses', 2629746),
+    ('day', 'days', 'día', 'días', 86400),
+    ('hour', 'hours', 'hora', 'horas', 3600),
+    ('minute', 'minutes', 'minuto', 'minutos', 60),
+    ('second', 'seconds', 'segundo', 'segundos', 1),
+)
+
+
+def describe_duration(delta, *, parts: int = 3, spanish=None) -> str:
+    """
+    Una duración en años, meses, días, horas, minutos y segundos.
+
+    Se escribe a mano en vez de usar ``timesince`` de Django por dos motivos
+    concretos: ``timesince`` corta en dos unidades y nunca baja de los
+    minutos, así que un bloqueo de cuarenta segundos salía como «0 minutos».
+    Y un bloqueo que acaba de expirar tiene que poder decirse en segundos,
+    que es justo cuando alguien está mirando la tabla.
+
+    Parameters:
+        delta: un ``timedelta``. Negativo o cero devuelve «0 segundos».
+        parts: cuántas unidades como mucho. Tres es lo que se lee de un
+            vistazo: «1 día 4 horas 12 minutos».
+        spanish: en qué idioma. Por defecto, el que esté activo en la
+            petición. La tabla vive aquí y no en un `.po` porque son doce
+            palabras y hacerlas depender de un `compilemessages` sería que la
+            duración de un bloqueo saliera en inglés a medio despliegue.
+
+    Returns:
+        str: la duración escrita.
+    """
+    if spanish is None:
+        from django.utils.translation import get_language
+
+        spanish = not (get_language() or 'es').startswith('en')
+
+    total = int(delta.total_seconds()) if delta else 0
+
+    if total <= 0:
+        return '0 segundos' if spanish else '0 seconds'
+
+    pieces = []
+
+    for singular_en, plural_en, singular_es, plural_es, size in _UNITS:
+        if len(pieces) >= parts:
+            break
+
+        amount, total = divmod(total, size)
+
+        if not amount:
+            continue
+
+        if spanish:
+            label = singular_es if amount == 1 else plural_es
+        else:
+            label = singular_en if amount == 1 else plural_en
+
+        pieces.append(f'{amount} {label}')
+
+    return ' '.join(pieces)

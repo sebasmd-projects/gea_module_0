@@ -12,7 +12,9 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import View
 
-from apps.common.utils.blocking import block_duration, block_until, note_attempt
+from apps.common.utils.blocking import (DERIVED_FIELDS, apply_to_entry,
+                                        block_duration, block_until,
+                                        note_attempt)
 from apps.common.utils.client_ip import get_client_ip, is_exempt
 from apps.common.utils.models import IPBlockedModel, WhiteListedIPModel
 
@@ -301,6 +303,17 @@ class HttpRequestAttackView(View):
         resolver_match = getattr(request, 'resolver_match', None)
         view_name = resolver_match.view_name if resolver_match else None
 
+        # Que termino de la trampa salto. El regex registrado lleva todos
+        # dentro, asi que por si solo dice *que* salto pero no *por que*, y en
+        # la tabla de bloqueos esa diferencia es la que separa a quien busca
+        # WordPress de quien busca credenciales.
+        #
+        # El import va aqui dentro: `attack_patterns` importa esta vista, asi
+        # que en el encabezado seria circular.
+        from apps.common.utils.attack_patterns import matched_term as _term
+
+        matched_term = _term(request.path)
+
         user_id = None
         if request.user and request.user.is_authenticated:
             user_id = str(request.user.id)
@@ -353,6 +366,15 @@ class HttpRequestAttackView(View):
                 self.time_in_minutes,
                 current=blocked_entry.blocked_until,
             )
+            apply_to_entry(
+                blocked_entry, info, request, pattern=matched_term)
             blocked_entry.save()
+        else:
+            # La fila recien creada tambien pasa por aqui: `get_or_create` la
+            # deja con los valores por defecto de las columnas, o sea a cero,
+            # y el primer intento ya es un intento.
+            apply_to_entry(
+                blocked_entry, session_data, request, pattern=matched_term)
+            blocked_entry.save(update_fields=list(DERIVED_FIELDS))
 
         return redirect('/')

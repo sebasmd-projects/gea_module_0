@@ -28,6 +28,7 @@ Lo que hace ahora
 
 import logging
 import re
+from functools import lru_cache
 
 from django.conf import settings
 from django.urls import re_path
@@ -92,6 +93,49 @@ def build_pattern(terms) -> str:
         r'^.*(?:^|/)\.?(?:' + alternation +
         r')(?:\.[A-Za-z0-9]{1,10})*(?:/|$).*$'
     )
+
+
+@lru_cache(maxsize=256)
+def _term_pattern(term: str):
+    """El regex de un solo termino, compilado y cacheado."""
+    return re.compile(build_pattern([term]))
+
+
+def matched_term(path: str, terms=None):
+    """
+    Cual de los terminos hizo saltar la trampa, o ``None``.
+
+    El regex que registra la ruta es uno solo con todos los terminos dentro,
+    asi que dice *que* salto pero no *por que*. Y esa diferencia importa al
+    leer la tabla de bloqueos: `/wp-login.php` y `/.env` son dos campanas
+    distintas --una busca WordPress, la otra credenciales-- y saber cual sono
+    es lo que permite ordenar por lo que de verdad se esta escaneando.
+
+    Se prueba termino a termino, con el mismo constructor de regex que la
+    trampa, para que no puedan discrepar: si `build_pattern` cambia, esto
+    cambia con el.
+
+    Parameters:
+        path: la ruta pedida.
+        terms: los terminos; por defecto los de ``COMMON_ATTACK_TERMS``.
+
+    Returns:
+        str | None: el primer termino que encaja.
+    """
+    if not path:
+        return None
+
+    if terms is None:
+        terms = getattr(settings, 'COMMON_ATTACK_TERMS', [])
+
+    for term in normalize_terms(terms):
+        try:
+            if _term_pattern(term).match(path):
+                return term
+        except re.error:
+            continue
+
+    return None
 
 
 def find_conflicts(pattern: str, url_patterns=None) -> list:

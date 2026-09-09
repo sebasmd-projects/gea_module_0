@@ -318,6 +318,50 @@ sólo en la web, porque es ahí donde se lee en el momento en que importa.
 
 ---
 
+## La capa inicial: qué frena y qué no
+
+Tres señales, y sólo una depende de acertar el nombre de la ruta. Las tres
+acaban en la misma tabla, con la misma curva de castigo.
+
+| Señal | Qué mira | Cuándo bloquea |
+|---|---|---|
+| Trampa de rutas (`attack_patterns.py`) | Que el segmento sea un término de `COMMON_ATTACK_TERMS` | Al primer intento — es precisa, puede permitírselo |
+| Enumeración (`scanning.py`) | El **patrón**: muchos 404 sobre rutas mayormente distintas | Al superar volumen **y** dispersión |
+| Firma de escáner (`block_bots.py`) | El `User-Agent` de una herramienta que se anuncia | Al primer intento |
+
+**Por qué hacían falta las dos nuevas.** La trampa sólo salta con lo que está
+escrito en la lista, y ampliar la lista tiene un coste conocido: cada término
+es una ruta legítima menos, y ya hubo un autobloqueo por meter `env`. Las
+otras dos no dependen de anticipar el nombre.
+
+**El falso positivo que más se cuidó.** Recargar veinte veces un enlace roto
+de un correo genera veinte 404 y no es un escaneo. Por eso el detector exige
+las dos condiciones: volumen **y** rutas distintas. Con la primera sola,
+reenviar un enlace roto a media oficina habría bloqueado a media oficina.
+
+**Y falla abierto**, al revés que los cupos de `throttling.py`. La asimetría
+es la de siempre: aquí el límite decide un *bloqueo*, no un *permiso*. Con la
+caché caída, fallar cerrado significaría empezar a bloquear a cualquiera que
+reciba un 404 por una avería que no es suya; fallar abierto sólo significa que
+durante el corte no se detecta enumeración, que es la situación de antes de
+que esto existiera.
+
+**De qué red viene cada IP.** Muchas de las que caen en la trampa pertenecen a
+rangos de proveedores cloud, y eso ya dice algo: una persona navega desde una
+dirección residencial o de oficina; un servidor no navega. La clasificación se
+hace **sin salir a la red**, con una tabla de prefijos que viaja en el
+repositorio — una consulta a un servicio de reputación metería una llamada de
+red en el camino crítico de cada petición y le contaría a un tercero quién
+visita el sitio.
+
+> **La etiqueta no bloquea por sí sola, y no debe.** Que una IP esté en un
+> rango de OVH dice que hay una máquina alquilada, no quién la alquiló, y una
+> VPN comercial sale por rangos idénticos. Bloquear a un proveedor entero
+> dejaría fuera integraciones legítimas, monitorización y a quien trabaje
+> detrás de una VPN. Sirve para leer la tabla, no para decidir.
+
+---
+
 ## Decisiones pendientes
 
 No son fallos, son cosas que alguien tiene que decidir:
