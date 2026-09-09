@@ -118,16 +118,20 @@
 {% endblock %}
 
 {% block body_custom_js %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha384-1H217gwSVyLSIfaLxHbE7dRb3v4mYCKbpQvzx0cegeju1MVsGrX5xXxAvs/HgeFs"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {{ form.media.js }}
 {% endblock %}
 
 {% block simple_datatables %}
-<link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet"
+      integrity="sha384-EzKxrZWmuy0y5NOrpvwCmyNwowzqsUTDm4boWHYpRtRLAoYgzlC1vVyViQaPoRPz" crossorigin="anonymous" referrerpolicy="no-referrer">
 {% endblock %}
 
 {% block simple_datatables_js %}
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
-    crossorigin="anonymous"></script>
+        integrity="sha384-CskkomWnqJzckLkvHOXUS1csEpaXi3ep0TeBTXzgZb8jfBMAkDnpSdUNSv2CKNml"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="{% static 'js/simple-datatable.js' %}"></script>
 {% endblock %}
