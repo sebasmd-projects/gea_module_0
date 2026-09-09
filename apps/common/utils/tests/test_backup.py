@@ -28,6 +28,7 @@ from django.core.management import CommandError, call_command
 from django.test import SimpleTestCase, TestCase
 
 from ..backup_crypto import BackupCryptoError, decrypt, encrypt
+from ..testing import posix_only
 from apps.project.common.users.models import UserModel
 
 PASSPHRASE = 'una-contrasena-de-respaldo-larga'
@@ -156,7 +157,7 @@ class TheBackupCommandTests(TestCase):
             stdout=StringIO(),
         )
 
-        recovered = (self.path / 'users_backup.json').read_text()
+        recovered = (self.path / 'users_backup.json').read_text(encoding='utf-8')
 
         self.assertIn(SECRET_EMAIL, recovered)
 
@@ -182,10 +183,17 @@ class TheBackupCommandTests(TestCase):
         self.assertIn('users_backup.json', self.written())
 
     # -- permisos -------------------------------------------------------
+    @posix_only
     def test_everything_is_written_readable_only_by_its_owner(self):
         """
         El caso mas tonto y mas frecuente: el respaldo en un directorio que
         comparte la cuenta de hosting.
+
+        Solo en POSIX. Windows no tiene el modo `rw-------` de Unix --`os.open`
+        con 0o600 alli solo controla el bit de solo lectura-- asi que esta
+        asercion fallaria en un portatil sin que nada estuviera roto. La
+        propiedad importa en el servidor, que es Linux; por eso se salta en vez
+        de borrarse.
         """
         os.environ['GEA_BACKUP_PASSPHRASE'] = PASSPHRASE
         self.addCleanup(os.environ.pop, 'GEA_BACKUP_PASSPHRASE', None)
@@ -198,6 +206,20 @@ class TheBackupCommandTests(TestCase):
             self.assertEqual(
                 mode, 0o600, f'{item.name} salio con permisos {oct(mode)}')
 
+    def test_the_files_are_written_on_any_system(self):
+        """
+        Lo que la de arriba no puede comprobar en Windows: que el respaldo se
+        escriba. Los permisos son una propiedad de POSIX; existir, no.
+        """
+        os.environ['GEA_BACKUP_PASSPHRASE'] = PASSPHRASE
+        self.addCleanup(os.environ.pop, 'GEA_BACKUP_PASSPHRASE', None)
+
+        self.run_backup()
+
+        for name in ('backup.json', 'h_backup.json', 'users_backup.json.enc'):
+            self.assertIn(name, self.written())
+            self.assertGreater((self.path / name).stat().st_size, 0)
+
     # -- el volcado general ---------------------------------------------
     def test_the_general_dump_carries_no_pii(self):
         os.environ['GEA_BACKUP_PASSPHRASE'] = PASSPHRASE
@@ -205,7 +227,7 @@ class TheBackupCommandTests(TestCase):
 
         self.run_backup()
 
-        general = (self.path / 'backup.json').read_text()
+        general = (self.path / 'backup.json').read_text(encoding='utf-8')
 
         self.assertNotIn(SECRET_EMAIL, general)
         self.assertNotIn(SECRET_PHONE, general)

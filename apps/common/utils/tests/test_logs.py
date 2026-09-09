@@ -46,11 +46,11 @@ class LogDirectoryMixin:
         self.addCleanup(settings.disable)
 
     def write(self, text='linea\n'):
-        self.current.write_text(text)
+        self.current.write_text(text, encoding='utf-8')
 
     def make_rotated(self, *numbers):
         for number in numbers:
-            rotated_name(self.current, number).write_text(f'viejo {number}\n')
+            rotated_name(self.current, number).write_text(f'viejo {number}\n', encoding='utf-8')
 
 
 class TestTheNumbering(LogDirectoryMixin, SimpleTestCase):
@@ -80,8 +80,8 @@ class TestTheNumbering(LogDirectoryMixin, SimpleTestCase):
         self.assertEqual(next_number(self.current), 6)
 
     def test_a_file_that_only_looks_rotated_is_ignored(self):
-        (self.directory / 'stderr_old_x.log').write_text('x')
-        (self.directory / 'otro_old_9.log').write_text('x')
+        (self.directory / 'stderr_old_x.log').write_text('x', encoding='utf-8')
+        (self.directory / 'otro_old_9.log').write_text('x', encoding='utf-8')
 
         self.assertEqual(rotated_files(self.current), [])
         self.assertEqual(next_number(self.current), 1)
@@ -134,7 +134,7 @@ class TestNothingIsLost(LogDirectoryMixin, SimpleTestCase):
 
         target = rotate(self.current)
 
-        self.assertEqual(target.read_text(), 'lo que habia\n')
+        self.assertEqual(target.read_text(encoding='utf-8'), 'lo que habia\n')
 
     def test_the_new_file_is_not_created_here(self):
         """
@@ -178,12 +178,12 @@ class TestARunningWorkerFollowsTheRotation(LogDirectoryMixin, SimpleTestCase):
         logger.info('despues de rotar')
         handler.flush()
 
-        self.assertIn('antes de rotar', target.read_text())
+        self.assertIn('antes de rotar', target.read_text(encoding='utf-8'))
 
         # Lo que decide: la escritura posterior va al fichero NUEVO.
         self.assertTrue(self.current.exists())
-        self.assertIn('despues de rotar', self.current.read_text())
-        self.assertNotIn('despues de rotar', target.read_text())
+        self.assertIn('despues de rotar', self.current.read_text(encoding='utf-8'))
+        self.assertNotIn('despues de rotar', target.read_text(encoding='utf-8'))
 
     def test_a_plain_file_handler_would_lose_everything(self):
         """
@@ -199,7 +199,7 @@ class TestARunningWorkerFollowsTheRotation(LogDirectoryMixin, SimpleTestCase):
         handler.flush()
 
         self.assertFalse(self.current.exists())
-        self.assertIn('despues de rotar', target.read_text())
+        self.assertIn('despues de rotar', target.read_text(encoding='utf-8'))
 
     def test_the_project_is_configured_with_the_handler_that_survives(self):
         """
