@@ -28,6 +28,7 @@ Los cuatro están también en la consola de operaciones.
 | ☐ | `FIELD_ENCRYPTION_KEY` es la misma de siempre | Cambiarla **inutiliza toda la PII ya cifrada**. No se rota sin migrar los datos |
 | ☐ | El `.htaccess` de `deploy/` está en la carpeta de media | Sin él el servidor web reparte los PDF por su cuenta y el control de acceso no pinta nada |
 | ☐ | `migrate` y `collectstatic` ejecutados | Una restricción sin migrar no existe; un JS sin recoger no llega |
+| ☐ | `GEA_BACKUP_PASSPHRASE` puesta antes de respaldar | `dumpdata` serializa el valor **descifrado**, así que sin ella el volcado de usuarios sería la PII en claro. Sin contraseña, `db_backup` no lo escribe |
 | ☐ | El correo sale de verdad | Desde que el acceso se puede hacer con un código enviado al buzón, un servidor de correo caído no es una molestia: es gente que no entra. `DJANGO_EMAIL_*` completas y una prueba de envío |
 
 ### Después de desplegar
@@ -359,6 +360,59 @@ visita el sitio.
 > VPN comercial sale por rangos idénticos. Bloquear a un proveedor entero
 > dejaría fuera integraciones legítimas, monitorización y a quien trabaje
 > detrás de una VPN. Sirve para leer la tabla, no para decidir.
+
+---
+
+## Dos cosas que se cerraron después de la auditoría
+
+### El respaldo deshacía el cifrado de campo
+
+`dumpdata` serializa el **valor de Python** de cada campo, y en los de
+`django-encrypted-model-fields` ese valor es el ya descifrado. Los volcados de
+usuarios salían con el correo, el teléfono, la fecha de nacimiento y el
+pasaporte legibles, sin permisos restringidos, en el directorio que se le
+pasara.
+
+Dicho de otro modo: `FIELD_ENCRYPTION_KEY` protege la base de datos contra un
+volcado robado, y el volcado de al lado era ese volcado robado ya servido. Y un
+respaldo no se queda quieto — acaba en un portátil, en un adjunto o en una
+carpeta compartida.
+
+Ahora el fichero se cifra con Fernet y una clave derivada por scrypt de
+`GEA_BACKUP_PASSPHRASE`, así que descargarlo no basta para leerlo; se abre con
+`manage.py db_restore_open`. Todo se escribe con permisos 600 —abriendo el
+fichero ya con ellos, porque entre crear y `chmod` hay una ventana— y **sin
+contraseña la PII no se escribe**: hay que pedirlo con `--allow-plaintext`.
+
+> `db_restore_open` está en `NEVER_EXPOSED` de la consola de operaciones.
+> Descifrar un respaldo escribe la PII en claro en el servidor, que es
+> justamente lo que el cifrado evita: necesita la contraseña y una sesión, no
+> un clic.
+
+**Lo que este respaldo no cubre**, y conviene saberlo: no incluye
+`certificates` ni `pqrs`. No es un respaldo completo de la plataforma.
+
+### Nada de fuera se ejecuta sin comprobarlo
+
+Los scripts de CDN se cargaban sin `integrity`, y del revés: el **CSS** de
+Bootstrap sí lo llevaba y el **JS** no — firmado justo lo que no ejecuta nada.
+`bootstrap-icons` se cargaba además **sin versión** en 28 plantillas, siguiendo
+a la última publicación del paquete.
+
+Un CDN comprometido, o alguien que pueda hablar por él, inyecta JavaScript en
+la pantalla de acceso, que es donde se teclean la contraseña y el código de un
+solo uso. Con `integrity` el navegador compara el hash de lo que recibe y, si
+no cuadra, no lo ejecuta.
+
+Quedan dos excepciones, y las dos son URL **mutables por diseño**:
+
+| | Por qué no admite hash | Qué haría falta |
+|---|---|---|
+| `kit.fontawesome.com` | La misma URL sirve contenido distinto según la configuración del kit | Pasar a una versión fija de Font Awesome; toca los iconos de toda la plataforma |
+| `cdn.jotfor.ms` | Sus URL llevan un identificador de compilación que JotForm rota | Es la contrapartida de embeber un formulario de un tercero |
+
+Están declaradas con su motivo en `utils/tests/test_sri.py`, que **falla si
+aparece un tercero nuevo sin firmar**.
 
 ---
 

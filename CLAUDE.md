@@ -261,6 +261,7 @@ Reglas que se deducen del grafo — respétalas al añadir código:
 | **Detector de enumeración (ráfagas de 404)** | `apps/common/utils/scanning.py` |
 | **De qué red viene una IP (cloud/ASN/país)** | `apps/common/utils/netintel.py` |
 | **Duración de un bloqueo y columnas de la fila** | `apps/common/utils/blocking.py` |
+| **Cifrado de los respaldos** | `apps/common/utils/backup_crypto.py` + `management/commands/db_backup.py` |
 | Tareas programadas | `apps/common/utils/cron.py` |
 | Filtros y tags de plantilla | `apps/common/utils/templatetags/custom_filters.py` |
 | Landing pública y `health/` | `apps/common/core/views.py` |
@@ -575,6 +576,9 @@ Sin build ni SPA. Plantillas Django + Bootstrap 5 por CDN; `templates/raw.html` 
 24. **La capa inicial tiene tres señales, y sólo una depende de acertar el nombre de la ruta.** La trampa de `attack_patterns` empareja términos de `COMMON_ATTACK_TERMS` --precisa, y por eso puede bloquear al primer intento, pero ciega ante lo que nadie anticipó--; `scanning.py` mira el **patrón** (muchos 404 sobre rutas mayormente distintas, en una ventana) y no el nombre; y `block_bots.py` mira la firma de herramientas que se anuncian solas. Dos cosas no se pueden romper. Una: las tres acaban en el **mismo** `IPBlockedModel` con la misma curva de `blocking.block_duration()` — tener dos políticas es lo que hacía que el castigo dependiera de por dónde entrara la petición. Y dos: `scanning.py` **falla abierto**, al contrario que `throttling.py`, porque aquí el límite decide un *bloqueo* y no un *permiso*: fallar cerrado con la caché caída sería bloquear a cualquiera que reciba un 404 por una avería que no es suya. Ampliar `COMMON_ATTACK_TERMS` no es la respuesta a una detección insuficiente: cada término es una ruta legítima menos, y ya hubo un autobloqueo por meter `env`.
 25. **El estado de un bloqueo se calcula, no se guarda.** `is_active` es el interruptor manual; `IPBlockedModel.is_currently_blocked` lo combina con el reloj y se evalúa al leerlo, así que el admin enseña siempre el estado real sin cron ni columna que mantener. Guardarlo obligaría a una tarea periódica que lo corrigiera, y mientras tanto la tabla mostraría como activos bloqueos caducados hace meses — que es exactamente lo que pasaba. Lo mismo vale para el origen de la IP (`netintel.py`): se resuelve **sin salir a la red**, con una tabla de prefijos que viaja en el repositorio, porque una consulta a un servicio de reputación metería una llamada de red en el camino crítico de cada petición, con `ATOMIC_REQUESTS` puesto, y le contaría a un tercero quién visita el sitio. La etiqueta de datacenter es un dato para leer la fila, **nunca** un motivo de bloqueo por sí sola: una VPN comercial sale por los mismos rangos.
 
+26. **Un respaldo no puede deshacer el cifrado de campo.** `dumpdata` serializa el **valor de Python**, y en los campos de `django-encrypted-model-fields` ese valor es el ya descifrado: los volcados de usuarios salían con el correo, el teléfono y el pasaporte en claro. `FIELD_ENCRYPTION_KEY` protege la base de datos contra un volcado robado; el volcado de al lado, sin llave y legible por cualquiera de la máquina, era ese volcado robado ya servido. Hoy `db_backup` cifra lo que lleva PII (`GEA_BACKUP_PASSPHRASE`), escribe todo con permisos 600 —abriendo el fichero ya con ellos, no con un `chmod` posterior, porque entre una cosa y otra hay una ventana— y **sin contraseña no escribe la PII**: hay que pedirlo con `--allow-plaintext`. `GENERAL_APPS` no puede contener ninguna app de `APPS_WITH_PII`; el comando se niega en vez de escribirla. Lo cubre `utils/tests/test_backup.py`, cuya primera prueba **reproduce el fallo** para avisar el día que la biblioteca deje de comportarse así.
+27. **Nada de fuera se ejecuta sin `integrity`.** Un `<script src="https://cdn…">` sin él es una promesa de que el CDN servirá siempre lo mismo, y la pantalla de acceso —donde se teclean la contraseña y el código— cargaba varios. Estaba además del revés: el **CSS** de Bootstrap lo llevaba y el **JS** no, o sea firmado justo lo que no ejecuta nada. Y `bootstrap-icons` se cargaba **sin versión** en 28 plantillas, siguiendo a la última publicación del paquete. Las dos únicas excepciones —el kit de Font Awesome y los formularios embebidos de JotForm— son URL mutables por diseño y están declaradas **con su motivo** en `utils/tests/test_sri.py`, que falla si aparece un tercero nuevo sin firmar.
+
 ---
 
 ## 7. Trampas conocidas
@@ -627,6 +631,10 @@ DJANGO_EMAIL_HOST_USER, DJANGO_EMAIL_HOST_PASSWORD, DJANGO_EMAIL_DEFAULT_FROM_EM
 
 # Seguridad
 FIELD_ENCRYPTION_KEY          # cifrado de PII — perderla inutiliza los datos cifrados
+GEA_BACKUP_PASSPHRASE         # con la que se cifran los respaldos que llevan PII.
+                              # Sin ella `db_backup` NO los escribe: `dumpdata`
+                              # serializa el valor descifrado, así que el volcado
+                              # deshacía el cifrado de campo
 CERTIFICATION_SIGNING_KEY     # Ed25519 base64; firma el registro de certificación
                               # (manage.py generate_certification_key). Sin ella
                               # el registro se sella con HMAC y solo la propia
@@ -722,6 +730,7 @@ IPBlockedModel / WhiteListedIPModel
 ## 11. Estado del repositorio
 
 - Rama principal: `master`.
+- **Las pruebas viven en `apps/<app>/tests/`**, un paquete por app, con ficheros `test_*.py`. Estaban sueltas al lado del código (`tests_login.py`, `tests_workflow.py`…) y en `utils/` llegaron a ser diecinueve ficheros mezclados con los módulos, lo que hacía que abrir la carpeta no dijera nada. El descubrimiento de `unittest` recorre paquetes, así que sigue encontrándolas sin configurar nada; lo único que hace falta es el `__init__.py` y que el nombre empiece por `test`. Un módulo de prueba que importe del suyo usa `..` (`from ..models import …`), y de un hermano, `.` (`from .test_buyers import …`).
 - No hay CI ni linters configurados, pero **todas las apps con lógica tienen pruebas** (~493). Las que más peso llevan: `buyers/` (control de acceso del flujo **y** las tres capas del flujo de 12 etapas, con las `CheckConstraint` probadas por `QuerySet.update()` para saltarse `save()` y `clean()`), `users/` (el correo cifrado no se puede consultar: por eso existe `email_hash`), `account/` (login por HTTP y wizard de registro), `common/utils/` (bloqueos, trampa anti-escaneo, rotación del log, `safe_next`), e `internal/ops/`. Las únicas sin contenido son `notifications/` (app vacía a propósito) y los `tests.py` de apps sin lógica propia. Se ejecutan con `--settings=app_core.settings_test` (SQLite en memoria), porque el usuario de MySQL en cPanel no puede crear la base `test_*`. La otra carpeta `tests` con contenido es `buyers/functions/tests/dummy_offer.py` (fixture para probar la generación de PDFs a mano).
 - Los mensajes de commit son informales y en español/inglés mezclado.
 - El historial reciente muestra la plataforma pasando por un ciclo de desactivación ("standby mode") y reactivación.

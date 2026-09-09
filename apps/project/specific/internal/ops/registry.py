@@ -150,6 +150,12 @@ NEVER_EXPOSED = {
         'included.'
     ),
     'loaddata': _('Injects arbitrary records.'),
+    'db_restore_open': _(
+        'Decrypts a backup and writes the personal data, in the clear, onto '
+        'the server filesystem. That is the whole point of encrypting the '
+        'backup in the first place, so it cannot be one click away: it needs '
+        'the passphrase and a shell, and it should leave someone accountable.'
+    ),
     'import': _('Bulk data injection from a web page.'),
     'export': _('Bulk data extraction into the run history.'),
     'delete_migrations': _('Deletes migration files across the repository.'),
