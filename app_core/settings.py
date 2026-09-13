@@ -127,9 +127,6 @@ ALLOW_ANY_EMAIL_IPCON = os.getenv(
     'ALLOW_ANY_EMAIL_IPCON', 'False').lower() == 'true'
 
 DJANGO_APPS = [
-    # No es 'django.contrib.admin': esta config instala GeaAdminSite, que
-    # exige sesion con segundo factor y responde 404 a quien no cumple, en vez
-    # de defenderse solo con lo secreta que sea ADMIN_URL. Ver app_core/admin.
     'app_core.apps.GeaAdminConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -143,33 +140,9 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'auditlog',
     'axes',
-    # 'betterforms' estaba aqui sin que nada lo usara.
-    #
-    # Lo arrastraba `django-two-factor-auth`, que hasta la 1.15 lo necesitaba
-    # para sus formularios. Desde entonces ya no, pero el paquete se quedo
-    # declarado como dependencia directa y en INSTALLED_APPS. Nadie del
-    # proyecto lo importa, y ningun paquete instalado tampoco -- comprobado
-    # sobre el entorno, no sobre la documentacion.
-    #
-    # Costaba un aviso en cada arranque, en cada comando y en cada linea del
-    # log: su `__init__` llama a `pkg_resources`, que esta en retirada. Un
-    # aviso permanente que no significa nada es peor que ninguno, porque
-    # ensena a no leerlos.
     'compressor',
     'corsheaders',
     'django_crontab',
-    # 'django_filters', 'parler' y 'django_countries' estaban aqui sin que nada
-    # los usara: ni un import, ni un campo, ni una migracion -- comprobado
-    # sobre el codigo, no sobre la memoria. Igual que paso con 'betterforms'.
-    #
-    # Una app declarada y sin usar no es gratis. Cuesta arranque y memoria en
-    # cada worker, pero sobre todo cuesta en la siguiente actualizacion: al
-    # subir a Django 5.2 habia que comprobar la compatibilidad de tres
-    # paquetes que no hacen nada, y `django-filter` y `django-parler` solo la
-    # dan en versiones que a su vez arrastran requisitos nuevos. Se paga por
-    # mantener lo que no se usa.
-    #
-    # Si algun dia hace falta alguno, `uv add` y vuelve a esta lista.
     'django_otp',
     'django_otp.plugins.otp_static',
     'django_otp.plugins.otp_totp',
@@ -258,7 +231,7 @@ LOCALE_PATHS.append(str(BASE_DIR / 'templates' / 'locale'))
 
 LANGUAGE_CODE = 'en'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Bogota'
 
 USE_I18N = True
 
