@@ -37,6 +37,8 @@ from django.utils import timezone
 
 from apps.project.specific.documents.certificates.models import AegisSummaryModel
 
+from apps.common.utils.testing import posix_only_because
+
 from ..models import (AnchorStatusChoices, AnchorTypeChoices,
                      CertificationAnchorModel)
 from ..services import ots
@@ -277,6 +279,40 @@ class TestGoingBackOverTheSend(AnchoringCheckTestCase):
             self.run_command(verify=True)
 
         self.assertEqual(target.read_bytes(), matured)
+
+    @posix_only_because(
+        'Hacen falta enlaces simbolicos: en Windows crearlos pide permisos de '
+        'administrador o el modo desarrollador, asi que la prueba no diria si '
+        'la comprobacion funciona sino si el portatil los permite.'
+    )
+    def test_maturing_does_not_write_through_a_symlink_out_of_the_folder(self):
+        """
+        La carpeta cuelga de MEDIA_ROOT, que es territorio de subidas.
+
+        Un enlace simbolico colocado ahi convertiria la reescritura de la
+        prueba en una escritura en cualquier otro sitio del disco, con los
+        permisos del proceso. Se resuelve la ruta antes de escribir y, si
+        apunta fuera, no se escribe: el anclaje ya es valido sin eso.
+        """
+        from pathlib import Path
+
+        # Con una prueba valida dentro: si no, el comando falla al leerla
+        # y no llega a la reescritura, que es lo que se quiere probar.
+        outside = Path(self.media.name) / 'fuera.ots'
+        outside.write_bytes(pending_proof())
+
+        link = (Path(self.media.name) / 'ots_selftest'
+                / '20260830-120000-33333333.ots')
+        link.parent.mkdir(parents=True, exist_ok=True)
+        link.symlink_to(outside)
+
+        with mock.patch(UPGRADE, return_value={
+            'upgraded': True, 'proof': confirmed_proof(),
+        }):
+            output = self.run_command(verify=True)
+
+        self.assertEqual(outside.read_bytes(), pending_proof())
+        self.assertIn('apunta fuera', output)
 
     def test_it_goes_back_over_the_last_one(self):
         """Con varios envios, el que interesa es el ultimo."""

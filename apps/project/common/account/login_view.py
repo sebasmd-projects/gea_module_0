@@ -44,6 +44,8 @@ camino más barato para quien atacaba era justo el que no dejaba rastro.
 import logging
 import time
 
+from django.contrib import messages
+from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from two_factor.forms import AuthenticationTokenForm, BackupTokenForm
 from two_factor.views import LoginView as TwoFactorLoginView
@@ -431,4 +433,58 @@ class GeaLoginView(TwoFactorLoginView):
         # `formtools` tiene que enterarse igual que al ponerlo.
         self._forget_resolved_steps()
 
+        # `get_user()` puede devolver **False**, y eso no se puede pasar a
+        # `login()`.
+        #
+        # El almacén del asistente guarda al usuario como dos datos sueltos
+        # --`user_pk` y `user_backend`-- y su lector
+        # (`two_factor.views.utils.LoginStorage`) devuelve `False`, no `None`,
+        # cuando falta alguno o cuando el backend ya no puede cargar esa
+        # cuenta. Si ese `False` llega a `login()`, Django intenta leerle un
+        # atributo `backend`, no lo encuentra, y con tres backends
+        # configurados acaba en:
+        #
+        #     ValueError: You have multiple authentication backends
+        #     configured and therefore must provide the `backend` argument
+        #
+        # O sea: un 500 en la pantalla de acceso, con su traza, por un almacén
+        # a medias. Eso puede pasar porque la sesión se perdiera entre dos
+        # peticiones, porque quedara una sesión a medias de una versión
+        # anterior, o porque la cuenta dejara de poder cargarse (se desactivó)
+        # entre identificarse y terminar.
+        #
+        # En los tres casos la respuesta correcta es la misma y no es
+        # reventar: no hay usuario, luego no hay acceso; se vacía lo que
+        # quedara y se vuelve a empezar, diciéndolo. Se registra con todo el
+        # contexto porque un reinicio silencioso es indistinguible de un botón
+        # que no hace nada.
+        if not self.get_user():
+            return self._restart_without_user()
+
         return super().done(form_list, **kwargs)
+
+    def _restart_without_user(self):
+        """Vacía el asistente y devuelve a la primera pantalla, con aviso."""
+        logger.warning(
+            'Acceso: se llegó al final del asistente sin usuario en el '
+            'almacén. paso=%s pasos=%s modo=%s user_pk=%s user_backend=%s',
+            self.storage.current_step,
+            list(self.get_form_list()),
+            self._mode(),
+            bool(self.storage.data.get('user_pk')),
+            self.storage.data.get('user_backend'),
+        )
+
+        self.storage.reset()
+        self.storage.current_step = self.AUTH_STEP
+        self._set_mode(MODE_PASSWORD)
+
+        messages.error(self.request, _(
+            'Your sign-in could not be completed because the session was '
+            'lost. Please sign in again.'
+        ))
+
+        # Se responde con una redirección y no repintando la pantalla: así el
+        # navegador queda en un GET y volver a recargar no reenvía el
+        # formulario a un asistente que ya no existe.
+        return redirect(self.request.path)
