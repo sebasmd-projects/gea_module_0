@@ -51,5 +51,11 @@ cd C:\Users\USUARIO\.ssh
 ssh -p 1022 -i "$env:USERPROFILE\.ssh\ssh_access" -L 3307:127.0.0.1:3306 propensi@190.90.160.103
 ```
 
+## Pruebas
+
+```cmd
+python manage.py test --settings=app_core.settings_test
+```
+
 Mantener la terminal abierta
 
