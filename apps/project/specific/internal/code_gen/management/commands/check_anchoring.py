@@ -367,6 +367,52 @@ class Command(BaseCommand):
 
         return target
 
+    def _rewrite_proof(self, saved: Path, proof: bytes) -> bool:
+        """
+        Reescribe la prueba madurada, pero solo si sigue donde tiene que estar.
+
+        La ruta no viene de nadie de fuera --sale de un ``glob`` sobre el
+        directorio que fija ``settings``-- asi que esto no protege de una ruta
+        tecleada. Protege de otra cosa: ese directorio cuelga de
+        ``MEDIA_ROOT``, que es territorio de subidas, y lo que se abre para
+        **escribir** ahi conviene mirarlo antes. Un enlace simbolico colocado
+        en esa carpeta convertiria este ``write_bytes`` en una escritura en
+        cualquier otro sitio del disco, con los permisos del proceso.
+
+        ``resolve()`` sigue los enlaces, asi que comparar despues de resolver
+        es justo lo que hace falta. Nunca aborta el comando: no poder
+        reescribir la prueba no invalida el anclaje --el hash ya llego a los
+        calendarios-- y lo unico que se pierde es no tener que volver a
+        madurarla la proxima vez.
+        """
+        expected = self._selftest_dir()
+
+        try:
+            target = saved.resolve(strict=True)
+            inside = target.is_relative_to(expected.resolve())
+        except OSError as error:
+            self.stdout.write(self.style.WARNING(
+                f'   Maduro, pero no se pudo resolver {saved}: {error}'
+            ))
+            return False
+
+        if not inside:
+            self.stdout.write(self.style.ERROR(
+                f'   Maduro, pero {saved} apunta fuera de {expected} '
+                f'(a {target}). No se reescribe.'
+            ))
+            return False
+
+        try:
+            target.write_bytes(proof)
+        except OSError as error:
+            self.stdout.write(self.style.WARNING(
+                f'   Maduro, pero no se pudo reescribir {target}: {error}'
+            ))
+            return False
+
+        return True
+
     def _latest_proof(self):
         """El ultimo envio de prueba guardado, que es sobre el que se vuelve."""
         try:
@@ -527,12 +573,7 @@ class Command(BaseCommand):
             return False
 
         if outcome['upgraded']:
-            try:
-                saved.write_bytes(outcome['proof'])
-            except OSError as error:
-                self.stdout.write(self.style.WARNING(
-                    f'   Maduro, pero no se pudo reescribir {saved}: {error}'
-                ))
+            self._rewrite_proof(saved, outcome['proof'])
 
         state = ots.inspect(outcome['proof'], full_digest)
 

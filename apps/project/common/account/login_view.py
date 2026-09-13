@@ -44,6 +44,8 @@ camino más barato para quien atacaba era justo el que no dejaba rastro.
 import logging
 import time
 
+from django.contrib import messages
+from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from two_factor.forms import AuthenticationTokenForm, BackupTokenForm
 from two_factor.views import LoginView as TwoFactorLoginView
@@ -431,4 +433,120 @@ class GeaLoginView(TwoFactorLoginView):
         # `formtools` tiene que enterarse igual que al ponerlo.
         self._forget_resolved_steps()
 
+        # `get_user()` puede devolver **False**, y eso no se puede pasar a
+        # `login()`.
+        #
+        # El almacén del asistente guarda al usuario como dos datos sueltos
+        # --`user_pk` y `user_backend`-- y su lector
+        # (`two_factor.views.utils.LoginStorage`) devuelve `False`, no `None`,
+        # cuando falta alguno o cuando el backend ya no puede cargar esa
+        # cuenta. Si ese `False` llega a `login()`, Django intenta leerle un
+        # atributo `backend`, no lo encuentra, y con tres backends
+        # configurados acaba en:
+        #
+        #     ValueError: You have multiple authentication backends
+        #     configured and therefore must provide the `backend` argument
+        #
+        # O sea: un 500 en la pantalla de acceso, con su traza, por un almacén
+        # a medias. Eso puede pasar porque la sesión se perdiera entre dos
+        # peticiones, porque quedara una sesión a medias de una versión
+        # anterior, o porque la cuenta dejara de poder cargarse (se desactivó)
+        # entre identificarse y terminar.
+        #
+        # En los tres casos la respuesta correcta es la misma y no es
+        # reventar: no hay usuario, luego no hay acceso; se vacía lo que
+        # quedara y se vuelve a empezar, diciéndolo. Se registra con todo el
+        # contexto porque un reinicio silencioso es indistinguible de un botón
+        # que no hace nada.
+        if not self.get_user():
+            return self._restart_without_user()
+
         return super().done(form_list, **kwargs)
+
+    def _why_there_is_no_user(self) -> str:
+        """
+        Cuál de las dos cosas pasó, dicho en una línea.
+
+        El lector del almacén devuelve `False` por dos motivos muy distintos y
+        no dice cuál: o **no hay** `user_pk`/`user_backend` --la sesión se
+        perdió-- o los hay pero **el backend no puede cargar esa cuenta** --no
+        existe, o `user_can_authenticate()` la rechaza porque quedó
+        `is_active=False`--. Uno se arregla mirando la sesión y el otro
+        mirando la cuenta, así que confundirlos manda a buscar al sitio
+        equivocado. Aquí se rehace la comprobación paso a paso para poder
+        decirlo.
+
+        Nunca lanza: esto se llama para explicar un fallo, y un diagnóstico
+        que revienta deja sin diagnóstico y sin fallo original.
+        """
+        data = self.storage.data
+        pk = data.get('user_pk')
+        path = data.get('user_backend')
+
+        if not pk or not path:
+            return (
+                f'el almacén no tiene al usuario (user_pk={"sí" if pk else "no"}, '
+                f'user_backend={path or "no"}): se perdió la sesión entre la '
+                f'petición que identificó y ésta'
+            )
+
+        try:
+            from django.contrib.auth import load_backend
+
+            backend = load_backend(path)
+        except Exception as error:                      # noqa: BLE001
+            return f'no se pudo cargar el backend {path}: {error!r}'
+
+        if not hasattr(backend, 'get_user'):
+            return (
+                f'el backend anotado ({path}) no sabe cargar usuarios: no '
+                f'tiene `get_user`. Ese no puede ser el backend de la sesión'
+            )
+
+        try:
+            loaded = backend.get_user(pk)
+        except Exception as error:                      # noqa: BLE001
+            return f'{path}.get_user({pk!r}) levantó {error!r}'
+
+        if loaded is not None:
+            return (
+                f'el backend sí carga a {pk}, así que el almacén cambió entre '
+                f'la comprobación y ésta'
+            )
+
+        from django.contrib.auth import get_user_model
+
+        exists = get_user_model()._default_manager.filter(pk=pk).first()
+
+        if exists is None:
+            return f'no hay ninguna cuenta con pk={pk}'
+
+        return (
+            f'la cuenta {pk} existe pero el backend la rechaza: '
+            f'is_active={getattr(exists, "is_active", None)!r}'
+        )
+
+    def _restart_without_user(self):
+        """Vacía el asistente y devuelve a la primera pantalla, con aviso."""
+        logger.warning(
+            'Acceso: se llegó al final del asistente sin usuario en el '
+            'almacén. paso=%s pasos=%s modo=%s. Motivo: %s',
+            self.storage.current_step,
+            list(self.get_form_list()),
+            self._mode(),
+            self._why_there_is_no_user(),
+        )
+
+        self.storage.reset()
+        self.storage.current_step = self.AUTH_STEP
+        self._set_mode(MODE_PASSWORD)
+
+        messages.error(self.request, _(
+            'Your sign-in could not be completed because the session was '
+            'lost. Please sign in again.'
+        ))
+
+        # Se responde con una redirección y no repintando la pantalla: así el
+        # navegador queda en un GET y volver a recargar no reenvía el
+        # formulario a un asistente que ya no existe.
+        return redirect(self.request.path)
