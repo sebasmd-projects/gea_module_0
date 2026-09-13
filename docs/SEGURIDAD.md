@@ -18,6 +18,32 @@ python manage.py check_cron          # que las tareas estén instaladas
 
 Los cuatro están también en la consola de operaciones.
 
+`check_security` incluye además dos escáneres de fuera: **bandit** sobre el
+código y **safety** sobre las dependencias instaladas. Los dos son opcionales
+—no están en `requirements.txt`, porque son herramientas de desarrollo y el
+servidor no las necesita para servir páginas— y si faltan, el informe **lo dice
+al final, aparte de los hallazgos**. Es deliberado: no haberlos ejecutado no es
+una vulnerabilidad, pero un «sin hallazgos» que se ha saltado dos secciones
+enteras es una media verdad.
+
+```bash
+uv add --dev bandit safety
+```
+
+**Safety necesita credencial.** Safety CLI 3 siempre se autentica: sin clave
+abre un navegador o se queda esperando en el terminal, y esto se ejecuta por
+cron y desde la consola, donde no hay nadie que conteste. Por eso sólo se lanza
+si hay `SAFETY_API_KEY` en el entorno, y va con `--stage cicd` y la entrada
+cerrada para que no pueda preguntar nada. **La clave viaja por el entorno,
+nunca como `--key=…`**: un argumento lo ve cualquiera que liste procesos, y
+además la consola guarda la línea ejecutada y su salida en `CommandRunModel`
+—un secreto que pase por ahí queda escrito en una tabla que se lee desde el
+propio panel.
+
+Si no se quiere mantener una credencial en el servidor, la alternativa sin
+cuenta es `pip-audit`, que consulta la base pública de avisos de PyPI. No está
+integrada: es una decisión pendiente, no una recomendación hecha.
+
 ### Y estas seis a ojo
 
 | | Qué mirar | Por qué |

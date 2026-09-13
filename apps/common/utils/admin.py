@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.contrib import admin, messages
-from django.utils.html import escape
+from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportActionModelAdmin
@@ -206,19 +206,29 @@ class IPBlockedModelAdmin(GeneralAdminModel):
 
     @admin.display(description=_('origin'), ordering='network_owner')
     def origin(self, obj):
-        """Proveedor y pais, o un guion si no se sabe."""
+        """
+        Proveedor y pais, o un guion si no se sabe.
+
+        Los dos valores van **escapados**, igual que en `agent()` de aqui
+        debajo. Hoy salen de `netintel.py`, que resuelve con una tabla que
+        viaja en el repositorio, pero son columnas de la fila: quedan escritas
+        en la base de datos y se pintan en una pagina del panel. Una columna
+        que se interpola cruda en HTML es una inyeccion esperando a que alguna
+        vez se rellene desde otro sitio -- y la funcion de al lado ya lo hacia
+        bien, asi que la diferencia era un descuido, no una decision.
+        """
         parts = []
 
         if obj.is_datacenter:
-            parts.append(
-                '<span style="color:#b02a37;font-weight:600;">'
-                + (obj.network_owner or _('datacenter')) + '</span>')
+            parts.append(format_html(
+                '<span style="color:#b02a37;font-weight:600;">{}</span>',
+                obj.network_owner or _('datacenter')))
         elif obj.network_owner:
-            parts.append(obj.network_owner)
+            parts.append(escape(obj.network_owner))
 
         if obj.country:
-            parts.append(
-                '<span style="color:#6c757d;">' + obj.country + '</span>')
+            parts.append(format_html(
+                '<span style="color:#6c757d;">{}</span>', obj.country))
 
         return mark_safe(' &middot; '.join(parts)) if parts else '—'
 

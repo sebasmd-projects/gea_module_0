@@ -89,6 +89,29 @@ uv run python manage.py check_attack_terms
 ```
 
 ```bash
+uv run python manage.py check_security
+```
+
+Ocho secciones: las seis propias de este proyecto (vistas sin guardia,
+formularios sin freno, shell, SQL por cadenas, carpetas de subidas, ajustes) más
+**bandit** sobre el código y **safety** sobre las dependencias instaladas.
+
+- Los dos escáneres son **opcionales** (`uv add --dev bandit safety`) y lo que
+  falte se cuenta **aparte de los hallazgos**, al final: no haberlo ejecutado no
+  es una vulnerabilidad, pero un «sin hallazgos» que se saltó dos secciones es
+  una media verdad.
+- **Safety necesita `SAFETY_API_KEY`.** Safety CLI 3 siempre se autentica, y sin
+  credencial se queda esperando en el terminal — esto corre por cron y desde la
+  consola, donde no hay nadie que conteste. Sin la variable no se lanza siquiera.
+  La clave va **por el entorno, nunca como `--key=…`**: un argumento lo ve quien
+  liste procesos y acaba escrito en `CommandRunModel` con el resto de la salida.
+- Lo que bandit da por bueno está en `apps/common/utils/scanners.py`
+  (`BANDIT_ACCEPTED`), con **la razón escrita al lado**, igual que
+  `INTENTIONALLY_PUBLIC` o `NEVER_EXPOSED`. La clave es `(regla, fichero)`: una
+  regla nueva, o la misma en un fichero nuevo, aflora; una segunda ocurrencia en
+  un fichero ya aceptado, no.
+
+```bash
 uv run python manage.py test --settings=app_core.settings_test
 ```
 
@@ -692,6 +715,11 @@ PUBLIC_BASE_URL               # base canónica para el QR y el registro; NUNCA s
                               # deriva del host de la petición
 CORS_ALLOWED_ORIGINS          # lista separada por comas
 COMMON_ATTACK_TERMS           # lista separada por comas → regex catch-all
+SAFETY_API_KEY                # credencial de Safety CLI, solo para
+                              # `check_security` §8. Sin ella esa sección no se
+                              # ejecuta y lo dice; NUNCA se pasa como --key,
+                              # porque la línea de comandos acaba en
+                              # CommandRunModel
 IP_BLOCKED_TIME_IN_MINUTES
 MIDDLEWARE_NOT_INCLUDE
 AXES_FAILURE_LIMIT            # por defecto 6, bloqueo por pareja (IP, usuario)

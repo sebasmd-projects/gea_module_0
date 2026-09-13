@@ -1,7 +1,7 @@
 # apps.project.specific.assets_management.buyers.admin.py
 from django.contrib import admin
 from django.db import models
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportActionModelAdmin
 
@@ -279,8 +279,15 @@ class OfferModelAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def image_thumb(self, obj):
+        # `format_html` y no `mark_safe` con una f-string: la URL sale del
+        # nombre del fichero subido, asi que una comilla en el nombre se sale
+        # del atributo. `format_html` escapa cada hueco; `mark_safe` promete
+        # que ya esta escapado, que es lo contrario de lo que pasaba aqui.
         if obj.offer_img:
-            return mark_safe(f'<img src="{obj.offer_img.url}" style="max-width:180px; border-radius:8px;" />')
+            return format_html(
+                '<img src="{}" style="max-width:180px; border-radius:8px;" />',
+                obj.offer_img.url,
+            )
         return "-"
 
     image_thumb.short_description = "Preview"

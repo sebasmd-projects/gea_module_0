@@ -6,7 +6,7 @@ Un informe se lee una vez y se archiva; lo que hace falta es poder repetirlo.
 Este comando comprueba lo que se reviso a mano, y lo hace **sobre el codigo
 que hay ahora**, no sobre lo que decia el informe.
 
-Las seis comprobaciones son las que ya sacaron algo real:
+Las seis primeras son las que ya sacaron algo real:
 
 1. **Vistas publicas sin guardia**, contrastadas con una lista de las que lo
    son a proposito. Una vista nueva sin control aparece aqui la primera vez
@@ -21,10 +21,27 @@ Las seis comprobaciones son las que ya sacaron algo real:
    donde un formulario publico deposita cedulas.
 6. **Ajustes de produccion** que dependen de que ``DEBUG`` este apagado.
 
+Y dos que no las sabe este proyecto, sino herramientas de fuera:
+
+7. **bandit** sobre el codigo, con las excepciones razonadas en
+   ``utils/scanners.py``. Lo que encontro la primera vez que se ejecuto:
+   un MD5 sin marcar, dos ``urlopen`` que habrian abierto ``file://`` y dos
+   sitios que interpolaban en HTML sin escapar. Los cuatro estan arreglados.
+8. **safety** sobre las dependencias instaladas. Es la unica seccion que
+   contesta "¿la version que tengo tiene un CVE?", que no se puede saber
+   leyendo este repositorio.
+
+Las dos ultimas son **opcionales**: ninguna esta en ``requirements.txt``
+--son herramientas de desarrollo y el servidor no las necesita para servir
+paginas-- y si faltan, la seccion lo dice en voz alta y sigue. No haberlas
+ejecutado no es una vulnerabilidad, pero callarselo convertiria un "sin
+hallazgos" en una media verdad, asi que se cuenta aparte al final.
+
 No sustituye a `manage.py check --deploy`, que mira los ajustes de Django.
 Esto mira lo que es propio de este proyecto.
 
     manage.py check_security
+    manage.py check_security --strict     # sale con codigo != 0 si hay algo
 """
 
 import ast
@@ -36,6 +53,8 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.urls import get_resolver
 from django.urls.resolvers import URLPattern, URLResolver
+
+from ...scanners import run_bandit, run_safety
 
 #: Mixins que cuentan como control de acceso.
 GUARD_MIXINS = frozenset({
@@ -150,14 +169,31 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.findings = []
 
+        self.not_checked = []
+
         self._check_unguarded_views()
         self._check_throttles()
         self._check_shell_calls()
         self._check_string_sql()
         self._check_uploads_are_not_served()
         self._check_settings()
+        self._check_bandit()
+        self._check_dependencies()
 
         self.stdout.write('')
+
+        # Lo que no se pudo mirar se dice siempre, haya hallazgos o no. Un
+        # informe que acaba en "sin hallazgos" habiendose saltado dos
+        # secciones enteras dice algo que no es verdad.
+        if self.not_checked:
+            self.stdout.write(self.style.WARNING(
+                f'{len(self.not_checked)} comprobacion(es) no se han hecho:'
+            ))
+
+            for reason in self.not_checked:
+                self.stdout.write(self.style.WARNING(f'   · {reason}'))
+
+            self.stdout.write('')
 
         if not self.findings:
             self.stdout.write(self.style.SUCCESS(
@@ -184,6 +220,76 @@ class Command(BaseCommand):
     def _finding(self, message):
         self.findings.append(message)
         self.stdout.write(self.style.ERROR(f'   AVISO {message}'))
+
+    def _not_checked(self, reason):
+        """
+        Lo que no se ha podido mirar.
+
+        No es un hallazgo --no haber ejecutado un escaner no es una
+        vulnerabilidad-- pero tampoco pasa en silencio: un informe de
+        seguridad que parece completo sin serlo es peor que uno que falta.
+        """
+        self.not_checked.append(reason)
+        self.stdout.write(self.style.WARNING(f'   SIN MIRAR {reason}'))
+
+    # ------------------------------------------------------------------
+    def _report_scan(self, result):
+        """Lo comun a las dos secciones de escaner."""
+        if result.skipped:
+            self._not_checked(result.skipped)
+            return False
+
+        if result.error:
+            self._not_checked(result.error)
+            return False
+
+        return True
+
+    def _check_bandit(self):
+        self._section('7. Analisis estatico del codigo (bandit)')
+
+        result = run_bandit()
+
+        if not self._report_scan(result):
+            return
+
+        if result.accepted:
+            self.stdout.write(
+                f'   ({result.accepted} aviso(s) dados por buenos, con su '
+                f'razon escrita en utils/scanners.py)'
+            )
+
+        if not result.findings:
+            self._ok('Ningun aviso nuevo.')
+            return
+
+        for finding in result.findings:
+            self._finding(finding)
+
+        self.stdout.write(
+            '   Si alguno es un falso positivo, va a BANDIT_ACCEPTED con su '
+            'motivo; no se silencia sin escribir por que.'
+        )
+
+    def _check_dependencies(self):
+        self._section('8. Vulnerabilidades en las dependencias (safety)')
+
+        self.stdout.write(
+            '   (mira lo que hay instalado en este entorno, asi que para que '
+            'valga hay que lanzarlo donde corre la aplicacion)'
+        )
+
+        result = run_safety()
+
+        if not self._report_scan(result):
+            return
+
+        if not result.findings:
+            self._ok('Ninguna dependencia con vulnerabilidad conocida.')
+            return
+
+        for finding in result.findings:
+            self._finding(finding)
 
     # ------------------------------------------------------------------
     def _upload_prefixes(self):
