@@ -39,7 +39,8 @@ msgstr "%(title)s: error inesperado (%(error)s)"
 #, python-format
 msgid "%(title)s: some placements did not match any page (%(items)s)."
 msgstr ""
-"%(title)s: algunas posiciones no coincidieron con ninguna página (%(items)s)."
+"%(title)s: algunas posiciones no coincidieron con ninguna página "
+"(%(items)s)."
 
 #: .\apps\project\specific\documents\certificates\admin.py:76
 #, python-format
@@ -167,12 +168,12 @@ msgstr "Cómo funciona"
 
 #: .\apps\project\specific\documents\certificates\admin.py:472
 msgid ""
-"1) Upload the ORIGINAL PDF without codes. 2) Pick the stamp layout (or leave "
-"it empty for the default one). 3) Save. 4) Run the action “Certify” from the "
-"list view."
+"1) Upload the ORIGINAL PDF without codes. 2) Pick the stamp layout (or leave"
+" it empty for the default one). 3) Save. 4) Run the action “Certify” from "
+"the list view."
 msgstr ""
-"1) Sube el PDF ORIGINAL sin códigos. 2) Elige la disposición de estampado (o "
-"déjala vacía para usar la de por defecto). 3) Guarda. 4) Ejecuta la acción "
+"1) Sube el PDF ORIGINAL sin códigos. 2) Elige la disposición de estampado (o"
+" déjala vacía para usar la de por defecto). 3) Guarda. 4) Ejecuta la acción "
 "«Certificar» desde el listado."
 
 #: .\apps\project\specific\documents\certificates\admin.py:477
@@ -319,10 +320,10 @@ msgid ""
 "exist yet when the hash is computed."
 msgstr ""
 "1) Añade abajo los documentos miembros (todos tienen que estar "
-"certificados). 2) Ejecuta «Sellar» para calcular el master hash. 3) Emite el "
-"documento resumen, que lleva ese hash. 4) Ejecuta «Anclar» para que una "
-"autoridad de sellado acredite la fecha. El master hash nunca cubre al propio "
-"resumen: no puede, todavía no existe cuando se calcula el hash."
+"certificados). 2) Ejecuta «Sellar» para calcular el master hash. 3) Emite el"
+" documento resumen, que lleva ese hash. 4) Ejecuta «Anclar» para que una "
+"autoridad de sellado acredite la fecha. El master hash nunca cubre al propio"
+" resumen: no puede, todavía no existe cuando se calcula el hash."
 
 #: .\apps\project\specific\documents\certificates\admin.py:832
 msgid "Members"
@@ -763,8 +764,8 @@ msgid ""
 "Human readable name of the asset. Only a label: the binding is made through "
 "the asset UUID."
 msgstr ""
-"Nombre legible del activo. Solo una etiqueta: el vínculo se hace por el UUID "
-"del activo."
+"Nombre legible del activo. Solo una etiqueta: el vínculo se hace por el UUID"
+" del activo."
 
 #: .\apps\project\specific\documents\certificates\models.py:793
 msgid "Documents"
@@ -795,8 +796,8 @@ msgid ""
 "The certified PDF that carries the master hash and the barcodes of every "
 "member. Issued after sealing, never part of the hash."
 msgstr ""
-"El PDF certificado que lleva el master hash y los códigos de barras de todos "
-"los miembros. Se emite después de sellar, y nunca forma parte del hash."
+"El PDF certificado que lleva el master hash y los códigos de barras de todos"
+" los miembros. Se emite después de sellar, y nunca forma parte del hash."
 
 #: .\apps\project\specific\documents\certificates\models.py:878
 msgid "AEGIS Summary"
@@ -832,8 +833,8 @@ msgstr "Tal como aparece en el payload maestro."
 
 #: .\apps\project\specific\documents\certificates\models.py:926
 msgid ""
-"Only certified documents can be part of a summary: an uncertified one has no "
-"fingerprint to include."
+"Only certified documents can be part of a summary: an uncertified one has no"
+" fingerprint to include."
 msgstr ""
 "Solo los documentos certificados pueden formar parte de un resumen: uno sin "
 "certificar no tiene huella que incluir."
@@ -851,8 +852,8 @@ msgid ""
 "Verification at Propensiones (GEA): here is the 6-digit verification code "
 "you requested"
 msgstr ""
-"Verificación en Propensiones (GEA): aquí tienes el código de verificación de "
-"6 dígitos que has solicitado"
+"Verificación en Propensiones (GEA): aquí tienes el código de verificación de"
+" 6 dígitos que has solicitado"
 
 #: .\apps\project\specific\documents\certificates\utils.py:132
 msgid "Use the following code to validate the certifications."
@@ -860,10 +861,9 @@ msgstr "Utiliza el siguiente código para validar las certificaciones."
 
 #: .\apps\project\specific\documents\certificates\views.py:105
 #: .\apps\project\specific\documents\certificates\views.py:363
-#, fuzzy
 #| msgid "Too many code requests. Try again later."
 msgid "Too many verification attempts. Try again later."
-msgstr "Demasiadas solicitudes de código. Inténtalo más tarde."
+msgstr "Demasiados intentos de verificación. Inténtalo más tarde."
 
 #: .\apps\project\specific\documents\certificates\views.py:120
 msgid "ID Number not found."
@@ -881,7 +881,8 @@ msgstr "Demasiadas solicitudes de código. Inténtalo más tarde."
 
 #: .\apps\project\specific\documents\certificates\views.py:214
 msgid "A new verification code has been sent to your email."
-msgstr "Se ha enviado un nuevo código de verificación a su correo electrónico."
+msgstr ""
+"Se ha enviado un nuevo código de verificación a su correo electrónico."
 
 #: .\apps\project\specific\documents\certificates\views.py:285
 msgid ""
@@ -971,8 +972,8 @@ msgstr ""
 
 #: .\apps\project\specific\documents\certificates\views.py:639
 msgid ""
-"The \"seal.signature\" field of a GEA certification record, over every other "
-"field serialised as compact JSON with sorted keys, UTF-8."
+"The \"seal.signature\" field of a GEA certification record, over every other"
+" field serialised as compact JSON with sorted keys, UTF-8."
 msgstr ""
 "El campo \"seal.signature\" de un registro de certificación de GEA, sobre "
 "todos los demás campos serializados como JSON compacto con las claves "
@@ -984,7 +985,8 @@ msgstr "Certificados de documentos AEGIS"
 
 #: .\apps\project\specific\documents\certificates\views.py:727
 msgid ""
-"Verify documents protected and issued through the AEGIS certification system."
+"Verify documents protected and issued through the AEGIS certification "
+"system."
 msgstr ""
 "Verifica documentos protegidos y emitidos a través del sistema de "
 "certificación AEGIS."

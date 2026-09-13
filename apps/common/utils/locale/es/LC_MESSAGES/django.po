@@ -29,15 +29,15 @@ msgstr "Por favor, introduzca un número válido."
 
 #: .\apps\common\utils\admin.py:110
 msgid "Block"
-msgstr ""
+msgstr "Bloqueo"
 
 #: .\apps\common\utils\admin.py:122
 msgid "Activity"
-msgstr ""
+msgstr "Actividad"
 
 #: .\apps\common\utils\admin.py:134
 msgid "Origin"
-msgstr ""
+msgstr "Procedencia"
 
 #: .\apps\common\utils\admin.py:141
 msgid ""
@@ -45,10 +45,13 @@ msgid ""
 "server does not browse. This is a hint for reading the row, never a reason "
 "to block on its own: a commercial VPN comes out of the same ranges."
 msgstr ""
+"De dónde sale la dirección. Una persona navega desde una conexión de casa o "
+"de oficina; un servidor no navega. Es un dato para leer la fila, nunca un "
+"motivo de bloqueo por sí solo: una VPN comercial sale por los mismos rangos."
 
 #: .\apps\common\utils\admin.py:149 .\apps\common\utils\admin.py:249
 msgid "Raw trail"
-msgstr ""
+msgstr "Rastro en bruto"
 
 #: .\apps\common\utils\admin.py:155
 msgid "Times"
@@ -59,46 +62,43 @@ msgid "Other"
 msgstr "Otros"
 
 #: .\apps\common\utils\admin.py:169
-#, fuzzy
 #| msgid "is blocked"
 msgid "blocked"
-msgstr "está bloqueado"
+msgstr "bloqueado"
 
 #: .\apps\common\utils\admin.py:184
-#, fuzzy
 #| msgid "is blocked"
 msgid "Blocked"
-msgstr "está bloqueado"
+msgstr "Bloqueado"
 
 #: .\apps\common\utils\admin.py:187
 msgid "left"
-msgstr ""
+msgstr "restantes"
 
 #: .\apps\common\utils\admin.py:192
 msgid "Disabled"
-msgstr ""
+msgstr "Desactivado"
 
 #: .\apps\common\utils\admin.py:196
 msgid "Expired"
-msgstr ""
+msgstr "Caducado"
 
 #: .\apps\common\utils\admin.py:198
-#, fuzzy
 #| msgid "blocked until"
 msgid "block length"
-msgstr "bloqueado hasta"
+msgstr "duración del bloqueo"
 
 #: .\apps\common\utils\admin.py:207
 msgid "origin"
-msgstr ""
+msgstr "procedencia"
 
 #: .\apps\common\utils\admin.py:225
 msgid "datacenter"
-msgstr ""
+msgstr "centro de datos"
 
 #: .\apps\common\utils\admin.py:235 .\apps\common\utils\models.py:268
 msgid "user agent"
-msgstr ""
+msgstr "agente de usuario"
 
 #: .\apps\common\utils\middleware\block_suspicious_request.py:155
 #: .\apps\common\utils\views.py:131
@@ -188,11 +188,11 @@ msgstr "Múltiples intentos fallidos de ingreso de clave de seguridad"
 
 #: .\apps\common\utils\models.py:234
 msgid "Enumerating paths that do not exist"
-msgstr ""
+msgstr "Enumerando rutas que no existen"
 
 #: .\apps\common\utils\models.py:235
 msgid "Known scanning tool"
-msgstr ""
+msgstr "Herramienta de escaneo conocida"
 
 #: .\apps\common\utils\models.py:237
 msgid "is blocked"
@@ -216,55 +216,59 @@ msgstr "información de la sesión"
 
 #: .\apps\common\utils\models.py:248
 msgid "attempts"
-msgstr ""
+msgstr "intentos"
 
 #: .\apps\common\utils\models.py:251
 msgid "unique paths"
-msgstr ""
+msgstr "rutas distintas"
 
 #: .\apps\common\utils\models.py:254
 msgid ""
 "Distinct paths tried. Many attempts on one path is someone retrying; a few "
 "attempts on many paths is a scan."
 msgstr ""
+"Cuántas rutas distintas se intentaron. Muchos intentos sobre una ruta es "
+"alguien reintentando; pocos intentos sobre muchas rutas es un escaneo."
 
 #: .\apps\common\utils\models.py:263
 msgid "first detection"
-msgstr ""
+msgstr "primera detección"
 
 #: .\apps\common\utils\models.py:265
 msgid "last detection"
-msgstr ""
+msgstr "última detección"
 
 #: .\apps\common\utils\models.py:271
 msgid "pattern"
-msgstr ""
+msgstr "patrón"
 
 #: .\apps\common\utils\models.py:275
 msgid "What tripped the block: the trap term, or the signature."
-msgstr ""
+msgstr "Qué disparó el bloqueo: el término de la trampa, o la firma."
 
 #: .\apps\common\utils\models.py:280
 msgid "country"
-msgstr ""
+msgstr "país"
 
 #: .\apps\common\utils\models.py:283
 msgid "network / ASN"
-msgstr ""
+msgstr "red / ASN"
 
 #: .\apps\common\utils\models.py:286
 msgid "datacenter or cloud"
-msgstr ""
+msgstr "centro de datos o nube"
 
 #: .\apps\common\utils\models.py:290
 msgid ""
 "The IP belongs to a hosting provider range. A person browses from a home or "
 "office address; a server does not browse."
 msgstr ""
+"La IP pertenece a un rango de un proveedor de alojamiento. Una persona "
+"navega desde una conexión de casa o de oficina; un servidor no navega."
 
 #: .\apps\common\utils\tests\test_toasts.py:67
 msgid "Saved."
-msgstr ""
+msgstr "Guardado."
 
 #: .\apps\common\utils\views.py:83
 msgid "Error 400"
