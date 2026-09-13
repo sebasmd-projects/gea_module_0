@@ -137,3 +137,69 @@ class LoginWithoutUserInStorageTests(TestCase):
         self.assertEqual(
             self.client.session.get('login_mode', 'password'), 'password'
         )
+
+
+class WhyThereIsNoUserTests(TestCase):
+    """
+    Que el log diga **cuál** de las dos cosas pasó.
+
+    El lector del almacen devuelve `False` por dos motivos que no se parecen en
+    nada --la sesion se perdio, o la cuenta ya no se puede cargar-- y no dice
+    cual. Uno se busca en la sesion y el otro en la cuenta, asi que
+    confundirlos manda a mirar al sitio equivocado.
+    """
+
+    BACKEND = 'apps.common.utils.backend.EmailOrUsernameModelBackend'
+
+    def setUp(self):
+        self.user = UserModel.objects.create_user(
+            username='clara', email='clara@example.com', password=PASSWORD,
+        )
+
+    def _reason(self, data):
+        from types import SimpleNamespace
+
+        view = GeaLoginView()
+        view.storage = SimpleNamespace(data=data, current_step='auth')
+
+        return view._why_there_is_no_user()
+
+    def test_sin_datos_apunta_a_la_sesion(self):
+        motivo = self._reason({})
+
+        self.assertIn('perdió la sesión', motivo)
+
+    def test_una_cuenta_desactivada_se_dice_asi(self):
+        """
+        El backend rechaza una cuenta con `is_active=False`, y desde fuera eso
+        es identico a no tener usuario. La diferencia importa: aqui no hay
+        nada que arreglar en la sesion.
+        """
+        UserModel.objects.filter(pk=self.user.pk).update(is_active=False)
+
+        motivo = self._reason({
+            'user_pk': str(self.user.pk), 'user_backend': self.BACKEND,
+        })
+
+        self.assertIn('is_active=False', motivo)
+
+    def test_una_cuenta_que_ya_no_esta_se_dice_asi(self):
+        pk = str(self.user.pk)
+        self.user.delete()
+
+        motivo = self._reason({'user_pk': pk, 'user_backend': self.BACKEND})
+
+        self.assertIn('no hay ninguna cuenta', motivo)
+
+    def test_un_backend_que_no_carga_usuarios_se_dice_asi(self):
+        """
+        `axes.backends.AxesStandaloneBackend` **no tiene** `get_user`: vigila
+        los intentos y no carga a nadie. Si acabara anotado como el backend de
+        la sesion, el sintoma seria este mismo `False` sin explicacion.
+        """
+        motivo = self._reason({
+            'user_pk': str(self.user.pk),
+            'user_backend': 'axes.backends.AxesStandaloneBackend',
+        })
+
+        self.assertIn('no sabe cargar usuarios', motivo)
