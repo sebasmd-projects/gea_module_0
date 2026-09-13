@@ -273,6 +273,24 @@ def verify(request, code: str):
     state = state_of(request)
 
     if not state:
+        # **En el log, no en la pantalla.** Quien entra ve siempre el mismo
+        # mensaje --distinguir «no había código» de «el código no es ése»
+        # convertiría la pantalla en un comprobador de cuentas-- pero quien
+        # mantiene esto necesita saber cuál de las dos cosas pasó, porque no
+        # se arreglan en el mismo sitio.
+        #
+        # Este caso concreto casi nunca es un código equivocado: significa que
+        # la sesión llegó **vacía** a la petición que trae el código, cuando la
+        # anterior escribió el estado en ella. O sea, la sesión no se está
+        # conservando entre peticiones: cookie que no vuelve, otra que la pisa,
+        # o un almacén de sesión que no guarda.
+        logger.warning(
+            'Login OTP: la sesión no trae ningún código. La petición que lo '
+            'pidió escribió el estado y ésta no lo ve: la sesión no se está '
+            'conservando entre peticiones (sesión=%s, claves=%s)',
+            request.session.session_key,
+            sorted(request.session.keys()),
+        )
         return None
 
     expires_at = state.get('expires_at')
@@ -283,6 +301,8 @@ def verify(request, code: str):
 
     if expired:
         request.session.pop(SESSION_KEY, None)
+        logger.info('Login OTP: código caducado (emitido para %s)',
+                    state.get('identifier') or '(sin identificador)')
         return None
 
     attempts = int(state.get('attempts', 0)) + 1
