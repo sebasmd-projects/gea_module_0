@@ -158,7 +158,18 @@ THIRD_PARTY_APPS = [
     'compressor',
     'corsheaders',
     'django_crontab',
-    'django_filters',
+    # 'django_filters', 'parler' y 'django_countries' estaban aqui sin que nada
+    # los usara: ni un import, ni un campo, ni una migracion -- comprobado
+    # sobre el codigo, no sobre la memoria. Igual que paso con 'betterforms'.
+    #
+    # Una app declarada y sin usar no es gratis. Cuesta arranque y memoria en
+    # cada worker, pero sobre todo cuesta en la siguiente actualizacion: al
+    # subir a Django 5.2 habia que comprobar la compatibilidad de tres
+    # paquetes que no hacen nada, y `django-filter` y `django-parler` solo la
+    # dan en versiones que a su vez arrastran requisitos nuevos. Se paga por
+    # mantener lo que no se usa.
+    #
+    # Si algun dia hace falta alguno, `uv add` y vuelve a esta lista.
     'django_otp',
     'django_otp.plugins.otp_static',
     'django_otp.plugins.otp_totp',
@@ -166,11 +177,9 @@ THIRD_PARTY_APPS = [
     'encrypted_model_fields',
     'formtools',
     'import_export',
-    'parler',
     'rosetta',
     'two_factor',
     'impersonate',
-    'django_countries',
 ]
 
 COMMON_APPS = [
@@ -340,11 +349,18 @@ DATABASES = {
         'PORT': int(os.getenv('DB_PORT')),
         'CONN_MAX_AGE': int(os.getenv('DB_CONN_MAX_AGE', 60)),
         'ATOMIC_REQUESTS': True,
-        "OPTIONS": {
-            "charset": "utf8mb4",
-            "init_command": "SET NAMES utf8mb4 COLLATE utf8mb4_bin",
-        }
-
+        # Vacio a proposito: las opciones de conexion son **de cada motor** y
+        # se ponen abajo.
+        #
+        # Aqui habia un `charset`/`init_command` de MySQL puesto para todos.
+        # Con MySQL no hacia nada --el bloque de abajo reemplazaba el dict
+        # entero-- y con cualquier otro motor rompia la conexion, porque
+        # `charset` no es un argumento valido ni para SQLite
+        # (`TypeError: 'charset' is an invalid keyword argument for
+        # Connection()`) ni para psycopg. O sea: inutil donde se usa e
+        # impeditivo donde no. Levantar el proyecto contra PostgreSQL en local
+        # era imposible sin tocar este fichero.
+        "OPTIONS": {},
     }
 }
 

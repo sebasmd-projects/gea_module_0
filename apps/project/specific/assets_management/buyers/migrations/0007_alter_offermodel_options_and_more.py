@@ -42,6 +42,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='offermodel',
-            constraint=models.CheckConstraint(check=models.Q(('profitability_paid_at__isnull', True), models.Q(('recovery_repatriation_foundation_paid', True), ('pay_master_service_paid', True), ('propensiones_paid', True)), _connector='OR'), name='profit_paid_requires_3_subpaids'),
+            constraint=models.CheckConstraint(condition=models.Q(('profitability_paid_at__isnull', True), models.Q(('recovery_repatriation_foundation_paid', True), ('pay_master_service_paid', True), ('propensiones_paid', True)), _connector='OR'), name='profit_paid_requires_3_subpaids'),
         ),
     ]

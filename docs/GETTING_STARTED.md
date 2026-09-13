@@ -67,7 +67,7 @@ El puente entre los dos es manual:
 
 ```bash
 uv add <paquete>
-uv export --format=requirements-txt > requirements.txt   # ⚠️ NO es opcional
+uv export --no-dev --format=requirements-txt > requirements.txt   # ⚠️ NO es opcional
 ```
 
 **Olvidar ese `export` ya rompió producción.** Pasó con `opentimestamps`,

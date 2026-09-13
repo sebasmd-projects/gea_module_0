@@ -173,7 +173,7 @@ class TestAnUndeclaredLibraryIsNotAGreenTests(WorkerCheckTestCase):
     def test_it_says_how_to_declare_it(self):
         output = self.run_with_celery(declared=False)
 
-        self.assertIn('uv export --format=requirements-txt', output)
+        self.assertIn('uv export --no-dev', output)
 
     def test_a_declared_library_says_nothing(self):
         output = self.run_with_celery(declared=True)

@@ -36,7 +36,7 @@ el documento afirma. El propio registro de certificación lo dice en
 | Capa | Tecnología |
 |---|---|
 | Runtime | Python **3.11+** |
-| Framework | **Django 4.2 LTS** (`>=4.2,<5.0`) |
+| Framework | **Django 5.2 LTS** (`>=5.2,<6.0`) — soporte hasta abril de 2028 |
 | Paquetes | **uv** (`pyproject.toml` + `uv.lock`); `requirements.txt` se **exporta** para producción |
 | Base de datos | **MySQL** o **PostgreSQL**, por `DB_ENGINE`; charset `utf8mb4` |
 | Caché / límites | **Redis** (opcional, muy recomendado) |
@@ -241,6 +241,7 @@ Detalle completo, con la auditoría y lo que se encontró:
 |---|---|
 | **[GETTING_STARTED.md](docs/GETTING_STARTED.md)** | Cómo lo pongo en marcha, y cómo lo despliego |
 | [SEGURIDAD.md](docs/SEGURIDAD.md) | Checklist de despliegue y la auditoría completa |
+| [DJANGO_5_2.md](docs/DJANGO_5_2.md) | La subida a Django 5.2: cambios rompedores, qué se verificó y qué mirar en el servidor antes de desplegar |
 | [NORMATIVA.md](docs/NORMATIVA.md) | Qué exigen los reguladores a la certificación |
 | [ANCLAJE.md](docs/ANCLAJE.md) | El anclaje temporal de punta a punta |
 | [ROUTES_MAP.md](docs/ROUTES_MAP.md) | Todas las URLs, namespaces, vistas y permisos |
