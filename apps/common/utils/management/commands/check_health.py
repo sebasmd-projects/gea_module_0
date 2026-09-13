@@ -26,6 +26,7 @@ import json
 import urllib.error
 import urllib.request
 
+import django
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
@@ -78,7 +79,60 @@ class Command(BaseCommand):
         self.stdout.write('Comprobado dentro del proceso de la aplicacion.')
         self.stdout.write('')
 
+        self._database_version()
+
         return self._report(checks)
+
+    # ------------------------------------------------------------------
+    def _database_version(self) -> None:
+        """
+        Que version del motor hay al otro lado, y si a Django le vale.
+
+        Cada version de Django sube el minimo del motor --5.2 pide MySQL
+        8.0.11, MariaDB 10.5 o PostgreSQL 14-- y cuando no se cumple **no
+        arranca**: levanta `NotSupportedError` al conectar. Eso convierte una
+        actualizacion de Django en una sorpresa el dia del despliegue, que es
+        el peor momento para descubrir que el hosting va por detras.
+
+        Los numeros no se escriben aqui: se preguntan a Django
+        (`features.minimum_database_version`), porque escribirlos seria
+        garantizar que se quedan viejos justo en la siguiente actualizacion.
+
+        Nunca falla la comprobacion: si el motor no contesta la version, lo
+        dice y sigue. Lo que de verdad prueba la conexion es la comprobacion
+        `database`, que ya esta arriba.
+        """
+        from django.db import connection
+
+        try:
+            version = connection.get_database_version()
+        except Exception as error:                      # noqa: BLE001
+            self.stdout.write(
+                f'  Motor: {connection.display_name} — no dice su version '
+                f'({error.__class__.__name__}).'
+            )
+            self.stdout.write('')
+            return
+
+        minimum = getattr(connection.features, 'minimum_database_version', None)
+
+        legible = '.'.join(str(part) for part in version)
+        line = f'  Motor: {connection.display_name} {legible}'
+
+        if minimum:
+            line += f' (Django {django.get_version()} pide '
+            line += '.'.join(str(part) for part in minimum) + ')'
+
+        if minimum and tuple(version) < tuple(minimum):
+            # A este punto no se llega con Django ya conectado: el propio
+            # `connection` aborta antes. Se deja por si algun dia la
+            # comprobacion de Django cambia de momento, y para que la razon
+            # este escrita donde se lee.
+            self.stdout.write(self.style.ERROR(line + '  ← POR DEBAJO'))
+        else:
+            self.stdout.write(self.style.SUCCESS(line))
+
+        self.stdout.write('')
 
     def _over_http(self, timeout):
         url = self._health_url()

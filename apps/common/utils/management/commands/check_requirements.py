@@ -8,8 +8,13 @@ El proyecto usa dos ficheros de dependencias y cada uno manda en un sitio:
 * ``requirements.txt`` es lo que instala **produccion**, con ``pip``, porque
   en cPanel no hay uv.
 
-El puente entre los dos es un paso manual: ``uv export --format=requirements-txt
-> requirements.txt``. Y un paso manual es un paso que se olvida.
+El puente entre los dos es un paso manual: ``uv export --no-dev
+--format=requirements-txt > requirements.txt``. El ``--no-dev`` no es un
+detalle: sin el, `uv` exporta tambien el grupo de desarrollo y produccion
+instala `bandit`, `pip-audit` y `safety` --la que este proyecto decidio no
+ejecutar en el servidor-- con todo lo que arrastran.
+
+Y un paso manual es un paso que se olvida.
 
 Ya ha pasado, y salio caro: ``opentimestamps`` se anadio a ``pyproject.toml``
 el 29 de agosto y no llego a ``requirements.txt`` hasta el dia siguiente. En
@@ -58,6 +63,9 @@ class Command(BaseCommand):
             return None
 
         missing = sorted(declared - exported)
+        dev_leaked = sorted(
+            self._dev_tools(root / 'pyproject.toml') & exported
+        )
 
         self.stdout.write(
             f'Declaradas en pyproject.toml : {len(declared)}'
@@ -66,12 +74,36 @@ class Command(BaseCommand):
             f'Presentes en requirements.txt: {len(exported)}'
         )
 
-        if not missing:
+        if not missing and not dev_leaked:
             self.stdout.write('')
             self.stdout.write(self.style.SUCCESS(
-                'Todo lo declarado esta exportado. Produccion instalara lo '
-                'mismo que hay en local.'
+                'Todo lo declarado esta exportado, y nada del grupo de '
+                'desarrollo. Produccion instalara lo mismo que hay en local.'
             ))
+            return None
+
+        if dev_leaked:
+            self.stdout.write('')
+            self.stdout.write(self.style.ERROR(
+                'Herramientas de desarrollo en requirements.txt: '
+                + ', '.join(dev_leaked)
+            ))
+            self.stdout.write('')
+            self.stdout.write(
+                'El export se hizo sin `--no-dev`, asi que produccion '
+                'instala tambien el grupo de desarrollo y lo que ese grupo '
+                'arrastra. No es solo peso: mete en el servidor `safety`, que '
+                'este proyecto decidio no ejecutar alli, y paquetes que solo '
+                'estan en produccion por venir de una herramienta que nadie '
+                'usa en produccion. Se arregla exportando bien:'
+            )
+            self.stdout.write('')
+            self.stdout.write(
+                '   uv export --no-dev --format=requirements-txt '
+                '> requirements.txt'
+            )
+
+        if not missing:
             return None
 
         self.stdout.write('')
@@ -90,7 +122,8 @@ class Command(BaseCommand):
         )
         self.stdout.write('')
         self.stdout.write(
-            '   uv export --format=requirements-txt > requirements.txt'
+            '   uv export --no-dev --format=requirements-txt '
+            '> requirements.txt'
         )
         self.stdout.write('')
         self.stdout.write('y despues commit del fichero.')
@@ -98,6 +131,32 @@ class Command(BaseCommand):
         return None
 
     # ------------------------------------------------------------------
+    def _dev_tools(self, path: Path) -> set:
+        """
+        Los nombres declarados en ``[dependency-groups]``.
+
+        Sirven de marcador: si alguno aparece en ``requirements.txt``, el
+        export se hizo sin ``--no-dev``. No se intenta enumerar lo que esos
+        paquetes arrastran --eso solo lo sabe el lock-- y no hace falta:
+        aparecen juntos, asi que detectar los directos detecta el descuido.
+        """
+        if not path.exists():
+            return set()
+
+        try:
+            data = tomllib.loads(path.read_text(encoding='utf-8'))
+        except tomllib.TOMLDecodeError:
+            return set()
+
+        names = set()
+
+        for group in (data.get('dependency-groups') or {}).values():
+            for line in group:
+                if isinstance(line, str) and (match := NAME.match(line.strip())):
+                    names.add(normalize(match.group(0)))
+
+        return names
+
     def _from_pyproject(self, path: Path):
         if not path.exists():
             self.stdout.write(self.style.ERROR(

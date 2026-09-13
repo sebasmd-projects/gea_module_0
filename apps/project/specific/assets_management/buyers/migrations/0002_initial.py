@@ -114,7 +114,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='serviceorderrecipient',
-            constraint=models.CheckConstraint(check=models.Q(('user__isnull', True), ('user_type__isnull', True), _negated=True), name='so_recipient_user_or_type'),
+            constraint=models.CheckConstraint(condition=models.Q(('user__isnull', True), ('user_type__isnull', True), _negated=True), name='so_recipient_user_or_type'),
         ),
         migrations.AddConstraint(
             model_name='serviceorderrecipient',
@@ -126,42 +126,42 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='offermodel',
-            constraint=models.CheckConstraint(check=models.Q(('is_approved', False), ('reviewed', True), _connector='OR'), name='approved_requires_reviewed'),
+            constraint=models.CheckConstraint(condition=models.Q(('is_approved', False), ('reviewed', True), _connector='OR'), name='approved_requires_reviewed'),
         ),
         migrations.AddConstraint(
             model_name='offermodel',
-            constraint=models.CheckConstraint(check=models.Q(('service_order_created_at__isnull', True), ('is_approved', True), _connector='OR'), name='so_created_requires_approved'),
+            constraint=models.CheckConstraint(condition=models.Q(('service_order_created_at__isnull', True), ('is_approved', True), _connector='OR'), name='so_created_requires_approved'),
         ),
         migrations.AddConstraint(
             model_name='offermodel',
-            constraint=models.CheckConstraint(check=models.Q(('service_order_sent_at__isnull', True), ('service_order_created_at__isnull', False), _connector='OR'), name='so_sent_requires_so_created'),
+            constraint=models.CheckConstraint(condition=models.Q(('service_order_sent_at__isnull', True), ('service_order_created_at__isnull', False), _connector='OR'), name='so_sent_requires_so_created'),
         ),
         migrations.AddConstraint(
             model_name='offermodel',
-            constraint=models.CheckConstraint(check=models.Q(('payment_order_created_at__isnull', True), ('service_order_sent_at__isnull', False), _connector='OR'), name='pay_created_requires_so_sent'),
+            constraint=models.CheckConstraint(condition=models.Q(('payment_order_created_at__isnull', True), ('service_order_sent_at__isnull', False), _connector='OR'), name='pay_created_requires_so_sent'),
         ),
         migrations.AddConstraint(
             model_name='offermodel',
-            constraint=models.CheckConstraint(check=models.Q(('payment_order_sent_at__isnull', True), ('payment_order_created_at__isnull', False), _connector='OR'), name='pay_sent_requires_pay_created'),
+            constraint=models.CheckConstraint(condition=models.Q(('payment_order_sent_at__isnull', True), ('payment_order_created_at__isnull', False), _connector='OR'), name='pay_sent_requires_pay_created'),
         ),
         migrations.AddConstraint(
             model_name='offermodel',
-            constraint=models.CheckConstraint(check=models.Q(('asset_in_possession_at__isnull', True), ('payment_order_sent_at__isnull', False), _connector='OR'), name='possession_requires_pay_sent'),
+            constraint=models.CheckConstraint(condition=models.Q(('asset_in_possession_at__isnull', True), ('payment_order_sent_at__isnull', False), _connector='OR'), name='possession_requires_pay_sent'),
         ),
         migrations.AddConstraint(
             model_name='offermodel',
-            constraint=models.CheckConstraint(check=models.Q(('asset_sent_at__isnull', True), ('asset_in_possession_at__isnull', False), _connector='OR'), name='asset_sent_requires_possession'),
+            constraint=models.CheckConstraint(condition=models.Q(('asset_sent_at__isnull', True), ('asset_in_possession_at__isnull', False), _connector='OR'), name='asset_sent_requires_possession'),
         ),
         migrations.AddConstraint(
             model_name='offermodel',
-            constraint=models.CheckConstraint(check=models.Q(('profitability_created_at__isnull', True), ('asset_sent_at__isnull', False), _connector='OR'), name='profit_created_requires_asset_sent'),
+            constraint=models.CheckConstraint(condition=models.Q(('profitability_created_at__isnull', True), ('asset_sent_at__isnull', False), _connector='OR'), name='profit_created_requires_asset_sent'),
         ),
         migrations.AddConstraint(
             model_name='offermodel',
-            constraint=models.CheckConstraint(check=models.Q(('profitability_paid_at__isnull', True), ('profitability_created_at__isnull', False), _connector='OR'), name='profit_paid_requires_profit_created'),
+            constraint=models.CheckConstraint(condition=models.Q(('profitability_paid_at__isnull', True), ('profitability_created_at__isnull', False), _connector='OR'), name='profit_paid_requires_profit_created'),
         ),
         migrations.AddConstraint(
             model_name='offermodel',
-            constraint=models.CheckConstraint(check=models.Q(('profitability_paid_at__isnull', True), models.Q(('recovery_repatriation_foundation_paid', True), ('am_pro_service_paid', True), ('propensiones_paid', True)), _connector='OR'), name='profit_paid_requires_3_subpaids'),
+            constraint=models.CheckConstraint(condition=models.Q(('profitability_paid_at__isnull', True), models.Q(('recovery_repatriation_foundation_paid', True), ('am_pro_service_paid', True), ('propensiones_paid', True)), _connector='OR'), name='profit_paid_requires_3_subpaids'),
         ),
     ]

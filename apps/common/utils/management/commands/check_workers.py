@@ -171,7 +171,8 @@ class Command(BaseCommand):
                 '      Se arregla declarandola y reexportando:'
             )
             self.stdout.write(
-                '         uv add celery && uv export --format=requirements-txt '
+                '         uv add celery && uv export --no-dev '
+                '--format=requirements-txt '
                 '> requirements.txt'
             )
 

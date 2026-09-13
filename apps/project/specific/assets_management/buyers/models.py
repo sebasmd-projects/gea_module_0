@@ -948,60 +948,60 @@ class OfferModel(TimeStampedModel):
             # Aprobado => Debe estar revisado
             models.CheckConstraint(
                 name="approved_requires_reviewed",
-                check=Q(is_approved=False) | Q(reviewed=True),
+                condition=Q(is_approved=False) | Q(reviewed=True),
             ),
             # SO Created => Approved
             models.CheckConstraint(
                 name="so_created_requires_approved",
-                check=Q(service_order_created_at__isnull=True) | Q(
+                condition=Q(service_order_created_at__isnull=True) | Q(
                     is_approved=True),
             ),
             # SO Sent => SO Created
             models.CheckConstraint(
                 name="so_sent_requires_so_created",
-                check=Q(service_order_sent_at__isnull=True) | Q(
+                condition=Q(service_order_sent_at__isnull=True) | Q(
                     service_order_created_at__isnull=False),
             ),
             # Payment Created => SO Sent
             models.CheckConstraint(
                 name="pay_created_requires_so_sent",
-                check=Q(payment_order_created_at__isnull=True) | Q(
+                condition=Q(payment_order_created_at__isnull=True) | Q(
                     service_order_sent_at__isnull=False),
             ),
             # Payment Sent => Payment Created
             models.CheckConstraint(
                 name="pay_sent_requires_pay_created",
-                check=Q(payment_order_sent_at__isnull=True) | Q(
+                condition=Q(payment_order_sent_at__isnull=True) | Q(
                     payment_order_created_at__isnull=False),
             ),
             # In Possession => Payment Sent
             models.CheckConstraint(
                 name="possession_requires_pay_sent",
-                check=Q(asset_in_possession_at__isnull=True) | Q(
+                condition=Q(asset_in_possession_at__isnull=True) | Q(
                     payment_order_sent_at__isnull=False),
             ),
             # Asset Sent => In Possession
             models.CheckConstraint(
                 name="asset_sent_requires_possession",
-                check=Q(asset_sent_at__isnull=True) | Q(
+                condition=Q(asset_sent_at__isnull=True) | Q(
                     asset_in_possession_at__isnull=False),
             ),
             # Profit Created => Asset Sent
             models.CheckConstraint(
                 name="profit_created_requires_asset_sent",
-                check=Q(profitability_created_at__isnull=True) | Q(
+                condition=Q(profitability_created_at__isnull=True) | Q(
                     asset_sent_at__isnull=False),
             ),
             # Profit Paid => Profit Created
             models.CheckConstraint(
                 name="profit_paid_requires_profit_created",
-                check=Q(profitability_paid_at__isnull=True) | Q(
+                condition=Q(profitability_paid_at__isnull=True) | Q(
                     profitability_created_at__isnull=False),
             ),
             # Profit Paid => 3 subpagos
             models.CheckConstraint(
                 name="profit_paid_requires_3_subpaids",
-                check=Q(profitability_paid_at__isnull=True) |
+                condition=Q(profitability_paid_at__isnull=True) |
                 (Q(recovery_repatriation_foundation_paid=True) &
                  Q(pay_master_service_paid=True) &
                  Q(propensiones_paid=True))
@@ -1031,7 +1031,7 @@ class ServiceOrderRecipient(TimeStampedModel):
         constraints = [
             models.CheckConstraint(
                 name="so_recipient_user_or_type",
-                check=~(Q(user__isnull=True) & Q(user_type__isnull=True)),
+                condition=~(Q(user__isnull=True) & Q(user_type__isnull=True)),
             ),
             # Sin `condition=`, y no es una relajacion: es lo que hace que
             # existan.

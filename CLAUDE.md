@@ -6,6 +6,9 @@ Documentos complementarios:
 - [`docs/ROUTES_MAP.md`](docs/ROUTES_MAP.md) — todas las URLs, namespaces, vistas y permisos.
 - [`docs/FEATURES_MAP.md`](docs/FEATURES_MAP.md) — funcionalidades por dominio, modelos y reglas de negocio.
 - [`docs/NORMATIVA.md`](docs/NORMATIVA.md) — qué exigen los reguladores a la certificación, por qué no se adopta W3C VC y qué falta en su lugar.
+- [`docs/DJANGO_5_2.md`](docs/DJANGO_5_2.md) — la subida de Django 4.2 a 5.2: el checklist de
+  cambios rompedores comprobado uno a uno contra este codigo, lo que hubo que cambiar, y **lo
+  unico que puede impedir que el servidor arranque** (la version de la base de datos).
 - [`docs/SEGURIDAD.md`](docs/SEGURIDAD.md) — checklist de despliegue en dos minutos, y la auditoría con lo que se encontró y por qué importa.
 - [`docs/ANCLAJE.md`](docs/ANCLAJE.md) — el anclaje temporal explicado de punta a punta: los dos tiempos, quién madura las pruebas, dónde se mira el estado y qué significa cada uno.
 - [`docs/verificar-certificado.html`](docs/verificar-certificado.html) y [`docs/verify-certificate.html`](docs/verify-certificate.html) — **para enseñar fuera**, no para desarrollar: el recorrido público de verificación paso a paso, con capturas anotadas, qué se entrega y qué se puede compartir. Es el mismo recorrido que describen los otros documentos, contado para un titular o un auditor. **Son la misma guía en español y en inglés**, generadas del mismo guion: el texto vive en tablas por idioma con las mismas claves, así que una frase añadida en uno y olvidada en el otro falla al generar y no en la página. Los recuadros de las capturas salen de medir la caja real de cada elemento en el navegador, no de estimarla. Si cambian esas pantallas, las capturas se quedan viejas y hay que rehacerlas.
@@ -37,7 +40,7 @@ Idiomas: español (contenido primario) e inglés.
 | Capa | Tecnología |
 |---|---|
 | Runtime | Python **3.11** |
-| Framework | **Django 4.2 LTS** (`>=4.2,<5.0`) |
+| Framework | **Django 5.2 LTS** (`>=5.2,<6.0`) |
 | Gestor de paquetes | **uv** (`uv.lock`, `pyproject.toml`); `requirements.txt` se exporta desde uv |
 | Base de datos | MySQL o PostgreSQL — se elige por la variable `DB_ENGINE`; charset `utf8mb4` |
 | Frontend | Plantillas Django + **Bootstrap 5.2.3** (CDN), AJAX con HTML renderizado en servidor. Sin SPA, sin build de JS |
@@ -48,7 +51,12 @@ Idiomas: español (contenido primario) e inglés.
 **Terceros clave**: `django-two-factor-auth` + `django-otp` (2FA), `django-axes` (fuerza bruta),
 `django-auditlog` (auditoría), `django-encrypted-model-fields` (PII cifrada), `django-import-export`,
 `django-crontab`, `django-select2`, `django-formtools` (wizards), `rosetta`, `impersonate`,
-`django-parler` (instalado, apenas usado), `argon2-cffi`.
+`argon2-cffi`.
+
+`django-filter`, `django-parler` y `django-countries` **ya no estan**: estaban
+en `INSTALLED_APPS` sin un solo import, campo ni migracion, y en la subida a
+Django 5.2 obligaban a comprobar la compatibilidad de tres paquetes que no
+hacen nada. Ver [`docs/DJANGO_5_2.md`](docs/DJANGO_5_2.md) §5.
 
 **No hay Django REST Framework.** Los directorios `api/` existen pero están vacíos. No asumas endpoints REST.
 
@@ -164,7 +172,7 @@ uv add <paquete>
 ```
 
 ```bash
-uv export --format=requirements-txt > requirements.txt
+uv export --no-dev --format=requirements-txt > requirements.txt
 ```
 
 ⚠️ **Ese `export` no es opcional, y olvidarlo ya rompió producción.** Hay dos
@@ -675,12 +683,9 @@ Sin build ni SPA. Plantillas Django + Bootstrap 5 por CDN; `templates/raw.html` 
 | **Un 403 confirma; un 404 no** | Vale también para el `User-Agent`, y ahí estaba mezclado. A un rastreador declarado (GPTBot, AhrefsBot) el 403 es lo correcto: es una decisión de política y necesita entenderla para dejar de volver. A una herramienta de ataque que se anuncia (sqlmap, nikto) el 403 le dice que hay filtro por agente, y cambiar la cadena cuesta un parámetro: ésas se llevan el mismo 404 silencioso que el resto de la capa, más su bloqueo. Y los nombres se emparejan como **token**, no como subcadena: `nmap` dentro de `Enmapador` es el mismo error que hizo que `env` bloqueara `/envio/`. |
 | **`CACHES` sale de `REDIS_URL`** | Con la variable puesta se usa `django-redis` con `IGNORE_EXCEPTIONS`: un Redis caído degrada a «sin cache» en vez de tumbar el login. Cuidado con lo que significa eso exactamente: **no lanza la excepción, devuelve `None`**, así que un `try/except` alrededor de una operación de caché no se entera de nada y `cache.get(k) or 0` da `0`. Eso apagaba los seis contadores de intentos en silencio; hoy todos pasan por `apps/common/utils/throttling.py`, que detecta la avería por lo que devuelve `incr` y **falla cerrado salvo donde hay una razón escrita para lo contrario**. Sin la variable, Django cae en `LocMemCache`, que es **por proceso**: los límites son entonces por worker. Montaje del Redis: [`deploy/REDIS.md`](deploy/REDIS.md). |
 | **`ERROR_TEMPLATE` no está definido** | Varios módulos hacen `settings.ERROR_TEMPLATE` dentro de `try/except` y caen a `'errors_template.html'`. Funciona, pero el `getattr` es engañoso. |
-| **`settings.py` explota si falta una variable** | Muchos `os.getenv(...)` se pasan directamente a `int()` o `.split(',')` sin valor por defecto (`DB_PORT`, `DJANGO_EMAIL_PORT`, `IP_BLOCKED_TIME_IN_MINUTES
-SCAN_404_THRESHOLD            # por defecto 20; cuántos 404 en la ventana
-SCAN_404_WINDOW_SECONDS       # por defecto 300; la ventana del detector
-GEOIP_PATH                    # opcional; sin ella el país de un bloqueo se
-                              # queda vacío y todo lo demás sigue igual`, `CORS_ALLOWED_ORIGINS`, `COMMON_ATTACK_TERMS`, `GEA_DAILY_CODE_*`). Sin `.env` completo, el proyecto no arranca. |
-| **`OPTIONS` de la BD se sobrescribe** | En `DATABASES` se define un `OPTIONS` con `charset`/`init_command` y, si `DB_ENGINE` es MySQL, el bloque siguiente **reemplaza el dict entero** (se pierde el `charset` y el `COLLATE utf8mb4_bin`). |
+| **`settings.py` no arranca sin el `.env` completo, pero ya dice qué falta** | Muchos `os.getenv(...)` se pasan directos a `int()` o `.split(',')` sin valor por defecto (`DB_PORT`, `DJANGO_EMAIL_PORT`, `IP_BLOCKED_TIME_IN_MINUTES`, `CORS_ALLOWED_ORIGINS`, `COMMON_ATTACK_TERMS`, `GEA_DAILY_CODE_*`), y el error que salía era `int() argument must be a string … not 'NoneType'`: no nombraba la variable, y como el arranque muere en la primera, había que repetirlo una vez por cada una que faltara. Hoy `app_core/env.py::check_environment()` corre **antes de que `settings.py` lea nada** y levanta un `ImproperlyConfigured` con **todas** las que faltan, cada una con para qué sirve y con `cp docs/env.example .env` al pie. Tres cosas al tocarlo: una variable **vacía cuenta como ausente** salvo en `ALLOWED_EMPTY` (vacío significa algo en `CORS_ALLOWED_ORIGINS`, `COMMON_ATTACK_TERMS` y las contraseñas); `DJANGO_ALLOWED_HOSTS` va en `REQUIRED_IN_PRODUCTION` porque sólo la lee la rama de `DEBUG=False`, y exigirla siempre rompería un `.env` de portátil que hoy funciona; y lo que se lee sin defecto y aun así puede faltar va en `OPTIONAL_WITHOUT_DEFAULT` **con su motivo escrito**, que `app_core/tests/test_env.py` comprueba recorriendo `settings.py` — una lectura nueva sin declarar falla la prueba. Sólo cubre lo que impide arrancar: lo que falta y sólo degrada (`REDIS_URL`, `CERTIFICATION_SIGNING_KEY`, `GEA_BACKUP_PASSPHRASE`, `PQRS_NOTIFICATION_RECIPIENTS`) no sale ahí a propósito. |
+| **Un ajuste que sólo se lee con `getattr(settings, …)` no se configura por entorno** | `SCAN_404_THRESHOLD`, `SCAN_404_WINDOW_SECONDS` y `GEOIP_PATH` estaban documentados como variables de entorno y no lo eran: `scanning.py` y `netintel.py` los leen del objeto `settings` con su propio defecto, y `settings.py` no los definía. Ponerlos en el `.env` no hacía nada — que es peor que no poder configurarlos, porque parece que sí. Ya se leen en `settings.py`. Al añadir un ajuste que quieras poder cambiar por entorno, defínelo ahí aunque el módulo que lo usa tenga un defecto. |
+| **Las opciones de conexion son de cada motor** | `DATABASES['default']['OPTIONS']` va **vacio** y cada motor pone las suyas en su propio bloque. Antes el diccionario base traia el `charset`/`init_command` de MySQL para todos: con MySQL no hacia nada --el bloque de abajo lo reemplazaba entero, perdiendo de paso el `COLLATE utf8mb4_bin`-- y con cualquier otro motor **rompia la conexion** (`TypeError: 'charset' is an invalid keyword argument for Connection()`), asi que levantar el proyecto contra PostgreSQL o SQLite en local era imposible sin editar `settings.py`. Inutil donde se usaba, impeditivo donde no. Al anadir una opcion de conexion, ponla en el bloque de su motor. |
 | **Allowlist de usuarios hardcodeada** | `OnlySpecificUserMixin.allowed_user_username = ['jose.henry', 'kalichemorales']` en `buyers/views.py` controla el acceso a Orion. |
 | **`django.contrib.sites` NO está instalado** | `get_current_site(request)` cae en `RequestSite` y devuelve la cabecera `Host`, que la pone el cliente. Cualquier URL construida así es envenenable. Por eso el enlace de recuperación de contraseña sale de `PUBLIC_BASE_URL` (invariante 12). Si añades otro correo con enlaces, hazlo igual. |
 | **`axes` no ve el usuario del login** | El login es un wizard de `formtools`: su campo es `auth-username`, no `username`. Sin `AXES_USERNAME_CALLABLE` (`utils/axes_hooks.py`) todos los intentos se guardan con usuario vacío y **cualquier bloqueo por pareja (IP, usuario) degrada en silencio a bloqueo por IP**. Si algún día cambia el prefijo del paso, actualiza `USERNAME_FIELDS`. |
@@ -701,7 +706,10 @@ GEOIP_PATH                    # opcional; sin ella el país de un bloqueo se
 
 ## 8. Variables de entorno
 
-Se cargan con `python-dotenv` desde `.env` en la raíz (ignorado por git).
+Se cargan con `python-dotenv` desde `.env` en la raíz (ignorado por git). La
+plantilla comentada es [`docs/env.example`](docs/env.example), y cuál de ellas
+es obligatoria lo decide `app_core/env.py`, que además es lo que produce el
+error cuando falta alguna: la lista completa, por su nombre, antes de arrancar.
 
 ```
 # Django
@@ -738,6 +746,10 @@ SAFETY_API_KEY                # credencial de Safety CLI, SOLO en local y solo
                               # en CommandRunModel
 IP_BLOCKED_TIME_IN_MINUTES
 MIDDLEWARE_NOT_INCLUDE
+SCAN_404_THRESHOLD            # por defecto 20; cuántos 404 en la ventana
+SCAN_404_WINDOW_SECONDS       # por defecto 300; la ventana del detector
+GEOIP_PATH                    # opcional; sin ella el país de un bloqueo se
+                              # queda vacío y todo lo demás sigue igual
 AXES_FAILURE_LIMIT            # por defecto 6, bloqueo por pareja (IP, usuario)
 AXES_COOLOFF_MINUTES          # por defecto 30; nunca dejarlo sin espera
 LOGIN_OTP_TTL_MINUTES         # por defecto 15; cuánto dura el código de acceso
