@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GEAUSA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-01 07:54-0500\n"
+"POT-Creation-Date: 2026-09-13 13:10-0500\n"
 "PO-Revision-Date: 2026-01-11 02:56+0000\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -90,13 +90,13 @@ msgstr "Aprobado"
 
 #: .\apps\project\specific\documents\certificates\admin.py:272
 #: .\apps\project\specific\documents\certificates\admin.py:496
-#: .\apps\project\specific\documents\certificates\views.py:439
+#: .\apps\project\specific\documents\certificates\views.py:447
 msgid "Expired"
 msgstr "Vencido"
 
 #: .\apps\project\specific\documents\certificates\admin.py:276
 #: .\apps\project\specific\documents\certificates\models.py:45
-#: .\apps\project\specific\documents\certificates\views.py:440
+#: .\apps\project\specific\documents\certificates\views.py:448
 msgid "Revoked"
 msgstr "Revocado"
 
@@ -846,27 +846,20 @@ msgstr "Miembro del resumen"
 msgid "Summary members"
 msgstr "Miembros del resumen"
 
-#: .\apps\project\specific\documents\certificates\utils.py:116
-msgid "Your document verification code"
-msgstr "Tu código de verificación para los documentos"
-
-#: .\apps\project\specific\documents\certificates\utils.py:118
-#, python-brace-format
+#: .\apps\project\specific\documents\certificates\utils.py:129
 msgid ""
-"Your verification code is:\n"
-"\n"
-"{otp}\n"
-"\n"
-"This code expires in 10 minutes."
+"Verification at Propensiones (GEA): here is the 6-digit verification code "
+"you requested"
 msgstr ""
-"Tu código de verificación es:\n"
-"\n"
-"{otp}\n"
-"\n"
-"Este código caduca en 10 minutos."
+"Verificación en Propensiones (GEA): aquí tienes el código de verificación de "
+"6 dígitos que has solicitado"
+
+#: .\apps\project\specific\documents\certificates\utils.py:132
+msgid "Use the following code to validate the certifications."
+msgstr "Utiliza el siguiente código para validar las certificaciones."
 
 #: .\apps\project\specific\documents\certificates\views.py:105
-#: .\apps\project\specific\documents\certificates\views.py:355
+#: .\apps\project\specific\documents\certificates\views.py:363
 #, fuzzy
 #| msgid "Too many code requests. Try again later."
 msgid "Too many verification attempts. Try again later."
@@ -882,15 +875,15 @@ msgid "Please wait %(seconds)s seconds before requesting a new code."
 msgstr "Espere %(seconds)s segundos antes de solicitar un nuevo código."
 
 #: .\apps\project\specific\documents\certificates\views.py:202
-#: .\apps\project\specific\documents\certificates\views.py:326
+#: .\apps\project\specific\documents\certificates\views.py:330
 msgid "Too many code requests. Try again later."
 msgstr "Demasiadas solicitudes de código. Inténtalo más tarde."
 
-#: .\apps\project\specific\documents\certificates\views.py:210
+#: .\apps\project\specific\documents\certificates\views.py:214
 msgid "A new verification code has been sent to your email."
 msgstr "Se ha enviado un nuevo código de verificación a su correo electrónico."
 
-#: .\apps\project\specific\documents\certificates\views.py:281
+#: .\apps\project\specific\documents\certificates\views.py:285
 msgid ""
 "This file is not valid: it is neither the original nor a certified digital "
 "copy issued by this platform."
@@ -898,7 +891,7 @@ msgstr ""
 "Este archivo no es válido: no es el original ni una copia digital "
 "certificada emitida por esta plataforma."
 
-#: .\apps\project\specific\documents\certificates\views.py:291
+#: .\apps\project\specific\documents\certificates\views.py:295
 msgid ""
 "This file carries the hidden watermark of the platform, so it originated "
 "from a certified copy, but its content has been modified. It is not a valid "
@@ -908,27 +901,27 @@ msgstr ""
 "procede de una copia certificada, pero su contenido ha sido modificado. No "
 "es una copia certificada válida."
 
-#: .\apps\project\specific\documents\certificates\views.py:339
+#: .\apps\project\specific\documents\certificates\views.py:347
 msgid "Invalid or expired code."
 msgstr "Código inválido o caducado."
 
-#: .\apps\project\specific\documents\certificates\views.py:368
+#: .\apps\project\specific\documents\certificates\views.py:376
 msgid "Document not found."
 msgstr "Documento no encontrado."
 
-#: .\apps\project\specific\documents\certificates\views.py:371
+#: .\apps\project\specific\documents\certificates\views.py:379
 msgid "We could not verify the document with the provided data."
 msgstr "No pudimos verificar el documento con los datos proporcionados."
 
-#: .\apps\project\specific\documents\certificates\views.py:438
+#: .\apps\project\specific\documents\certificates\views.py:446
 msgid "Valid"
 msgstr "Válido"
 
-#: .\apps\project\specific\documents\certificates\views.py:441
+#: .\apps\project\specific\documents\certificates\views.py:449
 msgid "Not certified"
 msgstr "Sin certificar"
 
-#: .\apps\project\specific\documents\certificates\views.py:473
+#: .\apps\project\specific\documents\certificates\views.py:481
 msgid ""
 "Verified file: this is the ORIGINAL document filed with the platform, "
 "unmodified."
@@ -936,7 +929,7 @@ msgstr ""
 "Archivo verificado: es el documento ORIGINAL depositado en la plataforma, "
 "sin modificar."
 
-#: .\apps\project\specific\documents\certificates\views.py:477
+#: .\apps\project\specific\documents\certificates\views.py:485
 msgid ""
 "Verified file: this is the CERTIFIED document, with its codes embedded, "
 "unmodified."
@@ -944,7 +937,7 @@ msgstr ""
 "Archivo verificado: es el documento CERTIFICADO, con sus códigos "
 "incrustados, sin modificar."
 
-#: .\apps\project\specific\documents\certificates\views.py:481
+#: .\apps\project\specific\documents\certificates\views.py:489
 msgid ""
 "Verified file: this is a CERTIFIED DIGITAL COPY of the original and it is "
 "valid."
@@ -952,11 +945,11 @@ msgstr ""
 "Archivo verificado: es una COPIA DIGITAL CERTIFICADA del original y es "
 "válida."
 
-#: .\apps\project\specific\documents\certificates\views.py:488
+#: .\apps\project\specific\documents\certificates\views.py:496
 msgid "Recognised by the exact fingerprint of the file (SHA-256)."
 msgstr "Reconocido por la huella exacta del archivo (SHA-256)."
 
-#: .\apps\project\specific\documents\certificates\views.py:491
+#: .\apps\project\specific\documents\certificates\views.py:499
 msgid ""
 "The bytes of the file changed (typically document metadata rewritten while "
 "it was emailed or re-saved), but its renderable content matches the "
@@ -966,7 +959,7 @@ msgstr ""
 "reescritos al enviarlo por correo o al reguardarlo), pero su contenido "
 "visible coincide exactamente con el certificado, página a página."
 
-#: .\apps\project\specific\documents\certificates\views.py:616
+#: .\apps\project\specific\documents\certificates\views.py:624
 msgid ""
 "This platform is not configured with a public signing key. Certification "
 "records are sealed with a symmetric HMAC that only the platform itself can "
@@ -976,7 +969,7 @@ msgstr ""
 "registros de certificación se sellan con un HMAC simétrico que solo la "
 "propia plataforma puede verificar."
 
-#: .\apps\project\specific\documents\certificates\views.py:631
+#: .\apps\project\specific\documents\certificates\views.py:639
 msgid ""
 "The \"seal.signature\" field of a GEA certification record, over every other "
 "field serialised as compact JSON with sorted keys, UTF-8."
@@ -985,30 +978,39 @@ msgstr ""
 "todos los demás campos serializados como JSON compacto con las claves "
 "ordenadas, en UTF-8."
 
-#: .\apps\project\specific\documents\certificates\views.py:717
+#: .\apps\project\specific\documents\certificates\views.py:725
 msgid "AEGIS Documents Certificates"
 msgstr "Certificados de documentos AEGIS"
 
-#: .\apps\project\specific\documents\certificates\views.py:719
+#: .\apps\project\specific\documents\certificates\views.py:727
 msgid ""
 "Verify documents protected and issued through the AEGIS certification system."
 msgstr ""
 "Verifica documentos protegidos y emitidos a través del sistema de "
 "certificación AEGIS."
 
-#: .\apps\project\specific\documents\certificates\views.py:727
+#: .\apps\project\specific\documents\certificates\views.py:735
 msgid "IPCON Employee Certificate"
 msgstr "Certificado de empleado IPCON"
 
-#: .\apps\project\specific\documents\certificates\views.py:729
+#: .\apps\project\specific\documents\certificates\views.py:737
 msgid "Validate employment and institutional certificates issued by IPCON."
 msgstr ""
 "Valida los certificados laborales e institucionales emitidos por IPCON."
 
-#: apps/project/specific/documents/certificates/utils.py
-msgid "Verification at Propensiones (GEA): here is the 6-digit verification code you requested"
-msgstr "Verificación en Propensiones (GEA): aquí tienes el código de verificación de 6 dígitos que has solicitado"
+#~ msgid "Your document verification code"
+#~ msgstr "Tu código de verificación para los documentos"
 
-#: apps/project/specific/documents/certificates/utils.py
-msgid "Use the following code to validate the certifications."
-msgstr "Utiliza el siguiente código para validar las certificaciones."
+#, python-brace-format
+#~ msgid ""
+#~ "Your verification code is:\n"
+#~ "\n"
+#~ "{otp}\n"
+#~ "\n"
+#~ "This code expires in 10 minutes."
+#~ msgstr ""
+#~ "Tu código de verificación es:\n"
+#~ "\n"
+#~ "{otp}\n"
+#~ "\n"
+#~ "Este código caduca en 10 minutos."

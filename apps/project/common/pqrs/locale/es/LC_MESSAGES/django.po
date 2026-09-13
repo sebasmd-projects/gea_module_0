@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-01 07:54-0500\n"
+"POT-Creation-Date: 2026-09-13 13:10-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 #: .\apps\project\common\pqrs\admin.py:32
 msgid "deadline"
 msgstr ""
@@ -98,7 +99,7 @@ msgstr ""
 msgid "%(count)s were already extended: the law allows one extension only."
 msgstr ""
 
-#: .\apps\project\common\pqrs\apps.py:8 .\apps\project\common\pqrs\views.py:140
+#: .\apps\project\common\pqrs\apps.py:8 .\apps\project\common\pqrs\views.py:149
 msgid "Requests and complaints (PQRS)"
 msgstr ""
 
@@ -113,7 +114,7 @@ msgid "The file is too large. The maximum is %(size)s MB."
 msgstr ""
 
 #: .\apps\project\common\pqrs\forms.py:73
-#: .\apps\project\common\pqrs\views.py:93
+#: .\apps\project\common\pqrs\views.py:95
 msgid "Type of request"
 msgstr ""
 
@@ -368,7 +369,7 @@ msgid "To prove who is making the request."
 msgstr ""
 
 #: .\apps\project\common\pqrs\models.py:189
-#: .\apps\project\common\pqrs\views.py:95
+#: .\apps\project\common\pqrs\views.py:97
 msgid "Description"
 msgstr ""
 
@@ -462,30 +463,30 @@ msgstr ""
 msgid "PQRS requests"
 msgstr ""
 
-#: .\apps\project\common\pqrs\views.py:94
+#: .\apps\project\common\pqrs\views.py:96
 msgid "Your details"
 msgstr ""
 
-#: .\apps\project\common\pqrs\views.py:96
+#: .\apps\project\common\pqrs\views.py:98
 msgid "How to reach you"
 msgstr ""
 
-#: .\apps\project\common\pqrs\views.py:97
+#: .\apps\project\common\pqrs\views.py:99
 msgid "Confirmation"
 msgstr ""
 
-#: .\apps\project\common\pqrs\views.py:193
+#: .\apps\project\common\pqrs\views.py:202
 msgid ""
 "Too many requests from this connection. Try again later, or write to us "
 "directly."
 msgstr ""
 
-#: .\apps\project\common\pqrs\views.py:260
+#: .\apps\project\common\pqrs\views.py:269
 #, python-format
 msgid "We received your request %(radicado)s"
 msgstr ""
 
-#: .\apps\project\common\pqrs\views.py:264
+#: .\apps\project\common\pqrs\views.py:273
 #, python-format
 msgid ""
 "We received your request.\n"
@@ -498,12 +499,12 @@ msgid ""
 "Quote the reference if you need to ask about it.\n"
 msgstr ""
 
-#: .\apps\project\common\pqrs\views.py:300
+#: .\apps\project\common\pqrs\views.py:309
 #, python-format
 msgid "New PQRS: %(radicado)s"
 msgstr ""
 
-#: .\apps\project\common\pqrs\views.py:303
+#: .\apps\project\common\pqrs\views.py:312
 #, python-format
 msgid ""
 "%(kind)s from %(name)s.\n"

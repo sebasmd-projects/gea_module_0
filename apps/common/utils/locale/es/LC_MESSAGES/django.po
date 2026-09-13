@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-01 07:54-0500\n"
+"POT-Creation-Date: 2026-09-13 13:10-0500\n"
 "PO-Revision-Date: 2025-09-11 02:27-0500\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,33 +19,94 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.0\n"
 
-#: .\apps\common\utils\admin.py:41
+#: .\apps\common\utils\admin.py:45
 msgid "Minimum allowed: 1 record."
 msgstr "Mínimo permitido: 1 registro."
 
-#: .\apps\common\utils\admin.py:45
+#: .\apps\common\utils\admin.py:49
 msgid "Please enter a valid number."
 msgstr "Por favor, introduzca un número válido."
 
-#: .\apps\common\utils\admin.py:70
-msgid "Information"
-msgstr "Información"
+#: .\apps\common\utils\admin.py:110
+msgid "Block"
+msgstr ""
 
-#: .\apps\common\utils\admin.py:80
+#: .\apps\common\utils\admin.py:122
+msgid "Activity"
+msgstr ""
+
+#: .\apps\common\utils\admin.py:134
+msgid "Origin"
+msgstr ""
+
+#: .\apps\common\utils\admin.py:141
+msgid ""
+"Where the address lives. A person browses from a home or office address; a "
+"server does not browse. This is a hint for reading the row, never a reason "
+"to block on its own: a commercial VPN comes out of the same ranges."
+msgstr ""
+
+#: .\apps\common\utils\admin.py:149 .\apps\common\utils\admin.py:249
+msgid "Raw trail"
+msgstr ""
+
+#: .\apps\common\utils\admin.py:155
 msgid "Times"
 msgstr "Tiempos"
 
-#: .\apps\common\utils\admin.py:92
+#: .\apps\common\utils\admin.py:161
 msgid "Other"
 msgstr "Otros"
 
-#: .\apps\common\utils\middleware\block_suspicious_request.py:150
-#: .\apps\common\utils\views.py:129
+#: .\apps\common\utils\admin.py:169
+#, fuzzy
+#| msgid "is blocked"
+msgid "blocked"
+msgstr "está bloqueado"
+
+#: .\apps\common\utils\admin.py:184
+#, fuzzy
+#| msgid "is blocked"
+msgid "Blocked"
+msgstr "está bloqueado"
+
+#: .\apps\common\utils\admin.py:187
+msgid "left"
+msgstr ""
+
+#: .\apps\common\utils\admin.py:192
+msgid "Disabled"
+msgstr ""
+
+#: .\apps\common\utils\admin.py:196
+msgid "Expired"
+msgstr ""
+
+#: .\apps\common\utils\admin.py:198
+#, fuzzy
+#| msgid "blocked until"
+msgid "block length"
+msgstr "bloqueado hasta"
+
+#: .\apps\common\utils\admin.py:207
+msgid "origin"
+msgstr ""
+
+#: .\apps\common\utils\admin.py:225
+msgid "datacenter"
+msgstr ""
+
+#: .\apps\common\utils\admin.py:235 .\apps\common\utils\models.py:268
+msgid "user agent"
+msgstr ""
+
+#: .\apps\common\utils\middleware\block_suspicious_request.py:155
+#: .\apps\common\utils\views.py:131
 msgid "Error 404"
 msgstr "Error 404"
 
-#: .\apps\common\utils\middleware\block_suspicious_request.py:151
-#: .\apps\common\utils\views.py:130
+#: .\apps\common\utils\middleware\block_suspicious_request.py:156
+#: .\apps\common\utils\views.py:132
 msgid "Page not found"
 msgstr "Página no encontrada"
 
@@ -117,85 +178,144 @@ msgstr "Código único diario de GEA"
 msgid "GEA daily unique codes"
 msgstr "Códigos únicos diarios de GEA"
 
-#: .\apps\common\utils\models.py:210
+#: .\apps\common\utils\models.py:227
 msgid "Attempts to obtain forbidden urls"
 msgstr "Intentos de obtener URL prohibidas"
 
-#: .\apps\common\utils\models.py:212
+#: .\apps\common\utils\models.py:229
 msgid "Multiple failed security key entry attempts"
 msgstr "Múltiples intentos fallidos de ingreso de clave de seguridad"
 
-#: .\apps\common\utils\models.py:215
+#: .\apps\common\utils\models.py:234
+msgid "Enumerating paths that do not exist"
+msgstr ""
+
+#: .\apps\common\utils\models.py:235
+msgid "Known scanning tool"
+msgstr ""
+
+#: .\apps\common\utils\models.py:237
 msgid "is blocked"
 msgstr "está bloqueado"
 
-#: .\apps\common\utils\models.py:216 .\apps\common\utils\models.py:235
+#: .\apps\common\utils\models.py:238 .\apps\common\utils\models.py:382
 msgid "current user IP"
 msgstr "IP del usuario actual"
 
-#: .\apps\common\utils\models.py:218 .\apps\common\utils\models.py:240
+#: .\apps\common\utils\models.py:240 .\apps\common\utils\models.py:387
 msgid "reason"
 msgstr "razón"
 
-#: .\apps\common\utils\models.py:220
+#: .\apps\common\utils\models.py:242
 msgid "blocked until"
 msgstr "bloqueado hasta"
 
-#: .\apps\common\utils\models.py:222
+#: .\apps\common\utils\models.py:244
 msgid "session information"
 msgstr "información de la sesión"
 
-#: .\apps\common\utils\tests_toasts.py:67
+#: .\apps\common\utils\models.py:248
+msgid "attempts"
+msgstr ""
+
+#: .\apps\common\utils\models.py:251
+msgid "unique paths"
+msgstr ""
+
+#: .\apps\common\utils\models.py:254
+msgid ""
+"Distinct paths tried. Many attempts on one path is someone retrying; a few "
+"attempts on many paths is a scan."
+msgstr ""
+
+#: .\apps\common\utils\models.py:263
+msgid "first detection"
+msgstr ""
+
+#: .\apps\common\utils\models.py:265
+msgid "last detection"
+msgstr ""
+
+#: .\apps\common\utils\models.py:271
+msgid "pattern"
+msgstr ""
+
+#: .\apps\common\utils\models.py:275
+msgid "What tripped the block: the trap term, or the signature."
+msgstr ""
+
+#: .\apps\common\utils\models.py:280
+msgid "country"
+msgstr ""
+
+#: .\apps\common\utils\models.py:283
+msgid "network / ASN"
+msgstr ""
+
+#: .\apps\common\utils\models.py:286
+msgid "datacenter or cloud"
+msgstr ""
+
+#: .\apps\common\utils\models.py:290
+msgid ""
+"The IP belongs to a hosting provider range. A person browses from a home or "
+"office address; a server does not browse."
+msgstr ""
+
+#: .\apps\common\utils\tests\test_toasts.py:67
 msgid "Saved."
 msgstr ""
 
-#: .\apps\common\utils\views.py:81
+#: .\apps\common\utils\views.py:83
 msgid "Error 400"
 msgstr "Error 400"
 
-#: .\apps\common\utils\views.py:82
+#: .\apps\common\utils\views.py:84
 msgid "Bad Request"
 msgstr "Solicitud incorrecta"
 
-#: .\apps\common\utils\views.py:97
+#: .\apps\common\utils\views.py:99
 msgid "Error 401"
 msgstr "Error 401"
 
-#: .\apps\common\utils\views.py:98
+#: .\apps\common\utils\views.py:100
 msgid "Unauthorized Access"
 msgstr "Acceso no Autorizado"
 
-#: .\apps\common\utils\views.py:113
+#: .\apps\common\utils\views.py:115
 msgid "Error 403"
 msgstr "Error 403"
 
-#: .\apps\common\utils\views.py:114
+#: .\apps\common\utils\views.py:116
 msgid "Forbidden Access"
 msgstr "Acceso Prohibido"
 
-#: .\apps\common\utils\views.py:144
+#: .\apps\common\utils\views.py:146
 msgid "Error 500"
 msgstr "Error 500"
 
-#: .\apps\common\utils\views.py:145
+#: .\apps\common\utils\views.py:147
 msgid "Server error"
 msgstr "Error del servidor"
 
-#: .\apps\common\utils\views.py:159
+#: .\apps\common\utils\views.py:161
 msgid "Error 503"
 msgstr "Error 503"
 
-#: .\apps\common\utils\views.py:160
+#: .\apps\common\utils\views.py:162
 msgid "Service Unavailable"
 msgstr "Servicio No Disponible"
 
-#: .\apps\common\utils\views.py:174
+#: .\apps\common\utils\views.py:176
 msgid "Error 504"
 msgstr "Error 504"
 
-#: .\apps\common\utils\views.py:175
+#: .\apps\common\utils\views.py:177
 msgid "Gateway Timeout"
 msgstr "Tiempo de Espera Agotado del Gateway"
+
+#~ msgid "Information"
+#~ msgstr "Información"
 
 #~ msgid "CHAT_GPT_API_KEY not configured"
 #~ msgstr "API KEY de CHAT GPT no establecida"

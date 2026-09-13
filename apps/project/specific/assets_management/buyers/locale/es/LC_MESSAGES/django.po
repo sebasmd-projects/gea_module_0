@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-01 07:54-0500\n"
+"POT-Creation-Date: 2026-09-13 13:10-0500\n"
 "PO-Revision-Date: 2025-11-10 21:47+0000\n"
 "Last-Translator: Sebastian Morales <support@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Utiliza el flujo de aprobacion."
 
 #: .\apps\project\specific\assets_management\buyers\access.py:97
-#: .\apps\project\specific\assets_management\buyers\views.py:769
+#: .\apps\project\specific\assets_management\buyers\views.py:759
 msgid "You don't have permission to perform this action."
 msgstr "No tienes permisos para realizar esta acción."
 
@@ -495,29 +495,29 @@ msgstr "Destinatario de la orden de servicio"
 msgid "Service Order Recipients"
 msgstr "Destinatarios de la orden de servicio"
 
-#: .\apps\project\specific\assets_management\buyers\views.py:319
+#: .\apps\project\specific\assets_management\buyers\views.py:320
 msgid "Your Purchase order has been sent for verification."
 msgstr "Su orden de compra ha sido enviada para verificación."
 
-#: .\apps\project\specific\assets_management\buyers\views.py:344
+#: .\apps\project\specific\assets_management\buyers\views.py:345
 msgid "New Purchase order Submitted for Verification"
 msgstr "Nueva orden de compra enviada para verificación"
 
-#: .\apps\project\specific\assets_management\buyers\views.py:657
+#: .\apps\project\specific\assets_management\buyers\views.py:654
 msgid "The service order cannot be sent before the purchase order is approved."
 msgstr ""
 "No se puede enviar la orden de servicio antes de que la orden de compra este "
 "aprobada."
 
-#: .\apps\project\specific\assets_management\buyers\views.py:666
+#: .\apps\project\specific\assets_management\buyers\views.py:663
 msgid "No recipients to notify."
 msgstr "No hay destinatarios a notificar."
 
-#: .\apps\project\specific\assets_management\buyers\views.py:689
+#: .\apps\project\specific\assets_management\buyers\views.py:686
 #, python-format
 msgid "Service Order Notification for OC: %(po)s"
 msgstr "Notificación de Orden de servicio para OC: %(po)s"
 
-#: .\apps\project\specific\assets_management\buyers\views.py:831
+#: .\apps\project\specific\assets_management\buyers\views.py:821
 msgid "Unknown step."
 msgstr "Paso desconocido."
