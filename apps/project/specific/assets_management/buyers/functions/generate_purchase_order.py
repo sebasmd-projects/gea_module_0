@@ -8,7 +8,7 @@ from reportlab.lib.units import mm
 from reportlab.platypus import (Image, Paragraph, SimpleDocTemplate, Spacer,
                                 Table, TableStyle)
 
-from .generate_pdf_helper import build_offer_image_story
+from .generate_pdf_helper import brand_image, build_offer_image_story
 
 
 def generate_purchase_order_pdf(offer, user):
@@ -25,14 +25,16 @@ def generate_purchase_order_pdf(offer, user):
     styles = getSampleStyleSheet()
 
     # ---------------- LOGOS ----------------
-    logo_header = Image(
-        "https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/ipcon_brands_po_so.webp",
+    logo_header = brand_image(
+        "assets/imgs/logos/ipcon_brands_po_so.webp",
         width=doc.width,
         height=80
     )
-    logo_header.hAlign = "CENTER"  # Centra la imagen en el PDF
 
-    elements.append(logo_header)
+    if logo_header is not None:
+        logo_header.hAlign = "CENTER"  # Centra la imagen en el PDF
+        elements.append(logo_header)
+
     elements.append(Spacer(1, 20))
 
     # ---------------- BARCODE ----------------
@@ -206,11 +208,11 @@ def generate_purchase_order_pdf(offer, user):
     elements.append(Spacer(1, 30))
 
     # ---------------- FOOTER ----------------
-    footer_img = Image(
-        "https://geausa.propensionesabogados.com/public/static/assets/imgs/purchase_order/stamp_mitch.webp",
+    footer_img = brand_image(
+        "assets/imgs/purchase_order/stamp_mitch.webp",
         width=80,
         height=80
-    )
+    ) or Spacer(80, 80)
 
     contacto = "\nmitch@recoveryrepatriationfoundation.com\n+1 609 342 71 06"
 
@@ -230,11 +232,11 @@ def generate_purchase_order_pdf(offer, user):
 
     # Footer completo: bloque contacto a la izquierda + firma a la derecha
     # Sello izquierdo (Mitch)
-    stamp_left = Image(
-        "https://geausa.propensionesabogados.com/public/static/assets/imgs/purchase_order/stamp_mitch.webp",
+    stamp_left = brand_image(
+        "assets/imgs/purchase_order/stamp_mitch.webp",
         width=80,
         height=80
-    )
+    ) or Spacer(80, 80)
 
     contacto_left = Paragraph(
         "mitch@recoveryrepatriationfoundation.com<br/>+1 609 342 71 06",
@@ -257,11 +259,11 @@ def generate_purchase_order_pdf(offer, user):
 
 
     # Sello derecho (Propensiones)
-    stamp_right = Image(
-        "https://geausa.propensionesabogados.com/public/static/assets/imgs/purchase_order/stamp_propensiones.webp",
+    stamp_right = brand_image(
+        "assets/imgs/purchase_order/stamp_propensiones.webp",
         width=80,
         height=80
-    )
+    ) or Spacer(80, 80)
 
     contacto_right = Paragraph(
         "director@propensionesabogados.com<br/>+57 3012283818",

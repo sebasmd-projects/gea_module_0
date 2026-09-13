@@ -29,6 +29,7 @@ from django.test import SimpleTestCase, override_settings
 
 from ..logs import (human_size, next_number, prune, rotate, rotated_files,
                    rotated_name, should_rotate)
+from ..testing import posix_rename_only
 
 
 class LogDirectoryMixin:
@@ -155,6 +156,19 @@ class TestARunningWorkerFollowsTheRotation(LogDirectoryMixin, SimpleTestCase):
 
     Renombrar no afecta a un descriptor ya abierto. Si el handler no reabre,
     rotar deja el log roto en silencio.
+
+    **Las dos primeras solo tienen sentido en POSIX**, y no por un detalle de
+    permisos: en Windows **no se puede renombrar un fichero que esta abierto**
+    -- el sistema lo bloquea y `rename()` levanta `WinError 32`. O sea que lo
+    que estas dos prueban no es que funcione mal alli: es que *no existe*
+    alli. La documentacion de Python lo dice de `WatchedFileHandler` con todas
+    las letras, que no sirve en Windows por exactamente esto.
+
+    Se marcan en vez de borrarse porque el mecanismo **si** es el de
+    produccion, que es Linux. Saltarlas en un portatil dice la verdad;
+    quitarlas diria que a nadie le importa como rota el log del servidor. La
+    tercera no renombra nada --lee los ajustes-- y corre en todas partes, que
+    es justo la que impide que alguien cambie el handler por descuido.
     """
 
     def make_logger(self, handler_class):
@@ -168,6 +182,7 @@ class TestARunningWorkerFollowsTheRotation(LogDirectoryMixin, SimpleTestCase):
 
         return logger, handler
 
+    @posix_rename_only
     def test_the_configured_handler_reopens_the_new_file(self):
         logger, handler = self.make_logger(
             logging.handlers.WatchedFileHandler
@@ -185,6 +200,7 @@ class TestARunningWorkerFollowsTheRotation(LogDirectoryMixin, SimpleTestCase):
         self.assertIn('despues de rotar', self.current.read_text(encoding='utf-8'))
         self.assertNotIn('despues de rotar', target.read_text(encoding='utf-8'))
 
+    @posix_rename_only
     def test_a_plain_file_handler_would_lose_everything(self):
         """
         El fallo del que protege el cambio de handler, fijado aqui para que se

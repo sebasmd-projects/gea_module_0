@@ -23,6 +23,8 @@ nuevo se quede vacio para siempre. Ver ``apps/common/utils/logs.py``.
     manage.py rotate_logs --max-mb 10 --keep 20
 """
 
+import os
+
 from django.core.management.base import BaseCommand
 
 from apps.common.utils.logs import (DEFAULT_KEEP, DEFAULT_MAX_BYTES,
@@ -90,6 +92,21 @@ class Command(BaseCommand):
             self.stderr.write(self.style.ERROR(
                 f'No se pudo rotar: {error}'
             ))
+
+            # En Windows esto casi siempre es lo mismo, y el mensaje del
+            # sistema no lo explica: alli **no se puede renombrar un fichero
+            # abierto**. Rotar es renombrar, asi que con el servidor de
+            # desarrollo levantado esto no puede funcionar -- y sin decirlo,
+            # quien lo vea buscara un problema de permisos que no existe.
+            if os.name != 'posix':
+                self.stderr.write(
+                    'En Windows no se puede renombrar un fichero que esta '
+                    'abierto, y rotar es renombrar: con la aplicacion '
+                    'levantada esto no va a funcionar. No es un problema de '
+                    'permisos ni de configuracion. La rotacion es del '
+                    'servidor, que es Linux.'
+                )
+
             raise SystemExit(1)
 
         self.stdout.write(self.style.SUCCESS(f'Rotado a {target.name}.'))
