@@ -9,8 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-01 07:54-0500\n"
 "PO-Revision-Date: 2024-12-15 02:02-0500\n"
-"Last-Translator: Sebastián Morales "
-"<sebastian.morales@propensionesabogados.com>\n"
+"Last-Translator: Sebastián Morales <sebastian.morales@propensionesabogados.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -49,16 +48,15 @@ msgid "Live preview"
 msgstr "Vista previa en vivo"
 
 #: .\apps\project\specific\internal\code_gen\admin.py:148
-#, fuzzy
 #| msgid ""
-#| "Updates as you edit the placements below. Drag a box to move it: the "
-#| "offsets are written back into the form."
+#| "Updates as you edit the placements below. Drag a box to move it: the offsets"
+#| " are written back into the form."
 msgid ""
 "Updates as you edit the placements below. Drag a summary to move it: the "
 "offsets are written back into the form."
 msgstr ""
 "Se actualiza mientras editas las posiciones de abajo. Arrastra un resumen "
-"para moverla: los desplazamientos se escriben de vuelta en el formulario."
+"para moverlo: los desplazamientos se escriben de vuelta en el formulario."
 
 #: .\apps\project\specific\internal\code_gen\admin.py:159
 msgid "Placements"
@@ -112,10 +110,10 @@ msgid "Placement %(number)s: opacity must be between 0 and 1."
 msgstr "Posición %(number)s: la opacidad debe estar entre 0 y 1."
 
 #: .\apps\project\specific\internal\code_gen\api.py:146
-#, fuzzy, python-format
+#, python-format
 #| msgid ""
-#| "Placement %(number)s: a member barcode must say which document of the box "
-#| "it carries."
+#| "Placement %(number)s: a member barcode must say which document of the box it"
+#| " carries."
 msgid ""
 "Placement %(number)s: a member barcode must say which document of the "
 "summary it carries."
@@ -142,7 +140,7 @@ msgstr "Disposición de estampado creada."
 #: .\apps\project\specific\internal\code_gen\api.py:348
 #: .\apps\project\specific\internal\code_gen\views.py:566
 msgid "Not sent"
-msgstr ""
+msgstr "Sin enviar"
 
 #: .\apps\project\specific\internal\code_gen\api.py:401
 msgid "\"members\" must be a list."
@@ -179,7 +177,7 @@ msgstr "Miembros actualizados. Hay que volver a sellar el resumen."
 
 #: .\apps\project\specific\internal\code_gen\api.py:546
 msgid "It was already sent to the blockchain."
-msgstr ""
+msgstr "Ya se envió a la cadena de bloques."
 
 #: .\apps\project\specific\internal\code_gen\api.py:554
 #, python-format
@@ -189,6 +187,10 @@ msgid ""
 "anchoring» in the operations console to see whether this server has the "
 "library and outbound access."
 msgstr ""
+"Sellado, pero los calendarios de la cadena de bloques no respondieron "
+"(%(reason)s). El sellado está guardado; envíalo más tarde con «Enviar a la "
+"cadena de bloques». Ejecuta «Anclaje en blockchain» en la consola de "
+"operaciones para ver si este servidor tiene la librería y salida a internet."
 
 #: .\apps\project\specific\internal\code_gen\api.py:562
 #, python-format
@@ -199,66 +201,84 @@ msgid ""
 "«Dependencies» in the operations console that the package actually reached "
 "that file."
 msgstr ""
+"Sellado, pero la librería OpenTimestamps no está instalada en este servidor "
+"(%(reason)s). El sellado está guardado. Esto se arregla instalando "
+"requirements.txt con pip en el servidor, no desde aquí: comprueba antes con "
+"«Dependencias», en la consola de operaciones, que el paquete llegó de verdad"
+" a ese fichero."
 
 #: .\apps\project\specific\internal\code_gen\api.py:571
 #, python-format
 msgid ""
-"Sealed, but sending to the blockchain failed: %(kind)s: %(reason)s. The seal "
-"is saved; send it later with «Send to blockchain». Run «Blockchain "
+"Sealed, but sending to the blockchain failed: %(kind)s: %(reason)s. The seal"
+" is saved; send it later with «Send to blockchain». Run «Blockchain "
 "anchoring» in the operations console for a full diagnosis."
 msgstr ""
+"Sellado, pero el envío a la cadena de bloques falló: %(kind)s: %(reason)s. "
+"El sellado está guardado; envíalo más tarde con «Enviar a la cadena de "
+"bloques». Ejecuta «Anclaje en blockchain» en la consola de operaciones para "
+"un diagnóstico completo."
 
 #: .\apps\project\specific\internal\code_gen\api.py:578
 msgid ""
 "Sealed and sent to the blockchain. The proof is born pending: it matures "
 "into a Bitcoin block within a few hours, on its own."
 msgstr ""
+"Sellado y enviado a la cadena de bloques. La prueba nace pendiente: madura "
+"hasta un bloque de Bitcoin en unas horas, ella sola."
 
 #: .\apps\project\specific\internal\code_gen\api.py:615
 msgid "Summary sealed."
 msgstr "Resumen sellado."
 
 #: .\apps\project\specific\internal\code_gen\api.py:650
-#, fuzzy
 #| msgid "Seal the summary before anchoring it."
 msgid "Seal the summary before sending it."
-msgstr "Sella el resumen antes de anclarlo."
+msgstr "Sella el resumen antes de enviarlo."
 
 #: .\apps\project\specific\internal\code_gen\api.py:658
 msgid ""
-"Sent to the blockchain. The proof is born pending: it matures into a Bitcoin "
-"block within a few hours, on its own."
+"Sent to the blockchain. The proof is born pending: it matures into a Bitcoin"
+" block within a few hours, on its own."
 msgstr ""
+"Enviado a la cadena de bloques. La prueba nace pendiente: madura hasta un "
+"bloque de Bitcoin en unas horas, ella sola."
 
 #: .\apps\project\specific\internal\code_gen\api.py:707
-#, fuzzy
 #| msgid "Seal the summary before issuing its document."
 msgid ""
 "Seal the summary before issuing its document: it carries the master hash "
 "inside."
-msgstr "Sella el resumen antes de emitir su documento."
+msgstr ""
+"Sella el resumen antes de emitir su documento: lleva el master hash dentro."
 
 #: .\apps\project\specific\internal\code_gen\api.py:719
 msgid ""
 "Upload the summary PDF without codes: there is no original stored yet to "
 "stamp over."
 msgstr ""
+"Sube el PDF del resumen sin códigos: todavía no hay un original guardado "
+"sobre el que estampar."
 
 #: .\apps\project\specific\internal\code_gen\api.py:730
 msgid "Choose a stamp layout: it decides where each code goes on the page."
 msgstr ""
+"Elige una disposición de estampado: es la que decide dónde va cada código en"
+" la página."
 
 #: .\apps\project\specific\internal\code_gen\api.py:753
-#, fuzzy, python-format
+#, python-format
 #| msgid "The stored token could not be parsed."
 msgid "The summary document could not be issued: %(error)s"
-msgstr "No se pudo interpretar el token almacenado."
+msgstr "No se pudo emitir el documento del resumen: %(error)s"
 
 #: .\apps\project\specific\internal\code_gen\api.py:762
 msgid ""
 "Summary document issued. Its QR points at the anchor page, which updates "
 "itself: there is nothing to reissue when the Bitcoin block arrives."
 msgstr ""
+"Documento del resumen emitido. Su QR apunta a la página de anclaje, que se "
+"actualiza sola: no hay nada que reemitir cuando llegue el bloque de Bitcoin."
 
 #: .\apps\project\specific\internal\code_gen\apps.py:8
 msgid "Code generation and document certification"
@@ -336,8 +356,8 @@ msgid ""
 "Requires uploading the document. The code carries the base64 fingerprint of "
 "the original file."
 msgstr ""
-"Requiere subir el documento. El código lleva la huella en base64 del archivo "
-"original."
+"Requiere subir el documento. El código lleva la huella en base64 del archivo"
+" original."
 
 #: .\apps\project\specific\internal\code_gen\forms.py:119
 msgid "Hash characters"
@@ -365,8 +385,8 @@ msgid ""
 "Only letters, digits, spaces and . _ - are allowed. URLs cannot be encoded "
 "in a barcode."
 msgstr ""
-"Solo se admiten letras, dígitos, espacios y los símbolos . _ - . Las URLs no "
-"se pueden codificar en un código de barras."
+"Solo se admiten letras, dígitos, espacios y los símbolos . _ - . Las URLs no"
+" se pueden codificar en un código de barras."
 
 #: .\apps\project\specific\internal\code_gen\forms.py:162
 msgid "Generate QR code"
@@ -393,8 +413,8 @@ msgid ""
 "Embeds the codes in the PDF, computes its fingerprints and issues the "
 "distributable digital copy."
 msgstr ""
-"Incrusta los códigos en el PDF, calcula sus huellas y emite la copia digital "
-"distribuible."
+"Incrusta los códigos en el PDF, calcula sus huellas y emite la copia digital"
+" distribuible."
 
 #: .\apps\project\specific\internal\code_gen\forms.py:214
 msgid "Document title"
@@ -426,12 +446,10 @@ msgid "Accepted formats: %(formats)s."
 msgstr "Formatos aceptados: %(formats)s."
 
 #: .\apps\project\specific\internal\code_gen\forms.py:271
-#, fuzzy
 #| msgid ""
-#| "What kind of document this is. It is shown on the public verification "
-#| "page, under the document title. Use \"Asset Certificate (AEGIS)\" for the "
-#| "certificates of a box of assets, and \"Generic Document\" for anything "
-#| "else."
+#| "What kind of document this is. It is shown on the public verification page, "
+#| "under the document title. Use \"Asset Certificate (AEGIS)\" for the "
+#| "certificates of a box of assets, and \"Generic Document\" for anything else."
 msgid ""
 "What kind of document this is. It is shown on the public verification page, "
 "under the document title. Use \"Asset Certificate (AEGIS)\" for the "
@@ -439,8 +457,8 @@ msgid ""
 "else."
 msgstr ""
 "Qué clase de documento es. Aparece en la página pública de verificación, "
-"debajo del título. Usa «Certificado de activo (AEGIS)» para los certificados "
-"de un resumen de activos, y «Documento genérico» para todo lo demás."
+"debajo del título. Usa «Certificado de activo (AEGIS)» para los certificados"
+" de un resumen de activos, y «Documento genérico» para todo lo demás."
 
 #: .\apps\project\specific\internal\code_gen\forms.py:290
 #: .\apps\project\specific\internal\code_gen\services\certification.py:203
@@ -474,8 +492,8 @@ msgid ""
 "The public verification URL only exists once the document is certified. "
 "Certify the document or choose another QR content."
 msgstr ""
-"La URL pública de verificación solo existe una vez certificado el documento. "
-"Certifica el documento o elige otro contenido para el QR."
+"La URL pública de verificación solo existe una vez certificado el documento."
+" Certifica el documento o elige otro contenido para el QR."
 
 #: .\apps\project\specific\internal\code_gen\forms.py:470
 msgid "— none —"
@@ -490,7 +508,6 @@ msgid "No asset matches."
 msgstr "Ningún activo coincide."
 
 #: .\apps\project\specific\internal\code_gen\forms.py:481
-#, fuzzy
 #| msgid ""
 #| "How this box is identified internally, e.g. \"AEGIS box - Zimbabwe gold "
 #| "micro-ingots\"."
@@ -498,7 +515,7 @@ msgid ""
 "How this summary is identified internally, e.g. \"AEGIS summary - Zimbabwe "
 "gold micro-ingots\"."
 msgstr ""
-"Cómo se identifica este resumen internamente, p. ej. «Caja AEGIS - "
+"Cómo se identifica este resumen internamente, p. ej. «Resumen AEGIS - "
 "microlingotes de oro de Zimbabue»."
 
 #: .\apps\project\specific\internal\code_gen\forms.py:485
@@ -610,10 +627,9 @@ msgid "Member code"
 msgstr "Código del miembro"
 
 #: .\apps\project\specific\internal\code_gen\models.py:197
-#, fuzzy
 #| msgid ""
-#| "Only for the member barcode: which document of the box this position "
-#| "carries (AEGIS-1, AEGIS-2…)."
+#| "Only for the member barcode: which document of the box this position carries"
+#| " (AEGIS-1, AEGIS-2…)."
 msgid ""
 "Only for the member barcode: which document of the summary this position "
 "carries (AEGIS-1, AEGIS-2…)."
@@ -660,9 +676,10 @@ msgid "Opacity"
 msgstr "Opacidad"
 
 #: .\apps\project\specific\internal\code_gen\models.py:258
-#, fuzzy
-#| msgid "A member barcode needs to say which document of the box it carries."
-msgid "A member barcode needs to say which document of the summary it carries."
+#| msgid ""
+#| "A member barcode needs to say which document of the box it carries."
+msgid ""
+"A member barcode needs to say which document of the summary it carries."
 msgstr ""
 "Un código de barras de miembro tiene que indicar qué documento del resumen "
 "lleva."
@@ -673,7 +690,8 @@ msgstr "Indica al menos un número de página para este selector."
 
 #: .\apps\project\specific\internal\code_gen\models.py:274
 msgid "Page numbers must be positive integers separated by commas."
-msgstr "Los números de página deben ser enteros positivos separados por comas."
+msgstr ""
+"Los números de página deben ser enteros positivos separados por comas."
 
 #: .\apps\project\specific\internal\code_gen\models.py:279
 msgid "Opacity must be greater than 0 and up to 1."
@@ -818,8 +836,8 @@ msgstr "Tamaño de página"
 #: .\apps\project\specific\internal\code_gen\preview.py:27
 msgid "Drag a box to move it; the offsets update as you go."
 msgstr ""
-"Arrastra un resumen para moverla; los desplazamientos se actualizan sobre la "
-"marcha."
+"Arrastra un resumen para moverla; los desplazamientos se actualizan sobre la"
+" marcha."
 
 #: .\apps\project\specific\internal\code_gen\preview.py:28
 msgid "Rendering the document…"
@@ -842,14 +860,14 @@ msgid ""
 "Drag a corner to resize keeping the proportion, or an edge to change only "
 "the width or the height."
 msgstr ""
-"Arrastra una esquina para redimensionar conservando la proporción, o un lado "
-"para cambiar solo el ancho o el alto."
+"Arrastra una esquina para redimensionar conservando la proporción, o un lado"
+" para cambiar solo el ancho o el alto."
 
 #: .\apps\project\specific\internal\code_gen\preview.py:39
 #, python-format
 msgid ""
-"The symbol keeps its proportion, so it uses %(w)s x %(h)s pt of the %(bw)s x "
-"%(bh)s pt box."
+"The symbol keeps its proportion, so it uses %(w)s x %(h)s pt of the %(bw)s x"
+" %(bh)s pt box."
 msgstr ""
 "El símbolo conserva su proporción, así que ocupa %(w)s x %(h)s pt del "
 "resumen de %(bw)s x %(bh)s pt."
@@ -952,8 +970,8 @@ msgid ""
 "The barcode text is too long (%(length)s characters). The maximum is "
 "%(maximum)s."
 msgstr ""
-"El texto del código de barras es demasiado largo (%(length)s caracteres). El "
-"máximo es %(maximum)s."
+"El texto del código de barras es demasiado largo (%(length)s caracteres). El"
+" máximo es %(maximum)s."
 
 #: .\apps\project\specific\internal\code_gen\services\codes.py:124
 #, python-format

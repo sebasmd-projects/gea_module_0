@@ -21,7 +21,7 @@ msgstr ""
 
 #: .\app_core\admin.py:153
 msgid "Operations console"
-msgstr ""
+msgstr "Consola de operaciones"
 
 #~ msgid "API documentation and endpoint representation"
 #~ msgstr "Documentación de API y representación de puntos finales"
