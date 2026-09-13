@@ -14,7 +14,7 @@ desplegar**, que es lo único que no se puede comprobar desde un portátil.
 | [1. Antes de desplegar](#1-antes-de-desplegar) | Lo que puede tumbar el servidor |
 | [2. Qué se subió](#2-qué-se-subió) | Versiones, antes y después |
 | [3. Checklist de cambios rompedores](#3-checklist-de-cambios-rompedores) | 5.0, 5.1 y 5.2, uno a uno |
-| [4. Lo que hubo que cambiar](#4-lo-que-hubo-que-cambiar) | Tres cosas, y por qué |
+| [4. Lo que hubo que cambiar](#4-lo-que-hubo-que-cambiar) | Cuatro cosas, y por qué |
 | [5. Limpieza de dependencias](#5-limpieza-de-dependencias) | Lo que sobraba |
 | [6. Cómo se verificó](#6-cómo-se-verificó) | Qué se ejecutó de verdad |
 | [7. Lo siguiente: Django 6.0](#7-lo-siguiente-django-60) | Qué ya está preparado |
@@ -54,6 +54,8 @@ La primera línea de la salida lo dice ahora:
 Si el motor está por debajo, **no despliegues**: la aplicación no arrancará, y
 el sitio se queda caído hasta que se revierta. Primero hay que subir la base de
 datos desde cPanel o pedirlo al hosting.
+
+⚠️ **Y si el motor es MariaDB 10.7 o superior**, lee la §4.4 antes de nada: Django 5.0 cambió cómo se escriben los UUID en las consultas, y con una base creada por Django 4.2 eso rompe el acceso **sin dar ningún error**. Ya está resuelto en el código; lo que hay que saber es que no se puede quitar.
 
 Lo demás del despliegue es lo de siempre:
 
@@ -102,6 +104,7 @@ Cada línea se comprobó **contra este código**, no contra las notas de versió
 
 | Cambio | ¿Afecta? | Comprobado |
 |---|---|---|
+| **`UUIDField` pasa al tipo nativo `uuid` en MariaDB 10.7+** | **Sí, y rompe el acceso** | Ver §4.4. **Este se escapó del checklist** |
 | Se quita `django.utils.timezone.utc` | No | Sin usos |
 | Se quita el soporte de `pytz` y `USE_DEPRECATED_PYTZ` | No | Sin usos |
 | Se quita `USE_L10N` | No | No está en `settings.py` |
@@ -137,7 +140,7 @@ Cada línea se comprobó **contra este código**, no contra las notas de versió
 
 ## 4. Lo que hubo que cambiar
 
-Tres cosas. Ninguna de negocio.
+Cuatro cosas. Ninguna de negocio.
 
 ### 4.1 `CheckConstraint(check=…)` → `condition=`
 
@@ -178,6 +181,64 @@ PostgreSQL en local era imposible sin editar `settings.py`.
 
 Ahora el diccionario base va vacío y cada motor pone las suyas abajo. **La
 configuración de MySQL en producción no cambia ni un carácter.**
+
+### 4.4 Los UUID se siguen guardando como estaban (MariaDB 10.7+)
+
+**Éste se escapó del checklist, y es el que más daño hizo.** Se revisó qué
+APIs de Python cambiaban, no qué cambiaba en el **almacenamiento**. El aviso
+de que faltaba llegó desde producción, no desde aquí.
+
+Django 5.0 empezó a usar el tipo nativo `uuid` de MariaDB 10.7 o superior:
+
+```python
+# django/db/backends/mysql/features.py
+@cached_property
+def has_native_uuid_field(self):
+    is_mariadb = self.connection.mysql_is_mariadb
+    return is_mariadb and self.connection.mysql_version >= (10, 7)
+
+# django/db/models/fields/__init__.py, UUIDField.get_db_prep_value
+if connection.features.has_native_uuid_field:
+    return value          # con guiones: 'd717d90c-5e8c-45a7-...'
+return value.hex          # sin guiones: 'd717d90c5e8c45a7...'
+```
+
+Una base creada con Django 4.2 tiene la columna como `char(32)` y los valores
+en hex **sin guiones**. Al subir, las consultas pasan a mandar el UUID **con
+guiones** contra esa misma columna.
+
+**No falla: se queda en silencio.** La fila existe, se lee, y
+`filter(username=...)` la encuentra; sólo deja de funcionar lo que busca **por
+clave primaria**. En el acceso eso significa que la contraseña se acepta —el
+backend busca por `username` o por `email_hash`— y acto seguido el asistente
+no puede recargar al usuario por su pk:
+
+```
+Acceso: se llegó al final del asistente sin usuario en el almacén.
+Motivo: no hay ninguna cuenta con pk=d717d90c-5e8c-45a7-... en
+propensi_geausadb en 127.0.0.1:3307, pero acaba de identificarse con esa clave
+```
+
+**Se apaga en vez de migrar la base.** `app_core/db/mysql` es el backend de
+Django con `has_native_uuid_field = False`, y `settings.py` lo instala cuando
+el `.env` declara MySQL (`app_core/db/engine_for()`). Migrar sería convertir
+diez columnas `UUIDField` **y todas las claves ajenas que apuntan a ellas**
+—usuarios, activos, ubicaciones, órdenes, certificados— en una base en
+producción, de una vez y sin poder volver atrás a mitad. El tipo nativo no
+aporta nada que este proyecto use: lo que aporta es que MariaDB muestre el
+UUID formateado.
+
+Apagarlo devuelve exactamente el comportamiento con el que se escribieron esos
+datos, y es reversible: migrar sigue siendo posible el día que compense.
+
+En MySQL (el de Oracle, no MariaDB) y en PostgreSQL esto no cambia nada.
+
+**La lección para la próxima subida**: un checklist de cambios rompedores que
+sólo mira el código propio no ve los que ocurren entre el ORM y el motor. Lo
+que lo habría cazado es una prueba contra el motor de producción, y la suite
+corre sobre SQLite por una razón que sigue siendo válida (§6). Mientras sea
+así, cada subida de Django necesita **una entrada de sesión real contra la
+base de verdad** antes de darla por buena.
 
 ### 4.3 `check_health` dice qué versión de base de datos hay
 

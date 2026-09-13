@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 from import_export.formats.base_formats import CSV, HTML, JSON, TSV, XLS, XLSX
 
+from app_core.db import engine_for
 from app_core.env import check_environment
 
 load_dotenv()
@@ -312,6 +313,27 @@ ASGI_APPLICATION = 'app_core.asgi.application'
 
 ENV_DB_ENGINE = os.getenv('DB_ENGINE')
 
+# Con MySQL/MariaDB no se usa el backend de Django tal cual, sino el de
+# `app_core/db/mysql`, que es el mismo con una sola diferencia: los UUID se
+# siguen guardando como se guardaron.
+#
+# Django 5.0 empezo a usar el tipo nativo `uuid` de MariaDB 10.7+, y con el
+# cambian los valores que van en CADA consulta: con guiones en vez del hex.
+# Una base creada con 4.2 tiene `char(32)` con el hex, asi que al subir de
+# version las busquedas **por clave primaria dejan de encontrar nada** --y
+# nada falla: la fila se lee, `filter(username=...)` la encuentra, y solo
+# `filter(pk=...)` se queda vacio--. En el acceso eso se vio como una
+# contrasena aceptada y un asistente que no podia recargar al usuario.
+#
+# Se cambia aqui y no en `DB_ENGINE` para que el `.env` no tenga que tocarse
+# en cada despliegue ni en cada portatil: el valor que se escribe ahi sigue
+# siendo el de Django. El porque completo esta en `app_core/db/mysql/base.py`.
+#: Lo que dice el `.env`, que es contra lo que se decide todo lo de abajo.
+#: El motor que se instala puede ser otro; el declarado no cambia.
+DECLARED_DB_ENGINE = ENV_DB_ENGINE
+
+ENV_DB_ENGINE = engine_for(DECLARED_DB_ENGINE)
+
 DATABASES = {
     'default': {
         'ENGINE': ENV_DB_ENGINE,
@@ -337,12 +359,12 @@ DATABASES = {
     }
 }
 
-if ENV_DB_ENGINE == 'django.db.backends.mysql':
+if DECLARED_DB_ENGINE == 'django.db.backends.mysql':
     DATABASES['default']['CHARSET'] = os.getenv('DB_CHARSET', 'utf8mb4')
     DATABASES['default']['OPTIONS'] = {
         "init_command": "SET SESSION time_zone = '+00:00', sql_mode='STRICT_TRANS_TABLES'"}
 
-if not DEBUG and ENV_DB_ENGINE == 'django.db.backends.postgresql':
+if not DEBUG and DECLARED_DB_ENGINE == 'django.db.backends.postgresql':
     DATABASES['default']['OPTIONS'] = {
         'sslmode': os.getenv('DB_SSLMODE', 'prefer')}
 
