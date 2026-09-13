@@ -128,7 +128,7 @@ class TestTheTemplatesDoNotDeclareItAgain(SimpleTestCase):
 
     def test_only_the_base_template_loads_it(self):
         found = [
-            str(path.relative_to(Path(settings.BASE_DIR)))
+            path.relative_to(Path(settings.BASE_DIR)).as_posix()
             for path in self.templates_with_feather()
         ]
 

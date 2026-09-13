@@ -41,7 +41,7 @@ uv sync
 ## Exportar requirements
 
 ```cmd
-uv export --format=requirements-txt > requirements.txt
+uv export --format=requirements-txt -o requirements.txt
 ```
 
 ## Activar tunel
