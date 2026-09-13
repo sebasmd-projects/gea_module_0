@@ -44,6 +44,7 @@ camino más barato para quien atacaba era justo el que no dejaba rastro.
 import logging
 import time
 
+from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
@@ -519,7 +520,33 @@ class GeaLoginView(TwoFactorLoginView):
         exists = get_user_model()._default_manager.filter(pk=pk).first()
 
         if exists is None:
-            return f'no hay ninguna cuenta con pk={pk}'
+            # La cuenta ACABA de identificarse --si no, no habria pk-- y aun
+            # asi no se encuentra por su clave. Eso no es «se borro entre dos
+            # lineas»: es que la clave no viaja de vuelta.
+            #
+            # El caso conocido es un UUID guardado **con guiones** (36
+            # caracteres) en una columna que Django consulta con el hex de 32.
+            # La fila se lee perfectamente --y por eso `authenticate()`, que
+            # busca por username o por email_hash, la encuentra-- pero
+            # `filter(pk=...)` manda el hex y no coincide con nada. Pasa cuando
+            # las filas entraron por una via que no normalizo el UUID: una
+            # importacion a mano, un volcado de otro motor, una herramienta de
+            # base de datos.
+            #
+            # Se comprueba contando en `apps_users_user` las filas cuyo `id`
+            # no mida 32 caracteres. El texto no lleva la consulta escrita: en
+            # este fichero no se construye SQL, y dejar una cadena con forma de
+            # consulta obligaria a aceptar el aviso de bandit para todo el
+            # modulo -- con lo que un SQL de verdad entraria despues sin que
+            # nadie se enterara.
+            return (
+                f'no hay ninguna cuenta con pk={pk}, pero acaba de '
+                f'identificarse con esa clave. Mira como estan guardados los '
+                f'id en la tabla de usuarios (apps_users_user): un UUID '
+                f'escrito con guiones ocupa 36 caracteres, se lee bien y '
+                f'autentica, pero no se encuentra por pk, porque la consulta '
+                f'va con el hex de 32'
+            )
 
         return (
             f'la cuenta {pk} existe pero el backend la rechaza: '
@@ -541,10 +568,19 @@ class GeaLoginView(TwoFactorLoginView):
         self.storage.current_step = self.AUTH_STEP
         self._set_mode(MODE_PASSWORD)
 
-        messages.error(self.request, _(
+        aviso = _(
             'Your sign-in could not be completed because the session was '
             'lost. Please sign in again.'
-        ))
+        )
+
+        # En desarrollo, el motivo va tambien a la pantalla. Quien esta
+        # depurando esto no tiene por que ir a buscar el log --y si el log no
+        # esta configurado como cree, no lo encuentra--; en produccion no sale,
+        # porque diria a un desconocido si una cuenta existe o esta desactivada.
+        if settings.DEBUG:
+            aviso = f'{aviso} [DEBUG] {self._why_there_is_no_user()}'
+
+        messages.error(self.request, aviso)
 
         # Se responde con una redirección y no repintando la pantalla: así el
         # navegador queda en un GET y volver a recargar no reenvía el

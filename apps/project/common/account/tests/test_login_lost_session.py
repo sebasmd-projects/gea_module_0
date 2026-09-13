@@ -203,3 +203,36 @@ class WhyThereIsNoUserTests(TestCase):
         })
 
         self.assertIn('no sabe cargar usuarios', motivo)
+
+    def test_un_uuid_guardado_con_guiones_se_explica(self):
+        """
+        El caso real: la cuenta autentica y no se recarga por su clave.
+
+        Un UUID guardado **con guiones** ocupa 36 caracteres; la fila se lee
+        bien --y por eso `authenticate()`, que busca por username o por
+        email_hash, la encuentra-- pero `filter(pk=...)` manda el hex de 32 y
+        no coincide con nada. El sintoma es que el acceso se recarga sin decir
+        por que, y el motivo que se escribia antes --«no hay ninguna cuenta con
+        pk=X»-- era cierto y no ayudaba: la cuenta esta, no se encuentra.
+        """
+        from django.db import connection
+
+        pk_con_guiones = str(self.user.pk)
+        tabla = UserModel._meta.db_table
+        columna = UserModel._meta.pk.column
+
+        with connection.cursor() as cursor:
+            cursor.execute(
+                f'UPDATE {tabla} SET {columna} = %s WHERE username = %s',  # noqa: S608
+                [pk_con_guiones, 'clara'],
+            )
+
+        # Se sigue encontrando por nombre, que es como entra.
+        self.assertIsNotNone(UserModel.objects.filter(username='clara').first())
+
+        motivo = self._reason({
+            'user_pk': pk_con_guiones, 'user_backend': self.BACKEND,
+        })
+
+        self.assertIn('36 caracteres', motivo)
+        self.assertIn('apps_users_user', motivo)

@@ -80,8 +80,64 @@ class Command(BaseCommand):
         self.stdout.write('')
 
         self._database_version()
+        self._session_round_trip()
 
         return self._report(checks)
+
+    # ------------------------------------------------------------------
+    def _session_round_trip(self) -> None:
+        """
+        Que una sesion guardada se pueda volver a leer.
+
+        Casi todo lo que parece «raro» en el acceso es esto: el asistente
+        guarda a quien se identifico, o el codigo del correo, y la peticion
+        siguiente no lo encuentra. Desde fuera se ve como «el boton no hace
+        nada», «la pagina se recarga» o «el codigo no es valido», que son tres
+        sintomas distintos de la misma causa y ninguno la nombra.
+
+        Se escribe una sesion de verdad con el motor configurado, se vuelve a
+        cargar por su clave y se comprueba que el dato sigue ahi. Eso separa
+        «el almacen no guarda» --que es lo que se prueba aqui-- de «la cookie
+        no vuelve», que ya es cosa del navegador y no se puede ver desde un
+        comando.
+
+        No falla la comprobacion: informa. Y limpia lo que escribio.
+        """
+        from importlib import import_module
+
+        engine = getattr(settings, 'SESSION_ENGINE',
+                         'django.contrib.sessions.backends.db')
+
+        try:
+            store = import_module(engine).SessionStore()
+            store['gea_health'] = 'ok'
+            store.create()
+            key = store.session_key
+
+            reloaded = import_module(engine).SessionStore(session_key=key)
+            value = reloaded.get('gea_health')
+
+            reloaded.delete()
+        except Exception as error:                      # noqa: BLE001
+            self.stdout.write(self.style.ERROR(
+                f'  Sesiones: {engine} — no se pudo probar: '
+                f'{error.__class__.__name__}: {error}'
+            ))
+            self.stdout.write('')
+            return
+
+        line = f'  Sesiones: {engine.rsplit(".", 1)[-1]}'
+
+        if value == 'ok':
+            self.stdout.write(self.style.SUCCESS(f'{line} — guarda y relee'))
+        else:
+            self.stdout.write(self.style.ERROR(
+                f'{line} — GUARDA PERO NO RELEE. Con este motor, todo lo que '
+                f'el acceso deja en la sesion se pierde entre peticiones: el '
+                f'usuario a medio identificar y el codigo del correo.'
+            ))
+
+        self.stdout.write('')
 
     # ------------------------------------------------------------------
     def _database_version(self) -> None:
