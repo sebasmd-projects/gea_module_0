@@ -838,12 +838,24 @@ COMMANDS = (
             'list with the reason it is public, so a new one shows up here '
             'the first time this runs rather than when somebody finds it. It '
             'does not replace "check --deploy", which looks at Django\'s own '
-            'settings; this looks at what is specific to this project.'
+            'settings; this looks at what is specific to this project. Three '
+            'more sections come from outside tools: bandit reads the code, '
+            'pip-audit compares the installed dependencies against the public '
+            'advisory database — it needs no credential, which is why it is '
+            'the one that runs on the server — and safety asks the same '
+            'question against a richer database, but only in development, '
+            'because it always authenticates and here there is nobody to '
+            'answer. All three are optional, and when one is missing the '
+            'report says so instead of quietly shrinking.'
         ),
         example=_('Before every deploy, together with the dependency check.'),
         risk=RISK_READ_ONLY,
         area=AREA_ACCESS,
-        timeout=120,
+        # Holgado a proposito: safety sale a la red. Sus propios topes
+        # (utils/scanners.py) son mas cortos que este, de modo que quien falle
+        # diga que fallo -- "safety no respondio en 240s" -- en vez de que el
+        # ejecutor corte el comando entero y no se sepa por donde iba.
+        timeout=600,
     ),
     Command(
         name='check_attack_terms',
@@ -1610,7 +1622,22 @@ COMMANDS_BY_NAME = {command.name: command for command in COMMANDS}
 # Un nombre duplicado dejaria una entrada inalcanzable desde su URL, en
 # silencio. Con varias entradas apuntando al mismo programa (`crontab add` y
 # `crontab remove`) eso es facil de provocar con un copiar y pegar.
-assert len(COMMANDS_BY_NAME) == len(COMMANDS), 'duplicate command name'
+#
+# Con `raise` y no con `assert`: `python -O` borra los assert del bytecode, y
+# esta comprobacion protege la integridad de la lista blanca. Una guardia que
+# desaparece segun como se arranque el interprete no es una guardia -- y aqui
+# el interprete lo arranca el hosting, no nosotros.
+if len(COMMANDS_BY_NAME) != len(COMMANDS):
+    _seen = set()
+    _repeated = sorted({
+        command.name for command in COMMANDS
+        if command.name in _seen or _seen.add(command.name)
+    })
+
+    raise RuntimeError(
+        f'hay entradas con el mismo `name` en COMMANDS, y una de cada pareja '
+        f'queda inalcanzable desde su URL: {", ".join(_repeated)}'
+    )
 
 
 def get_command(name: str) -> Optional[Command]:

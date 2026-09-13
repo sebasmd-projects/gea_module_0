@@ -29,6 +29,8 @@ import urllib.request
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
+from ...outbound import InsecureUrlScheme, require_http_url
+
 DEFAULT_TIMEOUT = 15
 
 
@@ -83,6 +85,19 @@ class Command(BaseCommand):
 
         self.stdout.write(f'Pidiendo {url}')
         self.stdout.write('')
+
+        # `urlopen` abre tambien `file://`, y esta URL sale de la
+        # configuracion (`GEA_WARMUP_URL` o `PUBLIC_BASE_URL`). Se comprueba el
+        # esquema antes de abrirla; ver apps/common/utils/outbound.py.
+        #
+        # Se sale con codigo distinto de cero, como el resto de fallos de esta
+        # ruta: una URL mal configurada no es "todo bien", es que la
+        # comprobacion no se ha podido hacer.
+        try:
+            require_http_url(url)
+        except InsecureUrlScheme as error:
+            self.stderr.write(self.style.ERROR(str(error)))
+            raise SystemExit(1)
 
         try:
             with urllib.request.urlopen(url, timeout=timeout) as response:

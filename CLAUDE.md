@@ -89,6 +89,43 @@ uv run python manage.py check_attack_terms
 ```
 
 ```bash
+uv run python manage.py check_security
+```
+
+Nueve secciones: las seis propias de este proyecto (vistas sin guardia,
+formularios sin freno, shell, SQL por cadenas, carpetas de subidas, ajustes) y
+tres de herramientas de fuera.
+
+**El reparto de los escáneres de dependencias no es redundancia:**
+
+| | Dónde corre | Credencial |
+|---|---|---|
+| **pip-audit** | servidor **y** local | ninguna |
+| **safety** | sólo local (`DEBUG=True`) | `SAFETY_API_KEY` |
+
+- **`pip-audit` es la de producción, y lo es porque no lleva credencial.** Un
+  chequeo que depende de un secreto deja de funcionar el día que el secreto
+  caduca, y eso no se nota hasta el despliegue siguiente. Mira el **entorno
+  instalado**, no `requirements.txt`: la versión que se ejecuta es la que puede
+  tener el fallo.
+- **`safety` ni se intenta en el servidor.** Safety CLI 3 siempre se autentica y
+  sin credencial se queda esperando en el terminal — por cron o desde la
+  consola, eso es un cuelgue. Saltársela en producción **no cuenta como hueco**
+  (`ScanResult.by_design`): un aviso que sale en cada despliegue por algo que
+  está bien acaba ignorándose junto con los que no lo están. Y la clave va **por
+  el entorno, nunca como `--key=…`**: un argumento lo ve quien liste procesos y
+  acaba escrito en `CommandRunModel` con el resto de la salida.
+- Los tres son **opcionales** (`uv add --dev bandit pip-audit safety`) y lo que
+  falte *sin estar previsto* se cuenta **aparte de los hallazgos**, al final: no
+  haberlo ejecutado no es una vulnerabilidad, pero un «sin hallazgos» que se
+  saltó una sección entera es una media verdad.
+- Lo que bandit da por bueno está en `apps/common/utils/scanners.py`
+  (`BANDIT_ACCEPTED`), con **la razón escrita al lado**, igual que
+  `INTENTIONALLY_PUBLIC` o `NEVER_EXPOSED`. La clave es `(regla, fichero)`: una
+  regla nueva, o la misma en un fichero nuevo, aflora; una segunda ocurrencia en
+  un fichero ya aceptado, no.
+
+```bash
 uv run python manage.py test --settings=app_core.settings_test
 ```
 
@@ -692,6 +729,12 @@ PUBLIC_BASE_URL               # base canónica para el QR y el registro; NUNCA s
                               # deriva del host de la petición
 CORS_ALLOWED_ORIGINS          # lista separada por comas
 COMMON_ATTACK_TERMS           # lista separada por comas → regex catch-all
+SAFETY_API_KEY                # credencial de Safety CLI, SOLO en local y solo
+                              # para `check_security` §9. En el servidor esa
+                              # sección ni se intenta (allí la de dependencias
+                              # es pip-audit, que no lleva clave). NUNCA se pasa
+                              # como --key: la línea de comandos acaba escrita
+                              # en CommandRunModel
 IP_BLOCKED_TIME_IN_MINUTES
 MIDDLEWARE_NOT_INCLUDE
 AXES_FAILURE_LIMIT            # por defecto 6, bloqueo por pareja (IP, usuario)

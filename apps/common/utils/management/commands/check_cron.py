@@ -177,7 +177,13 @@ class Command(BaseCommand):
         """
         encoded = json.JSONEncoder(sort_keys=True).encode(job)
 
-        return hashlib.md5(encoded.encode('utf-8')).hexdigest()
+        # `usedforsecurity=False` no cambia el hash --sigue siendo el mismo MD5
+        # que escribe la libreria, que es justo lo que hace falta para
+        # compararlos-- y dice dos cosas: que esto es un identificador y no una
+        # huella de seguridad, y que puede correr en un Python en modo FIPS,
+        # donde MD5 a secas levanta ValueError.
+        return hashlib.md5(
+            encoded.encode('utf-8'), usedforsecurity=False).hexdigest()
 
     def _comment(self) -> str:
         """La marca con la que django-crontab reconoce sus propias lineas."""
