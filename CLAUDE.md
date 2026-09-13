@@ -348,6 +348,7 @@ Reglas que se deducen del grafo — respétalas al añadir código:
 | Modelos de certificación y resúmenes AEGIS | `certificates/models.py` |
 | **Algoritmos de certificación** | `internal/code_gen/services/` (ver §4-bis.E) |
 | Generador de códigos, disposiciones, resúmenes | `code_gen/views.py`, `forms.py`, `api.py`, `preview.py` |
+| **Historial de códigos agrupado por resumen** | `code_gen/history.py` — lo que se pagina son ramas, no filas |
 | Consola de operaciones | `internal/ops/registry.py`, `runner.py`, `admin.py` |
 | Galería multimedia | `documents/video_masonry/` |
 

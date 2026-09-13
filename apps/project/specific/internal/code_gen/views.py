@@ -14,6 +14,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import (CreateView, DetailView, FormView,
                                   ListView, TemplateView)
 
+from .history import build_history_tree
 from .preview import placements_as_data, render_preview_container
 
 from .constants import (HASH_B64_DEFAULT_LENGTH, RANDOM_CODE_DEFAULT_LENGTH)
@@ -253,18 +254,23 @@ class CodeGeneratorView(InternalToolAccessMixin, FormView):
 
 class CodeHistoryListView(InternalToolAccessMixin, ListView):
     """
-    Todos los codigos emitidos, para poder volver a cualquiera.
+    Todos los codigos emitidos, en arbol: cada resumen con los suyos debajo.
 
     Cada certificacion registra tambien su codigo, asi que este listado cubre
     igualmente los documentos certificados.
+
+    **Lo que se pagina son ramas, no filas.** Un resumen entra entero o no
+    entra: partirlo por el corte de la pagina lo dejaria repetido arriba en dos
+    paginas con miembros distintos, y un arbol a medias se lee como completo.
+    El armado y el porque estan en `history.py`.
     """
 
     model = CodeRegistrationModel
     template_name = 'dashboard/pages/documents/code_gen/code_history.html'
-    context_object_name = 'registrations'
+    context_object_name = 'nodes'
     paginate_by = 25
 
-    def get_queryset(self):
+    def get_registrations(self):
         queryset = (
             CodeRegistrationModel.objects
             .select_related('document')
@@ -285,9 +291,21 @@ class CodeHistoryListView(InternalToolAccessMixin, ListView):
 
         return queryset
 
+    def get_queryset(self):
+        registrations = list(self.get_registrations())
+
+        # La cifra que importa sigue siendo la de codigos: el numero de ramas
+        # no dice cuantos se han emitido, y es lo que se viene a mirar. Se
+        # guarda aqui porque contar las filas del arbol daria de mas --un
+        # certificado que este en dos resumenes sale en los dos.
+        self.code_count = len(registrations)
+
+        return build_history_tree(registrations)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search'] = self.request.GET.get('q', '')
+        context['code_count'] = getattr(self, 'code_count', 0)
         return context
 
 
