@@ -10,33 +10,45 @@ mejor que nosotros, y que estaban sin cubrir:
 * **bandit** lee el código y reconoce patrones peligrosos de Python — un hash
   débil, un ``mark_safe`` con una interpolación dentro, un ``urlopen`` que
   aceptaría ``file://``.
-* **safety** compara las dependencias con una base de vulnerabilidades
-  publicadas. Es la única de las dos que responde a la pregunta «¿la versión de
+* **pip-audit** y **safety** comparan las dependencias con una base de
+  vulnerabilidades publicadas. Son las únicas que responden a «¿la versión de
   la biblioteca que tengo instalada tiene un CVE?», que no se puede contestar
   leyendo este repositorio.
 
-Las dos son opcionales
-----------------------
+Dos escáneres de dependencias, y no es redundancia
+---------------------------------------------------
+**En el servidor manda ``pip-audit``.** Consulta la base pública de avisos de
+PyPI y OSV, **sin cuenta y sin credencial**: no hay ninguna clave que rotar, ni
+que guardar en el entorno de producción, ni que se pueda filtrar. Esa es toda
+la razón por la que es la de producción — un chequeo que depende de un secreto
+es un chequeo que deja de funcionar el día que el secreto caduca, y nadie se
+entera hasta el despliegue siguiente.
+
+**``safety`` se queda en local.** Su base es más rica y da contexto que la
+pública no tiene, pero Safety CLI 3 **siempre se autentica**: sin credencial
+abre un navegador o se queda esperando en el terminal. Eso, en un servidor
+--donde esto corre por cron y desde la consola de operaciones, sin nadie que
+conteste-- es un cuelgue. Así que allí ni se intenta, y saltársela en
+producción **no se cuenta como un hueco**: es la configuración prevista, y un
+aviso que sale en cada despliegue por algo que está bien acaba ignorándose
+junto con los que no lo están.
+
+Cuando sí se lanza (en local, con clave), va con ``--stage cicd`` y con la
+entrada estándar cerrada, para que no pueda pedir nada aunque una versión
+futura cambie de opinión. Y **la clave va por entorno, nunca como argumento**:
+un ``--key=...`` en la línea de comandos lo ve cualquiera que liste procesos, y
+además esta consola guarda la línea ejecutada y su salida en
+``CommandRunModel`` — un secreto que pase por ahí queda escrito en una tabla
+que se lee desde el propio panel.
+
+Todas son opcionales
+--------------------
 Ninguna está en ``requirements.txt``, y es deliberado: son herramientas de
-desarrollo y el servidor no las necesita para servir páginas. Si no están
+diagnóstico y el servidor no las necesita para servir páginas. Si no están
 instaladas, la sección lo **dice en voz alta** y sigue. No inventa un hallazgo
 --no haberla ejecutado no es una vulnerabilidad-- pero tampoco se calla, que
 sería lo peor de los dos mundos: un informe de seguridad que parece completo y
 no lo es.
-
-Por qué `safety` necesita una clave, y qué pasa sin ella
---------------------------------------------------------
-Safety CLI 3 **siempre** se autentica. Sin credencial abre un navegador o se
-queda esperando en el terminal, y ahí se colgaría: esto se ejecuta por cron y
-desde la consola de operaciones, donde no hay nadie que conteste. Por eso:
-
-* se lanza sólo si hay ``SAFETY_API_KEY`` en el entorno;
-* se lanza con ``--stage cicd`` y con la entrada estándar cerrada, de modo que
-  no pueda pedir nada aunque cambie de opinión en una versión futura;
-* **la clave va por entorno, nunca como argumento.** Un ``--key=...`` en la
-  línea de comandos lo ve cualquiera que liste procesos, y además esta consola
-  guarda la línea ejecutada y su salida en ``CommandRunModel``: un secreto que
-  pase por ahí queda escrito en una tabla que se lee desde el propio panel.
 
 Lo que se da por bueno, y por qué
 ---------------------------------
@@ -71,8 +83,8 @@ SAFETY_KEY_ENV = 'SAFETY_API_KEY'
 BANDIT_TARGETS = ('apps', 'app_core')
 BANDIT_EXCLUDE = '*/tests/*,*/migrations/*'
 
-#: Tope de espera de cada escáner. Safety sale a la red; bandit no (tarda unos
-#: tres segundos sobre este proyecto).
+#: Tope de espera de cada escáner. Los de dependencias salen a la red; bandit
+#: no (tarda unos tres segundos sobre este proyecto).
 #:
 #: Los dos son **más cortos que el del comando en la consola de operaciones**
 #: (600 s en ``registry.py``), y a propósito: si el tope que salta primero es
@@ -81,6 +93,7 @@ BANDIT_EXCLUDE = '*/tests/*,*/migrations/*'
 #: respondió y en cuánto tiempo.
 BANDIT_TIMEOUT = 120
 SAFETY_TIMEOUT = 240
+PIP_AUDIT_TIMEOUT = 240
 
 #: Rutas que salen en más de una entrada, para que un fichero que se mueva se
 #: renombre en un sitio y no en cinco.
@@ -255,6 +268,13 @@ class ScanResult:
     ran: bool = False
     #: Por qué no se ejecutó, en una línea para imprimir tal cual.
     skipped: str = ''
+    #: Si ese salto es la configuración prevista y no un hueco.
+    #:
+    #: Safety no se ejecuta en el servidor **a propósito**. Contarlo como
+    #: «sin mirar» sacaría un aviso en cada despliegue por algo que está bien,
+    #: y un aviso que siempre sale se acaba ignorando junto con los que no
+    #: deberían salir.
+    by_design: bool = False
     #: Hallazgos vivos, ya descontados los aceptados.
     findings: List[str] = field(default_factory=list)
     #: Avisos aceptados, sólo para poder decir cuántos se dieron por buenos.
@@ -276,6 +296,47 @@ def _module_available(module: str) -> bool:
         ).returncode == 0
     except (OSError, subprocess.SubprocessError):
         return False
+
+
+def _first_json_object(text: str):
+    """
+    El JSON de la salida, saltandose lo que safety imprime antes.
+
+    Safety escribe avisos de deprecacion de sus propias dependencias antes del
+    informe. Buscar la primera llave evita que un aviso nuevo en una version
+    futura rompa la lectura.
+    """
+    if not text:
+        return None
+
+    start = text.find('{')
+
+    if start < 0:
+        return None
+
+    try:
+        return json.loads(text[start:])
+    except ValueError:
+        return None
+
+
+def _listed(container, key) -> list:
+    """
+    El valor de ``key`` como lista, venga como venga.
+
+    Lo usan los dos informes de dependencias. El de safety anida cuatro
+    niveles y cualquiera puede faltar, ser ``None`` o no ser un diccionario
+    segun la version; el de pip-audit es mas plano pero igual de opcional.
+    Concentrar esa tolerancia aqui deja los recorridos legibles; repartida
+    por los bucles, cada nivel llevaba su propio ``or []`` y no se veia la
+    forma del dato.
+    """
+    if not isinstance(container, dict):
+        return []
+
+    value = container.get(key)
+
+    return value if isinstance(value, list) else []
 
 
 # ----------------------------------------------------------------------
@@ -352,14 +413,136 @@ def run_bandit(min_severity: str = 'LOW') -> ScanResult:
 
 
 # ----------------------------------------------------------------------
-def run_safety() -> ScanResult:
+def run_pip_audit() -> ScanResult:
     """
-    Compara las dependencias instaladas con la base de vulnerabilidades.
+    Contrasta lo instalado con la base pública de avisos (PyPI y OSV).
 
-    Nunca puede quedarse esperando una respuesta: sin clave ni se lanza, y
-    cuando se lanza va con ``--stage cicd`` y con la entrada cerrada.
+    Es la comprobación de dependencias **del servidor**, y lo es justamente
+    porque no lleva credencial: no hay clave que rotar, ni que guardar en el
+    entorno de producción, ni que se pueda filtrar. Un chequeo que depende de
+    un secreto deja de funcionar el día que el secreto caduca, y eso no se
+    nota hasta el despliegue siguiente.
+
+    Mira el **entorno instalado**, no ``requirements.txt``: lo que importa es
+    la versión que se está ejecutando, que es la que puede tener el fallo.
     """
     result = ScanResult()
+
+    if not _module_available('pip_audit'):
+        result.skipped = (
+            'pip-audit no esta instalado, asi que las dependencias no se han '
+            'contrastado con ninguna base de vulnerabilidades. Es la '
+            'comprobacion que deberia correr en el servidor, porque no '
+            'necesita credencial. Para tenerla: uv add --dev pip-audit'
+        )
+        return result
+
+    argv = [
+        _python(), '-m', 'pip_audit',
+        '--format', 'json',
+        # Sin la ruleta giratoria: escribe caracteres de control que en un log
+        # o en CommandRunModel son ruido.
+        '--progress-spinner', 'off',
+    ]
+
+    try:
+        done = subprocess.run(
+            argv, capture_output=True, text=True,
+            cwd=str(settings.BASE_DIR), timeout=PIP_AUDIT_TIMEOUT,
+            stdin=subprocess.DEVNULL,
+        )
+    except subprocess.TimeoutExpired:
+        result.error = (
+            f'pip-audit no respondio en {PIP_AUDIT_TIMEOUT}s. Consulta la base '
+            f'de avisos por red: si el servidor no tiene salida, esta '
+            f'comprobacion no se puede hacer desde aqui.'
+        )
+        return result
+    except (OSError, subprocess.SubprocessError) as error:
+        result.error = f'no se pudo ejecutar pip-audit: {error}'
+        return result
+
+    payload = _first_json_object(done.stdout)
+
+    if payload is None:
+        result.error = (
+            f'pip-audit no devolvio JSON (codigo {done.returncode}): '
+            f'{(done.stderr or done.stdout).strip()[:300]}'
+        )
+        return result
+
+    result.ran = True
+    result.findings = _pip_audit_findings(payload)
+
+    return result
+
+
+def _pip_audit_findings(payload) -> List[str]:
+    """
+    Una línea por paquete afectado, con la versión que lo corrige.
+
+    Por paquete y no por aviso: doce paquetes dan sesenta y siete avisos, y
+    sesenta y siete líneas no se leen. Lo accionable es «sube este paquete a
+    esta versión», y eso es una línea.
+
+    Los identificadores **se deduplican**: pip-audit consulta más de una
+    fuente y el mismo aviso vuelve por cada una, así que contarlos en crudo
+    triplica la cifra y asusta de más.
+    """
+    findings = []
+
+    for dependency in _listed(payload, 'dependencies'):
+        issues = _listed(dependency, 'vulns')
+
+        if not issues:
+            continue
+
+        identifiers = sorted({
+            issue.get('id') for issue in issues if issue.get('id')
+        })
+        fixes = sorted({
+            version
+            for issue in issues
+            for version in (issue.get('fix_versions') or [])
+        })
+
+        remedy = f'corrige en {fixes[0]}' if fixes else 'sin version que lo corrija'
+        shown = ', '.join(identifiers[:3])
+
+        if len(identifiers) > 3:
+            shown += f' (+{len(identifiers) - 3})'
+
+        findings.append(
+            f'{dependency.get("name", "?")} '
+            f'{dependency.get("version", "?")} — '
+            f'{len(identifiers)} aviso(s), {remedy}: {shown}'
+        )
+
+    return findings
+
+
+# ----------------------------------------------------------------------
+def run_safety() -> ScanResult:
+    """
+    Lo mismo que ``run_pip_audit``, con una base más rica — y sólo en local.
+
+    En el servidor ni se intenta: Safety CLI 3 siempre se autentica y sin
+    credencial se queda esperando en el terminal, donde no hay nadie. Ese
+    salto es la configuración prevista, no un hueco.
+    """
+    result = ScanResult()
+
+    # Primero el entorno, antes que nada: en produccion esto no se ejecuta
+    # aunque este instalada y aunque haya clave.
+    if not getattr(settings, 'DEBUG', False):
+        result.by_design = True
+        result.skipped = (
+            'safety solo se ejecuta en local. En el servidor la comprobacion '
+            'de dependencias la hace pip-audit, que no necesita credencial; '
+            'safety se autentica siempre y sin nadie que conteste se quedaria '
+            'esperando.'
+        )
+        return result
 
     if not _module_available('safety'):
         result.skipped = (
@@ -421,43 +604,6 @@ def run_safety() -> ScanResult:
     return result
 
 
-def _first_json_object(text: str):
-    """
-    El JSON de la salida, saltandose lo que safety imprime antes.
-
-    Safety escribe avisos de deprecacion de sus propias dependencias antes del
-    informe. Buscar la primera llave evita que un aviso nuevo en una version
-    futura rompa la lectura.
-    """
-    if not text:
-        return None
-
-    start = text.find('{')
-
-    if start < 0:
-        return None
-
-    try:
-        return json.loads(text[start:])
-    except ValueError:
-        return None
-
-
-def _listed(container, key) -> list:
-    """
-    El valor de ``key`` como lista, venga como venga.
-
-    El informe de safety anida cuatro niveles y cualquiera de ellos puede
-    faltar, ser ``None`` o no ser un diccionario segun la version. Concentrar
-    esa tolerancia aqui deja el recorrido legible; repartida por el bucle,
-    cada nivel llevaba su propio ``or []`` y no se veia la forma del dato.
-    """
-    if not isinstance(container, dict):
-        return []
-
-    value = container.get(key)
-
-    return value if isinstance(value, list) else []
 
 
 def _lines_for(dependency, location) -> List[str]:

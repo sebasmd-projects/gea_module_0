@@ -21,18 +21,24 @@ Las seis primeras son las que ya sacaron algo real:
    donde un formulario publico deposita cedulas.
 6. **Ajustes de produccion** que dependen de que ``DEBUG`` este apagado.
 
-Y dos que no las sabe este proyecto, sino herramientas de fuera:
+Y tres que no las sabe este proyecto, sino herramientas de fuera:
 
 7. **bandit** sobre el codigo, con las excepciones razonadas en
    ``utils/scanners.py``. Lo que encontro la primera vez que se ejecuto:
    un MD5 sin marcar, dos ``urlopen`` que habrian abierto ``file://`` y dos
    sitios que interpolaban en HTML sin escapar. Los cuatro estan arreglados.
-8. **safety** sobre las dependencias instaladas. Es la unica seccion que
-   contesta "¿la version que tengo tiene un CVE?", que no se puede saber
-   leyendo este repositorio.
+8. **pip-audit** sobre las dependencias instaladas. Contesta "¿la version que
+   tengo tiene un CVE?", que no se puede saber leyendo este repositorio.
+   **Es la de produccion**, y lo es porque no lleva credencial: no hay clave
+   que rotar ni que guardar en el servidor, asi que no puede dejar de
+   funcionar por un secreto caducado.
+9. **safety**, la misma pregunta con una base mas rica, **solo en local**.
+   Safety CLI 3 siempre se autentica y sin credencial se queda esperando en
+   el terminal; en un servidor, donde esto corre por cron y desde la consola,
+   eso es un cuelgue. Saltarsela alli no cuenta como hueco: es lo previsto.
 
-Las dos ultimas son **opcionales**: ninguna esta en ``requirements.txt``
---son herramientas de desarrollo y el servidor no las necesita para servir
+Las tres ultimas son **opcionales**: ninguna esta en ``requirements.txt``
+--son herramientas de diagnostico y el servidor no las necesita para servir
 paginas-- y si faltan, la seccion lo dice en voz alta y sigue. No haberlas
 ejecutado no es una vulnerabilidad, pero callarselo convertiria un "sin
 hallazgos" en una media verdad, asi que se cuenta aparte al final.
@@ -54,7 +60,7 @@ from django.core.management.base import BaseCommand
 from django.urls import get_resolver
 from django.urls.resolvers import URLPattern, URLResolver
 
-from ...scanners import run_bandit, run_safety
+from ...scanners import run_bandit, run_pip_audit, run_safety
 
 #: Mixins que cuentan como control de acceso.
 GUARD_MIXINS = frozenset({
@@ -179,6 +185,7 @@ class Command(BaseCommand):
         self._check_settings()
         self._check_bandit()
         self._check_dependencies()
+        self._check_dependencies_deeply()
 
         self.stdout.write('')
 
@@ -234,9 +241,17 @@ class Command(BaseCommand):
 
     # ------------------------------------------------------------------
     def _report_scan(self, result):
-        """Lo comun a las dos secciones de escaner."""
+        """Lo comun a las tres secciones de escaner."""
         if result.skipped:
-            self._not_checked(result.skipped)
+            # Un salto previsto --safety fuera de local-- se cuenta, pero no
+            # como un hueco: sacarlo en la lista de "sin mirar" en cada
+            # despliegue por algo que esta bien acabaria con que nadie lee esa
+            # lista, ni cuando trae uno de verdad.
+            if result.by_design:
+                self.stdout.write(f'   (omitida: {result.skipped})')
+            else:
+                self._not_checked(result.skipped)
+
             return False
 
         if result.error:
@@ -272,12 +287,29 @@ class Command(BaseCommand):
         )
 
     def _check_dependencies(self):
-        self._section('8. Vulnerabilidades en las dependencias (safety)')
+        self._section('8. Vulnerabilidades en las dependencias (pip-audit)')
 
         self.stdout.write(
-            '   (mira lo que hay instalado en este entorno, asi que para que '
-            'valga hay que lanzarlo donde corre la aplicacion)'
+            '   (mira lo que hay INSTALADO en este entorno, no '
+            'requirements.txt: la version que se ejecuta es la que puede '
+            'tener el fallo, asi que para que valga hay que lanzarlo donde '
+            'corre la aplicacion)'
         )
+
+        result = run_pip_audit()
+
+        if not self._report_scan(result):
+            return
+
+        if not result.findings:
+            self._ok('Ninguna dependencia con vulnerabilidad conocida.')
+            return
+
+        for finding in result.findings:
+            self._finding(finding)
+
+    def _check_dependencies_deeply(self):
+        self._section('9. Segunda opinion sobre las dependencias (safety)')
 
         result = run_safety()
 

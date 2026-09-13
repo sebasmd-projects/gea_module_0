@@ -18,31 +18,40 @@ python manage.py check_cron          # que las tareas estén instaladas
 
 Los cuatro están también en la consola de operaciones.
 
-`check_security` incluye además dos escáneres de fuera: **bandit** sobre el
-código y **safety** sobre las dependencias instaladas. Los dos son opcionales
-—no están en `requirements.txt`, porque son herramientas de desarrollo y el
-servidor no las necesita para servir páginas— y si faltan, el informe **lo dice
-al final, aparte de los hallazgos**. Es deliberado: no haberlos ejecutado no es
-una vulnerabilidad, pero un «sin hallazgos» que se ha saltado dos secciones
-enteras es una media verdad.
+`check_security` incluye además tres escáneres de fuera:
+
+| | Qué mira | Dónde corre | Credencial |
+|---|---|---|---|
+| **bandit** | el código | servidor y local | ninguna |
+| **pip-audit** | las dependencias instaladas | servidor y local | **ninguna** |
+| **safety** | lo mismo, con una base más rica | **sólo local** | `SAFETY_API_KEY` |
 
 ```bash
-uv add --dev bandit safety
+uv add --dev bandit pip-audit safety
 ```
 
-**Safety necesita credencial.** Safety CLI 3 siempre se autentica: sin clave
-abre un navegador o se queda esperando en el terminal, y esto se ejecuta por
-cron y desde la consola, donde no hay nadie que conteste. Por eso sólo se lanza
-si hay `SAFETY_API_KEY` en el entorno, y va con `--stage cicd` y la entrada
-cerrada para que no pueda preguntar nada. **La clave viaja por el entorno,
-nunca como `--key=…`**: un argumento lo ve cualquiera que liste procesos, y
-además la consola guarda la línea ejecutada y su salida en `CommandRunModel`
-—un secreto que pase por ahí queda escrito en una tabla que se lee desde el
-propio panel.
+**`pip-audit` es la de producción, y lo es precisamente porque no lleva
+credencial.** No hay clave que rotar, ni que guardar en el entorno del
+servidor, ni que se pueda filtrar. Un chequeo que depende de un secreto deja de
+funcionar el día que el secreto caduca, y eso no se nota hasta el despliegue
+siguiente. Mira el **entorno instalado**, no `requirements.txt`: la versión que
+se está ejecutando es la que puede tener el fallo.
 
-Si no se quiere mantener una credencial en el servidor, la alternativa sin
-cuenta es `pip-audit`, que consulta la base pública de avisos de PyPI. No está
-integrada: es una decisión pendiente, no una recomendación hecha.
+**`safety` se queda en local.** Safety CLI 3 siempre se autentica: sin clave
+abre un navegador o se queda esperando en el terminal, y en el servidor —por
+cron, desde la consola— eso es un cuelgue. Así que allí ni se intenta, y
+saltársela **no cuenta como hueco**: es la configuración prevista, y un aviso
+que sale en cada despliegue por algo que está bien acaba ignorándose junto con
+los que no lo están. Cuando sí se lanza va con `--stage cicd` y la entrada
+cerrada, y **la clave viaja por el entorno, nunca como `--key=…`**: un argumento
+lo ve cualquiera que liste procesos, y además la consola guarda la línea
+ejecutada y su salida en `CommandRunModel` —un secreto que pase por ahí queda
+escrito en una tabla que se lee desde el propio panel.
+
+Los tres son opcionales, y lo que falte **sin estar previsto** se dice al final
+del informe, aparte de los hallazgos: no haberlos ejecutado no es una
+vulnerabilidad, pero un «sin hallazgos» que se ha saltado una sección entera es
+una media verdad.
 
 ### Y estas seis a ojo
 

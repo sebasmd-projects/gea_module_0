@@ -24,7 +24,7 @@ from pathlib import Path
 from unittest import mock
 
 from django.conf import settings
-from django.test import SimpleTestCase
+from django.test import SimpleTestCase, override_settings
 
 from .. import scanners
 from ..scanners import (BANDIT_ACCEPTED, SAFETY_KEY_ENV, _first_json_object,
@@ -94,6 +94,7 @@ class TheAcceptedListIsHonestTests(SimpleTestCase):
             )
 
 
+@override_settings(DEBUG=True)
 class WhatHappensWithoutTheToolTests(SimpleTestCase):
 
     def test_bandit_missing_is_not_a_clean_run(self):
@@ -117,9 +118,91 @@ class WhatHappensWithoutTheToolTests(SimpleTestCase):
         self.assertIn('safety', result.skipped)
 
 
+class WhichScannerRunsWhereTests(SimpleTestCase):
+    """
+    El reparto: pip-audit en el servidor, safety solo en local.
+
+    Es la decision de fondo de esta seccion. pip-audit no lleva credencial, y
+    por eso es la de produccion: un chequeo que depende de un secreto deja de
+    funcionar el dia que el secreto caduca, y no se nota hasta el despliegue
+    siguiente.
+    """
+
+    def setUp(self):
+        self.previous = os.environ.get(SAFETY_KEY_ENV)
+        self.addCleanup(self._restore)
+
+    def _restore(self):
+        if self.previous is None:
+            os.environ.pop(SAFETY_KEY_ENV, None)
+        else:
+            os.environ[SAFETY_KEY_ENV] = self.previous
+
+    @override_settings(DEBUG=False)
+    def test_safety_does_not_run_in_production_even_with_a_key(self):
+        os.environ[SAFETY_KEY_ENV] = 'una-clave-de-prueba'
+
+        with mock.patch.object(scanners, '_module_available',
+                               return_value=True), \
+                mock.patch.object(scanners.subprocess, 'run') as launched:
+            result = run_safety()
+
+        launched.assert_not_called()
+        self.assertFalse(result.ran)
+
+    @override_settings(DEBUG=False)
+    def test_skipping_safety_in_production_is_not_a_gap(self):
+        """
+        `by_design` es lo que impide que el informe saque un aviso en cada
+        despliegue por algo que esta bien. Una lista de "sin mirar" que
+        siempre trae la misma linea deja de leerse, y con ella las que si
+        importan.
+        """
+        os.environ[SAFETY_KEY_ENV] = 'una-clave-de-prueba'
+
+        with mock.patch.object(scanners, '_module_available',
+                               return_value=True):
+            result = run_safety()
+
+        self.assertTrue(result.by_design)
+
+    @override_settings(DEBUG=False)
+    def test_pip_audit_does_run_in_production(self):
+        """La contraparte: la que si tiene que correr en el servidor."""
+        with mock.patch.object(scanners, '_module_available',
+                               return_value=True), \
+                mock.patch.object(scanners.subprocess, 'run') as launched:
+            launched.return_value = mock.Mock(
+                stdout='{"dependencies": []}', stderr='', returncode=0)
+            result = scanners.run_pip_audit()
+
+        launched.assert_called_once()
+        self.assertTrue(result.ran)
+
+    @override_settings(DEBUG=True)
+    def test_pip_audit_needs_no_credential_at_all(self):
+        """
+        Sin clave, sin variable de entorno, sin nada. Es el motivo entero de
+        que sea la de produccion.
+        """
+        os.environ.pop(SAFETY_KEY_ENV, None)
+
+        with mock.patch.object(scanners, '_module_available',
+                               return_value=True), \
+                mock.patch.object(scanners.subprocess, 'run') as launched:
+            launched.return_value = mock.Mock(
+                stdout='{"dependencies": []}', stderr='', returncode=0)
+            result = scanners.run_pip_audit()
+
+        self.assertTrue(result.ran)
+
+
+@override_settings(DEBUG=True)
 class SafetyNeverWaitsForAnAnswerTests(SimpleTestCase):
     """
     Lo que haria que un cron se quedara colgado para siempre.
+
+    Todo esto es en local, que es donde safety se ejecuta.
     """
 
     def setUp(self):
@@ -143,6 +226,9 @@ class SafetyNeverWaitsForAnAnswerTests(SimpleTestCase):
         launched.assert_not_called()
         self.assertFalse(result.ran)
         self.assertIn(SAFETY_KEY_ENV, result.skipped)
+        # Y esto si es un hueco: la herramienta esta, el entorno es el suyo, y
+        # aun asi no se ha mirado.
+        self.assertFalse(result.by_design)
 
     def test_the_key_travels_in_the_environment_and_never_in_the_argv(self):
         """
@@ -267,6 +353,65 @@ class ReadingSafetysAnswerTests(SimpleTestCase):
     def test_output_without_any_json_is_read_as_no_object(self):
         self.assertIsNone(_first_json_object('safety exploto'))
         self.assertIsNone(_first_json_object(''))
+
+
+PIP_AUDIT_PAYLOAD = {
+    'dependencies': [
+        {
+            'name': 'django',
+            'version': '4.2.27',
+            'vulns': [
+                # El mismo aviso repetido: pip-audit consulta mas de una
+                # fuente y cada una lo devuelve.
+                {'id': 'PYSEC-2026-198', 'fix_versions': ['4.2.28', '6.0.2']},
+                {'id': 'PYSEC-2026-198', 'fix_versions': ['4.2.28']},
+                {'id': 'PYSEC-2026-199', 'fix_versions': ['4.2.29']},
+            ],
+        },
+        {'name': 'tranquilo', 'version': '1.0', 'vulns': []},
+        {
+            'name': 'sin-arreglo',
+            'version': '0.1',
+            'vulns': [{'id': 'PYSEC-2026-999', 'fix_versions': []}],
+        },
+    ],
+}
+
+
+class ReadingPipAuditsAnswerTests(SimpleTestCase):
+
+    def setUp(self):
+        self.lines = scanners._pip_audit_findings(PIP_AUDIT_PAYLOAD)
+        self.by_package = {line.split()[0]: line for line in self.lines}
+
+    def test_a_package_with_nothing_wrong_is_not_a_line(self):
+        self.assertNotIn('tranquilo', self.by_package)
+        self.assertEqual(len(self.lines), 2)
+
+    def test_the_repeated_identifiers_are_counted_once(self):
+        """
+        pip-audit consulta varias fuentes y el mismo aviso vuelve por cada una.
+        Contarlos en crudo triplicaba la cifra: en este proyecto, 121 donde
+        habia 67. Un numero inflado en un informe de seguridad no asusta mas,
+        se cree menos.
+        """
+        self.assertIn('2 aviso(s)', self.by_package['django'])
+
+    def test_the_line_says_which_version_fixes_it(self):
+        """
+        Lo accionable no es el identificador del aviso: es a que version hay
+        que subir. Y se coge la **mas baja** que lo corrige, que es la que
+        menos rompe -- aqui 4.2.28 y no 6.0.2, que seria cambiar de serie.
+        """
+        self.assertIn('corrige en 4.2.28', self.by_package['django'])
+
+    def test_a_package_with_no_fix_says_so(self):
+        self.assertIn(
+            'sin version que lo corrija', self.by_package['sin-arreglo'])
+
+    def test_a_shape_it_does_not_know_does_not_crash(self):
+        for payload in ({}, {'dependencies': None}, {'dependencies': [{}]}):
+            self.assertEqual(scanners._pip_audit_findings(payload), [])
 
 
 class BanditOverThisProjectTests(SimpleTestCase):
