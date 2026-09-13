@@ -62,30 +62,37 @@ if settings.DEBUG:
     urlpatterns += [
         path(
             "__test__/400/",
-            lambda r: error400(r, Exception("Bad request test"))
+            lambda r: error400(r, Exception("Bad request test")),
+            name="test_400"
         ),
         path(
             "__test__/401/",
-            lambda r: error401(r, Exception("Unauthorized test"))
+            lambda r: error401(r, Exception("Unauthorized test")),
+            name="test_401"
         ),
         path(
             "__test__/403/",
-            lambda r: error403(r, Exception("Forbidden test"))
+            lambda r: error403(r, Exception("Forbidden test")),
+            name="test_403"
         ),
         path(
             "__test__/404/",
-            lambda r: error404(r, Exception("Not found test"))
+            lambda r: error404(r, Exception("Not found test")),
+            name="test_404"
         ),
         path(
             "__test__/500/",
-            lambda r: error500(r)
+            lambda r: error500(r),
+            name="test_500"
         ),
         path(
             "__test__/503/",
-            lambda r: error503(r)
+            lambda r: error503(r),
+            name="test_503"
         ),
         path(
             "__test__/504/",
-            lambda r: error504(r)
+            lambda r: error504(r),
+            name="test_504"
         ),
     ]

@@ -75,6 +75,17 @@ GUARD_MIXINS = frozenset({
 #: Es una lista de excepciones justificadas, no una lista de exclusion para
 #: silenciar avisos: cada entrada dice por que esa vista puede ser publica, y
 #: anadir una obliga a escribir esa razon.
+
+TEST_PUBLIC_PATHS = {
+    'utils:test_400': 'test de la pagina 400, que siempre responde 400',
+    'utils:test_401': 'test de la pagina 401, que siempre responde 401',
+    'utils:test_403': 'test de la pagina 403, que siempre responde 403',
+    'utils:test_404': 'test de la pagina 404, que siempre responde 404',
+    'utils:test_500': 'test de la pagina 500, que siempre responde 500',
+    'utils:test_503': 'test de la pagina 503, que siempre responde 503',
+    'utils:test_504': 'test de la pagina 504, que siempre responde 504',
+}
+
 INTENTIONALLY_PUBLIC = {
     'core:index': 'portada del sitio',
     'core:privacy': 'aviso legal, tiene que leerse antes de registrarse',
@@ -109,6 +120,9 @@ INTENTIONALLY_PUBLIC = {
     'utils:set_language': 'cambio de idioma',
 }
 
+if settings.DEBUG:
+    INTENTIONALLY_PUBLIC.update(TEST_PUBLIC_PATHS)
+
 #: Rutas publicas sin nombre en el URLconf, identificadas por su ruta.
 #:
 #: `reverse()` no las alcanza y no tienen etiqueta `namespace:name`, asi que
@@ -126,7 +140,8 @@ THROTTLED_FORMS = {
 }
 
 SHELL_CALLS = re.compile(r'os\.system\(|os\.popen\(|shell\s*=\s*True')
-STRING_SQL = re.compile(r'cursor\.execute\(\s*[f\'"].*%s*[\'"]\s*%|\.raw\(\s*f')
+STRING_SQL = re.compile(
+    r'cursor\.execute\(\s*[f\'"].*%s*[\'"]\s*%|\.raw\(\s*f')
 
 #: Carpetas de `MEDIA_ROOT` que **si** puede repartir el servidor web.
 #:

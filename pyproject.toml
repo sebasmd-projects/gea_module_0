@@ -90,6 +90,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "bandit>=1.9.4",
+    "joserfc>=1.7.5",
     "pip-audit>=2.10.1",
     "safety>=3.8.1",
 ]
