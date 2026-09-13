@@ -524,34 +524,68 @@ class GeaLoginView(TwoFactorLoginView):
             # asi no se encuentra por su clave. Eso no es «se borro entre dos
             # lineas»: es que la clave no viaja de vuelta.
             #
-            # El caso conocido es un UUID guardado **con guiones** (36
-            # caracteres) en una columna que Django consulta con el hex de 32.
-            # La fila se lee perfectamente --y por eso `authenticate()`, que
-            # busca por username o por email_hash, la encuentra-- pero
-            # `filter(pk=...)` manda el hex y no coincide con nada. Pasa cuando
-            # las filas entraron por una via que no normalizo el UUID: una
-            # importacion a mano, un volcado de otro motor, una herramienta de
-            # base de datos.
+            # Hay dos causas conocidas, y **se distinguen por a que base
+            # apunta la aplicacion**, que por eso se dice aqui:
             #
-            # Se comprueba contando en `apps_users_user` las filas cuyo `id`
-            # no mida 32 caracteres. El texto no lleva la consulta escrita: en
-            # este fichero no se construye SQL, y dejar una cadena con forma de
-            # consulta obligaria a aceptar el aviso de bandit para todo el
-            # modulo -- con lo que un SQL de verdad entraria despues sin que
-            # nadie se enterara.
+            # 1. La sesion viene de OTRA base. Un asistente a medias guardado
+            #    en la sesion del navegador sobrevive a cambiar de base --por
+            #    ejemplo al pasar de un tunel contra produccion a la copia
+            #    local-- y entonces trae un pk que en esta no existe. Se
+            #    reconoce porque la cuenta si esta en la otra, y porque el
+            #    fallo es intermitente: en cuanto se vacia la sesion, entra.
+            #
+            # 2. El id no viaja de vuelta. Un UUID guardado **con guiones**
+            #    ocupa 36 caracteres, se lee bien --y por eso `authenticate()`,
+            #    que busca por username o por email_hash, lo encuentra-- pero
+            #    `filter(pk=...)` manda el hex de 32 y no coincide con nada. Se
+            #    reconoce contando en `apps_users_user` las filas cuyo `id` no
+            #    mida 32 caracteres.
+            #
+            # El texto no lleva la consulta escrita: en este fichero no se
+            # construye SQL, y dejar una cadena con forma de consulta obligaria
+            # a aceptar el aviso de bandit para todo el modulo -- con lo que un
+            # SQL de verdad entraria despues sin que nadie se enterara.
             return (
-                f'no hay ninguna cuenta con pk={pk}, pero acaba de '
-                f'identificarse con esa clave. Mira como estan guardados los '
-                f'id en la tabla de usuarios (apps_users_user): un UUID '
-                f'escrito con guiones ocupa 36 caracteres, se lee bien y '
-                f'autentica, pero no se encuentra por pk, porque la consulta '
-                f'va con el hex de 32'
+                f'no hay ninguna cuenta con pk={pk} en {self._which_database()}, '
+                f'pero acaba de identificarse con esa clave. Las dos causas '
+                f'conocidas: la sesion del navegador viene de otra base de '
+                f'datos (un asistente a medias sobrevive al cambio), o el id '
+                f'no viaja de vuelta porque en la tabla apps_users_user esta '
+                f'guardado con guiones --36 caracteres-- y la consulta va con '
+                f'el hex de 32'
             )
 
         return (
             f'la cuenta {pk} existe pero el backend la rechaza: '
             f'is_active={getattr(exists, "is_active", None)!r}'
         )
+
+    def _which_database(self) -> str:
+        """
+        Contra qué base está mirando esto ahora mismo.
+
+        Es el dato que separa las dos causas de que una cuenta recién
+        identificada no se encuentre por su clave: si la sesión del navegador
+        viene de otra base --un túnel contra producción y luego la copia
+        local, por ejemplo-- el pk que trae no existe aquí, y el fallo es
+        intermitente y desaparece al vaciar la sesión. Sin este dato, las dos
+        causas se leen igual.
+
+        **Sin contraseñas ni usuario.** Un log lo lee más gente que la que
+        debería ver una credencial, y el nombre y el host bastan para saber a
+        cuál de las dos bases se está hablando.
+        """
+        try:
+            from django.db import connection
+
+            ajustes = connection.settings_dict
+            nombre = ajustes.get('NAME') or '(sin nombre)'
+            host = ajustes.get('HOST') or 'local'
+            puerto = ajustes.get('PORT') or ''
+
+            return f'{nombre} en {host}:{puerto}' if puerto else f'{nombre} en {host}'
+        except Exception:                               # noqa: BLE001
+            return '(no se pudo saber qué base)'
 
     def _restart_without_user(self):
         """Vacía el asistente y devuelve a la primera pantalla, con aviso."""

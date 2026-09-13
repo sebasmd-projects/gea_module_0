@@ -236,3 +236,36 @@ class WhyThereIsNoUserTests(TestCase):
 
         self.assertIn('36 caracteres', motivo)
         self.assertIn('apps_users_user', motivo)
+
+    def test_dice_contra_que_base_esta_mirando(self):
+        """
+        Es lo que separa las dos causas.
+
+        Un asistente a medias guardado en la sesion del navegador
+        sobrevive a cambiar de base --de un tunel contra produccion a la
+        copia local, por ejemplo-- y entonces trae un pk que aqui no
+        existe. Sin decir a cual se esta hablando, eso se lee igual que un
+        id mal guardado, y se busca en el sitio equivocado.
+        """
+        from django.db import connection
+
+        pk = str(self.user.pk)
+        self.user.delete()
+
+        motivo = self._reason({'user_pk': pk, 'user_backend': self.BACKEND})
+
+        self.assertIn(str(connection.settings_dict['NAME']), motivo)
+
+    def test_no_escribe_la_contrasena_de_la_base(self):
+        """Un log lo lee mas gente de la que deberia ver una credencial."""
+        from django.db import connection
+
+        clave = connection.settings_dict.get('PASSWORD') or ''
+        pk = str(self.user.pk)
+        self.user.delete()
+
+        motivo = self._reason({'user_pk': pk, 'user_backend': self.BACKEND})
+
+        if clave:
+            self.assertNotIn(clave, motivo)
+        self.assertNotIn('PASSWORD', motivo)
