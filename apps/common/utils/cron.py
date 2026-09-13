@@ -3,7 +3,7 @@ import os
 from urllib.request import urlopen
 from urllib.error import URLError, HTTPError
 from apps.common.utils.models import GeaDailyUniqueCode
-from apps.common.utils.outbound import InsecureUrlScheme, require_http_url
+from apps.common.utils.outbound import is_http_url
 
 
 logger = logging.getLogger(__name__)
@@ -24,10 +24,14 @@ def warm_gea_app():
     # entorno. Una variable mal puesta --o cambiada por quien pueda tocar el
     # entorno del cron-- convertiria el calentamiento en una lectura de
     # ficheros locales cada tres minutos. Se comprueba el esquema antes.
-    try:
-        require_http_url(url)
-    except InsecureUrlScheme as error:
-        logger.error("WARMUP %s", error)
+    #
+    # Con el predicado y no con `try/except`: aqui no hay nada que atrapar,
+    # hay una rama. Y esto corre cada tres minutos, asi que una traza de una
+    # excepcion que nos levantamos nosotros mismos llenaria el log sin anadir
+    # un solo dato al mensaje, que ya dice cual es la URL.
+    if not is_http_url(url):
+        logger.error(
+            "WARMUP la URL no es http(s), no se abre: %s", url)
         return
 
     try:

@@ -33,6 +33,24 @@ class InsecureUrlScheme(ValueError):
     """La URL no es http(s), así que no se abre."""
 
 
+def is_http_url(url: str) -> bool:
+    """
+    Si la URL se puede abrir: http(s) y con servidor.
+
+    La versión que no levanta nada, para quien sólo quiere decidir. La tarea
+    de calentamiento la usa así: ahí una URL mal configurada no es una
+    excepción que haya que atrapar, es una rama --se registra y se vuelve--, y
+    escribirla con ``try/except`` haría que el log llevara cada tres minutos la
+    traza de un error que nos hemos levantado nosotros mismos.
+    """
+    try:
+        require_http_url(url)
+    except InsecureUrlScheme:
+        return False
+
+    return True
+
+
 def require_http_url(url: str) -> str:
     """
     Devuelve la URL si es http(s); si no, levanta ``InsecureUrlScheme``.

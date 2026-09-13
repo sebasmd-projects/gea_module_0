@@ -82,6 +82,24 @@ BANDIT_EXCLUDE = '*/tests/*,*/migrations/*'
 BANDIT_TIMEOUT = 120
 SAFETY_TIMEOUT = 240
 
+#: Rutas que salen en más de una entrada, para que un fichero que se mueva se
+#: renombre en un sitio y no en cinco.
+_WORKERS = 'apps/common/utils/management/commands/check_workers.py'
+_CACHE = 'apps/common/utils/management/commands/check_cache.py'
+_CRON = 'apps/common/utils/management/commands/check_cron.py'
+_REPORT = 'apps/common/utils/management/commands/test_report.py'
+_FFMPEG = 'apps/project/specific/documents/video_masonry/utils.py'
+_RUNNER = 'apps/project/specific/internal/ops/runner.py'
+_ADMIN = 'apps/common/utils/admin.py'
+_FILTERS = 'apps/common/utils/templatetags/custom_filters.py'
+_CERT_VIEWS = 'apps/project/specific/documents/certificates/views.py'
+
+#: Las dos remisiones y el motivo que se repite. Se escriben una vez porque
+#: significan lo mismo en cada sitio: si cambia el razonamiento, cambia entero.
+SEE_B308 = 'Ver B308 del mismo fichero.'
+SEE_B404 = 'Ver B404 del mismo fichero.'
+NO_SHELL = 'subprocess sin shell, con lista de argumentos.'
+
 #: Avisos de bandit que aquí no son un problema, con la razón al lado.
 #:
 #: La clave es ``(regla, ruta relativa)``. Añadir una entrada obliga a escribir
@@ -121,7 +139,7 @@ BANDIT_ACCEPTED = {
     ),
 
     # --- B110: try/except/pass ---
-    ('B110', 'apps/common/utils/management/commands/check_workers.py'): (
+    ('B110', _WORKERS): (
         'Un diagnostico no puede fallar por lo que esta diagnosticando: si '
         'leer /proc o el estado de un proceso revienta, se informa de lo que '
         'si se pudo leer en vez de abortar el informe entero.'
@@ -148,26 +166,26 @@ BANDIT_ACCEPTED = {
     # porque en los tres el contenido es seguro por construccion; el caso que
     # NO lo era --una URL de fichero subido interpolada en un <img>-- se
     # arreglo con format_html en vez de aceptarse.
-    ('B308', 'apps/common/utils/admin.py'): (
+    ('B308', _ADMIN): (
         'Etiquetas y colores fijos; los dos valores que vienen de la fila '
         '(user_agent, network_owner, country) pasan por escape() o '
         'format_html().'
     ),
-    ('B308', 'apps/common/utils/templatetags/custom_filters.py'): (
+    ('B308', _FILTERS): (
         'add_class y add_attrs devuelven lo que ya produjo field.as_widget(), '
         'que Django genera escapado; currency interpola dos trozos de '
         'f"{float(x):,.2f}", o sea digitos, comas y un punto.'
     ),
-    ('B308', 'apps/project/specific/documents/certificates/views.py'): (
+    ('B308', _CERT_VIEWS): (
         'El QR y el codigo de barras son imagenes que genera este mismo '
         'proyecto en functions.py; lo que se marca como seguro es el markup '
         'que produce la libreria, no texto de nadie.'
     ),
-    ('B703', 'apps/common/utils/admin.py'): 'Ver B308 del mismo fichero.',
-    ('B703', 'apps/common/utils/templatetags/custom_filters.py'):
-        'Ver B308 del mismo fichero.',
-    ('B703', 'apps/project/specific/documents/certificates/views.py'):
-        'Ver B308 del mismo fichero.',
+    ('B703', _ADMIN): SEE_B308,
+    ('B703', _FILTERS):
+        SEE_B308,
+    ('B703', _CERT_VIEWS):
+        SEE_B308,
 
     # --- B310: urlopen admite file:// ---
     # La regla es sintactica: mira la llamada, no lo que se hizo antes. En los
@@ -197,34 +215,34 @@ BANDIT_ACCEPTED = {
         'Aparecio en la primera ejecucion despues de escribirlo, que es '
         'exactamente lo que tiene que pasar con un fichero nuevo.'
     ),
-    ('B603', 'apps/common/utils/scanners.py'): 'Ver B404 del mismo fichero.',
-    ('B404', 'apps/common/utils/management/commands/check_cache.py'):
-        'subprocess sin shell, con lista de argumentos.',
-    ('B404', 'apps/common/utils/management/commands/check_cron.py'):
-        'subprocess sin shell, con lista de argumentos.',
-    ('B404', 'apps/common/utils/management/commands/check_workers.py'):
-        'subprocess sin shell, con lista de argumentos.',
-    ('B404', 'apps/common/utils/management/commands/test_report.py'):
-        'subprocess sin shell, con lista de argumentos.',
-    ('B404', 'apps/project/specific/documents/video_masonry/utils.py'):
+    ('B603', 'apps/common/utils/scanners.py'): SEE_B404,
+    ('B404', _CACHE):
+        NO_SHELL,
+    ('B404', _CRON):
+        NO_SHELL,
+    ('B404', _WORKERS):
+        NO_SHELL,
+    ('B404', _REPORT):
+        NO_SHELL,
+    ('B404', _FFMPEG):
         'Llama a ffmpeg sin shell, con lista de argumentos.',
-    ('B404', 'apps/project/specific/internal/ops/runner.py'): (
+    ('B404', _RUNNER): (
         'Es el ejecutor de la consola de operaciones. Ejecutar en subproceso '
         'y sin shell no es el riesgo: es el diseno (ver el docstring de '
         'registry.py).'
     ),
-    ('B603', 'apps/common/utils/management/commands/check_cache.py'):
-        'Ver B404 del mismo fichero.',
-    ('B603', 'apps/common/utils/management/commands/check_cron.py'):
-        'Ver B404 del mismo fichero.',
-    ('B603', 'apps/common/utils/management/commands/check_workers.py'):
-        'Ver B404 del mismo fichero.',
-    ('B603', 'apps/common/utils/management/commands/test_report.py'):
-        'Ver B404 del mismo fichero.',
-    ('B603', 'apps/project/specific/documents/video_masonry/utils.py'):
-        'Ver B404 del mismo fichero.',
-    ('B603', 'apps/project/specific/internal/ops/runner.py'):
-        'Ver B404 del mismo fichero.',
+    ('B603', _CACHE):
+        SEE_B404,
+    ('B603', _CRON):
+        SEE_B404,
+    ('B603', _WORKERS):
+        SEE_B404,
+    ('B603', _REPORT):
+        SEE_B404,
+    ('B603', _FFMPEG):
+        SEE_B404,
+    ('B603', _RUNNER):
+        SEE_B404,
 }
 
 
@@ -425,6 +443,41 @@ def _first_json_object(text: str):
         return None
 
 
+def _listed(container, key) -> list:
+    """
+    El valor de ``key`` como lista, venga como venga.
+
+    El informe de safety anida cuatro niveles y cualquiera de ellos puede
+    faltar, ser ``None`` o no ser un diccionario segun la version. Concentrar
+    esa tolerancia aqui deja el recorrido legible; repartida por el bucle,
+    cada nivel llevaba su propio ``or []`` y no se veia la forma del dato.
+    """
+    if not isinstance(container, dict):
+        return []
+
+    value = container.get(key)
+
+    return value if isinstance(value, list) else []
+
+
+def _lines_for(dependency, location) -> List[str]:
+    """Las vulnerabilidades de un paquete, ya escritas."""
+    name = dependency.get('name', '?')
+    lines = []
+
+    for spec in _listed(dependency, 'specifications'):
+        for issue in _listed(
+                spec.get('vulnerabilities'), 'known_vulnerabilities'):
+            lines.append(
+                f'{name} {spec.get("raw", "")} — '
+                f'{issue.get("id", "?")} '
+                f'({issue.get("severity") or "sin severidad"})'
+                f'  [{location}]'
+            )
+
+    return lines
+
+
 def _safety_findings(payload) -> List[str]:
     """
     Las vulnerabilidades del informe, una linea por paquete afectado.
@@ -435,25 +488,11 @@ def _safety_findings(payload) -> List[str]:
     """
     findings = []
 
-    files = (payload.get('scan_results', {}) or {}).get('files', []) or []
-
-    for entry in files:
+    for entry in _listed(payload.get('scan_results')
+                         if isinstance(payload, dict) else None, 'files'):
         location = entry.get('location', '?')
 
-        for dependency in (entry.get('results', {}) or {}).get(
-                'dependencies', []) or []:
-            name = dependency.get('name', '?')
-
-            for spec in dependency.get('specifications', []) or []:
-                known = (spec.get('vulnerabilities', {}) or {}).get(
-                    'known_vulnerabilities', []) or []
-
-                for vulnerability in known:
-                    findings.append(
-                        f'{name} {spec.get("raw", "")} — '
-                        f'{vulnerability.get("id", "?")} '
-                        f'({vulnerability.get("severity") or "sin severidad"})'
-                        f'  [{location}]'
-                    )
+        for dependency in _listed(entry.get('results'), 'dependencies'):
+            findings.extend(_lines_for(dependency, location))
 
     return findings
