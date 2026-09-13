@@ -8,7 +8,7 @@ from reportlab.lib.units import mm
 from reportlab.platypus import (Image, Paragraph, SimpleDocTemplate, Spacer,
                                 Table, TableStyle)
 
-from .generate_pdf_helper import build_offer_image_story
+from .generate_pdf_helper import brand_image, build_offer_image_story
 
 
 def generate_service_order_pdf(offer, user):
@@ -25,14 +25,16 @@ def generate_service_order_pdf(offer, user):
     styles = getSampleStyleSheet()
 
     # ---------------- LOGOS ----------------
-    logo_header = Image(
-        "https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/ipcon_brands_po_so.webp",
+    logo_header = brand_image(
+        "assets/imgs/logos/ipcon_brands_po_so.webp",
         width=doc.width,
         height=80
     )
-    logo_header.hAlign = "CENTER"  # Centra la imagen en el PDF
 
-    elements.append(logo_header)
+    if logo_header is not None:
+        logo_header.hAlign = "CENTER"  # Centra la imagen en el PDF
+        elements.append(logo_header)
+
     elements.append(Spacer(1, 20))
 
     # ---------------- BARCODE ----------------
@@ -204,11 +206,11 @@ def generate_service_order_pdf(offer, user):
     elements.append(Spacer(1, 30))
 
     # ---------------- FOOTER ----------------
-    footer_img = Image(
-        "https://geausa.propensionesabogados.com/public/static/assets/imgs/purchase_order/stamp_propensiones.webp",
+    footer_img = brand_image(
+        "assets/imgs/purchase_order/stamp_propensiones.webp",
         width=90,
         height=90
-    )
+    ) or Spacer(90, 90)
     
     centered_text = ParagraphStyle(
         name="CenteredText",

@@ -49,6 +49,7 @@ from two_factor.forms import AuthenticationTokenForm, BackupTokenForm
 from two_factor.views import LoginView as TwoFactorLoginView
 
 from apps.common.utils.login_attempts import is_locked_out, note_failure
+from apps.common.utils.wizards import forget_resolved_steps
 
 from . import otp_login
 from .forms import LoginOTPForm
@@ -119,6 +120,23 @@ class GeaLoginView(TwoFactorLoginView):
 
     def _set_mode(self, mode):
         self.request.session[MODE_KEY] = mode
+        self._forget_resolved_steps()
+
+    def _forget_resolved_steps(self):
+        """
+        Tira la lista de pasos que `formtools` guarda en caché.
+
+        Nuestra condición del paso `otp` mira el modo, que vive en la sesión y
+        cambia a mitad de petición; la caché de `formtools` no puede saberlo
+        (ver `apps/common/utils/wizards.py`). Sin esto, entrar en modo código
+        dejaba el paso `otp` como actual y luego lo buscaba en una lista
+        resuelta **antes** del cambio: `KeyError: 'otp'`. Y al revés al salir.
+
+        Se invalida aquí, en `_set_mode()`, y no en cada sitio que cambia de
+        modo: es el único punto por el que pasa el cambio, y una invalidación
+        que hay que acordarse de llamar es la que se olvida.
+        """
+        forget_resolved_steps(self)
 
     def has_otp_step(self):
         return self._mode() == MODE_OTP
@@ -408,5 +426,9 @@ class GeaLoginView(TwoFactorLoginView):
         self.request.session.pop(OFFERED_KEY, None)
         self.request.session.pop(ATTEMPT_KEY, None)
         otp_login.clear(self.request)
+
+        # Quitar el modo tambien cambia que pasos hay, asi que la caché de
+        # `formtools` tiene que enterarse igual que al ponerlo.
+        self._forget_resolved_steps()
 
         return super().done(form_list, **kwargs)

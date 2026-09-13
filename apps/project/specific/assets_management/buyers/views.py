@@ -37,6 +37,7 @@ from apps.project.specific.assets_management.assets_location.models import \
 from .access import OfferMutationMixin, can_view_offer
 from .form import OfferForm, OfferUpdateForm, ServiceOrderRecipientsForm
 from .functions import generate_purchase_order_pdf, generate_service_order_pdf
+from .functions.generate_pdf_helper import attach_inline_logo
 from .models import OfferModel
 
 logger = logging.getLogger(__name__)
@@ -399,16 +400,12 @@ class PurchaseOrderCreateView(BuyerRequiredMixin, CreateView):
             "application/pdf"
         )
 
-        # Adjuntar logo PNG inline
+        # Adjuntar logo inline, leido del disco. Antes se descargaba de la
+        # URL publica de produccion en cada correo: una llamada de red dentro
+        # de la peticion, con ATOMIC_REQUESTS puesto, para traer un fichero
+        # que ya esta en este servidor.
         email.mixed_subtype = "related"
-        logo_url = "https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/gea_logo.webp"
-        resp = requests.get(logo_url, timeout=10)
-        if resp.status_code == 200:
-            mime_img = MIMEImage(resp.content, _subtype="webp")
-            mime_img.add_header("Content-ID", "<gea_logo>")
-            mime_img.add_header("Content-Disposition",
-                                "inline", filename="gea_logo.webp")
-            email.attach(mime_img)
+        attach_inline_logo(email)
 
         # Adjuntar imagen de la oferta (desde el storage) como inline + attachment
         if offer_instance.offer_img and offer_instance.offer_img.name:
@@ -706,16 +703,9 @@ class OfferApprovalWizardActionView(BuyerRequiredMixin, PermissionRequiredMixin,
                 f"orden_servicio_{str(offer.id).upper()}.pdf", pdf_bytes, "application/pdf"
             )
 
-            # Adjuntar logo PNG desde la URL
+            # Idem: del disco, no de la red. Ver `attach_inline_logo`.
             email.mixed_subtype = "related"  # importante para HTML + inline
-            logo_url = "https://geausa.propensionesabogados.com/public/static/assets/imgs/logos/gea_logo.webp"
-            resp = requests.get(logo_url, timeout=10)
-            if resp.status_code == 200:
-                mime_img = MIMEImage(resp.content, _subtype="webp")
-                mime_img.add_header("Content-ID", "<gea_logo>")
-                mime_img.add_header("Content-Disposition",
-                                    "inline", filename="gea_logo.webp")
-                email.attach(mime_img)
+            attach_inline_logo(email)
 
             email.send(fail_silently=False)
 

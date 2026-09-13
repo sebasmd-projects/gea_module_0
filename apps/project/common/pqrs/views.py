@@ -17,6 +17,8 @@ from pathlib import Path
 from django.conf import settings
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
+
+from apps.common.utils.wizards import forget_resolved_steps
 from django.core.mail import send_mail
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -131,6 +133,13 @@ class PQRSWizardView(SessionWizardView):
                 else NaturalHolderForm
             )
             self.form_list = forms_by_step
+
+            # Sustituir `form_list` no basta: desde formtools 2.6 la lista ya
+            # resuelta esta cacheada, y `super().get_form()` la pide a esa
+            # cache. Sin avisarla, la rama de persona juridica recibia el
+            # formulario de persona natural -- y la solicitud no llegaba a
+            # guardarse. Ver `apps/common/utils/wizards.py`.
+            forget_resolved_steps(self)
 
         return super().get_form(step=step, data=data, files=files)
 
