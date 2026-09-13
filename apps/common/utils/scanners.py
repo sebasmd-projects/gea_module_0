@@ -142,6 +142,14 @@ BANDIT_ACCEPTED = {
         '(account:forgot_password, account:change_password). Bandit ve '
         '"password" en una cadena; lo que hay es el nombre de una ruta.'
     ),
+    ('B105', 'app_core/env.py'): (
+        'Son los NOMBRES de las variables de entorno y su explicacion: la '
+        'entrada DJANGO_SECRET_KEY vale "Clave de firma de Django. Generala '
+        'con...", y DB_PASSWORD vale "Contrasena de la base de datos". Bandit '
+        've una clave que suena a secreto con una cadena al lado y no puede '
+        'saber que la cadena es la ayuda que se imprime cuando falta. Ese '
+        'fichero no toca valores: solo comprueba si estan puestos.'
+    ),
     ('B105', 'apps/project/common/account/login_view.py'): (
         'MODE_PASSWORD es el identificador del modo del asistente de acceso, '
         'el que distingue entrar con contrasena de entrar con codigo.'

@@ -89,9 +89,44 @@ cp docs/env.example .env
 
 Y **rellénalo**. No es opcional ni se puede dejar a medias:
 
-> ⚠️ **`settings.py` explota si falta una variable.** Muchos `os.getenv()` se
-> pasan directos a `int()` o a `.split(',')` sin valor por defecto. Sin un
-> `.env` completo el proyecto **no arranca**, y el error no dice cuál falta.
+> ⚠️ **Sin un `.env` completo el proyecto no arranca.** Muchos `os.getenv()`
+> se pasan directos a `int()` o a `.split(',')` sin valor por defecto.
+
+La buena noticia es que **el error te dice cuáles faltan**, por su nombre,
+todas de una vez y con una línea de para qué sirve cada una:
+
+```
+Faltan 3 variables de entorno y el proyecto no puede arrancar sin ellas.
+
+Se leen del fichero `.env` en la raiz del repositorio (modo DEBUG):
+
+  DB_PORT
+      Puerto de la base de datos. Se convierte a entero.
+  FIELD_ENCRYPTION_KEY
+      Clave Fernet con la que se cifra la PII en la base de datos. Generala
+      con `python -c "from cryptography.fernet import Fernet; …"`. PERDERLA
+      INUTILIZA LOS DATOS YA CIFRADOS.
+  CORS_ALLOWED_ORIGINS
+      Origenes permitidos, separados por comas. Vacio es valido y significa
+      ninguno.
+
+La plantilla con todas, comentadas una a una, esta en docs/env.example:
+    cp docs/env.example .env
+```
+
+Tres detalles de esa comprobación (`app_core/env.py`), por si el mensaje te
+sorprende:
+
+- **Una variable vacía cuenta como ausente.** `DB_PORT=` rompe igual que no
+  ponerla, porque `int('')` también falla. Las excepciones son donde vacío
+  *significa* algo: `CORS_ALLOWED_ORIGINS` (ningún origen),
+  `COMMON_ATTACK_TERMS` (trampa desactivada) y las dos contraseñas.
+- **`DJANGO_ALLOWED_HOSTS` solo se exige con `DEBUG=False`**, que es la única
+  rama que la lee. En local no hace falta.
+- **Solo cubre lo que impide arrancar.** Lo que falta y únicamente degrada no
+  sale ahí: `REDIS_URL`, `CERTIFICATION_SIGNING_KEY`, `GEA_BACKUP_PASSPHRASE`
+  y `PQRS_NOTIFICATION_RECIPIENTS` tienen cada una su consecuencia, y están
+  explicadas donde toca en esta guía.
 
 `docs/env.example` tiene cada variable con su explicación y marca cuáles son
 obligatorias. Lo mínimo para levantar en local:

@@ -75,9 +75,39 @@ uv run python manage.py runserver         # sirve en 0.0.0.0:8000
 `runserver` está sobrescrito: sirve en `0.0.0.0:8000` e imprime la IPv4 de la
 red local, para poder abrirlo desde el móvil.
 
-> ⚠️ **`settings.py` explota si falta una variable.** Muchos `os.getenv()` se
-> pasan directos a `int()` o a `.split(',')` sin valor por defecto. Sin un
-> `.env` completo el proyecto **no arranca**, y el error no dice cuál falta.
+> ⚠️ **Sin un `.env` completo el proyecto no arranca** — muchos `os.getenv()`
+> se pasan directos a `int()` o a `.split(',')` sin valor por defecto. Pero el
+> error **dice cuáles faltan, por su nombre y todas de una vez**:
+>
+> ```
+> Faltan 3 variables de entorno y el proyecto no puede arrancar sin ellas.
+>
+> Se leen del fichero `.env` en la raiz del repositorio (modo produccion):
+>
+>   DB_PORT
+>       Puerto de la base de datos. Se convierte a entero.
+>   FIELD_ENCRYPTION_KEY
+>       Clave Fernet con la que se cifra la PII en la base de datos. …
+>   CORS_ALLOWED_ORIGINS
+>       Origenes permitidos, separados por comas. Vacio es valido y …
+>
+> La plantilla con todas, comentadas una a una, esta en docs/env.example:
+>     cp docs/env.example .env
+> ```
+>
+> Lo comprueba `app_core/env.py` antes de que `settings.py` lea nada. Una
+> variable **vacía** cuenta como ausente salvo donde vacío significa algo
+> (`CORS_ALLOWED_ORIGINS`, `COMMON_ATTACK_TERMS`, las contraseñas), y
+> `DJANGO_ALLOWED_HOSTS` solo se exige con `DEBUG=False`, que es la única rama
+> que la lee.
+>
+> La comprobación cubre lo que **impide arrancar**. Lo que falta y solo
+> degrada no sale ahí y conviene repasarlo a mano: sin `REDIS_URL` los
+> contadores de intentos pasan a ser por worker, sin
+> `CERTIFICATION_SIGNING_KEY` el registro se sella con HMAC y no lo puede
+> verificar un tercero, sin `GEA_BACKUP_PASSPHRASE` `db_backup` se niega a
+> escribir la PII, y sin `PQRS_NOTIFICATION_RECIPIENTS` nadie se entera de una
+> PQRS nueva mientras su plazo legal corre.
 
 ---
 
