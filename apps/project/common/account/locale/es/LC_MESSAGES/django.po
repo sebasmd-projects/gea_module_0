@@ -178,21 +178,21 @@ msgid "New password"
 msgstr "Contraseña nueva"
 
 #: .\apps\project\common\account\forms\login_otp_form.py:30
-#, fuzzy
 #| msgid "Username"
 msgid "Username or Email"
-msgstr "Usuario"
+msgstr "Usuario o correo electrónico"
 
 #: .\apps\project\common\account\forms\login_otp_form.py:41
 #: .\apps\project\common\account\views.py:78
 #: .\apps\project\common\account\views.py:98
 msgid "Verification code"
-msgstr ""
+msgstr "Código de verificación"
 
 #: .\apps\project\common\account\forms\login_otp_form.py:87
 msgid "Too many failed attempts. Please wait before trying again."
 msgstr ""
-"Demasiados intentos fallidos. Espera un momento antes de volver a intentarlo."
+"Demasiados intentos fallidos. Espera un momento antes de volver a "
+"intentarlo."
 
 #: .\apps\project\common\account\forms\login_otp_form.py:101
 msgid "The code is not valid or has expired. Request a new one."
@@ -237,15 +237,15 @@ msgstr "Escribe tus credenciales para entrar en GEA."
 #: .\apps\project\common\account\views.py:75
 #: .\apps\project\common\account\views.py:86
 msgid "Your details"
-msgstr ""
+msgstr "Tus datos"
 
 #: .\apps\project\common\account\views.py:77
 msgid "Contact"
-msgstr ""
+msgstr "Contacto"
 
 #: .\apps\project\common\account\views.py:87
 msgid "Tell us who you are and what kind of account you need."
-msgstr ""
+msgstr "Dinos quién eres y qué tipo de cuenta necesitas."
 
 #: .\apps\project\common\account\views.py:90
 msgid "Choose a password"
@@ -315,10 +315,9 @@ msgid "A user with this email already exists."
 msgstr "Ya existe un usuario con este correo electrónico."
 
 #: .\apps\project\common\account\views.py:342
-#, fuzzy
 #| msgid "A user with this email already exists."
 msgid "A user with this username already exists."
-msgstr "Ya existe un usuario con este correo electrónico."
+msgstr "Ya existe un usuario con ese nombre de usuario."
 
 #: .\apps\project\common\account\views.py:453
 #: .\apps\project\common\account\views.py:543
@@ -364,8 +363,8 @@ msgid ""
 "Your password has been reset successfully. You can now log in with your new "
 "password."
 msgstr ""
-"Tu contraseña se ha restablecido correctamente. Ya puedes iniciar sesión con "
-"la contraseña nueva."
+"Tu contraseña se ha restablecido correctamente. Ya puedes iniciar sesión con"
+" la contraseña nueva."
 
 #: .\apps\project\common\account\views.py:651
 #, python-format

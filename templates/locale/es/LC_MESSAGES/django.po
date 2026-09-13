@@ -10,8 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-13 13:10-0500\n"
 "PO-Revision-Date: 2026-09-01 08:07+0000\n"
-"Last-Translator: Juan Sebastian Morales Delgado "
-"<cto@propensionesabogados.com>\n"
+"Last-Translator: Juan Sebastian Morales Delgado <cto@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -229,13 +228,13 @@ msgstr "Inicio"
 
 #: .\templates\admin\ops\command.html:7
 #: .\templates\admin\ops\commandrunmodel_change_list.html:16
-#: .\templates\admin\ops\console.html:21 .\templates\admin\ops\console.html:100
+#: .\templates\admin\ops\console.html:21
+#: .\templates\admin\ops\console.html:100
 #: .\templates\admin\ops\test_summary.html:30
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:240
-#, fuzzy
 #| msgid "Observations"
 msgid "Operations console"
-msgstr "Observaciones"
+msgstr "Consola de operaciones"
 
 #: .\templates\admin\ops\command.html:67
 msgid "Development only"
@@ -246,6 +245,8 @@ msgid ""
 "this command writes into the repository, so it is not offered on a server. "
 "Its result belongs in git, reviewed and deployed like any other change."
 msgstr ""
+"este comando escribe en el repositorio, así que no se ofrece en un servidor."
+" Su resultado va en git, revisado y desplegado como cualquier otro cambio."
 
 #: .\templates\admin\ops\command.html:77
 msgid "What it does"
@@ -260,14 +261,13 @@ msgid "Careful"
 msgstr "Cuidado"
 
 #: .\templates\admin\ops\command.html:94
-#, fuzzy
 #| msgid "Actions"
 msgid "Options"
-msgstr "Acciones"
+msgstr "Opciones"
 
 #: .\templates\admin\ops\command.html:115 .\templates\pqrs\wizard.html:79
 msgid "Required"
-msgstr ""
+msgstr "Obligatorio"
 
 #: .\templates\admin\ops\command.html:148
 #, python-format
@@ -275,10 +275,9 @@ msgid "Type <b>%(name)s</b> to confirm."
 msgstr "Escriba <b>%(name)s</b> para confirmar."
 
 #: .\templates\admin\ops\command.html:158
-#, fuzzy
 #| msgid "Sending…"
 msgid "Running…"
-msgstr "Enviando…"
+msgstr "Ejecutando…"
 
 #: .\templates\admin\ops\command.html:159
 msgid "Run"
@@ -294,16 +293,14 @@ msgid "Output"
 msgstr "Salida"
 
 #: .\templates\admin\ops\command.html:179
-#, fuzzy
 #| msgid "Verify code"
 msgid "exit code"
-msgstr "Verificar código"
+msgstr "código de salida"
 
 #: .\templates\admin\ops\command.html:187
-#, fuzzy
 #| msgid "Previous"
 msgid "Previous runs"
-msgstr "Previo"
+msgstr "Ejecuciones anteriores"
 
 #: .\templates\admin\ops\command.html:191
 #: .\templates\admin\ops\console.html:184
@@ -322,10 +319,9 @@ msgstr "Estado"
 
 #: .\templates\admin\ops\command.html:193
 #: .\templates\admin\ops\console.html:187
-#, fuzzy
 #| msgid "Description (ES)"
 msgid "Duration (s)"
-msgstr "Descripción (ES)"
+msgstr "Duración (s)"
 
 #: .\templates\admin\ops\command.html:194
 #: .\templates\admin\ops\console.html:188
@@ -339,10 +335,14 @@ msgid ""
 "translation catalogs. They write into the repository, which is why they are "
 "not offered on a server."
 msgstr ""
+"Este es un entorno de desarrollo (DEBUG está activado). Enseña comandos que "
+"en producción no salen: crear una app, escribir migraciones, rehacer los "
+"catálogos de traducción. Todos escriben en el repositorio, y por eso no se "
+"ofrecen en un servidor."
 
 #: .\templates\admin\ops\console.html:118
 msgid "See the last test summary →"
-msgstr ""
+msgstr "Ver el último resumen de pruebas →"
 
 #: .\templates\admin\ops\console.html:123
 msgid ""
@@ -350,37 +350,39 @@ msgid ""
 "SSH. Every run is recorded — who, what and the full output — and the record "
 "cannot be edited or deleted."
 msgstr ""
+"Estos comandos se ejecutan en el servidor, con el mismo efecto que lanzarlos"
+" por SSH. Cada ejecución queda registrada —quién, qué y la salida completa— "
+"y el registro no se puede editar ni borrar."
 
 #: .\templates\admin\ops\console.html:132
-#, fuzzy
 #| msgid "Search by title or code…"
 msgid "Search by name, title or what it does…"
-msgstr "Buscar por título o código…"
+msgstr "Buscar por nombre, título o por lo que hace…"
 
 #: .\templates\admin\ops\console.html:133
 msgid "Search commands"
-msgstr ""
+msgstr "Buscar comandos"
 
 #: .\templates\admin\ops\console.html:137
 msgid "Filter by risk"
-msgstr ""
+msgstr "Filtrar por riesgo"
 
 #: .\templates\admin\ops\console.html:139
 msgid "All"
-msgstr ""
+msgstr "Todos"
 
 #: .\templates\admin\ops\console.html:154
 #, python-format
 msgid "Showing %%(count)s of %%(total)s"
-msgstr ""
+msgstr "Mostrando %%(count)s de %%(total)s"
 
 #: .\templates\admin\ops\console.html:158
 msgid "No command matches that."
-msgstr ""
+msgstr "Ningún comando coincide con eso."
 
 #: .\templates\admin\ops\console.html:171
 msgid "dev"
-msgstr ""
+msgstr "dev"
 
 #: .\templates\admin\ops\console.html:178
 msgid "Last runs"
@@ -395,119 +397,123 @@ msgid "Nothing has been run yet."
 msgstr "Todavía no se ha ejecutado nada."
 
 #: .\templates\admin\ops\test_summary.html:31
-#, fuzzy
 #| msgid "New summary"
 msgid "Test summary"
-msgstr "Nuevo resumen"
+msgstr "Resumen de pruebas"
 
 #: .\templates\admin\ops\test_summary.html:185
 msgid ""
 "There is no report yet. It is written by the “Test summary” command, which "
-"runs the suite and keeps what it usually throws away: which test, from which "
-"app, how long it took and how it ended."
+"runs the suite and keeps what it usually throws away: which test, from which"
+" app, how long it took and how it ended."
 msgstr ""
+"Todavía no hay informe. Lo escribe el comando «Resumen de pruebas», que "
+"ejecuta la suite y guarda lo que normalmente se tira: qué prueba, de qué "
+"app, cuánto tardó y cómo acabó."
 
 #: .\templates\admin\ops\test_summary.html:194
 msgid "Run it now"
-msgstr ""
+msgstr "Ejecutarlo ahora"
 
 #: .\templates\admin\ops\test_summary.html:197
 msgid "Or, from a terminal:"
-msgstr ""
+msgstr "O, desde un terminal:"
 
 #: .\templates\admin\ops\test_summary.html:212
 #, python-format
 msgid "of %(total)s tests"
-msgstr ""
+msgstr "de %(total)s pruebas"
 
 #: .\templates\admin\ops\test_summary.html:217
 #, python-format
 msgid "%(red)s in red"
-msgstr ""
+msgstr "%(red)s en rojo"
 
 #: .\templates\admin\ops\test_summary.html:230
 msgid "Scope:"
-msgstr ""
+msgstr "Alcance:"
 
 #: .\templates\admin\ops\test_summary.html:249
 #: .\templates\admin\ops\test_summary.html:368
 msgid "Coverage"
-msgstr ""
+msgstr "Cobertura"
 
 #: .\templates\admin\ops\test_summary.html:258
 msgid "How the suite ended"
-msgstr ""
+msgstr "Cómo acabó la suite"
 
 #: .\templates\admin\ops\test_summary.html:260
 msgid "A skipped test is not a passing test: it checked nothing."
-msgstr ""
+msgstr "Una prueba saltada no es una prueba que pasa: no comprobó nada."
 
 #: .\templates\admin\ops\test_summary.html:292
 msgid "Tests per app"
-msgstr ""
+msgstr "Pruebas por app"
 
 #: .\templates\admin\ops\test_summary.html:294
 msgid ""
-"Measured against the app with the most, not against the total: with thirteen "
-"apps, measuring against the total leaves every bar glued to the axis."
+"Measured against the app with the most, not against the total: with thirteen"
+" apps, measuring against the total leaves every bar glued to the axis."
 msgstr ""
+"Se mide contra la app que más tiene, no contra el total: con trece apps, "
+"medir contra el total deja todas las barras pegadas al eje."
 
 #: .\templates\admin\ops\test_summary.html:300
 #, python-format
 msgid "%(app)s: %(total)s tests, %(red)s in red"
-msgstr ""
+msgstr "%(app)s: %(total)s pruebas, %(red)s en rojo"
 
 #: .\templates\admin\ops\test_summary.html:314
 #: .\templates\admin\ops\test_summary.html:363
 #: .\templates\admin\ops\test_summary.html:416
 msgid "Hide the table"
-msgstr ""
+msgstr "Ocultar la tabla"
 
 #: .\templates\admin\ops\test_summary.html:314
 #: .\templates\admin\ops\test_summary.html:363
 #: .\templates\admin\ops\test_summary.html:416
 msgid "See as a table"
-msgstr ""
+msgstr "Ver como tabla"
 
 #: .\templates\admin\ops\test_summary.html:318
 #: .\templates\admin\ops\test_summary.html:367
-#, fuzzy
 #| msgid "Approve"
 msgid "App"
-msgstr "Aprobar"
+msgstr "App"
 
 #: .\templates\admin\ops\test_summary.html:319
 msgid "Tests"
-msgstr ""
+msgstr "Pruebas"
 
 #: .\templates\admin\ops\test_summary.html:320
 msgid "In red"
-msgstr ""
+msgstr "En rojo"
 
 #: .\templates\admin\ops\test_summary.html:321
 msgid "Skipped"
-msgstr ""
+msgstr "Saltadas"
 
 #: .\templates\admin\ops\test_summary.html:340
 msgid "Coverage per app"
-msgstr ""
+msgstr "Cobertura por app"
 
 #: .\templates\admin\ops\test_summary.html:344
 #, python-format
 msgid ""
-"%(covered)s of %(statements)s statements. Thinnest first, which is the order "
-"you would work in."
+"%(covered)s of %(statements)s statements. Thinnest first, which is the order"
+" you would work in."
 msgstr ""
+"%(covered)s de %(statements)s sentencias. Primero las más flojas, que es el "
+"orden en el que se trabajaría."
 
 #: .\templates\admin\ops\test_summary.html:369
 msgid "Covered"
-msgstr ""
+msgstr "Cubiertas"
 
 #: .\templates\admin\ops\test_summary.html:370
-#, fuzzy
 #| msgid "Placements"
 msgid "Statements"
-msgstr "Posiciones"
+msgstr "Sentencias"
 
 #: .\templates\admin\ops\test_summary.html:386
 msgid ""
@@ -515,80 +521,87 @@ msgid ""
 "requirements.txt, so the server does not carry it: install it with <code>uv "
 "add coverage</code> and run the command again without “Skip coverage”."
 msgstr ""
+"Esta ejecución no midió la cobertura. Es una herramienta de desarrollo y no "
+"está en requirements.txt, así que el servidor no la lleva: instálala con "
+"<code>uv add coverage</code> y vuelve a ejecutar el comando sin «Saltar la "
+"cobertura»."
 
 #: .\templates\admin\ops\test_summary.html:399
 msgid "The ten slowest"
-msgstr ""
+msgstr "Las diez más lentas"
 
 #: .\templates\admin\ops\test_summary.html:401
-msgid "The useful figure is which one is slow, not what the whole suite takes."
-msgstr ""
+msgid ""
+"The useful figure is which one is slow, not what the whole suite takes."
+msgstr "La cifra útil es cuál es lenta, no lo que tarda la suite entera."
 
 #: .\templates\admin\ops\test_summary.html:420
 msgid "Test"
-msgstr ""
+msgstr "Prueba"
 
 #: .\templates\admin\ops\test_summary.html:421
 msgid "Seconds"
-msgstr ""
+msgstr "Segundos"
 
 #: .\templates\admin\ops\test_summary.html:439
-#, fuzzy
 #| msgid "What it does"
 msgid "What does not pass"
-msgstr "Qué hace"
+msgstr "Lo que no pasa"
 
 #: .\templates\admin\ops\test_summary.html:441
 msgid "The last line of each one. The whole traceback is in the run output."
 msgstr ""
+"La última línea de cada una. La traza completa está en la salida de la "
+"ejecución."
 
 #: .\templates\admin\ops\test_summary.html:457
 msgid "Run it again"
-msgstr ""
+msgstr "Volver a ejecutarlo"
 
 #: .\templates\core\tyc\_legal_base.html:27
-#, fuzzy
 #| msgid "Legal content"
 msgid "Legal documents"
-msgstr "Contenido jurídico"
+msgstr "Documentos legales"
 
 #: .\templates\core\tyc\_legal_base.html:29
 msgid "Terms"
-msgstr ""
+msgstr "Términos"
 
 #: .\templates\core\tyc\_legal_base.html:31
 msgid "Data policy"
-msgstr ""
+msgstr "Política de datos"
 
 #: .\templates\core\tyc\_legal_base.html:33
 msgid "Privacy"
-msgstr ""
+msgstr "Privacidad"
 
 #: .\templates\core\tyc\_legal_base.html:35
 msgid "Cookies"
-msgstr ""
+msgstr "Cookies"
 
 #: .\templates\core\tyc\_legal_base.html:36
 msgid "PQRS"
-msgstr ""
+msgstr "PQRS"
 
 #: .\templates\core\tyc\_legal_base.html:44
 msgid "Version"
-msgstr ""
+msgstr "Versión"
 
 #: .\templates\core\tyc\_legal_base.html:46
 msgid "In force since"
-msgstr ""
+msgstr "Vigente desde"
 
 #: .\templates\core\tyc\_legal_base.html:55
 msgid ""
 "Propensiones Abogados · GEA. Questions about this document, or about your "
 "personal data, go through the PQRS form."
 msgstr ""
+"Propensiones Abogados · GEA. Las dudas sobre este documento, o sobre tus "
+"datos personales, se tramitan por el formulario de PQRS."
 
 #: .\templates\core\tyc\_legal_base.html:59
 msgid "File a request"
-msgstr ""
+msgstr "Radicar una solicitud"
 
 #: .\templates\dashboard\pages\buyers\asset_category_add.html:20
 #: .\templates\dashboard\pages\buyers\detail_offer.html:28
@@ -1330,8 +1343,8 @@ msgstr "Asistente de Aprobación"
 #: .\templates\dashboard\pages\buyers\wizard\offer_wizard_page.html:32
 msgid "Track and advance the purchase order through the approval pipeline"
 msgstr ""
-"Siga y haga avanzar la orden de compra por el flujo de aprobaciónRealizar un "
-"seguimiento y avanzar la orden de compra a través del proceso de aprobación"
+"Siga y haga avanzar la orden de compra por el flujo de aprobaciónRealizar un"
+" seguimiento y avanzar la orden de compra a través del proceso de aprobación"
 
 #: .\templates\dashboard\pages\buyers\wizard\offer_wizard_page.html:57
 msgid "Loading wizard…"
@@ -1690,9 +1703,9 @@ msgstr "Descargar"
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:114
 msgid ""
-"This is the distributable copy. It carries a hidden watermark that lets this "
-"platform recognise it as a certified copy even if its metadata changes while "
-"being emailed or shared."
+"This is the distributable copy. It carries a hidden watermark that lets this"
+" platform recognise it as a certified copy even if its metadata changes "
+"while being emailed or shared."
 msgstr ""
 "Esta es la copia distribuible. Lleva una marca de agua oculta que permite a "
 "esta plataforma reconocerla como copia certificada aunque sus metadatos "
@@ -1712,8 +1725,8 @@ msgstr "Registro de certificación"
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:134
 msgid ""
-"The record below is what an auditor needs. It states what this certification "
-"does and does not attest, and lets anyone check the file they hold without "
+"The record below is what an auditor needs. It states what this certification"
+" does and does not attest, and lets anyone check the file they hold without "
 "having to come back to this platform."
 msgstr ""
 "El registro que aparece abajo es lo que necesita un auditor. Indica qué "
@@ -1728,8 +1741,8 @@ msgstr "Contenido jurídico"
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:144
 msgid ""
 "What the firm declares about the asset. It rests on the document itself and "
-"the signature of the legal representative — the platform records it, it does "
-"not vouch for it."
+"the signature of the legal representative — the platform records it, it does"
+" not vouch for it."
 msgstr ""
 "Lo que la firma declara sobre el activo. Descansa en el propio documento y "
 "en la firma del representante legal: la plataforma lo registra, no lo avala."
@@ -1809,28 +1822,28 @@ msgid ""
 "INSTITUTIONAL CERTIFICATION OF AUTHENTICITY, ORIGINALITY AND LEGAL VALIDITY "
 "PROPENSIONES ABOGADOS INTERNACIONAL S.A.S., a legally constituted entity "
 "identified with Tax ID (NIT) 901409813-7, duly incorporated and in full "
-"legal capacity under the laws of the Republic of Colombia, acting within the "
-"scope of its institutional authority, HEREBY CERTIFIES, DECLARES AND "
+"legal capacity under the laws of the Republic of Colombia, acting within the"
+" scope of its institutional authority, HEREBY CERTIFIES, DECLARES AND "
 "ATTESTS, with full legal and doctrinal effect, that: The document to which "
-"this certification is attached is original, authentic and legally effective, "
-"having been issued under formal procedures of control, verification and due "
-"diligence. It constitutes the primary, prevailing and determinative "
+"this certification is attached is original, authentic and legally effective,"
+" having been issued under formal procedures of control, verification and due"
+" diligence. It constitutes the primary, prevailing and determinative "
 "instrument to evidence the legitimacy, origin and legal backing of the act, "
 "right, asset or legal situation contained therein. This certification "
 "consolidates, reaffirms and ratifies the originality of the certified "
 "document, conferring upon it full legal effectiveness, sufficient "
-"evidentiary force and institutional validity. It serves as the governing and "
-"interpretative instrument of authenticity, not subject to informal or "
-"extrajuridical challenge. Likewise, it is expressly stated that the document "
-"has been issued in accordance with the foundational principles of the legal "
-"system, including legality, objective good faith, legal certainty and "
+"evidentiary force and institutional validity. It serves as the governing and"
+" interpretative instrument of authenticity, not subject to informal or "
+"extrajuridical challenge. Likewise, it is expressly stated that the document"
+" has been issued in accordance with the foundational principles of the legal"
+" system, including legality, objective good faith, legal certainty and "
 "regulatory compliance, incorporating international compliance standards, "
 "anti-money laundering (AML) and counter-terrorist financing (CFT) "
 "frameworks, in accordance with the applicable regulatory regimes."
 msgstr ""
-"CERTIFICACIÓN INSTITUCIONAL DE AUTENTICIDAD, ORIGINALIDAD Y VALIDEZ JURÍDICA "
-"PROPENSIONES ABOGADOS INTERNACIONAL S.A.S., entidad legalmente constituida, "
-"identificada con NIT 901409813-7, debidamente incorporada y en pleno "
+"CERTIFICACIÓN INSTITUCIONAL DE AUTENTICIDAD, ORIGINALIDAD Y VALIDEZ JURÍDICA"
+" PROPENSIONES ABOGADOS INTERNACIONAL S.A.S., entidad legalmente constituida,"
+" identificada con NIT 901409813-7, debidamente incorporada y en pleno "
 "ejercicio de su capacidad jurídica conforme a las leyes de la República de "
 "Colombia, actuando dentro del ámbito de su autoridad institucional, "
 "CERTIFICA, DECLARA Y DA FE, con pleno efecto legal y doctrinal, que: El "
@@ -1838,14 +1851,14 @@ msgstr ""
 "y jurídicamente eficaz, habiendo sido emitido bajo procedimientos formales "
 "de control, verificación y debida diligencia. Constituye el instrumento "
 "primario, prevalente y determinante para evidenciar la legitimidad, el "
-"origen y el respaldo jurídico del acto, derecho, activo o situación jurídica "
-"que en él se consigna. La presente certificación consolida, reafirma y "
+"origen y el respaldo jurídico del acto, derecho, activo o situación jurídica"
+" que en él se consigna. La presente certificación consolida, reafirma y "
 "ratifica la originalidad del documento certificado, confiriéndole plena "
 "eficacia jurídica, fuerza probatoria suficiente y validez institucional. Se "
 "erige como el instrumento rector e interpretativo de autenticidad, no "
 "susceptible de impugnación por vías informales o extrajurídicas. Así mismo, "
-"se deja expresa constancia de que dicho documento ha sido emitido conforme a "
-"los principios fundamentales del ordenamiento jurídico, incluidos la "
+"se deja expresa constancia de que dicho documento ha sido emitido conforme a"
+" los principios fundamentales del ordenamiento jurídico, incluidos la "
 "legalidad, la buena fe objetiva, la seguridad jurídica y el cumplimiento "
 "normativo, incorporando estándares internacionales de compliance, marcos de "
 "prevención del lavado de activos (AML) y de financiación del terrorismo "
@@ -1864,28 +1877,21 @@ msgid ""
 "corresponding legal framework."
 msgstr ""
 "ALCANCE DE LA VALIDACIÓN Y EFECTOS JURÍDICOS APLICABLES\n"
-"La presente certificación y el documento que autentica producen efectos "
-"jurídicos plenos, exigibles y oponibles. Su eficacia legal resulta idónea, "
-"adecuada y suficiente dentro de procesos de verificación, debida diligencia, "
-"análisis de riesgo, custodia, aseguramiento o validación institucional, sin "
-"que ello implique dispensa, sustitución o limitación de los controles que "
-"cada entidad deba adelantar conforme a su régimen jurídico aplicable.\n"
-"En consecuencia, el documento podrá ser válidamente aceptado, incorporado y "
-"utilizado como soporte jurídico suficiente, de conformidad con el "
-"ordenamiento jurídico correspondiente."
+"La presente certificación y el documento que autentica producen efectos jurídicos plenos, exigibles y oponibles. Su eficacia legal resulta idónea, adecuada y suficiente dentro de procesos de verificación, debida diligencia, análisis de riesgo, custodia, aseguramiento o validación institucional, sin que ello implique dispensa, sustitución o limitación de los controles que cada entidad deba adelantar conforme a su régimen jurídico aplicable.\n"
+"En consecuencia, el documento podrá ser válidamente aceptado, incorporado y utilizado como soporte jurídico suficiente, de conformidad con el ordenamiento jurídico correspondiente."
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_detail.html:258
 msgid ""
 "APPLICABLE LEGAL REGIME Private International Law, General Principles of "
-"International Law, Vienna Convention on the Law of Treaties (1969), UNIDROIT "
-"Principles of International Commercial Contracts, international compliance "
+"International Law, Vienna Convention on the Law of Treaties (1969), UNIDROIT"
+" Principles of International Commercial Contracts, international compliance "
 "standards, international AML/CFT regulations, Financial Action Task Force "
 "(FATF/GAFI) recommendations, and applicable provisions of the USA PATRIOT "
 "Act."
 msgstr ""
 "RÉGIMEN JURÍDICO APLICABLE Derecho Internacional Privado, Principios "
-"Generales del Derecho Internacional, Convención de Viena sobre el Derecho de "
-"los Tratados (1969), Principios UNIDROIT sobre los Contratos Comerciales "
+"Generales del Derecho Internacional, Convención de Viena sobre el Derecho de"
+" los Tratados (1969), Principios UNIDROIT sobre los Contratos Comerciales "
 "Internacionales, estándares internacionales de compliance, normativa "
 "internacional en materia de prevención del lavado de activos y financiación "
 "del terrorismo (AML/CFT), recomendaciones del Grupo de Acción Financiera "
@@ -1908,8 +1914,8 @@ msgstr "Verificar certificado de documento"
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:27
 msgid "Enter your email to receive a verification code."
 msgstr ""
-"Escriba su correo para recibir un código de verificación.Introduce tu correo "
-"electrónico para recibir un código de verificación."
+"Escriba su correo para recibir un código de verificación.Introduce tu correo"
+" electrónico para recibir un código de verificación."
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:31
 msgid "Enter the verification code sent to your email."
@@ -1980,8 +1986,8 @@ msgid ""
 "The file is never stored: only its fingerprint is computed, in memory, and "
 "then discarded."
 msgstr ""
-"El archivo nunca se almacena: solo se calcula su huella, en memoria, y luego "
-"se descarta."
+"El archivo nunca se almacena: solo se calcula su huella, en memoria, y luego"
+" se descarta."
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\certificate_input.html:214
 msgid "The code expires in a few minutes."
@@ -2022,8 +2028,8 @@ msgid ""
 "page updates on its own as anchors arrive: the printed code never needs "
 "reissuing."
 msgstr ""
-"El resumen está sellada pero todavía ningún sello externo confirma su fecha. "
-"Esta página se actualiza sola según llegan los anclajes: el código impreso "
+"El resumen está sellada pero todavía ningún sello externo confirma su fecha."
+" Esta página se actualiza sola según llegan los anclajes: el código impreso "
 "no hay que volver a emitirlo nunca."
 
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:54
@@ -2036,8 +2042,8 @@ msgstr "Master hash"
 #: .\templates\dashboard\pages\certificates\documents\aegis_documents\summary_anchor.html:57
 msgid ""
 "One figure that commits to the fingerprints of every document in the "
-"summary. It is the only thing that leaves the platform: never the documents, "
-"never their content."
+"summary. It is the only thing that leaves the platform: never the documents,"
+" never their content."
 msgstr ""
 "Una sola cifra que compromete las huellas de todos los documentos del "
 "resumen. Es lo único que sale de la plataforma: nunca los documentos, nunca "
@@ -2124,8 +2130,8 @@ msgstr "Qué prueba esto y qué no."
 msgid ""
 "It proves WHEN: that this content existed on the stated date, attested by a "
 "third party. Who issued it is proven by the platform signature on each "
-"certification record. That what the documents claim is TRUE is not proven by "
-"any of this."
+"certification record. That what the documents claim is TRUE is not proven by"
+" any of this."
 msgstr ""
 "Prueba CUÁNDO: que este contenido existía en la fecha indicada, acreditado "
 "por un tercero. Quién lo emitió lo prueba la firma de la plataforma en cada "
@@ -2164,12 +2170,12 @@ msgstr "Certificación AEGIS"
 #: .\templates\dashboard\pages\certificates\includes\habeas_data.html:9
 msgid ""
 "We remind you that, in accordance with the provisions of the Habeas Data "
-"Law, all your personal data has been treated with due confidentiality and is "
-"protected under the strictest security standards, guaranteeing its integrity "
-"and privacy."
+"Law, all your personal data has been treated with due confidentiality and is"
+" protected under the strictest security standards, guaranteeing its "
+"integrity and privacy."
 msgstr ""
-"Le recordamos que, de conformidad con la Ley de Habeas Data, todos sus datos "
-"personales han sido tratados con la debida confidencialidad y están "
+"Le recordamos que, de conformidad con la Ley de Habeas Data, todos sus datos"
+" personales han sido tratados con la debida confidencialidad y están "
 "protegidos bajo los más estrictos estándares de seguridad, garantizando su "
 "integridad y privacidad. Sus datos se utilizarán exclusivamente para los "
 "fines autorizados y de conformidad con la normativa vigente en materia de "
@@ -2225,8 +2231,7 @@ msgstr "Este documento certifica que"
 #: .\templates\dashboard\pages\certificates\users\employee_ipcon\certificate_detail.html:97
 msgid ""
 "is currently verified as a member, employee, or authorized collaborator of\n"
-"              <strong>Propensiones</strong> and <strong>IPCON (International "
-"Private Consortium)</strong> the new financial era."
+"              <strong>Propensiones</strong> and <strong>IPCON (International Private Consortium)</strong> the new financial era."
 msgstr ""
 "está actualmente verificado como miembro, empleado o colaborador autorizado "
 "de <strong>Propensiones</strong> e <strong>IPCON (Consorcio Privado "
@@ -2470,8 +2475,8 @@ msgid ""
 "Anything with \"://\", \"?\", \"&amp;\" or other URL characters must go in "
 "the QR code instead."
 msgstr ""
-"Un código de barras solo admite letras, dígitos, espacios y los símbolos . _ "
-"- . Todo lo que lleve \"://\", \"?\", \"&amp;\" u otros caracteres de URL "
+"Un código de barras solo admite letras, dígitos, espacios y los símbolos . _"
+" - . Todo lo que lleve \"://\", \"?\", \"&amp;\" u otros caracteres de URL "
 "tiene que ir en el código QR."
 
 #: .\templates\dashboard\pages\documents\code_gen\code_form.html:219
@@ -2683,7 +2688,8 @@ msgstr "Vista previa en vivo"
 msgid "Reusable positions for the QR and the barcode inside the PDF."
 msgstr ""
 "Posiciones reutilizables para el QR y el código de barras dentro del "
-"PDF.Posiciones reutilizables para el QR y el código de barras dentro del PDF."
+"PDF.Posiciones reutilizables para el QR y el código de barras dentro del "
+"PDF."
 
 #: .\templates\dashboard\pages\documents\code_gen\layout_list.html:33
 msgid "New layout"
@@ -2720,8 +2726,8 @@ msgstr "Esta posición queda fuera de la página."
 #, python-format
 msgid "%(counter)s placement"
 msgid_plural "%(counter)s placements"
-msgstr[0] "%(counter)s colocación"
-msgstr[1] "%(counter)s colocaciones"
+msgstr[0] "%(counter)s posición"
+msgstr[1] "%(counter)s posiciones"
 
 #: .\templates\dashboard\pages\documents\code_gen\layout_list.html:79
 msgid "Edit and preview"
@@ -2741,14 +2747,14 @@ msgid ""
 "updates with it. Boxes are only shown on the pages where they actually land."
 msgstr ""
 "Sube el PDF arriba para verlo aquí. Arrastra un resumen para moverla; la "
-"tabla se actualiza con ella. Las cajas solo se muestran en las páginas donde "
-"realmente caen."
+"tabla se actualiza con ella. Las cajas solo se muestran en las páginas donde"
+" realmente caen."
 
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:52
 msgid "Drag a box to move it; the offsets update as you go."
 msgstr ""
-"Arrastre un resumen para moverla; los desplazamientos se actualizan sobre la "
-"marcha.Arrastra un resumen para moverla; los desplazamientos se actualizan "
+"Arrastre un resumen para moverla; los desplazamientos se actualizan sobre la"
+" marcha.Arrastra un resumen para moverla; los desplazamientos se actualizan "
 "sobre la marcha."
 
 #: .\templates\dashboard\pages\documents\code_gen\partials\_layout_workspace.html:55
@@ -2792,8 +2798,8 @@ msgstr "Qué páginas"
 msgid ""
 "Pick the documents, place their barcodes on the summary, seal and anchor."
 msgstr ""
-"Elige los documentos, coloca sus códigos de barras sobre el resumen, sella y "
-"ancla."
+"Elige los documentos, coloca sus códigos de barras sobre el resumen, sella y"
+" ancla."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:27
 #: .\templates\dashboard\pages\documents\code_gen\summary_form.html:26
@@ -2891,11 +2897,11 @@ msgstr "Cadena de bloques"
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:178
 msgid ""
 "A sealed summary can be sent later: the hash is the same one. The proof is "
-"born pending and matures into a Bitcoin block within a few hours, on its own "
-"— nothing needs re-stamping."
+"born pending and matures into a Bitcoin block within a few hours, on its own"
+" — nothing needs re-stamping."
 msgstr ""
-"Un resumen sellado se puede enviar después: la huella es la misma. La prueba "
-"nace pendiente y madura sola hasta un bloque de Bitcoin en unas horas, sin "
+"Un resumen sellado se puede enviar después: la huella es la misma. La prueba"
+" nace pendiente y madura sola hasta un bloque de Bitcoin en unas horas, sin "
 "reestampar nada."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:184
@@ -2917,22 +2923,21 @@ msgid "Not issued"
 msgstr "Sin emitir"
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:209
-#, fuzzy
 #| msgid ""
 #| "The box also has its own PDF: it carries the master hash, the barcode of "
 #| "every member, and the QR of the anchor page. It does not wait for the "
-#| "blockchain — that QR points at a page that updates itself, so nothing "
-#| "needs re-stamping when the Bitcoin block arrives."
+#| "blockchain — that QR points at a page that updates itself, so nothing needs "
+#| "re-stamping when the Bitcoin block arrives."
 msgid ""
 "The summary has its own PDF: it carries the master hash, the barcode of "
 "every member, and the QR of the anchor page. It does not wait for the "
 "blockchain — that QR points at a page that updates itself, so nothing needs "
 "re-stamping when the Bitcoin block arrives."
 msgstr ""
-"El resumen tiene también su propio PDF: lleva el master hash, el código de "
-"barras de cada miembro y el QR de la página de anclaje. No espera a la "
-"cadena de bloques — ese QR apunta a una página que se actualiza sola, así "
-"que no hay que reestampar nada cuando llegue el bloque de Bitcoin."
+"El resumen tiene su propio PDF: lleva el master hash, el código de barras de"
+" cada miembro y el QR de la página de anclaje. No espera a la cadena de "
+"bloques: ese QR apunta a una página que se actualiza sola, así que no hay "
+"que reestampar nada cuando llegue el bloque de Bitcoin."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:214
 msgid "Issuing…"
@@ -3013,10 +3018,10 @@ msgid "It could not be saved."
 msgstr "No se pudo guardar."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:421
-#, fuzzy
-#| msgid "Seal the box first: the summary carries the master hash inside."
+#| msgid ""
+#| "Seal the box first: the summary carries the master hash inside."
 msgid "Seal the summary first: it carries the master hash inside."
-msgstr "Sella el resumen primero: el resumen lleva el master hash dentro."
+msgstr "Sella antes el resumen: lleva el master hash dentro."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_composer.html:422
 msgid "Choose the summary PDF without codes."
@@ -3036,8 +3041,8 @@ msgstr "Nuevo resumen AEGIS"
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_form.html:24
 msgid ""
-"A summary gathers several certificates into one document that carries all of "
-"their barcodes."
+"A summary gathers several certificates into one document that carries all of"
+" their barcodes."
 msgstr ""
 "Un resumen reúne varios certificados en un documento que lleva todos sus "
 "códigos de barras."
@@ -3067,8 +3072,8 @@ msgid ""
 "You place each member barcode on the summary page, plus the summary own QR "
 "and barcode."
 msgstr ""
-"Colocas el código de barras de cada miembro en la página del resumen, más el "
-"QR y el código de barras del propio resumen."
+"Colocas el código de barras de cada miembro en la página del resumen, más el"
+" QR y el código de barras del propio resumen."
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_form.html:138
 msgid ""
@@ -3082,8 +3087,8 @@ msgstr ""
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_form.html:141
 msgid ""
-"The anchor QR points to a page that updates itself as the timestamp matures, "
-"so nothing has to be stamped again."
+"The anchor QR points to a page that updates itself as the timestamp matures,"
+" so nothing has to be stamped again."
 msgstr ""
 "El QR del anclaje apunta a una página que se actualiza sola según madura el "
 "sellado, así que no hay que reestampar nada."
@@ -3101,7 +3106,8 @@ msgid "New summary"
 msgstr "Nuevo resumen"
 
 #: .\templates\dashboard\pages\documents\code_gen\summary_list.html:33
-msgid "No summaries yet. Create the first one to start gathering certificates."
+msgid ""
+"No summaries yet. Create the first one to start gathering certificates."
 msgstr ""
 "Todavía no hay resúmenes. Cree la primera para empezar a agrupar "
 "certificados.Todavía no hay resúmenes. Crea la primera para empezar a "
@@ -3169,14 +3175,12 @@ msgstr "¿Necesitas ayuda?"
 #: .\templates\dashboard\pages\holders\asset_location_base.html:59
 msgid ""
 "\n"
-"                        The Asset Location ties a specific asset to a "
-"location, defining where and in what quantity the\n"
+"                        The Asset Location ties a specific asset to a location, defining where and in what quantity the\n"
 "                        asset is available.\n"
 "                        "
 msgstr ""
 "\n"
-"La ubicación del activo vincula un activo específico a una ubicación, "
-"definiendo dónde y en qué cantidad está disponible el activo."
+"La ubicación del activo vincula un activo específico a una ubicación, definiendo dónde y en qué cantidad está disponible el activo."
 
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:5
 #: .\templates\dashboard\pages\holders\edit_asset_location.html:62
@@ -3239,20 +3243,17 @@ msgstr "Su cuenta está bajo proceso de verificación."
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:408
 msgid ""
 "\n"
-"                    This process can take between 24 to 72 hours (1 to 3 "
-"business days), Please be patient while we\n"
+"                    This process can take between 24 to 72 hours (1 to 3 business days), Please be patient while we\n"
 "                    verify your account.\n"
 "                    "
 msgstr ""
 "\n"
-"Este proceso puede tardar entre 24 y 72 horas (1 a 3 días hábiles). Por "
-"favor, tenga paciencia mientras verificamos su cuenta."
+"Este proceso puede tardar entre 24 y 72 horas (1 a 3 días hábiles). Por favor, tenga paciencia mientras verificamos su cuenta."
 
 #: .\templates\dashboard\pages\holders\holder_dashboard.html:414
 msgid ""
 "\n"
-"                    If you have any questions, please contact our support "
-"team.\n"
+"                    If you have any questions, please contact our support team.\n"
 "                    "
 msgstr ""
 "\n"
@@ -3272,30 +3273,24 @@ msgstr "Agregar referencia de ubicación"
 #: .\templates\dashboard\pages\holders\location\edit_location.html:108
 msgid ""
 "\n"
-"                        The Location Reference serves as a unique identifier "
-"to manage inventory across various\n"
+"                        The Location Reference serves as a unique identifier to manage inventory across various\n"
 "                        locations.\n"
 "                        "
 msgstr ""
 "\n"
-"La referencia de ubicación sirve como un identificador único para "
-"administrar el inventario en varias ubicaciones."
+"La referencia de ubicación sirve como un identificador único para administrar el inventario en varias ubicaciones."
 
 #: .\templates\dashboard\pages\holders\location\add_location.html:124
 #: .\templates\dashboard\pages\holders\location\edit_location.html:115
 msgid ""
 "\n"
-"                        It allows differentiation between inventory located "
-"in the same country but in different areas,\n"
-"                        inventory in different countries, or inventory in "
-"the same country as well as across multiple\n"
+"                        It allows differentiation between inventory located in the same country but in different areas,\n"
+"                        inventory in different countries, or inventory in the same country as well as across multiple\n"
 "                        countries.\n"
 "                        "
 msgstr ""
 "\n"
-"Permite diferenciar entre inventario ubicado en el mismo país pero en "
-"diferentes áreas, inventario en diferentes países o inventario en el mismo "
-"país y en varios países."
+"Permite diferenciar entre inventario ubicado en el mismo país pero en diferentes áreas, inventario en diferentes países o inventario en el mismo país y en varios países."
 
 #: .\templates\dashboard\pages\holders\location\edit_location.html:52
 msgid "Edit Location Reference"
@@ -3351,7 +3346,7 @@ msgstr "Activos"
 
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:226
 msgid "Administration"
-msgstr ""
+msgstr "Administración"
 
 #: .\templates\dashboard\partials\sidenav\dashboard_sidenav.html:232
 msgid "Admin panel"
@@ -3437,12 +3432,10 @@ msgstr "¿No has solicitado este código? Ponte en contacto con nosotros."
 
 #: .\templates\email\otp_email.html:78
 msgid ""
-"This is an automated message. <strong>Nobody from the firm will ever ask "
-"you\n"
+"This is an automated message. <strong>Nobody from the firm will ever ask you\n"
 "            for this code</strong> by phone, WhatsApp or email."
 msgstr ""
-"Este mensaje es automático. <strong>Nadie del despacho te pedirá este "
-"código</strong>\n"
+"Este mensaje es automático. <strong>Nadie del despacho te pedirá este código</strong>\n"
 "            por teléfono, por WhatsApp ni por correo."
 
 #: .\templates\email\otp_email.html:85
@@ -3510,23 +3503,23 @@ msgstr "Gracias por su comprensión."
 #: .\templates\partials\footer\_legal_links.html:22
 #: .\templates\pqrs\wizard.html:16 .\templates\pqrs\wizard.html:30
 msgid "Requests and complaints (PQRS)"
-msgstr ""
+msgstr "Peticiones, quejas, reclamos y sugerencias (PQRS)"
 
 #: .\templates\partials\footer\_legal_links.html:24
 msgid "Data processing policy"
-msgstr ""
+msgstr "Política de tratamiento de datos"
 
 #: .\templates\partials\footer\_legal_links.html:26
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Política de privacidad"
 
 #: .\templates\partials\footer\_legal_links.html:28
 msgid "Cookie policy"
-msgstr ""
+msgstr "Política de cookies"
 
 #: .\templates\partials\footer\_legal_links.html:30
 msgid "Terms & Conditions"
-msgstr ""
+msgstr "Términos y condiciones"
 
 #: .\templates\partials\footer\footer.html:7
 msgid "Your unconditional ally. All Rights Reserved."
@@ -3564,81 +3557,92 @@ msgid "Logout"
 msgstr "Cerrar sesión"
 
 #: .\templates\pqrs\receipt.html:16
-#, fuzzy
 #| msgid "Request New Link"
 msgid "Request filed"
-msgstr "Solicitar nuevo enlace"
+msgstr "Solicitud radicada"
 
 #: .\templates\pqrs\receipt.html:32
-#, fuzzy
 #| msgid "You can request a new code in"
 msgid "Your request has been filed"
-msgstr "Puedes solicitar un nuevo código en"
+msgstr "Tu solicitud quedó radicada"
 
 #: .\templates\pqrs\receipt.html:35
-msgid "Keep this reference. Quote it if you need to ask us about your request."
+msgid ""
+"Keep this reference. Quote it if you need to ask us about your request."
 msgstr ""
+"Guarda este radicado. Cítalo si necesitas preguntarnos por tu solicitud."
 
 #: .\templates\pqrs\receipt.html:49
 msgid "Received on"
-msgstr ""
+msgstr "Fecha de radicación"
 
 #: .\templates\pqrs\receipt.html:52
 msgid "We will answer by"
-msgstr ""
+msgstr "Te responderemos antes del"
 
 #: .\templates\pqrs\receipt.html:66
 msgid ""
 "Claims are answered within 15 business days (Law 1581 of 2012, article 15). "
-"If we need longer we will tell you why and give you a new date, which cannot "
-"go beyond 8 further business days."
+"If we need longer we will tell you why and give you a new date, which cannot"
+" go beyond 8 further business days."
 msgstr ""
+"Los reclamos se responden en 15 días hábiles (Ley 1581 de 2012, artículo "
+"15). Si necesitamos más tiempo te diremos por qué y te daremos una nueva "
+"fecha, que no puede pasar de 8 días hábiles más."
 
 #: .\templates\pqrs\receipt.html:72
 msgid ""
-"Queries are answered within 10 business days (Law 1581 of 2012, article 14). "
-"If we need longer we will tell you why and give you a new date, which cannot "
-"go beyond 5 further business days."
+"Queries are answered within 10 business days (Law 1581 of 2012, article 14)."
+" If we need longer we will tell you why and give you a new date, which "
+"cannot go beyond 5 further business days."
 msgstr ""
+"Las consultas se responden en 10 días hábiles (Ley 1581 de 2012, artículo "
+"14). Si necesitamos más tiempo te diremos por qué y te daremos una nueva "
+"fecha, que no puede pasar de 5 días hábiles más."
 
 #: .\templates\pqrs\receipt.html:81
 msgid ""
-"We also sent this reference to the email address you gave us. If it does not "
-"arrive, check your spam folder before filing again — a second request does "
+"We also sent this reference to the email address you gave us. If it does not"
+" arrive, check your spam folder before filing again — a second request does "
 "not speed the first one up."
 msgstr ""
+"También enviamos este radicado al correo que nos diste. Si no llega, mira en"
+" la carpeta de no deseado antes de volver a radicar: una segunda solicitud "
+"no acelera la primera."
 
 #: .\templates\pqrs\receipt.html:89
-#, fuzzy
 #| msgid "Back to layouts"
 msgid "Back to the site"
-msgstr "Volver a las disposiciones"
+msgstr "Volver al sitio"
 
 #: .\templates\pqrs\wizard.html:32
 msgid ""
 "If you have a question, claim, complaint or suggestion, fill in this form "
 "and we will get back to you within the legal term."
 msgstr ""
+"Si tienes una petición, queja, reclamo o sugerencia, rellena este formulario"
+" y te responderemos dentro del término legal."
 
 #: .\templates\pqrs\wizard.html:62
-#, fuzzy
 #| msgid "Check Your Email"
 msgid "Check your details"
-msgstr "Revisa tu correo"
+msgstr "Revisa tus datos"
 
 #: .\templates\pqrs\wizard.html:119
 msgid "Submit request"
-msgstr ""
+msgstr "Radicar la solicitud"
 
 #: .\templates\pqrs\wizard.html:128
 msgid ""
 "The personal data you give us here is handled under our personal data "
 "processing policy."
 msgstr ""
+"Los datos personales que nos das aquí se tratan conforme a nuestra política "
+"de tratamiento de datos personales."
 
 #: .\templates\pqrs\wizard.html:133
 msgid "Read the policy"
-msgstr ""
+msgstr "Leer la política"
 
 #: .\templates\raw.html:211
 msgid "Processing…"
@@ -3725,8 +3729,8 @@ msgstr "Se ha enviado un código OTP a tu correo"
 
 #: .\templates\two_factor\core\login.html:161
 msgid ""
-"After several failed password attempts we sent you a code so you can sign in "
-"without getting locked out."
+"After several failed password attempts we sent you a code so you can sign in"
+" without getting locked out."
 msgstr ""
 "Tras varios intentos fallidos con la contraseña te hemos enviado un código "
 "para que puedas entrar sin quedarte bloqueado."
@@ -3740,10 +3744,9 @@ msgstr ""
 "dirección de tu cuenta."
 
 #: .\templates\two_factor\core\login.html:178
-#, fuzzy
 #| msgid "Verification Barcode"
 msgid "Verification code"
-msgstr "Código de barras de verificación"
+msgstr "Código de verificación"
 
 #: .\templates\two_factor\core\login.html:189
 #, python-format
@@ -3787,8 +3790,8 @@ msgstr ""
 #: .\templates\two_factor\core\otp_required.html:12
 #: .\templates\two_factor\profile\profile.html:27
 msgid ""
-"Two-factor authentication is not enabled for your account. Enable two-factor "
-"authentication for enhanced account security."
+"Two-factor authentication is not enabled for your account. Enable two-factor"
+" authentication for enhanced account security."
 msgstr ""
 "La autenticación de dos factores no está habilitada en tu cuenta. Actívala "
 "para mejorar la seguridad de tu cuenta."
@@ -3822,7 +3825,8 @@ msgid "Copied to clipboard"
 msgstr "Copiado al portapapeles"
 
 #: .\templates\two_factor\core\setup.html:56
-msgid "Token validated successfully. Two-factor authentication is now enabled."
+msgid ""
+"Token validated successfully. Two-factor authentication is now enabled."
 msgstr ""
 "Código validado correctamente. La verificación en dos pasos ya está "
 "activa.Token validado exitosamente. La autenticación de dos factores ahora "
@@ -3838,7 +3842,8 @@ msgid "Back to login"
 msgstr "Volver al inicio de sesión"
 
 #: .\templates\two_factor\core\setup_complete.html:13
-msgid "Congratulations, you've successfully enabled two-factor authentication."
+msgid ""
+"Congratulations, you've successfully enabled two-factor authentication."
 msgstr "¡Felicidades! Has habilitado la autenticación de dos factores."
 
 #: .\templates\two_factor\profile\profile.html:14
@@ -3862,8 +3867,8 @@ msgstr ""
 #, python-format
 msgid "You have only one backup token remaining."
 msgid_plural "You have %(counter)s backup tokens remaining."
-msgstr[0] "Solo tienes un token de respaldo restante."
-msgstr[1] "Tienes %(counter)s tokens de respaldo restantes."
+msgstr[0] "Te queda un solo código de respaldo."
+msgstr[1] "Te quedan %(counter)s códigos de respaldo."
 
 #: .\templates\two_factor\profile\profile.html:23
 msgid "Show Codes"
@@ -3918,14 +3923,14 @@ msgstr "Página"
 #~ msgstr "Creado por"
 
 #~ msgid ""
-#~ "Use this form for entering backup tokens for logging in. These tokens "
-#~ "have been generated for you to print and keep safe. Please enter one of "
-#~ "these backup tokens to login to your account."
+#~ "Use this form for entering backup tokens for logging in. These tokens have "
+#~ "been generated for you to print and keep safe. Please enter one of these "
+#~ "backup tokens to login to your account."
 #~ msgstr ""
 #~ "Usa este formulario para ingresar tokens de respaldo para iniciar sesión. "
 #~ "Estos tokens han sido generados para que los imprimas y los mantengas "
-#~ "seguros. Por favor, introduce uno de estos tokens de respaldo para "
-#~ "acceder a tu cuenta."
+#~ "seguros. Por favor, introduce uno de estos tokens de respaldo para acceder a"
+#~ " tu cuenta."
 
 #~ msgid "As a last resort, you can use a backup token:"
 #~ msgstr "Como último recurso, puedes usar un token de respaldo:"
@@ -3949,11 +3954,11 @@ msgstr "Página"
 #~ msgstr "Entrar con un código enviado a mi correo"
 
 #~ msgid ""
-#~ "Enter your username or email and we will send you a six-digit code to "
-#~ "sign in without your password."
+#~ "Enter your username or email and we will send you a six-digit code to sign "
+#~ "in without your password."
 #~ msgstr ""
-#~ "Escribe tu usuario o correo y te enviaremos un código de seis dígitos "
-#~ "para entrar sin la contraseña."
+#~ "Escribe tu usuario o correo y te enviaremos un código de seis dígitos para "
+#~ "entrar sin la contraseña."
 
 #~ msgid "Send a new code"
 #~ msgstr "Enviar un código nuevo"
