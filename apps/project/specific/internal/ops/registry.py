@@ -1380,6 +1380,34 @@ COMMANDS = (
         warning=_('This sends real email.'),
     ),
     Command(
+        name='notify_legal_changes',
+        title=_('Announce a legal document change'),
+        summary=_('Emails every user about an approved change they have not '
+                  'been told about yet.'),
+        detail=_(
+            'Entering the platform after a change is recorded as accepting '
+            'it, and that only holds if the person was told first — so this '
+            'is what opens that door, not the approval. It runs by itself '
+            'every half hour; this entry is for sending it now, or for '
+            'checking with a dry run who would get it. With nothing pending '
+            'it is one query and it stops.'
+        ),
+        example=_('Right after approving a new version, instead of waiting '
+                  'for the scheduled run.'),
+        risk=RISK_WRITES,
+        area=AREA_MAINTENANCE,
+        options=[
+            Option(
+                flag='--dry-run',
+                label=_('Only say who would get it'),
+                kind=KIND_FLAG,
+                help=_('Sends nothing and marks nothing.'),
+            ),
+        ],
+        timeout=600,
+        warning=_('Without the dry run this sends real email to every user.'),
+    ),
+    Command(
         name='generate_gea_code',
         title=_('Daily GEA code'),
         summary=_('Issues the daily code and mails it to its recipients.'),

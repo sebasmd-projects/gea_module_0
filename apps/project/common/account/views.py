@@ -23,6 +23,7 @@ from django.utils.crypto import get_random_string
 
 from formtools.wizard.views import SessionWizardView
 
+from apps.common.core.legal import accept_on_registration
 from apps.common.utils.client_ip import get_client_ip
 from apps.common.utils.functions import safe_next
 from apps.common.utils.throttling import RateLimit
@@ -343,6 +344,12 @@ class GeaUserRegisterWizardView(SessionWizardView):
                 return self.render(form)
 
             raise
+
+        # La constancia de la autorizacion, antes de nada mas: si el alta
+        # llega hasta aqui, la cuenta existe y el titular marco la casilla, asi
+        # que lo que no puede pasar es que quede la cuenta sin la constancia.
+        # Con ATOMIC_REQUESTS las dos cosas van en la misma transaccion.
+        accept_on_registration(user, self.request)
 
         auth_user = authenticate(
             self.request,

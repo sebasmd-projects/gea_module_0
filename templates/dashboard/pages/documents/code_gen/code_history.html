@@ -83,8 +83,23 @@
         {% if not object_list %}
           <p class="text-muted mb-0">{% trans 'No codes issued yet.' %}</p>
         {% else %}
+          {% comment %}
+            El `|default:0` no es cosmetico: sin el, esta pagina se cae entera.
+
+            `{% blocktrans count %}` **exige** que su contador sea un numero, y
+            una variable que no este en el contexto se resuelve a la cadena
+            vacia, no a cero — asi que lanza TemplateSyntaxError y responde 500.
+
+            Eso ya paso en produccion. El cargador de plantillas cacheado se
+            llena **por plantilla y en el primer render de cada proceso**, asi
+            que un worker arrancado antes de un `git pull` sigue ejecutando la
+            vista vieja en memoria y, la primera vez que alguien abre esta
+            pagina, lee del disco la plantilla **nueva**: contexto viejo con
+            plantilla nueva. Con el filtro se ve una cifra equivocada hasta que
+            se reinicie la aplicacion; sin el, no se ve la pagina.
+          {% endcomment %}
           <p class="text-muted small">
-            {% blocktrans trimmed count counter=code_count %}
+            {% blocktrans trimmed count counter=code_count|default:0 %}
               {{ counter }} code issued.
             {% plural %}
               {{ counter }} codes issued.
@@ -133,7 +148,7 @@
                           <span class="badge bg-secondary ms-2">{{ node.summary.get_status_display }}</span>
 
                           <span class="text-muted fw-normal ms-2">
-                            {% blocktrans trimmed count counter=node.count %}
+                            {% blocktrans trimmed count counter=node.count|default:0 %}
                               {{ counter }} code
                             {% plural %}
                               {{ counter }} codes

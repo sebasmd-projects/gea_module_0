@@ -6,10 +6,17 @@ from django.conf import settings
 from django.core.cache import caches
 from django.core.mail import get_connection
 from django.db import DatabaseError, connection
-from django.http import JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404
+from django.utils.safestring import mark_safe
+from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import TemplateView, View
+
+from .legal_html import sanitize_legal_html
+from .legal_pdf import render_document_pdf
+from .models import LegalDocumentModel
 
 logger = logging.getLogger(__name__)
 
@@ -20,52 +27,105 @@ class IndexTemplateView(TemplateView):
 
 class LegalDocumentView(TemplateView):
     """
-    Base de los documentos legales.
+    Un documento legal, leido de la base y no de una plantilla.
 
-    Todos comparten dos cosas y por eso comparten vista: **la fecha de
-    vigencia** y **la version**. No son adorno -- el articulo 18 de la propia
-    politica obliga a publicar la fecha de entrada en vigor de cada
-    modificacion, y sin version no se puede demostrar que texto acepto alguien
-    el dia que se registro.
+    Los cuatro comparten vista y plantilla porque lo unico que los distingue es
+    su clave: el texto, la version, la fecha de vigencia y el estado salen
+    todos de la fila de `LegalDocumentVersionModel` que este vigente.
 
-    Las fechas viven en ``settings`` y no en la plantilla para que cambiarlas
-    no dependa de acordarse de tocar cuatro ficheros.
+    **El aviso de borrador sale de `status`.** Antes estaba escrito a mano
+    dentro de cada plantilla y ademas repetido en un ajuste de `settings.py`
+    con un sufijo `-borrador`, o sea dos marcas que se podian desincronizar sin
+    que nada lo impidiera. Ahora hay una.
     """
 
+    template_name = 'core/tyc/legal_document.html'
     document_key = None
 
-    def get_context_data(self, **kwargs):
-        from django.conf import settings
+    def get_document(self):
+        clave = self.kwargs.get('document_key') or self.document_key
 
+        return get_object_or_404(
+            LegalDocumentModel, key=clave, is_active=True
+        )
+
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        versions = getattr(settings, 'LEGAL_DOCUMENT_VERSIONS', {})
-        current = versions.get(self.document_key, {})
+        documento = self.get_document()
+        version = documento.displayed_version()
+        idioma = get_language() or 'es'
 
-        context['document_version'] = current.get('version', '1.0.0')
-        context['document_date'] = current.get('date')
-        context['document_key'] = self.document_key
+        context['document'] = documento
+        context['document_key'] = documento.key
+        context['document_name'] = documento.name_for(idioma)
+        context['version'] = version
+
+        if version is not None:
+            context['document_version'] = version.version
+            context['document_date'] = version.effective_from
+            # Saneado antes de marcarlo como seguro. Estas paginas son
+            # publicas y sin autenticar, y el editor tiene boton de codigo
+            # fuente: `mark_safe` sobre lo que salga del admin pondria un
+            # `<script>` a la vista de cualquier visitante. Ver `legal_html`.
+            context['document_body'] = mark_safe(
+                sanitize_legal_html(version.body_for(idioma))
+            )
+            context['is_draft'] = not version.is_approved
+        else:
+            # Un documento sin ninguna redaccion. No deberia pasar --la
+            # semilla crea las cuatro-- pero un 500 aqui seria peor que una
+            # pagina que dice honestamente que todavia no hay texto.
+            context['document_body'] = ''
+            context['is_draft'] = True
 
         return context
 
 
+class LegalDocumentPDFView(LegalDocumentView):
+    """
+    El mismo documento, en PDF, generado al vuelo.
+
+    No se guarda en disco a proposito: un `FileField` obligaria a decidir su
+    carpeta en `deploy/media.htaccess` o declararla en
+    `PUBLICLY_SERVABLE_MEDIA` (invariante 13), y a regenerarlo cada vez que
+    cambia el texto. Para un documento que ya esta entero en la base y que se
+    descarga de vez en cuando, generarlo es mas barato que mantenerlo.
+    """
+
+    def get(self, request, *args, **kwargs):
+        documento = self.get_document()
+        version = documento.displayed_version()
+
+        if version is None:
+            raise Http404('El documento no tiene ninguna redaccion.')
+
+        idioma = get_language() or 'es'
+        pdf = render_document_pdf(version, idioma)
+
+        respuesta = HttpResponse(pdf, content_type='application/pdf')
+
+        # `inline`: se abre en el navegador. Es un documento para leer, y
+        # forzar la descarga de algo que se quiere consultar molesta.
+        nombre = f'{documento.key}-{version.version}-{idioma}.pdf'
+        respuesta['Content-Disposition'] = f'inline; filename="{nombre}"'
+
+        return respuesta
+
+
 class PrivacyTemplateView(LegalDocumentView):
-    template_name = "core/tyc/privacy.html"
     document_key = 'privacy'
 
 
 class TermsTemplateView(LegalDocumentView):
-    template_name = "core/tyc/terms.html"
     document_key = 'terms'
 
 
 class CookiesTemplateView(LegalDocumentView):
-    template_name = "core/tyc/cookies.html"
     document_key = 'cookies'
 
 
 class DataPolicyTemplateView(LegalDocumentView):
-    template_name = "core/tyc/data_policy.html"
     document_key = 'data_policy'
 
 

@@ -119,6 +119,22 @@ NO_SHELL = 'subprocess sin shell, con lista de argumentos.'
 #: por qué, que es la fricción que se busca: una lista de exclusión sin motivos
 #: es una forma cómoda de no mirar.
 BANDIT_ACCEPTED = {
+    # --- B308/B703: mark_safe ---
+    ('B308', 'apps/common/core/views.py'): (
+        'El cuerpo de un documento legal es HTML, y hay que marcarlo seguro '
+        'para que salga como HTML y no como codigo escapado. Lo que se marca '
+        'NO es lo que se guardo: es lo que devuelve '
+        'core.legal_html.sanitize_legal_html(), que solo emite las etiquetas '
+        'y atributos de su lista blanca y descarta cualquier href que no sea '
+        'http, https, mailto, tel o una ruta del propio sitio. Sin sanear '
+        'esto seria un <script> del admin en una pagina publica; con el '
+        'saneador, el peor caso de perder una cuenta de personal es un texto '
+        'equivocado.'
+    ),
+    ('B703', 'apps/common/core/views.py'): (
+        'La misma llamada que B308, que bandit cuenta dos veces con dos '
+        'reglas distintas. Mismo motivo.'
+    ),
     # --- B104: "bind a todas las interfaces" ---
     ('B104', 'apps/common/utils/client_ip.py'): (
         'No es una direccion de escucha: es el centinela UNKNOWN_IP para '

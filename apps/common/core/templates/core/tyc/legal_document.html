@@ -1,0 +1,41 @@
+{% extends 'core/tyc/_legal_base.html' %}
+{% load i18n %}
+
+{% comment %}
+  Los cuatro documentos legales, con una sola plantilla.
+
+  Antes habia una por documento con el texto dentro, en `{% trans %}`. El texto
+  vive ahora en `LegalDocumentVersionModel` y esto solo lo coloca: lo unico que
+  distinguia a las cuatro plantillas era su contenido, asi que en cuanto el
+  contenido sale de aqui no queda nada que separar.
+
+  El cuerpo entra con `mark_safe` desde la vista. Es HTML que se redacto en el
+  admin, o sea que ya viene de alguien que tiene acceso al admin: no es entrada
+  de un tercero. Quien pueda editar estos textos ya podria hacer mucho mas daño
+  por otros diez sitios.
+{% endcomment %}
+
+{% block document_title %}{{ document_name }}{% endblock %}
+{% block document_heading %}{{ document_name }}{% endblock %}
+
+{% block document_body %}
+
+  {% if is_draft %}
+    {% comment %}
+      El aviso sale del estado de la version, no escrito a mano. Antes estaba
+      en dos sitios --este recuadro y un sufijo en `settings.py`-- y nada
+      impedia que dijeran cosas distintas.
+    {% endcomment %}
+    <div class="legal__draft">
+      <b>{% trans 'Draft.' %}</b>
+      {% blocktrans trimmed %}
+        This text has not been approved and does not govern. It is published so
+        it can be read and corrected; while it says this, do not treat it as
+        the firm's policy.
+      {% endblocktrans %}
+    </div>
+  {% endif %}
+
+  {{ document_body }}
+
+{% endblock %}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 13:10-0500\n"
+"POT-Creation-Date: 2026-09-14 02:25+0000\n"
 "PO-Revision-Date: 2026-01-06 23:16+0000\n"
 "Last-Translator: Sebastian Morales <cto@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,12 +19,349 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.3\n"
 
-#: .\apps\common\core\templates\core\index.html:16
-#: .\apps\common\core\templates\core\index.html:22
+#: admin.py:58
+msgid "In force"
+msgstr "Vigente"
+
+#: admin.py:65
+msgid "Nothing approved yet"
+msgstr "Todavía no hay nada aprobado"
+
+#: admin.py:74
+msgid "Draft pending"
+msgstr "Borrador pendiente"
+
+#: admin.py:97
+msgid "Text"
+msgstr "Texto"
+
+#: admin.py:100
+msgid ""
+"Spanish is the wording that governs: these documents are Colombian. English "
+"is a courtesy translation."
+msgstr ""
+"El español es la redacción que rige: estos documentos son colombianos. El "
+"inglés es una traducción de cortesía."
+
+#: admin.py:104
+msgid "What changed"
+msgstr "Qué cambió"
+
+#: admin.py:107
+msgid ""
+"This is what every user receives. Say what changed, not that something "
+"changed."
+msgstr ""
+"Esto es lo que recibe cada usuario. Di qué cambió, no que algo cambió."
+
+#: admin.py:111
+msgid "Approval"
+msgstr "Aprobación"
+
+#: admin.py:115
+msgid ""
+"Filled in by the approval action. Approving is an act by a person, with "
+"their name on it."
+msgstr ""
+"Lo rellena la acción de aprobar. Aprobar es un acto de una persona, con su "
+"nombre puesto."
+
+#: admin.py:125 models.py:204
+msgid "Status"
+msgstr "Estado"
+
+#: admin.py:141
+msgid "Accepted by"
+msgstr "Aceptado por"
+
+#: admin.py:166
+msgid "Approve the selected versions"
+msgstr "Aprobar las versiones seleccionadas"
+
+#: admin.py:185
+#, python-format
+msgid ""
+"%(count)s approved, in force from today. Users will be told on the next run "
+"of the notification task — only for the ones marked to notify."
+msgstr ""
+"%(count)s aprobadas, vigentes desde hoy. Se avisará a los usuarios en la "
+"próxima pasada de la tarea de aviso, y sólo de las marcadas para avisar."
+
+#: admin.py:192
+#, python-format
+msgid ""
+"%(count)s were already approved: an approved version is never re-approved, a"
+" new one is created."
+msgstr ""
+"%(count)s ya estaban aprobadas: una versión aprobada no se vuelve a aprobar,"
+" se crea otra."
+
+#: admin.py:198
+#, python-format
+msgid ""
+"%(count)s have no Spanish text. Spanish is the wording that governs, so it "
+"cannot be approved empty."
+msgstr ""
+"%(count)s no tienen texto en español. El español es la redacción que rige, "
+"así que no se puede aprobar vacía."
+
+#: admin.py:219 models.py:178
+msgid "Document"
+msgstr "Documento"
+
+#: admin.py:223 models.py:182
+#| msgid "Extension"
+msgid "Version"
+msgstr "Versión"
+
+#: apps.py:8 models.py:153
+msgid "Legal documents"
+msgstr "Documentos legales"
+
+#: legal_pdf.py:332 models.py:152
+msgid "Legal document"
+msgstr "Documento legal"
+
+#: legal_pdf.py:339
+msgid "not in force yet"
+msgstr "todavía no vigente"
+
+#: legal_pdf.py:342
+#, python-format
+msgid "Version %(version)s · In force since %(date)s"
+msgstr "Versión %(version)s · Vigente desde %(date)s"
+
+#: legal_pdf.py:352
+msgid "Draft. This text has not been approved, and does not govern."
+msgstr "Borrador. Este texto no está aprobado y no rige."
+
+#: legal_pdf.py:363
+#, python-format
+msgid "Content fingerprint (SHA-256): %(hash)s"
+msgstr "Huella del contenido (SHA-256): %(hash)s"
+
+#: management/commands/notify_legal_changes.py:171
+#, python-format
+msgid "%(document)s has changed"
+msgstr "Ha cambiado: %(document)s"
+
+#: management/commands/notify_legal_changes.py:181
+#, python-format
+msgid "We have updated the %(document)s. You can read it at %(url)s"
+msgstr "Hemos actualizado %(document)s. Puedes leerlo en %(url)s"
+
+#: models.py:64
+msgid "Terms and conditions"
+msgstr "Términos y condiciones"
+
+#: models.py:65
+msgid "Personal data processing policy"
+msgstr "Política de tratamiento de datos personales"
+
+#: models.py:66
+msgid "Privacy notice"
+msgstr "Aviso de privacidad"
+
+#: models.py:67
+msgid "Cookie policy"
+msgstr "Política de cookies"
+
+#: models.py:71
+msgid "Draft"
+msgstr "Borrador"
+
+#: models.py:72
+msgid "Approved"
+msgstr "Aprobada"
+
+#: models.py:73
+msgid "Retired"
+msgstr "Retirada"
+
+#: models.py:86
+msgid "On registration"
+msgstr "En el alta"
+
+#: models.py:87
+msgid "Continued use after logging in"
+msgstr "Uso continuado tras entrar"
+
+#: models.py:88
+msgid "Accepted explicitly"
+msgstr "Aceptada expresamente"
+
+#: models.py:107
+msgid "Key"
+msgstr "Clave"
+
+#: models.py:112
+msgid "Identifies the document in its URL. Never renamed."
+msgstr "Identifica el documento en su URL. No se renombra nunca."
+
+#: models.py:115
+msgid "Name (Spanish)"
+msgstr "Nombre (español)"
+
+#: models.py:116
+msgid "Name (English)"
+msgstr "Nombre (inglés)"
+
+#: models.py:184
+msgid "For example 1.0.0. Unique within the document."
+msgstr "Por ejemplo 1.0.0. Única dentro del documento."
+
+#: models.py:188
+msgid "Text (Spanish)"
+msgstr "Texto (español)"
+
+#: models.py:192
+msgid "The wording that governs: these documents are Colombian."
+msgstr "La redacción que rige: estos documentos son colombianos."
+
+#: models.py:196
+msgid "Text (English)"
+msgstr "Texto (inglés)"
+
+#: models.py:200
+msgid "Courtesy translation. Where they differ, Spanish rules."
+msgstr "Traducción de cortesía. Donde difieran, manda el español."
+
+#: models.py:212
+msgid "In force since"
+msgstr "Vigente desde"
+
+#: models.py:215
+msgid ""
+"Set when it is approved. Article 18 of the policy requires publishing it."
+msgstr ""
+"Se fija al aprobar. El artículo 18 de la propia política obliga a "
+"publicarla."
+
+#: models.py:220
+msgid "What changed (Spanish)"
+msgstr "Qué cambió (español)"
+
+#: models.py:223
+msgid ""
+"Goes into the notice sent to every user. Say what changed, not that "
+"something changed."
+msgstr ""
+"Va en el aviso que se manda a cada usuario. Di qué cambió, no que algo "
+"cambió."
+
+#: models.py:228
+msgid "What changed (English)"
+msgstr "Qué cambió (inglés)"
+
+#: models.py:234
+msgid "Content hash (SHA-256)"
+msgstr "Huella del contenido (SHA-256)"
+
+#: models.py:240
+msgid ""
+"Computed on approval, over the exact text of both languages. It is what an "
+"acceptance points to."
+msgstr ""
+"Se calcula al aprobar, sobre el texto exacto de los dos idiomas. Es a lo que"
+" apunta una aceptación."
+
+#: models.py:248
+msgid "Approved by"
+msgstr "Aprobada por"
+
+#: models.py:255
+msgid "Approved at"
+msgstr "Aprobada el"
+
+#: models.py:262
+msgid "Notify every user"
+msgstr "Avisar a todos los usuarios"
+
+#: models.py:264
+msgid ""
+"Turn it off only for a correction that changes no obligation — a typo, a "
+"broken link."
+msgstr ""
+"Quítalo sólo para una corrección que no cambia ninguna obligación: una "
+"errata, un enlace roto."
+
+#: models.py:269
+msgid "Users notified at"
+msgstr "Usuarios avisados el"
+
+#: models.py:276
+msgid "People notified"
+msgstr "Personas avisadas"
+
+#: models.py:356
+msgid "An approved version has to say since when it is in force."
+msgstr "Una versión aprobada tiene que decir desde cuándo está vigente."
+
+#: models.py:378
+msgid ""
+"An approved version cannot be edited: somebody has already accepted this "
+"exact text. Create a new version instead."
+msgstr ""
+"Una versión aprobada no se puede editar: alguien ya aceptó exactamente este "
+"texto. Crea una versión nueva."
+
+#: models.py:391
+msgid "Legal document version"
+msgstr "Versión de documento legal"
+
+#: models.py:392
+msgid "Legal document versions"
+msgstr "Versiones de documento legal"
+
+#: models.py:440
+#| msgid "Data owner (titular)"
+msgid "Data owner"
+msgstr "Titular"
+
+#: models.py:447
+msgid "Accepted version"
+msgstr "Versión aceptada"
+
+#: models.py:451
+msgid "Hash of what was accepted"
+msgstr "Huella de lo aceptado"
+
+#: models.py:455
+msgid ""
+"Copied on acceptance. The proof survives even if the version row does not."
+msgstr ""
+"Se copia al aceptar. La prueba sigue en pie aunque la fila de la versión no."
+
+#: models.py:460
+msgid "How it was given"
+msgstr "Cómo se dio"
+
+#: models.py:467
+msgid "Accepted at"
+msgstr "Aceptada el"
+
+#: models.py:473
+#| msgid "Address"
+msgid "IP address"
+msgstr "Dirección IP"
+
+#: models.py:480
+msgid "Browser"
+msgstr "Navegador"
+
+#: models.py:501
+msgid "Legal acceptance"
+msgstr "Aceptación legal"
+
+#: models.py:502
+msgid "Legal acceptances"
+msgstr "Aceptaciones legales"
+
+#: templates/core/index.html:16 templates/core/index.html:22
 msgid "Secure platform for historical assets"
 msgstr "Plataforma para los activos historicos"
 
-#: .\apps\common\core\templates\core\index.html:31
+#: templates/core/index.html:31
 msgid ""
 "Comprehensive, exclusive and secure platform for buying and selling "
 "historical assets. Official U.S. purchasing platform."
@@ -32,7 +369,7 @@ msgstr ""
 "Plataforma exclusiva y segura para la compraventa de activos históricos. "
 "Plataforma de compras oficial de EE. UU."
 
-#: .\apps\common\core\templates\core\index.html:41
+#: templates/core/index.html:41
 msgid ""
 "Official and exclusive platform for the purchase and sale of US historical "
 "assets."
@@ -40,7 +377,7 @@ msgstr ""
 "Plataforma completa, exclusiva y segura para la compra y venta de activos "
 "históricos. Plataforma de compras oficial de EE. UU."
 
-#: .\apps\common\core\templates\core\index.html:54
+#: templates/core/index.html:54
 msgid ""
 "Exclusive and official platform for the secure purchase of US historical "
 "assets."
@@ -48,1570 +385,1324 @@ msgstr ""
 "Plataforma exclusiva y oficial para la compra segura de activos históricos "
 "de EE. UU."
 
-#: .\apps\common\core\templates\core\index.html:222
+#: templates/core/index.html:222
 msgid "Your browser does not support HTML5 video."
 msgstr "Su navegador no soporta vídeo HTML5."
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:19
+#: templates/core/partials/core_nav.html:19
 msgid "Toggle navigation"
 msgstr "Alternar navegación"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:36
-#: .\apps\common\core\templates\core\partials\core_nav.html:194
+#: templates/core/partials/core_nav.html:36
+#: templates/core/partials/core_nav.html:194
 msgid "Buyers"
 msgstr "Compradores"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:44
-#: .\apps\common\core\templates\core\partials\core_nav.html:199
+#: templates/core/partials/core_nav.html:44
+#: templates/core/partials/core_nav.html:199
 msgid "Suppliers"
 msgstr "Proveedores"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:59
-#: .\apps\common\core\templates\core\partials\core_nav.html:67
-#: .\apps\common\core\templates\core\partials\core_nav.html:158
-#: .\apps\common\core\templates\core\partials\core_nav.html:163
+#: templates/core/partials/core_nav.html:59
+#: templates/core/partials/core_nav.html:67
+#: templates/core/partials/core_nav.html:158
+#: templates/core/partials/core_nav.html:163
 msgid "Certificates"
 msgstr "Certificados"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:78
-#: .\apps\common\core\templates\core\partials\core_nav.html:172
+#: templates/core/partials/core_nav.html:78
+#: templates/core/partials/core_nav.html:172
 msgid "AEGIS Certification (PDF)"
 msgstr "Certificación AEGIS (PDF)"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:109
-#: .\apps\common\core\templates\core\partials\core_nav.html:207
+#: templates/core/partials/core_nav.html:109
+#: templates/core/partials/core_nav.html:207
 msgid "Login"
 msgstr "Iniciar Sesión"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:114
-#: .\apps\common\core\templates\core\partials\core_nav.html:210
+#: templates/core/partials/core_nav.html:114
+#: templates/core/partials/core_nav.html:210
 msgid "Register"
 msgstr "Registro"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:129
+#: templates/core/partials/core_nav.html:129
 msgid "Menu"
 msgstr "Menú"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:141
+#: templates/core/partials/core_nav.html:141
 msgid "Language"
 msgstr "Idioma"
 
-#: .\apps\common\core\templates\core\partials\core_nav.html:203
+#: templates/core/partials/core_nav.html:203
 msgid "Logout"
 msgstr "Cerrar Sesión"
 
-#: .\apps\common\core\templates\core\partials\whatsapp.html:51
+#: templates/core/partials/whatsapp.html:51
 msgid "Contact Us Now"
 msgstr "Contáctanos"
 
-#: .\apps\common\core\templates\core\tyc\cookies.html:16
-#: .\apps\common\core\templates\core\tyc\cookies.html:17
-msgid "Cookie policy"
-msgstr "Política de cookies"
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:22
-#: .\apps\common\core\templates\core\tyc\data_policy.html:24
-#: .\apps\common\core\templates\core\tyc\privacy.html:24
-#: .\apps\common\core\templates\core\tyc\terms.html:29
-msgid "Starting draft."
-msgstr "Borrador de partida."
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:23
-msgid ""
-"This text was written from the platform's actual behaviour, but it has not "
-"been reviewed by counsel. Read it, correct it and approve it before treating"
-" it as published policy."
-msgstr ""
-"Este texto se escribió a partir del comportamiento real de la plataforma, "
-"pero no lo ha revisado un abogado. Léelo, corrígelo y apruébalo antes de "
-"tratarlo como política publicada."
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:30
-msgid "What this covers"
-msgstr "Qué cubre"
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:33
-msgid ""
-"This policy explains the cookies and similar technologies used by GEA, the "
-"platform of Propensiones Abogados available at "
-"geausa.propensionesabogados.com and its subdomains."
-msgstr ""
-"Esta política explica las cookies y tecnologías similares que usa GEA, la "
-"plataforma de Propensiones Abogados disponible en "
-"geausa.propensionesabogados.com y sus subdominios."
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:40
-msgid "What we do not use"
-msgstr "Lo que no usamos"
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:43
-msgid ""
-"We state this first because it is the part that usually matters: this "
-"platform carries no analytics, no advertising pixels and no session "
-"recording. There is no Google Analytics, no Meta Pixel, no Hotjar and no "
-"equivalent. We do not profile visitors, and we do not sell or share browsing"
-" data with anyone for advertising."
-msgstr ""
-"Lo decimos primero porque suele ser la parte que importa: esta plataforma no"
-" lleva analítica, ni píxeles publicitarios, ni grabación de sesión. No hay "
-"Google Analytics, ni Meta Pixel, ni Hotjar ni equivalente. No perfilamos a "
-"los visitantes, y no vendemos ni compartimos datos de navegación con nadie "
-"con fines publicitarios."
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:52
-msgid "The cookies we do set"
-msgstr "Las cookies que sí ponemos"
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:55
-msgid ""
-"All of them are strictly necessary: without them you cannot log in, and "
-"forms cannot be submitted safely. None of them are used to track you across "
-"other sites."
-msgstr ""
-"Todas son estrictamente necesarias: sin ellas no se puede iniciar sesión, ni"
-" enviar formularios de forma segura. Ninguna se usa para seguirte por otros "
-"sitios."
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:65
-msgid "Cookie"
-msgstr "Cookie"
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:66
-msgid "What it is for"
-msgstr "Para qué sirve"
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:67
-msgid "How long it lasts"
-msgstr "Cuánto dura"
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:73
-msgid ""
-"Keeps you logged in as you move between pages. Without it, every page would "
-"ask for your password again."
-msgstr ""
-"Mantiene tu sesión abierta mientras te mueves entre páginas. Sin ella, cada "
-"página volvería a pedirte la contraseña."
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:74
-msgid "Until the session expires or you log out"
-msgstr "Hasta que caduque la sesión o cierres sesión"
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:78
-msgid ""
-"Confirms that a form was submitted from this site and not from a page "
-"someone else controls."
-msgstr ""
-"Confirma que un formulario se envió desde este sitio y no desde una página "
-"que controla otra persona."
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:79
-#: .\apps\common\core\templates\core\tyc\cookies.html:84
-msgid "1 year"
-msgstr "1 año"
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:83
-msgid "Remembers whether you chose Spanish or English."
-msgstr "Recuerda si elegiste español o inglés."
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:89
-msgid "Third parties that see your connection"
-msgstr "Terceros que ven tu conexión"
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:92
-msgid ""
-"Some resources — stylesheets, icon fonts, JavaScript libraries — are served "
-"from public content delivery networks. They set no cookies of ours, but by "
-"definition they receive your IP address and browser details, because that is"
-" how your browser fetches a file from them."
-msgstr ""
-"Algunos recursos —hojas de estilo, fuentes de iconos, bibliotecas de "
-"JavaScript— se sirven desde redes públicas de distribución de contenido. No "
-"ponen ninguna cookie nuestra, pero por definición reciben tu dirección IP y "
-"los datos de tu navegador, porque así es como tu navegador les pide un "
-"archivo."
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:101
-msgid "Bootstrap, icons and other libraries."
-msgstr "Bootstrap, iconos y otras bibliotecas."
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:102
-msgid "icon set."
-msgstr "juego de iconos."
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:103
-msgid "the jQuery library, served by Google."
-msgstr "la biblioteca jQuery, servida por Google."
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:104
-msgid "web fonts, where used."
-msgstr "fuentes web, donde se usan."
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:108
-#: .\apps\common\core\templates\core\tyc\data_policy.html:366
-#: .\apps\common\core\templates\core\tyc\terms.html:184
-msgid "Note for review."
-msgstr "Nota para revisión."
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:109
-msgid ""
-"Loading jQuery from Google's CDN gives Google the IP address of every "
-"visitor on the pages that use it, without anything being gained over hosting"
-" the same file ourselves. Serving those libraries from our own static files "
-"would remove that flow entirely, and would also make the platform work when "
-"a CDN is unreachable."
-msgstr ""
-"Cargar jQuery desde el CDN de Google le da a Google la dirección IP de cada "
-"visitante de las páginas que lo usan, sin ganar nada frente a alojar ese "
-"mismo archivo nosotros. Servir esas bibliotecas desde nuestros propios "
-"estáticos eliminaría ese flujo por completo, y además haría que la "
-"plataforma funcionase cuando un CDN no está accesible."
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:118
-msgid "Forms hosted by third parties"
-msgstr "Formularios alojados por terceros"
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:121
-msgid ""
-"Some pages inside the platform embed forms served by JotForm. What you type "
-"into one of those forms, including any file you attach, is sent to and "
-"stored by that provider, not by us. Their own privacy terms apply to that "
-"data in addition to ours."
-msgstr ""
-"Algunas páginas de la plataforma incrustan formularios servidos por JotForm."
-" Lo que escribas en uno de esos formularios, incluido cualquier archivo que "
-"adjuntes, se envía a ese proveedor y lo almacena él, no nosotros. A esos "
-"datos se les aplican, además de los nuestros, sus propios términos de "
-"privacidad."
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:129
-msgid "How to control cookies"
-msgstr "Cómo controlar las cookies"
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:132
-msgid ""
-"Every browser lets you see, block and delete cookies from its settings. "
-"Blocking the three listed above will stop you from logging in and from "
-"submitting forms, because they are what makes those operations work at all —"
-" it is not a restriction we impose, it is what they are for."
-msgstr ""
-"Cualquier navegador permite ver, bloquear y borrar cookies desde sus "
-"ajustes. Bloquear las tres de arriba impedirá iniciar sesión y enviar "
-"formularios, porque son justo lo que hace que esas operaciones funcionen —no"
-" es una restricción que impongamos, es para lo que sirven."
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:140
-#: .\apps\common\core\templates\core\tyc\terms.html:267
-msgid "Changes"
-msgstr "Cambios"
-
-#: .\apps\common\core\templates\core\tyc\cookies.html:143
-msgid ""
-"If we add any tool that measures or tracks use of the platform, this policy "
-"will be updated before that tool is switched on, and consent will be "
-"requested where the law requires it. The version and date at the top say "
-"which text is in force."
-msgstr ""
-"Si añadimos alguna herramienta que mida o rastree el uso de la plataforma, "
-"esta política se actualizará antes de encenderla, y se pedirá consentimiento"
-" donde la ley lo exija. La versión y la fecha de arriba dicen qué texto está"
-" en vigor."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:18
-#: .\apps\common\core\templates\core\tyc\data_policy.html:19
-msgid "Personal data processing policy"
-msgstr "Política de tratamiento de datos personales"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:25
-msgid ""
-"Written on the structure of a real policy and filled in from what the "
-"platform actually does. It has not been reviewed by counsel, and the "
-"identification details of the controller are placeholders. Do not publish it"
-" as approved policy until the firm has gone through it."
-msgstr ""
-"Escrita sobre la estructura de una política real y rellenada con lo que la "
-"plataforma hace de verdad. No la ha revisado un abogado, y los datos de "
-"identificación del responsable son marcadores de posición. No la publiques "
-"como política aprobada hasta que la firma la haya repasado."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:33
-msgid "General"
-msgstr "Generalidades"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:36
-msgid ""
-"PROPENSIONES ABOGADOS, identified with NIT [pending], with its main address "
-"in [city] (hereinafter, \"Propensiones\"), operator of the GEA platform, has"
-" adopted this personal data processing policy in compliance with the "
-"constitutional and legal provisions in force, recognising the importance of "
-"guaranteeing the security, privacy and confidentiality of the personal data "
-"of its clients, users, employees, suppliers, partners and every other group "
-"whose information it processes."
-msgstr ""
-"PROPENSIONES ABOGADOS, identificada con NIT [pendiente], con domicilio "
-"principal en [ciudad] (en adelante, «Propensiones»), operadora de la "
-"plataforma GEA, ha adoptado esta política de tratamiento de datos personales"
-" en cumplimiento de las disposiciones constitucionales y legales vigentes, "
-"reconociendo la importancia de garantizar la seguridad, la privacidad y la "
-"confidencialidad de los datos personales de sus clientes, usuarios, "
-"empleados, proveedores, socios y de todo otro grupo cuya información trata."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:47
-msgid "Applicable rules"
-msgstr "Normas aplicables"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:50
-msgid "Article 15 of the Political Constitution of Colombia"
-msgstr "Artículo 15 de la Constitución Política de Colombia"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:51
-msgid "Statutory Law 1266 of 2008"
-msgstr "Ley Estatutaria 1266 de 2008"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:52
-msgid "Law 1273 of 2009"
-msgstr "Ley 1273 de 2009"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:53
-msgid "Statutory Law 1581 of 2012"
-msgstr "Ley Estatutaria 1581 de 2012"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:54
-msgid "Decree 1377 of 2013"
-msgstr "Decreto 1377 de 2013"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:55
-msgid "Decrees 1727 of 2009, 2952 of 2010 and 886 of 2014"
-msgstr "Decretos 1727 de 2009, 2952 de 2010 y 886 de 2014"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:56
-msgid ""
-"Title V of the Single Circular of the Superintendence of Industry and "
-"Commerce"
-msgstr ""
-"Título V de la Circular Única de la Superintendencia de Industria y Comercio"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:57
-msgid "Constitutional Court judgments C-1011 of 2008 and C-748 of 2011"
-msgstr "Sentencias de la Corte Constitucional C-1011 de 2008 y C-748 de 2011"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:60
-msgid "Purpose of this policy"
-msgstr "Objeto de esta política"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:63
-msgid ""
-"To protect the constitutional right of habeas data, guaranteeing that the "
-"people whose data we hold can know it, update it and correct it. "
-"Propensiones only stores and processes data that has been authorised by its "
-"owner, and applies the security measures needed to protect it."
-msgstr ""
-"Proteger el derecho constitucional de habeas data, garantizando que las "
-"personas cuyos datos tenemos puedan conocerlos, actualizarlos y "
-"rectificarlos. Propensiones sólo almacena y trata datos que han sido "
-"autorizados por su titular, y aplica las medidas de seguridad necesarias "
-"para protegerlos."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:71
-msgid "Definitions"
-msgstr "Definiciones"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:74
-#: .\apps\common\core\templates\core\tyc\data_policy.html:151
-msgid "Authorisation"
-msgstr "Autorización"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:75
-msgid ""
-"The prior, express and informed consent given by the data owner for their "
-"data to be processed."
-msgstr ""
-"El consentimiento previo, expreso e informado que da el titular para que se "
-"traten sus datos."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:77
-msgid "Data owner (titular)"
-msgstr "Titular"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:78
-msgid "The natural person whose personal data is processed."
-msgstr "La persona natural cuyos datos personales son objeto de tratamiento."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:80
-msgid "Controller (responsable)"
-msgstr "Responsable del tratamiento"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:81
-msgid ""
-"Whoever decides on the processing of the data. For this platform, "
-"Propensiones Abogados."
-msgstr ""
-"Quien decide sobre el tratamiento de los datos. Para esta plataforma, "
-"Propensiones Abogados."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:83
-msgid "Processor (encargado)"
-msgstr "Encargado del tratamiento"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:84
-msgid "Whoever processes data on behalf of the controller."
-msgstr "Quien trata los datos por cuenta del responsable."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:86
-#: .\apps\common\core\templates\core\tyc\privacy.html:59
-msgid "Sensitive data"
-msgstr "Datos sensibles"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:87
-msgid ""
-"Data affecting the intimacy of its owner, or whose misuse may lead to "
-"discrimination."
-msgstr ""
-"Datos que afectan a la intimidad de su titular, o cuyo uso indebido puede "
-"generar discriminación."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:89
-msgid "Transfer"
-msgstr "Transferencia"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:90
-msgid ""
-"Sending data to a recipient who is itself a controller, inside or outside "
-"the country."
-msgstr ""
-"Envío de datos a un receptor que es a su vez responsable del tratamiento, "
-"dentro o fuera del país."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:92
-msgid "Transmission"
-msgstr "Transmisión"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:93
-msgid ""
-"Communicating data so that a processor handles it on the controller behalf."
-msgstr ""
-"Comunicación de datos para que un encargado los trate por cuenta del "
-"responsable."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:96
-msgid "Principles"
-msgstr "Principios"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:99
-msgid ""
-"Processing follows the principles of legality, freedom, purpose, accuracy, "
-"transparency, restricted access and circulation, security, confidentiality "
-"and time limitation, as set out in article 4 of Law 1581 of 2012."
-msgstr ""
-"El tratamiento sigue los principios de legalidad, libertad, finalidad, "
-"veracidad, transparencia, acceso y circulación restringida, seguridad, "
-"confidencialidad y temporalidad, tal como los enuncia el artículo 4 de la "
-"Ley 1581 de 2012."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:107
-msgid "What data we collect"
-msgstr "Qué datos recogemos"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:110
-msgid ""
-"This section describes what the platform actually asks for, grouped by why "
-"it is asked."
-msgstr ""
-"Esta sección describe lo que la plataforma pide de verdad, agrupado por el "
-"motivo por el que se pide."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:119
-msgid "Group"
-msgstr "Grupo"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:120
-msgid "Data"
-msgstr "Datos"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:125
-msgid "Account"
-msgstr "Cuenta"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:126
-msgid ""
-"Username, names and surnames, email address, mobile number and country code,"
-" user type, and who referred you if anyone did."
-msgstr ""
-"Nombre de usuario, nombres y apellidos, correo electrónico, número de móvil "
-"e indicativo de país, tipo de usuario y quién te refirió, si lo hizo "
-"alguien."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:129
-msgid "Identity"
-msgstr "Identidad"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:130
-msgid ""
-"Date of birth, nationality, passport or identity number, issuing authority "
-"and dates, a photograph of the identity document, and a signature image."
-msgstr ""
-"Fecha de nacimiento, nacionalidad, número de pasaporte o de documento de "
-"identidad, autoridad y fechas de expedición, una fotografía del documento de"
-" identidad y una imagen de la firma."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:133
-msgid "Address"
-msgstr "Dirección"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:134
-msgid "Country, department, city, street address and postal code."
-msgstr "País, departamento, ciudad, dirección y código postal."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:137
-msgid "Activity on the platform"
-msgstr "Actividad en la plataforma"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:138
-msgid ""
-"Assets and locations registered, purchase orders and their approval history,"
-" documents certified, and who viewed or downloaded which file and when."
-msgstr ""
-"Activos y ubicaciones registrados, órdenes de compra y su historial de "
-"aprobación, documentos certificados, y quién vio o descargó qué archivo y "
-"cuándo."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:141
-msgid "Security"
-msgstr "Seguridad"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:142
-msgid ""
-"IP address, browser details, login attempts, and the record of every change "
-"made through the platform."
-msgstr ""
-"Dirección IP, datos del navegador, intentos de acceso y el registro de cada "
-"cambio hecho a través de la plataforma."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:145
-msgid "Requests (PQRS)"
-msgstr "Solicitudes (PQRS)"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:146
-msgid ""
-"What you write in the request form, the identification you give to prove who"
-" you are, and any document you attach."
-msgstr ""
-"Lo que escribas en el formulario de solicitud, la identificación que aportes"
-" para acreditar quién eres y cualquier documento que adjuntes."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:154
-msgid ""
-"Propensiones requests the prior, express and informed consent of the data "
-"owner. That authorisation is recorded, together with when it was given, so "
-"that it can be produced later as article 9 of Law 1581 requires. "
-"Authorisation is not needed where the data is requested by a public body "
-"exercising its legal functions, where the data is public, in cases of "
-"medical urgency, for authorised historical or statistical purposes, or in "
-"relation to the civil registry."
-msgstr ""
-"Propensiones solicita el consentimiento previo, expreso e informado del "
-"titular. Esa autorización se conserva, junto con el momento en que se dio, "
-"para poder acreditarla después como exige el artículo 9 de la Ley 1581. No "
-"se requiere autorización cuando los datos los solicita una entidad pública "
-"en ejercicio de sus funciones legales, cuando son de naturaleza pública, en "
-"casos de urgencia médica, para fines históricos o estadísticos autorizados, "
-"ni en lo relativo al registro civil."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:165
-msgid "Sensitive data and data of minors"
-msgstr "Datos sensibles y datos de menores"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:168
-msgid ""
-"Where sensitive data is involved, the owner is told that they are not "
-"obliged to authorise it, which data is sensitive, and what it will be used "
-"for. The platform is not intended for minors and does not knowingly collect "
-"their data; where it were necessary, it would be handled through their legal"
-" representative and after hearing the minor, as articles 6 and 12 of Decree "
-"1377 of 2013 require."
-msgstr ""
-"Cuando hay datos sensibles de por medio, se le informa al titular que no "
-"está obligado a autorizar su tratamiento, cuáles son esos datos y para qué "
-"se van a usar. La plataforma no está dirigida a menores y no recoge sus "
-"datos a sabiendas; si fuera necesario, se haría por medio de su "
-"representante legal y después de oír al menor, como exigen los artículos 6 y"
-" 12 del Decreto 1377 de 2013."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:178
-msgid "Purposes"
-msgstr "Finalidades"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:181
-msgid ""
-"Create and maintain your account, and let you into the areas that correspond"
-" to your role."
-msgstr ""
-"Crear y mantener tu cuenta, y darte acceso a las áreas que corresponden a tu"
-" rol."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:182
-msgid ""
-"Verify your identity before giving access to, or changing, personal data — "
-"including for requests filed through the PQRS form."
-msgstr ""
-"Verificar tu identidad antes de dar acceso a datos personales o de "
-"modificarlos, incluidas las solicitudes presentadas por el formulario de "
-"PQRS."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:183
-msgid ""
-"Register historical assets and their physical locations, and keep the "
-"inventory."
-msgstr ""
-"Registrar activos históricos y sus ubicaciones físicas, y llevar el "
-"inventario."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:184
-msgid ""
-"Process purchase orders through their approval stages, and issue the "
-"resulting documents."
-msgstr ""
-"Tramitar las órdenes de compra por sus etapas de aprobación y emitir los "
-"documentos que resulten."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:185
-msgid ""
-"Issue and verify certified documents, including the public verification "
-"portal."
-msgstr ""
-"Emitir y verificar documentos certificados, incluido el portal público de "
-"verificación."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:186
-msgid ""
-"Send operational communications: verification codes, password recovery, "
-"service orders and answers to requests."
-msgstr ""
-"Enviar comunicaciones operativas: códigos de verificación, recuperación de "
-"contraseña, órdenes de servicio y respuestas a solicitudes."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:187
-msgid ""
-"Comply with legal obligations and with orders from administrative or "
-"judicial authorities."
-msgstr ""
-"Cumplir obligaciones legales y órdenes de autoridades administrativas o "
-"judiciales."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:188
-msgid ""
-"Keep the platform secure: detect abuse, block automated attacks and keep an "
-"audit trail of what was done and by whom."
-msgstr ""
-"Mantener la seguridad de la plataforma: detectar abusos, bloquear ataques "
-"automatizados y conservar la traza de auditoría de qué se hizo y quién lo "
-"hizo."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:191
-msgid "How long we keep it"
-msgstr "Cuánto tiempo los conservamos"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:194
-msgid ""
-"Data is processed while the relationship with the owner lasts, plus the "
-"period required by the applicable law. Two categories last longer, for a "
-"reason worth stating plainly:"
-msgstr ""
-"Los datos se tratan mientras dure la relación con el titular, más el plazo "
-"que exija la ley aplicable. Dos categorías duran más, por una razón que "
-"conviene decir claramente:"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:203
-msgid ""
-"<b>Certified documents and their fingerprints.</b> A certificate whose "
-"record is deleted stops being verifiable, which defeats the point of having "
-"issued it."
-msgstr ""
-"<b>Los documentos certificados y sus huellas.</b> Un certificado cuyo "
-"registro se borra deja de poder verificarse, lo que vacía de sentido haberlo"
-" emitido."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:210
-msgid ""
-"<b>The audit trail.</b> The record of who did what is what allows the firm "
-"to show it acted correctly, including towards the person asking."
-msgstr ""
-"<b>La traza de auditoría.</b> El registro de quién hizo qué es lo que "
-"permite a la firma demostrar que actuó correctamente, también frente a quien"
-" pregunta."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:217
-msgid "Rights of the data owner"
-msgstr "Derechos del titular"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:220
-msgid "Know, update and correct your data."
-msgstr "Conocer, actualizar y rectificar tus datos."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:221
-msgid "Ask for proof of the authorisation you gave."
-msgstr "Solicitar prueba de la autorización que diste."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:222
-msgid "Be told what use is being made of your data."
-msgstr "Ser informado del uso que se da a tus datos."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:223
-msgid ""
-"File complaints with the Superintendence of Industry and Commerce for "
-"breaches of the rules."
-msgstr ""
-"Presentar quejas ante la Superintendencia de Industria y Comercio por "
-"infracciones a las normas."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:224
-msgid ""
-"Withdraw the authorisation or ask for your data to be deleted, where no "
-"legal or contractual duty requires it to be kept."
-msgstr ""
-"Revocar la autorización o solicitar la supresión de tus datos, cuando no "
-"haya un deber legal o contractual que obligue a conservarlos."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:225
-msgid "Consult your data free of charge."
-msgstr "Consultar tus datos de forma gratuita."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:229
-msgid ""
-"These rights may be exercised by the owner, by their successors, by a "
-"representative with proof of the representation, or under a stipulation in "
-"favour of another, as article 20 of Decree 1377 of 2013 sets out."
-msgstr ""
-"Estos derechos los puede ejercer el titular, sus causahabientes, un "
-"representante que acredite la representación, o quien resulte de una "
-"estipulación a favor de otro, como establece el artículo 20 del Decreto 1377"
-" de 2013."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:236
-msgid "Security measures"
-msgstr "Medidas de seguridad"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:239
-msgid ""
-"Beyond the general commitment, these are the specific measures in place, so "
-"that the statement can be checked rather than taken on trust:"
-msgstr ""
-"Más allá del compromiso general, estas son las medidas concretas que hay "
-"puestas, para que la afirmación se pueda comprobar en vez de creerse:"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:246
-msgid ""
-"Identity data — passport number, date of birth, nationality, address and "
-"telephone — is stored encrypted, not in readable form."
-msgstr ""
-"Los datos de identidad —número de pasaporte, fecha de nacimiento, "
-"nacionalidad, dirección y teléfono— se guardan cifrados, no en claro."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:247
-msgid ""
-"Certificate document numbers are never stored in the clear: only a keyed "
-"hash of them is kept."
-msgstr ""
-"Los números de documento de los certificados nunca se guardan en claro: sólo"
-" se conserva un hash con clave de ellos."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:248
-msgid "Access to the administration panel requires a verified second factor."
-msgstr ""
-"El acceso al panel de administración exige un segundo factor verificado."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:249
-msgid ""
-"Repeated failed logins are throttled, and automated scanning is blocked."
-msgstr ""
-"Los intentos de acceso fallidos repetidos se limitan, y el escaneo "
-"automatizado se bloquea."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:250
-msgid ""
-"Certified files are not served as plain links: every download goes through a"
-" check of who is asking."
-msgstr ""
-"Los archivos certificados no se sirven por enlaces directos: cada descarga "
-"pasa por una comprobación de quién la pide."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:251
-msgid "Changes to records are logged, with who made them and when."
-msgstr ""
-"Los cambios en los registros quedan registrados, con quién los hizo y "
-"cuándo."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:254
-msgid "Duties as controller and as processor"
-msgstr "Deberes como responsable y como encargado"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:257
-msgid ""
-"Propensiones assumes the duties of a controller under article 17 of Law "
-"1581, and, where it processes data on behalf of a third party, those of a "
-"processor under article 18. Where both roles coincide, both sets of duties "
-"apply."
-msgstr ""
-"Propensiones asume los deberes de responsable del artículo 17 de la Ley 1581"
-" y, cuando trata datos por cuenta de un tercero, los de encargado del "
-"artículo 18. Cuando ambos roles coinciden, se aplican los dos conjuntos de "
-"deberes."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:265
-msgid "Queries and claims"
-msgstr "Consultas y reclamos"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:268
-msgid ""
-"Requests are filed through the PQRS form on this site, and each one is given"
-" a reference number and a due date at the moment it comes in."
-msgstr ""
-"Las solicitudes se presentan por el formulario de PQRS de este sitio, y a "
-"cada una se le asigna un número de radicado y una fecha de vencimiento en el"
-" momento en que entra."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:277
-msgid "Type"
-msgstr "Tipo"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:278
-msgid "Term"
-msgstr "Plazo"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:279
-msgid "Extension"
-msgstr "Prórroga"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:284
-msgid "Query (article 14)"
-msgstr "Consulta (artículo 14)"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:285
-msgid "10 business days"
-msgstr "10 días hábiles"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:286
-msgid "5 further business days, with reasons given"
-msgstr "5 días hábiles más, con motivación"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:289
-msgid "Claim (article 15)"
-msgstr "Reclamo (artículo 15)"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:290
-msgid "15 business days"
-msgstr "15 días hábiles"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:291
-msgid "8 further business days, with reasons given"
-msgstr "8 días hábiles más, con motivación"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:297
-msgid ""
-"Both terms are counted in business days from the day after the request is "
-"received. An incomplete claim is returned for amendment within 5 days; if "
-"two months pass without an answer, the claim is treated as withdrawn. Where "
-"Propensiones is not the competent party, the request is passed on and the "
-"person is told."
-msgstr ""
-"Los dos plazos se cuentan en días hábiles a partir del día siguiente al de "
-"recepción de la solicitud. Un reclamo incompleto se devuelve para "
-"subsanación dentro de los 5 días siguientes; si pasan dos meses sin "
-"respuesta, el reclamo se entiende desistido. Cuando Propensiones no es la "
-"competente, la solicitud se traslada y se le informa a la persona."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:306
-#: .\apps\common\core\templates\core\tyc\terms.html:277
-#| msgid "Contact Us Now"
-msgid "Contact"
-msgstr "Contacto"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:309
-#: .\apps\common\core\templates\core\tyc\terms.html:280
-msgid "PQRS form:"
-msgstr "Formulario de PQRS:"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:309
-#: .\apps\common\core\templates\core\tyc\terms.html:280
-msgid "file a request"
-msgstr "presentar una solicitud"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:310
-#: .\apps\common\core\templates\core\tyc\terms.html:281
-msgid "Email:"
-msgstr "Correo electrónico:"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:313
-msgid "Third parties and processors"
-msgstr "Terceros y encargados"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:316
-msgid ""
-"Propensiones requires the third parties it works with to comply with the "
-"Colombian personal data regime, and may ask them to show that compliance "
-"before, during and after the relationship."
-msgstr ""
-"Propensiones exige a los terceros con los que trabaja el cumplimiento del "
-"régimen colombiano de datos personales, y puede pedirles que lo acrediten "
-"antes, durante y después de la relación."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:323
-msgid "International transfers"
-msgstr "Transferencias internacionales"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:326
-msgid ""
-"Operating this platform involves sending certain data outside Colombia. Each"
-" case is listed with what actually leaves, because the difference matters:"
-msgstr ""
-"Operar esta plataforma implica enviar ciertos datos fuera de Colombia. Cada "
-"caso se enumera con lo que sale de verdad, porque la diferencia importa:"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:336
-msgid "Recipient"
-msgstr "Destinatario"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:337
-msgid "What is sent"
-msgstr "Qué se envía"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:338
-msgid "Why"
-msgstr "Para qué"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:344
-msgid ""
-"The text of asset names, descriptions and observations, at the moment they "
-"are saved."
-msgstr ""
-"El texto de los nombres, descripciones y observaciones de los activos, en el"
-" momento en que se guardan."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:345
-msgid "Automatic translation between Spanish and English."
-msgstr "Traducción automática entre español e inglés."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:348
-msgid "OpenTimestamps calendars"
-msgstr "Calendarios de OpenTimestamps"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:349
-msgid "Only a SHA-256 hash."
-msgstr "Sólo un hash SHA-256."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:349
-msgid "Never the document, and never its content."
-msgstr "Nunca el documento, ni su contenido."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:350
-msgid "Time anchoring of certified documents."
-msgstr "Anclaje temporal de los documentos certificados."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:354
-msgid ""
-"What is typed into the forms embedded on certain pages, including "
-"attachments."
-msgstr ""
-"Lo que se escribe en los formularios incrustados en ciertas páginas, "
-"incluidos los adjuntos."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:355
-msgid "Forms hosted by that provider."
-msgstr "Formularios alojados por ese proveedor."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:358
-msgid "Content delivery networks"
-msgstr "Redes de distribución de contenido"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:359
-msgid "Your IP address and browser details, by the fact of requesting a file."
-msgstr ""
-"Tu dirección IP y los datos de tu navegador, por el hecho de pedir un "
-"archivo."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:360
-msgid "Serving libraries, fonts and icons."
-msgstr "Servir bibliotecas, fuentes e iconos."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:367
-msgid ""
-"The transfer to OpenAI is the one that deserves a decision rather than a "
-"disclosure. Names and descriptions of assets are free text: if someone types"
-" personal data into a description, it leaves the country with it. Options "
-"are to keep it and cover it with the transfer instruments the SIC requires, "
-"to restrict which fields are translated, or to translate only on explicit "
-"request instead of automatically on every save."
-msgstr ""
-"La transferencia a OpenAI es la que merece una decisión y no sólo una "
-"declaración. Los nombres y las descripciones de los activos son texto libre:"
-" si alguien escribe datos personales en una descripción, salen del país con "
-"ella. Las opciones son mantenerla y cubrirla con los instrumentos de "
-"transferencia que exige la SIC, restringir qué campos se traducen, o "
-"traducir sólo a petición expresa en vez de automáticamente en cada guardado."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:377
-#: .\apps\common\core\templates\core\tyc\terms.html:116
-msgid "Automatic translation"
-msgstr "Traducción automática"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:380
-msgid ""
-"Some texts in the platform are translated automatically between Spanish and "
-"English. That translation is machine-generated: it is a convenience, not a "
-"certified translation, and it is not reviewed by a person before being "
-"shown. Where a text has legal or contractual effect, the version written by "
-"its author is the one that governs."
-msgstr ""
-"Algunos textos de la plataforma se traducen automáticamente entre español e "
-"inglés. Esa traducción la genera una máquina: es una comodidad, no una "
-"traducción certificada, y nadie la revisa antes de mostrarla. Cuando un "
-"texto tiene efectos jurídicos o contractuales, la versión escrita por su "
-"autor es la que prevalece."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:389
-msgid "Changes to this policy"
-msgstr "Cambios en esta política"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:392
-msgid ""
-"This policy may be modified to adapt it to new practices or to legal "
-"developments. Any update is published on this page with the date it comes "
-"into force, shown at the top of this document."
-msgstr ""
-"Esta política puede modificarse para adaptarla a nuevas prácticas o a "
-"cambios normativos. Cualquier actualización se publica en esta página con la"
-" fecha en que entra en vigor, que aparece al principio de este documento."
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:399
-msgid "Effective date"
-msgstr "Fecha de entrada en vigor"
-
-#: .\apps\common\core\templates\core\tyc\data_policy.html:402
-msgid ""
-"This policy takes effect from the date of its approval, shown at the top of "
-"this document."
-msgstr ""
-"Esta política rige desde la fecha de su aprobación, que aparece al principio"
-" de este documento."
-
-#: .\apps\common\core\templates\core\tyc\privacy.html:18
-#: .\apps\common\core\templates\core\tyc\privacy.html:19
-msgid "Privacy notice"
-msgstr "Aviso de privacidad"
-
-#: .\apps\common\core\templates\core\tyc\privacy.html:25
-msgid ""
-"Pending review by the firm. The controller's identification details are "
-"placeholders."
-msgstr ""
-"Pendiente de revisión por la firma. Los datos de identificación del "
-"responsable son marcadores de posición."
-
-#: .\apps\common\core\templates\core\tyc\privacy.html:32
-msgid ""
-"This is the short notice required by article 15 of Decree 1377 of 2013. The "
-"full detail is in the personal data processing policy."
-msgstr ""
-"Este es el aviso breve que exige el artículo 15 del Decreto 1377 de 2013. El"
-" detalle completo está en la política de tratamiento de datos personales."
-
-#: .\apps\common\core\templates\core\tyc\privacy.html:38
-msgid "Who is responsible"
-msgstr "Quién es el responsable"
-
-#: .\apps\common\core\templates\core\tyc\privacy.html:41
-msgid ""
-"PROPENSIONES ABOGADOS, NIT [pending], with address at [address], operator of"
-" the GEA platform. Contact: info@propensionesabogados.com."
-msgstr ""
-"PROPENSIONES ABOGADOS, NIT [pendiente], con dirección en [dirección], "
-"operadora de la plataforma GEA. Contacto: info@propensionesabogados.com."
-
-#: .\apps\common\core\templates\core\tyc\privacy.html:47
-msgid "What we do with your data"
-msgstr "Qué hacemos con tus datos"
-
-#: .\apps\common\core\templates\core\tyc\privacy.html:50
-msgid ""
-"We collect and process personal data in order to: create and maintain your "
-"account; verify your identity; register historical assets and their "
-"locations; process purchase orders; issue and verify certified documents; "
-"send you the communications the service requires; comply with legal "
-"obligations; and keep the platform secure."
-msgstr ""
-"Recogemos y tratamos datos personales para: crear y mantener tu cuenta; "
-"verificar tu identidad; registrar activos históricos y sus ubicaciones; "
-"tramitar órdenes de compra; emitir y verificar documentos certificados; "
-"enviarte las comunicaciones que el servicio requiere; cumplir obligaciones "
-"legales; y mantener la seguridad de la plataforma."
-
-#: .\apps\common\core\templates\core\tyc\privacy.html:62
-msgid ""
-"Where sensitive data is requested, you are not obliged to give it, and you "
-"will be told which data it is and what it is for before it is collected."
-msgstr ""
-"Cuando se soliciten datos sensibles, no estás obligado a darlos, y se te "
-"dirá cuáles son y para qué sirven antes de recogerlos."
-
-#: .\apps\common\core\templates\core\tyc\privacy.html:69
-msgid "Your rights"
-msgstr "Tus derechos"
-
-#: .\apps\common\core\templates\core\tyc\privacy.html:72
-msgid ""
-"You may know, update and correct your data; ask for proof of the "
-"authorisation you gave; be told what use is made of it; withdraw the "
-"authorisation or ask for deletion, where no legal or contractual duty "
-"requires it to be kept; consult it free of charge; and file a complaint with"
-" the Superintendence of Industry and Commerce."
-msgstr ""
-"Puedes conocer, actualizar y rectificar tus datos; solicitar prueba de la "
-"autorización que diste; ser informado del uso que se les da; revocar la "
-"autorización o pedir su supresión, cuando no haya un deber legal o "
-"contractual que obligue a conservarlos; consultarlos de forma gratuita; y "
-"presentar queja ante la Superintendencia de Industria y Comercio."
-
-#: .\apps\common\core\templates\core\tyc\privacy.html:81
-msgid "How to exercise them"
-msgstr "Cómo ejercerlos"
-
-#: .\apps\common\core\templates\core\tyc\privacy.html:84
-msgid ""
-"Through the PQRS form on this site. Each request gets a reference number and"
-" a due date at the moment it is filed: queries are answered within 10 "
-"business days and claims within 15, in both cases counted from the day after"
-" the request comes in."
-msgstr ""
-"Por el formulario de PQRS de este sitio. A cada solicitud se le asigna un "
-"número de radicado y una fecha de vencimiento en el momento de presentarla: "
-"las consultas se responden en 10 días hábiles y los reclamos en 15, en ambos"
-" casos contados desde el día siguiente al de entrada de la solicitud."
-
-#: .\apps\common\core\templates\core\tyc\privacy.html:93
-msgid "File a request"
-msgstr "Presentar una solicitud"
-
-#: .\apps\common\core\templates\core\tyc\privacy.html:96
-msgid "Where the full policy is"
-msgstr "Dónde está la política completa"
-
-#: .\apps\common\core\templates\core\tyc\privacy.html:99
-msgid ""
-"The personal data processing policy sets out what data we hold, why, how "
-"long for, what security measures apply, and which data leaves the country "
-"and to whom."
-msgstr ""
-"La política de tratamiento de datos personales detalla qué datos tenemos, "
-"para qué, durante cuánto tiempo, qué medidas de seguridad se aplican y qué "
-"datos salen del país y hacia quién."
-
-#: .\apps\common\core\templates\core\tyc\privacy.html:107
-msgid "Read the full policy"
-msgstr "Leer la política completa"
-
-#: .\apps\common\core\templates\core\tyc\terms.html:23
-#: .\apps\common\core\templates\core\tyc\terms.html:24
-msgid "Terms and conditions"
-msgstr "Términos y condiciones"
-
-#: .\apps\common\core\templates\core\tyc\terms.html:30
-msgid ""
-"A starting point, not approved terms. The sections on what a certification "
-"proves and on automatic translation were written to match what the platform "
-"actually does; the rest needs the firm's review, and the dispute resolution "
-"section in particular needs a decision, not just a redraft."
-msgstr ""
-"Un punto de partida, no unos términos aprobados. Las secciones sobre qué "
-"prueba una certificación y sobre la traducción automática se escribieron "
-"para ajustarse a lo que la plataforma hace de verdad; el resto necesita la "
-"revisión de la firma, y la sección de resolución de controversias necesita "
-"en particular una decisión, no sólo una nueva redacción."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:39
-msgid "Who we are and what this is"
-msgstr "Quiénes somos y qué es esto"
-
-#: .\apps\common\core\templates\core\tyc\terms.html:42
-msgid ""
-"GEA is the platform operated by Propensiones Abogados for managing "
-"historical assets — bonds, gold, high denomination banknotes and similar — "
-"and for issuing and verifying certified documents. By creating an account or"
-" using the platform you accept these terms."
-msgstr ""
-"GEA es la plataforma que opera Propensiones Abogados para la gestión de "
-"activos históricos —bonos, oro, billetes de alta denominación y similares— y"
-" para la emisión y verificación de documentos certificados. Al crear una "
-"cuenta o usar la plataforma aceptas estos términos."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:50
-msgid "Who may use it"
-msgstr "Quién puede usarla"
-
-#: .\apps\common\core\templates\core\tyc\terms.html:53
-msgid ""
-"The platform is for adults with legal capacity. Registration requires a code"
-" supplied by the firm: it is not open sign-up, and an account is personal "
-"and non-transferable. You are responsible for what is done from your "
-"account, which is why a second factor is available and required for internal"
-" roles."
-msgstr ""
-"La plataforma es para personas mayores de edad con capacidad legal. El "
-"registro exige un código que entrega la firma: no es un alta abierta, y la "
-"cuenta es personal e intransferible. Eres responsable de lo que se haga "
-"desde tu cuenta, y por eso hay un segundo factor disponible, obligatorio "
-"para los roles internos."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:62
-msgid "What you may not do"
-msgstr "Lo que no puedes hacer"
-
-#: .\apps\common\core\templates\core\tyc\terms.html:65
-msgid "Register assets or documents you have no right over."
-msgstr "Registrar activos o documentos sobre los que no tienes derecho."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:66
-msgid "Upload content that is unlawful, or that infringes third party rights."
-msgstr "Subir contenido ilícito o que vulnere derechos de terceros."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:67
-msgid "Try to reach data or areas that do not correspond to your role."
-msgstr "Intentar llegar a datos o áreas que no corresponden a tu rol."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:68
-msgid "Automate access, scan the platform, or interfere with its operation."
-msgstr ""
-"Automatizar el acceso, escanear la plataforma o interferir en su "
-"funcionamiento."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:69
-msgid ""
-"Present a certified copy as if it were something other than what section 5 "
-"describes."
-msgstr ""
-"Presentar una copia certificada como si fuera algo distinto de lo que "
-"describe la sección 5."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:72
-msgid "Your content"
-msgstr "Tu contenido"
-
-#: .\apps\common\core\templates\core\tyc\terms.html:75
-msgid ""
-"What you upload stays yours. You give Propensiones the permission needed to "
-"store it, process it and show it to whoever the platform's rules allow, for "
-"the purpose you uploaded it for. You are responsible for having the right to"
-" upload it."
-msgstr ""
-"Lo que subes sigue siendo tuyo. Le das a Propensiones el permiso necesario "
-"para almacenarlo, tratarlo y mostrarlo a quien permitan las reglas de la "
-"plataforma, para la finalidad por la que lo subiste. Eres responsable de "
-"tener derecho a subirlo."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:83
-msgid "What a certification proves — and what it does not"
-msgstr "Qué prueba una certificación, y qué no"
-
-#: .\apps\common\core\templates\core\tyc\terms.html:86
-msgid "This is the section to read twice."
-msgstr "Esta es la sección que hay que leer dos veces."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:87
-msgid ""
-"A GEA certification proves <b>integrity</b>: that a file has not changed "
-"since it was registered, and that it existed no later than a given moment. "
-"It says nothing about whether what the document claims is <b>true</b>, nor "
-"about the authenticity, ownership, value or legal validity of any asset it "
-"describes."
-msgstr ""
-"Una certificación de GEA prueba la <b>integridad</b>: que un archivo no ha "
-"cambiado desde que se registró, y que existía a más tardar en un momento "
-"dado. No dice nada sobre si es <b>cierto</b> lo que el documento afirma, ni "
-"sobre la autenticidad, la titularidad, el valor o la validez jurídica de "
-"ningún activo que describa."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:97
-msgid ""
-"In concrete terms: certifying a document that states an asset is worth a "
-"certain amount proves that the document said so on that date. It does not "
-"verify the amount, the asset, or the claim. The certification record issued "
-"with every document says the same thing in its own terms, and that record "
-"governs over any summary of it."
-msgstr ""
-"En concreto: certificar un documento que afirma que un activo vale cierta "
-"cantidad prueba que el documento lo decía en esa fecha. No verifica la "
-"cantidad, ni el activo, ni la afirmación. El registro de certificación que "
-"se emite con cada documento dice lo mismo en sus propios términos, y ese "
-"registro prevalece sobre cualquier resumen de él."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:107
-msgid ""
-"Presenting a certified document as if it proved the truth of its contents is"
-" a misuse of the service, and Propensiones may cancel a certification and "
-"close the account of anyone who does so."
-msgstr ""
-"Presentar un documento certificado como si probara la veracidad de su "
-"contenido es un uso indebido del servicio, y Propensiones puede anular una "
-"certificación y cerrar la cuenta de quien lo haga."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:114
-msgid "Automatic features, stated plainly"
-msgstr "Las funciones automáticas, dichas claramente"
-
-#: .\apps\common\core\templates\core\tyc\terms.html:119
-msgid ""
-"Names and descriptions are translated between Spanish and English by an "
-"automated system, without human review. It is a convenience for reading, not"
-" a certified or sworn translation, and it may be wrong. Where a text has "
-"legal or contractual effect, the version written by its author is the one "
-"that governs. Do not rely on a machine translation for a decision that "
-"matters."
-msgstr ""
-"Los nombres y las descripciones se traducen entre español e inglés mediante "
-"un sistema automatizado, sin revisión humana. Es una comodidad para leer, no"
-" una traducción certificada ni oficial, y puede estar equivocada. Cuando un "
-"texto tiene efectos jurídicos o contractuales, la versión escrita por su "
-"autor es la que prevalece. No tomes una decisión que importe apoyándote en "
-"una traducción automática."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:129
-msgid "Time anchoring"
-msgstr "Anclaje temporal"
-
-#: .\apps\common\core\templates\core\tyc\terms.html:132
-msgid ""
-"Certain documents are anchored in time using a timestamping authority and "
-"the Bitcoin blockchain. What is published is only a cryptographic hash — "
-"never the document, and never its content. The anchor proves that a given "
-"file existed no later than a certain moment. It proves nothing about who "
-"wrote it, whether it is true, or what it is worth."
-msgstr ""
-"Ciertos documentos se anclan en el tiempo usando una autoridad de sellado de"
-" tiempo y la cadena de bloques de Bitcoin. Lo que se publica es sólo un hash"
-" criptográfico —nunca el documento, ni su contenido. El anclaje prueba que "
-"un archivo determinado existía a más tardar en un momento dado. No prueba "
-"nada sobre quién lo escribió, si es cierto, ni cuánto vale."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:142
-msgid ""
-"Anchoring in a block is not instantaneous: proofs are issued pending and "
-"mature over the following hours. A document is fully usable in the meantime;"
-" the anchoring page shows the current state at any time."
-msgstr ""
-"El anclaje en un bloque no es instantáneo: las pruebas se emiten pendientes "
-"y maduran en las horas siguientes. Mientras tanto el documento es plenamente"
-" utilizable; la página de anclaje muestra el estado actual en todo momento."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:149
-msgid "Availability"
-msgstr "Disponibilidad"
-
-#: .\apps\common\core\templates\core\tyc\terms.html:152
-msgid ""
-"We work to keep the platform available, but we do not guarantee "
-"uninterrupted service. Maintenance, third party failures and causes outside "
-"our control may interrupt it. Nothing here creates a service level "
-"commitment unless it has been agreed separately in writing."
-msgstr ""
-"Trabajamos para mantener la plataforma disponible, pero no garantizamos un "
-"servicio ininterrumpido. El mantenimiento, los fallos de terceros y causas "
-"ajenas a nuestro control pueden interrumpirlo. Nada de lo aquí escrito crea "
-"un compromiso de nivel de servicio salvo que se haya pactado aparte y por "
-"escrito."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:160
-msgid "Copyright and takedown"
-msgstr "Derechos de autor y retirada de contenido"
-
-#: .\apps\common\core\templates\core\tyc\terms.html:163
-msgid ""
-"We respect intellectual property. If you believe content on the platform "
-"infringes your copyright, send a notice to the address in section 14 "
-"including: your signature; identification of the protected work; "
-"identification of the material you say infringes it and where it is; your "
-"contact details; a statement that you believe in good faith that the use is "
-"unauthorised; and a statement that the information is accurate and that you "
-"are entitled to act on behalf of the rights holder."
-msgstr ""
-"Respetamos la propiedad intelectual. Si crees que un contenido de la "
-"plataforma infringe tus derechos de autor, envía una notificación a la "
-"dirección de la sección 14 que incluya: tu firma; la identificación de la "
-"obra protegida; la identificación del material que consideras infractor y "
-"dónde está; tus datos de contacto; una declaración de que crees de buena fe "
-"que el uso no está autorizado; y una declaración de que la información es "
-"exacta y de que estás facultado para actuar en nombre del titular de los "
-"derechos."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:176
-msgid ""
-"Material that is the subject of a valid notice is removed promptly, and "
-"accounts that repeatedly infringe may be terminated. Whoever uploaded the "
-"material is told, and may reply."
-msgstr ""
-"El material objeto de una notificación válida se retira con prontitud, y las"
-" cuentas que infrinjan de forma reiterada pueden cancelarse. Se le informa a"
-" quien subió el material, que puede responder."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:185
-msgid ""
-"The DMCA is United States law, and its safe harbour protects providers "
-"subject to that jurisdiction; registering an agent with the US Copyright "
-"Office only makes sense if the service is offered there. In Colombia the "
-"applicable framework is Law 23 of 1982 and Law 1915 of 2018. A takedown "
-"procedure is worth having either way — this one — but calling it \"DMCA\" "
-"does not by itself bring the safe harbour with it."
-msgstr ""
-"La DMCA es una ley de Estados Unidos, y su puerto seguro protege a los "
-"proveedores sometidos a esa jurisdicción; registrar un agente ante la "
-"Oficina de Derechos de Autor de EE. UU. sólo tiene sentido si el servicio se"
-" ofrece allí. En Colombia el marco aplicable son la Ley 23 de 1982 y la Ley "
-"1915 de 2018. Vale la pena tener un procedimiento de retirada en cualquier "
-"caso —este—, pero llamarlo «DMCA» no trae consigo el puerto seguro."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:195
-msgid "Suspension and termination"
-msgstr "Suspensión y terminación"
-
-#: .\apps\common\core\templates\core\tyc\terms.html:198
-msgid ""
-"We may suspend or close an account that breaches these terms. Closing an "
-"account does not delete certifications already issued, nor the audit trail: "
-"both have to survive for the platform to keep doing what it is for. Section "
-"9 of the data policy explains why."
-msgstr ""
-"Podemos suspender o cerrar una cuenta que incumpla estos términos. Cerrar "
-"una cuenta no borra las certificaciones ya emitidas ni la traza de "
-"auditoría: las dos tienen que sobrevivir para que la plataforma siga "
-"sirviendo para lo que es. La sección 9 de la política de datos explica por "
-"qué."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:206
-msgid "Liability"
-msgstr "Responsabilidad"
-
-#: .\apps\common\core\templates\core\tyc\terms.html:209
-msgid ""
-"Propensiones is liable for its own wilful misconduct and gross negligence, "
-"as the applicable law provides. It is not liable for decisions taken on the "
-"basis of an automatic translation, nor for the use a third party makes of a "
-"certified document contrary to section 5, nor for the content that users "
-"themselves upload."
-msgstr ""
-"Propensiones responde por su propio dolo y culpa grave, en los términos de "
-"la ley aplicable. No responde por decisiones tomadas sobre la base de una "
-"traducción automática, ni por el uso que un tercero haga de un documento "
-"certificado en contra de la sección 5, ni por el contenido que suben los "
-"propios usuarios."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:218
-msgid "Personal data"
-msgstr "Datos personales"
-
-#: .\apps\common\core\templates\core\tyc\terms.html:221
-msgid ""
-"Handling of personal data is governed by the personal data processing "
-"policy, which forms part of these terms."
-msgstr ""
-"El tratamiento de los datos personales se rige por la política de "
-"tratamiento de datos personales, que forma parte de estos términos."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:225
-msgid "Read the data policy"
-msgstr "Leer la política de datos"
-
-#: .\apps\common\core\templates\core\tyc\terms.html:228
-msgid "Governing law and disputes"
-msgstr "Ley aplicable y controversias"
-
-#: .\apps\common\core\templates\core\tyc\terms.html:231
-msgid ""
-"These terms are governed by Colombian law. Any dispute shall first be raised"
-" through the PQRS form, so that it can be resolved directly. If it is not "
-"resolved, the parties may attempt conciliation before an authorised "
-"conciliation centre before going to court. Failing that, the dispute goes "
-"before the ordinary Colombian courts."
-msgstr ""
-"Estos términos se rigen por la ley colombiana. Cualquier controversia se "
-"planteará primero por el formulario de PQRS, para poder resolverla "
-"directamente. Si no se resuelve, las partes podrán intentar una conciliación"
-" ante un centro de conciliación autorizado antes de acudir a la justicia. En"
-" su defecto, la controversia se somete a los jueces ordinarios colombianos."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:241
-msgid "Note for review: the arbitration clause does not port."
-msgstr "Nota para revisión: la cláusula de arbitraje no se puede trasplantar."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:243
-msgid ""
-"The standard United States clause — binding individual arbitration before "
-"AAA or JAMS, waiver of jury trial, waiver of class actions — is not a matter"
-" of swapping the administrator for a local one:"
-msgstr ""
-"La cláusula estándar de Estados Unidos —arbitraje individual vinculante ante"
-" la AAA o JAMS, renuncia al juicio por jurado, renuncia a las acciones de "
-"clase— no es cuestión de cambiar el administrador por uno local:"
-
-#: .\apps\common\core\templates\core\tyc\terms.html:250
-msgid ""
-"There is no jury in Colombian civil procedure, so that waiver means nothing."
-msgstr ""
-"En el procedimiento civil colombiano no hay jurado, así que esa renuncia no "
-"significa nada."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:251
-msgid ""
-"Group and class actions are governed by Law 472 of 1998 and are of "
-"constitutional rank; they are not waived in an adhesion contract."
-msgstr ""
-"Las acciones populares y de grupo se rigen por la Ley 472 de 1998 y tienen "
-"rango constitucional; no se renuncian en un contrato de adhesión."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:252
-msgid ""
-"In consumer matters the Superintendence of Industry and Commerce holds "
-"jurisdiction under Law 1480 of 2011, and a clause that tries to close that "
-"door risks being held abusive and ineffective."
-msgstr ""
-"En materia de consumo la Superintendencia de Industria y Comercio tiene "
-"competencia jurisdiccional por la Ley 1480 de 2011, y una cláusula que "
-"intente cerrar esa puerta se expone a ser declarada abusiva e ineficaz."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:253
-msgid ""
-"Real arbitration here runs under Law 1563 of 2012, before a chamber of "
-"commerce arbitration centre, at a cost that only makes sense above a certain"
-" amount in dispute."
-msgstr ""
-"El arbitraje de verdad aquí se rige por la Ley 1563 de 2012, ante un centro "
-"de arbitraje de cámara de comercio, con un coste que sólo tiene sentido por "
-"encima de cierta cuantía."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:256
-msgid ""
-"What is written above is a graduated clause — direct claim, conciliation, "
-"then courts — which is the usual arrangement here. If the firm wants "
-"arbitration, it belongs in the contracts signed with counterparties for "
-"specific transactions, with its seat, rules and amount threshold set out, "
-"rather than in the general terms of a platform."
-msgstr ""
-"Lo escrito arriba es una cláusula escalonada —reclamación directa, "
-"conciliación y después justicia—, que es lo habitual aquí. Si la firma "
-"quiere arbitraje, su sitio son los contratos que se firman con las "
-"contrapartes para operaciones concretas, con su sede, su reglamento y su "
-"cuantía mínima, y no los términos generales de una plataforma."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:270
-msgid ""
-"We may modify these terms. Material changes are notified through the "
-"platform or by email, with the date they come into force. The version and "
-"date at the top say which text is in force."
-msgstr ""
-"Podemos modificar estos términos. Los cambios sustanciales se notifican por "
-"la plataforma o por correo electrónico, con la fecha en que entran en vigor."
-" La versión y la fecha de arriba dicen qué texto está vigente."
-
-#: .\apps\common\core\templates\core\tyc\terms.html:282
-msgid "Copyright notices:"
-msgstr "Notificaciones de derechos de autor:"
-
-#: .\apps\common\core\templates\core\tyc\terms.html:282
-msgid "designated contact, pending"
-msgstr "contacto designado, pendiente"
+#: templates/core/tyc/legal_document.html:31
+msgid "Draft."
+msgstr "Borrador."
+
+#: templates/core/tyc/legal_document.html:32
+msgid ""
+"This text has not been approved and does not govern. It is published so it "
+"can be read and corrected; while it says this, do not treat it as the firm's"
+" policy."
+msgstr ""
+"Este texto no está aprobado y no rige. Se publica para que pueda leerse y "
+"corregirse; mientras diga esto, no lo tomes como la política de la firma."
+
+#~ msgid "Starting draft."
+#~ msgstr "Borrador de partida."
+
+#~ msgid ""
+#~ "This text was written from the platform's actual behaviour, but it has not "
+#~ "been reviewed by counsel. Read it, correct it and approve it before treating"
+#~ " it as published policy."
+#~ msgstr ""
+#~ "Este texto se escribió a partir del comportamiento real de la plataforma, "
+#~ "pero no lo ha revisado un abogado. Léelo, corrígelo y apruébalo antes de "
+#~ "tratarlo como política publicada."
+
+#~ msgid "What this covers"
+#~ msgstr "Qué cubre"
+
+#~ msgid ""
+#~ "This policy explains the cookies and similar technologies used by GEA, the "
+#~ "platform of Propensiones Abogados available at "
+#~ "geausa.propensionesabogados.com and its subdomains."
+#~ msgstr ""
+#~ "Esta política explica las cookies y tecnologías similares que usa GEA, la "
+#~ "plataforma de Propensiones Abogados disponible en "
+#~ "geausa.propensionesabogados.com y sus subdominios."
+
+#~ msgid "What we do not use"
+#~ msgstr "Lo que no usamos"
+
+#~ msgid ""
+#~ "We state this first because it is the part that usually matters: this "
+#~ "platform carries no analytics, no advertising pixels and no session "
+#~ "recording. There is no Google Analytics, no Meta Pixel, no Hotjar and no "
+#~ "equivalent. We do not profile visitors, and we do not sell or share browsing"
+#~ " data with anyone for advertising."
+#~ msgstr ""
+#~ "Lo decimos primero porque suele ser la parte que importa: esta plataforma no"
+#~ " lleva analítica, ni píxeles publicitarios, ni grabación de sesión. No hay "
+#~ "Google Analytics, ni Meta Pixel, ni Hotjar ni equivalente. No perfilamos a "
+#~ "los visitantes, y no vendemos ni compartimos datos de navegación con nadie "
+#~ "con fines publicitarios."
+
+#~ msgid "The cookies we do set"
+#~ msgstr "Las cookies que sí ponemos"
+
+#~ msgid ""
+#~ "All of them are strictly necessary: without them you cannot log in, and "
+#~ "forms cannot be submitted safely. None of them are used to track you across "
+#~ "other sites."
+#~ msgstr ""
+#~ "Todas son estrictamente necesarias: sin ellas no se puede iniciar sesión, ni"
+#~ " enviar formularios de forma segura. Ninguna se usa para seguirte por otros "
+#~ "sitios."
+
+#~ msgid "Cookie"
+#~ msgstr "Cookie"
+
+#~ msgid "What it is for"
+#~ msgstr "Para qué sirve"
+
+#~ msgid "How long it lasts"
+#~ msgstr "Cuánto dura"
+
+#~ msgid ""
+#~ "Keeps you logged in as you move between pages. Without it, every page would "
+#~ "ask for your password again."
+#~ msgstr ""
+#~ "Mantiene tu sesión abierta mientras te mueves entre páginas. Sin ella, cada "
+#~ "página volvería a pedirte la contraseña."
+
+#~ msgid "Until the session expires or you log out"
+#~ msgstr "Hasta que caduque la sesión o cierres sesión"
+
+#~ msgid ""
+#~ "Confirms that a form was submitted from this site and not from a page "
+#~ "someone else controls."
+#~ msgstr ""
+#~ "Confirma que un formulario se envió desde este sitio y no desde una página "
+#~ "que controla otra persona."
+
+#~ msgid "1 year"
+#~ msgstr "1 año"
+
+#~ msgid "Remembers whether you chose Spanish or English."
+#~ msgstr "Recuerda si elegiste español o inglés."
+
+#~ msgid "Third parties that see your connection"
+#~ msgstr "Terceros que ven tu conexión"
+
+#~ msgid ""
+#~ "Some resources — stylesheets, icon fonts, JavaScript libraries — are served "
+#~ "from public content delivery networks. They set no cookies of ours, but by "
+#~ "definition they receive your IP address and browser details, because that is"
+#~ " how your browser fetches a file from them."
+#~ msgstr ""
+#~ "Algunos recursos —hojas de estilo, fuentes de iconos, bibliotecas de "
+#~ "JavaScript— se sirven desde redes públicas de distribución de contenido. No "
+#~ "ponen ninguna cookie nuestra, pero por definición reciben tu dirección IP y "
+#~ "los datos de tu navegador, porque así es como tu navegador les pide un "
+#~ "archivo."
+
+#~ msgid "Bootstrap, icons and other libraries."
+#~ msgstr "Bootstrap, iconos y otras bibliotecas."
+
+#~ msgid "icon set."
+#~ msgstr "juego de iconos."
+
+#~ msgid "the jQuery library, served by Google."
+#~ msgstr "la biblioteca jQuery, servida por Google."
+
+#~ msgid "web fonts, where used."
+#~ msgstr "fuentes web, donde se usan."
+
+#~ msgid "Note for review."
+#~ msgstr "Nota para revisión."
+
+#~ msgid ""
+#~ "Loading jQuery from Google's CDN gives Google the IP address of every "
+#~ "visitor on the pages that use it, without anything being gained over hosting"
+#~ " the same file ourselves. Serving those libraries from our own static files "
+#~ "would remove that flow entirely, and would also make the platform work when "
+#~ "a CDN is unreachable."
+#~ msgstr ""
+#~ "Cargar jQuery desde el CDN de Google le da a Google la dirección IP de cada "
+#~ "visitante de las páginas que lo usan, sin ganar nada frente a alojar ese "
+#~ "mismo archivo nosotros. Servir esas bibliotecas desde nuestros propios "
+#~ "estáticos eliminaría ese flujo por completo, y además haría que la "
+#~ "plataforma funcionase cuando un CDN no está accesible."
+
+#~ msgid "Forms hosted by third parties"
+#~ msgstr "Formularios alojados por terceros"
+
+#~ msgid ""
+#~ "Some pages inside the platform embed forms served by JotForm. What you type "
+#~ "into one of those forms, including any file you attach, is sent to and "
+#~ "stored by that provider, not by us. Their own privacy terms apply to that "
+#~ "data in addition to ours."
+#~ msgstr ""
+#~ "Algunas páginas de la plataforma incrustan formularios servidos por JotForm."
+#~ " Lo que escribas en uno de esos formularios, incluido cualquier archivo que "
+#~ "adjuntes, se envía a ese proveedor y lo almacena él, no nosotros. A esos "
+#~ "datos se les aplican, además de los nuestros, sus propios términos de "
+#~ "privacidad."
+
+#~ msgid "How to control cookies"
+#~ msgstr "Cómo controlar las cookies"
+
+#~ msgid ""
+#~ "Every browser lets you see, block and delete cookies from its settings. "
+#~ "Blocking the three listed above will stop you from logging in and from "
+#~ "submitting forms, because they are what makes those operations work at all —"
+#~ " it is not a restriction we impose, it is what they are for."
+#~ msgstr ""
+#~ "Cualquier navegador permite ver, bloquear y borrar cookies desde sus "
+#~ "ajustes. Bloquear las tres de arriba impedirá iniciar sesión y enviar "
+#~ "formularios, porque son justo lo que hace que esas operaciones funcionen —no"
+#~ " es una restricción que impongamos, es para lo que sirven."
+
+#~ msgid "Changes"
+#~ msgstr "Cambios"
+
+#~ msgid ""
+#~ "If we add any tool that measures or tracks use of the platform, this policy "
+#~ "will be updated before that tool is switched on, and consent will be "
+#~ "requested where the law requires it. The version and date at the top say "
+#~ "which text is in force."
+#~ msgstr ""
+#~ "Si añadimos alguna herramienta que mida o rastree el uso de la plataforma, "
+#~ "esta política se actualizará antes de encenderla, y se pedirá consentimiento"
+#~ " donde la ley lo exija. La versión y la fecha de arriba dicen qué texto está"
+#~ " en vigor."
+
+#~ msgid ""
+#~ "Written on the structure of a real policy and filled in from what the "
+#~ "platform actually does. It has not been reviewed by counsel, and the "
+#~ "identification details of the controller are placeholders. Do not publish it"
+#~ " as approved policy until the firm has gone through it."
+#~ msgstr ""
+#~ "Escrita sobre la estructura de una política real y rellenada con lo que la "
+#~ "plataforma hace de verdad. No la ha revisado un abogado, y los datos de "
+#~ "identificación del responsable son marcadores de posición. No la publiques "
+#~ "como política aprobada hasta que la firma la haya repasado."
+
+#~ msgid "General"
+#~ msgstr "Generalidades"
+
+#~ msgid ""
+#~ "PROPENSIONES ABOGADOS, identified with NIT [pending], with its main address "
+#~ "in [city] (hereinafter, \"Propensiones\"), operator of the GEA platform, has"
+#~ " adopted this personal data processing policy in compliance with the "
+#~ "constitutional and legal provisions in force, recognising the importance of "
+#~ "guaranteeing the security, privacy and confidentiality of the personal data "
+#~ "of its clients, users, employees, suppliers, partners and every other group "
+#~ "whose information it processes."
+#~ msgstr ""
+#~ "PROPENSIONES ABOGADOS, identificada con NIT [pendiente], con domicilio "
+#~ "principal en [ciudad] (en adelante, «Propensiones»), operadora de la "
+#~ "plataforma GEA, ha adoptado esta política de tratamiento de datos personales"
+#~ " en cumplimiento de las disposiciones constitucionales y legales vigentes, "
+#~ "reconociendo la importancia de garantizar la seguridad, la privacidad y la "
+#~ "confidencialidad de los datos personales de sus clientes, usuarios, "
+#~ "empleados, proveedores, socios y de todo otro grupo cuya información trata."
+
+#~ msgid "Applicable rules"
+#~ msgstr "Normas aplicables"
+
+#~ msgid "Article 15 of the Political Constitution of Colombia"
+#~ msgstr "Artículo 15 de la Constitución Política de Colombia"
+
+#~ msgid "Statutory Law 1266 of 2008"
+#~ msgstr "Ley Estatutaria 1266 de 2008"
+
+#~ msgid "Law 1273 of 2009"
+#~ msgstr "Ley 1273 de 2009"
+
+#~ msgid "Statutory Law 1581 of 2012"
+#~ msgstr "Ley Estatutaria 1581 de 2012"
+
+#~ msgid "Decree 1377 of 2013"
+#~ msgstr "Decreto 1377 de 2013"
+
+#~ msgid "Decrees 1727 of 2009, 2952 of 2010 and 886 of 2014"
+#~ msgstr "Decretos 1727 de 2009, 2952 de 2010 y 886 de 2014"
+
+#~ msgid ""
+#~ "Title V of the Single Circular of the Superintendence of Industry and "
+#~ "Commerce"
+#~ msgstr ""
+#~ "Título V de la Circular Única de la Superintendencia de Industria y Comercio"
+
+#~ msgid "Constitutional Court judgments C-1011 of 2008 and C-748 of 2011"
+#~ msgstr "Sentencias de la Corte Constitucional C-1011 de 2008 y C-748 de 2011"
+
+#~ msgid "Purpose of this policy"
+#~ msgstr "Objeto de esta política"
+
+#~ msgid ""
+#~ "To protect the constitutional right of habeas data, guaranteeing that the "
+#~ "people whose data we hold can know it, update it and correct it. "
+#~ "Propensiones only stores and processes data that has been authorised by its "
+#~ "owner, and applies the security measures needed to protect it."
+#~ msgstr ""
+#~ "Proteger el derecho constitucional de habeas data, garantizando que las "
+#~ "personas cuyos datos tenemos puedan conocerlos, actualizarlos y "
+#~ "rectificarlos. Propensiones sólo almacena y trata datos que han sido "
+#~ "autorizados por su titular, y aplica las medidas de seguridad necesarias "
+#~ "para protegerlos."
+
+#~ msgid "Definitions"
+#~ msgstr "Definiciones"
+
+#~ msgid "Authorisation"
+#~ msgstr "Autorización"
+
+#~ msgid ""
+#~ "The prior, express and informed consent given by the data owner for their "
+#~ "data to be processed."
+#~ msgstr ""
+#~ "El consentimiento previo, expreso e informado que da el titular para que se "
+#~ "traten sus datos."
+
+#~ msgid "The natural person whose personal data is processed."
+#~ msgstr "La persona natural cuyos datos personales son objeto de tratamiento."
+
+#~ msgid "Controller (responsable)"
+#~ msgstr "Responsable del tratamiento"
+
+#~ msgid ""
+#~ "Whoever decides on the processing of the data. For this platform, "
+#~ "Propensiones Abogados."
+#~ msgstr ""
+#~ "Quien decide sobre el tratamiento de los datos. Para esta plataforma, "
+#~ "Propensiones Abogados."
+
+#~ msgid "Processor (encargado)"
+#~ msgstr "Encargado del tratamiento"
+
+#~ msgid "Whoever processes data on behalf of the controller."
+#~ msgstr "Quien trata los datos por cuenta del responsable."
+
+#~ msgid "Sensitive data"
+#~ msgstr "Datos sensibles"
+
+#~ msgid ""
+#~ "Data affecting the intimacy of its owner, or whose misuse may lead to "
+#~ "discrimination."
+#~ msgstr ""
+#~ "Datos que afectan a la intimidad de su titular, o cuyo uso indebido puede "
+#~ "generar discriminación."
+
+#~ msgid "Transfer"
+#~ msgstr "Transferencia"
+
+#~ msgid ""
+#~ "Sending data to a recipient who is itself a controller, inside or outside "
+#~ "the country."
+#~ msgstr ""
+#~ "Envío de datos a un receptor que es a su vez responsable del tratamiento, "
+#~ "dentro o fuera del país."
+
+#~ msgid "Transmission"
+#~ msgstr "Transmisión"
+
+#~ msgid ""
+#~ "Communicating data so that a processor handles it on the controller behalf."
+#~ msgstr ""
+#~ "Comunicación de datos para que un encargado los trate por cuenta del "
+#~ "responsable."
+
+#~ msgid "Principles"
+#~ msgstr "Principios"
+
+#~ msgid ""
+#~ "Processing follows the principles of legality, freedom, purpose, accuracy, "
+#~ "transparency, restricted access and circulation, security, confidentiality "
+#~ "and time limitation, as set out in article 4 of Law 1581 of 2012."
+#~ msgstr ""
+#~ "El tratamiento sigue los principios de legalidad, libertad, finalidad, "
+#~ "veracidad, transparencia, acceso y circulación restringida, seguridad, "
+#~ "confidencialidad y temporalidad, tal como los enuncia el artículo 4 de la "
+#~ "Ley 1581 de 2012."
+
+#~ msgid "What data we collect"
+#~ msgstr "Qué datos recogemos"
+
+#~ msgid ""
+#~ "This section describes what the platform actually asks for, grouped by why "
+#~ "it is asked."
+#~ msgstr ""
+#~ "Esta sección describe lo que la plataforma pide de verdad, agrupado por el "
+#~ "motivo por el que se pide."
+
+#~ msgid "Group"
+#~ msgstr "Grupo"
+
+#~ msgid "Data"
+#~ msgstr "Datos"
+
+#~ msgid "Account"
+#~ msgstr "Cuenta"
+
+#~ msgid ""
+#~ "Username, names and surnames, email address, mobile number and country code,"
+#~ " user type, and who referred you if anyone did."
+#~ msgstr ""
+#~ "Nombre de usuario, nombres y apellidos, correo electrónico, número de móvil "
+#~ "e indicativo de país, tipo de usuario y quién te refirió, si lo hizo "
+#~ "alguien."
+
+#~ msgid "Identity"
+#~ msgstr "Identidad"
+
+#~ msgid ""
+#~ "Date of birth, nationality, passport or identity number, issuing authority "
+#~ "and dates, a photograph of the identity document, and a signature image."
+#~ msgstr ""
+#~ "Fecha de nacimiento, nacionalidad, número de pasaporte o de documento de "
+#~ "identidad, autoridad y fechas de expedición, una fotografía del documento de"
+#~ " identidad y una imagen de la firma."
+
+#~ msgid "Country, department, city, street address and postal code."
+#~ msgstr "País, departamento, ciudad, dirección y código postal."
+
+#~ msgid "Activity on the platform"
+#~ msgstr "Actividad en la plataforma"
+
+#~ msgid ""
+#~ "Assets and locations registered, purchase orders and their approval history,"
+#~ " documents certified, and who viewed or downloaded which file and when."
+#~ msgstr ""
+#~ "Activos y ubicaciones registrados, órdenes de compra y su historial de "
+#~ "aprobación, documentos certificados, y quién vio o descargó qué archivo y "
+#~ "cuándo."
+
+#~ msgid "Security"
+#~ msgstr "Seguridad"
+
+#~ msgid ""
+#~ "IP address, browser details, login attempts, and the record of every change "
+#~ "made through the platform."
+#~ msgstr ""
+#~ "Dirección IP, datos del navegador, intentos de acceso y el registro de cada "
+#~ "cambio hecho a través de la plataforma."
+
+#~ msgid "Requests (PQRS)"
+#~ msgstr "Solicitudes (PQRS)"
+
+#~ msgid ""
+#~ "What you write in the request form, the identification you give to prove who"
+#~ " you are, and any document you attach."
+#~ msgstr ""
+#~ "Lo que escribas en el formulario de solicitud, la identificación que aportes"
+#~ " para acreditar quién eres y cualquier documento que adjuntes."
+
+#~ msgid ""
+#~ "Propensiones requests the prior, express and informed consent of the data "
+#~ "owner. That authorisation is recorded, together with when it was given, so "
+#~ "that it can be produced later as article 9 of Law 1581 requires. "
+#~ "Authorisation is not needed where the data is requested by a public body "
+#~ "exercising its legal functions, where the data is public, in cases of "
+#~ "medical urgency, for authorised historical or statistical purposes, or in "
+#~ "relation to the civil registry."
+#~ msgstr ""
+#~ "Propensiones solicita el consentimiento previo, expreso e informado del "
+#~ "titular. Esa autorización se conserva, junto con el momento en que se dio, "
+#~ "para poder acreditarla después como exige el artículo 9 de la Ley 1581. No "
+#~ "se requiere autorización cuando los datos los solicita una entidad pública "
+#~ "en ejercicio de sus funciones legales, cuando son de naturaleza pública, en "
+#~ "casos de urgencia médica, para fines históricos o estadísticos autorizados, "
+#~ "ni en lo relativo al registro civil."
+
+#~ msgid "Sensitive data and data of minors"
+#~ msgstr "Datos sensibles y datos de menores"
+
+#~ msgid ""
+#~ "Where sensitive data is involved, the owner is told that they are not "
+#~ "obliged to authorise it, which data is sensitive, and what it will be used "
+#~ "for. The platform is not intended for minors and does not knowingly collect "
+#~ "their data; where it were necessary, it would be handled through their legal"
+#~ " representative and after hearing the minor, as articles 6 and 12 of Decree "
+#~ "1377 of 2013 require."
+#~ msgstr ""
+#~ "Cuando hay datos sensibles de por medio, se le informa al titular que no "
+#~ "está obligado a autorizar su tratamiento, cuáles son esos datos y para qué "
+#~ "se van a usar. La plataforma no está dirigida a menores y no recoge sus "
+#~ "datos a sabiendas; si fuera necesario, se haría por medio de su "
+#~ "representante legal y después de oír al menor, como exigen los artículos 6 y"
+#~ " 12 del Decreto 1377 de 2013."
+
+#~ msgid "Purposes"
+#~ msgstr "Finalidades"
+
+#~ msgid ""
+#~ "Create and maintain your account, and let you into the areas that correspond"
+#~ " to your role."
+#~ msgstr ""
+#~ "Crear y mantener tu cuenta, y darte acceso a las áreas que corresponden a tu"
+#~ " rol."
+
+#~ msgid ""
+#~ "Verify your identity before giving access to, or changing, personal data — "
+#~ "including for requests filed through the PQRS form."
+#~ msgstr ""
+#~ "Verificar tu identidad antes de dar acceso a datos personales o de "
+#~ "modificarlos, incluidas las solicitudes presentadas por el formulario de "
+#~ "PQRS."
+
+#~ msgid ""
+#~ "Register historical assets and their physical locations, and keep the "
+#~ "inventory."
+#~ msgstr ""
+#~ "Registrar activos históricos y sus ubicaciones físicas, y llevar el "
+#~ "inventario."
+
+#~ msgid ""
+#~ "Process purchase orders through their approval stages, and issue the "
+#~ "resulting documents."
+#~ msgstr ""
+#~ "Tramitar las órdenes de compra por sus etapas de aprobación y emitir los "
+#~ "documentos que resulten."
+
+#~ msgid ""
+#~ "Issue and verify certified documents, including the public verification "
+#~ "portal."
+#~ msgstr ""
+#~ "Emitir y verificar documentos certificados, incluido el portal público de "
+#~ "verificación."
+
+#~ msgid ""
+#~ "Send operational communications: verification codes, password recovery, "
+#~ "service orders and answers to requests."
+#~ msgstr ""
+#~ "Enviar comunicaciones operativas: códigos de verificación, recuperación de "
+#~ "contraseña, órdenes de servicio y respuestas a solicitudes."
+
+#~ msgid ""
+#~ "Comply with legal obligations and with orders from administrative or "
+#~ "judicial authorities."
+#~ msgstr ""
+#~ "Cumplir obligaciones legales y órdenes de autoridades administrativas o "
+#~ "judiciales."
+
+#~ msgid ""
+#~ "Keep the platform secure: detect abuse, block automated attacks and keep an "
+#~ "audit trail of what was done and by whom."
+#~ msgstr ""
+#~ "Mantener la seguridad de la plataforma: detectar abusos, bloquear ataques "
+#~ "automatizados y conservar la traza de auditoría de qué se hizo y quién lo "
+#~ "hizo."
+
+#~ msgid "How long we keep it"
+#~ msgstr "Cuánto tiempo los conservamos"
+
+#~ msgid ""
+#~ "Data is processed while the relationship with the owner lasts, plus the "
+#~ "period required by the applicable law. Two categories last longer, for a "
+#~ "reason worth stating plainly:"
+#~ msgstr ""
+#~ "Los datos se tratan mientras dure la relación con el titular, más el plazo "
+#~ "que exija la ley aplicable. Dos categorías duran más, por una razón que "
+#~ "conviene decir claramente:"
+
+#~ msgid ""
+#~ "<b>Certified documents and their fingerprints.</b> A certificate whose "
+#~ "record is deleted stops being verifiable, which defeats the point of having "
+#~ "issued it."
+#~ msgstr ""
+#~ "<b>Los documentos certificados y sus huellas.</b> Un certificado cuyo "
+#~ "registro se borra deja de poder verificarse, lo que vacía de sentido haberlo"
+#~ " emitido."
+
+#~ msgid ""
+#~ "<b>The audit trail.</b> The record of who did what is what allows the firm "
+#~ "to show it acted correctly, including towards the person asking."
+#~ msgstr ""
+#~ "<b>La traza de auditoría.</b> El registro de quién hizo qué es lo que "
+#~ "permite a la firma demostrar que actuó correctamente, también frente a quien"
+#~ " pregunta."
+
+#~ msgid "Rights of the data owner"
+#~ msgstr "Derechos del titular"
+
+#~ msgid "Know, update and correct your data."
+#~ msgstr "Conocer, actualizar y rectificar tus datos."
+
+#~ msgid "Ask for proof of the authorisation you gave."
+#~ msgstr "Solicitar prueba de la autorización que diste."
+
+#~ msgid "Be told what use is being made of your data."
+#~ msgstr "Ser informado del uso que se da a tus datos."
+
+#~ msgid ""
+#~ "File complaints with the Superintendence of Industry and Commerce for "
+#~ "breaches of the rules."
+#~ msgstr ""
+#~ "Presentar quejas ante la Superintendencia de Industria y Comercio por "
+#~ "infracciones a las normas."
+
+#~ msgid ""
+#~ "Withdraw the authorisation or ask for your data to be deleted, where no "
+#~ "legal or contractual duty requires it to be kept."
+#~ msgstr ""
+#~ "Revocar la autorización o solicitar la supresión de tus datos, cuando no "
+#~ "haya un deber legal o contractual que obligue a conservarlos."
+
+#~ msgid "Consult your data free of charge."
+#~ msgstr "Consultar tus datos de forma gratuita."
+
+#~ msgid ""
+#~ "These rights may be exercised by the owner, by their successors, by a "
+#~ "representative with proof of the representation, or under a stipulation in "
+#~ "favour of another, as article 20 of Decree 1377 of 2013 sets out."
+#~ msgstr ""
+#~ "Estos derechos los puede ejercer el titular, sus causahabientes, un "
+#~ "representante que acredite la representación, o quien resulte de una "
+#~ "estipulación a favor de otro, como establece el artículo 20 del Decreto 1377"
+#~ " de 2013."
+
+#~ msgid "Security measures"
+#~ msgstr "Medidas de seguridad"
+
+#~ msgid ""
+#~ "Beyond the general commitment, these are the specific measures in place, so "
+#~ "that the statement can be checked rather than taken on trust:"
+#~ msgstr ""
+#~ "Más allá del compromiso general, estas son las medidas concretas que hay "
+#~ "puestas, para que la afirmación se pueda comprobar en vez de creerse:"
+
+#~ msgid ""
+#~ "Identity data — passport number, date of birth, nationality, address and "
+#~ "telephone — is stored encrypted, not in readable form."
+#~ msgstr ""
+#~ "Los datos de identidad —número de pasaporte, fecha de nacimiento, "
+#~ "nacionalidad, dirección y teléfono— se guardan cifrados, no en claro."
+
+#~ msgid ""
+#~ "Certificate document numbers are never stored in the clear: only a keyed "
+#~ "hash of them is kept."
+#~ msgstr ""
+#~ "Los números de documento de los certificados nunca se guardan en claro: sólo"
+#~ " se conserva un hash con clave de ellos."
+
+#~ msgid "Access to the administration panel requires a verified second factor."
+#~ msgstr ""
+#~ "El acceso al panel de administración exige un segundo factor verificado."
+
+#~ msgid ""
+#~ "Repeated failed logins are throttled, and automated scanning is blocked."
+#~ msgstr ""
+#~ "Los intentos de acceso fallidos repetidos se limitan, y el escaneo "
+#~ "automatizado se bloquea."
+
+#~ msgid ""
+#~ "Certified files are not served as plain links: every download goes through a"
+#~ " check of who is asking."
+#~ msgstr ""
+#~ "Los archivos certificados no se sirven por enlaces directos: cada descarga "
+#~ "pasa por una comprobación de quién la pide."
+
+#~ msgid "Changes to records are logged, with who made them and when."
+#~ msgstr ""
+#~ "Los cambios en los registros quedan registrados, con quién los hizo y "
+#~ "cuándo."
+
+#~ msgid "Duties as controller and as processor"
+#~ msgstr "Deberes como responsable y como encargado"
+
+#~ msgid ""
+#~ "Propensiones assumes the duties of a controller under article 17 of Law "
+#~ "1581, and, where it processes data on behalf of a third party, those of a "
+#~ "processor under article 18. Where both roles coincide, both sets of duties "
+#~ "apply."
+#~ msgstr ""
+#~ "Propensiones asume los deberes de responsable del artículo 17 de la Ley 1581"
+#~ " y, cuando trata datos por cuenta de un tercero, los de encargado del "
+#~ "artículo 18. Cuando ambos roles coinciden, se aplican los dos conjuntos de "
+#~ "deberes."
+
+#~ msgid "Queries and claims"
+#~ msgstr "Consultas y reclamos"
+
+#~ msgid ""
+#~ "Requests are filed through the PQRS form on this site, and each one is given"
+#~ " a reference number and a due date at the moment it comes in."
+#~ msgstr ""
+#~ "Las solicitudes se presentan por el formulario de PQRS de este sitio, y a "
+#~ "cada una se le asigna un número de radicado y una fecha de vencimiento en el"
+#~ " momento en que entra."
+
+#~ msgid "Type"
+#~ msgstr "Tipo"
+
+#~ msgid "Term"
+#~ msgstr "Plazo"
+
+#~ msgid "Query (article 14)"
+#~ msgstr "Consulta (artículo 14)"
+
+#~ msgid "10 business days"
+#~ msgstr "10 días hábiles"
+
+#~ msgid "5 further business days, with reasons given"
+#~ msgstr "5 días hábiles más, con motivación"
+
+#~ msgid "Claim (article 15)"
+#~ msgstr "Reclamo (artículo 15)"
+
+#~ msgid "15 business days"
+#~ msgstr "15 días hábiles"
+
+#~ msgid "8 further business days, with reasons given"
+#~ msgstr "8 días hábiles más, con motivación"
+
+#~ msgid ""
+#~ "Both terms are counted in business days from the day after the request is "
+#~ "received. An incomplete claim is returned for amendment within 5 days; if "
+#~ "two months pass without an answer, the claim is treated as withdrawn. Where "
+#~ "Propensiones is not the competent party, the request is passed on and the "
+#~ "person is told."
+#~ msgstr ""
+#~ "Los dos plazos se cuentan en días hábiles a partir del día siguiente al de "
+#~ "recepción de la solicitud. Un reclamo incompleto se devuelve para "
+#~ "subsanación dentro de los 5 días siguientes; si pasan dos meses sin "
+#~ "respuesta, el reclamo se entiende desistido. Cuando Propensiones no es la "
+#~ "competente, la solicitud se traslada y se le informa a la persona."
+
+#~ msgid "Contact"
+#~ msgstr "Contacto"
+
+#~ msgid "PQRS form:"
+#~ msgstr "Formulario de PQRS:"
+
+#~ msgid "file a request"
+#~ msgstr "presentar una solicitud"
+
+#~ msgid "Email:"
+#~ msgstr "Correo electrónico:"
+
+#~ msgid "Third parties and processors"
+#~ msgstr "Terceros y encargados"
+
+#~ msgid ""
+#~ "Propensiones requires the third parties it works with to comply with the "
+#~ "Colombian personal data regime, and may ask them to show that compliance "
+#~ "before, during and after the relationship."
+#~ msgstr ""
+#~ "Propensiones exige a los terceros con los que trabaja el cumplimiento del "
+#~ "régimen colombiano de datos personales, y puede pedirles que lo acrediten "
+#~ "antes, durante y después de la relación."
+
+#~ msgid "International transfers"
+#~ msgstr "Transferencias internacionales"
+
+#~ msgid ""
+#~ "Operating this platform involves sending certain data outside Colombia. Each"
+#~ " case is listed with what actually leaves, because the difference matters:"
+#~ msgstr ""
+#~ "Operar esta plataforma implica enviar ciertos datos fuera de Colombia. Cada "
+#~ "caso se enumera con lo que sale de verdad, porque la diferencia importa:"
+
+#~ msgid "Recipient"
+#~ msgstr "Destinatario"
+
+#~ msgid "What is sent"
+#~ msgstr "Qué se envía"
+
+#~ msgid "Why"
+#~ msgstr "Para qué"
+
+#~ msgid ""
+#~ "The text of asset names, descriptions and observations, at the moment they "
+#~ "are saved."
+#~ msgstr ""
+#~ "El texto de los nombres, descripciones y observaciones de los activos, en el"
+#~ " momento en que se guardan."
+
+#~ msgid "Automatic translation between Spanish and English."
+#~ msgstr "Traducción automática entre español e inglés."
+
+#~ msgid "OpenTimestamps calendars"
+#~ msgstr "Calendarios de OpenTimestamps"
+
+#~ msgid "Only a SHA-256 hash."
+#~ msgstr "Sólo un hash SHA-256."
+
+#~ msgid "Never the document, and never its content."
+#~ msgstr "Nunca el documento, ni su contenido."
+
+#~ msgid "Time anchoring of certified documents."
+#~ msgstr "Anclaje temporal de los documentos certificados."
+
+#~ msgid ""
+#~ "What is typed into the forms embedded on certain pages, including "
+#~ "attachments."
+#~ msgstr ""
+#~ "Lo que se escribe en los formularios incrustados en ciertas páginas, "
+#~ "incluidos los adjuntos."
+
+#~ msgid "Forms hosted by that provider."
+#~ msgstr "Formularios alojados por ese proveedor."
+
+#~ msgid "Content delivery networks"
+#~ msgstr "Redes de distribución de contenido"
+
+#~ msgid "Your IP address and browser details, by the fact of requesting a file."
+#~ msgstr ""
+#~ "Tu dirección IP y los datos de tu navegador, por el hecho de pedir un "
+#~ "archivo."
+
+#~ msgid "Serving libraries, fonts and icons."
+#~ msgstr "Servir bibliotecas, fuentes e iconos."
+
+#~ msgid ""
+#~ "The transfer to OpenAI is the one that deserves a decision rather than a "
+#~ "disclosure. Names and descriptions of assets are free text: if someone types"
+#~ " personal data into a description, it leaves the country with it. Options "
+#~ "are to keep it and cover it with the transfer instruments the SIC requires, "
+#~ "to restrict which fields are translated, or to translate only on explicit "
+#~ "request instead of automatically on every save."
+#~ msgstr ""
+#~ "La transferencia a OpenAI es la que merece una decisión y no sólo una "
+#~ "declaración. Los nombres y las descripciones de los activos son texto libre:"
+#~ " si alguien escribe datos personales en una descripción, salen del país con "
+#~ "ella. Las opciones son mantenerla y cubrirla con los instrumentos de "
+#~ "transferencia que exige la SIC, restringir qué campos se traducen, o "
+#~ "traducir sólo a petición expresa en vez de automáticamente en cada guardado."
+
+#~ msgid "Automatic translation"
+#~ msgstr "Traducción automática"
+
+#~ msgid ""
+#~ "Some texts in the platform are translated automatically between Spanish and "
+#~ "English. That translation is machine-generated: it is a convenience, not a "
+#~ "certified translation, and it is not reviewed by a person before being "
+#~ "shown. Where a text has legal or contractual effect, the version written by "
+#~ "its author is the one that governs."
+#~ msgstr ""
+#~ "Algunos textos de la plataforma se traducen automáticamente entre español e "
+#~ "inglés. Esa traducción la genera una máquina: es una comodidad, no una "
+#~ "traducción certificada, y nadie la revisa antes de mostrarla. Cuando un "
+#~ "texto tiene efectos jurídicos o contractuales, la versión escrita por su "
+#~ "autor es la que prevalece."
+
+#~ msgid "Changes to this policy"
+#~ msgstr "Cambios en esta política"
+
+#~ msgid ""
+#~ "This policy may be modified to adapt it to new practices or to legal "
+#~ "developments. Any update is published on this page with the date it comes "
+#~ "into force, shown at the top of this document."
+#~ msgstr ""
+#~ "Esta política puede modificarse para adaptarla a nuevas prácticas o a "
+#~ "cambios normativos. Cualquier actualización se publica en esta página con la"
+#~ " fecha en que entra en vigor, que aparece al principio de este documento."
+
+#~ msgid "Effective date"
+#~ msgstr "Fecha de entrada en vigor"
+
+#~ msgid ""
+#~ "This policy takes effect from the date of its approval, shown at the top of "
+#~ "this document."
+#~ msgstr ""
+#~ "Esta política rige desde la fecha de su aprobación, que aparece al principio"
+#~ " de este documento."
+
+#~ msgid ""
+#~ "Pending review by the firm. The controller's identification details are "
+#~ "placeholders."
+#~ msgstr ""
+#~ "Pendiente de revisión por la firma. Los datos de identificación del "
+#~ "responsable son marcadores de posición."
+
+#~ msgid ""
+#~ "This is the short notice required by article 15 of Decree 1377 of 2013. The "
+#~ "full detail is in the personal data processing policy."
+#~ msgstr ""
+#~ "Este es el aviso breve que exige el artículo 15 del Decreto 1377 de 2013. El"
+#~ " detalle completo está en la política de tratamiento de datos personales."
+
+#~ msgid "Who is responsible"
+#~ msgstr "Quién es el responsable"
+
+#~ msgid ""
+#~ "PROPENSIONES ABOGADOS, NIT [pending], with address at [address], operator of"
+#~ " the GEA platform. Contact: info@propensionesabogados.com."
+#~ msgstr ""
+#~ "PROPENSIONES ABOGADOS, NIT [pendiente], con dirección en [dirección], "
+#~ "operadora de la plataforma GEA. Contacto: info@propensionesabogados.com."
+
+#~ msgid "What we do with your data"
+#~ msgstr "Qué hacemos con tus datos"
+
+#~ msgid ""
+#~ "We collect and process personal data in order to: create and maintain your "
+#~ "account; verify your identity; register historical assets and their "
+#~ "locations; process purchase orders; issue and verify certified documents; "
+#~ "send you the communications the service requires; comply with legal "
+#~ "obligations; and keep the platform secure."
+#~ msgstr ""
+#~ "Recogemos y tratamos datos personales para: crear y mantener tu cuenta; "
+#~ "verificar tu identidad; registrar activos históricos y sus ubicaciones; "
+#~ "tramitar órdenes de compra; emitir y verificar documentos certificados; "
+#~ "enviarte las comunicaciones que el servicio requiere; cumplir obligaciones "
+#~ "legales; y mantener la seguridad de la plataforma."
+
+#~ msgid ""
+#~ "Where sensitive data is requested, you are not obliged to give it, and you "
+#~ "will be told which data it is and what it is for before it is collected."
+#~ msgstr ""
+#~ "Cuando se soliciten datos sensibles, no estás obligado a darlos, y se te "
+#~ "dirá cuáles son y para qué sirven antes de recogerlos."
+
+#~ msgid "Your rights"
+#~ msgstr "Tus derechos"
+
+#~ msgid ""
+#~ "You may know, update and correct your data; ask for proof of the "
+#~ "authorisation you gave; be told what use is made of it; withdraw the "
+#~ "authorisation or ask for deletion, where no legal or contractual duty "
+#~ "requires it to be kept; consult it free of charge; and file a complaint with"
+#~ " the Superintendence of Industry and Commerce."
+#~ msgstr ""
+#~ "Puedes conocer, actualizar y rectificar tus datos; solicitar prueba de la "
+#~ "autorización que diste; ser informado del uso que se les da; revocar la "
+#~ "autorización o pedir su supresión, cuando no haya un deber legal o "
+#~ "contractual que obligue a conservarlos; consultarlos de forma gratuita; y "
+#~ "presentar queja ante la Superintendencia de Industria y Comercio."
+
+#~ msgid "How to exercise them"
+#~ msgstr "Cómo ejercerlos"
+
+#~ msgid ""
+#~ "Through the PQRS form on this site. Each request gets a reference number and"
+#~ " a due date at the moment it is filed: queries are answered within 10 "
+#~ "business days and claims within 15, in both cases counted from the day after"
+#~ " the request comes in."
+#~ msgstr ""
+#~ "Por el formulario de PQRS de este sitio. A cada solicitud se le asigna un "
+#~ "número de radicado y una fecha de vencimiento en el momento de presentarla: "
+#~ "las consultas se responden en 10 días hábiles y los reclamos en 15, en ambos"
+#~ " casos contados desde el día siguiente al de entrada de la solicitud."
+
+#~ msgid "File a request"
+#~ msgstr "Presentar una solicitud"
+
+#~ msgid "Where the full policy is"
+#~ msgstr "Dónde está la política completa"
+
+#~ msgid ""
+#~ "The personal data processing policy sets out what data we hold, why, how "
+#~ "long for, what security measures apply, and which data leaves the country "
+#~ "and to whom."
+#~ msgstr ""
+#~ "La política de tratamiento de datos personales detalla qué datos tenemos, "
+#~ "para qué, durante cuánto tiempo, qué medidas de seguridad se aplican y qué "
+#~ "datos salen del país y hacia quién."
+
+#~ msgid "Read the full policy"
+#~ msgstr "Leer la política completa"
+
+#~ msgid ""
+#~ "A starting point, not approved terms. The sections on what a certification "
+#~ "proves and on automatic translation were written to match what the platform "
+#~ "actually does; the rest needs the firm's review, and the dispute resolution "
+#~ "section in particular needs a decision, not just a redraft."
+#~ msgstr ""
+#~ "Un punto de partida, no unos términos aprobados. Las secciones sobre qué "
+#~ "prueba una certificación y sobre la traducción automática se escribieron "
+#~ "para ajustarse a lo que la plataforma hace de verdad; el resto necesita la "
+#~ "revisión de la firma, y la sección de resolución de controversias necesita "
+#~ "en particular una decisión, no sólo una nueva redacción."
+
+#~ msgid "Who we are and what this is"
+#~ msgstr "Quiénes somos y qué es esto"
+
+#~ msgid ""
+#~ "GEA is the platform operated by Propensiones Abogados for managing "
+#~ "historical assets — bonds, gold, high denomination banknotes and similar — "
+#~ "and for issuing and verifying certified documents. By creating an account or"
+#~ " using the platform you accept these terms."
+#~ msgstr ""
+#~ "GEA es la plataforma que opera Propensiones Abogados para la gestión de "
+#~ "activos históricos —bonos, oro, billetes de alta denominación y similares— y"
+#~ " para la emisión y verificación de documentos certificados. Al crear una "
+#~ "cuenta o usar la plataforma aceptas estos términos."
+
+#~ msgid "Who may use it"
+#~ msgstr "Quién puede usarla"
+
+#~ msgid ""
+#~ "The platform is for adults with legal capacity. Registration requires a code"
+#~ " supplied by the firm: it is not open sign-up, and an account is personal "
+#~ "and non-transferable. You are responsible for what is done from your "
+#~ "account, which is why a second factor is available and required for internal"
+#~ " roles."
+#~ msgstr ""
+#~ "La plataforma es para personas mayores de edad con capacidad legal. El "
+#~ "registro exige un código que entrega la firma: no es un alta abierta, y la "
+#~ "cuenta es personal e intransferible. Eres responsable de lo que se haga "
+#~ "desde tu cuenta, y por eso hay un segundo factor disponible, obligatorio "
+#~ "para los roles internos."
+
+#~ msgid "What you may not do"
+#~ msgstr "Lo que no puedes hacer"
+
+#~ msgid "Register assets or documents you have no right over."
+#~ msgstr "Registrar activos o documentos sobre los que no tienes derecho."
+
+#~ msgid "Upload content that is unlawful, or that infringes third party rights."
+#~ msgstr "Subir contenido ilícito o que vulnere derechos de terceros."
+
+#~ msgid "Try to reach data or areas that do not correspond to your role."
+#~ msgstr "Intentar llegar a datos o áreas que no corresponden a tu rol."
+
+#~ msgid "Automate access, scan the platform, or interfere with its operation."
+#~ msgstr ""
+#~ "Automatizar el acceso, escanear la plataforma o interferir en su "
+#~ "funcionamiento."
+
+#~ msgid ""
+#~ "Present a certified copy as if it were something other than what section 5 "
+#~ "describes."
+#~ msgstr ""
+#~ "Presentar una copia certificada como si fuera algo distinto de lo que "
+#~ "describe la sección 5."
+
+#~ msgid "Your content"
+#~ msgstr "Tu contenido"
+
+#~ msgid ""
+#~ "What you upload stays yours. You give Propensiones the permission needed to "
+#~ "store it, process it and show it to whoever the platform's rules allow, for "
+#~ "the purpose you uploaded it for. You are responsible for having the right to"
+#~ " upload it."
+#~ msgstr ""
+#~ "Lo que subes sigue siendo tuyo. Le das a Propensiones el permiso necesario "
+#~ "para almacenarlo, tratarlo y mostrarlo a quien permitan las reglas de la "
+#~ "plataforma, para la finalidad por la que lo subiste. Eres responsable de "
+#~ "tener derecho a subirlo."
+
+#~ msgid "What a certification proves — and what it does not"
+#~ msgstr "Qué prueba una certificación, y qué no"
+
+#~ msgid "This is the section to read twice."
+#~ msgstr "Esta es la sección que hay que leer dos veces."
+
+#~ msgid ""
+#~ "A GEA certification proves <b>integrity</b>: that a file has not changed "
+#~ "since it was registered, and that it existed no later than a given moment. "
+#~ "It says nothing about whether what the document claims is <b>true</b>, nor "
+#~ "about the authenticity, ownership, value or legal validity of any asset it "
+#~ "describes."
+#~ msgstr ""
+#~ "Una certificación de GEA prueba la <b>integridad</b>: que un archivo no ha "
+#~ "cambiado desde que se registró, y que existía a más tardar en un momento "
+#~ "dado. No dice nada sobre si es <b>cierto</b> lo que el documento afirma, ni "
+#~ "sobre la autenticidad, la titularidad, el valor o la validez jurídica de "
+#~ "ningún activo que describa."
+
+#~ msgid ""
+#~ "In concrete terms: certifying a document that states an asset is worth a "
+#~ "certain amount proves that the document said so on that date. It does not "
+#~ "verify the amount, the asset, or the claim. The certification record issued "
+#~ "with every document says the same thing in its own terms, and that record "
+#~ "governs over any summary of it."
+#~ msgstr ""
+#~ "En concreto: certificar un documento que afirma que un activo vale cierta "
+#~ "cantidad prueba que el documento lo decía en esa fecha. No verifica la "
+#~ "cantidad, ni el activo, ni la afirmación. El registro de certificación que "
+#~ "se emite con cada documento dice lo mismo en sus propios términos, y ese "
+#~ "registro prevalece sobre cualquier resumen de él."
+
+#~ msgid ""
+#~ "Presenting a certified document as if it proved the truth of its contents is"
+#~ " a misuse of the service, and Propensiones may cancel a certification and "
+#~ "close the account of anyone who does so."
+#~ msgstr ""
+#~ "Presentar un documento certificado como si probara la veracidad de su "
+#~ "contenido es un uso indebido del servicio, y Propensiones puede anular una "
+#~ "certificación y cerrar la cuenta de quien lo haga."
+
+#~ msgid "Automatic features, stated plainly"
+#~ msgstr "Las funciones automáticas, dichas claramente"
+
+#~ msgid ""
+#~ "Names and descriptions are translated between Spanish and English by an "
+#~ "automated system, without human review. It is a convenience for reading, not"
+#~ " a certified or sworn translation, and it may be wrong. Where a text has "
+#~ "legal or contractual effect, the version written by its author is the one "
+#~ "that governs. Do not rely on a machine translation for a decision that "
+#~ "matters."
+#~ msgstr ""
+#~ "Los nombres y las descripciones se traducen entre español e inglés mediante "
+#~ "un sistema automatizado, sin revisión humana. Es una comodidad para leer, no"
+#~ " una traducción certificada ni oficial, y puede estar equivocada. Cuando un "
+#~ "texto tiene efectos jurídicos o contractuales, la versión escrita por su "
+#~ "autor es la que prevalece. No tomes una decisión que importe apoyándote en "
+#~ "una traducción automática."
+
+#~ msgid "Time anchoring"
+#~ msgstr "Anclaje temporal"
+
+#~ msgid ""
+#~ "Certain documents are anchored in time using a timestamping authority and "
+#~ "the Bitcoin blockchain. What is published is only a cryptographic hash — "
+#~ "never the document, and never its content. The anchor proves that a given "
+#~ "file existed no later than a certain moment. It proves nothing about who "
+#~ "wrote it, whether it is true, or what it is worth."
+#~ msgstr ""
+#~ "Ciertos documentos se anclan en el tiempo usando una autoridad de sellado de"
+#~ " tiempo y la cadena de bloques de Bitcoin. Lo que se publica es sólo un hash"
+#~ " criptográfico —nunca el documento, ni su contenido. El anclaje prueba que "
+#~ "un archivo determinado existía a más tardar en un momento dado. No prueba "
+#~ "nada sobre quién lo escribió, si es cierto, ni cuánto vale."
+
+#~ msgid ""
+#~ "Anchoring in a block is not instantaneous: proofs are issued pending and "
+#~ "mature over the following hours. A document is fully usable in the meantime;"
+#~ " the anchoring page shows the current state at any time."
+#~ msgstr ""
+#~ "El anclaje en un bloque no es instantáneo: las pruebas se emiten pendientes "
+#~ "y maduran en las horas siguientes. Mientras tanto el documento es plenamente"
+#~ " utilizable; la página de anclaje muestra el estado actual en todo momento."
+
+#~ msgid "Availability"
+#~ msgstr "Disponibilidad"
+
+#~ msgid ""
+#~ "We work to keep the platform available, but we do not guarantee "
+#~ "uninterrupted service. Maintenance, third party failures and causes outside "
+#~ "our control may interrupt it. Nothing here creates a service level "
+#~ "commitment unless it has been agreed separately in writing."
+#~ msgstr ""
+#~ "Trabajamos para mantener la plataforma disponible, pero no garantizamos un "
+#~ "servicio ininterrumpido. El mantenimiento, los fallos de terceros y causas "
+#~ "ajenas a nuestro control pueden interrumpirlo. Nada de lo aquí escrito crea "
+#~ "un compromiso de nivel de servicio salvo que se haya pactado aparte y por "
+#~ "escrito."
+
+#~ msgid "Copyright and takedown"
+#~ msgstr "Derechos de autor y retirada de contenido"
+
+#~ msgid ""
+#~ "We respect intellectual property. If you believe content on the platform "
+#~ "infringes your copyright, send a notice to the address in section 14 "
+#~ "including: your signature; identification of the protected work; "
+#~ "identification of the material you say infringes it and where it is; your "
+#~ "contact details; a statement that you believe in good faith that the use is "
+#~ "unauthorised; and a statement that the information is accurate and that you "
+#~ "are entitled to act on behalf of the rights holder."
+#~ msgstr ""
+#~ "Respetamos la propiedad intelectual. Si crees que un contenido de la "
+#~ "plataforma infringe tus derechos de autor, envía una notificación a la "
+#~ "dirección de la sección 14 que incluya: tu firma; la identificación de la "
+#~ "obra protegida; la identificación del material que consideras infractor y "
+#~ "dónde está; tus datos de contacto; una declaración de que crees de buena fe "
+#~ "que el uso no está autorizado; y una declaración de que la información es "
+#~ "exacta y de que estás facultado para actuar en nombre del titular de los "
+#~ "derechos."
+
+#~ msgid ""
+#~ "Material that is the subject of a valid notice is removed promptly, and "
+#~ "accounts that repeatedly infringe may be terminated. Whoever uploaded the "
+#~ "material is told, and may reply."
+#~ msgstr ""
+#~ "El material objeto de una notificación válida se retira con prontitud, y las"
+#~ " cuentas que infrinjan de forma reiterada pueden cancelarse. Se le informa a"
+#~ " quien subió el material, que puede responder."
+
+#~ msgid ""
+#~ "The DMCA is United States law, and its safe harbour protects providers "
+#~ "subject to that jurisdiction; registering an agent with the US Copyright "
+#~ "Office only makes sense if the service is offered there. In Colombia the "
+#~ "applicable framework is Law 23 of 1982 and Law 1915 of 2018. A takedown "
+#~ "procedure is worth having either way — this one — but calling it \"DMCA\" "
+#~ "does not by itself bring the safe harbour with it."
+#~ msgstr ""
+#~ "La DMCA es una ley de Estados Unidos, y su puerto seguro protege a los "
+#~ "proveedores sometidos a esa jurisdicción; registrar un agente ante la "
+#~ "Oficina de Derechos de Autor de EE. UU. sólo tiene sentido si el servicio se"
+#~ " ofrece allí. En Colombia el marco aplicable son la Ley 23 de 1982 y la Ley "
+#~ "1915 de 2018. Vale la pena tener un procedimiento de retirada en cualquier "
+#~ "caso —este—, pero llamarlo «DMCA» no trae consigo el puerto seguro."
+
+#~ msgid "Suspension and termination"
+#~ msgstr "Suspensión y terminación"
+
+#~ msgid ""
+#~ "We may suspend or close an account that breaches these terms. Closing an "
+#~ "account does not delete certifications already issued, nor the audit trail: "
+#~ "both have to survive for the platform to keep doing what it is for. Section "
+#~ "9 of the data policy explains why."
+#~ msgstr ""
+#~ "Podemos suspender o cerrar una cuenta que incumpla estos términos. Cerrar "
+#~ "una cuenta no borra las certificaciones ya emitidas ni la traza de "
+#~ "auditoría: las dos tienen que sobrevivir para que la plataforma siga "
+#~ "sirviendo para lo que es. La sección 9 de la política de datos explica por "
+#~ "qué."
+
+#~ msgid "Liability"
+#~ msgstr "Responsabilidad"
+
+#~ msgid ""
+#~ "Propensiones is liable for its own wilful misconduct and gross negligence, "
+#~ "as the applicable law provides. It is not liable for decisions taken on the "
+#~ "basis of an automatic translation, nor for the use a third party makes of a "
+#~ "certified document contrary to section 5, nor for the content that users "
+#~ "themselves upload."
+#~ msgstr ""
+#~ "Propensiones responde por su propio dolo y culpa grave, en los términos de "
+#~ "la ley aplicable. No responde por decisiones tomadas sobre la base de una "
+#~ "traducción automática, ni por el uso que un tercero haga de un documento "
+#~ "certificado en contra de la sección 5, ni por el contenido que suben los "
+#~ "propios usuarios."
+
+#~ msgid "Personal data"
+#~ msgstr "Datos personales"
+
+#~ msgid ""
+#~ "Handling of personal data is governed by the personal data processing "
+#~ "policy, which forms part of these terms."
+#~ msgstr ""
+#~ "El tratamiento de los datos personales se rige por la política de "
+#~ "tratamiento de datos personales, que forma parte de estos términos."
+
+#~ msgid "Read the data policy"
+#~ msgstr "Leer la política de datos"
+
+#~ msgid "Governing law and disputes"
+#~ msgstr "Ley aplicable y controversias"
+
+#~ msgid ""
+#~ "These terms are governed by Colombian law. Any dispute shall first be raised"
+#~ " through the PQRS form, so that it can be resolved directly. If it is not "
+#~ "resolved, the parties may attempt conciliation before an authorised "
+#~ "conciliation centre before going to court. Failing that, the dispute goes "
+#~ "before the ordinary Colombian courts."
+#~ msgstr ""
+#~ "Estos términos se rigen por la ley colombiana. Cualquier controversia se "
+#~ "planteará primero por el formulario de PQRS, para poder resolverla "
+#~ "directamente. Si no se resuelve, las partes podrán intentar una conciliación"
+#~ " ante un centro de conciliación autorizado antes de acudir a la justicia. En"
+#~ " su defecto, la controversia se somete a los jueces ordinarios colombianos."
+
+#~ msgid "Note for review: the arbitration clause does not port."
+#~ msgstr "Nota para revisión: la cláusula de arbitraje no se puede trasplantar."
+
+#~ msgid ""
+#~ "The standard United States clause — binding individual arbitration before "
+#~ "AAA or JAMS, waiver of jury trial, waiver of class actions — is not a matter"
+#~ " of swapping the administrator for a local one:"
+#~ msgstr ""
+#~ "La cláusula estándar de Estados Unidos —arbitraje individual vinculante ante"
+#~ " la AAA o JAMS, renuncia al juicio por jurado, renuncia a las acciones de "
+#~ "clase— no es cuestión de cambiar el administrador por uno local:"
+
+#~ msgid ""
+#~ "There is no jury in Colombian civil procedure, so that waiver means nothing."
+#~ msgstr ""
+#~ "En el procedimiento civil colombiano no hay jurado, así que esa renuncia no "
+#~ "significa nada."
+
+#~ msgid ""
+#~ "Group and class actions are governed by Law 472 of 1998 and are of "
+#~ "constitutional rank; they are not waived in an adhesion contract."
+#~ msgstr ""
+#~ "Las acciones populares y de grupo se rigen por la Ley 472 de 1998 y tienen "
+#~ "rango constitucional; no se renuncian en un contrato de adhesión."
+
+#~ msgid ""
+#~ "In consumer matters the Superintendence of Industry and Commerce holds "
+#~ "jurisdiction under Law 1480 of 2011, and a clause that tries to close that "
+#~ "door risks being held abusive and ineffective."
+#~ msgstr ""
+#~ "En materia de consumo la Superintendencia de Industria y Comercio tiene "
+#~ "competencia jurisdiccional por la Ley 1480 de 2011, y una cláusula que "
+#~ "intente cerrar esa puerta se expone a ser declarada abusiva e ineficaz."
+
+#~ msgid ""
+#~ "Real arbitration here runs under Law 1563 of 2012, before a chamber of "
+#~ "commerce arbitration centre, at a cost that only makes sense above a certain"
+#~ " amount in dispute."
+#~ msgstr ""
+#~ "El arbitraje de verdad aquí se rige por la Ley 1563 de 2012, ante un centro "
+#~ "de arbitraje de cámara de comercio, con un coste que sólo tiene sentido por "
+#~ "encima de cierta cuantía."
+
+#~ msgid ""
+#~ "What is written above is a graduated clause — direct claim, conciliation, "
+#~ "then courts — which is the usual arrangement here. If the firm wants "
+#~ "arbitration, it belongs in the contracts signed with counterparties for "
+#~ "specific transactions, with its seat, rules and amount threshold set out, "
+#~ "rather than in the general terms of a platform."
+#~ msgstr ""
+#~ "Lo escrito arriba es una cláusula escalonada —reclamación directa, "
+#~ "conciliación y después justicia—, que es lo habitual aquí. Si la firma "
+#~ "quiere arbitraje, su sitio son los contratos que se firman con las "
+#~ "contrapartes para operaciones concretas, con su sede, su reglamento y su "
+#~ "cuantía mínima, y no los términos generales de una plataforma."
+
+#~ msgid ""
+#~ "We may modify these terms. Material changes are notified through the "
+#~ "platform or by email, with the date they come into force. The version and "
+#~ "date at the top say which text is in force."
+#~ msgstr ""
+#~ "Podemos modificar estos términos. Los cambios sustanciales se notifican por "
+#~ "la plataforma o por correo electrónico, con la fecha en que entran en vigor."
+#~ " La versión y la fecha de arriba dicen qué texto está vigente."
+
+#~ msgid "Copyright notices:"
+#~ msgstr "Notificaciones de derechos de autor:"
+
+#~ msgid "designated contact, pending"
+#~ msgstr "contacto designado, pendiente"

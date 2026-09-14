@@ -1,0 +1,108 @@
+{% load i18n %}
+{% comment %}
+  El aviso de que un documento legal cambio.
+
+  Maquetado con tablas y estilos en linea por lo mismo que el correo del
+  codigo: los clientes de correo no traen hoja de estilos externa, Outlook
+  ignora la mayor parte del CSS moderno y Gmail recorta lo que va dentro de un
+  <style>. Lo que aqui parece anticuado es lo unico que se ve igual en todos.
+
+  Sin logos por `cid:` a proposito, al reves que el correo del codigo. Alli el
+  destinatario acaba de escanear un QR de un papel y no reconoce al remitente,
+  asi que la marca importa; aqui es alguien que ya tiene cuenta, y adjuntar dos
+  imagenes a un envio masivo es peso en cada uno de cientos de mensajes para
+  no decir nada que el texto no diga.
+
+  Lo que si tiene que estar, porque es lo que convierte esto en un aviso y no
+  en un anuncio: **que** documento cambio, **que** cambio y **desde cuando**,
+  y que seguir usando la plataforma cuenta como aceptarlo.
+{% endcomment %}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+       style="background:#f4f2ec;margin:0;padding:24px 12px;font-family:Arial,Helvetica,sans-serif;">
+  <tr>
+    <td align="center">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+             style="max-width:560px;background:#ffffff;border:1px solid #ded8cb;border-radius:6px;">
+
+        <tr>
+          <td style="padding:26px 28px 6px;color:#12203a;font-size:16px;line-height:1.5;">
+            <p style="margin:0 0 16px;">
+              {% if user.first_name %}
+                {% blocktrans with name=user.first_name %}Hi {{ name }}:{% endblocktrans %}
+              {% else %}
+                {% trans "Hi:" %}
+              {% endif %}
+            </p>
+
+            <p style="margin:0 0 16px;">
+              {% blocktrans trimmed with document=document_name %}
+                We have updated the <b>{{ document }}</b>.
+              {% endblocktrans %}
+              {% if effective_from %}
+                {% blocktrans trimmed with date=effective_from|date:"d/m/Y" %}
+                  It is in force since {{ date }}.
+                {% endblocktrans %}
+              {% endif %}
+            </p>
+          </td>
+        </tr>
+
+        {% if change_note %}
+          <tr>
+            <td style="padding:0 28px 6px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+                     style="background:#fbf7ea;border:1px solid #e2d5a8;border-radius:5px;">
+                <tr>
+                  <td style="padding:14px 16px;color:#4a3d16;font-size:14px;line-height:1.55;">
+                    <b style="display:block;margin-bottom:6px;">{% trans "What changed" %}</b>
+                    {{ change_note|linebreaksbr }}
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        {% endif %}
+
+        <tr>
+          <td style="padding:18px 28px 6px;color:#12203a;font-size:15px;line-height:1.55;">
+            <p style="margin:0 0 18px;">
+              {% blocktrans trimmed %}
+                You can read the full text, and download it as a PDF, here:
+              {% endblocktrans %}
+            </p>
+
+            <p style="margin:0 0 20px;">
+              <a href="{{ base_url }}/{{ document_key }}/"
+                 style="display:inline-block;padding:11px 20px;background:#12203a;color:#ffffff;
+                        text-decoration:none;border-radius:4px;font-size:15px;">
+                {{ document_name }}
+              </a>
+            </p>
+
+            <p style="margin:0 0 16px;color:#5a5a5a;font-size:13px;line-height:1.55;">
+              {% blocktrans trimmed %}
+                If you keep using the platform after this notice, we record it
+                as your acceptance of the new text. If you do not agree with
+                it, tell us through the PQRS form before continuing.
+              {% endblocktrans %}
+            </p>
+
+            <p style="margin:0 0 4px;color:#5a5a5a;font-size:13px;">
+              <a href="{{ base_url }}/pqrs/" style="color:#8a6d1a;">{% trans "File a request" %}</a>
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:16px 28px 24px;border-top:1px solid #ebe6da;color:#8a8a8a;font-size:12px;line-height:1.5;">
+            {% blocktrans trimmed with version=version.version %}
+              Version {{ version }}. This is a notice about a document you
+              accepted, not a commercial message.
+            {% endblocktrans %}
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>

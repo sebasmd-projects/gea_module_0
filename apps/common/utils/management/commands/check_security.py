@@ -92,6 +92,9 @@ INTENTIONALLY_PUBLIC = {
     'core:terms': 'idem',
     'core:cookies': 'idem',
     'core:data_policy': 'idem',
+    'core:legal_pdf':
+        'el mismo texto legal en PDF; solo sirve la version que ya esta '
+        'publicada en su pagina publica, saneada por core.legal_html',
     'core:health_check': 'lo consulta el monitor y la tarea de calentamiento',
     'certificates:certificates_landing': 'portal publico de verificacion',
     'certificates:input_employee_verification_ipcon':

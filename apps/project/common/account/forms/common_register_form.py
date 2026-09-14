@@ -181,8 +181,33 @@ class ContactBaseForm(forms.Form):
 
 class UniqueCodeForm(forms.Form):
     """
-    Paso 4: unique code
+    Paso 4: el codigo, y la autorizacion de tratamiento de datos.
+
+    La casilla va **en el ultimo paso** y no en el primero por una razon
+    practica: ahi es donde el titular ya ha visto que datos se le piden. Marcar
+    "acepto" antes de que te pregunten el pasaporte es marcar sobre algo que
+    todavia no conoces.
+
+    Que se marque la casilla no es la constancia. La constancia es la fila que
+    escribe `core.legal.accept_on_registration()` cuando el alta termina: quien
+    aceptó, qué versión, con qué huella, cuándo y desde dónde. El artículo 9 de
+    la Ley 1581 obliga a conservar eso, no un booleano.
     """
+
+    accepted_terms = forms.BooleanField(
+        label=_("I have read and accept the terms and the personal data "
+                "processing policy"),
+        required=True,
+        error_messages={
+            'required': _('The personal data processing policy has to be '
+                          'accepted in order to create the account.'),
+        },
+        widget=forms.CheckboxInput(attrs={
+            "id": "register_accepted_terms",
+            "class": "form-check-input",
+        })
+    )
+
     unique_code = forms.CharField(
         label=_("Unique code"),
         max_length=64,

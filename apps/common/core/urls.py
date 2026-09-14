@@ -2,7 +2,8 @@ from django.urls import path
 
 from apps.common.core.views import (CookiesTemplateView, DataPolicyTemplateView,
                                     HealthCheckView, IndexTemplateView,
-                                    PrivacyTemplateView, TermsTemplateView)
+                                    LegalDocumentPDFView, PrivacyTemplateView,
+                                    TermsTemplateView)
 
 app_name = 'core'
 
@@ -39,5 +40,14 @@ urlpatterns = [
         'data-policy/',
         DataPolicyTemplateView.as_view(),
         name='data_policy'
+    ),
+
+    # El mismo documento en PDF. Una sola ruta con la clave dentro en vez de
+    # cuatro: lo que cambia es el documento, no la vista, y cuatro rutas serian
+    # cuatro sitios donde olvidarse de añadir el quinto.
+    path(
+        'legal/<slug:document_key>.pdf',
+        LegalDocumentPDFView.as_view(),
+        name='legal_pdf'
     ),
 ]
