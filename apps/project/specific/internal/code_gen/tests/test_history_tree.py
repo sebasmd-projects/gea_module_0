@@ -333,3 +333,262 @@ class HistoryPageTestCase(TestCase):
 
         self.assertEqual(response.context['code_count'], 2)
         self.assertNotContains(response, 'NADA QUE VER')
+
+
+class FlatViewTestCase(TestCase):
+    """
+    El otro modo: una fila por codigo, sin repetir ninguno.
+
+    El arbol repite a proposito el certificado que esta en dos resumenes, asi
+    que sus filas dejan de ser los codigos emitidos. Para cuadrar una cuenta
+    hace falta la lista de siempre — y para no perder la relacion al dejar de
+    agrupar, cada fila dice a que resumenes pertenece.
+    """
+
+    def setUp(self):
+        self.staff = UserModel.objects.create_user(
+            username='ops', email='ops@example.com', password=PASSWORD,
+            is_staff=True,
+        )
+        self.client.force_login(self.staff)
+        self.url = reverse('code_gen:code_history')
+
+    def a_document(self, title, h):
+        return DocumentVerificationModel.objects.create(
+            document_title=title,
+            issued_at=date(2026, 1, 15),
+            certification_status=CertificationStatusChoices.CERTIFIED,
+            document_hash=h * 64,
+        )
+
+    def shared_document(self):
+        """Un certificado en dos resumenes: el caso que separa los dos modos."""
+        first = AegisSummaryModel.objects.create(title='Resumen X')
+        second = AegisSummaryModel.objects.create(title='Resumen Y')
+
+        document = self.a_document('Compartido', 'c')
+
+        AegisSummaryDocumentModel.objects.create(
+            summary=first, document=document, code='AEGIS-1'
+        )
+        AegisSummaryDocumentModel.objects.create(
+            summary=second, document=document, code='AEGIS-4'
+        )
+
+        CodeRegistrationModel.objects.create(
+            reference='COMPARTIDO', document=document
+        )
+
+        return first, second
+
+    def test_el_arbol_es_el_modo_por_defecto(self):
+        self.shared_document()
+
+        response = self.client.get(self.url)
+
+        self.assertTrue(response.context['grouped'])
+        self.assertIn('nodes', response.context)
+
+    def test_un_valor_desconocido_cae_en_el_arbol(self):
+        """Una URL vieja o manipulada no puede acabar en un error."""
+        self.shared_document()
+
+        response = self.client.get(self.url, {'view': 'loquesea'})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context['grouped'])
+
+    def test_la_lista_no_repite_el_certificado_compartido(self):
+        self.shared_document()
+
+        grouped = self.client.get(self.url)
+        flat = self.client.get(self.url, {'view': 'flat'})
+
+        # En arbol son dos ramas de una fila: dos filas para un solo codigo.
+        self.assertEqual(
+            sum(node.count for node in grouped.context['nodes']), 2
+        )
+
+        # En lista, una fila y una sola.
+        self.assertFalse(flat.context['grouped'])
+        self.assertEqual(len(flat.context['rows']), 1)
+        self.assertEqual(flat.context['code_count'], 1)
+
+    def test_la_lista_dice_de_que_resumenes_es_cada_codigo(self):
+        """Dejar de agrupar no puede ser perder la relacion."""
+        self.shared_document()
+
+        response = self.client.get(self.url, {'view': 'flat'})
+        row = response.context['rows'][0]
+
+        self.assertEqual(
+            sorted(row.labels),
+            ['Resumen X · AEGIS-1', 'Resumen Y · AEGIS-4'],
+        )
+        self.assertContains(response, 'Resumen X · AEGIS-1')
+
+    def test_el_papel_del_resumen_se_distingue_en_la_lista(self):
+        summary = AegisSummaryModel.objects.create(title='Bonos 1872')
+        paper = self.a_document('Resumen AEGIS-6', 'f')
+        summary.summary_document = paper
+        summary.save(update_fields=['summary_document'])
+
+        CodeRegistrationModel.objects.create(
+            reference='RESUMEN', document=paper
+        )
+
+        row = self.client.get(self.url, {'view': 'flat'}).context['rows'][0]
+
+        self.assertTrue(row.is_summary_document)
+        # Lleva su resumen, pero sin codigo de miembro: no es miembro de si
+        # mismo (invariante 15).
+        self.assertEqual(row.labels, ('Bonos 1872',))
+
+    def test_un_codigo_sin_resumen_no_lleva_etiqueta(self):
+        orphan = self.a_document('Certificado sin resumen', 'z')
+        CodeRegistrationModel.objects.create(
+            reference='HUERFANO', document=orphan
+        )
+        CodeRegistrationModel.objects.create(reference='SIN DOCUMENTO')
+
+        rows = self.client.get(self.url, {'view': 'flat'}).context['rows']
+
+        self.assertEqual([row.labels for row in rows], [(), ()])
+
+    def test_la_lista_pagina_en_la_base_de_datos(self):
+        """
+        En lista no hay ramas que partir, asi que no hace falta traerlo todo.
+
+        Es la diferencia de coste entre los dos modos y conviene que este
+        fijada: el arbol carga el historial entero para no cortar una rama, y
+        esta no tiene por que pagarlo.
+        """
+        for number in range(30):
+            CodeRegistrationModel.objects.create(reference=f'SUELTO-{number}')
+
+        response = self.client.get(self.url, {'view': 'flat'})
+
+        self.assertEqual(len(response.context['rows']), 25)
+        self.assertEqual(response.context['code_count'], 30)
+        self.assertEqual(response.context['paginator'].num_pages, 2)
+
+        # `object_list` es el QuerySet ya cortado, no una lista en memoria.
+        self.assertEqual(len(response.context['object_list']), 25)
+
+    def test_la_busqueda_y_la_paginacion_conservan_el_modo(self):
+        """
+        Sin esto, buscar desde la lista devolvia al arbol y parecia que el
+        interruptor se hubiera soltado solo.
+        """
+        for number in range(30):
+            CodeRegistrationModel.objects.create(reference=f'SUELTO-{number}')
+
+        response = self.client.get(self.url, {'view': 'flat'})
+
+        self.assertContains(response, 'name="view" value="flat"')
+        self.assertContains(response, 'view=flat&amp;page=2')
+
+        # Y la pagina 2 sigue en lista.
+        second = self.client.get(self.url, {'view': 'flat', 'page': 2})
+
+        self.assertFalse(second.context['grouped'])
+        self.assertEqual(len(second.context['rows']), 5)
+
+
+class SharedMembersTestCase(TestCase):
+    """
+    Dos resumenes que comparten miembros, y dos que comparten titulo.
+
+    Nada en la base lo impide: `uniq_document_per_summary` solo evita repetir
+    un documento **dentro** de un resumen, y el titulo no es unico. Las ramas
+    se indexan por el UUID del resumen, no por su nombre, asi que dos que se
+    llamen igual no se funden en una — que seria juntar los miembros de dos
+    resumenes distintos bajo una sola cabecera.
+    """
+
+    def a_document(self, title, h):
+        return DocumentVerificationModel.objects.create(
+            document_title=title,
+            issued_at=date(2026, 1, 15),
+            certification_status=CertificationStatusChoices.CERTIFIED,
+            document_hash=h * 64,
+        )
+
+    def listing(self):
+        return (
+            CodeRegistrationModel.objects
+            .select_related('document')
+            .order_by('-created')
+        )
+
+    def test_dos_resumenes_con_los_mismos_miembros(self):
+        first = AegisSummaryModel.objects.create(title='Bonos — original')
+        second = AegisSummaryModel.objects.create(title='Bonos — para el banco')
+
+        for number, letter in ((1, 'a'), (2, 'b')):
+            document = self.a_document(f'Certificado {number}', letter)
+
+            for summary in (first, second):
+                AegisSummaryDocumentModel.objects.create(
+                    summary=summary, document=document,
+                    code=f'AEGIS-{number}',
+                )
+
+            CodeRegistrationModel.objects.create(
+                reference=f'CERT-{number}', document=document
+            )
+
+        tree = build_history_tree(self.listing())
+
+        self.assertEqual(len(tree), 2)
+
+        for node in tree:
+            self.assertEqual(
+                [row.member_code for row in node.rows],
+                ['AEGIS-1', 'AEGIS-2'],
+                'cada resumen lleva su juego completo',
+            )
+
+    def test_dos_resumenes_con_el_mismo_titulo_no_se_funden(self):
+        first = AegisSummaryModel.objects.create(title='Repetido')
+        second = AegisSummaryModel.objects.create(title='Repetido')
+
+        for summary, number, letter in ((first, 1, 'd'), (second, 2, 'e')):
+            document = self.a_document(f'Certificado {number}', letter)
+            AegisSummaryDocumentModel.objects.create(
+                summary=summary, document=document, code='AEGIS-1'
+            )
+            CodeRegistrationModel.objects.create(
+                reference=f'CERT-{number}', document=document
+            )
+
+        tree = build_history_tree(self.listing())
+
+        self.assertEqual(len(tree), 2, 'son dos resumenes, no uno')
+        self.assertEqual(
+            {node.summary.pk for node in tree}, {first.pk, second.pk}
+        )
+        # Se distinguen por el codigo publico, que si es unico.
+        self.assertNotEqual(
+            tree[0].summary.public_code, tree[1].summary.public_code
+        )
+
+    def test_un_certificado_que_no_esta_en_ningun_resumen(self):
+        """
+        Un documento certificado y suelto: ni miembro, ni papel de resumen.
+
+        Estaba cubierto el codigo **sin documento**, que toma otro camino en
+        el armado: aqui hay documento, y hay que mirar sus pertenencias para
+        descubrir que no tiene ninguna.
+        """
+        orphan = self.a_document('Certificado sin resumen', 'z')
+        CodeRegistrationModel.objects.create(
+            reference='HUERFANO', document=orphan
+        )
+
+        tree = build_history_tree(self.listing())
+
+        self.assertEqual(len(tree), 1)
+        self.assertFalse(tree[0].is_summary)
+        self.assertEqual(tree[0].rows[0].registration.reference, 'HUERFANO')
+        self.assertEqual(tree[0].rows[0].member_code, '')

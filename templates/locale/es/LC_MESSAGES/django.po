@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 18:29-0500\n"
+"POT-Creation-Date: 2026-09-14 00:56+0000\n"
 "PO-Revision-Date: 2026-09-01 08:07+0000\n"
 "Last-Translator: Juan Sebastian Morales Delgado <cto@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1285,7 +1285,7 @@ msgid "Quantity Needed"
 msgstr "Cantidad necesaria"
 
 #: dashboard/pages/buyers/purchase_orders.html:147
-#: dashboard/pages/documents/code_gen/code_history.html:146
+#: dashboard/pages/documents/code_gen/partials/_code_row.html:52
 #: dashboard/pages/holders/holder_dashboard.html:249
 msgid "Yes"
 msgstr "Si"
@@ -2080,7 +2080,7 @@ msgstr "No válido"
 #: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:145
 #: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:64
 #: dashboard/pages/documents/code_gen/code_detail.html:37
-#: dashboard/pages/documents/code_gen/code_history.html:78
+#: dashboard/pages/documents/code_gen/code_history.html:106
 #: dashboard/pages/documents/code_gen/summary_composer.html:81
 msgid "Code"
 msgstr "Código"
@@ -2112,7 +2112,7 @@ msgstr "Comprobado el"
 
 #: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:32
 #: dashboard/pages/documents/code_gen/code_detail.html:68
-#: dashboard/pages/documents/code_gen/code_history.html:79
+#: dashboard/pages/documents/code_gen/code_history.html:107
 #: dashboard/pages/documents/code_gen/summary_list.html:41
 msgid "Public code"
 msgstr "Código público"
@@ -2127,7 +2127,7 @@ msgid "Summary document (distributable copy)"
 msgstr "Documento resumen (copia distribuible)"
 
 #: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:77
-#: dashboard/pages/documents/code_gen/code_history.html:154
+#: dashboard/pages/documents/code_gen/partials/_code_row.html:61
 msgid "View"
 msgstr "Ver"
 
@@ -2287,7 +2287,7 @@ msgid "Generated codes"
 msgstr "Códigos generados"
 
 #: dashboard/pages/documents/code_gen/code_detail.html:49
-#: dashboard/pages/documents/code_gen/code_history.html:77
+#: dashboard/pages/documents/code_gen/code_history.html:105
 #: dashboard/pages/holders/location/add_location.html:72
 #: dashboard/pages/holders/location/edit_location.html:63
 msgid "Reference"
@@ -2314,7 +2314,7 @@ msgid "Original SHA-256"
 msgstr "SHA-256 del original"
 
 #: dashboard/pages/documents/code_gen/code_detail.html:82
-#: dashboard/pages/documents/code_gen/code_history.html:76
+#: dashboard/pages/documents/code_gen/code_history.html:104
 msgid "Date"
 msgstr "Fecha"
 
@@ -2353,12 +2353,12 @@ msgstr "Abrir la página pública de verificación"
 
 #: dashboard/pages/documents/code_gen/code_detail.html:156
 #: dashboard/pages/documents/code_gen/code_form.html:166
-#: dashboard/pages/documents/code_gen/code_history.html:80
+#: dashboard/pages/documents/code_gen/code_history.html:108
 msgid "Symbols"
 msgstr "Símbolos"
 
 #: dashboard/pages/documents/code_gen/code_detail.html:161
-#: dashboard/pages/documents/code_gen/code_history.html:141
+#: dashboard/pages/documents/code_gen/partials/_code_row.html:46
 msgid "Barcode"
 msgstr "Código de barras"
 
@@ -2367,7 +2367,7 @@ msgid "Download barcode"
 msgstr "Descargar código de barras"
 
 #: dashboard/pages/documents/code_gen/code_detail.html:172
-#: dashboard/pages/documents/code_gen/code_history.html:142
+#: dashboard/pages/documents/code_gen/partials/_code_row.html:47
 msgid "QR code"
 msgstr "Código QR"
 
@@ -2533,58 +2533,70 @@ msgstr "Historial"
 msgid "Generate a new code"
 msgstr "Generar un código nuevo"
 
-#: dashboard/pages/documents/code_gen/code_history.html:38
+#: dashboard/pages/documents/code_gen/code_history.html:46
 msgid "Search by reference, code, sequence or hash"
 msgstr "Buscar por referencia, código, secuencia o hash"
 
-#: dashboard/pages/documents/code_gen/code_history.html:42
+#: dashboard/pages/documents/code_gen/code_history.html:50
 msgid "Search"
 msgstr "Buscar"
 
-#: dashboard/pages/documents/code_gen/code_history.html:47
+#: dashboard/pages/documents/code_gen/code_history.html:55
 msgid "Clear"
 msgstr "Limpiar"
 
-#: dashboard/pages/documents/code_gen/code_history.html:53
+#: dashboard/pages/documents/code_gen/code_history.html:70
+#| msgid "How the suite ended"
+msgid "How to show the codes"
+msgstr "Cómo mostrar los códigos"
+
+#: dashboard/pages/documents/code_gen/code_history.html:75
+#| msgid "New summary"
+msgid "Grouped by summary"
+msgstr "Agrupados por resumen"
+
+#: dashboard/pages/documents/code_gen/code_history.html:81
+msgid "One row per code"
+msgstr "Una fila por código"
+
+#: dashboard/pages/documents/code_gen/code_history.html:86
 msgid "No codes issued yet."
 msgstr "Todavía no se ha emitido ningún código."
 
-#: dashboard/pages/documents/code_gen/code_history.html:65
+#: dashboard/pages/documents/code_gen/code_history.html:89
 #, python-format
-#| msgid "%(counter)s placement"
-#| msgid_plural "%(counter)s placements"
 msgid "%(counter)s code issued."
 msgid_plural "%(counter)s codes issued."
 msgstr[0] "%(counter)s código emitido."
 msgstr[1] "%(counter)s códigos emitidos."
 
-#: dashboard/pages/documents/code_gen/code_history.html:81
+#: dashboard/pages/documents/code_gen/code_history.html:96
+msgid ""
+"A certificate that belongs to more than one summary appears under each of "
+"them, so there may be more rows than codes."
+msgstr ""
+"Un certificado que pertenece a más de un resumen aparece en cada uno de "
+"ellos, así que puede haber más filas que códigos."
+
+#: dashboard/pages/documents/code_gen/code_history.html:109
 msgid "Certified"
 msgstr "Certificado"
 
-#: dashboard/pages/documents/code_gen/code_history.html:92
-#| msgid "Summaries"
+#: dashboard/pages/documents/code_gen/code_history.html:131
 msgid "Summary:"
 msgstr "Resumen:"
 
-#: dashboard/pages/documents/code_gen/code_history.html:100
+#: dashboard/pages/documents/code_gen/code_history.html:139
 #, python-format
-#| msgid "%(counter)s placement"
-#| msgid_plural "%(counter)s placements"
 msgid "%(counter)s code"
 msgid_plural "%(counter)s codes"
 msgstr[0] "%(counter)s código"
 msgstr[1] "%(counter)s códigos"
 
-#: dashboard/pages/documents/code_gen/code_history.html:109
+#: dashboard/pages/documents/code_gen/code_history.html:148
 #: dashboard/pages/documents/code_gen/summary_list.html:59
 msgid "Compose"
 msgstr "Componer"
-
-#: dashboard/pages/documents/code_gen/code_history.html:132
-#: dashboard/pages/documents/code_gen/summary_composer.html:200
-msgid "Summary document"
-msgstr "Documento del resumen"
 
 #: dashboard/pages/documents/code_gen/layout_form.html:6
 msgid "New stamp layout"
@@ -2733,6 +2745,11 @@ msgstr[1] "%(counter)s posiciones"
 #: dashboard/pages/documents/code_gen/layout_list.html:79
 msgid "Edit and preview"
 msgstr "Editar y previsualizar"
+
+#: dashboard/pages/documents/code_gen/partials/_code_row.html:32
+#: dashboard/pages/documents/code_gen/summary_composer.html:200
+msgid "Summary document"
+msgstr "Documento del resumen"
 
 #: dashboard/pages/documents/code_gen/partials/_layout_workspace.html:16
 msgid "Placements over the document"
