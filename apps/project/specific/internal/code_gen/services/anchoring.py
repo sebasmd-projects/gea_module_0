@@ -112,12 +112,84 @@ def anchor_with_ots(summary):
     )
 
 
+def anchors_without_block_time(queryset=None):
+    """
+    Anclajes de Bitcoin ya confirmados a los que les falta la fecha.
+
+    Existe como consulta aparte porque la fecha se busca **fuera** del momento
+    de confirmar: la prueba madura diciendo una altura de bloque, y la hora de
+    ese bloque hay que ir a pedirla. Si esa peticion falla --o las dos fuentes
+    no coinciden-- el anclaje se confirma igual y se queda sin fecha; sin esta
+    consulta no habria forma de volver a por ella, porque el anclaje ya no esta
+    pendiente y el cron no lo miraria nunca mas. Un corte de red de un minuto
+    dejaria la columna vacia para siempre.
+    """
+    from ..models import (AnchorStatusChoices, AnchorTypeChoices,
+                          CertificationAnchorModel)
+
+    if queryset is None:
+        queryset = CertificationAnchorModel.objects.all()
+
+    return queryset.filter(
+        anchor_type=AnchorTypeChoices.OPENTIMESTAMPS,
+        status=AnchorStatusChoices.CONFIRMED,
+        stamped_at__isnull=True,
+    ).exclude(serial='')
+
+
+def _record_block_time(anchor) -> bool:
+    """La hora del bloque que este anclaje acredita, si se puede establecer."""
+    from .bitcoin_time import block_time
+
+    try:
+        height = int(anchor.serial)
+    except (TypeError, ValueError):
+        return False
+
+    moment = block_time(height)
+
+    if moment is None:
+        return False
+
+    anchor.stamped_at = moment
+    anchor.save(update_fields=['stamped_at', 'updated'])
+
+    return True
+
+
+def fill_missing_block_times(queryset=None) -> dict:
+    """
+    Pone fecha a los anclajes confirmados que no la tienen.
+
+    Se llama desde el cron, nunca desde una peticion: con `ATOMIC_REQUESTS`
+    puesto, resolver esto al pintar la pagina seria una transaccion abierta
+    esperando a un explorador de bloques.
+    """
+    pending = anchors_without_block_time(queryset)
+
+    checked = 0
+    dated = 0
+
+    for anchor in pending:
+        checked += 1
+
+        if _record_block_time(anchor):
+            dated += 1
+
+    return {'checked': checked, 'dated': dated}
+
+
 def upgrade_pending_anchors(queryset=None) -> dict:
     """
     Madura las pruebas de OpenTimestamps que ya tengan bloque.
 
     Pensado para un cron: mientras la prueba no haya entrado en un bloque, el
     calendario responde que todavia no, y eso **no es un error**.
+
+    Al confirmar se busca ademas la hora de la cabecera del bloque, que es la
+    fecha que el anclaje acredita de verdad: la prueba dice una **altura**, no
+    una fecha. Que esa busqueda falle no impide confirmar --el anclaje es
+    valido igual-- y lo recoge `fill_missing_block_times()` en otra vuelta.
     """
     from ..models import (AnchorStatusChoices, AnchorTypeChoices,
                           CertificationAnchorModel)
@@ -130,6 +202,7 @@ def upgrade_pending_anchors(queryset=None) -> dict:
 
     checked = 0
     confirmed = 0
+    dated = 0
 
     for anchor in queryset:
         checked += 1
@@ -156,7 +229,12 @@ def upgrade_pending_anchors(queryset=None) -> dict:
         anchor.save(update_fields=['proof', 'status', 'detail', 'serial',
                                    'updated'])
 
-    return {'checked': checked, 'confirmed': confirmed}
+        # Despues de guardar, y sin condicionar lo anterior: la prueba ya esta
+        # a salvo aunque ningun explorador conteste.
+        if state['confirmed'] and _record_block_time(anchor):
+            dated += 1
+
+    return {'checked': checked, 'confirmed': confirmed, 'dated': dated}
 
 
 def verify_anchor(anchor) -> dict:

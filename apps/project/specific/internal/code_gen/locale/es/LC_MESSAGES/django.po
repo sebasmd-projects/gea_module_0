@@ -7,9 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ATLAS 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-14 15:26+0000\n"
+"POT-Creation-Date: 2026-09-14 16:30+0000\n"
 "PO-Revision-Date: 2024-12-15 02:02-0500\n"
-"Last-Translator: Sebastián Morales <sebastian.morales@propensionesabogados.com>\n"
+"Last-Translator: Sebastián Morales <sebastian.morales@propensionesabogados."
+"com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -187,22 +188,21 @@ msgstr ""
 #, python-format
 msgid ""
 "Sealed, but the OpenTimestamps library is not installed on this server "
-"(%(reason)s). The seal is saved. This is fixed by installing "
-"requirements.txt with pip on the server, not from here — check first with "
-"«Dependencies» in the operations console that the package actually reached "
-"that file."
+"(%(reason)s). The seal is saved. This is fixed by installing requirements."
+"txt with pip on the server, not from here — check first with «Dependencies» "
+"in the operations console that the package actually reached that file."
 msgstr ""
 "Sellado, pero la librería OpenTimestamps no está instalada en este servidor "
 "(%(reason)s). El sellado está guardado. Esto se arregla instalando "
 "requirements.txt con pip en el servidor, no desde aquí: comprueba antes con "
-"«Dependencias», en la consola de operaciones, que el paquete llegó de verdad"
-" a ese fichero."
+"«Dependencias», en la consola de operaciones, que el paquete llegó de verdad "
+"a ese fichero."
 
 #: api.py:571
 #, python-format
 msgid ""
-"Sealed, but sending to the blockchain failed: %(kind)s: %(reason)s. The seal"
-" is saved; send it later with «Send to blockchain». Run «Blockchain "
+"Sealed, but sending to the blockchain failed: %(kind)s: %(reason)s. The seal "
+"is saved; send it later with «Send to blockchain». Run «Blockchain "
 "anchoring» in the operations console for a full diagnosis."
 msgstr ""
 "Sellado, pero el envío a la cadena de bloques falló: %(kind)s: %(reason)s. "
@@ -228,8 +228,8 @@ msgstr "Sella el resumen antes de enviarlo."
 
 #: api.py:658
 msgid ""
-"Sent to the blockchain. The proof is born pending: it matures into a Bitcoin"
-" block within a few hours, on its own."
+"Sent to the blockchain. The proof is born pending: it matures into a Bitcoin "
+"block within a few hours, on its own."
 msgstr ""
 "Enviado a la cadena de bloques. La prueba nace pendiente: madura hasta un "
 "bloque de Bitcoin en unas horas, ella sola."
@@ -252,8 +252,8 @@ msgstr ""
 #: api.py:730
 msgid "Choose a stamp layout: it decides where each code goes on the page."
 msgstr ""
-"Elige una disposición de estampado: es la que decide dónde va cada código en"
-" la página."
+"Elige una disposición de estampado: es la que decide dónde va cada código en "
+"la página."
 
 #: api.py:753
 #, python-format
@@ -341,8 +341,8 @@ msgid ""
 "Requires uploading the document. The code carries the base64 fingerprint of "
 "the original file."
 msgstr ""
-"Requiere subir el documento. El código lleva la huella en base64 del archivo"
-" original."
+"Requiere subir el documento. El código lleva la huella en base64 del archivo "
+"original."
 
 #: forms.py:119
 msgid "Hash characters"
@@ -369,8 +369,8 @@ msgid ""
 "Only letters, digits, spaces and . _ - are allowed. URLs cannot be encoded "
 "in a barcode."
 msgstr ""
-"Solo se admiten letras, dígitos, espacios y los símbolos . _ - . Las URLs no"
-" se pueden codificar en un código de barras."
+"Solo se admiten letras, dígitos, espacios y los símbolos . _ - . Las URLs no "
+"se pueden codificar en un código de barras."
 
 #: forms.py:162
 msgid "Generate QR code"
@@ -397,8 +397,8 @@ msgid ""
 "Embeds the codes in the PDF, computes its fingerprints and issues the "
 "distributable digital copy."
 msgstr ""
-"Incrusta los códigos en el PDF, calcula sus huellas y emite la copia digital"
-" distribuible."
+"Incrusta los códigos en el PDF, calcula sus huellas y emite la copia digital "
+"distribuible."
 
 #: forms.py:214
 msgid "Document title"
@@ -437,8 +437,8 @@ msgid ""
 "else."
 msgstr ""
 "Qué clase de documento es. Aparece en la página pública de verificación, "
-"debajo del título. Usa «Certificado de activo (AEGIS)» para los certificados"
-" de un resumen de activos, y «Documento genérico» para todo lo demás."
+"debajo del título. Usa «Certificado de activo (AEGIS)» para los certificados "
+"de un resumen de activos, y «Documento genérico» para todo lo demás."
 
 #: forms.py:290 services/certification.py:203
 #, python-format
@@ -471,8 +471,8 @@ msgid ""
 "The public verification URL only exists once the document is certified. "
 "Certify the document or choose another QR content."
 msgstr ""
-"La URL pública de verificación solo existe una vez certificado el documento."
-" Certifica el documento o elige otro contenido para el QR."
+"La URL pública de verificación solo existe una vez certificado el documento. "
+"Certifica el documento o elige otro contenido para el QR."
 
 #: forms.py:470
 msgid "— none —"
@@ -649,8 +649,7 @@ msgid "Opacity"
 msgstr "Opacidad"
 
 #: models.py:258
-msgid ""
-"A member barcode needs to say which document of the summary it carries."
+msgid "A member barcode needs to say which document of the summary it carries."
 msgstr ""
 "Un código de barras de miembro tiene que indicar qué documento del resumen "
 "lleva."
@@ -661,8 +660,7 @@ msgstr "Indica al menos un número de página para este selector."
 
 #: models.py:274
 msgid "Page numbers must be positive integers separated by commas."
-msgstr ""
-"Los números de página deben ser enteros positivos separados por comas."
+msgstr "Los números de página deben ser enteros positivos separados por comas."
 
 #: models.py:279
 msgid "Opacity must be greater than 0 and up to 1."
@@ -792,11 +790,11 @@ msgstr "Número de serie"
 msgid "Detail"
 msgstr "Detalle"
 
-#: models.py:533
+#: models.py:548
 msgid "Certification anchor"
 msgstr "Anclaje de certificación"
 
-#: models.py:534
+#: models.py:549
 msgid "Certification anchors"
 msgstr "Anclajes de certificación"
 
@@ -807,8 +805,8 @@ msgstr "Tamaño de página"
 #: preview.py:27
 msgid "Drag a box to move it; the offsets update as you go."
 msgstr ""
-"Arrastra un resumen para moverla; los desplazamientos se actualizan sobre la"
-" marcha."
+"Arrastra un resumen para moverla; los desplazamientos se actualizan sobre la "
+"marcha."
 
 #: preview.py:28
 msgid "Rendering the document…"
@@ -831,14 +829,14 @@ msgid ""
 "Drag a corner to resize keeping the proportion, or an edge to change only "
 "the width or the height."
 msgstr ""
-"Arrastra una esquina para redimensionar conservando la proporción, o un lado"
-" para cambiar solo el ancho o el alto."
+"Arrastra una esquina para redimensionar conservando la proporción, o un lado "
+"para cambiar solo el ancho o el alto."
 
 #: preview.py:39
 #, python-format
 msgid ""
-"The symbol keeps its proportion, so it uses %(w)s x %(h)s pt of the %(bw)s x"
-" %(bh)s pt box."
+"The symbol keeps its proportion, so it uses %(w)s x %(h)s pt of the %(bw)s x "
+"%(bh)s pt box."
 msgstr ""
 "El símbolo conserva su proporción, así que ocupa %(w)s x %(h)s pt del "
 "resumen de %(bw)s x %(bh)s pt."
@@ -872,11 +870,11 @@ msgstr "Política %(policy)s"
 msgid "Waiting for inclusion in a Bitcoin block."
 msgstr "Esperando a entrar en un bloque de Bitcoin."
 
-#: services/anchoring.py:206
+#: services/anchoring.py:284
 msgid "This anchor type cannot be verified by the platform yet."
 msgstr "La plataforma todavía no puede verificar este tipo de anclaje."
 
-#: services/anchoring.py:211
+#: services/anchoring.py:289
 msgid ""
 "The anchor is valid, but it covers an earlier master hash: the summary was "
 "re-sealed after being anchored."
@@ -940,8 +938,8 @@ msgid ""
 "The barcode text is too long (%(length)s characters). The maximum is "
 "%(maximum)s."
 msgstr ""
-"El texto del código de barras es demasiado largo (%(length)s caracteres). El"
-" máximo es %(maximum)s."
+"El texto del código de barras es demasiado largo (%(length)s caracteres). El "
+"máximo es %(maximum)s."
 
 #: services/codes.py:124
 #, python-format
@@ -1097,7 +1095,6 @@ msgid "The token attests this hash existed at the time it states."
 msgstr "El token acredita que este hash existía en la hora que indica."
 
 #: services/usb_readiness.py:94
-#| msgid "%(code)s is not certified yet."
 msgid "not certified"
 msgstr "sin certificar"
 
@@ -1123,11 +1120,11 @@ msgstr ""
 
 #: services/usb_readiness.py:132
 msgid ""
-"The sealed payload no longer describes the current members. Seal it again so"
-" the hash covers what the summary holds today."
+"The sealed payload no longer describes the current members. Seal it again so "
+"the hash covers what the summary holds today."
 msgstr ""
-"El payload sellado ya no describe a los miembros de ahora. Vuelve a sellarlo"
-" para que el hash cubra lo que el resumen lleva hoy."
+"El payload sellado ya no describe a los miembros de ahora. Vuelve a sellarlo "
+"para que el hash cubra lo que el resumen lleva hoy."
 
 #: services/usb_readiness.py:150
 msgid ""
@@ -1142,8 +1139,8 @@ msgid ""
 "The summary PDF is certified, but its public copy is not on disk. Issue it "
 "again: what is not on disk cannot be copied."
 msgstr ""
-"El PDF del resumen está certificado, pero su copia pública no está en disco."
-" Vuelve a emitirlo: lo que no está en disco no se puede copiar."
+"El PDF del resumen está certificado, pero su copia pública no está en disco. "
+"Vuelve a emitirlo: lo que no está en disco no se puede copiar."
 
 #: services/usb_readiness.py:176
 msgid ""

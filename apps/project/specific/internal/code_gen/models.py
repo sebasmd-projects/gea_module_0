@@ -525,6 +525,21 @@ class CertificationAnchorModel(TimeStampedModel):
     def is_confirmed(self) -> bool:
         return self.status == AnchorStatusChoices.CONFIRMED
 
+    @property
+    def proof_extension(self) -> str:
+        """
+        La extension que le toca al fichero de la prueba.
+
+        Vive aqui y no en la vista ni en la plantilla porque lo usan los tres:
+        quien descarga tiene que recibir el nombre correcto para dárselo a la
+        herramienta correcta, y el boton tiene que decir cual es antes de que lo
+        pulsen. Repartido, un dia dicen cosas distintas.
+        """
+        if self.anchor_type == AnchorTypeChoices.OPENTIMESTAMPS:
+            return 'ots'
+
+        return 'tsr'
+
     def __str__(self) -> str:
         return f'{self.get_anchor_type_display()} · {self.payload_hash[:16]}…'
 

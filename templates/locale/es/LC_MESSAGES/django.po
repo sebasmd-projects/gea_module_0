@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-14 15:25+0000\n"
+"POT-Creation-Date: 2026-09-14 16:30+0000\n"
 "PO-Revision-Date: 2026-09-01 08:07+0000\n"
 "Last-Translator: Juan Sebastian Morales Delgado <cto@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1795,7 +1795,7 @@ msgid "Distributable copy"
 msgstr "Copia distribuible"
 
 #: dashboard/pages/certificates/documents/aegis_documents/certificate_detail.html:192
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:87
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:111
 msgid "Compute it yourself:"
 msgstr "Compruébalo tú mismo:"
 
@@ -2047,10 +2047,21 @@ msgstr "El código caduca en unos minutos."
 msgid "You can request a new code in"
 msgstr "Puedes solicitar un nuevo código en"
 
+#: dashboard/pages/certificates/documents/aegis_documents/includes/_anchor_proof_button.html:19
+msgid "The proof file: this is what lets anyone check the anchor without us."
+msgstr ""
+"El archivo de la prueba: es lo que permite comprobar el anclaje sin "
+"nosotros."
+
+#: dashboard/pages/certificates/documents/aegis_documents/includes/_anchor_proof_button.html:26
+#, python-format
+msgid "Proof (.%(kind)s)"
+msgstr "Prueba (.%(kind)s)"
+
 #: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:6
 #: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:21
 #: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:25
-#: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:47
+#: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:66
 msgid "Timestamp anchor"
 msgstr "Anclaje temporal"
 
@@ -2060,19 +2071,34 @@ msgstr "Anclaje temporal"
 msgid "AEGIS summary"
 msgstr "Resumen AEGIS"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:35
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:45
 msgid "The content of this summary is proven to have existed since:"
 msgstr "Está probado que el contenido de este resumen existía desde:"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:39
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:49
 msgid "A third party attested the date. It is not this platform saying so."
 msgstr "La fecha la acreditó un tercero. No es esta plataforma quien lo dice."
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:44
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:54
+#| msgid "Send to blockchain"
+msgid "Confirmed in the blockchain"
+msgstr "Confirmado en la cadena de bloques"
+
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:57
+msgid ""
+"The block that attests it is already recorded below. Its exact time is still"
+" being resolved, and that changes nothing about the proof: the block itself "
+"is what attests the date, and anyone can look it up."
+msgstr ""
+"El bloque que lo acredita ya está anotado abajo. Su hora exacta se está "
+"resolviendo todavía, y eso no cambia nada de la prueba: lo que acredita la "
+"fecha es el propio bloque, y cualquiera puede mirarlo."
+
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:68
 msgid "Not anchored yet"
 msgstr "Todavía sin anclar"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:46
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:70
 msgid ""
 "The summary is sealed but no external timestamp confirms its date yet. This "
 "page updates on its own as anchors arrive: the printed code never needs "
@@ -2082,14 +2108,14 @@ msgstr ""
 " Esta página se actualiza sola según llegan los anclajes: el código impreso "
 "no hay que volver a emitirlo nunca."
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:54
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:78
 #: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:41
 #: dashboard/pages/documents/code_gen/summary_composer.html:48
 #: dashboard/pages/documents/code_gen/summary_list.html:44
 msgid "Master hash"
 msgstr "Master hash"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:57
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:81
 msgid ""
 "One figure that commits to the fingerprints of every document in the "
 "summary. It is the only thing that leaves the platform: never the documents,"
@@ -2099,84 +2125,132 @@ msgstr ""
 "resumen. Es lo único que sale de la plataforma: nunca los documentos, nunca "
 "su contenido."
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:63
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:87
 msgid "Algorithm"
 msgstr "Algoritmo"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:66
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:90
 msgid "Canonicalization"
 msgstr "Canonicalización"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:69
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:139
-#: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:58
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:93
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:244
+#: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:91
 #: dashboard/pages/documents/code_gen/summary_composer.html:66
 msgid "Documents in the summary"
 msgstr "Documentos del resumen"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:72
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:96
 msgid "Sealed at"
 msgstr "Sellado el"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:83
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:107
 msgid "Download the exact bytes that were hashed (JSON)"
 msgstr "Descargar los bytes exactos que se hashearon (JSON)"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:96
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:122
+msgid "Download the file; do not copy and paste it."
+msgstr "Descarga el archivo; no lo copies y pegues."
+
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:123
+msgid ""
+"A single extra byte — the newline most editors add on save — produces a "
+"completely different hash."
+msgstr ""
+"Un solo byte de más —el salto de línea que casi todos los editores añaden al"
+" guardar— produce un hash completamente distinto."
+
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:134
 msgid "Anchors"
 msgstr "Anclajes"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:99
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:137
 msgid "No anchors recorded."
 msgstr "No hay anclajes registrados."
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:105
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:143
 #: pqrs/receipt.html:46
 msgid "Type"
 msgstr "Tipo"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:106
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:144
 msgid "Attested time"
 msgstr "Hora acreditada"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:107
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:145
+#| msgid "Blockchain"
+msgid "Block"
+msgstr "Bloque"
+
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:146
 msgid "Provider"
 msgstr "Proveedor"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:108
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:147
 msgid "State"
 msgstr "Estado"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:119
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:148
+msgid "Proof"
+msgstr "Prueba"
+
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:186
 msgid "Valid"
 msgstr "Válido"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:121
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:188
 msgid "Earlier hash"
 msgstr "Hash anterior"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:123
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:190
 msgid "Not valid"
 msgstr "No válido"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:145
-#: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:64
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:212
+msgid "Check it yourself, without us"
+msgstr "Compruébalo tú, sin nosotros"
+
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:216
+msgid "Download the proof and read it offline — nothing is sent anywhere:"
+msgstr ""
+"Descarga la prueba y léela sin conexión; no se manda nada a ninguna parte:"
+
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:224
+msgid ""
+"Check that the hash it prints is the master hash above, and that the block "
+"it names is the one in the table."
+msgstr ""
+"Comprueba que el hash que imprime es el master hash de arriba, y que el "
+"bloque que nombra es el de la tabla."
+
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:230
+msgid ""
+"Open that block in any explorer and compare its merkle root with the one the"
+" proof states. Careful: the two are printed in reverse byte order, so one "
+"reads backwards against the other."
+msgstr ""
+"Abre ese bloque en cualquier explorador y compara su merkle root con el que "
+"dice la prueba. Ojo: los dos se imprimen en orden de bytes invertido, así "
+"que uno se lee al revés del otro."
+
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:250
+#: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:97
 #: dashboard/pages/documents/code_gen/code_detail.html:37
 #: dashboard/pages/documents/code_gen/code_history.html:154
 #: dashboard/pages/documents/code_gen/summary_composer.html:81
 msgid "Code"
 msgstr "Código"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:146
-#: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:65
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:251
+#: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:98
 msgid "Document type"
 msgstr "Tipo de documento"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:167
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:272
 msgid "What this proves, and what it does not."
 msgstr "Qué prueba esto y qué no."
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:168
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:273
 msgid ""
 "It proves WHEN: that this content existed on the stated date, attested by a "
 "third party. Who issued it is proven by the platform signature on each "
@@ -2188,7 +2262,7 @@ msgstr ""
 "registro de certificación. Que sea CIERTO lo que los documentos afirman no "
 "lo prueba nada de esto."
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:172
+#: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:277
 msgid "Checked at"
 msgstr "Comprobado el"
 
@@ -2204,11 +2278,21 @@ msgstr "Código público"
 msgid "Verification ID"
 msgstr "ID de verificación"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:52
+#: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:55
+#, python-format
+msgid "Attested in the blockchain since %(since)s UTC."
+msgstr "Acreditado en la cadena de bloques desde el %(since)s UTC."
+
+#: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:59
+#| msgid "Send to blockchain"
+msgid "Confirmed in the blockchain."
+msgstr "Confirmado en la cadena de bloques."
+
+#: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:71
 msgid "Summary document (distributable copy)"
 msgstr "Documento resumen (copia distribuible)"
 
-#: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:77
+#: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:110
 #: dashboard/pages/documents/code_gen/partials/_code_row.html:61
 msgid "View"
 msgstr "Ver"
@@ -2915,7 +2999,6 @@ msgid "Done:"
 msgstr "Cumplido:"
 
 #: dashboard/pages/documents/code_gen/partials/_usb_export.html:65
-#| msgid "Pending"
 msgid "Pending:"
 msgstr "Pendiente:"
 
@@ -3455,7 +3538,6 @@ msgid "Assets"
 msgstr "Activos"
 
 #: dashboard/partials/sidenav/dashboard_sidenav.html:197
-#| msgid "Verification ID"
 msgid "Verification"
 msgstr "Verificación"
 

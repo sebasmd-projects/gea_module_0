@@ -42,6 +42,24 @@
       <dd class="col-sm-8"><code class="text-break">{{ summary.master_hash|default:'—' }}</code></dd>
     </dl>
 
+    {% comment %}
+      La fecha que acredita el anclaje, aqui tambien. Esta pagina llevaba
+      calculado `state` y no enseñaba nada de el: para saber si el resumen
+      estaba en la cadena, y desde cuando, habia que irse a la otra pagina.
+    {% endcomment %}
+    {% if state.anchored %}
+      <p class="small text-success mb-3">
+        <i class="bi bi-clock-history me-1" aria-hidden="true"></i>
+        {% if state.attested_since %}
+          {% blocktrans trimmed with since=state.attested_since|date:'d/m/Y H:i' %}
+            Attested in the blockchain since {{ since }} UTC.
+          {% endblocktrans %}
+        {% else %}
+          {% trans 'Confirmed in the blockchain.' %}
+        {% endif %}
+      </p>
+    {% endif %}
+
     <div class="d-grid gap-2 d-md-flex mb-4">
       <a class="btn btn-outline-dark btn-sm" href="{% url 'certificates:summary_anchor' summary.pk %}">
         <i class="bi bi-clock-history"></i> {% trans 'Timestamp anchor' %}
@@ -52,6 +70,19 @@
           <i class="bi bi-file-earmark-pdf"></i> {% trans 'Summary document (distributable copy)' %}
         </a>
       {% endif %}
+
+      {% comment %}
+        La prueba, descargable desde aqui y no solo desde la pagina de anclaje:
+        quien llega a esta ya tiene delante el resumen y su master hash, y es el
+        fichero que le falta para comprobarlo por su cuenta. Solo las que
+        acreditan el master hash de ahora: ofrecer la de un sello anterior
+        invitaria a comprobar una cosa contra otra distinta.
+      {% endcomment %}
+      {% for item in state.anchors %}
+        {% if item.valid and item.covers_current_master_hash %}
+          {% include 'dashboard/pages/certificates/documents/aegis_documents/includes/_anchor_proof_button.html' with anchor=item.anchor summary=summary %}
+        {% endif %}
+      {% endfor %}
     </div>
 
     <div class="card">
