@@ -185,6 +185,23 @@
         </a>
       {% endif %}
 
+      {% comment %}
+        Verificar un documento lo ve cualquiera que haya entrado, no solo el
+        personal. La vista siempre fue publica --figura en
+        INTENTIONALLY_PUBLIC y le pide OTP a un anonimo--; lo que estaba
+        cerrado era este enlace, que vivia dentro del bloque de `is_staff`,
+        asi que un comprador o un tenedor tenia que conocerse la URL de
+        memoria para usar una pagina que es suya.
+      {% endcomment %}
+      <div class="sidenav-menu-heading">{% trans 'Verification' %}</div>
+
+      <a class="nav-link {% active_class 'certificates:input_document_verification_aegis' %}" href="{% url 'certificates:input_document_verification_aegis' %}">
+        <div class="nav-link-icon">
+          <i class="fa-solid fa-file-shield"></i>
+        </div>
+        {% trans 'Verify document' %}
+      </a>
+
       {% if request.user.is_staff or request.user.is_superuser %}
         <div class="sidenav-menu-heading">{% trans 'Documents' %}</div>
 
@@ -214,13 +231,6 @@
             <i class="fa-solid fa-crop-simple"></i>
           </div>
           {% trans 'Stamp layouts' %}
-        </a>
-
-        <a class="nav-link {% active_class 'certificates:input_document_verification_aegis' %}" href="{% url 'certificates:input_document_verification_aegis' %}">
-          <div class="nav-link-icon">
-            <i class="fa-solid fa-file-shield"></i>
-          </div>
-          {% trans 'Verify document' %}
         </a>
 
         <div class="sidenav-menu-heading">{% trans 'Administration' %}</div>

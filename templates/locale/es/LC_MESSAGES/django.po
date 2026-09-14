@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-14 02:58+0000\n"
+"POT-Creation-Date: 2026-09-14 15:25+0000\n"
 "PO-Revision-Date: 2026-09-01 08:07+0000\n"
 "Last-Translator: Juan Sebastian Morales Delgado <cto@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -221,7 +221,6 @@ msgstr "Aprobado"
 
 #: admin/core/legaldocumentversionmodel/_approve_row.html:17
 #, python-format
-#| msgid "It is in force since %(date)s."
 msgid "approved by %(who)s, in force since %(since)s."
 msgstr "aprobada por %(who)s, vigente desde el %(since)s."
 
@@ -235,7 +234,6 @@ msgstr ""
 
 #: admin/core/legaldocumentversionmodel/_approve_row.html:30
 #: admin/core/legaldocumentversionmodel/_approve_row.html:51
-#| msgid "This verification is valid and currently active."
 msgid "This version is a draft."
 msgstr "Esta versión es un borrador."
 
@@ -248,7 +246,6 @@ msgstr ""
 "nombre y la fecha de hoy. Después ya no se puede editar."
 
 #: admin/core/legaldocumentversionmodel/_approve_row.html:44
-#| msgid "Approved and Valid"
 msgid "Approve and publish"
 msgstr "Aprobar y publicar"
 
@@ -270,7 +267,7 @@ msgstr "Inicio"
 #: admin/ops/command.html:7 admin/ops/commandrunmodel_change_list.html:16
 #: admin/ops/console.html:21 admin/ops/console.html:100
 #: admin/ops/test_summary.html:30
-#: dashboard/partials/sidenav/dashboard_sidenav.html:240
+#: dashboard/partials/sidenav/dashboard_sidenav.html:251
 msgid "Operations console"
 msgstr "Consola de operaciones"
 
@@ -1612,7 +1609,7 @@ msgstr "Certificaciones"
 #: dashboard/pages/certificates/certificates_landing.html:26
 #: dashboard/pages/documents/code_gen/code_detail.html:24
 #: dashboard/pages/documents/code_gen/code_form.html:24
-#: dashboard/pages/documents/code_gen/code_history.html:19
+#: dashboard/pages/documents/code_gen/code_history.html:51
 #: dashboard/pages/documents/code_gen/layout_form.html:25
 #: dashboard/pages/documents/code_gen/layout_list.html:24
 #: dashboard/pages/documents/code_gen/summary_composer.html:26
@@ -1945,42 +1942,79 @@ msgstr "Ahora puedes verificar el documento."
 msgid "Enter the document details to verify."
 msgstr "Ingrese los detalles del documento a verificar."
 
-#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:118
+#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:77
+msgid "The two checks below are not the same."
+msgstr "Las dos comprobaciones de abajo no son la misma."
+
+#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:82
+msgid ""
+"<b>Uploading the document does verify its integrity.</b> Its fingerprint is "
+"compared against the one recorded when it was certified, so it tells you "
+"whether the file in your hands is still exactly the one that was registered."
+msgstr ""
+"<b>Subir el documento sí comprueba su integridad.</b> Se compara su huella "
+"con la que se registró al certificarlo, así que dice si el archivo que "
+"tienes en la mano sigue siendo exactamente el que se registró."
+
+#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:91
+msgid ""
+"<b>Entering the public code does not.</b> It only looks up the record and "
+"shows what was certified. It says nothing about the file you have: a copy "
+"that had been altered would give the very same page."
+msgstr ""
+"<b>Teclear el código público no.</b> Solo busca la ficha y enseña lo que se "
+"certificó. No dice nada del archivo que tú tienes: una copia alterada daría "
+"exactamente la misma página."
+
+#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:102
+msgid ""
+"Neither of them attests that what the document says is true — only that it "
+"has not changed since it was registered."
+msgstr ""
+"Ninguna de las dos acredita que sea cierto lo que el documento dice — solo "
+"que no ha cambiado desde que se registró."
+
+#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:185
 #: dashboard/pages/documents/code_gen/summary_composer.html:182
 #: pqrs/wizard.html:117
 msgid "Sending…"
 msgstr "Enviando…"
 
-#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:118
+#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:185
 msgid "Verifying…"
 msgstr "Verificando…"
 
-#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:120
+#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:187
 msgid "Send verification code"
 msgstr "Enviar código de verificación"
 
-#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:122
+#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:189
 msgid "Verify code"
 msgstr "Verificar código"
 
-#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:124
-#: dashboard/partials/sidenav/dashboard_sidenav.html:223
+#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:191
+#: dashboard/partials/sidenav/dashboard_sidenav.html:203
 msgid "Verify document"
 msgstr "Verificar documento"
 
-#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:140
+#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:204
+msgid "This looks up the record. It does not check your file."
+msgstr "Esto busca la ficha. No comprueba tu archivo."
+
+#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:220
 msgid "Resend verification code"
 msgstr "Reenviar código de verificación"
 
-#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:153
+#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:233
 msgid "Change email address"
 msgstr "Cambiar dirección de correo electrónico"
 
-#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:170
-msgid "Or verify by uploading the file"
-msgstr "O verifica subiendo el archivo"
+#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:250
+msgid "Verify by uploading the file — this is the one that checks integrity"
+msgstr ""
+"Verificar subiendo el archivo — esta es la que comprueba la integridad"
 
-#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:172
+#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:252
 msgid ""
 "Upload the PDF and we will tell you whether it is the original, a valid "
 "certified digital copy, or a file that does not correspond to any certified "
@@ -1989,15 +2023,15 @@ msgstr ""
 "Sube el PDF y te diremos si es el original, una copia digital certificada "
 "válida, o un archivo que no corresponde a ningún documento certificado."
 
-#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:197
+#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:277
 msgid "Verifying the file…"
 msgstr "Verificando el archivo…"
 
-#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:198
+#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:278
 msgid "Verify file"
 msgstr "Verificar archivo"
 
-#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:204
+#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:284
 msgid ""
 "The file is never stored: only its fingerprint is computed, in memory, and "
 "then discarded."
@@ -2005,11 +2039,11 @@ msgstr ""
 "El archivo nunca se almacena: solo se calcula su huella, en memoria, y luego"
 " se descarta."
 
-#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:214
+#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:294
 msgid "The code expires in a few minutes."
 msgstr "El código caduca en unos minutos."
 
-#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:246
+#: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:326
 msgid "You can request a new code in"
 msgstr "Puedes solicitar un nuevo código en"
 
@@ -2128,7 +2162,7 @@ msgstr "No válido"
 #: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:145
 #: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:64
 #: dashboard/pages/documents/code_gen/code_detail.html:37
-#: dashboard/pages/documents/code_gen/code_history.html:122
+#: dashboard/pages/documents/code_gen/code_history.html:154
 #: dashboard/pages/documents/code_gen/summary_composer.html:81
 msgid "Code"
 msgstr "Código"
@@ -2160,7 +2194,7 @@ msgstr "Comprobado el"
 
 #: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:32
 #: dashboard/pages/documents/code_gen/code_detail.html:68
-#: dashboard/pages/documents/code_gen/code_history.html:123
+#: dashboard/pages/documents/code_gen/code_history.html:155
 #: dashboard/pages/documents/code_gen/summary_list.html:41
 msgid "Public code"
 msgstr "Código público"
@@ -2329,13 +2363,13 @@ msgstr "Código emitido"
 
 #: dashboard/pages/documents/code_gen/code_detail.html:25
 #: dashboard/pages/documents/code_gen/code_history.html:6
-#: dashboard/pages/documents/code_gen/code_history.html:17
-#: dashboard/partials/sidenav/dashboard_sidenav.html:202
+#: dashboard/pages/documents/code_gen/code_history.html:49
+#: dashboard/partials/sidenav/dashboard_sidenav.html:220
 msgid "Generated codes"
 msgstr "Códigos generados"
 
 #: dashboard/pages/documents/code_gen/code_detail.html:49
-#: dashboard/pages/documents/code_gen/code_history.html:121
+#: dashboard/pages/documents/code_gen/code_history.html:153
 #: dashboard/pages/holders/location/add_location.html:72
 #: dashboard/pages/holders/location/edit_location.html:63
 msgid "Reference"
@@ -2362,7 +2396,7 @@ msgid "Original SHA-256"
 msgstr "SHA-256 del original"
 
 #: dashboard/pages/documents/code_gen/code_detail.html:82
-#: dashboard/pages/documents/code_gen/code_history.html:120
+#: dashboard/pages/documents/code_gen/code_history.html:152
 msgid "Date"
 msgstr "Fecha"
 
@@ -2401,7 +2435,7 @@ msgstr "Abrir la página pública de verificación"
 
 #: dashboard/pages/documents/code_gen/code_detail.html:156
 #: dashboard/pages/documents/code_gen/code_form.html:166
-#: dashboard/pages/documents/code_gen/code_history.html:124
+#: dashboard/pages/documents/code_gen/code_history.html:156
 msgid "Symbols"
 msgstr "Símbolos"
 
@@ -2453,15 +2487,15 @@ msgid "Issue barcodes and QR codes, and certify a PDF end to end."
 msgstr "Emite códigos de barras y QR, y certifica un PDF de principio a fin."
 
 #: dashboard/pages/documents/code_gen/code_form.html:25
-#: dashboard/pages/documents/code_gen/code_history.html:20
+#: dashboard/pages/documents/code_gen/code_history.html:52
 #: dashboard/pages/documents/code_gen/layout_list.html:25
 #: dashboard/pages/documents/code_gen/summary_list.html:18
-#: dashboard/partials/sidenav/dashboard_sidenav.html:189
+#: dashboard/partials/sidenav/dashboard_sidenav.html:207
 msgid "Documents"
 msgstr "Documentos"
 
 #: dashboard/pages/documents/code_gen/code_form.html:26
-#: dashboard/partials/sidenav/dashboard_sidenav.html:195
+#: dashboard/partials/sidenav/dashboard_sidenav.html:213
 msgid "Code generator"
 msgstr "Generador de códigos"
 
@@ -2569,54 +2603,54 @@ msgstr "Guardando…"
 msgid "Creating…"
 msgstr "Creando…"
 
-#: dashboard/pages/documents/code_gen/code_history.html:18
+#: dashboard/pages/documents/code_gen/code_history.html:50
 msgid "Every code issued, so you can come back to any of them."
 msgstr "Todos los códigos emitidos, para poder volver a cualquiera de ellos."
 
-#: dashboard/pages/documents/code_gen/code_history.html:27
+#: dashboard/pages/documents/code_gen/code_history.html:59
 msgid "History"
 msgstr "Historial"
 
-#: dashboard/pages/documents/code_gen/code_history.html:30
+#: dashboard/pages/documents/code_gen/code_history.html:62
 msgid "Generate a new code"
 msgstr "Generar un código nuevo"
 
-#: dashboard/pages/documents/code_gen/code_history.html:46
+#: dashboard/pages/documents/code_gen/code_history.html:78
 msgid "Search by reference, code, sequence or hash"
 msgstr "Buscar por referencia, código, secuencia o hash"
 
-#: dashboard/pages/documents/code_gen/code_history.html:50
+#: dashboard/pages/documents/code_gen/code_history.html:82
 msgid "Search"
 msgstr "Buscar"
 
-#: dashboard/pages/documents/code_gen/code_history.html:55
+#: dashboard/pages/documents/code_gen/code_history.html:87
 msgid "Clear"
 msgstr "Limpiar"
 
-#: dashboard/pages/documents/code_gen/code_history.html:70
+#: dashboard/pages/documents/code_gen/code_history.html:102
 msgid "How to show the codes"
 msgstr "Cómo mostrar los códigos"
 
-#: dashboard/pages/documents/code_gen/code_history.html:75
+#: dashboard/pages/documents/code_gen/code_history.html:107
 msgid "Grouped by summary"
 msgstr "Agrupados por resumen"
 
-#: dashboard/pages/documents/code_gen/code_history.html:81
+#: dashboard/pages/documents/code_gen/code_history.html:113
 msgid "One row per code"
 msgstr "Una fila por código"
 
-#: dashboard/pages/documents/code_gen/code_history.html:86
+#: dashboard/pages/documents/code_gen/code_history.html:118
 msgid "No codes issued yet."
 msgstr "Todavía no se ha emitido ningún código."
 
-#: dashboard/pages/documents/code_gen/code_history.html:105
+#: dashboard/pages/documents/code_gen/code_history.html:137
 #, python-format
 msgid "%(counter)s code issued."
 msgid_plural "%(counter)s codes issued."
 msgstr[0] "%(counter)s código emitido."
 msgstr[1] "%(counter)s códigos emitidos."
 
-#: dashboard/pages/documents/code_gen/code_history.html:112
+#: dashboard/pages/documents/code_gen/code_history.html:144
 msgid ""
 "A certificate that belongs to more than one summary appears under each of "
 "them, so there may be more rows than codes."
@@ -2624,22 +2658,22 @@ msgstr ""
 "Un certificado que pertenece a más de un resumen aparece en cada uno de "
 "ellos, así que puede haber más filas que códigos."
 
-#: dashboard/pages/documents/code_gen/code_history.html:125
+#: dashboard/pages/documents/code_gen/code_history.html:157
 msgid "Certified"
 msgstr "Certificado"
 
-#: dashboard/pages/documents/code_gen/code_history.html:147
+#: dashboard/pages/documents/code_gen/code_history.html:179
 msgid "Summary:"
 msgstr "Resumen:"
 
-#: dashboard/pages/documents/code_gen/code_history.html:155
+#: dashboard/pages/documents/code_gen/code_history.html:187
 #, python-format
 msgid "%(counter)s code"
 msgid_plural "%(counter)s codes"
 msgstr[0] "%(counter)s código"
 msgstr[1] "%(counter)s códigos"
 
-#: dashboard/pages/documents/code_gen/code_history.html:164
+#: dashboard/pages/documents/code_gen/code_history.html:199
 #: dashboard/pages/documents/code_gen/summary_list.html:59
 msgid "Compose"
 msgstr "Componer"
@@ -2663,7 +2697,7 @@ msgstr ""
 #: dashboard/pages/documents/code_gen/layout_form.html:26
 #: dashboard/pages/documents/code_gen/layout_list.html:6
 #: dashboard/pages/documents/code_gen/layout_list.html:22
-#: dashboard/partials/sidenav/dashboard_sidenav.html:216
+#: dashboard/partials/sidenav/dashboard_sidenav.html:234
 msgid "Stamp layouts"
 msgstr "Disposiciones de estampado"
 
@@ -2858,6 +2892,33 @@ msgstr "Crear disposición"
 msgid "Which pages"
 msgstr "Qué páginas"
 
+#: dashboard/pages/documents/code_gen/partials/_usb_export.html:24
+msgid "Export to USB"
+msgstr "Exportar a USB"
+
+#: dashboard/pages/documents/code_gen/partials/_usb_export.html:39
+#, python-format
+msgid "Not ready to export (%(counter)s pending)"
+msgstr "No se puede exportar todavía (%(counter)s pendiente(s))"
+
+#: dashboard/pages/documents/code_gen/partials/_usb_export.html:46
+msgid ""
+"A device leaves here and does not come back: it does not update, it does not"
+" warn and it cannot be withdrawn. So it is only handed out once all five are"
+" green."
+msgstr ""
+"Un dispositivo sale de aquí y no vuelve: no se actualiza, no avisa y no se "
+"puede retirar. Por eso solo se entrega con las cinco en verde."
+
+#: dashboard/pages/documents/code_gen/partials/_usb_export.html:59
+msgid "Done:"
+msgstr "Cumplido:"
+
+#: dashboard/pages/documents/code_gen/partials/_usb_export.html:65
+#| msgid "Pending"
+msgid "Pending:"
+msgstr "Pendiente:"
+
 #: dashboard/pages/documents/code_gen/summary_composer.html:25
 msgid ""
 "Pick the documents, place their barcodes on the summary, seal and anchor."
@@ -2869,7 +2930,7 @@ msgstr ""
 #: dashboard/pages/documents/code_gen/summary_form.html:26
 #: dashboard/pages/documents/code_gen/summary_list.html:5
 #: dashboard/pages/documents/code_gen/summary_list.html:15
-#: dashboard/partials/sidenav/dashboard_sidenav.html:209
+#: dashboard/partials/sidenav/dashboard_sidenav.html:227
 msgid "AEGIS summaries"
 msgstr "Resúmenes AEGIS"
 
@@ -3393,11 +3454,16 @@ msgstr "Seguridad"
 msgid "Assets"
 msgstr "Activos"
 
-#: dashboard/partials/sidenav/dashboard_sidenav.html:226
+#: dashboard/partials/sidenav/dashboard_sidenav.html:197
+#| msgid "Verification ID"
+msgid "Verification"
+msgstr "Verificación"
+
+#: dashboard/partials/sidenav/dashboard_sidenav.html:237
 msgid "Administration"
 msgstr "Administración"
 
-#: dashboard/partials/sidenav/dashboard_sidenav.html:232
+#: dashboard/partials/sidenav/dashboard_sidenav.html:243
 msgid "Admin panel"
 msgstr "Panel de administración"
 
@@ -3976,71 +4042,3 @@ msgstr "archivos"
 #: video_masonry/gallery.html:28
 msgid "Page"
 msgstr "Página"
-
-#~ msgid "Step"
-#~ msgstr "Paso"
-
-#~ msgid "User information"
-#~ msgstr "Información de Usuario"
-
-#~ msgid "Security information"
-#~ msgstr "Información de Seguridad"
-
-#~ msgid "Contact information"
-#~ msgstr "Información de contacto "
-
-#~ msgid "Unique code"
-#~ msgstr "Código Único*"
-
-#~ msgid "Register"
-#~ msgstr "Registro"
-
-#~ msgid "Do you already have an account? Sign in"
-#~ msgstr "¿Ya tienes una cuenta? Iniciar sesión"
-
-#~ msgid "Created by"
-#~ msgstr "Creado por"
-
-#~ msgid ""
-#~ "Use this form for entering backup tokens for logging in. These tokens have "
-#~ "been generated for you to print and keep safe. Please enter one of these "
-#~ "backup tokens to login to your account."
-#~ msgstr ""
-#~ "Usa este formulario para ingresar tokens de respaldo para iniciar sesión. "
-#~ "Estos tokens han sido generados para que los imprimas y los mantengas "
-#~ "seguros. Por favor, introduce uno de estos tokens de respaldo para acceder a"
-#~ " tu cuenta."
-
-#~ msgid "As a last resort, you can use a backup token:"
-#~ msgstr "Como último recurso, puedes usar un token de respaldo:"
-
-#~ msgid "Use Backup Token"
-#~ msgstr "Usar token de respaldo"
-
-#~ msgid "Seal the box"
-#~ msgstr "Sellar el resumen"
-
-#~ msgid "Summary PDF (without codes), to preview over it"
-#~ msgstr "PDF del resumen (sin códigos), para previsualizar encima"
-
-#~ msgid "Read in the browser only: it is not uploaded from here."
-#~ msgstr "Solo se lee en el navegador: desde aquí no se sube."
-
-#~ msgid "Not sent"
-#~ msgstr "Sin enviar"
-
-#~ msgid "Sign in with a code sent to my email"
-#~ msgstr "Entrar con un código enviado a mi correo"
-
-#~ msgid ""
-#~ "Enter your username or email and we will send you a six-digit code to sign "
-#~ "in without your password."
-#~ msgstr ""
-#~ "Escribe tu usuario o correo y te enviaremos un código de seis dígitos para "
-#~ "entrar sin la contraseña."
-
-#~ msgid "Send a new code"
-#~ msgstr "Enviar un código nuevo"
-
-#~ msgid "Use the following code to sign in to your account."
-#~ msgstr "Utiliza el siguiente código para iniciar sesión en tu cuenta."

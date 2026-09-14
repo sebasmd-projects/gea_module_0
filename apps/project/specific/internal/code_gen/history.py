@@ -123,6 +123,15 @@ class HistoryNode:
     summary: Optional[object] = None
     rows: list = field(default_factory=list)
 
+    #: Si el resumen se puede llevar en un USB, y si no, por que no
+    #: (`services.usb_readiness.ExportState`). Lo rellena la vista, y **solo
+    #: para las ramas de la pagina que se esta mirando**: comprobarlo obliga a
+    #: verificar el sello y a leer las pruebas de anclaje de cada resumen, y
+    #: hacerlo sobre el historial entero para enseñar veinticinco seria pagar
+    #: por lo que no se ve. En un nodo de codigos sueltos se queda a `None`,
+    #: porque no hay resumen que exportar.
+    export: Optional[object] = None
+
     @property
     def is_summary(self) -> bool:
         return self.summary is not None

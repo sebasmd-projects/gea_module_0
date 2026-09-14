@@ -1,0 +1,77 @@
+{% load i18n %}
+
+{% comment %}
+  La accion de llevarse un resumen en un USB, en la cabecera de su rama.
+
+  Cuando no se puede, **no** se pinta un boton apagado. Un boton en gris invita
+  a pulsarlo y a preguntarse por que no responde, y quien lo mira se va al chat
+  interno a preguntar; una lista que dice cual de las cinco falta y que hacer,
+  no. Es la misma decision que la franja de aprobacion de una version legal.
+
+  Las cinco salen siempre, cumplidas y no cumplidas: arreglar una y descubrir la
+  siguiente, de una en una, es la peor forma de enterarse. El porque de cada una
+  esta en `services/usb_readiness.py`.
+
+  El color nunca va solo: cada estado lleva su icono y su palabra, porque el
+  verde y el rojo de esta paleta se separan poco bajo deuteranopia.
+{% endcomment %}
+
+{% if export.ok %}
+
+  <a class="btn btn-outline-success btn-sm"
+     href="{% url 'code_gen:summary_usb_export' summary.pk %}">
+    <i class="bi bi-usb-drive me-1" aria-hidden="true"></i>
+    {% trans 'Export to USB' %}
+  </a>
+
+{% else %}
+
+  <details class="usb-export">
+    <summary class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-exclamation-triangle me-1" aria-hidden="true"></i>
+      {% comment %}
+        Con `with` y no con `count`: el texto no cambia de forma en plural, y
+        un `{% blocktrans count %}` cuyo contador se resuelva a la cadena vacia
+        --una variable que no llegue al contexto-- tumba la pagina entera con
+        un TemplateSyntaxError. Ya paso aqui al lado.
+      {% endcomment %}
+      {% blocktrans trimmed with counter=export.blocking|length|default:0 %}
+        Not ready to export ({{ counter }} pending)
+      {% endblocktrans %}
+    </summary>
+
+    <div class="usb-export__panel">
+      <p class="mb-2 small text-muted">
+        {% blocktrans trimmed %}
+          A device leaves here and does not come back: it does not update, it
+          does not warn and it cannot be withdrawn. So it is only handed out
+          once all five are green.
+        {% endblocktrans %}
+      </p>
+
+      <ul class="list-unstyled mb-0 small">
+        {% for check in export.checks %}
+          <li class="mb-2">
+            {% if check.ok %}
+              <span class="usb-export__ok">
+                <i class="bi bi-check-circle-fill me-1" aria-hidden="true"></i>
+                <span class="visually-hidden">{% trans 'Done:' %}</span>
+                {{ check.label }}
+              </span>
+            {% else %}
+              <span class="usb-export__pending">
+                <i class="bi bi-x-circle-fill me-1" aria-hidden="true"></i>
+                <span class="visually-hidden">{% trans 'Pending:' %}</span>
+                <b>{{ check.label }}</b>
+              </span>
+              {% if check.detail %}
+                <div class="text-muted ms-4">{{ check.detail }}</div>
+              {% endif %}
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </details>
+
+{% endif %}

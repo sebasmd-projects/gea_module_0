@@ -40,6 +40,71 @@
                 </p>
             {% endif %}
 
+            {% comment %}
+              ================= LAS DOS COSAS NO SON LA MISMA =================
+
+              Esta pagina ofrece dos caminos que se parecen y no prueban lo
+              mismo, y el que esta arriba --teclear el codigo-- es el que no
+              prueba nada del archivo. Quien lo usa se lleva una ficha en
+              pantalla que dice «certificado», y de ahi a creer que el PDF que
+              tiene en la mano acaba de quedar comprobado hay un paso que nadie
+              le ha dicho que no de.
+
+              Asi que se dice, arriba, entero y con las dos mitades juntas: la
+              comparacion solo la hace subir el archivo. Va donde va porque una
+              advertencia debajo del boton llega tarde, y lleva ademas el limite
+              del invariante 11 --integridad, nunca veracidad-- que es la otra
+              confusion de esta misma pantalla.
+
+              Se pinta con la misma condicion que el cotejo por archivo
+              (`file_verification_allowed`): antes de eso lo que hay en pantalla
+              es el correo o el codigo de acceso, y explicar ahi una distincion
+              entre dos formularios que todavia no se ven solo estorba.
+            {% endcomment %}
+            {% if file_verification_allowed %}
+                <div class="alert alert-warning small" role="note">
+                    {% comment %}
+                      Sin icono: esta pagina es publica y no carga la fuente de
+                      iconos, asi que un `<i class="bi …">` aqui seria un hueco
+                      en blanco. Traerla por CDN para un adorno obligaria
+                      ademas a fijar version y `integrity` (invariante 27), y el
+                      aviso se lee igual escrito.
+                    {% endcomment %}
+                    <p class="mb-2">
+                        <b>{% trans 'The two checks below are not the same.' %}</b>
+                    </p>
+
+                    <ul class="mb-2 ps-3">
+                        <li class="mb-1">
+                            {% blocktrans trimmed %}
+                                <b>Uploading the document does verify its
+                                integrity.</b> Its fingerprint is compared
+                                against the one recorded when it was certified,
+                                so it tells you whether the file in your hands
+                                is still exactly the one that was registered.
+                            {% endblocktrans %}
+                        </li>
+                        <li>
+                            {% blocktrans trimmed %}
+                                <b>Entering the public code does not.</b> It
+                                only looks up the record and shows what was
+                                certified. It says nothing about the file you
+                                have: a copy that had been altered would give
+                                the very same page.
+                            {% endblocktrans %}
+                        </li>
+                    </ul>
+
+                    <p class="mb-0">
+                        {% blocktrans trimmed %}
+                            Neither of them attests that what the document says
+                            is true — only that it has not changed since it was
+                            registered.
+                        {% endblocktrans %}
+                    </p>
+                </div>
+            {% endif %}
+
             {% comment %} ================= FORM ================= {% endcomment %}
             <form method="post" novalidate>
                 {% csrf_token %}
@@ -119,6 +184,18 @@
                                     {% endif %}
                                 </button>
 
+                                {% comment %}
+                                  Pegado al boton, no solo arriba: quien baja
+                                  directo a rellenar el codigo se salta el
+                                  recuadro, y el momento en que hace falta
+                                  leerlo es justo antes de pulsar.
+                                {% endcomment %}
+                                {% if file_verification_allowed %}
+                                    <p class="text-muted small mt-2 mb-0 text-center">
+                                        {% trans 'This looks up the record. It does not check your file.' %}
+                                    </p>
+                                {% endif %}
+
                                 <div class="mt-3">
                                     {% if form.otp %}
                                         {% comment %} ================= RESEND OTP BUTTON ================= {% endcomment %}
@@ -158,7 +235,7 @@
 
                 <div class="row justify-content-center">
                     <div class="col-md-8">
-                        <h2 class="h5 text-center">{% trans 'Or verify by uploading the file' %}</h2>
+                        <h2 class="h5 text-center">{% trans 'Verify by uploading the file — this is the one that checks integrity' %}</h2>
                         <p class="text-muted text-center small">
                             {% trans 'Upload the PDF and we will tell you whether it is the original, a valid certified digital copy, or a file that does not correspond to any certified document.' %}
                         </p>
