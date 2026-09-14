@@ -420,6 +420,30 @@ CERTIFICATION_TSA_URL = os.getenv('CERTIFICATION_TSA_URL', '')
 CERTIFICATION_TSA_USERNAME = os.getenv('CERTIFICATION_TSA_USERNAME', '')
 CERTIFICATION_TSA_PASSWORD = os.getenv('CERTIFICATION_TSA_PASSWORD', '')
 
+# Exploradores con los que se resuelve la HORA de un bloque de Bitcoin. Una
+# prueba de OpenTimestamps acredita una **altura**, no una fecha, y la fecha
+# esta en la cabecera de ese bloque.
+#
+# Van **dos, de operadores distintos, y tienen que coincidir** para que la
+# fecha se guarde: la pagina de anclaje dice «un tercero acredito la fecha, no
+# es esta plataforma diciendolo», y una fecha sacada de un solo explorador si
+# es esta plataforma diciendolo, con un intermediario. Se consulta solo desde
+# el cron, nunca al pintar una pagina (ATOMIC_REQUESTS).
+BITCOIN_BLOCK_EXPLORERS = [
+    origen.strip()
+    for origen in os.getenv(
+        'BITCOIN_BLOCK_EXPLORERS',
+        'https://mempool.space/api,https://blockstream.info/api',
+    ).split(',')
+    if origen.strip()
+]
+
+# Donde manda el enlace del bloque que sale en la pagina. Solo es un enlace
+# para que quien lea pueda mirarlo en la cadena; la fecha no se saca de aqui.
+BITCOIN_BLOCK_EXPLORER_URL = os.getenv(
+    'BITCOIN_BLOCK_EXPLORER_URL', 'https://mempool.space/block'
+).rstrip('/')
+
 STATIC_URL = os.getenv('DJANGO_STATIC_URL')
 
 STATIC_ROOT = str(os.getenv('DJANGO_STATIC_ROOT'))

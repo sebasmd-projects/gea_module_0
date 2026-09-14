@@ -29,14 +29,37 @@
     {% comment %} ================= ESTADO ================= {% endcomment %}
     {% if state.anchored %}
       <div class="alert alert-success">
-        <h2 class="h5 alert-heading">
-          <i class="bi bi-clock-history me-1"></i>
-          {% trans 'The content of this summary is proven to have existed since:' %}
-          {{ state.attested_since|date:'d/m/Y H:i' }} UTC
-        </h2>
-        <p class="mb-0 small">
-          {% trans 'A third party attested the date. It is not this platform saying so.' %}
-        </p>
+        {% comment %}
+          La fecha puede faltar aunque el anclaje este confirmado: la prueba
+          acredita una **altura de bloque** y la hora esta en la cabecera de ese
+          bloque, que se resuelve aparte (`services/bitcoin_time.py`, desde el
+          cron). Antes se pintaba sin condicion y salia «existed since:  UTC»
+          --un «UTC» suelto detras de un hueco--, que es peor que no decir la
+          fecha: parece que el anclaje no acredita nada.
+        {% endcomment %}
+        {% if state.attested_since %}
+          <h2 class="h5 alert-heading">
+            <i class="bi bi-clock-history me-1"></i>
+            {% trans 'The content of this summary is proven to have existed since:' %}
+            {{ state.attested_since|date:'d/m/Y H:i' }} UTC
+          </h2>
+          <p class="mb-0 small">
+            {% trans 'A third party attested the date. It is not this platform saying so.' %}
+          </p>
+        {% else %}
+          <h2 class="h5 alert-heading">
+            <i class="bi bi-clock-history me-1"></i>
+            {% trans 'Confirmed in the blockchain' %}
+          </h2>
+          <p class="mb-0 small">
+            {% blocktrans trimmed %}
+              The block that attests it is already recorded below. Its exact
+              time is still being resolved, and that changes nothing about the
+              proof: the block itself is what attests the date, and anyone can
+              look it up.
+            {% endblocktrans %}
+          </p>
+        {% endif %}
       </div>
     {% else %}
       <div class="alert alert-secondary">
@@ -84,6 +107,19 @@
         <p class="small text-muted mt-2 mb-0">
           {% trans 'Compute it yourself:' %}
           <code>sha256sum master-payload-*.json</code>
+          <br>
+          {% comment %}
+            El aviso no es una nota al pie: sin el, el primero que copie y
+            pegue el payload en un editor obtiene otro hash --casi todos
+            añaden un salto de linea al guardar-- y concluye que el sello no
+            cuadra. Descargar el fichero es lo unico que da los bytes exactos,
+            que es lo que significa «verbatim».
+          {% endcomment %}
+          <strong>{% trans 'Download the file; do not copy and paste it.' %}</strong>
+          {% blocktrans trimmed %}
+            A single extra byte — the newline most editors add on save —
+            produces a completely different hash.
+          {% endblocktrans %}
         </p>
       </div>
     </div>
@@ -101,15 +137,43 @@
                 <tr>
                   <th>{% trans 'Type' %}</th>
                   <th>{% trans 'Attested time' %}</th>
+                  <th>{% trans 'Block' %}</th>
                   <th>{% trans 'Provider' %}</th>
                   <th>{% trans 'State' %}</th>
+                  <th>{% trans 'Proof' %}</th>
                 </tr>
               </thead>
               <tbody>
                 {% for item in state.anchors %}
                   <tr>
                     <td>{{ item.anchor.get_anchor_type_display }}</td>
-                    <td class="text-nowrap">{{ item.stamped_at|date:'d/m/Y H:i'|default:'—' }}</td>
+                    <td class="text-nowrap">
+                      {% if item.stamped_at %}
+                        {{ item.stamped_at|date:'d/m/Y H:i' }} <span class="text-muted">UTC</span>
+                      {% else %}
+                        —
+                      {% endif %}
+                    </td>
+
+                    {% comment %}
+                      El bloque, enlazado a un explorador. Es lo que convierte
+                      «confiad en nosotros» en algo que se mira: la altura la
+                      puede comprobar cualquiera en la cadena, y con tres
+                      exploradores distintos diciendo lo mismo ya no es una
+                      fuente, es Bitcoin. El enlace sale de un ajuste para que
+                      no haya un dominio escrito en una plantilla.
+                    {% endcomment %}
+                    <td class="text-nowrap">
+                      {% if item.bitcoin_block %}
+                        <a href="{{ block_explorer }}/{{ item.bitcoin_block }}"
+                           target="_blank" rel="noopener noreferrer">
+                          {{ item.bitcoin_block }}
+                        </a>
+                      {% else %}
+                        —
+                      {% endif %}
+                    </td>
+
                     <td class="text-break">{{ item.anchor.provider|default:'—' }}</td>
                     <td>
                       {% if item.valid and item.covers_current_master_hash %}
@@ -121,11 +185,48 @@
                       {% endif %}
                       <div class="text-muted">{{ item.detail }}</div>
                     </td>
+                    <td class="text-nowrap">
+                      {% include 'dashboard/pages/certificates/documents/aegis_documents/includes/_anchor_proof_button.html' with anchor=item.anchor summary=summary %}
+                    </td>
                   </tr>
                 {% endfor %}
               </tbody>
             </table>
           </div>
+
+          {% comment %}
+            Como comprobarlo sin nosotros, que es lo unico que hace util a un
+            anclaje. Sin estas cuatro lineas el boton de descarga es un fichero
+            que nadie sabe para que sirve, y «confirmado en el bloque N» se
+            queda en esta plataforma diciendolo.
+          {% endcomment %}
+          <hr class="my-3">
+
+          <h3 class="h6">{% trans 'Check it yourself, without us' %}</h3>
+
+          <ol class="small text-muted mb-0 ps-3">
+            <li class="mb-2">
+              {% blocktrans trimmed %}
+                Download the proof and read it offline — nothing is sent
+                anywhere:
+              {% endblocktrans %}
+              <br><code>pip install opentimestamps-client</code>
+              <br><code>ots info anchor-*.ots</code>
+            </li>
+            <li class="mb-2">
+              {% blocktrans trimmed %}
+                Check that the hash it prints is the master hash above, and
+                that the block it names is the one in the table.
+              {% endblocktrans %}
+            </li>
+            <li>
+              {% blocktrans trimmed %}
+                Open that block in any explorer and compare its merkle root
+                with the one the proof states. Careful: the two are printed in
+                reverse byte order, so one reads backwards against the other.
+              {% endblocktrans %}
+            </li>
+          </ol>
         {% endif %}
       </div>
     </div>

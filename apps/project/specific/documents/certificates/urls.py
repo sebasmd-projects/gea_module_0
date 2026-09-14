@@ -6,7 +6,7 @@ from .views import (AegisSummaryAnchorView, AegisSummaryDetailView,
                     EmployeeIPCONDetailView, EmployeePhotoView,
                     InputDocumentVerificationFormView,
                     InputEmployeeIPCONFormView, certification_public_key,
-                    summary_master_payload)
+                    summary_anchor_proof, summary_master_payload)
 
 app_name = 'certificates'
 
@@ -76,6 +76,13 @@ urlpatterns = [
         'verify/aegis/summary/<uuid:pk>/payload/',
         summary_master_payload,
         name='summary_master_payload'
+    ),
+    # El fichero de la prueba. Sin el, «confirmado en el bloque N» es esta
+    # plataforma diciendolo, que es lo que un anclaje existe para no ser.
+    path(
+        'verify/aegis/summary/<uuid:pk>/anchor/<int:anchor_id>/proof/',
+        summary_anchor_proof,
+        name='summary_anchor_proof'
     ),
 
     path(

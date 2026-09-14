@@ -1,5 +1,6 @@
 # apps/project/specific/documents/certificates/views.py
 
+from django.conf import settings
 from django.contrib import messages
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -661,6 +662,7 @@ class AegisSummaryDetailView(OTPProtectedDocumentMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['state'] = summary_anchor_state(self.object)
         context['anchor_url'] = anchor_url(self.object)
+        context['block_explorer'] = settings.BITCOIN_BLOCK_EXPLORER_URL
         context['members'] = self.object.ordered_members()
         return context
 
@@ -687,6 +689,9 @@ class AegisSummaryAnchorView(DetailView):
 
         context = super().get_context_data(**kwargs)
         context['state'] = summary_anchor_state(self.object)
+        # Solo para enlazar el bloque: la fecha no se saca de aqui, se resuelve
+        # en el cron y ya viene guardada (services/bitcoin_time.py).
+        context['block_explorer'] = settings.BITCOIN_BLOCK_EXPLORER_URL
         context['members'] = self.object.ordered_members()
         return context
 
@@ -711,6 +716,58 @@ def summary_master_payload(request, pk):
         f'attachment; filename="master-payload-'
         f'{summary.public_code or summary.uuid_prefix}.json"'
     )
+    return response
+
+
+def summary_anchor_proof(request, pk, anchor_id):
+    """
+    El fichero de la prueba: `.ots` de OpenTimestamps o `.tsr` de una TSA.
+
+    Sin esto, un anclaje no se puede comprobar. La pagina dice «confirmado en
+    el bloque 964899», pero eso es **esta plataforma diciendolo**, que es
+    exactamente lo que un anclaje existe para no tener que hacer. La prueba es
+    el fichero: el camino desde el master hash hasta la transaccion que lo metio
+    en la cadena, comprobable con `ots` y un nodo de Bitcoin, sin nosotros.
+
+    **Publica, como la pagina de la que cuelga.** No lleva nada del contenido de
+    los documentos: son hashes y un camino de Merkle, y el master hash ya sale
+    impreso arriba. Cerrarla no protegeria nada y romperia lo unico que hace
+    util al anclaje, que es que cualquiera pueda comprobarlo.
+
+    Se pide por su resumen (`pk`) y no por su id a secas para que la URL diga de
+    que es la prueba, y para que un id de otro resumen sea un 404 en vez de una
+    descarga desconcertante.
+    """
+    from apps.project.specific.internal.code_gen.models import \
+        CertificationAnchorModel
+
+    summary = get_object_or_404(AegisSummaryModel, pk=pk)
+
+    anchor = get_object_or_404(
+        CertificationAnchorModel, pk=anchor_id, summary=summary)
+
+    proof = bytes(anchor.proof or b'')
+
+    if not proof:
+        # Un anclaje fallido puede existir sin prueba. Ofrecer un fichero vacio
+        # seria peor que no ofrecer nada: parece una prueba y no lo es.
+        raise Http404('no proof stored')
+
+    extension = anchor.proof_extension
+
+    # OpenTimestamps no tiene tipo registrado en IANA; lo que importa es que el
+    # navegador no intente abrirlo. El de la TSA si lo tiene (RFC 3161).
+    content_type = (
+        'application/timestamp-reply' if extension == 'tsr'
+        else 'application/octet-stream'
+    )
+
+    response = HttpResponse(proof, content_type=content_type)
+    response['Content-Disposition'] = (
+        f'attachment; filename="anchor-'
+        f'{summary.public_code or summary.uuid_prefix}-{anchor.pk}.{extension}"'
+    )
+
     return response
 
 

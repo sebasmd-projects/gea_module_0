@@ -1,0 +1,29 @@
+{% load i18n %}
+
+{% comment %}
+  El boton que descarga el fichero de la prueba.
+
+  Vive en un parcial porque lo usan las dos paginas --la del anclaje, donde va
+  en cada fila de la tabla, y la del resumen, donde va en la barra de acciones--
+  y lo que tiene que decir es lo mismo en las dos.
+
+  Solo sale si hay prueba guardada. Un anclaje fallido existe sin ella, y
+  ofrecer un fichero vacio es peor que no ofrecer nada: parece una prueba.
+
+  Espera `anchor` y, opcionalmente, `summary` (si no, se usa `anchor.summary`).
+{% endcomment %}
+
+{% if anchor.proof %}
+  <a class="btn btn-outline-secondary btn-sm"
+     href="{% url 'certificates:summary_anchor_proof' summary.pk|default:anchor.summary_id anchor.pk %}"
+     title="{% trans 'The proof file: this is what lets anyone check the anchor without us.' %}">
+    <i class="bi bi-download me-1" aria-hidden="true"></i>
+    {% comment %}
+      La extension sale del modelo (`proof_extension`), no de comparar aqui el
+      valor de la opcion: el boton tiene que decir lo mismo que va a bajar.
+    {% endcomment %}
+    {% blocktrans trimmed with kind=anchor.proof_extension %}
+      Proof (.{{ kind }})
+    {% endblocktrans %}
+  </a>
+{% endif %}

@@ -107,6 +107,10 @@ INTENTIONALLY_PUBLIC = {
     'certificates:summary_anchor':
         'destino del QR de anclaje; solo hashes y fechas',
     'certificates:summary_master_payload': 'payload publico del anclaje',
+    'certificates:summary_anchor_proof':
+        'el fichero de la prueba (.ots / .tsr); son hashes y un camino de '
+        'Merkle, y cerrarlo romperia lo unico que hace util a un anclaje: que '
+        'cualquiera pueda comprobarlo sin nosotros',
     'certificates:certification_public_key': 'clave publica de verificacion',
     'certificates:document_file': 'comprueba permisos dentro (files.can_access)',
     'account:login':
