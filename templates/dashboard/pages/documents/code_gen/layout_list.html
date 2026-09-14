@@ -69,7 +69,7 @@
                      data-label-outside="{% trans 'This placement falls outside the page.' %}"></div>
 
                 <p class="small text-muted mb-0">
-                  {% blocktrans count counter=layout.placements.count %}{{ counter }} placement{% plural %}{{ counter }} placements{% endblocktrans %}
+                  {% blocktrans count counter=layout.placements.count|default:0 %}{{ counter }} placement{% plural %}{{ counter }} placements{% endblocktrans %}
                 </p>
               </div>
 

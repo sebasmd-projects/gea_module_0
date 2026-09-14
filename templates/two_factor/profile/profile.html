@@ -17,7 +17,7 @@
           <h2 class="h5 mt-4">{% trans 'Backup Tokens' %}</h2>
           <p>
             {% blocktrans trimmed %}If you don't have any device with you, you can access your account using backup tokens.{% endblocktrans %}
-            {% blocktrans trimmed count counter=backup_tokens %}You have only one backup token remaining.{% plural %}You have {{ counter }} backup tokens remaining.{% endblocktrans %}
+            {% blocktrans trimmed count counter=backup_tokens|default:0 %}You have only one backup token remaining.{% plural %}You have {{ counter }} backup tokens remaining.{% endblocktrans %}
           </p>
           <p>
             <a href="{% url 'two_factor:backup_tokens' %}" class="btn btn-info">{% trans 'Show Codes' %}</a>

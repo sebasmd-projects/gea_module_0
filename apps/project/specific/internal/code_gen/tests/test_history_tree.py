@@ -35,7 +35,8 @@ Nada de aqui sale a internet ni toca archivos.
 
 from datetime import date
 
-from django.test import TestCase
+from django.template.loader import get_template
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
 from apps.project.common.users.models import UserModel
@@ -43,7 +44,7 @@ from apps.project.specific.documents.certificates.models import (
     AegisSummaryDocumentModel, AegisSummaryModel, CertificationStatusChoices,
     DocumentVerificationModel)
 
-from ..history import build_history_tree
+from ..history import HistoryNode, build_history_tree
 from ..models import CodeRegistrationModel
 
 PASSWORD = 'pw-for-tests-123'
@@ -592,3 +593,87 @@ class SharedMembersTestCase(TestCase):
         self.assertFalse(tree[0].is_summary)
         self.assertEqual(tree[0].rows[0].registration.reference, 'HUERFANO')
         self.assertEqual(tree[0].rows[0].member_code, '')
+
+
+class StaleContextTestCase(TestCase):
+    """
+    La pagina no puede caerse porque falte una variable del contexto.
+
+    Esto salio en produccion, con un 500 y este error:
+
+        TemplateSyntaxError: 'counter' argument to 'blocktrans' tag must be a
+        number.
+
+    `{% blocktrans count %}` **exige** que su contador sea un numero, y una
+    variable que no esta en el contexto se resuelve a la **cadena vacia**, no a
+    cero. Asi que una variable que falte no deja un hueco en la pagina: tira la
+    pagina entera.
+
+    Y falto por un motivo que no es un fallo de logica, y que por eso no lo
+    coge ninguna prueba de la vista: el cargador de plantillas cacheado se
+    llena **por plantilla y en el primer render de cada proceso**. Un worker
+    arrancado antes de un `git pull` sigue ejecutando en memoria la vista
+    vieja; la primera vez que alguien abre esta pagina, el cargador lee del
+    disco la plantilla **nueva**. Contexto viejo, plantilla nueva.
+
+    Reiniciar la aplicacion lo arregla, pero no puede ser lo unico que lo
+    arregle: el despliegue tiene una ventana en la que esto pasa, y durante esa
+    ventana la pagina tiene que verse, aunque sea con una cifra equivocada.
+
+    Esta prueba renderiza la plantilla **a mano**, con el contexto que dejaria
+    una vista anterior, porque por la vista es imposible llegar aqui.
+    """
+
+    def a_template(self):
+        return get_template(
+            'dashboard/pages/documents/code_gen/code_history.html'
+        )
+
+    def an_old_context(self, **extra):
+        """Lo que habia en el contexto antes de que existiera `code_count`."""
+        context = {
+            'object_list': [HistoryNode()],
+            'nodes': [HistoryNode()],
+            'search': '',
+            'is_paginated': False,
+        }
+        context.update(extra)
+        return context
+
+    def test_sin_code_count_la_pagina_se_ve_igual(self):
+        request = RequestFactory().get('/generate/code/history/')
+
+        # Sin la guarda esto levanta TemplateSyntaxError y responde 500.
+        html = self.a_template().render(self.an_old_context(), request)
+
+        self.assertIn('<table', html)
+
+    def test_sin_el_contador_de_una_rama_tampoco(self):
+        """
+        La cabecera de cada resumen tiene su propio contador, con el mismo
+        problema: una rama de otra forma la tumbaria igual.
+
+        Se simula con una rama **sin `count`**, que es lo que dejaria una
+        version anterior del armado: el resumen tiene que seguir viendose.
+        """
+        request = RequestFactory().get('/generate/code/history/')
+
+        summary = AegisSummaryModel.objects.create(title='Bonos 1872')
+
+        class RamaDeOtraForma:
+            is_summary = True
+            rows = []
+
+            def __init__(self, summary):
+                self.summary = summary
+
+        node = RamaDeOtraForma(summary)
+
+        html = self.a_template().render(
+            self.an_old_context(
+                object_list=[node], nodes=[node], grouped=True
+            ),
+            request,
+        )
+
+        self.assertIn('Bonos 1872', html)
