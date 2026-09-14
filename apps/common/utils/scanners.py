@@ -441,7 +441,7 @@ def run_pip_audit() -> ScanResult:
             'pip-audit no esta instalado, asi que las dependencias no se han '
             'contrastado con ninguna base de vulnerabilidades. Es la '
             'comprobacion que deberia correr en el servidor, porque no '
-            'necesita credencial. Para tenerla: uv add --dev pip-audit'
+            'necesita credencial. Para tenerla: uv add pip-audit'
         )
         return result
 

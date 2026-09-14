@@ -62,26 +62,6 @@ LOGGING = {
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
-if os.getenv('DJANGO_DEBUG') == 'True':
-    DEBUG = True
-    ALLOWED_HOSTS = ['*']
-else:
-    CSRF_COOKIE_SAMESITE = 'Strict'
-    CSRF_COOKIE_SECURE = True
-    DEBUG = False
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    X_FRAME_OPTIONS = 'DENY'
-    if ',' in os.getenv('DJANGO_ALLOWED_HOSTS'):
-        ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',')
-    else:
-        ALLOWED_HOSTS = [os.getenv('DJANGO_ALLOWED_HOSTS')]
-
 ALLOW_ANY_EMAIL_IPCON = os.getenv(
     'ALLOW_ANY_EMAIL_IPCON', 'False').lower() == 'true'
 
@@ -156,6 +136,33 @@ INSTALLED_APPS = [
     *THIRD_PARTY_APPS,
 ]
 
+
+if os.getenv('DJANGO_DEBUG') == 'True':
+    DEBUG = True
+    ALLOWED_HOSTS = ['*']
+    try:
+        INSTALLED_APPS.append("debug_toolbar")
+        INTERNAL_IPS = ["127.0.0.1", "localhost"]
+    except ImportError:
+        pass
+else:
+    CSRF_COOKIE_SAMESITE = 'Strict'
+    CSRF_COOKIE_SECURE = True
+    DEBUG = False
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    X_FRAME_OPTIONS = 'DENY'
+    if ',' in os.getenv('DJANGO_ALLOWED_HOSTS'):
+        ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',')
+    else:
+        ALLOWED_HOSTS = [os.getenv('DJANGO_ALLOWED_HOSTS')]
+
+
 # import_export
 IMPORT_EXPORT_FORMATS = [CSV, HTML, JSON, TSV, XLS, XLSX]
 
@@ -227,6 +234,9 @@ MIDDLEWARE = [
     'axes.middleware.AxesMiddleware',
     'impersonate.middleware.ImpersonateMiddleware',
 ]
+
+if os.getenv('DJANGO_DEBUG') == 'True':
+    MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
 
 MIDDLEWARE_NOT_INCLUDE = [os.getenv('MIDDLEWARE_NOT_INCLUDE')]
 
