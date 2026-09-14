@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-14 02:25+0000\n"
+"POT-Creation-Date: 2026-09-14 02:58+0000\n"
 "PO-Revision-Date: 2026-01-06 23:16+0000\n"
 "Last-Translator: Sebastian Morales <cto@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,23 +19,23 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.10.3\n"
 
-#: admin.py:58
+#: admin.py:59
 msgid "In force"
 msgstr "Vigente"
 
-#: admin.py:65
+#: admin.py:66
 msgid "Nothing approved yet"
 msgstr "Todavía no hay nada aprobado"
 
-#: admin.py:74
+#: admin.py:75
 msgid "Draft pending"
 msgstr "Borrador pendiente"
 
-#: admin.py:97
+#: admin.py:98
 msgid "Text"
 msgstr "Texto"
 
-#: admin.py:100
+#: admin.py:101
 msgid ""
 "Spanish is the wording that governs: these documents are Colombian. English "
 "is a courtesy translation."
@@ -43,42 +43,82 @@ msgstr ""
 "El español es la redacción que rige: estos documentos son colombianos. El "
 "inglés es una traducción de cortesía."
 
-#: admin.py:104
+#: admin.py:105
 msgid "What changed"
 msgstr "Qué cambió"
 
-#: admin.py:107
+#: admin.py:108
 msgid ""
 "This is what every user receives. Say what changed, not that something "
 "changed."
 msgstr ""
 "Esto es lo que recibe cada usuario. Di qué cambió, no que algo cambió."
 
-#: admin.py:111
+#: admin.py:112
 msgid "Approval"
 msgstr "Aprobación"
 
-#: admin.py:115
+#: admin.py:116
+#| msgid ""
+#| "Filled in by the approval action. Approving is an act by a person, with "
+#| "their name on it."
 msgid ""
-"Filled in by the approval action. Approving is an act by a person, with "
-"their name on it."
+"Filled in by the approve button at the top and bottom of this page. "
+"Approving is an act by a person, with their name on it — never a field you "
+"type into."
 msgstr ""
-"Lo rellena la acción de aprobar. Aprobar es un acto de una persona, con su "
-"nombre puesto."
+"Lo rellena el botón de aprobar que hay arriba y abajo de esta página. "
+"Aprobar es un acto de una persona, con su nombre puesto: nunca un campo que "
+"se teclea."
 
-#: admin.py:125 models.py:204
+#: admin.py:148
+#| msgid ""
+#| "%(count)s were already approved: an approved version is never re-approved, a"
+#| " new one is created."
+msgid ""
+"It was already approved: an approved version is never re-approved, a new one"
+" is created."
+msgstr ""
+"Ya estaba aprobada: una versión aprobada no se vuelve a aprobar, se crea "
+"otra."
+
+#: admin.py:154
+#| msgid ""
+#| "%(count)s have no Spanish text. Spanish is the wording that governs, so it "
+#| "cannot be approved empty."
+msgid ""
+"It has no Spanish text. Spanish is the wording that governs, so it cannot be"
+" approved empty."
+msgstr ""
+"No tiene texto en español. El español es la redacción que rige, así que no "
+"se puede aprobar vacía."
+
+#: admin.py:162
+#| msgid ""
+#| "%(count)s approved, in force from today. Users will be told on the next run "
+#| "of the notification task — only for the ones marked to notify."
+msgid ""
+"Approved and in force from today. Users will be told on the next run of the "
+"notification task, and only then does continuing to use the platform count "
+"as accepting it."
+msgstr ""
+"Aprobada y vigente desde hoy. Se avisará a los usuarios en la próxima pasada"
+" de la tarea de aviso, y sólo a partir de ahí seguir usando la plataforma "
+"cuenta como aceptarla."
+
+#: admin.py:169 models.py:204
 msgid "Status"
 msgstr "Estado"
 
-#: admin.py:141
+#: admin.py:185
 msgid "Accepted by"
 msgstr "Aceptado por"
 
-#: admin.py:166
+#: admin.py:210
 msgid "Approve the selected versions"
 msgstr "Aprobar las versiones seleccionadas"
 
-#: admin.py:185
+#: admin.py:229
 #, python-format
 msgid ""
 "%(count)s approved, in force from today. Users will be told on the next run "
@@ -87,7 +127,7 @@ msgstr ""
 "%(count)s aprobadas, vigentes desde hoy. Se avisará a los usuarios en la "
 "próxima pasada de la tarea de aviso, y sólo de las marcadas para avisar."
 
-#: admin.py:192
+#: admin.py:236
 #, python-format
 msgid ""
 "%(count)s were already approved: an approved version is never re-approved, a"
@@ -96,7 +136,7 @@ msgstr ""
 "%(count)s ya estaban aprobadas: una versión aprobada no se vuelve a aprobar,"
 " se crea otra."
 
-#: admin.py:198
+#: admin.py:242
 #, python-format
 msgid ""
 "%(count)s have no Spanish text. Spanish is the wording that governs, so it "
@@ -105,12 +145,11 @@ msgstr ""
 "%(count)s no tienen texto en español. El español es la redacción que rige, "
 "así que no se puede aprobar vacía."
 
-#: admin.py:219 models.py:178
+#: admin.py:263 models.py:178
 msgid "Document"
 msgstr "Documento"
 
-#: admin.py:223 models.py:182
-#| msgid "Extension"
+#: admin.py:267 models.py:182
 msgid "Version"
 msgstr "Versión"
 
@@ -314,7 +353,6 @@ msgid "Legal document versions"
 msgstr "Versiones de documento legal"
 
 #: models.py:440
-#| msgid "Data owner (titular)"
 msgid "Data owner"
 msgstr "Titular"
 
@@ -341,7 +379,6 @@ msgid "Accepted at"
 msgstr "Aceptada el"
 
 #: models.py:473
-#| msgid "Address"
 msgid "IP address"
 msgstr "Dirección IP"
 

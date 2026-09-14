@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-14 02:25+0000\n"
+"POT-Creation-Date: 2026-09-14 02:58+0000\n"
 "PO-Revision-Date: 2026-09-01 08:07+0000\n"
 "Last-Translator: Juan Sebastian Morales Delgado <cto@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -213,6 +213,54 @@ msgstr "Mostrar"
 #: admin/change_list.html:13
 msgid "(Max: 2000)"
 msgstr "(Max: 2000)"
+
+#: admin/core/legaldocumentversionmodel/_approve_row.html:15
+#: dashboard/pages/buyers/modals/delete_offer_modal.html:50
+msgid "Approved"
+msgstr "Aprobado"
+
+#: admin/core/legaldocumentversionmodel/_approve_row.html:17
+#, python-format
+#| msgid "It is in force since %(date)s."
+msgid "approved by %(who)s, in force since %(since)s."
+msgstr "aprobada por %(who)s, vigente desde el %(since)s."
+
+#: admin/core/legaldocumentversionmodel/_approve_row.html:20
+msgid ""
+"An approved version is not edited: if something has to change, create a new "
+"version."
+msgstr ""
+"Una versión aprobada no se edita: si hay que cambiar algo, crea una versión "
+"nueva."
+
+#: admin/core/legaldocumentversionmodel/_approve_row.html:30
+#: admin/core/legaldocumentversionmodel/_approve_row.html:51
+#| msgid "This verification is valid and currently active."
+msgid "This version is a draft."
+msgstr "Esta versión es un borrador."
+
+#: admin/core/legaldocumentversionmodel/_approve_row.html:31
+msgid ""
+"Approving it publishes it, freezes its text and its fingerprint, and records"
+" your name and today's date. It cannot be edited afterwards."
+msgstr ""
+"Aprobarla la publica, congela su texto y su huella, y deja registrado tu "
+"nombre y la fecha de hoy. Después ya no se puede editar."
+
+#: admin/core/legaldocumentversionmodel/_approve_row.html:44
+#| msgid "Approved and Valid"
+msgid "Approve and publish"
+msgstr "Aprobar y publicar"
+
+#: admin/core/legaldocumentversionmodel/_approve_row.html:52
+msgid ""
+"It has no Spanish text yet. Spanish is the wording that governs, so it "
+"cannot be approved empty: write it, save, and the approve button appears "
+"here."
+msgstr ""
+"Todavía no tiene texto en español. El español es la redacción que rige, así "
+"que no se puede aprobar vacía: escríbelo, guarda, y el botón de aprobar "
+"aparece aquí."
 
 #: admin/ops/command.html:6 admin/ops/console.html:20
 #: admin/ops/test_summary.html:29
@@ -563,7 +611,6 @@ msgid "In force since"
 msgstr "Vigente desde"
 
 #: core/tyc/_legal_base.html:49
-#| msgid "Download "
 msgid "Download as PDF"
 msgstr "Descargar en PDF"
 
@@ -1062,10 +1109,6 @@ msgstr "País"
 #: dashboard/pages/buyers/modals/delete_offer_modal.html:46
 msgid "Total value of the offer ($ USD)"
 msgstr "Valor total de la oferta ($ USD)"
-
-#: dashboard/pages/buyers/modals/delete_offer_modal.html:50
-msgid "Approved"
-msgstr "Aprobado"
 
 #: dashboard/pages/buyers/modals/delete_offer_modal.html:68
 #: dashboard/pages/documents/code_gen/layout_form.html:114
@@ -3420,7 +3463,6 @@ msgstr "Si no esperabas este mensaje o fue enviado por error, ignóralo."
 
 #: email/legal_change_email.html:31
 #, python-format
-#| msgid "Hi %(name)s,"
 msgid "Hi %(name)s:"
 msgstr "Hola %(name)s:"
 
@@ -3435,12 +3477,10 @@ msgstr "Hemos actualizado <b>%(document)s</b>."
 
 #: email/legal_change_email.html:42
 #, python-format
-#| msgid "In force since"
 msgid "It is in force since %(date)s."
 msgstr "Está vigente desde el %(date)s."
 
 #: email/legal_change_email.html:57
-#| msgid "What happens next"
 msgid "What changed"
 msgstr "Qué cambió"
 

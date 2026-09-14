@@ -43,6 +43,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
+from apps.common.utils.testing import login_with_otp
 from apps.project.common.users.models import UserModel
 
 from ..legal import (accept_on_login, accept_on_registration, pending_for,
@@ -460,3 +461,118 @@ class PublicPagesTestCase(LegalBase):
     def test_una_clave_inventada_es_un_404(self):
         self.assertEqual(
             self.client.get('/legal/inventado.pdf').status_code, 404)
+
+
+class ApproveFromTheFormTestCase(LegalBase):
+    """
+    Aprobar desde el formulario de la version, que es donde se redacta.
+
+    Estaba **solo** en el desplegable de acciones del listado, y ahi no lo
+    encuentra nadie: quien acaba de escribir el texto esta en el formulario, y
+    alli los campos de estado y aprobador salen en gris sin decir donde se
+    cambian. Se reporto exactamente asi: «no veo donde cambiar el aprobador y
+    estado».
+
+    La accion del listado sigue existiendo --sirve para aprobar varias de una
+    vez-- pero la que se usa de verdad es esta.
+    """
+
+    def setUp(self):
+        super().setUp()
+
+        self.boss = UserModel.objects.create_superuser(
+            username='jefe', email='jefe@example.com', password=PASSWORD)
+        login_with_otp(self.client, self.boss)
+
+    def form_url(self, version):
+        return reverse(
+            'admin:core_legaldocumentversionmodel_change', args=[version.pk])
+
+    def payload(self, version, **extra):
+        """
+        El formulario entero, como lo manda el navegador.
+
+        El boton de aprobar es un `submit` dentro del formulario, asi que
+        arrastra todos los campos — y el admin valida antes de llegar a
+        `response_change()`. Mandar solo `_approve` probaria un envio que no
+        existe.
+        """
+        datos = {
+            'document': str(version.document_id),
+            'version': version.version,
+            'es_body': version.es_body,
+            'en_body': version.en_body,
+            'change_note_es': version.change_note_es,
+            'change_note_en': version.change_note_en,
+            'effective_from': '',
+        }
+
+        if version.notify_users:
+            datos['notify_users'] = 'on'
+
+        datos.update(extra)
+        return datos
+
+    def test_el_boton_esta_en_el_formulario(self):
+        version = self.a_version()
+
+        html = self.client.get(self.form_url(version)).content.decode()
+
+        self.assertIn('name="_approve"', html)
+
+    def test_el_boton_aprueba_y_deja_quien(self):
+        version = self.a_version()
+
+        respuesta = self.client.post(
+            self.form_url(version),
+            self.payload(version, _approve='1'),
+            follow=True,
+        )
+        version.refresh_from_db()
+
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertTrue(version.is_approved)
+        self.assertEqual(version.approved_by, self.boss)
+        self.assertEqual(version.effective_from, timezone.localdate())
+        self.assertEqual(len(version.content_hash), 64)
+
+    def test_una_aprobada_ya_no_ofrece_el_boton(self):
+        version = self.a_version()
+        version.approve(user=self.staff)
+
+        html = self.client.get(self.form_url(version)).content.decode()
+
+        self.assertNotIn('name="_approve"', html)
+        # En su lugar dice quien la aprobo: un boton apagado invita a
+        # intentarlo y a preguntarse por que no responde.
+        self.assertIn('jefa', html)
+
+    def test_sin_texto_en_espanol_no_se_aprueba(self):
+        version = self.a_version(es_body='', en_body='<p>Only English</p>')
+
+        self.client.post(
+            self.form_url(version),
+            self.payload(version, _approve='1'),
+            follow=True,
+        )
+        version.refresh_from_db()
+
+        self.assertFalse(version.is_approved)
+
+    def test_guardar_no_aprueba(self):
+        """
+        Guardar es lo que se hace veinte veces mientras se redacta, y aprobar
+        pasa una sola vez: mezclarlos convertiria un guardado distraido en una
+        publicacion.
+        """
+        version = self.a_version()
+
+        self.client.post(
+            self.form_url(version),
+            self.payload(version, es_body='<p>Otra redaccion</p>', _save='Save'),
+            follow=True,
+        )
+        version.refresh_from_db()
+
+        self.assertFalse(version.is_approved)
+        self.assertIsNone(version.approved_by)
