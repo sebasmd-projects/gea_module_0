@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-14 00:56+0000\n"
+"POT-Creation-Date: 2026-09-14 02:25+0000\n"
 "PO-Revision-Date: 2026-09-01 08:07+0000\n"
 "Last-Translator: Juan Sebastian Morales Delgado <cto@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -562,7 +562,12 @@ msgstr "Versión"
 msgid "In force since"
 msgstr "Vigente desde"
 
-#: core/tyc/_legal_base.html:55
+#: core/tyc/_legal_base.html:49
+#| msgid "Download "
+msgid "Download as PDF"
+msgstr "Descargar en PDF"
+
+#: core/tyc/_legal_base.html:58
 msgid ""
 "Propensiones Abogados · GEA. Questions about this document, or about your "
 "personal data, go through the PQRS form."
@@ -570,7 +575,7 @@ msgstr ""
 "Propensiones Abogados · GEA. Las dudas sobre este documento, o sobre tus "
 "datos personales, se tramitan por el formulario de PQRS."
 
-#: core/tyc/_legal_base.html:59
+#: core/tyc/_legal_base.html:62 email/legal_change_email.html:91
 msgid "File a request"
 msgstr "Radicar una solicitud"
 
@@ -2080,7 +2085,7 @@ msgstr "No válido"
 #: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:145
 #: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:64
 #: dashboard/pages/documents/code_gen/code_detail.html:37
-#: dashboard/pages/documents/code_gen/code_history.html:106
+#: dashboard/pages/documents/code_gen/code_history.html:122
 #: dashboard/pages/documents/code_gen/summary_composer.html:81
 msgid "Code"
 msgstr "Código"
@@ -2112,7 +2117,7 @@ msgstr "Comprobado el"
 
 #: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:32
 #: dashboard/pages/documents/code_gen/code_detail.html:68
-#: dashboard/pages/documents/code_gen/code_history.html:107
+#: dashboard/pages/documents/code_gen/code_history.html:123
 #: dashboard/pages/documents/code_gen/summary_list.html:41
 msgid "Public code"
 msgstr "Código público"
@@ -2287,7 +2292,7 @@ msgid "Generated codes"
 msgstr "Códigos generados"
 
 #: dashboard/pages/documents/code_gen/code_detail.html:49
-#: dashboard/pages/documents/code_gen/code_history.html:105
+#: dashboard/pages/documents/code_gen/code_history.html:121
 #: dashboard/pages/holders/location/add_location.html:72
 #: dashboard/pages/holders/location/edit_location.html:63
 msgid "Reference"
@@ -2314,7 +2319,7 @@ msgid "Original SHA-256"
 msgstr "SHA-256 del original"
 
 #: dashboard/pages/documents/code_gen/code_detail.html:82
-#: dashboard/pages/documents/code_gen/code_history.html:104
+#: dashboard/pages/documents/code_gen/code_history.html:120
 msgid "Date"
 msgstr "Fecha"
 
@@ -2353,7 +2358,7 @@ msgstr "Abrir la página pública de verificación"
 
 #: dashboard/pages/documents/code_gen/code_detail.html:156
 #: dashboard/pages/documents/code_gen/code_form.html:166
-#: dashboard/pages/documents/code_gen/code_history.html:108
+#: dashboard/pages/documents/code_gen/code_history.html:124
 msgid "Symbols"
 msgstr "Símbolos"
 
@@ -2546,12 +2551,10 @@ msgid "Clear"
 msgstr "Limpiar"
 
 #: dashboard/pages/documents/code_gen/code_history.html:70
-#| msgid "How the suite ended"
 msgid "How to show the codes"
 msgstr "Cómo mostrar los códigos"
 
 #: dashboard/pages/documents/code_gen/code_history.html:75
-#| msgid "New summary"
 msgid "Grouped by summary"
 msgstr "Agrupados por resumen"
 
@@ -2563,14 +2566,14 @@ msgstr "Una fila por código"
 msgid "No codes issued yet."
 msgstr "Todavía no se ha emitido ningún código."
 
-#: dashboard/pages/documents/code_gen/code_history.html:89
+#: dashboard/pages/documents/code_gen/code_history.html:105
 #, python-format
 msgid "%(counter)s code issued."
 msgid_plural "%(counter)s codes issued."
 msgstr[0] "%(counter)s código emitido."
 msgstr[1] "%(counter)s códigos emitidos."
 
-#: dashboard/pages/documents/code_gen/code_history.html:96
+#: dashboard/pages/documents/code_gen/code_history.html:112
 msgid ""
 "A certificate that belongs to more than one summary appears under each of "
 "them, so there may be more rows than codes."
@@ -2578,22 +2581,22 @@ msgstr ""
 "Un certificado que pertenece a más de un resumen aparece en cada uno de "
 "ellos, así que puede haber más filas que códigos."
 
-#: dashboard/pages/documents/code_gen/code_history.html:109
+#: dashboard/pages/documents/code_gen/code_history.html:125
 msgid "Certified"
 msgstr "Certificado"
 
-#: dashboard/pages/documents/code_gen/code_history.html:131
+#: dashboard/pages/documents/code_gen/code_history.html:147
 msgid "Summary:"
 msgstr "Resumen:"
 
-#: dashboard/pages/documents/code_gen/code_history.html:139
+#: dashboard/pages/documents/code_gen/code_history.html:155
 #, python-format
 msgid "%(counter)s code"
 msgid_plural "%(counter)s codes"
 msgstr[0] "%(counter)s código"
 msgstr[1] "%(counter)s códigos"
 
-#: dashboard/pages/documents/code_gen/code_history.html:148
+#: dashboard/pages/documents/code_gen/code_history.html:164
 #: dashboard/pages/documents/code_gen/summary_list.html:59
 msgid "Compose"
 msgstr "Componer"
@@ -3415,14 +3418,59 @@ msgid ""
 "it."
 msgstr "Si no esperabas este mensaje o fue enviado por error, ignóralo."
 
+#: email/legal_change_email.html:31
+#, python-format
+#| msgid "Hi %(name)s,"
+msgid "Hi %(name)s:"
+msgstr "Hola %(name)s:"
+
+#: email/legal_change_email.html:33 email/otp_email.html:40
+msgid "Hi:"
+msgstr "Hola:"
+
+#: email/legal_change_email.html:38
+#, python-format
+msgid "We have updated the <b>%(document)s</b>."
+msgstr "Hemos actualizado <b>%(document)s</b>."
+
+#: email/legal_change_email.html:42
+#, python-format
+#| msgid "In force since"
+msgid "It is in force since %(date)s."
+msgstr "Está vigente desde el %(date)s."
+
+#: email/legal_change_email.html:57
+#| msgid "What happens next"
+msgid "What changed"
+msgstr "Qué cambió"
+
+#: email/legal_change_email.html:69
+msgid "You can read the full text, and download it as a PDF, here:"
+msgstr "Puedes leer el texto completo, y descargarlo en PDF, aquí:"
+
+#: email/legal_change_email.html:83
+msgid ""
+"If you keep using the platform after this notice, we record it as your "
+"acceptance of the new text. If you do not agree with it, tell us through the"
+" PQRS form before continuing."
+msgstr ""
+"Si sigues usando la plataforma después de este aviso, lo registramos como tu"
+" aceptación del texto nuevo. Si no estás de acuerdo con él, dínoslo por el "
+"formulario de PQRS antes de continuar."
+
+#: email/legal_change_email.html:98
+#, python-format
+msgid ""
+"Version %(version)s. This is a notice about a document you accepted, not a "
+"commercial message."
+msgstr ""
+"Versión %(version)s. Esto es un aviso sobre un documento que aceptaste, no "
+"un mensaje comercial."
+
 #: email/otp_email.html:40
 #, python-format
 msgid "Hi %(usuario)s:"
 msgstr "Hola %(usuario)s:"
-
-#: email/otp_email.html:40
-msgid "Hi:"
-msgstr "Hola:"
 
 #: email/otp_email.html:56
 #, python-format

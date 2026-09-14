@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ATLAS 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 13:10-0500\n"
+"POT-Creation-Date: 2026-09-14 02:25+0000\n"
 "PO-Revision-Date: 2026-08-30 00:00-0500\n"
 "Last-Translator: Sebastián Morales <sebastian.morales@propensionesabogados.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -17,35 +17,33 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\apps\project\specific\internal\ops\admin.py:91
-#: .\apps\project\specific\internal\ops\models.py:50
+#: admin.py:91 models.py:50
 msgid "Status"
 msgstr "Estado"
 
-#: .\apps\project\specific\internal\ops\admin.py:155
+#: admin.py:155
 msgid "Operations console"
 msgstr "Consola de operaciones"
 
-#: .\apps\project\specific\internal\ops\admin.py:196
-#: .\apps\project\specific\internal\ops\registry.py:1553
+#: admin.py:196 registry.py:1581
 msgid "Test summary"
 msgstr "Resumen de pruebas"
 
-#: .\apps\project\specific\internal\ops\admin.py:254
+#: admin.py:254
 #, python-format
 msgid "Type \"%(name)s\" to confirm before running it."
 msgstr "Escriba \"%(name)s\" para confirmar antes de ejecutarlo."
 
-#: .\apps\project\specific\internal\ops\admin.py:279
+#: admin.py:279
 msgid "That command is not allowed."
 msgstr "Ese comando no está permitido."
 
-#: .\apps\project\specific\internal\ops\admin.py:299
+#: admin.py:299
 #, python-format
 msgid "%(title)s finished in %(seconds)s s."
 msgstr "%(title)s terminó en %(seconds)s s."
 
-#: .\apps\project\specific\internal\ops\admin.py:305
+#: admin.py:305
 #, python-format
 msgid ""
 "%(title)s was cut off after %(seconds)s s. The output below is partial, and "
@@ -54,89 +52,88 @@ msgstr ""
 "%(title)s se cortó a los %(seconds)s s. La salida de abajo está incompleta, "
 "y el comando puede haber seguido ejecutándose."
 
-#: .\apps\project\specific\internal\ops\admin.py:312
+#: admin.py:312
 #, python-format
 msgid "%(title)s failed with exit code %(code)s."
 msgstr "%(title)s falló con código de salida %(code)s."
 
-#: .\apps\project\specific\internal\ops\apps.py:11
-#| msgid "Operations console"
+#: apps.py:11
 msgid "Operations"
 msgstr "Operaciones"
 
-#: .\apps\project\specific\internal\ops\models.py:24
+#: models.py:24
 msgid "Finished"
 msgstr "Terminado"
 
-#: .\apps\project\specific\internal\ops\models.py:25
+#: models.py:25
 msgid "Failed"
 msgstr "Fallido"
 
-#: .\apps\project\specific\internal\ops\models.py:26
+#: models.py:26
 msgid "Cut off by timeout"
 msgstr "Cortado por tiempo límite"
 
-#: .\apps\project\specific\internal\ops\models.py:27
+#: models.py:27
 msgid "Refused"
 msgstr "Rechazado"
 
-#: .\apps\project\specific\internal\ops\models.py:30
+#: models.py:30
 msgid "Command"
 msgstr "Comando"
 
-#: .\apps\project\specific\internal\ops\models.py:36
+#: models.py:36
 msgid "Arguments"
 msgstr "Argumentos"
 
-#: .\apps\project\specific\internal\ops\models.py:39
+#: models.py:39
 msgid "The values as they were filled in the form."
 msgstr "Los valores tal como se rellenaron en el formulario."
 
-#: .\apps\project\specific\internal\ops\models.py:43
+#: models.py:43
 msgid "Command line"
 msgstr "Línea de comando"
 
-#: .\apps\project\specific\internal\ops\models.py:46
+#: models.py:46
 msgid "What was actually run, argument by argument."
 msgstr "Lo que se ejecutó realmente, argumento por argumento."
 
-#: .\apps\project\specific\internal\ops\models.py:57
+#: models.py:57
 msgid "Exit code"
 msgstr "Código de salida"
 
-#: .\apps\project\specific\internal\ops\models.py:63
+#: models.py:63
 msgid "Duration (s)"
 msgstr "Duración (s)"
 
-#: .\apps\project\specific\internal\ops\models.py:68
+#: models.py:68
 msgid "Output"
 msgstr "Salida"
 
-#: .\apps\project\specific\internal\ops\models.py:77
+#: models.py:77
 msgid "Run by"
 msgstr "Ejecutado por"
 
-#: .\apps\project\specific\internal\ops\models.py:85
+#: models.py:85
 msgid "Client IP"
 msgstr "IP del cliente"
 
-#: .\apps\project\specific\internal\ops\models.py:99
+#: models.py:99
 msgid "Command run"
 msgstr "Ejecución de comando"
 
-#: .\apps\project\specific\internal\ops\models.py:100
+#: models.py:100
 msgid "Command runs"
 msgstr "Ejecuciones de comandos"
 
-#: .\apps\project\specific\internal\ops\registry.py:111
+#: registry.py:111
 msgid "Always"
 msgstr "Siempre"
 
-#: .\apps\project\specific\internal\ops\registry.py:112
+#: registry.py:112
 msgid "Development only"
 msgstr "Solo en desarrollo"
 
-#: .\apps\project\specific\internal\ops\registry.py:125
+#: registry.py:125
 msgid ""
 "Destroys the audit trail the certification relies on. Purging by retention "
 "policy is a written procedure, not a button."
@@ -144,23 +141,23 @@ msgstr ""
 "Destruye el rastro de auditoría en el que se apoya la certificación. Purgar "
 "por política de retención es un procedimiento escrito, no un botón."
 
-#: .\apps\project\specific\internal\ops\registry.py:128
+#: registry.py:128
 msgid "Destroys the record of access attempts."
 msgstr "Destruye el registro de intentos de acceso."
 
-#: .\apps\project\specific\internal\ops\registry.py:129
+#: registry.py:129
 msgid "Destroys the record of failed logins."
 msgstr "Destruye el registro de accesos fallidos."
 
-#: .\apps\project\specific\internal\ops\registry.py:132
+#: registry.py:132
 msgid "Arbitrary code execution: it voids the whole allowlist."
 msgstr "Ejecución de código arbitrario: deja sin efecto toda la lista blanca."
 
-#: .\apps\project\specific\internal\ops\registry.py:133
+#: registry.py:133
 msgid "Arbitrary SQL: it voids the whole allowlist."
 msgstr "SQL arbitrario: deja sin efecto toda la lista blanca."
 
-#: .\apps\project\specific\internal\ops\registry.py:135
+#: registry.py:135
 msgid ""
 "Prints SECRET_KEY, the database password and FIELD_ENCRYPTION_KEY — and the "
 "output is stored in CommandRunModel."
@@ -168,34 +165,33 @@ msgstr ""
 "Imprime SECRET_KEY, la contraseña de la base de datos y FIELD_ENCRYPTION_KEY"
 " — y la salida se guarda en CommandRunModel."
 
-#: .\apps\project\specific\internal\ops\registry.py:139
+#: registry.py:139
 msgid "Prints a private key, which would end up written in a table."
 msgstr "Imprime una clave privada, que acabaría escrita en una tabla."
 
-#: .\apps\project\specific\internal\ops\registry.py:142
+#: registry.py:142
 msgid "Prints the PII encryption key, which would end up written in a table."
 msgstr ""
 "Imprime la clave de cifrado de la PII, que acabaría escrita en una tabla."
 
-#: .\apps\project\specific\internal\ops\registry.py:146
-#| msgid "Empties the application cache."
+#: registry.py:146
 msgid "Empties the entire database."
 msgstr "Vacía la base de datos entera."
 
-#: .\apps\project\specific\internal\ops\registry.py:147
+#: registry.py:147
 msgid "Prints the SQL that empties the entire database."
 msgstr "Imprime el SQL que vacía la base de datos entera."
 
-#: .\apps\project\specific\internal\ops\registry.py:149
+#: registry.py:149
 msgid "Would dump every record into CommandRunModel, encrypted PII included."
 msgstr ""
 "Volcaría todos los registros en CommandRunModel, incluida la PII cifrada."
 
-#: .\apps\project\specific\internal\ops\registry.py:152
+#: registry.py:152
 msgid "Injects arbitrary records."
 msgstr "Inyecta registros arbitrarios."
 
-#: .\apps\project\specific\internal\ops\registry.py:154
+#: registry.py:154
 msgid ""
 "Decrypts a backup and writes the personal data, in the clear, onto the "
 "server filesystem. That is the whole point of encrypting the backup in the "
@@ -207,39 +203,39 @@ msgstr ""
 "puede estar a un clic: necesita la contraseña y un terminal, y tiene que "
 "dejar a alguien como responsable."
 
-#: .\apps\project\specific\internal\ops\registry.py:159
+#: registry.py:159
 msgid "Bulk data injection from a web page."
 msgstr "Inyección masiva de datos desde una página web."
 
-#: .\apps\project\specific\internal\ops\registry.py:160
+#: registry.py:160
 msgid "Bulk data extraction into the run history."
 msgstr "Extracción masiva de datos al historial de ejecuciones."
 
-#: .\apps\project\specific\internal\ops\registry.py:161
+#: registry.py:161
 msgid "Deletes migration files across the repository."
 msgstr "Borra ficheros de migración de todo el repositorio."
 
-#: .\apps\project\specific\internal\ops\registry.py:162
+#: registry.py:162
 msgid "Renames migration files across the repository."
 msgstr "Renombra ficheros de migración de todo el repositorio."
 
-#: .\apps\project\specific\internal\ops\registry.py:163
+#: registry.py:163
 msgid "Cascades into deleting permissions."
 msgstr "Arrastra el borrado de permisos."
 
-#: .\apps\project\specific\internal\ops\registry.py:166
+#: registry.py:166
 msgid "Creates credentials from a web page."
 msgstr "Crea credenciales desde una página web."
 
-#: .\apps\project\specific\internal\ops\registry.py:168
+#: registry.py:168
 msgid "Changes credentials, and needs stdin, which here is DEVNULL."
 msgstr "Cambia credenciales, y necesita stdin, que aquí es DEVNULL."
 
-#: .\apps\project\specific\internal\ops\registry.py:170
+#: registry.py:170
 msgid "Mints second-factor backup tokens for a user."
 msgstr "Emite códigos de respaldo del segundo factor de un usuario."
 
-#: .\apps\project\specific\internal\ops\registry.py:172
+#: registry.py:172
 msgid ""
 "Would strip the second factor from a user, from a page that requires a "
 "second factor to open."
@@ -247,23 +243,23 @@ msgstr ""
 "Le quitaría el segundo factor a un usuario, desde una página que exige un "
 "segundo factor para abrirse."
 
-#: .\apps\project\specific\internal\ops\registry.py:177
+#: registry.py:177
 msgid "There is already a server running."
 msgstr "Ya hay un servidor corriendo."
 
-#: .\apps\project\specific\internal\ops\registry.py:178
+#: registry.py:178
 msgid "Starts a throwaway server with fixture data."
 msgstr "Levanta un servidor de usar y tirar con datos de ejemplo."
 
-#: .\apps\project\specific\internal\ops\registry.py:179
+#: registry.py:179
 msgid "Creates a new project; meaningless here."
 msgstr "Crea un proyecto nuevo; aquí no significa nada."
 
-#: .\apps\project\specific\internal\ops\registry.py:180
+#: registry.py:180
 msgid "This project publishes no sitemap."
 msgstr "Este proyecto no publica ningún sitemap."
 
-#: .\apps\project\specific\internal\ops\registry.py:184
+#: registry.py:184
 msgid ""
 "Rewrites the audit table wholesale. It is a one-off upgrade step to run with"
 " a backup in hand, not a button on a panel."
@@ -271,7 +267,7 @@ msgstr ""
 "Reescribe la tabla de auditoría entera. Es un paso de actualización que se "
 "hace una vez y con un respaldo a mano, no un botón de un panel."
 
-#: .\apps\project\specific\internal\ops\registry.py:202
+#: registry.py:202
 msgid ""
 "Superseded by start_app, which sets the dotted name, the urls.py and the "
 "locale folder this project needs."
@@ -279,7 +275,7 @@ msgstr ""
 "Lo sustituye start_app, que fija el nombre con ruta completa, el urls.py y "
 "la carpeta locale que este proyecto necesita."
 
-#: .\apps\project\specific\internal\ops\registry.py:206
+#: registry.py:206
 msgid ""
 "This project caches in Redis, or in memory when there is none. There is no "
 "cache table to create."
@@ -287,7 +283,7 @@ msgstr ""
 "Este proyecto cachea en Redis, o en memoria cuando no lo hay. No hay ninguna"
 " tabla de caché que crear."
 
-#: .\apps\project\specific\internal\ops\registry.py:210
+#: registry.py:210
 msgid ""
 "A warm-up helper for django-compressor. Precompiling the bundles with "
 "compress already covers what a deploy needs."
@@ -295,7 +291,7 @@ msgstr ""
 "Es un auxiliar de calentamiento de django-compressor. Precompilar los "
 "paquetes con compress ya cubre lo que hace falta en un despliegue."
 
-#: .\apps\project\specific\internal\ops\registry.py:214
+#: registry.py:214
 msgid ""
 "Migration surgery belongs in an editor with the diff in front of you, and "
 "the result goes through git."
@@ -303,11 +299,11 @@ msgstr ""
 "La cirugía de migraciones se hace en un editor con el diff delante, y el "
 "resultado pasa por git."
 
-#: .\apps\project\specific\internal\ops\registry.py:217
+#: registry.py:217
 msgid "Same as squashing: it rewrites source code."
 msgstr "Lo mismo que agrupar migraciones: reescribe código fuente."
 
-#: .\apps\project\specific\internal\ops\registry.py:219
+#: registry.py:219
 msgid ""
 "Covered by the two entries that are here: unlocking an address and unlocking"
 " a person."
@@ -315,55 +311,53 @@ msgstr ""
 "Lo cubren las dos entradas que sí están: desbloquear una dirección y "
 "desbloquear a una persona."
 
-#: .\apps\project\specific\internal\ops\registry.py:230
+#: registry.py:230
 msgid "Read only — only reports, changes nothing"
 msgstr "Solo lectura — solo informa, no cambia nada"
 
-#: .\apps\project\specific\internal\ops\registry.py:231
+#: registry.py:231
 msgid "Writes — changes data or files"
 msgstr "Escribe — cambia datos o archivos"
 
-#: .\apps\project\specific\internal\ops\registry.py:232
+#: registry.py:232
 msgid "Dangerous — hard to undo, confirm before running"
 msgstr "Peligroso — difícil de deshacer, confirme antes de ejecutar"
 
-#: .\apps\project\specific\internal\ops\registry.py:264
-#| msgid "Deploy checks"
+#: registry.py:264
 msgid "Deploy"
 msgstr "Despliegue"
 
-#: .\apps\project\specific\internal\ops\registry.py:265
+#: registry.py:265
 msgid "Diagnostics"
 msgstr "Diagnóstico"
 
-#: .\apps\project\specific\internal\ops\registry.py:266
+#: registry.py:266
 msgid "Certification"
 msgstr "Certificación"
 
-#: .\apps\project\specific\internal\ops\registry.py:267
-#: .\apps\project\specific\internal\ops\registry.py:719
+#: registry.py:267 registry.py:719
 msgid "Scheduled tasks"
 msgstr "Tareas programadas"
 
-#: .\apps\project\specific\internal\ops\registry.py:268
+#: registry.py:268
 msgid "Access and blocks"
 msgstr "Acceso y bloqueos"
 
-#: .\apps\project\specific\internal\ops\registry.py:269
+#: registry.py:269
 msgid "Maintenance"
 msgstr "Mantenimiento"
 
-#: .\apps\project\specific\internal\ops\registry.py:405
+#: registry.py:405
 msgid "Working tree state"
 msgstr "Estado del árbol de trabajo"
 
-#: .\apps\project\specific\internal\ops\registry.py:406
+#: registry.py:406
 msgid ""
 "Shows which branch is deployed and whether anything was edited on the "
 "server."
 msgstr "Enseña qué rama está desplegada y si se editó algo en el servidor."
 
-#: .\apps\project\specific\internal\ops\registry.py:409
+#: registry.py:409
 msgid ""
 "The question to answer before pulling. A file edited directly on the server "
 "stops the pull, and finding that out from the error message is the slow way."
@@ -375,22 +369,20 @@ msgstr ""
 "error es la vía lenta. Dice además cuántos commits de retraso lleva la rama,"
 " que es como se sabe si hace falta desplegar."
 
-#: .\apps\project\specific\internal\ops\registry.py:415
-#| msgid "Before every deploy, and after adding any dependency."
+#: registry.py:415
 msgid "Before every deploy, and when a fix does not seem to have landed."
 msgstr ""
 "Antes de cada despliegue, y cuando una corrección no parece haber llegado."
 
-#: .\apps\project\specific\internal\ops\registry.py:426
-#| msgid "Deploy checks"
+#: registry.py:426
 msgid "Deployed commits"
 msgstr "Commits desplegados"
 
-#: .\apps\project\specific\internal\ops\registry.py:427
+#: registry.py:427
 msgid "Lists the last commits of the deployed code."
 msgstr "Lista los últimos commits del código desplegado."
 
-#: .\apps\project\specific\internal\ops\registry.py:429
+#: registry.py:429
 msgid ""
 "What is actually running on this server, which is not always what was "
 "merged. If a change is missing here, the deploy did not happen — no need to "
@@ -400,21 +392,20 @@ msgstr ""
 "se mergeó. Si aquí falta un cambio, el despliegue no llegó a hacerse: no "
 "hace falta buscar el fallo en ningún otro sitio."
 
-#: .\apps\project\specific\internal\ops\registry.py:433
+#: registry.py:433
 msgid "To confirm a merged fix really reached production."
 msgstr ""
 "Para confirmar que un arreglo ya mergeado llegó de verdad a producción."
 
-#: .\apps\project\specific\internal\ops\registry.py:443
-#| msgid "Launch the test process"
+#: registry.py:443
 msgid "Pull the latest code"
 msgstr "Traer el código más reciente"
 
-#: .\apps\project\specific\internal\ops\registry.py:444
+#: registry.py:444
 msgid "Brings down what was merged, without ever creating a merge commit."
 msgstr "Baja lo que se mergeó, sin crear nunca un commit de merge."
 
-#: .\apps\project\specific\internal\ops\registry.py:447
+#: registry.py:447
 msgid ""
 "It runs with --ff-only, and that is the whole safety of it: if the server "
 "cannot fast-forward — because something was edited here, or the branch "
@@ -433,11 +424,11 @@ msgstr ""
 "cambia CSS o JS necesita recopilar los estáticos. Ninguna de las dos cosas "
 "pasa sola."
 
-#: .\apps\project\specific\internal\ops\registry.py:456
+#: registry.py:456
 msgid "After merging to master, to bring the change to the server."
 msgstr "Después de mergear a master, para llevar el cambio al servidor."
 
-#: .\apps\project\specific\internal\ops\registry.py:465
+#: registry.py:465
 msgid ""
 "This changes the running code. Right afterwards: apply migrations and "
 "collect static files, or the site will be serving new code against an old "
@@ -447,15 +438,15 @@ msgstr ""
 " y recopilar estáticos, o el sitio servirá código nuevo contra una base de "
 "datos y unos assets viejos."
 
-#: .\apps\project\specific\internal\ops\registry.py:472
+#: registry.py:472
 msgid "Pending model changes"
 msgstr "Cambios de modelo pendientes"
 
-#: .\apps\project\specific\internal\ops\registry.py:473
+#: registry.py:473
 msgid "Says whether a model was changed without writing its migration."
 msgstr "Dice si se cambió un modelo sin escribir su migración."
 
-#: .\apps\project\specific\internal\ops\registry.py:476
+#: registry.py:476
 msgid ""
 "It runs with --check --dry-run, so it writes nothing: it only answers yes or"
 " no. A model changed without its migration is a failure that shows up far "
@@ -467,19 +458,19 @@ msgstr ""
 "su causa: el código despliega bien y la base de datos revienta en la primera"
 " consulta que toca el campo nuevo."
 
-#: .\apps\project\specific\internal\ops\registry.py:482
+#: registry.py:482
 msgid "Before deploying, together with the migration state."
 msgstr "Antes de desplegar, junto con el estado de las migraciones."
 
-#: .\apps\project\specific\internal\ops\registry.py:491
+#: registry.py:491
 msgid "SQL of a migration"
 msgstr "SQL de una migración"
 
-#: .\apps\project\specific\internal\ops\registry.py:492
+#: registry.py:492
 msgid "Shows the SQL a migration would run, without running it."
 msgstr "Enseña el SQL que ejecutaría una migración, sin ejecutarlo."
 
-#: .\apps\project\specific\internal\ops\registry.py:494
+#: registry.py:494
 msgid ""
 "The way to know what a migration is going to do before it does it — whether "
 "it rewrites a table, whether it locks it, whether it drops a column. Reading"
@@ -489,16 +480,15 @@ msgstr ""
 "reescribe una tabla, si la bloquea, si borra una columna. Leerlo cuesta un "
 "minuto; deshacer una migración sobre una base de datos viva, no."
 
-#: .\apps\project\specific\internal\ops\registry.py:499
+#: registry.py:499
 msgid "Before applying a migration on a table with a lot of rows."
 msgstr "Antes de aplicar una migración sobre una tabla con muchas filas."
 
-#: .\apps\project\specific\internal\ops\registry.py:506
-#: .\apps\project\specific\internal\ops\registry.py:1523
+#: registry.py:506 registry.py:1551
 msgid "App"
 msgstr "App"
 
-#: .\apps\project\specific\internal\ops\registry.py:510
+#: registry.py:510
 msgid ""
 "Label of the app, as it appears in the migration state (for example: "
 "buyers)."
@@ -506,26 +496,25 @@ msgstr ""
 "Etiqueta de la app, tal como aparece en el estado de las migraciones (por "
 "ejemplo: buyers)."
 
-#: .\apps\project\specific\internal\ops\registry.py:516
-#| msgid "Migration state"
+#: registry.py:516
 msgid "Migration"
 msgstr "Migración"
 
-#: .\apps\project\specific\internal\ops\registry.py:520
+#: registry.py:520
 msgid "Its number or full name, for example 0012."
 msgstr "Su número o su nombre completo, por ejemplo 0012."
 
-#: .\apps\project\specific\internal\ops\registry.py:528
+#: registry.py:528
 msgid "Precompile CSS and JS bundles"
 msgstr "Precompilar los paquetes de CSS y JS"
 
-#: .\apps\project\specific\internal\ops\registry.py:529
+#: registry.py:529
 msgid "Builds the compressed bundles django-compressor serves in production."
 msgstr ""
 "Construye los paquetes comprimidos que django-compressor sirve en "
 "producción."
 
-#: .\apps\project\specific\internal\ops\registry.py:532
+#: registry.py:532
 msgid ""
 "With offline compression on, the bundles are not built when a page is "
 "requested: they have to exist beforehand. If they are missing or stale, "
@@ -537,16 +526,15 @@ msgstr ""
 "fallan con «you have offline compression enabled but key is missing». "
 "Ejecútalo después de recopilar los estáticos, no antes."
 
-#: .\apps\project\specific\internal\ops\registry.py:538
-#| msgid "After every deploy that touches CSS or JS."
+#: registry.py:538
 msgid "After a deploy that touched CSS or JS."
 msgstr "Después de un despliegue que haya tocado CSS o JS."
 
-#: .\apps\project\specific\internal\ops\registry.py:544
+#: registry.py:544
 msgid "Rebuild everything"
 msgstr "Reconstruirlo todo"
 
-#: .\apps\project\specific\internal\ops\registry.py:546
+#: registry.py:546
 msgid ""
 "Rebuilds even what looks up to date. Slower, and the answer when something "
 "stale is being served."
@@ -554,15 +542,15 @@ msgstr ""
 "Reconstruye incluso lo que parece al día. Es más lento, y es la respuesta "
 "cuando se está sirviendo algo viejo."
 
-#: .\apps\project\specific\internal\ops\registry.py:558
+#: registry.py:558
 msgid "Django checks"
 msgstr "Comprobaciones de Django"
 
-#: .\apps\project\specific\internal\ops\registry.py:559
+#: registry.py:559
 msgid "Looks for configuration problems without touching anything."
 msgstr "Busca problemas de configuración sin tocar nada."
 
-#: .\apps\project\specific\internal\ops\registry.py:561
+#: registry.py:561
 msgid ""
 "Runs the framework checks: models, admin, URLs, templates and security "
 "settings. It is what should come out clean before any deploy."
@@ -571,15 +559,15 @@ msgstr ""
 " ajustes de seguridad. Es lo que tiene que salir limpio antes de cualquier "
 "despliegue."
 
-#: .\apps\project\specific\internal\ops\registry.py:565
+#: registry.py:565
 msgid "After changing settings.py, to confirm nothing broke."
 msgstr "Después de cambiar settings.py, para confirmar que nada se rompió."
 
-#: .\apps\project\specific\internal\ops\registry.py:571
+#: registry.py:571
 msgid "Deploy checks"
 msgstr "Comprobaciones de despliegue"
 
-#: .\apps\project\specific\internal\ops\registry.py:574
+#: registry.py:574
 msgid ""
 "Adds the production-only checks: HTTPS, cookies, HSTS. Expect warnings in "
 "development."
@@ -587,11 +575,11 @@ msgstr ""
 "Añade las comprobaciones que solo aplican en producción: HTTPS, cookies, "
 "HSTS. En desarrollo es normal que salgan avisos."
 
-#: .\apps\project\specific\internal\ops\registry.py:583
+#: registry.py:583
 msgid "Media storage"
 msgstr "Almacenamiento de media"
 
-#: .\apps\project\specific\internal\ops\registry.py:585
+#: registry.py:585
 msgid ""
 "Checks that MEDIA_ROOT points where the files really are and that the "
 "sensitive folders are not served by the web server."
@@ -599,7 +587,7 @@ msgstr ""
 "Comprueba que MEDIA_ROOT apunte donde están los archivos de verdad y que el "
 "servidor web no sirva las carpetas sensibles."
 
-#: .\apps\project\specific\internal\ops\registry.py:589
+#: registry.py:589
 msgid ""
 "FileField stores paths relative to MEDIA_ROOT. If the variable points "
 "somewhere else, nothing is lost but Django stops finding the files: every "
@@ -614,34 +602,34 @@ msgstr ""
 "que el servidor web reparta certificados y documentos de identidad por su "
 "cuenta."
 
-#: .\apps\project\specific\internal\ops\registry.py:596
+#: registry.py:596
 msgid "After moving the media folder, or after a deploy."
 msgstr "Después de mover la carpeta de media, o después de un despliegue."
 
-#: .\apps\project\specific\internal\ops\registry.py:602
+#: registry.py:602
 msgid "Files per field"
 msgstr "Archivos por campo"
 
-#: .\apps\project\specific\internal\ops\registry.py:605
+#: registry.py:605
 msgid "How many files to check per model field."
 msgstr "Cuántos archivos comprobar por cada campo del modelo."
 
-#: .\apps\project\specific\internal\ops\registry.py:609
+#: registry.py:609
 msgid "Search under"
 msgstr "Buscar dentro de"
 
-#: .\apps\project\specific\internal\ops\registry.py:612
+#: registry.py:612
 msgid ""
 "If a file is missing, look for it by name under this path and say where it "
 "is."
 msgstr ""
 "Si falta un archivo, búscalo por nombre bajo esta ruta y di dónde está."
 
-#: .\apps\project\specific\internal\ops\registry.py:619
+#: registry.py:619
 msgid "Check over HTTP"
 msgstr "Comprobar por HTTP"
 
-#: .\apps\project\specific\internal\ops\registry.py:622
+#: registry.py:622
 msgid ""
 "Actually request a sensitive file from outside and confirm the web server "
 "answers 404."
@@ -649,11 +637,11 @@ msgstr ""
 "Pedir de verdad un archivo sensible desde fuera y confirmar que el servidor "
 "web responde 404."
 
-#: .\apps\project\specific\internal\ops\registry.py:631
+#: registry.py:631
 msgid "Certified documents health"
 msgstr "Salud de los documentos certificados"
 
-#: .\apps\project\specific\internal\ops\registry.py:633
+#: registry.py:633
 msgid ""
 "Checks that the three files of every certified document are on disk and that"
 " their fingerprints still match."
@@ -661,7 +649,7 @@ msgstr ""
 "Comprueba que los tres archivos de cada documento certificado estén en disco"
 " y que sus huellas sigan cuadrando."
 
-#: .\apps\project\specific\internal\ops\registry.py:637
+#: registry.py:637
 msgid ""
 "Two different failures: a record pointing at a deleted file, and a file "
 "whose stored hash no longer matches what is on disk. The second one is the "
@@ -671,19 +659,19 @@ msgstr ""
 "archivo cuyo hash guardado ya no cuadra con lo que hay en disco. El grave es"
 " el segundo: significa que la certificación está mintiendo."
 
-#: .\apps\project\specific\internal\ops\registry.py:642
+#: registry.py:642
 msgid "Monthly, and after any migration of the media folder."
 msgstr "Cada mes, y después de cualquier migración de la carpeta de media."
 
-#: .\apps\project\specific\internal\ops\registry.py:649
+#: registry.py:649
 msgid "Cache"
 msgstr "Cache"
 
-#: .\apps\project\specific\internal\ops\registry.py:651
+#: registry.py:651
 msgid "Checks that the cache answers and that it is shared across processes."
 msgstr "Comprueba que la cache responde y que se comparte entre procesos."
 
-#: .\apps\project\specific\internal\ops\registry.py:655
+#: registry.py:655
 msgid ""
 "Asking the VPS whether Redis is alive does not answer what matters: whether "
 "this application reaches it, and whether the rate counters are shared. And "
@@ -701,25 +689,25 @@ msgstr ""
 " una vacía. La última comprobación es la que decide: escribe una clave y la "
 "vuelve a leer desde otro proceso."
 
-#: .\apps\project\specific\internal\ops\registry.py:664
+#: registry.py:664
 msgid ""
 "After pointing REDIS_URL at the VPS, and when rate limits seem not to apply."
 msgstr ""
 "Después de apuntar REDIS_URL al VPS, y cuando parezca que los límites de "
 "tasa no se aplican."
 
-#: .\apps\project\specific\internal\ops\registry.py:672
+#: registry.py:672
 msgid "Background workers"
 msgstr "Workers en segundo plano"
 
-#: .\apps\project\specific\internal\ops\registry.py:674
+#: registry.py:674
 msgid ""
 "Checks whether this server can hold a worker process outside the request."
 msgstr ""
 "Comprueba si este servidor puede sostener un proceso worker fuera de la "
 "petición."
 
-#: .\apps\project\specific\internal\ops\registry.py:678
+#: registry.py:678
 msgid ""
 "A worker is not a library you install: it is a process that lives outside "
 "the request and does not die. Shared hosting often kills anything that is "
@@ -738,15 +726,15 @@ msgstr ""
 "claves y otras operaciones. Ese falla en silencio, y las tareas simplemente "
 "desaparecen."
 
-#: .\apps\project\specific\internal\ops\registry.py:687
+#: registry.py:687
 msgid "Before deciding whether Celery is worth adopting here."
 msgstr "Antes de decidir si merece la pena adoptar Celery aquí."
 
-#: .\apps\project\specific\internal\ops\registry.py:694
+#: registry.py:694
 msgid "Launch the test process"
 msgstr "Lanzar el proceso de prueba"
 
-#: .\apps\project\specific\internal\ops\registry.py:697
+#: registry.py:697
 msgid ""
 "Starts a detached process that does nothing but write the time every 30 "
 "seconds. Come back later and run this again: what matters is not that it "
@@ -756,11 +744,11 @@ msgstr ""
 "segundos. Vuelve más tarde y ejecútalo otra vez: lo que importa no es que "
 "arranque, sino que entonces siga vivo."
 
-#: .\apps\project\specific\internal\ops\registry.py:705
+#: registry.py:705
 msgid "How long the test should last"
 msgstr "Cuánto debe durar la prueba"
 
-#: .\apps\project\specific\internal\ops\registry.py:709
+#: registry.py:709
 msgid ""
 "Half an hour rules out the hosting that kills everything right away, which "
 "is the common case. It says nothing about the one that kills a process now "
@@ -770,14 +758,14 @@ msgstr ""
 "caso común. No dice nada del que mata un proceso de vez en cuando, y para "
 "eso tiene que correr más tiempo: 1440 es un día entero."
 
-#: .\apps\project\specific\internal\ops\registry.py:721
+#: registry.py:721
 msgid ""
 "Checks whether the scheduled tasks are actually installed in the crontab."
 msgstr ""
 "Comprueba si las tareas programadas están instaladas de verdad en el "
 "crontab."
 
-#: .\apps\project\specific\internal\ops\registry.py:725
+#: registry.py:725
 msgid ""
 "Declaring a task in CRONJOBS does not schedule it: django-crontab writes it "
 "into the crontab only when someone runs \"manage.py crontab add\". Until "
@@ -795,16 +783,15 @@ msgstr ""
 " la línea apuntando a una tarea que ya no existe. El cron dispara y no "
 "ejecuta nada, y desde fuera se ve exactamente igual que si todo funcionara."
 
-#: .\apps\project\specific\internal\ops\registry.py:735
-#: .\apps\project\specific\internal\ops\registry.py:1173
+#: registry.py:735 registry.py:1173
 msgid "When something that should run on its own has not run."
 msgstr "Cuando algo que debería correr solo no ha corrido."
 
-#: .\apps\project\specific\internal\ops\registry.py:742
+#: registry.py:742
 msgid "Mature blockchain proofs"
 msgstr "Madurar pruebas de la cadena de bloques"
 
-#: .\apps\project\specific\internal\ops\registry.py:744
+#: registry.py:744
 msgid ""
 "Asks the calendars whether the pending proofs are already in a Bitcoin "
 "block."
@@ -812,7 +799,7 @@ msgstr ""
 "Pregunta a los calendarios si las pruebas pendientes ya están en un bloque "
 "de Bitcoin."
 
-#: .\apps\project\specific\internal\ops\registry.py:748
+#: registry.py:748
 msgid ""
 "This is what the scheduled task does every 15 minutes. Running it by hand "
 "catches up without waiting — useful when the task was not installed, or "
@@ -826,21 +813,21 @@ msgstr ""
 "nada pendiente ni siquiera sale a la red, y una prueba que todavía no ha "
 "madurado se deja para la vuelta siguiente en vez de tratarla como un error."
 
-#: .\apps\project\specific\internal\ops\registry.py:755
+#: registry.py:755
 msgid "When an anchor has been waiting longer than a few hours."
 msgstr "Cuando un anclaje lleva esperando más de unas horas."
 
-#: .\apps\project\specific\internal\ops\registry.py:762
+#: registry.py:762
 msgid "Dependencies"
 msgstr "Dependencias"
 
-#: .\apps\project\specific\internal\ops\registry.py:764
+#: registry.py:764
 msgid ""
 "Checks that requirements.txt carries everything declared in pyproject.toml."
 msgstr ""
 "Comprueba que requirements.txt lleve todo lo declarado en pyproject.toml."
 
-#: .\apps\project\specific\internal\ops\registry.py:768
+#: registry.py:768
 msgid ""
 "The project uses two dependency files: pyproject.toml with uv locally, and "
 "requirements.txt with pip in production, because cPanel has no uv. The "
@@ -858,22 +845,22 @@ msgstr ""
 "anclaje en la cadena de bloques fallaba. El síntoma apareció lejos de la "
 "causa, que es lo peor que hay."
 
-#: .\apps\project\specific\internal\ops\registry.py:777
+#: registry.py:777
 msgid "Before every deploy, and after adding any dependency."
 msgstr "Antes de cada despliegue, y después de añadir cualquier dependencia."
 
-#: .\apps\project\specific\internal\ops\registry.py:784
+#: registry.py:784
 msgid "Blockchain anchoring"
 msgstr "Anclaje en la cadena de bloques"
 
-#: .\apps\project\specific\internal\ops\registry.py:786
+#: registry.py:786
 msgid ""
 "Checks whether this server can send hashes to the OpenTimestamps calendars."
 msgstr ""
 "Comprueba si este servidor puede enviar huellas a los calendarios de "
 "OpenTimestamps."
 
-#: .\apps\project\specific\internal\ops\registry.py:790
+#: registry.py:790
 msgid ""
 "When the composer says the box was sealed but not sent, the cause is almost "
 "never the code: either the opentimestamps library is not installed on this "
@@ -891,15 +878,15 @@ msgstr ""
 "anclajes de verdad: una prueba que lleva días esperando significa que nadie "
 "la está madurando, no que el envío fallara."
 
-#: .\apps\project\specific\internal\ops\registry.py:799
+#: registry.py:799
 msgid "When sealing reports that sending to the blockchain failed."
 msgstr "Cuando el sellado avisa de que el envío a la cadena de bloques falló."
 
-#: .\apps\project\specific\internal\ops\registry.py:806
+#: registry.py:806
 msgid "Send a test hash"
 msgstr "Enviar una huella de prueba"
 
-#: .\apps\project\specific\internal\ops\registry.py:809
+#: registry.py:809
 msgid ""
 "Sends a made-up hash for real, to test the whole path, and keeps the proof "
 "so it can be checked later. Harmless: it belongs to no document."
@@ -908,11 +895,11 @@ msgstr ""
 " prueba para poder comprobarla después. Es inofensivo: no pertenece a ningún"
 " documento."
 
-#: .\apps\project\specific\internal\ops\registry.py:816
+#: registry.py:816
 msgid "Check the last test send"
 msgstr "Comprobar el último envío de prueba"
 
-#: .\apps\project\specific\internal\ops\registry.py:819
+#: registry.py:819
 msgid ""
 "Goes back to the last test hash and asks the calendars whether it made it "
 "into a Bitcoin block. Nobody notifies you when it does, so this is how you "
@@ -922,15 +909,15 @@ msgstr ""
 "llegó a un bloque de Bitcoin. Nadie avisa cuando llega, así que esta es la "
 "forma de enterarse. Ejecútalo unas horas después del envío."
 
-#: .\apps\project\specific\internal\ops\registry.py:829
+#: registry.py:829
 msgid "Security check"
 msgstr "Comprobación de seguridad"
 
-#: .\apps\project\specific\internal\ops\registry.py:831
+#: registry.py:831
 msgid "Repeats the security audit over the code as it is right now."
 msgstr "Repite la auditoría de seguridad sobre el código tal como está ahora."
 
-#: .\apps\project\specific\internal\ops\registry.py:834
+#: registry.py:834
 msgid ""
 "It looks at what a report cannot: whether a view added since then went out "
 "without access control, whether a public form accepts POST with no attempt "
@@ -962,21 +949,20 @@ msgstr ""
 "no hay nadie que conteste. Las tres son opcionales, y cuando falta una el "
 "informe lo dice en vez de encogerse en silencio."
 
-#: .\apps\project\specific\internal\ops\registry.py:851
-#| msgid "Before every deploy, and after adding any dependency."
+#: registry.py:851
 msgid "Before every deploy, together with the dependency check."
 msgstr "Antes de cada despliegue, junto con la comprobación de dependencias."
 
-#: .\apps\project\specific\internal\ops\registry.py:862
+#: registry.py:862
 msgid "Anti-scan trap"
 msgstr "Trampa anti-escaneo"
 
-#: .\apps\project\specific\internal\ops\registry.py:864
+#: registry.py:864
 msgid "Checks that no legitimate route collides with the scanner trap."
 msgstr ""
 "Comprueba que ninguna ruta legítima colisione con la trampa anti-escaneo."
 
-#: .\apps\project\specific\internal\ops\registry.py:867
+#: registry.py:867
 msgid ""
 "The trap catches any path containing one of COMMON_ATTACK_TERMS and blocks "
 "the IP. A badly chosen term hijacks a real route and locks out real users. "
@@ -988,19 +974,19 @@ msgstr ""
 " a usuarios reales. Esto informa de las colisiones respetando el orden del "
 "URLconf, que es lo que de verdad lo decide."
 
-#: .\apps\project\specific\internal\ops\registry.py:872
+#: registry.py:872
 msgid "Every time COMMON_ATTACK_TERMS changes."
 msgstr "Cada vez que cambia COMMON_ATTACK_TERMS."
 
-#: .\apps\project\specific\internal\ops\registry.py:879
+#: registry.py:879
 msgid "Migration state"
 msgstr "Estado de las migraciones"
 
-#: .\apps\project\specific\internal\ops\registry.py:880
+#: registry.py:880
 msgid "Lists which migrations are applied and which are pending."
 msgstr "Lista qué migraciones están aplicadas y cuáles pendientes."
 
-#: .\apps\project\specific\internal\ops\registry.py:882
+#: registry.py:882
 msgid ""
 "Nothing runs. It is the way to see whether the database matches the code "
 "before deciding to migrate."
@@ -1008,27 +994,27 @@ msgstr ""
 "No se ejecuta nada. Es la forma de ver si la base de datos cuadra con el "
 "código antes de decidir migrar."
 
-#: .\apps\project\specific\internal\ops\registry.py:885
+#: registry.py:885
 msgid "Right after deploying, before running migrate."
 msgstr "Justo después de desplegar, antes de ejecutar migrate."
 
-#: .\apps\project\specific\internal\ops\registry.py:891
+#: registry.py:891
 msgid "Show plan"
 msgstr "Mostrar el plan"
 
-#: .\apps\project\specific\internal\ops\registry.py:893
+#: registry.py:893
 msgid "Lists them in the order they would be applied."
 msgstr "Las lista en el orden en que se aplicarían."
 
-#: .\apps\project\specific\internal\ops\registry.py:904
+#: registry.py:904
 msgid "Apply migrations"
 msgstr "Aplicar migraciones"
 
-#: .\apps\project\specific\internal\ops\registry.py:905
+#: registry.py:905
 msgid "Brings the database schema up to date with the code."
 msgstr "Pone el esquema de la base de datos al día con el código."
 
-#: .\apps\project\specific\internal\ops\registry.py:907
+#: registry.py:907
 msgid ""
 "Applies every pending migration. Run the migration state check first to see "
 "what is going to happen."
@@ -1036,36 +1022,34 @@ msgstr ""
 "Aplica todas las migraciones pendientes. Ejecuta antes la comprobación del "
 "estado para ver qué va a pasar."
 
-#: .\apps\project\specific\internal\ops\registry.py:910
+#: registry.py:910
 msgid "After deploying code that adds fields or constraints."
 msgstr "Después de desplegar código que añade campos o restricciones."
 
-#: .\apps\project\specific\internal\ops\registry.py:916
-#: .\apps\project\specific\internal\ops\registry.py:943
+#: registry.py:916 registry.py:943
 msgid "No questions"
 msgstr "Sin preguntas"
 
-#: .\apps\project\specific\internal\ops\registry.py:919
-#: .\apps\project\specific\internal\ops\registry.py:946
+#: registry.py:919 registry.py:946
 msgid "Required here: there is nobody to answer a prompt."
 msgstr "Imprescindible aquí: no hay nadie que conteste a una pregunta."
 
-#: .\apps\project\specific\internal\ops\registry.py:924
+#: registry.py:924
 msgid ""
 "A migration can lock tables. On a busy database, run it out of office hours."
 msgstr ""
 "Una migración puede bloquear tablas. En una base de datos con movimiento, "
 "ejecútala fuera del horario de oficina."
 
-#: .\apps\project\specific\internal\ops\registry.py:930
+#: registry.py:930
 msgid "Collect static files"
 msgstr "Recopilar archivos estáticos"
 
-#: .\apps\project\specific\internal\ops\registry.py:931
+#: registry.py:931
 msgid "Publishes the CSS and JS so the browser gets them."
 msgstr "Publica el CSS y el JS para que el navegador los reciba."
 
-#: .\apps\project\specific\internal\ops\registry.py:933
+#: registry.py:933
 msgid ""
 "In production static files are served with a hash in the name, so a change "
 "is invisible until this runs. If a page looks broken after a deploy, this is"
@@ -1075,30 +1059,30 @@ msgstr ""
 "cambio es invisible hasta que esto se ejecuta. Si una página se ve rota "
 "después de un despliegue, suele ser por esto."
 
-#: .\apps\project\specific\internal\ops\registry.py:937
+#: registry.py:937
 msgid "After every deploy that touches CSS or JS."
 msgstr "Después de cada despliegue que toque CSS o JS."
 
-#: .\apps\project\specific\internal\ops\registry.py:950
+#: registry.py:950
 msgid "Clear first"
 msgstr "Limpiar primero"
 
-#: .\apps\project\specific\internal\ops\registry.py:953
+#: registry.py:953
 msgid ""
 "Deletes what was collected before. Slower, but leaves no orphan files "
 "behind."
 msgstr ""
 "Borra lo que se recopiló antes. Más lento, pero no deja ficheros huérfanos."
 
-#: .\apps\project\specific\internal\ops\registry.py:962
+#: registry.py:962
 msgid "Compile translations"
 msgstr "Compilar traducciones"
 
-#: .\apps\project\specific\internal\ops\registry.py:963
+#: registry.py:963
 msgid "Turns the .po catalogs into the .mo files Django reads."
 msgstr "Convierte los catálogos .po en los archivos .mo que lee Django."
 
-#: .\apps\project\specific\internal\ops\registry.py:965
+#: registry.py:965
 msgid ""
 "Editing a translation changes the .po file, but Django only reads the "
 "compiled .mo. Until this runs, the new text shows in English."
@@ -1106,28 +1090,27 @@ msgstr ""
 "Editar una traducción cambia el fichero .po, pero Django solo lee el .mo "
 "compilado. Hasta que esto se ejecuta, el texto nuevo sale en inglés."
 
-#: .\apps\project\specific\internal\ops\registry.py:969
+#: registry.py:969
 msgid "After translating with Rosetta or editing a .po by hand."
 msgstr "Después de traducir con Rosetta o de editar un .po a mano."
 
-#: .\apps\project\specific\internal\ops\registry.py:975
-#: .\apps\project\specific\internal\ops\registry.py:1479
+#: registry.py:975 registry.py:1507
 msgid "Language"
 msgstr "Idioma"
 
-#: .\apps\project\specific\internal\ops\registry.py:979
+#: registry.py:979
 msgid "Which catalog to compile."
 msgstr "Qué catálogo compilar."
 
-#: .\apps\project\specific\internal\ops\registry.py:986
+#: registry.py:986
 msgid "Clear the cache"
 msgstr "Vaciar la caché"
 
-#: .\apps\project\specific\internal\ops\registry.py:987
+#: registry.py:987
 msgid "Empties the application cache."
 msgstr "Vacía la caché de la aplicación."
 
-#: .\apps\project\specific\internal\ops\registry.py:989
+#: registry.py:989
 msgid ""
 "Useful when something stale is being served. Note that it also clears the "
 "public OTP rate-limit counters, which live in cache: right after running "
@@ -1137,11 +1120,11 @@ msgstr ""
 " de los límites del OTP público, que viven en la caché; justo después de "
 "ejecutarlo, esos límites empiezan de cero."
 
-#: .\apps\project\specific\internal\ops\registry.py:993
+#: registry.py:993
 msgid "After changing data that a page keeps cached."
 msgstr "Después de cambiar datos que una página mantiene en caché."
 
-#: .\apps\project\specific\internal\ops\registry.py:998
+#: registry.py:998
 msgid ""
 "It resets the public OTP rate limits. Do not run it while someone is "
 "hammering the verification page."
@@ -1149,12 +1132,11 @@ msgstr ""
 "Reinicia los límites del OTP público. No lo ejecutes mientras alguien esté "
 "machacando la página de verificación."
 
-#: .\apps\project\specific\internal\ops\registry.py:1004
-#| msgid "Deploy checks"
+#: registry.py:1004
 msgid "Health check"
 msgstr "Comprobación de salud"
 
-#: .\apps\project\specific\internal\ops\registry.py:1005
+#: registry.py:1005
 msgid ""
 "Checks the database, the cache and the mail server, from inside and from "
 "outside."
@@ -1162,7 +1144,7 @@ msgstr ""
 "Comprueba la base de datos, la caché y el servidor de correo, desde dentro y"
 " desde fuera."
 
-#: .\apps\project\specific\internal\ops\registry.py:1008
+#: registry.py:1008
 msgid ""
 "The two ways of asking do not answer the same thing, and telling them apart "
 "is the whole point. Asked from inside, it says whether the application "
@@ -1180,7 +1162,7 @@ msgstr ""
 " buscar en el código. Es la misma URL que golpea la tarea de calentamiento "
 "cada tres minutos."
 
-#: .\apps\project\specific\internal\ops\registry.py:1017
+#: registry.py:1017
 msgid ""
 "Right after a deploy, and whenever the site feels broken without an obvious "
 "error."
@@ -1188,26 +1170,24 @@ msgstr ""
 "Justo después de un despliegue, y siempre que el sitio se note roto sin un "
 "error evidente."
 
-#: .\apps\project\specific\internal\ops\registry.py:1024
-#| msgid "Check over HTTP"
+#: registry.py:1024
 msgid "Ask over HTTP"
 msgstr "Preguntar por HTTP"
 
-#: .\apps\project\specific\internal\ops\registry.py:1026
+#: registry.py:1026
 msgid "Requests the real public URL instead of checking inside this process."
 msgstr ""
 "Pide la URL pública de verdad en vez de comprobarlo dentro de este proceso."
 
-#: .\apps\project\specific\internal\ops\registry.py:1034
-#| msgid "Apply migrations"
+#: registry.py:1034
 msgid "Application log"
 msgstr "Registro de la aplicación"
 
-#: .\apps\project\specific\internal\ops\registry.py:1035
+#: registry.py:1035
 msgid "Shows the last lines of the log without opening a terminal."
 msgstr "Enseña las últimas líneas del log sin abrir un terminal."
 
-#: .\apps\project\specific\internal\ops\registry.py:1038
+#: registry.py:1038
 msgid ""
 "Reading the log was the last thing that still forced an SSH session, and it "
 "is the first thing needed when something fails. It reads from the end and "
@@ -1222,15 +1202,15 @@ msgstr ""
 "enseñe queda escrito también en el historial de ejecuciones de esta misma "
 "consola."
 
-#: .\apps\project\specific\internal\ops\registry.py:1045
+#: registry.py:1045
 msgid "A page returned a 500 and there is no other clue."
 msgstr "Una página devolvió un 500 y no hay más pistas."
 
-#: .\apps\project\specific\internal\ops\registry.py:1051
+#: registry.py:1051
 msgid "Only list the files"
 msgstr "Solo listar los ficheros"
 
-#: .\apps\project\specific\internal\ops\registry.py:1053
+#: registry.py:1053
 msgid ""
 "Shows the current log and the rotated ones with their size, without printing"
 " any content."
@@ -1238,39 +1218,39 @@ msgstr ""
 "Enseña el log actual y los rotados con su tamaño, sin imprimir nada de su "
 "contenido."
 
-#: .\apps\project\specific\internal\ops\registry.py:1058
+#: registry.py:1058
 msgid "Lines"
 msgstr "Líneas"
 
-#: .\apps\project\specific\internal\ops\registry.py:1061
+#: registry.py:1061
 msgid "How many lines from the end. The maximum is 2000."
 msgstr "Cuántas líneas desde el final. El máximo son 2000."
 
-#: .\apps\project\specific\internal\ops\registry.py:1065
+#: registry.py:1065
 msgid "Containing"
 msgstr "Que contengan"
 
-#: .\apps\project\specific\internal\ops\registry.py:1067
+#: registry.py:1067
 msgid "Only lines carrying this text. Literal, not a regular expression."
 msgstr ""
 "Solo las líneas que lleven este texto. Literal, no una expresión regular."
 
-#: .\apps\project\specific\internal\ops\registry.py:1073
+#: registry.py:1073
 msgid "Rotated number"
 msgstr "Número del rotado"
 
-#: .\apps\project\specific\internal\ops\registry.py:1075
+#: registry.py:1075
 msgid ""
 "Read stderr_old_N.log instead of the current one. Leave it empty for the "
 "current log."
 msgstr ""
 "Leer stderr_old_N.log en vez del actual. Déjalo vacío para el log actual."
 
-#: .\apps\project\specific\internal\ops\registry.py:1083
+#: registry.py:1083
 msgid "Rotate the log"
 msgstr "Rotar el log"
 
-#: .\apps\project\specific\internal\ops\registry.py:1084
+#: registry.py:1084
 msgid ""
 "Renames the log to stderr_old_N.log when it grows past its size, and drops "
 "the oldest ones."
@@ -1278,7 +1258,7 @@ msgstr ""
 "Renombra el log a stderr_old_N.log cuando pasa de su tamaño, y descarta los "
 "más viejos."
 
-#: .\apps\project\specific\internal\ops\registry.py:1087
+#: registry.py:1087
 msgid ""
 "It does nothing unless the file has passed the limit, so running it costs "
 "one stat. That is why it is scheduled hourly rather than weekly: with a "
@@ -1298,31 +1278,31 @@ msgstr ""
 "del log. La numeración continúa desde lo que ya hay en vez de empezar de "
 "cero, así que un fichero que alguien citó en un correo conserva su nombre."
 
-#: .\apps\project\specific\internal\ops\registry.py:1098
+#: registry.py:1098
 msgid "It runs on its own every hour; by hand only to force it."
 msgstr "Se ejecuta solo cada hora; a mano, únicamente para forzarlo."
 
-#: .\apps\project\specific\internal\ops\registry.py:1104
+#: registry.py:1104
 msgid "Rotate now"
 msgstr "Rotar ahora"
 
-#: .\apps\project\specific\internal\ops\registry.py:1106
+#: registry.py:1106
 msgid "Rotates even if it has not reached the size."
 msgstr "Rota aunque no haya llegado al tamaño."
 
-#: .\apps\project\specific\internal\ops\registry.py:1110
+#: registry.py:1110
 msgid "Size in MB"
 msgstr "Tamaño en MB"
 
-#: .\apps\project\specific\internal\ops\registry.py:1113
+#: registry.py:1113
 msgid "Rotate from this size on."
 msgstr "Rotar a partir de este tamaño."
 
-#: .\apps\project\specific\internal\ops\registry.py:1117
+#: registry.py:1117
 msgid "Rotated files to keep"
 msgstr "Rotados que se conservan"
 
-#: .\apps\project\specific\internal\ops\registry.py:1120
+#: registry.py:1120
 msgid ""
 "The older ones are deleted. 0 keeps them all, and fills the disk sooner or "
 "later."
@@ -1330,18 +1310,17 @@ msgstr ""
 "Los más viejos se borran. Con 0 se guardan todos, y tarde o temprano se "
 "llena el disco."
 
-#: .\apps\project\specific\internal\ops\registry.py:1128
-#| msgid "Collect static files"
+#: registry.py:1128
 msgid "Locate a static file"
 msgstr "Localizar un archivo estático"
 
-#: .\apps\project\specific\internal\ops\registry.py:1129
+#: registry.py:1129
 msgid "Says which folder a CSS, JS or image file is really being served from."
 msgstr ""
 "Dice desde qué carpeta se está sirviendo de verdad un fichero CSS, JS o de "
 "imagen."
 
-#: .\apps\project\specific\internal\ops\registry.py:1132
+#: registry.py:1132
 msgid ""
 "When a page looks broken after a deploy, the question is whether the file "
 "was collected at all and which copy won. This answers both: it lists every "
@@ -1352,36 +1331,36 @@ msgstr ""
 "todos los sitios donde aparece el fichero, en el orden en que Django los "
 "busca."
 
-#: .\apps\project\specific\internal\ops\registry.py:1137
+#: registry.py:1137
 msgid "A stylesheet 404s, or a change to it does not show up."
 msgstr "Una hoja de estilos da 404, o un cambio en ella no se ve."
 
-#: .\apps\project\specific\internal\ops\registry.py:1143
+#: registry.py:1143
 msgid "Path of the file"
 msgstr "Ruta del fichero"
 
-#: .\apps\project\specific\internal\ops\registry.py:1147
+#: registry.py:1147
 msgid "Relative to the static folder, for example css/aegis_header.css."
 msgstr "Relativa a la carpeta de estáticos, por ejemplo css/aegis_header.css."
 
-#: .\apps\project\specific\internal\ops\registry.py:1153
+#: registry.py:1153
 msgid "Only the winning copy"
 msgstr "Solo la copia que gana"
 
-#: .\apps\project\specific\internal\ops\registry.py:1155
+#: registry.py:1155
 msgid "Stops at the first match, which is the one actually served."
 msgstr ""
 "Se detiene en la primera coincidencia, que es la que se sirve de verdad."
 
-#: .\apps\project\specific\internal\ops\registry.py:1163
+#: registry.py:1163
 msgid "Installed scheduled lines"
 msgstr "Líneas programadas instaladas"
 
-#: .\apps\project\specific\internal\ops\registry.py:1164
+#: registry.py:1164
 msgid "Lists the lines django-crontab has written into the crontab."
 msgstr "Lista las líneas que django-crontab ha escrito en el crontab."
 
-#: .\apps\project\specific\internal\ops\registry.py:1167
+#: registry.py:1167
 msgid ""
 "What is really installed, as opposed to what CRONJOBS declares. The two "
 "drift apart on their own: the installed line carries a hash of the whole job"
@@ -1395,16 +1374,15 @@ msgstr ""
 " que ya no existe. Léelo junto a la comprobación de tareas programadas, que "
 "compara las dos."
 
-#: .\apps\project\specific\internal\ops\registry.py:1182
-#| msgid "Scheduled tasks"
+#: registry.py:1182
 msgid "Install the scheduled tasks"
 msgstr "Instalar las tareas programadas"
 
-#: .\apps\project\specific\internal\ops\registry.py:1183
+#: registry.py:1183
 msgid "Writes every job declared in CRONJOBS into the crontab."
 msgstr "Escribe en el crontab todas las tareas declaradas en CRONJOBS."
 
-#: .\apps\project\specific\internal\ops\registry.py:1185
+#: registry.py:1185
 msgid ""
 "Declaring a task in settings schedules nothing until this runs. It is also "
 "the fix when a schedule changed: it is safe to run repeatedly, because "
@@ -1416,7 +1394,7 @@ msgstr ""
 "las veces que haga falta, porque django-crontab quita sus propias líneas "
 "antes de volver a escribirlas — nunca toca líneas que no escribió él."
 
-#: .\apps\project\specific\internal\ops\registry.py:1190
+#: registry.py:1190
 msgid ""
 "After deploying a change to CRONJOBS, or when the scheduled-tasks check "
 "reports nothing installed."
@@ -1424,7 +1402,7 @@ msgstr ""
 "Después de desplegar un cambio en CRONJOBS, o cuando la comprobación de "
 "tareas programadas dice que no hay nada instalado."
 
-#: .\apps\project\specific\internal\ops\registry.py:1198
+#: registry.py:1198
 msgid ""
 "It rewrites this account crontab lines for this project. Run the scheduled-"
 "tasks check afterwards to confirm what ended up there."
@@ -1432,16 +1410,15 @@ msgstr ""
 "Reescribe las líneas del crontab de esta cuenta para este proyecto. Ejecuta "
 "después la comprobación de tareas programadas para confirmar qué acabó ahí."
 
-#: .\apps\project\specific\internal\ops\registry.py:1204
-#| msgid "Scheduled tasks"
+#: registry.py:1204
 msgid "Uninstall the scheduled tasks"
 msgstr "Desinstalar las tareas programadas"
 
-#: .\apps\project\specific\internal\ops\registry.py:1205
+#: registry.py:1205
 msgid "Removes this project lines from the crontab."
 msgstr "Quita del crontab las líneas de este proyecto."
 
-#: .\apps\project\specific\internal\ops\registry.py:1207
+#: registry.py:1207
 msgid ""
 "Nothing scheduled runs after this: anchors stop maturing, the daily code "
 "stops being issued. It is half of the repair when a schedule changed — "
@@ -1453,23 +1430,23 @@ msgstr ""
 "cambia un horario —quitar y volver a instalar— y por sí solo sirve "
 "únicamente para dejar la plataforma fuera de servicio."
 
-#: .\apps\project\specific\internal\ops\registry.py:1212
+#: registry.py:1212
 msgid "Before reinstalling the tasks after changing a schedule."
 msgstr "Antes de reinstalar las tareas después de cambiar un horario."
 
-#: .\apps\project\specific\internal\ops\registry.py:1219
+#: registry.py:1219
 msgid "Nothing runs on its own until the tasks are installed again."
 msgstr "No se ejecuta nada solo hasta que las tareas se vuelvan a instalar."
 
-#: .\apps\project\specific\internal\ops\registry.py:1224
+#: registry.py:1224
 msgid "Failed login attempts"
 msgstr "Intentos de acceso fallidos"
 
-#: .\apps\project\specific\internal\ops\registry.py:1225
+#: registry.py:1225
 msgid "Lists the login failures axes is counting right now."
 msgstr "Lista los fallos de acceso que axes está contando ahora mismo."
 
-#: .\apps\project\specific\internal\ops\registry.py:1227
+#: registry.py:1227
 msgid ""
 "Where to look when someone says they cannot log in. It tells a lockout apart"
 " from a wrong password, which look identical from the outside. Note that a "
@@ -1481,19 +1458,19 @@ msgstr ""
 " bloqueo va por pareja (IP, usuario), así que la misma persona puede estar "
 "bloqueada desde la oficina y entrar desde su móvil."
 
-#: .\apps\project\specific\internal\ops\registry.py:1233
+#: registry.py:1233
 msgid "A user reports that their password stopped working."
 msgstr "Un usuario avisa de que su contraseña dejó de funcionar."
 
-#: .\apps\project\specific\internal\ops\registry.py:1240
+#: registry.py:1240
 msgid "Unlock an IP"
 msgstr "Desbloquear una IP"
 
-#: .\apps\project\specific\internal\ops\registry.py:1241
+#: registry.py:1241
 msgid "Clears the login lockout for one IP address."
 msgstr "Quita el bloqueo de acceso de una sola dirección IP."
 
-#: .\apps\project\specific\internal\ops\registry.py:1243
+#: registry.py:1243
 msgid ""
 "The surgical fix when a real user is locked out: it frees that address and "
 "nobody else. This is about the login lockout, which is a different thing "
@@ -1506,29 +1483,29 @@ msgstr ""
 "desde la tabla de IP bloqueadas o desde la lista blanca, y se ve como un 404"
 " normal y corriente, no como un error de acceso."
 
-#: .\apps\project\specific\internal\ops\registry.py:1249
+#: registry.py:1249
 msgid "An office got locked out after several typed passwords."
 msgstr "Una oficina se quedó bloqueada después de teclear varias contraseñas."
 
-#: .\apps\project\specific\internal\ops\registry.py:1255
+#: registry.py:1255
 msgid "IP address"
 msgstr "Dirección IP"
 
-#: .\apps\project\specific\internal\ops\registry.py:1259
+#: registry.py:1259
 msgid "The one showing in the failed attempts."
 msgstr "La que aparece en los intentos fallidos."
 
-#: .\apps\project\specific\internal\ops\registry.py:1267
+#: registry.py:1267
 msgid "Unlock one person"
 msgstr "Desbloquear a una persona"
 
-#: .\apps\project\specific\internal\ops\registry.py:1268
+#: registry.py:1268
 msgid "Clears the login lockout for one username, from any address."
 msgstr ""
 "Quita el bloqueo de acceso de un nombre de usuario, desde cualquier "
 "dirección."
 
-#: .\apps\project\specific\internal\ops\registry.py:1271
+#: registry.py:1271
 msgid ""
 "The lockout is per (IP, user) pair, so someone locked out at the office is "
 "still locked out from there after moving to their phone and back. This frees"
@@ -1540,28 +1517,27 @@ msgstr ""
 " esa persona en todas partes sin tocar a nadie más que comparta su "
 "dirección."
 
-#: .\apps\project\specific\internal\ops\registry.py:1276
+#: registry.py:1276
 msgid "A user is still locked out after changing network."
 msgstr "Un usuario sigue bloqueado después de cambiar de red."
 
-#: .\apps\project\specific\internal\ops\registry.py:1282
-#: .\apps\project\specific\internal\ops\registry.py:1309
+#: registry.py:1282 registry.py:1309
 msgid "Username"
 msgstr "Nombre de usuario"
 
-#: .\apps\project\specific\internal\ops\registry.py:1286
+#: registry.py:1286
 msgid "As it appears in the failed attempts."
 msgstr "Tal como aparece en los intentos fallidos."
 
-#: .\apps\project\specific\internal\ops\registry.py:1294
+#: registry.py:1294
 msgid "Second-factor status"
 msgstr "Estado del segundo factor"
 
-#: .\apps\project\specific\internal\ops\registry.py:1295
+#: registry.py:1295
 msgid "Says whether a user has their second factor set up."
 msgstr "Dice si un usuario tiene configurado su segundo factor."
 
-#: .\apps\project\specific\internal\ops\registry.py:1297
+#: registry.py:1297
 msgid ""
 "It changes nothing and shows no secret: only whether the device is "
 "registered. It is the first question to answer when someone says they cannot"
@@ -1575,23 +1551,23 @@ msgstr ""
 "segundo factor verificado — y lo hace con un 404, que desde fuera se ve como"
 " que la página no existe."
 
-#: .\apps\project\specific\internal\ops\registry.py:1303
+#: registry.py:1303
 msgid "Someone reports the admin URL \"does not exist\" for them."
 msgstr "Alguien avisa de que a él la URL del panel «no existe»."
 
-#: .\apps\project\specific\internal\ops\registry.py:1313
+#: registry.py:1313
 msgid "Whose status to check."
 msgstr "De quién se comprueba el estado."
 
-#: .\apps\project\specific\internal\ops\registry.py:1321
+#: registry.py:1321
 msgid "Unlock every login"
 msgstr "Desbloquear todos los accesos"
 
-#: .\apps\project\specific\internal\ops\registry.py:1322
+#: registry.py:1322
 msgid "Clears all login lockouts at once."
 msgstr "Quita de golpe todos los bloqueos de acceso."
 
-#: .\apps\project\specific\internal\ops\registry.py:1324
+#: registry.py:1324
 msgid ""
 "It frees everyone, an attacker in the middle of guessing passwords included."
 " Prefer unlocking a single IP: this one is for when the lockout is clearly "
@@ -1601,25 +1577,25 @@ msgstr ""
 "Es mejor desbloquear una sola IP: esto es para cuando el bloqueo es "
 "claramente culpa de la propia plataforma y hay varias personas atascadas."
 
-#: .\apps\project\specific\internal\ops\registry.py:1329
+#: registry.py:1329
 msgid "After a change that locked out legitimate users in bulk."
 msgstr "Después de un cambio que dejó fuera a usuarios legítimos en bloque."
 
-#: .\apps\project\specific\internal\ops\registry.py:1334
+#: registry.py:1334
 msgid "It also resets the counter of anyone currently guessing passwords."
 msgstr ""
 "Reinicia también el contador de quien esté probando contraseñas en este "
 "momento."
 
-#: .\apps\project\specific\internal\ops\registry.py:1340
+#: registry.py:1340
 msgid "Expired sessions"
 msgstr "Sesiones caducadas"
 
-#: .\apps\project\specific\internal\ops\registry.py:1341
+#: registry.py:1341
 msgid "Deletes sessions that already expired."
 msgstr "Borra las sesiones que ya caducaron."
 
-#: .\apps\project\specific\internal\ops\registry.py:1343
+#: registry.py:1343
 msgid ""
 "Django never cleans up the session table on its own, so it only grows. It "
 "removes nothing that is still valid: nobody gets logged out by running this."
@@ -1628,22 +1604,21 @@ msgstr ""
 "No quita nada que siga siendo válido: ejecutarlo no saca a nadie de su "
 "sesión."
 
-#: .\apps\project\specific\internal\ops\registry.py:1347
+#: registry.py:1347
 msgid "Housekeeping, when the session table has grown a lot."
 msgstr "Mantenimiento, cuando la tabla de sesiones ha crecido mucho."
 
-#: .\apps\project\specific\internal\ops\registry.py:1354
-#| msgid "Send a test hash"
+#: registry.py:1354
 msgid "Send a test email"
 msgstr "Enviar un correo de prueba"
 
-#: .\apps\project\specific\internal\ops\registry.py:1355
+#: registry.py:1355
 msgid "Sends one message to check the mail settings really work."
 msgstr ""
 "Envía un mensaje para comprobar que la configuración de correo funciona de "
 "verdad."
 
-#: .\apps\project\specific\internal\ops\registry.py:1357
+#: registry.py:1357
 msgid ""
 "Email fails silently more often than anything else here, and it fails where "
 "it hurts: the OTP of the public verification, the password recovery link, "
@@ -1657,35 +1632,79 @@ msgstr ""
 "configuración mala de un mensaje que salió y lo filtraron: si llega, la "
 "plataforma hizo su parte."
 
-#: .\apps\project\specific\internal\ops\registry.py:1363
-#| msgid "After changing settings.py, to confirm nothing broke."
+#: registry.py:1363
 msgid "After changing the mail settings, or when OTPs are not arriving."
 msgstr ""
 "Después de cambiar la configuración de correo, o cuando los códigos no "
 "llegan."
 
-#: .\apps\project\specific\internal\ops\registry.py:1370
+#: registry.py:1370
 msgid "Recipient"
 msgstr "Destinatario"
 
-#: .\apps\project\specific\internal\ops\registry.py:1374
+#: registry.py:1374
 msgid "An address you can actually check."
 msgstr "Una dirección que puedas mirar de verdad."
 
-#: .\apps\project\specific\internal\ops\registry.py:1380
-#| msgid "This sends real email to the configured recipients."
+#: registry.py:1380
 msgid "This sends real email."
 msgstr "Esto envía correo real."
 
-#: .\apps\project\specific\internal\ops\registry.py:1384
+#: registry.py:1384
+msgid "Announce a legal document change"
+msgstr "Anunciar un cambio en un documento legal"
+
+#: registry.py:1385
+msgid ""
+"Emails every user about an approved change they have not been told about "
+"yet."
+msgstr ""
+"Manda un correo a cada usuario sobre un cambio aprobado del que todavía no "
+"se le ha avisado."
+
+#: registry.py:1388
+msgid ""
+"Entering the platform after a change is recorded as accepting it, and that "
+"only holds if the person was told first — so this is what opens that door, "
+"not the approval. It runs by itself every half hour; this entry is for "
+"sending it now, or for checking with a dry run who would get it. With "
+"nothing pending it is one query and it stops."
+msgstr ""
+"Entrar en la plataforma después de un cambio se registra como aceptarlo, y "
+"eso sólo vale si antes se avisó a la persona, así que es esto lo que abre "
+"esa puerta y no la aprobación. Se ejecuta solo cada media hora; esta entrada"
+" es para mandarlo ya, o para comprobar en seco a quién le llegaría. Sin nada"
+" pendiente es una consulta y se para."
+
+#: registry.py:1395
+msgid ""
+"Right after approving a new version, instead of waiting for the scheduled "
+"run."
+msgstr ""
+"Justo después de aprobar una versión nueva, en vez de esperar a la pasada "
+"programada."
+
+#: registry.py:1402
+msgid "Only say who would get it"
+msgstr "Sólo decir a quién le llegaría"
+
+#: registry.py:1404
+msgid "Sends nothing and marks nothing."
+msgstr "No manda nada ni marca nada."
+
+#: registry.py:1408
+msgid "Without the dry run this sends real email to every user."
+msgstr "Sin la opción en seco, esto manda correo real a todos los usuarios."
+
+#: registry.py:1412
 msgid "Daily GEA code"
 msgstr "Código diario de GEA"
 
-#: .\apps\project\specific\internal\ops\registry.py:1385
+#: registry.py:1413
 msgid "Issues the daily code and mails it to its recipients."
 msgstr "Emite el código diario y lo envía por correo a sus destinatarios."
 
-#: .\apps\project\specific\internal\ops\registry.py:1387
+#: registry.py:1415
 msgid ""
 "The same thing the scheduled job does. Running it by hand sends real email, "
 "so only use it if the scheduled run failed."
@@ -1693,23 +1712,23 @@ msgstr ""
 "Lo mismo que hace la tarea programada. Ejecutarlo a mano envía correo de "
 "verdad, así que úsalo solo si la ejecución programada falló."
 
-#: .\apps\project\specific\internal\ops\registry.py:1390
+#: registry.py:1418
 msgid "The cron did not run and the code for today is missing."
 msgstr "El cron no se ejecutó y falta el código de hoy."
 
-#: .\apps\project\specific\internal\ops\registry.py:1394
+#: registry.py:1422
 msgid "This sends real email to the configured recipients."
 msgstr "Esto envía correo real a los destinatarios configurados."
 
-#: .\apps\project\specific\internal\ops\registry.py:1408
+#: registry.py:1436
 msgid "Create an app"
 msgstr "Crear una app"
 
-#: .\apps\project\specific\internal\ops\registry.py:1409
+#: registry.py:1437
 msgid "Creates a new app with the project layout already set up."
 msgstr "Crea una app nueva con la estructura del proyecto ya puesta."
 
-#: .\apps\project\specific\internal\ops\registry.py:1411
+#: registry.py:1439
 msgid ""
 "It writes the app with its full dotted name, its urls.py and its locale "
 "folder, which is what makes it fit this project — a plain startapp leaves "
@@ -1723,19 +1742,19 @@ msgstr ""
 " le toca en settings.py sigue siendo un paso manual, y ese orden decide el "
 "del URLconf y el de LOCALE_PATHS."
 
-#: .\apps\project\specific\internal\ops\registry.py:1418
+#: registry.py:1446
 msgid "Starting a new domain area, on a development machine."
 msgstr "Al empezar un área nueva del dominio, en una máquina de desarrollo."
 
-#: .\apps\project\specific\internal\ops\registry.py:1425
+#: registry.py:1453
 msgid "Path of the app"
 msgstr "Ruta de la app"
 
-#: .\apps\project\specific\internal\ops\registry.py:1429
+#: registry.py:1457
 msgid "For example apps/project/specific/documents/reports."
 msgstr "Por ejemplo apps/project/specific/documents/reports."
 
-#: .\apps\project\specific\internal\ops\registry.py:1435
+#: registry.py:1463
 msgid ""
 "It writes new files into the repository. They are not in git until someone "
 "commits them."
@@ -1743,16 +1762,15 @@ msgstr ""
 "Escribe ficheros nuevos en el repositorio. No están en git hasta que alguien"
 " los commitea."
 
-#: .\apps\project\specific\internal\ops\registry.py:1441
-#| msgid "Apply migrations"
+#: registry.py:1469
 msgid "Write migrations"
 msgstr "Escribir migraciones"
 
-#: .\apps\project\specific\internal\ops\registry.py:1442
+#: registry.py:1470
 msgid "Writes the migration files for the model changes."
 msgstr "Escribe los ficheros de migración de los cambios de modelo."
 
-#: .\apps\project\specific\internal\ops\registry.py:1444
+#: registry.py:1472
 msgid ""
 "The writing version of the pending-changes check. It belongs on a "
 "development machine because a migration is source code: it goes through git,"
@@ -1764,25 +1782,24 @@ msgstr ""
 "git, se revisa y se despliega. Generada en el servidor es un fichero que "
 "nadie ha visto, y el siguiente pull o lo borra o choca con él."
 
-#: .\apps\project\specific\internal\ops\registry.py:1450
+#: registry.py:1478
 msgid "After changing a model, before committing."
 msgstr "Después de cambiar un modelo, antes de commitear."
 
-#: .\apps\project\specific\internal\ops\registry.py:1456
+#: registry.py:1484
 msgid "A migration is source code: commit it, do not leave it on a server."
 msgstr ""
 "Una migración es código fuente: commitéala, no la dejes en un servidor."
 
-#: .\apps\project\specific\internal\ops\registry.py:1462
+#: registry.py:1490
 msgid "Extract translatable text"
 msgstr "Extraer el texto traducible"
 
-#: .\apps\project\specific\internal\ops\registry.py:1463
-#| msgid "Turns the .po catalogs into the .mo files Django reads."
+#: registry.py:1491
 msgid "Rewrites the .po catalogs with the strings found in the code."
 msgstr "Reescribe los catálogos .po con las cadenas encontradas en el código."
 
-#: .\apps\project\specific\internal\ops\registry.py:1466
+#: registry.py:1494
 msgid ""
 "It rewrites every catalog in the project, so it belongs where the result can"
 " be reviewed and committed. It also needs gettext installed. On the server "
@@ -1794,27 +1811,26 @@ msgstr ""
 "servidor la mitad útil es la otra —compilar los catálogos— que sí está "
 "disponible en todas partes."
 
-#: .\apps\project\specific\internal\ops\registry.py:1471
+#: registry.py:1499
 msgid "After adding text wrapped in gettext, on a development machine."
 msgstr ""
 "Después de añadir texto envuelto en gettext, en una máquina de desarrollo."
 
-#: .\apps\project\specific\internal\ops\registry.py:1483
-#| msgid "Which catalog to compile."
+#: registry.py:1511
 msgid "Which catalog to rebuild."
 msgstr "Qué catálogo reconstruir."
 
-#: .\apps\project\specific\internal\ops\registry.py:1490
+#: registry.py:1518
 msgid "Models from the schema"
 msgstr "Modelos a partir del esquema"
 
-#: .\apps\project\specific\internal\ops\registry.py:1491
+#: registry.py:1519
 msgid "Prints the models that would match the tables already in the database."
 msgstr ""
 "Imprime los modelos que corresponderían a las tablas que ya hay en la base "
 "de datos."
 
-#: .\apps\project\specific\internal\ops\registry.py:1494
+#: registry.py:1522
 msgid ""
 "Reads the schema and writes nothing. It is for comparing what the database "
 "really has against what the code declares, when the two have drifted apart. "
@@ -1824,21 +1840,21 @@ msgstr ""
 "en la base de datos con lo que declara el código, cuando los dos se han "
 "separado. La salida es un borrador, nunca algo que pegar tal cual."
 
-#: .\apps\project\specific\internal\ops\registry.py:1499
+#: registry.py:1527
 msgid "Chasing a mismatch between a table and its model."
 msgstr "Persiguiendo un desajuste entre una tabla y su modelo."
 
-#: .\apps\project\specific\internal\ops\registry.py:1507
+#: registry.py:1535
 msgid "SQL to fix the sequences"
 msgstr "SQL para arreglar las secuencias"
 
-#: .\apps\project\specific\internal\ops\registry.py:1508
+#: registry.py:1536
 msgid "Prints the SQL that puts the auto-increment counters back in place."
 msgstr ""
 "Imprime el SQL que vuelve a poner en su sitio los contadores de "
 "autoincremento."
 
-#: .\apps\project\specific\internal\ops\registry.py:1511
+#: registry.py:1539
 msgid ""
 "It only prints: nothing runs. It is what is needed after loading rows with "
 "explicit ids, when the counter is left behind and the next insert collides "
@@ -1848,25 +1864,24 @@ msgstr ""
 "filas con ids explícitos, cuando el contador se queda atrás y el siguiente "
 "insert choca con una fila que ya existe."
 
-#: .\apps\project\specific\internal\ops\registry.py:1515
+#: registry.py:1543
 msgid "After importing data with fixed ids into a development database."
 msgstr ""
 "Después de importar datos con ids fijos en una base de datos de desarrollo."
 
-#: .\apps\project\specific\internal\ops\registry.py:1527
+#: registry.py:1555
 msgid "Label of the app, for example buyers."
 msgstr "Etiqueta de la app, por ejemplo buyers."
 
-#: .\apps\project\specific\internal\ops\registry.py:1535
-#| msgid "Launch the test process"
+#: registry.py:1563
 msgid "Run the test suite"
 msgstr "Ejecutar la suite de pruebas"
 
-#: .\apps\project\specific\internal\ops\registry.py:1536
+#: registry.py:1564
 msgid "Runs the tests against SQLite in memory."
 msgstr "Ejecuta las pruebas contra SQLite en memoria."
 
-#: .\apps\project\specific\internal\ops\registry.py:1538
+#: registry.py:1566
 msgid ""
 "They run with app_core.settings_test because the MySQL user on cPanel cannot"
 " create the test_ database — which is also why this is a development-only "
@@ -1879,15 +1894,15 @@ msgstr ""
 "cerraron, así que un resultado en rojo merece leerse antes de dar por hecho "
 "que la prueba está vieja."
 
-#: .\apps\project\specific\internal\ops\registry.py:1544
+#: registry.py:1572
 msgid "Before pushing, on a development machine."
 msgstr "Antes de hacer push, en una máquina de desarrollo."
 
-#: .\apps\project\specific\internal\ops\registry.py:1554
+#: registry.py:1582
 msgid "Runs the suite and writes the summary the charts read."
 msgstr "Ejecuta la suite y escribe el resumen que leen las gráficas."
 
-#: .\apps\project\specific\internal\ops\registry.py:1556
+#: registry.py:1584
 msgid ""
 "The same suite as the entry above, but keeping what it usually throws away: "
 "which test, from which app, how long it took and how it ended. It also "
@@ -1904,23 +1919,23 @@ msgstr ""
 "subproceso propio porque coverage tiene que arrancar antes de que Django "
 "importe nada."
 
-#: .\apps\project\specific\internal\ops\registry.py:1565
+#: registry.py:1593
 msgid "Before a release, to see which app is thin on tests."
 msgstr "Antes de una entrega, para ver qué app va floja de pruebas."
 
-#: .\apps\project\specific\internal\ops\registry.py:1572
+#: registry.py:1600
 msgid "Skip coverage"
 msgstr "Saltar la cobertura"
 
-#: .\apps\project\specific\internal\ops\registry.py:1574
+#: registry.py:1602
 msgid "Only the results. Runs noticeably faster."
 msgstr "Solo los resultados. Va bastante más rápido."
 
-#: .\apps\project\specific\internal\ops\registry.py:1578
+#: registry.py:1606
 msgid "Also the navigable HTML"
 msgstr "También el HTML navegable"
 
-#: .\apps\project\specific\internal\ops\registry.py:1580
+#: registry.py:1608
 msgid ""
 "Writes htmlcov/, which is what shows the missing line. Only useful on a "
 "machine you can browse."
@@ -1928,15 +1943,15 @@ msgstr ""
 "Escribe htmlcov/, que es lo que enseña la línea que falta. Solo sirve en una"
 " máquina donde puedas navegar."
 
-#: .\apps\project\specific\internal\ops\registry.py:1592
+#: registry.py:1620
 msgid "Database backup"
 msgstr "Copia de seguridad de la base de datos"
 
-#: .\apps\project\specific\internal\ops\registry.py:1593
+#: registry.py:1621
 msgid "Writes a full dump of the database to disk."
 msgstr "Escribe un volcado completo de la base de datos en disco."
 
-#: .\apps\project\specific\internal\ops\registry.py:1595
+#: registry.py:1623
 msgid ""
 "Produces a file with everything in the database. Where it lands matters: "
 "anyone who can read that path can read every record, including the encrypted"
@@ -1946,19 +1961,19 @@ msgstr ""
 "importa: quien pueda leer esa ruta puede leer todos los registros, incluidos"
 " los campos de datos personales cifrados."
 
-#: .\apps\project\specific\internal\ops\registry.py:1599
+#: registry.py:1627
 msgid "Right before applying a risky migration."
 msgstr "Justo antes de aplicar una migración arriesgada."
 
-#: .\apps\project\specific\internal\ops\registry.py:1605
+#: registry.py:1633
 msgid "Output folder"
 msgstr "Carpeta de salida"
 
-#: .\apps\project\specific\internal\ops\registry.py:1608
+#: registry.py:1636
 msgid "Folder for the dump, relative to the project root."
 msgstr "Carpeta para el volcado, relativa a la raíz del proyecto."
 
-#: .\apps\project\specific\internal\ops\registry.py:1614
+#: registry.py:1642
 msgid ""
 "The dump contains every record. Keep it out of any folder the web server can"
 " serve."
@@ -1966,27 +1981,27 @@ msgstr ""
 "El volcado lleva todos los registros. Mantenlo fuera de cualquier carpeta "
 "que el servidor web pueda servir."
 
-#: .\apps\project\specific\internal\ops\runner.py:120
+#: runner.py:120
 #, python-format
 msgid "%(label)s is required."
 msgstr "%(label)s es obligatorio."
 
-#: .\apps\project\specific\internal\ops\runner.py:129
+#: runner.py:129
 #, python-format
 msgid "%(label)s must be a whole number."
 msgstr "%(label)s tiene que ser un número entero."
 
-#: .\apps\project\specific\internal\ops\runner.py:136
+#: runner.py:136
 #, python-format
 msgid "%(label)s: \"%(value)s\" is not one of the allowed values."
 msgstr "%(label)s: \"%(value)s\" no es uno de los valores permitidos."
 
-#: .\apps\project\specific\internal\ops\runner.py:153
+#: runner.py:153
 #, python-format
 msgid "%(label)s contains characters that are not allowed."
 msgstr "%(label)s contiene caracteres que no están permitidos."
 
-#: .\apps\project\specific\internal\ops\runner.py:279
+#: runner.py:279
 msgid ""
 "The program could not be found. For manage.py, check BASE_DIR; for git, "
 "check that it is on the PATH."
@@ -1994,24 +2009,23 @@ msgstr ""
 "No se encontró el programa. Para manage.py, revisa BASE_DIR; para git, "
 "comprueba que esté en el PATH."
 
-#: .\apps\project\specific\internal\ops\summary.py:34
+#: summary.py:34
 msgid "Pass"
 msgstr "Pasa"
 
-#: .\apps\project\specific\internal\ops\summary.py:35
-#| msgid "Failed"
+#: summary.py:35
 msgid "Fail"
 msgstr "Falla"
 
-#: .\apps\project\specific\internal\ops\summary.py:36
+#: summary.py:36
 msgid "Error"
 msgstr "Error"
 
-#: .\apps\project\specific\internal\ops\summary.py:37
+#: summary.py:37
 msgid "Skipped"
 msgstr "Saltada"
 
-#: .\apps\project\specific\internal\ops\summary.py:38
+#: summary.py:38
 msgid "Expected failure"
 msgstr "Fallo esperado"
 

@@ -332,6 +332,7 @@ Reglas que se deducen del grafo — respétalas al añadir código:
 | Tareas programadas | `apps/common/utils/cron.py` |
 | Filtros y tags de plantilla | `apps/common/utils/templatetags/custom_filters.py` |
 | Landing pública y `health/` | `apps/common/core/views.py` |
+| **Documentos legales: texto, aprobación y aceptación** | `apps/common/core/models.py` + `legal.py` (constancia) + `legal_html.py` (saneado) + `legal_pdf.py` |
 | Usuario, PII cifrada, geografía | `apps/project/common/users/models.py` |
 | Registro por wizard, recuperar contraseña | `apps/project/common/account/views.py` + `forms/` |
 | **Entrar con código al correo** | `account/login_view.py` (los pasos) + `account/otp_login.py` (el código) + `account/emails.py` |
@@ -672,6 +673,9 @@ Sin build ni SPA. Plantillas Django + Bootstrap 5 por CDN; `templates/raw.html` 
 25. **El estado de un bloqueo se calcula, no se guarda.** `is_active` es el interruptor manual; `IPBlockedModel.is_currently_blocked` lo combina con el reloj y se evalúa al leerlo, así que el admin enseña siempre el estado real sin cron ni columna que mantener. Guardarlo obligaría a una tarea periódica que lo corrigiera, y mientras tanto la tabla mostraría como activos bloqueos caducados hace meses — que es exactamente lo que pasaba. Lo mismo vale para el origen de la IP (`netintel.py`): se resuelve **sin salir a la red**, con una tabla de prefijos que viaja en el repositorio, porque una consulta a un servicio de reputación metería una llamada de red en el camino crítico de cada petición, con `ATOMIC_REQUESTS` puesto, y le contaría a un tercero quién visita el sitio. La etiqueta de datacenter es un dato para leer la fila, **nunca** un motivo de bloqueo por sí sola: una VPN comercial sale por los mismos rangos.
 
 26. **Un respaldo no puede deshacer el cifrado de campo.** `dumpdata` serializa el **valor de Python**, y en los campos de `django-encrypted-model-fields` ese valor es el ya descifrado: los volcados de usuarios salían con el correo, el teléfono y el pasaporte en claro. `FIELD_ENCRYPTION_KEY` protege la base de datos contra un volcado robado; el volcado de al lado, sin llave y legible por cualquiera de la máquina, era ese volcado robado ya servido. Hoy `db_backup` cifra lo que lleva PII (`GEA_BACKUP_PASSPHRASE`), escribe todo con permisos 600 —abriendo el fichero ya con ellos, no con un `chmod` posterior, porque entre una cosa y otra hay una ventana— y **sin contraseña no escribe la PII**: hay que pedirlo con `--allow-plaintext`. `GENERAL_APPS` no puede contener ninguna app de `APPS_WITH_PII`; el comando se niega en vez de escribirla. Lo cubre `utils/tests/test_backup.py`, cuya primera prueba **reproduce el fallo** para avisar el día que la biblioteca deje de comportarse así.
+28. **La constancia de una autorizacion es la huella, no el texto.** Los cuatro documentos legales ya no son plantillas: son `LegalDocumentVersionModel`, y cada aceptacion (`LegalAcceptanceModel`) guarda **quien, cuando, que y como** — el «que» es el `content_hash` copiado, no una referencia a secas. El articulo 9 de la Ley 1581 no pide saber que el titular acepto, pide poder demostrarlo, y con el texto en una plantilla eso era imposible: se desplegaba encima y lo anterior desaparecia. De ahi tres reglas que no se pueden romper. Una: **una version aprobada no se edita**, se aprueba otra — lo impiden `clean()` y una `CheckConstraint`, porque editar el texto que alguien acepto deja la constancia apuntando a algo que ya no existe. Dos: **el estado vive solo en `status`**; antes estaba en la plantilla *y* en `settings.LEGAL_DOCUMENT_VERSIONS`, dos marcas que nada obligaba a mantener de acuerdo. Y tres: **entrar no acepta lo que no se ha avisado** — `accept_on_login()` se niega a registrar una version sin `notified_at`, porque consentimiento por conducta sin aviso previo es darlo por hecho; el aviso (`notify_legal_changes`, por cron) va primero. Lo cubre `core/tests/test_legal.py`.
+29. **Lo que se redacta en el admin y se publica sin autenticar va saneado.** El cuerpo de un documento legal es HTML de un editor con boton de codigo fuente, y sus paginas las ve cualquiera. `core/legal_html.sanitize_legal_html()` deja pasar solo su lista blanca de etiquetas, atributos y esquemas de enlace, y **conserva el texto** de lo que descarta: a un documento legal no se le puede caer una clausula por una etiqueta rara. Esa lista es la misma que ofrece el editor (`CKEDITOR_5_CONFIGS['legal']`) y la misma que pinta `legal_pdf.py`; si divergen, algo que se escribe no se ve o algo que se ve no llega al papel. `mark_safe` sobre lo que salga del admin sin pasar por ahi seria un `<script>` en la cara de cada visitante, y esa es la razon escrita en `BANDIT_ACCEPTED`.
+
 27. **Nada de fuera se ejecuta sin `integrity`.** Un `<script src="https://cdn…">` sin él es una promesa de que el CDN servirá siempre lo mismo, y la pantalla de acceso —donde se teclean la contraseña y el código— cargaba varios. Estaba además del revés: el **CSS** de Bootstrap lo llevaba y el **JS** no, o sea firmado justo lo que no ejecuta nada. Y `bootstrap-icons` se cargaba **sin versión** en 28 plantillas, siguiendo a la última publicación del paquete. Las dos únicas excepciones —el kit de Font Awesome y los formularios embebidos de JotForm— son URL mutables por diseño y están declaradas **con su motivo** en `utils/tests/test_sri.py`, que falla si aparece un tercero nuevo sin firmar.
 
 ---
@@ -813,6 +817,10 @@ CodeRegistrationModel            (traza de cada código emitido)
 MediaAsset ─1:N─ MediaAssetInteraction
 MediaAsset ─1:N─ MediaAssetUserStats  (unique por usuario+activo)
 
+LegalDocumentModel ─1:N─ LegalDocumentVersionModel ─1:N─ LegalAcceptanceModel
+   (documento)            (texto es/en, estado, hash,        (quién, cuándo,
+                           aprobador, vigencia)               qué hash, cómo)
+
 GeaDailyUniqueCode   (código diario, kind GENERAL/BUYER, único por fecha+kind)
 IPBlockedModel / WhiteListedIPModel
 ```
@@ -832,6 +840,8 @@ IPBlockedModel / WhiteListedIPModel
 **Mover un código dentro del PDF**: edita el `StampPlacementModel` correspondiente (coordenadas en puntos PostScript, medidas desde el anclaje hacia el interior) y vuelve a certificar.
 
 **Cambiar textos visibles**: edita el código con `_()`, luego `makemessages -l es` / `compilemessages`, o usa Rosetta desde el admin.
+
+**Cambiar un documento legal** (términos, datos, privacidad, cookies): en el admin, `Legal document versions` → **crear una versión nueva** (nunca editar la aprobada), redactar en los dos idiomas con el editor, escribir **qué cambió** —ese texto es el que reciben los usuarios— y ejecutar la acción *Aprobar*. El aviso sale solo en la siguiente pasada del cron, o desde la consola de operaciones con «Anunciar un cambio». Sólo después de ese aviso empieza a contar el uso continuado como aceptación.
 
 **Depurar un bloqueo de IP**: revisa `IPBlockedModel` (tabla `apps_common_utils_ipblocked`); `session_info` guarda los paths intentados. Añade la IP a `WhiteListedIPModel` o ajusta `blocked_until`. Ojo: desde fuera un bloqueo se ve como un 404 normal y corriente, así que el síntoma que reporta el usuario es «la página no existe», no «me han bloqueado». La confirmación está en la tabla y en el log (`Blocked IP … attempted access to …`).
 

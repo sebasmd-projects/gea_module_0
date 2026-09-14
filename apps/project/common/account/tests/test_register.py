@@ -110,8 +110,11 @@ class WizardMixin:
             'phone_number': '3001234567',
         }, url=url)
 
-        return self.step(STEP_CODE, {'unique_code': code},
-                         url=url, expect_ok=False)
+        return self.step(
+            STEP_CODE,
+            {'unique_code': code, 'accepted_terms': 'on'},
+            url=url, expect_ok=False,
+        )
 
     def daily_code(self, code='CODIGODELDIA', kind=None):
         return GeaDailyUniqueCode.objects.create(
@@ -240,8 +243,11 @@ class TestTheBuyerCodeGoesToTheirEmail(WizardMixin, TestCase):
     def test_the_emailed_code_lets_them_in(self):
         email = self.start_buyer()
 
-        self.step(STEP_CODE, {'unique_code': self.buyer_code_for(email)},
-                  expect_ok=False)
+        self.step(
+            STEP_CODE,
+            {'unique_code': self.buyer_code_for(email), 'accepted_terms': 'on'},
+            expect_ok=False,
+        )
 
         self.assertTrue(UserModel.objects.filter(username='comprador').exists())
 
@@ -258,7 +264,11 @@ class TestTheBuyerCodeGoesToTheirEmail(WizardMixin, TestCase):
             'AAAAAAAAAA', 600,
         )
 
-        self.step(STEP_CODE, {'unique_code': 'AAAAAAAAAA'}, expect_ok=False)
+        self.step(
+            STEP_CODE,
+            {'unique_code': 'AAAAAAAAAA', 'accepted_terms': 'on'},
+            expect_ok=False,
+        )
 
         self.assertFalse(
             UserModel.objects.filter(username='comprador').exists())
@@ -271,7 +281,11 @@ class TestTheBuyerCodeGoesToTheirEmail(WizardMixin, TestCase):
         email = self.start_buyer()
         code = self.buyer_code_for(email)
 
-        self.step(STEP_CODE, {'unique_code': code}, expect_ok=False)
+        self.step(
+            STEP_CODE,
+            {'unique_code': code, 'accepted_terms': 'on'},
+            expect_ok=False,
+        )
 
         self.assertIsNone(self.buyer_code_for(email))
 
@@ -280,7 +294,11 @@ class TestTheBuyerCodeGoesToTheirEmail(WizardMixin, TestCase):
         self.daily_code('CODIGODELDIA')
         self.start_buyer()
 
-        self.step(STEP_CODE, {'unique_code': 'CODIGODELDIA'}, expect_ok=False)
+        self.step(
+            STEP_CODE,
+            {'unique_code': 'CODIGODELDIA', 'accepted_terms': 'on'},
+            expect_ok=False,
+        )
 
         self.assertFalse(
             UserModel.objects.filter(username='comprador').exists())

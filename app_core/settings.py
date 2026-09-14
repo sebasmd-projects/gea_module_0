@@ -78,6 +78,7 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     'auditlog',
+    'django_ckeditor_5',
     'axes',
     'compressor',
     'corsheaders',
@@ -488,21 +489,59 @@ CRONJOBS = [
     ('0 19 * * *', 'apps.common.utils.cron.generate_and_send_gea_code'),
     ('*/3 * * * *', 'apps.common.utils.cron.warm_gea_app'),
     ('0 * * * *', 'django.core.management.call_command', ['rotate_logs']),
+
+    # El aviso de un cambio en un documento legal. Cada media hora y no cada
+    # minuto porque aprobar un texto pasa tres veces al año; sin nada pendiente
+    # es una consulta y se va. Va por cron y no dentro de la peticion de
+    # aprobar porque mandar cientos de correos con ATOMIC_REQUESTS puesto
+    # tendria la transaccion abierta todo ese rato.
+    ('*/30 * * * *', 'django.core.management.call_command',
+     ['notify_legal_changes']),
 ]
 
-# --- Documentos legales: version y fecha de vigencia -------------------
+# --- Documentos legales ------------------------------------------------
 #
-# Van aqui y no dentro de cada plantilla porque el articulo 18 de la propia
-# politica obliga a publicar la fecha de entrada en vigor de cada
-# modificacion, y sin version no se puede demostrar que texto acepto alguien
-# el dia que se registro. Repartidas por las plantillas, actualizar una y
-# olvidar otra es cuestion de tiempo.
-LEGAL_DOCUMENT_VERSIONS = {
-    'terms': {'version': '1.0.0-borrador', 'date': date(2026, 9, 1)},
-    'data_policy': {'version': '1.0.0-borrador', 'date': date(2026, 9, 1)},
-    'privacy': {'version': '1.0.0-borrador', 'date': date(2026, 9, 1)},
-    'cookies': {'version': '1.0.0-borrador', 'date': date(2026, 9, 1)},
+# La version, la fecha de vigencia y el estado ya NO se configuran aqui: viven
+# en `LegalDocumentVersionModel`, que es el unico sitio donde no pueden
+# contradecir al texto publicado. Lo que queda aqui es como se redacta.
+#
+# La configuracion del editor de los documentos legales.
+#
+# La barra es corta a proposito. Lo que se redacta aqui es un texto juridico
+# que ademas se convierte en PDF, y cada boton de mas es una etiqueta que el
+# convertidor de `legal_pdf.py` tiene que saber pintar: un color de fondo o una
+# fuente rara no llegan al papel, asi que ofrecerlos es prometer algo que no se
+# cumple. Lo que hay aqui es exactamente lo que el PDF sabe reproducir.
+CKEDITOR_5_CONFIGS = {
+    'legal': {
+        'toolbar': [
+            'heading', '|',
+            'bold', 'italic', 'link', '|',
+            'bulletedList', 'numberedList', '|',
+            'insertTable', 'blockQuote', '|',
+            'undo', 'redo', 'sourceEditing',
+        ],
+        'heading': {
+            'options': [
+                {'model': 'paragraph', 'title': 'Parrafo',
+                 'class': 'ck-heading_paragraph'},
+                {'model': 'heading2', 'view': 'h2', 'title': 'Apartado',
+                 'class': 'ck-heading_heading2'},
+                {'model': 'heading3', 'view': 'h3', 'title': 'Subapartado',
+                 'class': 'ck-heading_heading3'},
+            ]
+        },
+        'table': {
+            'contentToolbar': ['tableColumn', 'tableRow', 'mergeTableCells'],
+        },
+        'language': 'es',
+    },
 }
+
+# Sin subidas desde el editor: un documento legal no lleva imagenes, y una
+# carpeta de subidas mas seria una carpeta mas que decidir en
+# `deploy/media.htaccess` (invariante 13) para no ganar nada.
+CKEDITOR_5_FILE_UPLOAD_PERMISSION = 'staff'
 
 PQRS_NOTIFICATION_RECIPIENTS = [
     correo.strip()

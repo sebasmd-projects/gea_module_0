@@ -45,6 +45,9 @@
       {% if document_date %}
         · {% trans 'In force since' %} {{ document_date|date:"d/m/Y" }}
       {% endif %}
+      {% if document_key %}
+        · <a href="{% url 'core:legal_pdf' document_key %}">{% trans 'Download as PDF' %}</a>
+      {% endif %}
     </p>
 
     {% block document_body %}{% endblock %}
