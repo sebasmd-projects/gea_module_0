@@ -6,15 +6,18 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import ValidationError
 from django.db.models import Q
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.http import urlencode
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import (CreateView, DetailView, FormView,
-                                  ListView, TemplateView)
+                                  ListView, TemplateView, View)
 
 from .history import annotate_flat, build_history_tree
+from .services.usb_bundle import NotReadyToExport, build_bundle
+from .services.usb_readiness import export_state
 from .preview import placements_as_data, render_preview_container
 
 from .constants import (HASH_B64_DEFAULT_LENGTH, RANDOM_CODE_DEFAULT_LENGTH)
@@ -332,7 +335,18 @@ class CodeHistoryListView(InternalToolAccessMixin, ListView):
         context['flat_value'] = self.FLAT
 
         if self.grouped:
-            context['nodes'] = context['object_list']
+            nodes = context['object_list']
+
+            # Solo las ramas de esta pagina. Comprobar si un resumen se puede
+            # llevar en un USB obliga a rehacer su master hash y a leer sus
+            # pruebas de anclaje; hacerlo sobre el historial entero para
+            # enseñar una pagina seria pagar por lo que no se ve. Todo es
+            # local: leer un `.ots` es parsearlo, no consultar la cadena.
+            for node in nodes:
+                if node.is_summary:
+                    node.export = export_state(node.summary)
+
+            context['nodes'] = nodes
             context['code_count'] = getattr(self, 'code_count', 0)
         else:
             # Sobre la pagina ya cortada: dos consultas para veinticinco
@@ -341,6 +355,68 @@ class CodeHistoryListView(InternalToolAccessMixin, ListView):
             context['code_count'] = context['paginator'].count
 
         return context
+
+
+class SummaryUSBExportView(InternalToolAccessMixin, View):
+    """
+    El dossier de un resumen, empaquetado para grabarlo en un USB.
+
+    **Solo si esta todo en verde.** Un USB sale de aqui y no vuelve: no se
+    actualiza, no avisa y no se puede retirar. Exportar un resumen a medias
+    --sellado pero sin confirmar en la cadena, o con un anclaje que ya no cubre
+    el master hash de ahora-- reparte un dossier que parece prueba y no lo es,
+    y quien lo recibe no tiene forma de notarlo. Las cinco condiciones y el
+    porque estan en `services/usb_readiness.py`.
+
+    Se arma en memoria y se devuelve: no se guarda en disco. Un archivo
+    guardado obligaria a decidir su carpeta en `deploy/media.htaccess`
+    (invariante 13) y a regenerarlo cada vez que cambie algo del resumen.
+    """
+
+    def get(self, request, *args, **kwargs):
+        # Import dentro de la funcion: `certificates` y `code_gen` se importan
+        # mutuamente a proposito (CLAUDE.md §4-bis.B) y en el encabezado seria
+        # circular.
+        from apps.project.specific.documents.certificates.models import \
+            AegisSummaryModel
+
+        summary = get_object_or_404(
+            AegisSummaryModel, pk=kwargs['pk'], is_active=True)
+
+        try:
+            nombre, contenido = build_bundle(summary, requested_by=request.user)
+        except NotReadyToExport as falta:
+            # La pagina ya pinta la lista de las cinco, asi que aqui solo se
+            # llega escribiendo la URL o si el estado cambio entre que se
+            # dibujo el boton y se pulso. Un aviso, no cinco: lo que hace falta
+            # es que quede claro por que no bajo el archivo.
+            pendientes = [
+                f'{check.label}: {check.detail}' if check.detail
+                else str(check.label)
+                for check in falta.checks
+                if not check.ok
+            ]
+
+            messages.error(
+                request,
+                _('This summary cannot be exported yet. %(reasons)s')
+                % {'reasons': ' '.join(pendientes)},
+            )
+
+            # Al compositor, que es donde se sella, se emite y se manda a
+            # anclar: es lo que hay que hacer para ponerlo en verde.
+            return redirect('code_gen:summary_compose', pk=summary.pk)
+
+        respuesta = HttpResponse(
+            contenido, content_type='application/zip')
+        respuesta['Content-Disposition'] = f'attachment; filename="{nombre}"'
+
+        logger.info(
+            'Dossier USB generado: resumen=%s por=%s (%s bytes)',
+            summary.pk, request.user.pk, len(contenido),
+        )
+
+        return respuesta
 
 
 class CodeDetailView(InternalToolAccessMixin, DetailView):

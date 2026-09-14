@@ -5,7 +5,8 @@ from .api import (layout_create, layout_placements, preview_symbols,
                   summary_seal)
 from .views import (CodeDetailView, CodeGeneratorView, CodeHistoryListView,
                     StampLayoutEditView, StampLayoutListView,
-                    SummaryComposerView, SummaryCreateView, SummaryListView)
+                    SummaryComposerView, SummaryCreateView, SummaryListView,
+                    SummaryUSBExportView)
 
 app_name = "code_gen"
 
@@ -85,7 +86,14 @@ urlpatterns = [
         name="summary_anchor"
     ),
 
-    # Emitir el PDF de la caja. No espera al anclaje: el QR estampado lleva la
+    # El dossier para el USB. Solo sale si el resumen esta en verde.
+    path(
+        "generate/summary/<uuid:pk>/usb/",
+        SummaryUSBExportView.as_view(),
+        name="summary_usb_export"
+    ),
+
+    # Emitir el PDF del resumen. No espera al anclaje: el QR estampado lleva la
     # URL de la pagina de anclaje, y esa pagina se actualiza sola.
     path(
         "generate/summary/<uuid:pk>/issue/",
