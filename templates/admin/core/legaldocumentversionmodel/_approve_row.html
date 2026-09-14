@@ -1,0 +1,59 @@
+{% load i18n %}
+
+{% comment %}
+  La franja de aprobacion. Tres estados, y cada uno dice lo que toca.
+
+  Cuando ya esta aprobada no se enseña un boton apagado: se dice quien la
+  aprobo y desde cuando rige. Un boton en gris invita a intentarlo y a
+  preguntarse por que no responde; una frase cierra la pregunta.
+{% endcomment %}
+
+{% if original %}
+  {% if original.is_approved %}
+
+    <div class="legal-approve legal-approve--done">
+      <b>✓ {% trans 'Approved' %}</b>
+      —
+      {% blocktrans trimmed with who=original.approved_by since=original.effective_from|date:"d/m/Y" %}
+        approved by {{ who }}, in force since {{ since }}.
+      {% endblocktrans %}
+      {% blocktrans trimmed %}
+        An approved version is not edited: if something has to change, create a
+        new version.
+      {% endblocktrans %}
+    </div>
+
+  {% elif original.es_body %}
+
+    <div class="legal-approve legal-approve--ready">
+      <div class="legal-approve__text">
+        <b>{% trans 'This version is a draft.' %}</b>
+        {% blocktrans trimmed %}
+          Approving it publishes it, freezes its text and its fingerprint, and
+          records your name and today's date. It cannot be edited afterwards.
+        {% endblocktrans %}
+      </div>
+
+      {% comment %}
+        `name="_approve"`: lo atiende `response_change()` del admin, que es
+        quien llama a `approve()`. No se aprueba guardando el formulario,
+        porque guardar es lo que se hace veinte veces mientras se redacta.
+      {% endcomment %}
+      <button type="submit" name="_approve" value="1" class="default legal-approve__button">
+        {% trans 'Approve and publish' %}
+      </button>
+    </div>
+
+  {% else %}
+
+    <div class="legal-approve legal-approve--blocked">
+      <b>{% trans 'This version is a draft.' %}</b>
+      {% blocktrans trimmed %}
+        It has no Spanish text yet. Spanish is the wording that governs, so it
+        cannot be approved empty: write it, save, and the approve button
+        appears here.
+      {% endblocktrans %}
+    </div>
+
+  {% endif %}
+{% endif %}

@@ -1,0 +1,51 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% comment %}
+  El formulario de una version legal, con su boton de aprobar.
+
+  Aprobar estaba **solo** en el desplegable de acciones del listado, y ahi no
+  lo encuentra nadie: quien acaba de redactar el texto esta en esta pantalla,
+  no en la de al lado, y los campos de estado y aprobador salen en gris sin
+  decir donde se cambian. La accion del listado sigue existiendo --sirve para
+  aprobar varias de una vez-- pero la que se usa de verdad es esta.
+
+  El boton va **arriba y abajo**: el cuerpo de un documento legal es largo, y
+  si solo estuviera al final habria que recorrer el texto entero para llegar a
+  el.
+{% endcomment %}
+
+{% block extrahead %}
+  {{ block.super }}
+
+  {% comment %}
+    El estilo va aqui y no en el parcial porque el parcial se incluye dos
+    veces --arriba y abajo-- y saldria duplicado en la pagina.
+  {% endcomment %}
+<style>
+  .legal-approve {
+    display: flex; flex-wrap: wrap; gap: .75rem 1rem;
+    align-items: center; justify-content: space-between;
+    margin: .75rem 0; padding: .8rem 1rem;
+    border-radius: .3rem; font-size: .9rem; line-height: 1.5;
+  }
+  .legal-approve__text { flex: 1 1 20rem; }
+  .legal-approve__button { flex: 0 0 auto; }
+
+  /* El color nunca va solo: cada estado lleva su palabra y su forma, porque
+     el verde y el rojo de esta paleta se separan poco bajo deuteranopia. */
+  .legal-approve--ready   { background: #fbf7ea; border: 1px solid #a17f1a; }
+  .legal-approve--done    { background: #eef6f0; border: 1px solid #1a7a3c; }
+  .legal-approve--blocked { background: #f6eeee; border: 1px solid #a11a1a; }
+</style>
+{% endblock %}
+
+{% block submit_buttons_top %}
+  {% include "admin/core/legaldocumentversionmodel/_approve_row.html" %}
+  {{ block.super }}
+{% endblock %}
+
+{% block submit_buttons_bottom %}
+  {{ block.super }}
+  {% include "admin/core/legaldocumentversionmodel/_approve_row.html" %}
+{% endblock %}

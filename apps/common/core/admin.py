@@ -22,6 +22,7 @@ Tres decisiones que no son de gusto:
 """
 
 from django.contrib import admin
+from django.http import HttpResponseRedirect
 from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
@@ -112,15 +113,58 @@ class LegalDocumentVersionAdmin(admin.ModelAdmin):
             'fields': ('status', 'effective_from', 'approved_by',
                        'approved_at', 'content_hash'),
             'description': _(
-                'Filled in by the approval action. Approving is an act by a '
-                'person, with their name on it.'
+                'Filled in by the approve button at the top and bottom of '
+                'this page. Approving is an act by a person, with their name '
+                'on it — never a field you type into.'
             ),
         }),
     )
 
     readonly_fields = ('status', 'approved_by', 'approved_at', 'content_hash')
 
+    #: Añade la franja de aprobacion arriba y abajo del formulario.
+    change_form_template = (
+        'admin/core/legaldocumentversionmodel/change_form.html'
+    )
+
     actions = ['approve_versions']
+
+    def response_change(self, request, obj):
+        """
+        Atiende el boton «Aprobar y publicar» del formulario.
+
+        Aprobar es un boton propio y no una casilla que se guarda con el resto
+        por dos razones. Una: guardar es lo que se hace veinte veces mientras
+        se redacta, y aprobar pasa una sola vez — mezclarlos convierte un
+        guardado distraido en una publicacion. Y dos: los campos que fija
+        --quien, cuando, desde cuando, con que huella-- son `editable=False`,
+        asi que no hay formulario que pueda ponerlos; los pone `approve()`.
+        """
+        if '_approve' not in request.POST:
+            return super().response_change(request, obj)
+
+        if obj.is_approved:
+            self.message_user(request, _(
+                'It was already approved: an approved version is never '
+                're-approved, a new one is created.'
+            ), level='WARNING')
+
+        elif not (obj.es_body or '').strip():
+            self.message_user(request, _(
+                'It has no Spanish text. Spanish is the wording that governs, '
+                'so it cannot be approved empty.'
+            ), level='ERROR')
+
+        else:
+            obj.approve(user=request.user, effective_from=timezone.localdate())
+
+            self.message_user(request, _(
+                'Approved and in force from today. Users will be told on the '
+                'next run of the notification task, and only then does '
+                'continuing to use the platform count as accepting it.'
+            ))
+
+        return HttpResponseRedirect(request.get_full_path())
 
     @admin.display(description=_('Status'))
     def display_status(self, obj):
