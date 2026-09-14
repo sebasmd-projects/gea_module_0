@@ -33,6 +33,13 @@
 
       <div class="card-body">
         <form method="get" class="row g-2 mb-3">
+          {% comment %}
+            El modo viaja con la busqueda: sin esto, buscar desde la lista
+            devolvia al arbol y parecia que el interruptor se habia soltado
+            solo.
+          {% endcomment %}
+          {% if not grouped %}<input type="hidden" name="view" value="{{ flat_value }}" />{% endif %}
+
           <div class="col-md-6">
             <input type="search" name="q" value="{{ search }}" class="form-control"
                    placeholder="{% trans 'Search by reference, code, sequence or hash' %}" />
@@ -44,28 +51,48 @@
           </div>
           {% if search %}
             <div class="col-auto">
-              <a class="btn btn-link" href="{% url 'code_gen:code_history' %}">{% trans 'Clear' %}</a>
+              <a class="btn btn-link" href="?{% if not grouped %}view={{ flat_value }}{% endif %}">{% trans 'Clear' %}</a>
             </div>
           {% endif %}
         </form>
 
-        {% if not nodes %}
+        {% comment %}
+          Los dos modos no dicen lo mismo, y por eso hay interruptor en vez de
+          elegir uno: el arbol ensena de que resumen es cada certificado, a
+          costa de repetir el que esta en dos; la lista ensena cuantos codigos
+          hay de verdad, a costa de la estructura. Cambiar de modo reinicia la
+          pagina a proposito --la 3 de un modo no es la 3 del otro-- y conserva
+          la busqueda.
+        {% endcomment %}
+        <div class="btn-group btn-group-sm mb-3" role="group"
+             aria-label="{% trans 'How to show the codes' %}">
+          <a class="btn {% if grouped %}btn-secondary active{% else %}btn-outline-secondary{% endif %}"
+             {% if grouped %}aria-current="true"{% endif %}
+             href="?q={{ search|urlencode }}">
+            <i class="fa-solid fa-sitemap me-1" aria-hidden="true"></i>
+            {% trans 'Grouped by summary' %}
+          </a>
+          <a class="btn {% if not grouped %}btn-secondary active{% else %}btn-outline-secondary{% endif %}"
+             {% if not grouped %}aria-current="true"{% endif %}
+             href="?q={{ search|urlencode }}&amp;view={{ flat_value }}">
+            <i class="fa-solid fa-list-ul me-1" aria-hidden="true"></i>
+            {% trans 'One row per code' %}
+          </a>
+        </div>
+
+        {% if not object_list %}
           <p class="text-muted mb-0">{% trans 'No codes issued yet.' %}</p>
         {% else %}
-          {% comment %}
-            El arbol es una tabla con un <tbody> por rama, no <ul> anidados:
-            las columnas tienen que seguir cuadrando entre ramas para poder
-            comparar fechas y codigos de un vistazo, y eso una lista no lo da.
-            La jerarquia va escrita en la propia fila --el codigo del miembro,
-            «Documento del resumen»--, nunca solo en la sangria, que no se lee
-            en voz alta ni sobrevive a copiar y pegar.
-          {% endcomment %}
           <p class="text-muted small">
             {% blocktrans trimmed count counter=code_count %}
               {{ counter }} code issued.
             {% plural %}
               {{ counter }} codes issued.
             {% endblocktrans %}
+
+            {% if grouped %}
+              {% trans 'A certificate that belongs to more than one summary appears under each of them, so there may be more rows than codes.' %}
+            {% endif %}
           </p>
 
           <div class="table-responsive">
@@ -82,80 +109,65 @@
                 </tr>
               </thead>
 
-              {% for node in nodes %}
-                <tbody class="border-top">
-                  {% if node.is_summary %}
-                    <tr class="table-light">
-                      <th colspan="7" scope="rowgroup" class="fw-semibold">
-                        <i class="fa-solid fa-layer-group me-2" aria-hidden="true"></i>
-                        <span class="visually-hidden">{% trans 'Summary:' %}</span>
-                        {{ node.summary.title }}
+              {% if grouped %}
+                {% comment %}
+                  El arbol es una tabla con un <tbody> por rama, no <ul>
+                  anidados: las columnas tienen que seguir cuadrando entre
+                  ramas para poder comparar fechas y codigos de un vistazo, y
+                  eso una lista no lo da. La jerarquia va escrita en la propia
+                  fila --el codigo del miembro, «Documento del resumen»--,
+                  nunca solo en la sangria, que no se lee en voz alta ni
+                  sobrevive a copiar y pegar.
+                {% endcomment %}
+                {% for node in nodes %}
+                  <tbody class="border-top">
+                    {% if node.is_summary %}
+                      <tr class="table-light">
+                        <th colspan="7" scope="rowgroup" class="fw-semibold">
+                          <i class="fa-solid fa-layer-group me-2" aria-hidden="true"></i>
+                          <span class="visually-hidden">{% trans 'Summary:' %}</span>
+                          {{ node.summary.title }}
 
-                        <code class="ms-2">{{ node.summary.public_code|default:'—' }}</code>
+                          <code class="ms-2">{{ node.summary.public_code|default:'—' }}</code>
 
-                        <span class="badge bg-secondary ms-2">{{ node.summary.get_status_display }}</span>
+                          <span class="badge bg-secondary ms-2">{{ node.summary.get_status_display }}</span>
 
-                        <span class="text-muted fw-normal ms-2">
-                          {% blocktrans trimmed count counter=node.count %}
-                            {{ counter }} code
-                          {% plural %}
-                            {{ counter }} codes
-                          {% endblocktrans %}
-                        </span>
+                          <span class="text-muted fw-normal ms-2">
+                            {% blocktrans trimmed count counter=node.count %}
+                              {{ counter }} code
+                            {% plural %}
+                              {{ counter }} codes
+                            {% endblocktrans %}
+                          </span>
 
-                        <a class="btn btn-outline-primary btn-sm float-end"
-                           href="{% url 'code_gen:summary_compose' node.summary.pk %}">
-                          {% trans 'Compose' %}
-                        </a>
-                      </th>
-                    </tr>
-                  {% endif %}
+                          <a class="btn btn-outline-primary btn-sm float-end"
+                             href="{% url 'code_gen:summary_compose' node.summary.pk %}">
+                            {% trans 'Compose' %}
+                          </a>
+                        </th>
+                      </tr>
+                    {% endif %}
 
-                  {% for row in node.rows %}
-                    <tr>
-                      <td class="small text-nowrap">
-                        {% if node.is_summary %}
-                          {% comment %}
-                            Decorativo y solo eso: quien no vea el caracter ya
-                            sabe de que resumen es la fila por la cabecera del
-                            grupo y por el codigo de miembro de la columna de
-                            al lado. De ahi el aria-hidden.
-                          {% endcomment %}
-                          <span class="text-muted me-1" aria-hidden="true">{% if forloop.last %}└{% else %}├{% endif %}</span>
-                        {% endif %}
-                        {{ row.registration.created|date:'d/m/Y H:i' }}
-                      </td>
-                      <td class="small">
-                        {% if row.is_summary_document %}
-                          <span class="badge bg-dark me-1">{% trans 'Summary document' %}</span>
-                        {% elif row.member_code %}
-                          <span class="badge bg-info text-dark me-1">{{ row.member_code }}</span>
-                        {% endif %}
-                        {{ row.registration.reference }}
-                      </td>
-                      <td class="small"><code class="text-break">{{ row.registration.code_information|default:'-' }}</code></td>
-                      <td class="small"><code>{{ row.registration.random_code|default:'-' }}</code></td>
-                      <td class="small text-nowrap">
-                        {% if row.registration.generated_barcode %}<i class="bi bi-upc-scan" title="{% trans 'Barcode' %}"></i>{% endif %}
-                        {% if row.registration.generated_qr %}<i class="bi bi-qr-code ms-1" title="{% trans 'QR code' %}"></i>{% endif %}
-                      </td>
-                      <td class="small">
-                        {% if row.registration.document %}
-                          <span class="badge bg-success">{% trans 'Yes' %}</span>
+                    {% for row in node.rows %}
+                      {% if node.is_summary %}
+                        {% if forloop.last %}
+                          {% include 'dashboard/pages/documents/code_gen/partials/_code_row.html' with registration=row.registration labels=row.labels is_summary_document=row.is_summary_document guide='└' %}
                         {% else %}
-                          <span class="text-muted">—</span>
+                          {% include 'dashboard/pages/documents/code_gen/partials/_code_row.html' with registration=row.registration labels=row.labels is_summary_document=row.is_summary_document guide='├' %}
                         {% endif %}
-                      </td>
-                      <td class="text-end">
-                        <a class="btn btn-outline-primary btn-sm"
-                           href="{% url 'code_gen:code_detail' row.registration.pk %}">
-                          {% trans 'View' %}
-                        </a>
-                      </td>
-                    </tr>
+                      {% else %}
+                        {% include 'dashboard/pages/documents/code_gen/partials/_code_row.html' with registration=row.registration labels=row.labels is_summary_document=row.is_summary_document guide='' %}
+                      {% endif %}
+                    {% endfor %}
+                  </tbody>
+                {% endfor %}
+              {% else %}
+                <tbody>
+                  {% for row in rows %}
+                    {% include 'dashboard/pages/documents/code_gen/partials/_code_row.html' with registration=row.registration labels=row.labels is_summary_document=row.is_summary_document guide='' %}
                   {% endfor %}
                 </tbody>
-              {% endfor %}
+              {% endif %}
             </table>
           </div>
 
@@ -164,7 +176,7 @@
               <ul class="pagination pagination-sm">
                 {% if page_obj.has_previous %}
                   <li class="page-item">
-                    <a class="page-link" href="?q={{ search|urlencode }}&amp;page={{ page_obj.previous_page_number }}">&laquo;</a>
+                    <a class="page-link" href="?q={{ search|urlencode }}{% if not grouped %}&amp;view={{ flat_value }}{% endif %}&amp;page={{ page_obj.previous_page_number }}">&laquo;</a>
                   </li>
                 {% endif %}
 
@@ -176,7 +188,7 @@
 
                 {% if page_obj.has_next %}
                   <li class="page-item">
-                    <a class="page-link" href="?q={{ search|urlencode }}&amp;page={{ page_obj.next_page_number }}">&raquo;</a>
+                    <a class="page-link" href="?q={{ search|urlencode }}{% if not grouped %}&amp;view={{ flat_value }}{% endif %}&amp;page={{ page_obj.next_page_number }}">&raquo;</a>
                   </li>
                 {% endif %}
               </ul>

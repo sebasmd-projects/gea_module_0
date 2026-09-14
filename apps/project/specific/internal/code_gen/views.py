@@ -14,7 +14,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import (CreateView, DetailView, FormView,
                                   ListView, TemplateView)
 
-from .history import build_history_tree
+from .history import annotate_flat, build_history_tree
 from .preview import placements_as_data, render_preview_container
 
 from .constants import (HASH_B64_DEFAULT_LENGTH, RANDOM_CODE_DEFAULT_LENGTH)
@@ -254,21 +254,36 @@ class CodeGeneratorView(InternalToolAccessMixin, FormView):
 
 class CodeHistoryListView(InternalToolAccessMixin, ListView):
     """
-    Todos los codigos emitidos, en arbol: cada resumen con los suyos debajo.
+    Todos los codigos emitidos, en dos modos que no dicen lo mismo.
 
     Cada certificacion registra tambien su codigo, asi que este listado cubre
     igualmente los documentos certificados.
 
-    **Lo que se pagina son ramas, no filas.** Un resumen entra entero o no
-    entra: partirlo por el corte de la pagina lo dejaria repetido arriba en dos
-    paginas con miembros distintos, y un arbol a medias se lee como completo.
-    El armado y el porque estan en `history.py`.
+    - **Arbol** (por defecto): cada resumen con los suyos debajo. Lo que se
+      pagina son **ramas, no filas** — un resumen entra entero o no entra:
+      partirlo por el corte lo dejaria repetido arriba en dos paginas con
+      miembros distintos, y un arbol a medias se lee como completo.
+    - **Lista**: una fila por codigo, sin repetir ninguno, diciendo de que
+      resumenes es cada uno. Aqui no hay ramas que partir, asi que la
+      paginacion vuelve a ser la de la base de datos.
+
+    Existen los dos porque un certificado puede estar en varios resumenes, y
+    entonces «cuantas filas hay» y «cuantos codigos se han emitido» dejan de
+    ser el mismo numero. El porque, en `history.py`.
     """
 
     model = CodeRegistrationModel
     template_name = 'dashboard/pages/documents/code_gen/code_history.html'
-    context_object_name = 'nodes'
     paginate_by = 25
+
+    #: Valor de `?view=` que pide la lista. Cualquier otra cosa es el arbol,
+    #: que es el modo por defecto: una URL vieja o manipulada cae en el, no en
+    #: un error.
+    FLAT = 'flat'
+
+    @property
+    def grouped(self) -> bool:
+        return self.request.GET.get('view') != self.FLAT
 
     def get_registrations(self):
         queryset = (
@@ -292,7 +307,15 @@ class CodeHistoryListView(InternalToolAccessMixin, ListView):
         return queryset
 
     def get_queryset(self):
-        registrations = list(self.get_registrations())
+        queryset = self.get_registrations()
+
+        if not self.grouped:
+            # En lista no hay nada que agrupar, asi que se devuelve el
+            # QuerySet tal cual y pagina la base de datos: veinticinco filas
+            # por peticion, como toda la vida.
+            return queryset
+
+        registrations = list(queryset)
 
         # La cifra que importa sigue siendo la de codigos: el numero de ramas
         # no dice cuantos se han emitido, y es lo que se viene a mirar. Se
@@ -305,7 +328,18 @@ class CodeHistoryListView(InternalToolAccessMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search'] = self.request.GET.get('q', '')
-        context['code_count'] = getattr(self, 'code_count', 0)
+        context['grouped'] = self.grouped
+        context['flat_value'] = self.FLAT
+
+        if self.grouped:
+            context['nodes'] = context['object_list']
+            context['code_count'] = getattr(self, 'code_count', 0)
+        else:
+            # Sobre la pagina ya cortada: dos consultas para veinticinco
+            # filas, no para el historial entero.
+            context['rows'] = annotate_flat(context['object_list'])
+            context['code_count'] = context['paginator'].count
+
         return context
 
 

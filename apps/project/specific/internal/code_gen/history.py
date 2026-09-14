@@ -1,7 +1,24 @@
 """
-El historial de codigos, en arbol: cada resumen con los suyos debajo.
+El historial de codigos, en sus dos modos: agrupado por resumen y en lista.
 
-Por que no sale de un `ORDER BY`
+Por que hacen falta los dos
+---------------------------
+El arbol ensena **la estructura**: de que resumen es cada certificado, que es
+lo unico que relaciona unos codigos con otros. El precio es que un certificado
+que pertenece a dos resumenes sale en los dos --esconderlo en uno haria que ese
+resumen se leyera incompleto-- y entonces las filas de la pagina ya no son los
+codigos emitidos.
+
+La lista ensena **cuantos codigos hay**: una fila por codigo, sin repetir
+ninguno, que es lo que hace falta para cuadrar una cuenta. El precio es que la
+estructura se pierde, y por eso cada fila dice a que resumenes pertenece.
+
+Las dos cosas no caben en una sola vista sin mentir en una de las dos, asi que
+la pagina tiene un interruptor y cada modo hace bien lo suyo. Comparten las dos
+consultas de `_summary_lookups()`, que es la misma pregunta sobre distintas
+filas.
+
+Por que el arbol no sale de un `ORDER BY`
 --------------------------------
 Un codigo puede colgar de un resumen de tres maneras distintas: ser el de un
 certificado que es **miembro** del resumen, ser el del **documento del propio
@@ -53,6 +70,46 @@ class HistoryRow:
     #: True para el documento del resumen, que no es miembro sino continente.
     is_summary_document: bool = False
 
+    @property
+    def labels(self) -> tuple:
+        """
+        Solo el codigo de miembro: el resumen ya lo dice la cabecera de la
+        rama, y repetirlo en cada fila seria ruido.
+        """
+        return (self.member_code,) if self.member_code else ()
+
+
+@dataclass(frozen=True)
+class FlatRow:
+    """
+    Un codigo en la lista sin agrupar: una fila, una sola vez.
+
+    Lleva **todos** los resumenes a los que pertenece --de ahi que sea una
+    tupla y no uno-- para no perder la relacion al dejar de agrupar: quien mira
+    la lista sigue viendo de donde es cada codigo, solo que sin repetirlo.
+    """
+
+    registration: object
+
+    #: Pares `(resumen, codigo)`. Vacia en un codigo que no es de ninguno.
+    summaries: tuple = ()
+
+    is_summary_document: bool = False
+
+    @property
+    def labels(self) -> tuple:
+        """
+        De que resumen es, escrito para leerlo en la fila.
+
+        En la lista no hay cabecera de grupo que lo diga, asi que el nombre del
+        resumen va dentro de la etiqueta. El papel del propio resumen no lleva
+        codigo de miembro porque no lo tiene.
+        """
+        return tuple(
+            f'{summary.title} · {code}' if code else summary.title
+            for summary, code in self.summaries
+        )
+
 
 @dataclass
 class HistoryNode:
@@ -91,6 +148,99 @@ def _member_sort_key(code: str):
     return (1, 0, (code or '').lower())
 
 
+def _summary_lookups(registrations):
+    """
+    De que resumen cuelga cada documento, en dos consultas.
+
+    Devuelve `(pertenencias, documentos_de_resumen)`. La primera es
+    `documento -> [(resumen, codigo), …]` --lista, porque un certificado puede
+    ser miembro de varios-- y la segunda `documento -> resumen` para el papel
+    del propio resumen, que no es miembro de si mismo.
+
+    Lo usan los dos modos de la pagina, el arbol y la lista, y por eso esta
+    aqui suelto: son la misma pregunta hecha sobre distintas filas.
+    """
+    from apps.project.specific.documents.certificates.models import (
+        AegisSummaryDocumentModel, AegisSummaryModel)
+
+    document_ids = {
+        registration.document_id
+        for registration in registrations
+        if registration.document_id
+    }
+
+    memberships: dict = {}
+    summary_documents: dict = {}
+
+    if not document_ids:
+        return memberships, summary_documents
+
+    rows = (
+        AegisSummaryDocumentModel.objects
+        .filter(document_id__in=document_ids)
+        .select_related('summary')
+    )
+
+    for membership in rows:
+        memberships.setdefault(membership.document_id, []).append(
+            (membership.summary, membership.code)
+        )
+
+    summaries = AegisSummaryModel.objects.filter(
+        summary_document_id__in=document_ids
+    )
+
+    for summary in summaries:
+        summary_documents[summary.summary_document_id] = summary
+
+    return memberships, summary_documents
+
+
+def annotate_flat(registrations) -> list:
+    """
+    La lista de siempre --una fila por codigo, sin repetir ninguno-- pero
+    diciendo de que resumen es cada uno.
+
+    Es el otro modo de la pagina. El arbol ensena la estructura a costa de
+    repetir el certificado que esta en dos resumenes; esta ensena **cuantos
+    codigos hay de verdad**, que es lo que hace falta para cuadrar una cuenta.
+    Las dos cosas no caben en una sola vista, asi que son dos.
+
+    A diferencia del arbol, esto se aplica **sobre la pagina ya cortada**: aqui
+    no hay ramas que partir, asi que la paginacion sigue siendo la de la base
+    de datos y solo se miran veinticinco filas.
+    """
+    registrations = list(registrations)
+    memberships, summary_documents = _summary_lookups(registrations)
+
+    rows = []
+
+    for registration in registrations:
+        document_id = registration.document_id
+        summary = summary_documents.get(document_id) if document_id else None
+
+        if summary is not None:
+            # El papel del resumen: lleva su resumen, pero sin codigo de
+            # miembro, porque no es miembro de si mismo.
+            rows.append(
+                FlatRow(
+                    registration=registration,
+                    summaries=((summary, ''),),
+                    is_summary_document=True,
+                )
+            )
+            continue
+
+        rows.append(
+            FlatRow(
+                registration=registration,
+                summaries=tuple(memberships.get(document_id) or ()),
+            )
+        )
+
+    return rows
+
+
 def build_history_tree(registrations) -> list:
     """
     Agrupa los codigos por resumen, respetando el orden que traen.
@@ -99,44 +249,8 @@ def build_history_tree(registrations) -> list:
     fecha descendente): este modulo no decide **que** se ve ni en que orden,
     solo **como** se anida.
     """
-    from apps.project.specific.documents.certificates.models import (
-        AegisSummaryDocumentModel, AegisSummaryModel)
-
     registrations = list(registrations)
-
-    document_ids = {
-        registration.document_id
-        for registration in registrations
-        if registration.document_id
-    }
-
-    # Pertenencias: un documento puede estar en varios resumenes, asi que el
-    # valor es una lista y el codigo va con cada uno (AEGIS-1 en uno no tiene
-    # por que ser AEGIS-1 en otro).
-    memberships: dict = {}
-
-    if document_ids:
-        rows = (
-            AegisSummaryDocumentModel.objects
-            .filter(document_id__in=document_ids)
-            .select_related('summary')
-        )
-
-        for membership in rows:
-            memberships.setdefault(membership.document_id, []).append(
-                (membership.summary, membership.code)
-            )
-
-    # Documentos que son el resumen en si, no un miembro suyo.
-    summary_documents: dict = {}
-
-    if document_ids:
-        summaries = AegisSummaryModel.objects.filter(
-            summary_document_id__in=document_ids
-        )
-
-        for summary in summaries:
-            summary_documents[summary.summary_document_id] = summary
+    memberships, summary_documents = _summary_lookups(registrations)
 
     # Un diccionario conserva el orden de insercion, asi que el nodo queda
     # donde aparecio su codigo mas reciente sin tener que ordenar despues.

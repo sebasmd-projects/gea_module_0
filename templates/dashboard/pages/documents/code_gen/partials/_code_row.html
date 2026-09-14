@@ -1,0 +1,63 @@
+{% load i18n %}
+
+{% comment %}
+  Una fila del historial, para los dos modos.
+
+  Vive aparte porque las siete columnas son las mismas en el arbol y en la
+  lista, y tenerlas escritas dos veces es como se acaba corrigiendo una sola
+  --que es justo lo que paso en video_masonry con la derivacion duplicada.
+
+  Parametros:
+    registration          el codigo (obligatorio)
+    labels                etiquetas de la primera celda, ya compuestas
+    is_summary_document   pinta la etiqueta oscura del papel del resumen
+    guide                 el caracter del arbol, o vacio en la lista
+{% endcomment %}
+
+<tr>
+  <td class="small text-nowrap">
+    {% if guide %}
+      {% comment %}
+        Decorativo y solo eso: quien no vea el caracter ya sabe de que resumen
+        es la fila por la cabecera del grupo y por las etiquetas de al lado.
+      {% endcomment %}
+      <span class="text-muted me-1" aria-hidden="true">{{ guide }}</span>
+    {% endif %}
+    {{ registration.created|date:'d/m/Y H:i' }}
+  </td>
+
+  <td class="small">
+    {% if is_summary_document %}
+      <span class="badge bg-dark me-1">{% trans 'Summary document' %}</span>
+    {% endif %}
+
+    {% for label in labels %}
+      <span class="badge bg-info text-dark me-1">{{ label }}</span>
+    {% endfor %}
+
+    {{ registration.reference }}
+  </td>
+
+  <td class="small"><code class="text-break">{{ registration.code_information|default:'-' }}</code></td>
+  <td class="small"><code>{{ registration.random_code|default:'-' }}</code></td>
+
+  <td class="small text-nowrap">
+    {% if registration.generated_barcode %}<i class="bi bi-upc-scan" title="{% trans 'Barcode' %}"></i>{% endif %}
+    {% if registration.generated_qr %}<i class="bi bi-qr-code ms-1" title="{% trans 'QR code' %}"></i>{% endif %}
+  </td>
+
+  <td class="small">
+    {% if registration.document %}
+      <span class="badge bg-success">{% trans 'Yes' %}</span>
+    {% else %}
+      <span class="text-muted">—</span>
+    {% endif %}
+  </td>
+
+  <td class="text-end">
+    <a class="btn btn-outline-primary btn-sm"
+       href="{% url 'code_gen:code_detail' registration.pk %}">
+      {% trans 'View' %}
+    </a>
+  </td>
+</tr>
