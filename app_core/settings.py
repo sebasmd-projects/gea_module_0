@@ -483,20 +483,33 @@ FIELD_ENCRYPTION_KEY = os.getenv('FIELD_ENCRYPTION_KEY')
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 15000
 
 # Cron jobs
+#
+# `django-crontab` quiere la ruta del invocable **como cadena**, asi que una
+# entrada que lanza un comando de `manage.py` repite siempre la misma. Escrita
+# a mano en cada una, una errata no se ve al leer --son rutas largas y
+# parecidas-- y la entrada simplemente no se ejecuta: `crontab_add` la instala
+# igual, y el fallo aparece a la hora de la verdad, en el servidor y sin nadie
+# delante.
+#
+# En minusculas a proposito: Django convierte en ajuste **todo nombre de
+# modulo en mayusculas**, y esto no es configuracion de nadie. Un
+# `CALL_COMMAND` en `settings` seria un ajuste mas que parece que se puede
+# cambiar y no cambia nada — justo la trampa que §7 de CLAUDE.md ya documenta
+# con `MIDDLEWARE_NOT_INCLUDE` y compania.
+_call_command = 'django.core.management.call_command'
+
 CRONJOBS = [
-    ('*/15 * * * *', 'django.core.management.call_command',
-     ['upgrade_ots_anchors']),
+    ('*/15 * * * *', _call_command, ['upgrade_ots_anchors']),
     ('0 19 * * *', 'apps.common.utils.cron.generate_and_send_gea_code'),
     ('*/3 * * * *', 'apps.common.utils.cron.warm_gea_app'),
-    ('0 * * * *', 'django.core.management.call_command', ['rotate_logs']),
+    ('0 * * * *', _call_command, ['rotate_logs']),
 
     # El aviso de un cambio en un documento legal. Cada media hora y no cada
     # minuto porque aprobar un texto pasa tres veces al año; sin nada pendiente
     # es una consulta y se va. Va por cron y no dentro de la peticion de
     # aprobar porque mandar cientos de correos con ATOMIC_REQUESTS puesto
     # tendria la transaccion abierta todo ese rato.
-    ('*/30 * * * *', 'django.core.management.call_command',
-     ['notify_legal_changes']),
+    ('*/30 * * * *', _call_command, ['notify_legal_changes']),
 ]
 
 # --- Documentos legales ------------------------------------------------
