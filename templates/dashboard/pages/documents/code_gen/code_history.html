@@ -49,11 +49,27 @@
           {% endif %}
         </form>
 
-        {% if not registrations %}
+        {% if not nodes %}
           <p class="text-muted mb-0">{% trans 'No codes issued yet.' %}</p>
         {% else %}
+          {% comment %}
+            El arbol es una tabla con un <tbody> por rama, no <ul> anidados:
+            las columnas tienen que seguir cuadrando entre ramas para poder
+            comparar fechas y codigos de un vistazo, y eso una lista no lo da.
+            La jerarquia va escrita en la propia fila --el codigo del miembro,
+            «Documento del resumen»--, nunca solo en la sangria, que no se lee
+            en voz alta ni sobrevive a copiar y pegar.
+          {% endcomment %}
+          <p class="text-muted small">
+            {% blocktrans trimmed count counter=code_count %}
+              {{ counter }} code issued.
+            {% plural %}
+              {{ counter }} codes issued.
+            {% endblocktrans %}
+          </p>
+
           <div class="table-responsive">
-            <table class="table table-striped table-sm align-middle">
+            <table class="table table-sm align-middle">
               <thead>
                 <tr>
                   <th>{% trans 'Date' %}</th>
@@ -65,33 +81,81 @@
                   <th></th>
                 </tr>
               </thead>
-              <tbody>
-                {% for registration in registrations %}
-                  <tr>
-                    <td class="small text-nowrap">{{ registration.created|date:'d/m/Y H:i' }}</td>
-                    <td class="small">{{ registration.reference }}</td>
-                    <td class="small"><code class="text-break">{{ registration.code_information|default:'-' }}</code></td>
-                    <td class="small"><code>{{ registration.random_code|default:'-' }}</code></td>
-                    <td class="small text-nowrap">
-                      {% if registration.generated_barcode %}<i class="bi bi-upc-scan" title="{% trans 'Barcode' %}"></i>{% endif %}
-                      {% if registration.generated_qr %}<i class="bi bi-qr-code ms-1" title="{% trans 'QR code' %}"></i>{% endif %}
-                    </td>
-                    <td class="small">
-                      {% if registration.document %}
-                        <span class="badge bg-success">{% trans 'Yes' %}</span>
-                      {% else %}
-                        <span class="text-muted">—</span>
-                      {% endif %}
-                    </td>
-                    <td class="text-end">
-                      <a class="btn btn-outline-primary btn-sm"
-                         href="{% url 'code_gen:code_detail' registration.pk %}">
-                        {% trans 'View' %}
-                      </a>
-                    </td>
-                  </tr>
-                {% endfor %}
-              </tbody>
+
+              {% for node in nodes %}
+                <tbody class="border-top">
+                  {% if node.is_summary %}
+                    <tr class="table-light">
+                      <th colspan="7" scope="rowgroup" class="fw-semibold">
+                        <i class="fa-solid fa-layer-group me-2" aria-hidden="true"></i>
+                        <span class="visually-hidden">{% trans 'Summary:' %}</span>
+                        {{ node.summary.title }}
+
+                        <code class="ms-2">{{ node.summary.public_code|default:'—' }}</code>
+
+                        <span class="badge bg-secondary ms-2">{{ node.summary.get_status_display }}</span>
+
+                        <span class="text-muted fw-normal ms-2">
+                          {% blocktrans trimmed count counter=node.count %}
+                            {{ counter }} code
+                          {% plural %}
+                            {{ counter }} codes
+                          {% endblocktrans %}
+                        </span>
+
+                        <a class="btn btn-outline-primary btn-sm float-end"
+                           href="{% url 'code_gen:summary_compose' node.summary.pk %}">
+                          {% trans 'Compose' %}
+                        </a>
+                      </th>
+                    </tr>
+                  {% endif %}
+
+                  {% for row in node.rows %}
+                    <tr>
+                      <td class="small text-nowrap">
+                        {% if node.is_summary %}
+                          {% comment %}
+                            Decorativo y solo eso: quien no vea el caracter ya
+                            sabe de que resumen es la fila por la cabecera del
+                            grupo y por el codigo de miembro de la columna de
+                            al lado. De ahi el aria-hidden.
+                          {% endcomment %}
+                          <span class="text-muted me-1" aria-hidden="true">{% if forloop.last %}└{% else %}├{% endif %}</span>
+                        {% endif %}
+                        {{ row.registration.created|date:'d/m/Y H:i' }}
+                      </td>
+                      <td class="small">
+                        {% if row.is_summary_document %}
+                          <span class="badge bg-dark me-1">{% trans 'Summary document' %}</span>
+                        {% elif row.member_code %}
+                          <span class="badge bg-info text-dark me-1">{{ row.member_code }}</span>
+                        {% endif %}
+                        {{ row.registration.reference }}
+                      </td>
+                      <td class="small"><code class="text-break">{{ row.registration.code_information|default:'-' }}</code></td>
+                      <td class="small"><code>{{ row.registration.random_code|default:'-' }}</code></td>
+                      <td class="small text-nowrap">
+                        {% if row.registration.generated_barcode %}<i class="bi bi-upc-scan" title="{% trans 'Barcode' %}"></i>{% endif %}
+                        {% if row.registration.generated_qr %}<i class="bi bi-qr-code ms-1" title="{% trans 'QR code' %}"></i>{% endif %}
+                      </td>
+                      <td class="small">
+                        {% if row.registration.document %}
+                          <span class="badge bg-success">{% trans 'Yes' %}</span>
+                        {% else %}
+                          <span class="text-muted">—</span>
+                        {% endif %}
+                      </td>
+                      <td class="text-end">
+                        <a class="btn btn-outline-primary btn-sm"
+                           href="{% url 'code_gen:code_detail' row.registration.pk %}">
+                          {% trans 'View' %}
+                        </a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              {% endfor %}
             </table>
           </div>
 
