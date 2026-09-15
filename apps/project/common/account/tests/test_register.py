@@ -21,8 +21,11 @@ Lo que se comprueba aqui:
         --settings=app_core.settings_test
 """
 
+import re
+
+from django.core import mail
 from django.core.cache import cache
-from django.test import TestCase
+from django.test import Client, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
@@ -59,11 +62,11 @@ class WizardMixin:
 
         return f'{self.url}?{query}'
 
-    def step(self, name, data, url=None, expect_ok=True):
+    def step(self, name, data, url=None, expect_ok=True, client=None):
         payload = {f'{name}-{key}': value for key, value in data.items()}
         payload['gea_user_register_wizard_view-current_step'] = name
 
-        response = self.client.post(url or self.url, payload)
+        response = (client or self.client).post(url or self.url, payload)
 
         if expect_ok:
             self.assert_step_was_accepted(response, name)
@@ -124,10 +127,22 @@ class WizardMixin:
         )
 
     def buyer_code_for(self, email):
-        """El codigo que el wizard dejo en cache al terminar el paso 3."""
-        view = GeaUserRegisterWizardView()
+        """
+        El codigo que le llego a esa direccion, leido del propio correo.
 
-        return cache.get(view._buyer_cache_key(email.strip().lower()))
+        El wizard ya no lo deja en ningun sitio que un test pueda leer
+        directamente --vive hasheado en la sesion, igual que el OTP de
+        acceso-- asi que se saca de `mail.outbox`, que es tambien por donde
+        lo sacaria quien se esta registrando de verdad.
+        """
+        email = email.strip().lower()
+
+        for sent in reversed(mail.outbox):
+            if email in [addr.strip().lower() for addr in sent.to]:
+                match = re.search(r'\b([A-HJ-NP-Z2-9]{10})\b', sent.body)
+                return match.group(1) if match else None
+
+        return None
 
 
 class TestTheCodeIsWhatGatesTheDoor(WizardMixin, TestCase):
@@ -255,18 +270,39 @@ class TestTheBuyerCodeGoesToTheirEmail(WizardMixin, TestCase):
         """
         El codigo esta atado al correo. Si no lo estuviera, uno cualquiera
         serviria para registrar a nombre de otra direccion.
+
+        El codigo vive en sesion, y cada persona que se registra tiene la
+        suya: para probar que uno ajeno no sirve hace falta una segunda
+        sesion de verdad, no plantar un valor en un almacen compartido.
         """
         self.start_buyer()
 
-        other = GeaUserRegisterWizardView()
-        cache.set(
-            other._buyer_cache_key('otro@propensionesabogados.com'),
-            'AAAAAAAAAA', 600,
-        )
+        other_client = Client()
+        other_email = 'otro@propensionesabogados.com'
+
+        other_client.get(self.url)
+        self.step(STEP_USER, {
+            'user_type': UserModel.UserTypeChoices.BUYER,
+            'username': 'otro-comprador',
+            'first_name': 'Otro',
+            'last_name': 'Comprador',
+        }, client=other_client)
+        self.step(STEP_SECURITY, {
+            'password': PASSWORD, 'confirm_password': PASSWORD,
+        }, client=other_client)
+        self.step(STEP_CONTACT, {
+            'email': other_email,
+            'confirm_email': other_email,
+            'phone_number_code': UserModel.PhoneCodeChoices.COLOMBIA,
+            'phone_number': '3001234567',
+        }, client=other_client)
+
+        other_code = self.buyer_code_for(other_email)
+        self.assertIsNotNone(other_code)
 
         self.step(
             STEP_CODE,
-            {'unique_code': 'AAAAAAAAAA', 'accepted_terms': 'on'},
+            {'unique_code': other_code, 'accepted_terms': 'on'},
             expect_ok=False,
         )
 
@@ -275,7 +311,7 @@ class TestTheBuyerCodeGoesToTheirEmail(WizardMixin, TestCase):
 
     def test_the_code_is_burned_after_use(self):
         """
-        Si quedara en cache, el mismo codigo abriria una segunda cuenta
+        Si quedara en la sesion, el mismo codigo abriria una segunda cuenta
         durante los diez minutos que dura.
         """
         email = self.start_buyer()
@@ -287,7 +323,12 @@ class TestTheBuyerCodeGoesToTheirEmail(WizardMixin, TestCase):
             expect_ok=False,
         )
 
-        self.assertIsNone(self.buyer_code_for(email))
+        self.assertTrue(
+            UserModel.objects.filter(username='comprador').exists())
+        self.assertNotIn(
+            GeaUserRegisterWizardView.BUYER_CODE_SESSION_KEY,
+            self.client.session,
+        )
 
     def test_the_daily_code_does_not_work_for_a_buyer(self):
         """La otra mitad de la separacion entre los dos secretos."""
@@ -301,6 +342,31 @@ class TestTheBuyerCodeGoesToTheirEmail(WizardMixin, TestCase):
         )
 
         self.assertFalse(
+            UserModel.objects.filter(username='comprador').exists())
+
+    def test_the_code_still_works_if_the_cache_is_gone(self):
+        """
+        El codigo vivia en `cache`, con la misma llave para mandarlo y para
+        comprobarlo despues. Sin `REDIS_URL` eso es `LocMemCache`, que es por
+        proceso: en cPanel, con mas de un worker, la peticion que comprobaba
+        el codigo caia en uno que nunca habia visto lo que otro guardo, y el
+        alta no se completaba nunca aunque el correo llegara y el codigo
+        tecleado fuera el correcto. Vaciar la cache a mitad de camino es la
+        forma mas directa de reproducir justo eso en una sola prueba: si el
+        alta sigue funcionando, es que ya no depende de ella.
+        """
+        email = self.start_buyer()
+        code = self.buyer_code_for(email)
+
+        cache.clear()
+
+        self.step(
+            STEP_CODE,
+            {'unique_code': code, 'accepted_terms': 'on'},
+            expect_ok=False,
+        )
+
+        self.assertTrue(
             UserModel.objects.filter(username='comprador').exists())
 
 

@@ -1,7 +1,10 @@
 # apps/project/common/account/views.py
 
+import hashlib
+import hmac
 import logging
 from collections import OrderedDict
+from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
@@ -12,14 +15,14 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import View
 from django.views.generic.edit import FormView
-from django.core.cache import cache
 from django.contrib import messages
-from django.utils.crypto import get_random_string
+from django.utils.crypto import constant_time_compare, get_random_string
 
 from formtools.wizard.views import SessionWizardView
 
@@ -179,8 +182,27 @@ class GeaUserRegisterWizardView(SessionWizardView):
     # -------------------------
     # Buyer code generation/sending
     # -------------------------
-    def _buyer_cache_key(self, email: str) -> str:
-        return f"gea:buyer_reg_code:{email}"
+
+    #: Donde vive el estado del codigo dentro de la sesion.
+    #:
+    #: Vivia en `django.core.cache.cache`, con la misma clave para mandar el
+    #: correo y para comprobar el codigo despues. Eso solo funciona si las dos
+    #: peticiones caen en el mismo proceso: sin `REDIS_URL` configurado la cache
+    #: es `LocMemCache`, que es **por worker** (documentado en CLAUDE.md), y en
+    #: cPanel eso es tipicamente mas de uno. El codigo se guardaba en un
+    #: proceso y se comprobaba en otro que nunca lo habia visto: no fallaba a
+    #: veces, fallaba siempre. La sesion, en este proyecto, va en base de
+    #: datos (`SESSION_ENGINE` por defecto) y es la misma que ya usan el
+    #: codigo de acceso (`otp_login.py`) y el de verificacion de documentos
+    #: (`OTPSessionMixin`) por esta misma razon.
+    BUYER_CODE_SESSION_KEY = "buyer_registration_code"
+
+    def _hash_buyer_code(self, code: str) -> str:
+        return hmac.new(
+            key=settings.SECRET_KEY.encode(),
+            msg=code.encode(),
+            digestmod=hashlib.sha256,
+        ).hexdigest()
 
     # El cupo de envios del codigo de registro.
     #
@@ -216,8 +238,14 @@ class GeaUserRegisterWizardView(SessionWizardView):
             length=10,
             allowed_chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
         )
-        cache.set(self._buyer_cache_key(email), code,
-                  timeout=self.BUYER_CODE_TTL_SECONDS)
+        self.request.session[self.BUYER_CODE_SESSION_KEY] = {
+            "email": email,
+            "code_hash": self._hash_buyer_code(code),
+            "expires_at": (
+                timezone.now()
+                + timedelta(seconds=self.BUYER_CODE_TTL_SECONDS)
+            ).isoformat(),
+        }
 
         subject = _("Your GEA registration code")
         message = _(
@@ -264,9 +292,24 @@ class GeaUserRegisterWizardView(SessionWizardView):
             return False
 
         if user_type == UserModel.UserTypeChoices.BUYER:
-            expected = cache.get(self._buyer_cache_key(
-                (email or "").strip().lower()))
-            return bool(expected and expected == candidate)
+            state = self.request.session.get(
+                self.BUYER_CODE_SESSION_KEY) or {}
+
+            if state.get("email") != (email or "").strip().lower():
+                return False
+
+            try:
+                expired = timezone.datetime.fromisoformat(
+                    state.get("expires_at")) <= timezone.now()
+            except (TypeError, ValueError):
+                expired = True
+
+            if expired:
+                return False
+
+            stored = state.get("code_hash") or ""
+            return bool(stored) and constant_time_compare(
+                stored, self._hash_buyer_code(candidate))
 
         # Proveedores: código del día (GENERAL)
         return GeaDailyUniqueCode.objects.verify_code(
@@ -361,7 +404,7 @@ class GeaUserRegisterWizardView(SessionWizardView):
 
         # invalidar código buyer para que no se reuse
         if user_type == UserModel.UserTypeChoices.BUYER:
-            cache.delete(self._buyer_cache_key(email))
+            self.request.session.pop(self.BUYER_CODE_SESSION_KEY, None)
 
         # Redirects
         #
