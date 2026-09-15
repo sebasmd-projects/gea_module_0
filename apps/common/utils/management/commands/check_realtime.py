@@ -100,9 +100,11 @@ class Command(BaseCommand):
             '--realtime-host',
             default='',
             help=(
-                'El subdominio que retransmitiria los eventos, por ejemplo '
-                'rt.propensionesabogados.com. Sin el, esa comprobacion se '
-                'salta: no se inventa un nombre de host.'
+                'El host del RELAY: el proceso del VPS que retransmite los '
+                'eventos al navegador. NO es la aplicacion, ni una copia de '
+                'ella -- el relay no ejecuta Django ni toca la base de datos. '
+                'Sin este dato la comprobacion se salta: no se inventa un '
+                'nombre de host.'
             ),
         )
         parser.add_argument(
@@ -634,16 +636,22 @@ class Command(BaseCommand):
         desde una pagina servida en https: un certificado que no valga ahi no
         da un aviso que se pueda saltar, corta la conexion y ya esta.
         """
-        self._section('4. Subdominio de tiempo real')
+        self._section('4. El host del relay')
 
         if not host:
             self.stdout.write(
-                '   No se ha dicho cual es, asi que no se comprueba. Cuando lo '
-                'haya:'
+                '   No se ha dicho cual es, asi que no se comprueba.'
             )
             self.stdout.write(
-                '      manage.py check_realtime --realtime-host '
-                'rt.propensionesabogados.com'
+                '   El relay es un proceso del VPS que se suscribe al canal y '
+                'retransmite al navegador. No ejecuta Django, no consulta la '
+                'base de datos y no renderiza nada: si se cae, las '
+                'notificaciones siguen escritas y aparecen al recargar. '
+                'Apuntar esto a la aplicacion --o a una copia suya-- es otra '
+                'cosa distinta.'
+            )
+            self.stdout.write(
+                '      manage.py check_realtime --realtime-host <host del VPS>'
             )
             return NOT_ASKED
 
@@ -743,12 +751,20 @@ class Command(BaseCommand):
             ))
             self.stdout.write(
                 '      El registro existe y el certificado vale, asi que esta '
-                'seccion parecia resuelta. No lo esta: el relay vive donde '
-                'vive el Redis, y el navegador abriria el socket contra '
-                'cPanel, donde no hay nada escuchando. Lo que falta es '
-                'apuntar el registro al VPS (o, si se prefiere dejarlo aqui, '
-                'un proxy de WebSocket en Apache, que es otra arquitectura y '
-                'hay que decidirla a proposito).'
+                'seccion parecia resuelta. Lo que hay que mirar es QUE hay '
+                'escuchando ahi. El relay no es la aplicacion ni una copia de '
+                'ella: es un proceso que se suscribe al canal y retransmite, '
+                'sin Django y sin base de datos. Si en ese host corre la '
+                'aplicacion, este no es el host del relay -- y entonces esta '
+                'comprobacion se ha hecho sobre otra cosa.'
+            )
+            self.stdout.write(
+                '      Dos salidas, y son decisiones distintas: apuntar el '
+                'registro al VPS, donde vive el relay junto al Redis; o '
+                'dejarlo aqui y poner Apache a hacer de proxy de WebSocket '
+                'hacia el VPS, que ahorra el certificado y el cruce de '
+                'origenes pero mete a cPanel en el camino de cada conexion '
+                'abierta.'
             )
             return WRONG_MACHINE
 

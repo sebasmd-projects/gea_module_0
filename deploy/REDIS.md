@@ -674,19 +674,61 @@ no dé error: `PUBLISH` devuelve «0 receptores» sin quejarse cuando nadie
 escucha, y dos conexiones a Redis distintos detrás de un balanceador dan
 exactamente eso. Lo que decide es que el mensaje vuelva.
 
+### Qué es el relay, y qué no
+
+Esto se malentiende con facilidad, así que va antes que nada: **el relay no es
+la aplicación**, ni una copia de ella, ni un despliegue de Django en otro
+subdominio.
+
+Es un proceso pequeño que vive en el VPS, al lado del Redis, y hace una sola
+cosa: se suscribe a los canales y reenvía al navegador lo que Django publique.
+No ejecuta Django, no consulta MySQL, no renderiza plantillas y no comprueba
+permisos contra la base de datos. Son unas decenas de líneas.
+
+Que sea así de tonto es justo lo que hace que el plan funcione:
+
+- **Por eso la aplicación puede quedarse en cPanel.** Quien tiene que estar vivo
+  todo el rato es el consumidor, no el productor. Django sólo publica, dentro de
+  la petición, y se va.
+- **Por eso si se cae no se pierde nada.** La notificación ya está escrita en
+  MySQL antes de publicar; sin relay, el efecto es *tiempo real degradado a
+  recargar la página*.
+- **Por eso no necesita la base de datos.** Lo que viaja por el canal es un
+  aviso («hay novedad, id N»), no contenido. Lo que hay dentro lo pide después
+  el navegador a Django, que comprueba permisos como siempre.
+
+Si en ese host corre la aplicación, ese host no es el del relay.
+
 ### El subdominio: que exista no es que esté en el sitio
 
-`--realtime-host` comprueba DNS y TLS, pero eso no dice **en qué máquina** está,
+`--realtime-host` comprueba DNS y TLS, pero eso no dice **qué hay escuchando**,
 y el relay tiene que vivir donde vive el Redis. Comprobado contra producción:
-`rt.propensionesabogados.com` ya existe, tiene certificado válido y contesta —
-apuntando a la misma dirección que la propia aplicación, o sea al cPanel. El
-registro está creado; lo que no está es apuntando al VPS.
+`rt.propensionesabogados.com` resuelve, tiene certificado válido y contesta —
+apuntando a la misma dirección que la propia aplicación, o sea al cPanel.
 
 Un «saludo TLS correcto» a secas ahí es media verdad de las que cuestan una
 tarde: se da la sección por buena, se monta el relay en el VPS y el navegador
 sigue abriendo el socket contra cPanel, donde no hay nada escuchando. Así que el
 comando compara contra las dos máquinas que ya conoce —la del `REDIS_URL` y la
 del `PUBLIC_BASE_URL`— y dice cuál de las dos es.
+
+**Hay dos arquitecturas posibles y son decisiones distintas**, no dos formas de
+hacer lo mismo:
+
+| | El relay tiene su host en el VPS | Apache de cPanel hace de proxy |
+|---|---|---|
+| DNS | un registro al VPS | nada que cambiar |
+| Certificado | uno propio en el VPS | ya lo tiene |
+| Origen | cruzado → hace falta token efímero firmado | mismo origen → vale la cookie |
+| Coste | ninguno en cPanel | **cada conexión abierta ocupa un proceso de cPanel** |
+| Requisito | ninguno | `mod_proxy_wstunnel`, que en hosting compartido no siempre está |
+
+La segunda parece más cómoda y es la que hay que mirar con cuidado: un
+WebSocket es una conexión que **no se cierra**, y el límite de procesos de
+cPanel es el mismo que atiende las visitas. Eso es justo lo que el plan A
+evitaba.
+
+Esto se decide en la Fase 4, no ahora.
 
 Lo que ese comando **no** puede comprobar es la otra dirección: si el worker del
 VPS alcanza la base de datos de cPanel. Esa conexión sale del VPS, así que la
