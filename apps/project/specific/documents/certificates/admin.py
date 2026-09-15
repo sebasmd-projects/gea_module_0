@@ -323,7 +323,7 @@ class DocumentVerificationModelAdmin(GeneralAdminModel):
     list_display = (
         "uuid_prefix",
         "document_title",
-        "holder",
+        "holders_display",
         "certificate_type",
         "status_badge",
         "public_code",
@@ -357,17 +357,15 @@ class DocumentVerificationModelAdmin(GeneralAdminModel):
         "public_copy_hash",
         "code_sequence",
         "code_payload",
-        "holder__username",
-        "holder__first_name",
-        "holder__last_name",
+        "holders__username",
+        "holders__first_name",
+        "holders__last_name",
     )
 
     # Un desplegable con todos los usuarios no se puede usar en cuanto hay unos
     # cuantos, y el correo va cifrado: se busca por usuario, nombre y apellido,
     # que es por lo que `filter(email=...)` no sirve en este proyecto.
-    autocomplete_fields = ("holder",)
-
-    autocomplete_fields = ()
+    autocomplete_fields = ("holders",)
 
     readonly_fields = (
         "id",
@@ -404,7 +402,7 @@ class DocumentVerificationModelAdmin(GeneralAdminModel):
                 "public_code",
                 "certificate_type",
                 "document_title",
-                "holder",
+                "holders",
             )
         }),
         (_("Certificacion"), {
@@ -472,7 +470,12 @@ class DocumentVerificationModelAdmin(GeneralAdminModel):
         return qs.annotate(
             _views_total=Count("view_logs"),
             _views_unique=Count(viewer_key, distinct=True),
-        )
+        ).prefetch_related("holders")
+
+    @admin.display(description=_("Holder(s)"))
+    def holders_display(self, obj):
+        names = [h.get_full_name() or h.username for h in obj.holders.all()]
+        return ", ".join(names) if names else self.empty_value_display
 
     @admin.display(description=_("How it works"))
     def certification_help(self, obj):

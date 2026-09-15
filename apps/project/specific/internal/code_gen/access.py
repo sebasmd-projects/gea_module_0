@@ -76,7 +76,9 @@ def visible_registrations(queryset, user):
 
     El operador lo ve entero. El titular ve **solo los codigos de documentos de
     los que es titular**, y por tanto ningun codigo suelto: un codigo sin
-    documento no es de nadie, asi que no puede ser suyo.
+    documento no es de nadie, asi que no puede ser suyo. Un documento puede
+    tener varios titulares (`holders` es M2M); el filtro solo pregunta si esta
+    persona es uno de ellos, no si es el unico.
     """
     if is_operator(user):
         return queryset
@@ -84,7 +86,7 @@ def visible_registrations(queryset, user):
     if not is_holder(user):
         return queryset.none()
 
-    return queryset.filter(document__holder=user)
+    return queryset.filter(document__holders=user)
 
 
 def can_view_registration(user, registration) -> bool:
@@ -97,7 +99,7 @@ def can_view_registration(user, registration) -> bool:
 
     document = registration.document
 
-    return bool(document and document.holder_id == user.pk)
+    return bool(document and document.holders.filter(pk=user.pk).exists())
 
 
 def can_see_internals(user) -> bool:

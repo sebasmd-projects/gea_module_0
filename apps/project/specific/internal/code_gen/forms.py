@@ -223,26 +223,23 @@ class CodeGeneratorForm(forms.Form):
         widget=forms.Select(attrs={'class': 'form-select'})
     )
 
-    #: Para quien se emite. Opcional: hay certificados institucionales que no
-    #: son de nadie en particular, y exigirlo obligaria a inventarse un titular
-    #: para emitirlos. Puesto, le deja ver **este** certificado en su
-    #: historial, en solo lectura; vacio, el certificado sigue siendo solo del
-    #: operador. Ver `code_gen/access.py`.
-    holder = forms.ModelChoiceField(
-        label=_('Issued for (holder)'),
+    #: Para quien se emite. Opcional y puede ser mas de uno: hay certificados
+    #: institucionales que no son de nadie en particular, y exigirlo obligaria
+    #: a inventarse un titular para emitirlos; y hay organizaciones con varios
+    #: integrantes, ninguno "el" titular por encima de los demas. Puestos, le
+    #: dejan ver **este** certificado en su historial, en solo lectura; vacio,
+    #: el certificado sigue siendo solo del operador. Ver `code_gen/access.py`.
+    holders = forms.ModelMultipleChoiceField(
+        label=_('Issued for (holders)'),
         required=False,
         # Se rellena en `__init__`: un queryset evaluado aqui se resolveria al
         # importar el modulo y se quedaria con la lista de usuarios de ese
         # momento.
         queryset=None,
-        empty_label=_('Nobody in particular'),
-        widget=forms.Select(attrs={
-            'class': 'form-select',
-            'data-searchable': '1',
-        }),
+        widget=forms.SelectMultiple(attrs={'class': 'form-select'}),
         help_text=_(
-            'The user this certificate is for. They will see it in their own '
-            'history, read-only.'
+            'The users this certificate is for. They will see it in their '
+            'own history, read-only.'
         )
     )
 
@@ -292,7 +289,7 @@ class CodeGeneratorForm(forms.Form):
         # de baja lo deja sin quien lo vea, que es peor que no ponerle titular.
         from apps.project.common.users.models import UserModel
 
-        self.fields['holder'].queryset = (
+        self.fields['holders'].queryset = (
             UserModel.objects
             .filter(is_active=True)
             .order_by('username')

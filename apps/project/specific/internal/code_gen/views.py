@@ -212,14 +212,17 @@ class CodeGeneratorView(InternalToolAccessMixin, FormView):
             issued_at=data.get('issued_at') or timezone.localdate(),
             expires_at=data.get('expires_at'),
             code_initials=options.initials,
-            # Para quien se emite. Vacio es valido: hay certificados que no son
-            # de nadie en particular. Puesto, es lo unico que le deja ver este
-            # certificado en su historial (`access.visible_registrations`).
-            holder=data.get('holder'),
         )
 
         document.source_file = data['source_file']
         document.save()
+
+        # Para quien se emite. Vacio es valido: hay certificados que no son de
+        # nadie en particular. Puestos, es lo unico que les deja ver este
+        # certificado en su historial (`access.visible_registrations`). Un M2M
+        # no se puede pasar al constructor: hace falta que el documento ya
+        # tenga PK, de ahi que esto vaya despues del `save()` de arriba.
+        document.holders.set(data.get('holders') or [])
 
         qr_override = None
         if data.get('qr_content') == QR_CONTENT_CUSTOM:
@@ -342,12 +345,19 @@ class CodeHistoryListView(HistoryAccessMixin, ListView):
             # misma razon por la que existe `email_hash`).
             if is_operator(self.request.user):
                 campos |= (
-                    Q(document__holder__username__icontains=search)
-                    | Q(document__holder__first_name__icontains=search)
-                    | Q(document__holder__last_name__icontains=search)
+                    Q(document__holders__username__icontains=search)
+                    | Q(document__holders__first_name__icontains=search)
+                    | Q(document__holders__last_name__icontains=search)
                 )
 
             queryset = queryset.filter(campos)
+
+            # `holders` es M2M: un documento con varios titulares que
+            # coincidan con la busqueda saldria una vez por cada uno sin
+            # esto. Se aplica siempre y no solo en la rama de arriba, porque
+            # es gratis cuando no hace falta y facil de olvidar si se vuelve
+            # condicional.
+            queryset = queryset.distinct()
 
         return queryset
 
@@ -494,7 +504,7 @@ class CodeDetailView(HistoryAccessMixin, DetailView):
         poder averiguar (invariantes 7 y 20).
         """
         queryset = CodeRegistrationModel.objects.select_related(
-            'document', 'document__holder')
+            'document').prefetch_related('document__holders')
 
         return visible_registrations(queryset, self.request.user)
 
