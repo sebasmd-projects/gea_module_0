@@ -202,6 +202,28 @@
         {% trans 'Verify document' %}
       </a>
 
+      {% comment %}
+        El historico lo abren los dos papeles, y por eso el enlace vive aqui y
+        no dentro del bloque de `is_staff`: la vista se abrio al titular pero
+        el enlace se quedo dentro, asi que para llegar a lo suyo habia que
+        saberse la URL. Una pagina a la que solo se llega sabiendosela no esta
+        abierta: esta escondida.
+
+        La etiqueta cambia con el papel porque la pagina tambien: el operador ve
+        todos los codigos emitidos, el titular solo sus certificados. Llamarle
+        «codigos generados» a quien solo ve los suyos describe otra pantalla.
+      {% endcomment %}
+      <a class="nav-link {% active_class 'code_gen:code_history' %}" href="{% url 'code_gen:code_history' %}">
+        <div class="nav-link-icon">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+        </div>
+        {% if request.user.is_staff or request.user.is_superuser %}
+          {% trans 'Generated codes' %}
+        {% else %}
+          {% trans 'My certificates' %}
+        {% endif %}
+      </a>
+
       {% if request.user.is_staff or request.user.is_superuser %}
         <div class="sidenav-menu-heading">{% trans 'Documents' %}</div>
 
@@ -210,13 +232,6 @@
             <i class="fa-solid fa-barcode"></i>
           </div>
           {% trans 'Code generator' %}
-        </a>
-
-        <a class="nav-link {% active_class 'code_gen:code_history' %}" href="{% url 'code_gen:code_history' %}">
-          <div class="nav-link-icon">
-            <i class="fa-solid fa-clock-rotate-left"></i>
-          </div>
-          {% trans 'Generated codes' %}
         </a>
 
         <a class="nav-link {% active_class 'code_gen:summary_list' %}" href="{% url 'code_gen:summary_list' %}">

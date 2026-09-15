@@ -323,7 +323,7 @@ class CodeHistoryListView(HistoryAccessMixin, ListView):
         search = (self.request.GET.get('q') or '').strip()
 
         if search:
-            queryset = queryset.filter(
+            campos = (
                 Q(reference__icontains=search)
                 | Q(code_information__icontains=search)
                 | Q(sequence__icontains=search)
@@ -331,6 +331,23 @@ class CodeHistoryListView(HistoryAccessMixin, ListView):
                 | Q(source_file_hash__icontains=search)
                 | Q(document__document_title__icontains=search)
             )
+
+            # Buscar por titular: es como el operador ve «los de esta persona»
+            # sin que haga falta un control aparte. Solo para el operador --a un
+            # titular no le sirve de nada filtrar por si mismo, y ofrecerselo
+            # sugeriria que puede buscar a otros.
+            #
+            # Por usuario, nombre y apellido, nunca por correo: va cifrado con
+            # Fernet y un `icontains` sobre el devuelve cero siempre (es la
+            # misma razon por la que existe `email_hash`).
+            if is_operator(self.request.user):
+                campos |= (
+                    Q(document__holder__username__icontains=search)
+                    | Q(document__holder__first_name__icontains=search)
+                    | Q(document__holder__last_name__icontains=search)
+                )
+
+            queryset = queryset.filter(campos)
 
         return queryset
 

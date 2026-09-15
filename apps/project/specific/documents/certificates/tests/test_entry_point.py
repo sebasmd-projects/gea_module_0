@@ -94,8 +94,15 @@ class TheLinkIsForEveryoneWhoIsLoggedIn(TestCase):
         html = self.sidenav(username='comprador2',
                             email='comprador2@example.com', user_type='B')
 
-        self.assertNotIn(reverse('code_gen:code_generate'), html)
-        self.assertNotIn(reverse('code_gen:layout_list'), html)
+        # Con `href="…"`: `/generate/code/` es **prefijo** de
+        # `/generate/code/history/`, que un titular si tiene en su menu desde
+        # que el historial se abrio a los dos papeles. Sin las comillas esta
+        # prueba fallaba por el prefijo, no por el permiso -- el mismo error
+        # que hizo que el termino `env` bloqueara `/envio/` (invariante 14).
+        self.assertNotIn(
+            'href="%s"' % reverse('code_gen:code_generate'), html)
+        self.assertNotIn(
+            'href="%s"' % reverse('code_gen:layout_list'), html)
 
 
 class TheScreenSaysWhichOfTheTwoChecksIntegrity(TestCase):
