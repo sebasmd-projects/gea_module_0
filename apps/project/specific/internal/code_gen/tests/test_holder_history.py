@@ -8,7 +8,10 @@ Un certificado **no tenia dueño**. `DocumentVerificationModel` no tenia ningun
 campo que dijera para quien se emitio, asi que la frase «este certificado es de
 este usuario» no se podia escribir en ninguna parte, y el historial era una
 herramienta interna a la que o entrabas entero o no entrabas. De ahi el campo
-`holder` y este modulo.
+`holders` y este modulo. Empezo siendo un FK (uno solo) y paso a M2M cuando
+hizo falta que un mismo certificado pudiera ser de varias personas a la vez
+--los integrantes de una organizacion, no solo quien lo tramito--, sin que
+ninguna de las reglas de mas abajo cambiara de fondo.
 
 Que se prueba, y por que cada cosa
 ----------------------------------
@@ -66,8 +69,8 @@ class HolderTestCase(TestCase):
             username='beto', email='beto@example.com', password=PASSWORD,
         )
 
-        self.de_ana = self.a_document('Bonos de Ana', holder=self.ana)
-        self.de_beto = self.a_document('Oro de Beto', holder=self.beto)
+        self.de_ana = self.a_document('Bonos de Ana', holders=[self.ana])
+        self.de_beto = self.a_document('Oro de Beto', holders=[self.beto])
         self.de_nadie = self.a_document('Certificado institucional')
 
         self.codigo_ana = self.a_code('ANA', self.de_ana)
@@ -77,15 +80,18 @@ class HolderTestCase(TestCase):
 
         self.history = reverse('code_gen:code_history')
 
-    def a_document(self, title, holder=None):
+    def a_document(self, title, holders=()):
         document = DocumentVerificationModel.objects.create(
             document_title=title,
             issued_at=date(2026, 1, 15),
             certification_status=CertificationStatusChoices.CERTIFIED,
             document_hash=f'{abs(hash(title)):064x}'[:64],
             code_payload=f'GEA-{title[:10]}',
-            holder=holder,
         )
+
+        # M2M: no se puede pasar al constructor, hace falta la PK de arriba.
+        if holders:
+            document.holders.set(holders)
 
         # Con archivo original: el boton que lo ofrece solo existe si lo hay,
         # asi que sin esto la prueba del operador pasaria por no haber archivo
@@ -417,13 +423,13 @@ class TestTheAccessRuleIsOneRule(HolderTestCase):
 
 class TestLosingTheHolderDoesNotWidenAccess(HolderTestCase):
     """
-    `on_delete=SET_NULL`: de los tres comportamientos es el unico que nunca
-    ensancha el acceso. Sin titular no encaja nadie.
+    Quitar a alguien de `holders` (M2M) es la version de hoy de lo que antes
+    hacia `on_delete=SET_NULL` en el FK: de las formas de perder un titular,
+    ninguna ensancha el acceso. Sin ningun titular no encaja nadie.
     """
 
     def test_a_certificate_with_no_holder_belongs_to_nobody(self):
-        self.de_ana.holder = None
-        self.de_ana.save(update_fields=['holder'])
+        self.de_ana.holders.clear()
 
         for usuario in (self.ana, self.beto):
             visibles = visible_registrations(self.listing(), usuario)
@@ -431,12 +437,76 @@ class TestLosingTheHolderDoesNotWidenAccess(HolderTestCase):
             self.assertNotIn(self.codigo_ana, list(visibles), usuario.username)
 
     def test_and_the_operator_still_sees_it(self):
-        self.de_ana.holder = None
-        self.de_ana.save(update_fields=['holder'])
+        self.de_ana.holders.clear()
 
         self.assertIn(
             self.codigo_ana,
             list(visible_registrations(self.listing(), self.operator)),
+        )
+
+    def test_removing_one_of_several_holders_only_drops_that_one(self):
+        """
+        La otra mitad de M2M: quitar a una persona no toca a las demas.
+        """
+        self.de_ana.holders.add(self.beto)
+
+        self.de_ana.holders.remove(self.ana)
+
+        self.assertNotIn(
+            self.codigo_ana,
+            list(visible_registrations(self.listing(), self.ana)),
+        )
+        self.assertIn(
+            self.codigo_ana,
+            list(visible_registrations(self.listing(), self.beto)),
+        )
+
+
+class TestACertificateCanHaveSeveralHolders(HolderTestCase):
+    """
+    El motivo del cambio: una organizacion tiene varios integrantes, ninguno
+    "el" titular por encima de los demas, y antes solo cabia uno.
+    """
+
+    def setUp(self):
+        super().setUp()
+        self.de_ana.holders.add(self.beto)
+
+    def test_both_holders_see_it_in_the_listing(self):
+        for usuario in (self.ana, self.beto):
+            visibles = visible_registrations(self.listing(), usuario)
+
+            self.assertIn(self.codigo_ana, list(visibles), usuario.username)
+
+    def test_both_holders_can_open_the_detail(self):
+        for usuario in (self.ana, self.beto):
+            self.client.force_login(usuario)
+
+            response = self.client.get(self.detail_url(self.codigo_ana))
+
+            self.assertEqual(
+                response.status_code, 200, usuario.username)
+
+    def test_a_third_person_still_gets_a_404(self):
+        alguien_mas = UserModel.objects.create_user(
+            username='otra', email='otra@example.com', password=PASSWORD,
+        )
+        self.client.force_login(alguien_mas)
+
+        response = self.client.get(self.detail_url(self.codigo_ana))
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_neither_holder_sees_the_others_certificate_through_this_one(self):
+        """
+        Compartir un certificado no comparte los demas: Beto es titular de
+        `de_ana` ademas de `de_beto`, pero eso no le abre nada nuevo de Ana.
+        """
+        visibles_de_beto = visible_registrations(self.listing(), self.beto)
+
+        self.assertEqual(
+            {row.reference for row in visibles_de_beto},
+            {'ANA', 'BETO'},
         )
 
 

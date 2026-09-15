@@ -391,24 +391,22 @@ class DocumentVerificationModel(TimeStampedModel):
         db_index=True
     )
 
-    # `SET_NULL` y no `CASCADE` ni `PROTECT`: un certificado es un documento
-    # con valor juridico propio y no se borra porque se vaya su titular. Y de
-    # los tres comportamientos es el unico que **nunca ensancha el acceso**:
-    # sin titular no hay ningun usuario que encaje, asi que el certificado
-    # desaparece de todas las vistas de titular en vez de aparecer en la que
-    # no toca. Un fallo aqui tiene que dejar a la gente fuera, no dentro.
-    holder = models.ForeignKey(
+    # M2M y no FK: un certificado puede pertenecer a varias personas a la vez
+    # -- los integrantes de una organizacion, no solo quien lo tramito --, y
+    # un FK unico obligaba a elegir uno y dejar al resto fuera. Quitar a un
+    # titular es quitar su fila de la tabla intermedia: el certificado sigue
+    # entero para los demas y **nunca ensancha el acceso** a nadie mas, que es
+    # la misma razon por la que antes se usaba `SET_NULL` en vez de `CASCADE`
+    # o `PROTECT`. Un fallo aqui tiene que dejar a alguien fuera, no dentro.
+    holders = models.ManyToManyField(
         UserModel,
-        on_delete=models.SET_NULL,
-        verbose_name=_('Holder'),
+        verbose_name=_('Holders'),
         related_name='held_certificates',
         blank=True,
-        null=True,
-        db_index=True,
         help_text=_(
-            'The user this certificate was issued for. They can see it in the '
-            'code history, read-only: never the original file, the symbols or '
-            'where they were stamped.'
+            'The users this certificate was issued for. They can see it in '
+            'the code history, read-only: never the original file, the '
+            'symbols or where they were stamped.'
         )
     )
 
