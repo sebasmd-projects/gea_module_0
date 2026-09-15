@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ATLAS 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-14 02:25+0000\n"
+"POT-Creation-Date: 2026-09-15 11:28+0000\n"
 "PO-Revision-Date: 2026-08-30 00:00-0500\n"
 "Last-Translator: Sebastián Morales <sebastian.morales@propensionesabogados.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -25,7 +25,7 @@ msgstr "Estado"
 msgid "Operations console"
 msgstr "Consola de operaciones"
 
-#: admin.py:196 registry.py:1581
+#: admin.py:196 registry.py:1641
 msgid "Test summary"
 msgstr "Resumen de pruebas"
 
@@ -335,7 +335,7 @@ msgstr "Diagnóstico"
 msgid "Certification"
 msgstr "Certificación"
 
-#: registry.py:267 registry.py:719
+#: registry.py:267 registry.py:779
 msgid "Scheduled tasks"
 msgstr "Tareas programadas"
 
@@ -484,7 +484,7 @@ msgstr ""
 msgid "Before applying a migration on a table with a lot of rows."
 msgstr "Antes de aplicar una migración sobre una tabla con muchas filas."
 
-#: registry.py:506 registry.py:1551
+#: registry.py:506 registry.py:1611
 msgid "App"
 msgstr "App"
 
@@ -697,17 +697,97 @@ msgstr ""
 "tasa no se aplican."
 
 #: registry.py:672
+msgid "Real-time channel"
+msgstr "Canal de tiempo real"
+
+#: registry.py:674
+msgid ""
+"Measures whether this server can push events in real time through the Redis "
+"on the VPS."
+msgstr ""
+"Mide si este servidor puede empujar eventos en tiempo real a través del "
+"Redis del VPS."
+
+#: registry.py:678
+msgid ""
+"The application lives here and Redis lives on a VPS. That is what would let "
+"real-time notifications work without moving the application: Django only "
+"publishes, and the process that has to stay alive lives over there. Whether "
+"that holds is not a design question, it is a measurement — the channel end "
+"to end, how long a round trip takes (with ATOMIC_REQUESTS that is time with "
+"a transaction open), and whether this hosting allows several outbound "
+"connections at once. One thing it does NOT measure, and says so: whether the"
+" VPS reaches this database. That connection starts on the other side."
+msgstr ""
+"La aplicación vive aquí y el Redis vive en un VPS. Eso es lo que permitiría "
+"que las notificaciones en tiempo real funcionaran sin mudar la aplicación: "
+"Django solo publica, y el proceso que tiene que estar vivo está allá. Si eso"
+" se sostiene no es una cuestión de diseño, es una medición — el canal de "
+"punta a punta, cuánto tarda una ida y vuelta (con ATOMIC_REQUESTS eso es "
+"tiempo con una transacción abierta) y si este hosting deja abrir varias "
+"conexiones salientes a la vez. Una cosa NO la mide, y lo dice: si el VPS "
+"alcanza esta base de datos. Esa conexión sale del otro lado."
+
+#: registry.py:689
+msgid ""
+"Before committing to a real-time design, and after any change to the Redis "
+"ACL."
+msgstr ""
+"Antes de comprometerse con un diseño en tiempo real, y después de cualquier "
+"cambio en la ACL del Redis."
+
+#: registry.py:697
+msgid "Real-time subdomain"
+msgstr "Subdominio de tiempo real"
+
+#: registry.py:700
+msgid ""
+"The host that would serve the socket to the browser, for example "
+"rt.propensionesabogados.com. Left empty that check is skipped rather than "
+"guessed: answering about a host nobody named is not an answer."
+msgstr ""
+"El host que serviría el socket al navegador, por ejemplo "
+"rt.propensionesabogados.com. Vacío, esa comprobación se salta en vez de "
+"adivinarse: contestar sobre un host que nadie nombró no es una respuesta."
+
+#: registry.py:709
+msgid "Latency samples"
+msgstr "Muestras de latencia"
+
+#: registry.py:713
+msgid ""
+"How many round trips to measure. One measures nothing: the first pays for "
+"the connection and the TLS handshake."
+msgstr ""
+"Cuántas idas y vueltas se miden. Una no mide nada: la primera paga el "
+"establecimiento de la conexión y el saludo TLS."
+
+#: registry.py:719
+msgid "Simultaneous connections"
+msgstr "Conexiones simultáneas"
+
+#: registry.py:723
+msgid ""
+"How many outbound connections to hold open at the same time. Ten is not the "
+"production number — it is enough to rule out a hosting that cuts at the "
+"second one."
+msgstr ""
+"Cuántas conexiones salientes se mantienen abiertas a la vez. Diez no es el "
+"número de producción — es suficiente para descartar un hosting que corta a "
+"la segunda."
+
+#: registry.py:732
 msgid "Background workers"
 msgstr "Workers en segundo plano"
 
-#: registry.py:674
+#: registry.py:734
 msgid ""
 "Checks whether this server can hold a worker process outside the request."
 msgstr ""
 "Comprueba si este servidor puede sostener un proceso worker fuera de la "
 "petición."
 
-#: registry.py:678
+#: registry.py:738
 msgid ""
 "A worker is not a library you install: it is a process that lives outside "
 "the request and does not die. Shared hosting often kills anything that is "
@@ -726,15 +806,15 @@ msgstr ""
 "claves y otras operaciones. Ese falla en silencio, y las tareas simplemente "
 "desaparecen."
 
-#: registry.py:687
+#: registry.py:747
 msgid "Before deciding whether Celery is worth adopting here."
 msgstr "Antes de decidir si merece la pena adoptar Celery aquí."
 
-#: registry.py:694
+#: registry.py:754
 msgid "Launch the test process"
 msgstr "Lanzar el proceso de prueba"
 
-#: registry.py:697
+#: registry.py:757
 msgid ""
 "Starts a detached process that does nothing but write the time every 30 "
 "seconds. Come back later and run this again: what matters is not that it "
@@ -744,11 +824,11 @@ msgstr ""
 "segundos. Vuelve más tarde y ejecútalo otra vez: lo que importa no es que "
 "arranque, sino que entonces siga vivo."
 
-#: registry.py:705
+#: registry.py:765
 msgid "How long the test should last"
 msgstr "Cuánto debe durar la prueba"
 
-#: registry.py:709
+#: registry.py:769
 msgid ""
 "Half an hour rules out the hosting that kills everything right away, which "
 "is the common case. It says nothing about the one that kills a process now "
@@ -758,14 +838,14 @@ msgstr ""
 "caso común. No dice nada del que mata un proceso de vez en cuando, y para "
 "eso tiene que correr más tiempo: 1440 es un día entero."
 
-#: registry.py:721
+#: registry.py:781
 msgid ""
 "Checks whether the scheduled tasks are actually installed in the crontab."
 msgstr ""
 "Comprueba si las tareas programadas están instaladas de verdad en el "
 "crontab."
 
-#: registry.py:725
+#: registry.py:785
 msgid ""
 "Declaring a task in CRONJOBS does not schedule it: django-crontab writes it "
 "into the crontab only when someone runs \"manage.py crontab add\". Until "
@@ -783,15 +863,15 @@ msgstr ""
 " la línea apuntando a una tarea que ya no existe. El cron dispara y no "
 "ejecuta nada, y desde fuera se ve exactamente igual que si todo funcionara."
 
-#: registry.py:735 registry.py:1173
+#: registry.py:795 registry.py:1233
 msgid "When something that should run on its own has not run."
 msgstr "Cuando algo que debería correr solo no ha corrido."
 
-#: registry.py:742
+#: registry.py:802
 msgid "Mature blockchain proofs"
 msgstr "Madurar pruebas de la cadena de bloques"
 
-#: registry.py:744
+#: registry.py:804
 msgid ""
 "Asks the calendars whether the pending proofs are already in a Bitcoin "
 "block."
@@ -799,7 +879,7 @@ msgstr ""
 "Pregunta a los calendarios si las pruebas pendientes ya están en un bloque "
 "de Bitcoin."
 
-#: registry.py:748
+#: registry.py:808
 msgid ""
 "This is what the scheduled task does every 15 minutes. Running it by hand "
 "catches up without waiting — useful when the task was not installed, or "
@@ -813,21 +893,21 @@ msgstr ""
 "nada pendiente ni siquiera sale a la red, y una prueba que todavía no ha "
 "madurado se deja para la vuelta siguiente en vez de tratarla como un error."
 
-#: registry.py:755
+#: registry.py:815
 msgid "When an anchor has been waiting longer than a few hours."
 msgstr "Cuando un anclaje lleva esperando más de unas horas."
 
-#: registry.py:762
+#: registry.py:822
 msgid "Dependencies"
 msgstr "Dependencias"
 
-#: registry.py:764
+#: registry.py:824
 msgid ""
 "Checks that requirements.txt carries everything declared in pyproject.toml."
 msgstr ""
 "Comprueba que requirements.txt lleve todo lo declarado en pyproject.toml."
 
-#: registry.py:768
+#: registry.py:828
 msgid ""
 "The project uses two dependency files: pyproject.toml with uv locally, and "
 "requirements.txt with pip in production, because cPanel has no uv. The "
@@ -845,22 +925,22 @@ msgstr ""
 "anclaje en la cadena de bloques fallaba. El síntoma apareció lejos de la "
 "causa, que es lo peor que hay."
 
-#: registry.py:777
+#: registry.py:837
 msgid "Before every deploy, and after adding any dependency."
 msgstr "Antes de cada despliegue, y después de añadir cualquier dependencia."
 
-#: registry.py:784
+#: registry.py:844
 msgid "Blockchain anchoring"
 msgstr "Anclaje en la cadena de bloques"
 
-#: registry.py:786
+#: registry.py:846
 msgid ""
 "Checks whether this server can send hashes to the OpenTimestamps calendars."
 msgstr ""
 "Comprueba si este servidor puede enviar huellas a los calendarios de "
 "OpenTimestamps."
 
-#: registry.py:790
+#: registry.py:850
 msgid ""
 "When the composer says the box was sealed but not sent, the cause is almost "
 "never the code: either the opentimestamps library is not installed on this "
@@ -878,15 +958,15 @@ msgstr ""
 "anclajes de verdad: una prueba que lleva días esperando significa que nadie "
 "la está madurando, no que el envío fallara."
 
-#: registry.py:799
+#: registry.py:859
 msgid "When sealing reports that sending to the blockchain failed."
 msgstr "Cuando el sellado avisa de que el envío a la cadena de bloques falló."
 
-#: registry.py:806
+#: registry.py:866
 msgid "Send a test hash"
 msgstr "Enviar una huella de prueba"
 
-#: registry.py:809
+#: registry.py:869
 msgid ""
 "Sends a made-up hash for real, to test the whole path, and keeps the proof "
 "so it can be checked later. Harmless: it belongs to no document."
@@ -895,11 +975,11 @@ msgstr ""
 " prueba para poder comprobarla después. Es inofensivo: no pertenece a ningún"
 " documento."
 
-#: registry.py:816
+#: registry.py:876
 msgid "Check the last test send"
 msgstr "Comprobar el último envío de prueba"
 
-#: registry.py:819
+#: registry.py:879
 msgid ""
 "Goes back to the last test hash and asks the calendars whether it made it "
 "into a Bitcoin block. Nobody notifies you when it does, so this is how you "
@@ -909,15 +989,15 @@ msgstr ""
 "llegó a un bloque de Bitcoin. Nadie avisa cuando llega, así que esta es la "
 "forma de enterarse. Ejecútalo unas horas después del envío."
 
-#: registry.py:829
+#: registry.py:889
 msgid "Security check"
 msgstr "Comprobación de seguridad"
 
-#: registry.py:831
+#: registry.py:891
 msgid "Repeats the security audit over the code as it is right now."
 msgstr "Repite la auditoría de seguridad sobre el código tal como está ahora."
 
-#: registry.py:834
+#: registry.py:894
 msgid ""
 "It looks at what a report cannot: whether a view added since then went out "
 "without access control, whether a public form accepts POST with no attempt "
@@ -949,20 +1029,20 @@ msgstr ""
 "no hay nadie que conteste. Las tres son opcionales, y cuando falta una el "
 "informe lo dice en vez de encogerse en silencio."
 
-#: registry.py:851
+#: registry.py:911
 msgid "Before every deploy, together with the dependency check."
 msgstr "Antes de cada despliegue, junto con la comprobación de dependencias."
 
-#: registry.py:862
+#: registry.py:922
 msgid "Anti-scan trap"
 msgstr "Trampa anti-escaneo"
 
-#: registry.py:864
+#: registry.py:924
 msgid "Checks that no legitimate route collides with the scanner trap."
 msgstr ""
 "Comprueba que ninguna ruta legítima colisione con la trampa anti-escaneo."
 
-#: registry.py:867
+#: registry.py:927
 msgid ""
 "The trap catches any path containing one of COMMON_ATTACK_TERMS and blocks "
 "the IP. A badly chosen term hijacks a real route and locks out real users. "
@@ -974,19 +1054,19 @@ msgstr ""
 " a usuarios reales. Esto informa de las colisiones respetando el orden del "
 "URLconf, que es lo que de verdad lo decide."
 
-#: registry.py:872
+#: registry.py:932
 msgid "Every time COMMON_ATTACK_TERMS changes."
 msgstr "Cada vez que cambia COMMON_ATTACK_TERMS."
 
-#: registry.py:879
+#: registry.py:939
 msgid "Migration state"
 msgstr "Estado de las migraciones"
 
-#: registry.py:880
+#: registry.py:940
 msgid "Lists which migrations are applied and which are pending."
 msgstr "Lista qué migraciones están aplicadas y cuáles pendientes."
 
-#: registry.py:882
+#: registry.py:942
 msgid ""
 "Nothing runs. It is the way to see whether the database matches the code "
 "before deciding to migrate."
@@ -994,27 +1074,27 @@ msgstr ""
 "No se ejecuta nada. Es la forma de ver si la base de datos cuadra con el "
 "código antes de decidir migrar."
 
-#: registry.py:885
+#: registry.py:945
 msgid "Right after deploying, before running migrate."
 msgstr "Justo después de desplegar, antes de ejecutar migrate."
 
-#: registry.py:891
+#: registry.py:951
 msgid "Show plan"
 msgstr "Mostrar el plan"
 
-#: registry.py:893
+#: registry.py:953
 msgid "Lists them in the order they would be applied."
 msgstr "Las lista en el orden en que se aplicarían."
 
-#: registry.py:904
+#: registry.py:964
 msgid "Apply migrations"
 msgstr "Aplicar migraciones"
 
-#: registry.py:905
+#: registry.py:965
 msgid "Brings the database schema up to date with the code."
 msgstr "Pone el esquema de la base de datos al día con el código."
 
-#: registry.py:907
+#: registry.py:967
 msgid ""
 "Applies every pending migration. Run the migration state check first to see "
 "what is going to happen."
@@ -1022,34 +1102,34 @@ msgstr ""
 "Aplica todas las migraciones pendientes. Ejecuta antes la comprobación del "
 "estado para ver qué va a pasar."
 
-#: registry.py:910
+#: registry.py:970
 msgid "After deploying code that adds fields or constraints."
 msgstr "Después de desplegar código que añade campos o restricciones."
 
-#: registry.py:916 registry.py:943
+#: registry.py:976 registry.py:1003
 msgid "No questions"
 msgstr "Sin preguntas"
 
-#: registry.py:919 registry.py:946
+#: registry.py:979 registry.py:1006
 msgid "Required here: there is nobody to answer a prompt."
 msgstr "Imprescindible aquí: no hay nadie que conteste a una pregunta."
 
-#: registry.py:924
+#: registry.py:984
 msgid ""
 "A migration can lock tables. On a busy database, run it out of office hours."
 msgstr ""
 "Una migración puede bloquear tablas. En una base de datos con movimiento, "
 "ejecútala fuera del horario de oficina."
 
-#: registry.py:930
+#: registry.py:990
 msgid "Collect static files"
 msgstr "Recopilar archivos estáticos"
 
-#: registry.py:931
+#: registry.py:991
 msgid "Publishes the CSS and JS so the browser gets them."
 msgstr "Publica el CSS y el JS para que el navegador los reciba."
 
-#: registry.py:933
+#: registry.py:993
 msgid ""
 "In production static files are served with a hash in the name, so a change "
 "is invisible until this runs. If a page looks broken after a deploy, this is"
@@ -1059,30 +1139,30 @@ msgstr ""
 "cambio es invisible hasta que esto se ejecuta. Si una página se ve rota "
 "después de un despliegue, suele ser por esto."
 
-#: registry.py:937
+#: registry.py:997
 msgid "After every deploy that touches CSS or JS."
 msgstr "Después de cada despliegue que toque CSS o JS."
 
-#: registry.py:950
+#: registry.py:1010
 msgid "Clear first"
 msgstr "Limpiar primero"
 
-#: registry.py:953
+#: registry.py:1013
 msgid ""
 "Deletes what was collected before. Slower, but leaves no orphan files "
 "behind."
 msgstr ""
 "Borra lo que se recopiló antes. Más lento, pero no deja ficheros huérfanos."
 
-#: registry.py:962
+#: registry.py:1022
 msgid "Compile translations"
 msgstr "Compilar traducciones"
 
-#: registry.py:963
+#: registry.py:1023
 msgid "Turns the .po catalogs into the .mo files Django reads."
 msgstr "Convierte los catálogos .po en los archivos .mo que lee Django."
 
-#: registry.py:965
+#: registry.py:1025
 msgid ""
 "Editing a translation changes the .po file, but Django only reads the "
 "compiled .mo. Until this runs, the new text shows in English."
@@ -1090,27 +1170,27 @@ msgstr ""
 "Editar una traducción cambia el fichero .po, pero Django solo lee el .mo "
 "compilado. Hasta que esto se ejecuta, el texto nuevo sale en inglés."
 
-#: registry.py:969
+#: registry.py:1029
 msgid "After translating with Rosetta or editing a .po by hand."
 msgstr "Después de traducir con Rosetta o de editar un .po a mano."
 
-#: registry.py:975 registry.py:1507
+#: registry.py:1035 registry.py:1567
 msgid "Language"
 msgstr "Idioma"
 
-#: registry.py:979
+#: registry.py:1039
 msgid "Which catalog to compile."
 msgstr "Qué catálogo compilar."
 
-#: registry.py:986
+#: registry.py:1046
 msgid "Clear the cache"
 msgstr "Vaciar la caché"
 
-#: registry.py:987
+#: registry.py:1047
 msgid "Empties the application cache."
 msgstr "Vacía la caché de la aplicación."
 
-#: registry.py:989
+#: registry.py:1049
 msgid ""
 "Useful when something stale is being served. Note that it also clears the "
 "public OTP rate-limit counters, which live in cache: right after running "
@@ -1120,11 +1200,11 @@ msgstr ""
 " de los límites del OTP público, que viven en la caché; justo después de "
 "ejecutarlo, esos límites empiezan de cero."
 
-#: registry.py:993
+#: registry.py:1053
 msgid "After changing data that a page keeps cached."
 msgstr "Después de cambiar datos que una página mantiene en caché."
 
-#: registry.py:998
+#: registry.py:1058
 msgid ""
 "It resets the public OTP rate limits. Do not run it while someone is "
 "hammering the verification page."
@@ -1132,11 +1212,11 @@ msgstr ""
 "Reinicia los límites del OTP público. No lo ejecutes mientras alguien esté "
 "machacando la página de verificación."
 
-#: registry.py:1004
+#: registry.py:1064
 msgid "Health check"
 msgstr "Comprobación de salud"
 
-#: registry.py:1005
+#: registry.py:1065
 msgid ""
 "Checks the database, the cache and the mail server, from inside and from "
 "outside."
@@ -1144,7 +1224,7 @@ msgstr ""
 "Comprueba la base de datos, la caché y el servidor de correo, desde dentro y"
 " desde fuera."
 
-#: registry.py:1008
+#: registry.py:1068
 msgid ""
 "The two ways of asking do not answer the same thing, and telling them apart "
 "is the whole point. Asked from inside, it says whether the application "
@@ -1162,7 +1242,7 @@ msgstr ""
 " buscar en el código. Es la misma URL que golpea la tarea de calentamiento "
 "cada tres minutos."
 
-#: registry.py:1017
+#: registry.py:1077
 msgid ""
 "Right after a deploy, and whenever the site feels broken without an obvious "
 "error."
@@ -1170,24 +1250,24 @@ msgstr ""
 "Justo después de un despliegue, y siempre que el sitio se note roto sin un "
 "error evidente."
 
-#: registry.py:1024
+#: registry.py:1084
 msgid "Ask over HTTP"
 msgstr "Preguntar por HTTP"
 
-#: registry.py:1026
+#: registry.py:1086
 msgid "Requests the real public URL instead of checking inside this process."
 msgstr ""
 "Pide la URL pública de verdad en vez de comprobarlo dentro de este proceso."
 
-#: registry.py:1034
+#: registry.py:1094
 msgid "Application log"
 msgstr "Registro de la aplicación"
 
-#: registry.py:1035
+#: registry.py:1095
 msgid "Shows the last lines of the log without opening a terminal."
 msgstr "Enseña las últimas líneas del log sin abrir un terminal."
 
-#: registry.py:1038
+#: registry.py:1098
 msgid ""
 "Reading the log was the last thing that still forced an SSH session, and it "
 "is the first thing needed when something fails. It reads from the end and "
@@ -1202,15 +1282,15 @@ msgstr ""
 "enseñe queda escrito también en el historial de ejecuciones de esta misma "
 "consola."
 
-#: registry.py:1045
+#: registry.py:1105
 msgid "A page returned a 500 and there is no other clue."
 msgstr "Una página devolvió un 500 y no hay más pistas."
 
-#: registry.py:1051
+#: registry.py:1111
 msgid "Only list the files"
 msgstr "Solo listar los ficheros"
 
-#: registry.py:1053
+#: registry.py:1113
 msgid ""
 "Shows the current log and the rotated ones with their size, without printing"
 " any content."
@@ -1218,39 +1298,39 @@ msgstr ""
 "Enseña el log actual y los rotados con su tamaño, sin imprimir nada de su "
 "contenido."
 
-#: registry.py:1058
+#: registry.py:1118
 msgid "Lines"
 msgstr "Líneas"
 
-#: registry.py:1061
+#: registry.py:1121
 msgid "How many lines from the end. The maximum is 2000."
 msgstr "Cuántas líneas desde el final. El máximo son 2000."
 
-#: registry.py:1065
+#: registry.py:1125
 msgid "Containing"
 msgstr "Que contengan"
 
-#: registry.py:1067
+#: registry.py:1127
 msgid "Only lines carrying this text. Literal, not a regular expression."
 msgstr ""
 "Solo las líneas que lleven este texto. Literal, no una expresión regular."
 
-#: registry.py:1073
+#: registry.py:1133
 msgid "Rotated number"
 msgstr "Número del rotado"
 
-#: registry.py:1075
+#: registry.py:1135
 msgid ""
 "Read stderr_old_N.log instead of the current one. Leave it empty for the "
 "current log."
 msgstr ""
 "Leer stderr_old_N.log en vez del actual. Déjalo vacío para el log actual."
 
-#: registry.py:1083
+#: registry.py:1143
 msgid "Rotate the log"
 msgstr "Rotar el log"
 
-#: registry.py:1084
+#: registry.py:1144
 msgid ""
 "Renames the log to stderr_old_N.log when it grows past its size, and drops "
 "the oldest ones."
@@ -1258,7 +1338,7 @@ msgstr ""
 "Renombra el log a stderr_old_N.log cuando pasa de su tamaño, y descarta los "
 "más viejos."
 
-#: registry.py:1087
+#: registry.py:1147
 msgid ""
 "It does nothing unless the file has passed the limit, so running it costs "
 "one stat. That is why it is scheduled hourly rather than weekly: with a "
@@ -1278,31 +1358,31 @@ msgstr ""
 "del log. La numeración continúa desde lo que ya hay en vez de empezar de "
 "cero, así que un fichero que alguien citó en un correo conserva su nombre."
 
-#: registry.py:1098
+#: registry.py:1158
 msgid "It runs on its own every hour; by hand only to force it."
 msgstr "Se ejecuta solo cada hora; a mano, únicamente para forzarlo."
 
-#: registry.py:1104
+#: registry.py:1164
 msgid "Rotate now"
 msgstr "Rotar ahora"
 
-#: registry.py:1106
+#: registry.py:1166
 msgid "Rotates even if it has not reached the size."
 msgstr "Rota aunque no haya llegado al tamaño."
 
-#: registry.py:1110
+#: registry.py:1170
 msgid "Size in MB"
 msgstr "Tamaño en MB"
 
-#: registry.py:1113
+#: registry.py:1173
 msgid "Rotate from this size on."
 msgstr "Rotar a partir de este tamaño."
 
-#: registry.py:1117
+#: registry.py:1177
 msgid "Rotated files to keep"
 msgstr "Rotados que se conservan"
 
-#: registry.py:1120
+#: registry.py:1180
 msgid ""
 "The older ones are deleted. 0 keeps them all, and fills the disk sooner or "
 "later."
@@ -1310,17 +1390,17 @@ msgstr ""
 "Los más viejos se borran. Con 0 se guardan todos, y tarde o temprano se "
 "llena el disco."
 
-#: registry.py:1128
+#: registry.py:1188
 msgid "Locate a static file"
 msgstr "Localizar un archivo estático"
 
-#: registry.py:1129
+#: registry.py:1189
 msgid "Says which folder a CSS, JS or image file is really being served from."
 msgstr ""
 "Dice desde qué carpeta se está sirviendo de verdad un fichero CSS, JS o de "
 "imagen."
 
-#: registry.py:1132
+#: registry.py:1192
 msgid ""
 "When a page looks broken after a deploy, the question is whether the file "
 "was collected at all and which copy won. This answers both: it lists every "
@@ -1331,36 +1411,36 @@ msgstr ""
 "todos los sitios donde aparece el fichero, en el orden en que Django los "
 "busca."
 
-#: registry.py:1137
+#: registry.py:1197
 msgid "A stylesheet 404s, or a change to it does not show up."
 msgstr "Una hoja de estilos da 404, o un cambio en ella no se ve."
 
-#: registry.py:1143
+#: registry.py:1203
 msgid "Path of the file"
 msgstr "Ruta del fichero"
 
-#: registry.py:1147
+#: registry.py:1207
 msgid "Relative to the static folder, for example css/aegis_header.css."
 msgstr "Relativa a la carpeta de estáticos, por ejemplo css/aegis_header.css."
 
-#: registry.py:1153
+#: registry.py:1213
 msgid "Only the winning copy"
 msgstr "Solo la copia que gana"
 
-#: registry.py:1155
+#: registry.py:1215
 msgid "Stops at the first match, which is the one actually served."
 msgstr ""
 "Se detiene en la primera coincidencia, que es la que se sirve de verdad."
 
-#: registry.py:1163
+#: registry.py:1223
 msgid "Installed scheduled lines"
 msgstr "Líneas programadas instaladas"
 
-#: registry.py:1164
+#: registry.py:1224
 msgid "Lists the lines django-crontab has written into the crontab."
 msgstr "Lista las líneas que django-crontab ha escrito en el crontab."
 
-#: registry.py:1167
+#: registry.py:1227
 msgid ""
 "What is really installed, as opposed to what CRONJOBS declares. The two "
 "drift apart on their own: the installed line carries a hash of the whole job"
@@ -1374,15 +1454,15 @@ msgstr ""
 " que ya no existe. Léelo junto a la comprobación de tareas programadas, que "
 "compara las dos."
 
-#: registry.py:1182
+#: registry.py:1242
 msgid "Install the scheduled tasks"
 msgstr "Instalar las tareas programadas"
 
-#: registry.py:1183
+#: registry.py:1243
 msgid "Writes every job declared in CRONJOBS into the crontab."
 msgstr "Escribe en el crontab todas las tareas declaradas en CRONJOBS."
 
-#: registry.py:1185
+#: registry.py:1245
 msgid ""
 "Declaring a task in settings schedules nothing until this runs. It is also "
 "the fix when a schedule changed: it is safe to run repeatedly, because "
@@ -1394,7 +1474,7 @@ msgstr ""
 "las veces que haga falta, porque django-crontab quita sus propias líneas "
 "antes de volver a escribirlas — nunca toca líneas que no escribió él."
 
-#: registry.py:1190
+#: registry.py:1250
 msgid ""
 "After deploying a change to CRONJOBS, or when the scheduled-tasks check "
 "reports nothing installed."
@@ -1402,7 +1482,7 @@ msgstr ""
 "Después de desplegar un cambio en CRONJOBS, o cuando la comprobación de "
 "tareas programadas dice que no hay nada instalado."
 
-#: registry.py:1198
+#: registry.py:1258
 msgid ""
 "It rewrites this account crontab lines for this project. Run the scheduled-"
 "tasks check afterwards to confirm what ended up there."
@@ -1410,15 +1490,15 @@ msgstr ""
 "Reescribe las líneas del crontab de esta cuenta para este proyecto. Ejecuta "
 "después la comprobación de tareas programadas para confirmar qué acabó ahí."
 
-#: registry.py:1204
+#: registry.py:1264
 msgid "Uninstall the scheduled tasks"
 msgstr "Desinstalar las tareas programadas"
 
-#: registry.py:1205
+#: registry.py:1265
 msgid "Removes this project lines from the crontab."
 msgstr "Quita del crontab las líneas de este proyecto."
 
-#: registry.py:1207
+#: registry.py:1267
 msgid ""
 "Nothing scheduled runs after this: anchors stop maturing, the daily code "
 "stops being issued. It is half of the repair when a schedule changed — "
@@ -1430,23 +1510,23 @@ msgstr ""
 "cambia un horario —quitar y volver a instalar— y por sí solo sirve "
 "únicamente para dejar la plataforma fuera de servicio."
 
-#: registry.py:1212
+#: registry.py:1272
 msgid "Before reinstalling the tasks after changing a schedule."
 msgstr "Antes de reinstalar las tareas después de cambiar un horario."
 
-#: registry.py:1219
+#: registry.py:1279
 msgid "Nothing runs on its own until the tasks are installed again."
 msgstr "No se ejecuta nada solo hasta que las tareas se vuelvan a instalar."
 
-#: registry.py:1224
+#: registry.py:1284
 msgid "Failed login attempts"
 msgstr "Intentos de acceso fallidos"
 
-#: registry.py:1225
+#: registry.py:1285
 msgid "Lists the login failures axes is counting right now."
 msgstr "Lista los fallos de acceso que axes está contando ahora mismo."
 
-#: registry.py:1227
+#: registry.py:1287
 msgid ""
 "Where to look when someone says they cannot log in. It tells a lockout apart"
 " from a wrong password, which look identical from the outside. Note that a "
@@ -1458,19 +1538,19 @@ msgstr ""
 " bloqueo va por pareja (IP, usuario), así que la misma persona puede estar "
 "bloqueada desde la oficina y entrar desde su móvil."
 
-#: registry.py:1233
+#: registry.py:1293
 msgid "A user reports that their password stopped working."
 msgstr "Un usuario avisa de que su contraseña dejó de funcionar."
 
-#: registry.py:1240
+#: registry.py:1300
 msgid "Unlock an IP"
 msgstr "Desbloquear una IP"
 
-#: registry.py:1241
+#: registry.py:1301
 msgid "Clears the login lockout for one IP address."
 msgstr "Quita el bloqueo de acceso de una sola dirección IP."
 
-#: registry.py:1243
+#: registry.py:1303
 msgid ""
 "The surgical fix when a real user is locked out: it frees that address and "
 "nobody else. This is about the login lockout, which is a different thing "
@@ -1483,29 +1563,29 @@ msgstr ""
 "desde la tabla de IP bloqueadas o desde la lista blanca, y se ve como un 404"
 " normal y corriente, no como un error de acceso."
 
-#: registry.py:1249
+#: registry.py:1309
 msgid "An office got locked out after several typed passwords."
 msgstr "Una oficina se quedó bloqueada después de teclear varias contraseñas."
 
-#: registry.py:1255
+#: registry.py:1315
 msgid "IP address"
 msgstr "Dirección IP"
 
-#: registry.py:1259
+#: registry.py:1319
 msgid "The one showing in the failed attempts."
 msgstr "La que aparece en los intentos fallidos."
 
-#: registry.py:1267
+#: registry.py:1327
 msgid "Unlock one person"
 msgstr "Desbloquear a una persona"
 
-#: registry.py:1268
+#: registry.py:1328
 msgid "Clears the login lockout for one username, from any address."
 msgstr ""
 "Quita el bloqueo de acceso de un nombre de usuario, desde cualquier "
 "dirección."
 
-#: registry.py:1271
+#: registry.py:1331
 msgid ""
 "The lockout is per (IP, user) pair, so someone locked out at the office is "
 "still locked out from there after moving to their phone and back. This frees"
@@ -1517,27 +1597,27 @@ msgstr ""
 " esa persona en todas partes sin tocar a nadie más que comparta su "
 "dirección."
 
-#: registry.py:1276
+#: registry.py:1336
 msgid "A user is still locked out after changing network."
 msgstr "Un usuario sigue bloqueado después de cambiar de red."
 
-#: registry.py:1282 registry.py:1309
+#: registry.py:1342 registry.py:1369
 msgid "Username"
 msgstr "Nombre de usuario"
 
-#: registry.py:1286
+#: registry.py:1346
 msgid "As it appears in the failed attempts."
 msgstr "Tal como aparece en los intentos fallidos."
 
-#: registry.py:1294
+#: registry.py:1354
 msgid "Second-factor status"
 msgstr "Estado del segundo factor"
 
-#: registry.py:1295
+#: registry.py:1355
 msgid "Says whether a user has their second factor set up."
 msgstr "Dice si un usuario tiene configurado su segundo factor."
 
-#: registry.py:1297
+#: registry.py:1357
 msgid ""
 "It changes nothing and shows no secret: only whether the device is "
 "registered. It is the first question to answer when someone says they cannot"
@@ -1551,23 +1631,23 @@ msgstr ""
 "segundo factor verificado — y lo hace con un 404, que desde fuera se ve como"
 " que la página no existe."
 
-#: registry.py:1303
+#: registry.py:1363
 msgid "Someone reports the admin URL \"does not exist\" for them."
 msgstr "Alguien avisa de que a él la URL del panel «no existe»."
 
-#: registry.py:1313
+#: registry.py:1373
 msgid "Whose status to check."
 msgstr "De quién se comprueba el estado."
 
-#: registry.py:1321
+#: registry.py:1381
 msgid "Unlock every login"
 msgstr "Desbloquear todos los accesos"
 
-#: registry.py:1322
+#: registry.py:1382
 msgid "Clears all login lockouts at once."
 msgstr "Quita de golpe todos los bloqueos de acceso."
 
-#: registry.py:1324
+#: registry.py:1384
 msgid ""
 "It frees everyone, an attacker in the middle of guessing passwords included."
 " Prefer unlocking a single IP: this one is for when the lockout is clearly "
@@ -1577,25 +1657,25 @@ msgstr ""
 "Es mejor desbloquear una sola IP: esto es para cuando el bloqueo es "
 "claramente culpa de la propia plataforma y hay varias personas atascadas."
 
-#: registry.py:1329
+#: registry.py:1389
 msgid "After a change that locked out legitimate users in bulk."
 msgstr "Después de un cambio que dejó fuera a usuarios legítimos en bloque."
 
-#: registry.py:1334
+#: registry.py:1394
 msgid "It also resets the counter of anyone currently guessing passwords."
 msgstr ""
 "Reinicia también el contador de quien esté probando contraseñas en este "
 "momento."
 
-#: registry.py:1340
+#: registry.py:1400
 msgid "Expired sessions"
 msgstr "Sesiones caducadas"
 
-#: registry.py:1341
+#: registry.py:1401
 msgid "Deletes sessions that already expired."
 msgstr "Borra las sesiones que ya caducaron."
 
-#: registry.py:1343
+#: registry.py:1403
 msgid ""
 "Django never cleans up the session table on its own, so it only grows. It "
 "removes nothing that is still valid: nobody gets logged out by running this."
@@ -1604,21 +1684,21 @@ msgstr ""
 "No quita nada que siga siendo válido: ejecutarlo no saca a nadie de su "
 "sesión."
 
-#: registry.py:1347
+#: registry.py:1407
 msgid "Housekeeping, when the session table has grown a lot."
 msgstr "Mantenimiento, cuando la tabla de sesiones ha crecido mucho."
 
-#: registry.py:1354
+#: registry.py:1414
 msgid "Send a test email"
 msgstr "Enviar un correo de prueba"
 
-#: registry.py:1355
+#: registry.py:1415
 msgid "Sends one message to check the mail settings really work."
 msgstr ""
 "Envía un mensaje para comprobar que la configuración de correo funciona de "
 "verdad."
 
-#: registry.py:1357
+#: registry.py:1417
 msgid ""
 "Email fails silently more often than anything else here, and it fails where "
 "it hurts: the OTP of the public verification, the password recovery link, "
@@ -1632,29 +1712,29 @@ msgstr ""
 "configuración mala de un mensaje que salió y lo filtraron: si llega, la "
 "plataforma hizo su parte."
 
-#: registry.py:1363
+#: registry.py:1423
 msgid "After changing the mail settings, or when OTPs are not arriving."
 msgstr ""
 "Después de cambiar la configuración de correo, o cuando los códigos no "
 "llegan."
 
-#: registry.py:1370
+#: registry.py:1430
 msgid "Recipient"
 msgstr "Destinatario"
 
-#: registry.py:1374
+#: registry.py:1434
 msgid "An address you can actually check."
 msgstr "Una dirección que puedas mirar de verdad."
 
-#: registry.py:1380
+#: registry.py:1440
 msgid "This sends real email."
 msgstr "Esto envía correo real."
 
-#: registry.py:1384
+#: registry.py:1444
 msgid "Announce a legal document change"
 msgstr "Anunciar un cambio en un documento legal"
 
-#: registry.py:1385
+#: registry.py:1445
 msgid ""
 "Emails every user about an approved change they have not been told about "
 "yet."
@@ -1662,7 +1742,7 @@ msgstr ""
 "Manda un correo a cada usuario sobre un cambio aprobado del que todavía no "
 "se le ha avisado."
 
-#: registry.py:1388
+#: registry.py:1448
 msgid ""
 "Entering the platform after a change is recorded as accepting it, and that "
 "only holds if the person was told first — so this is what opens that door, "
@@ -1676,7 +1756,7 @@ msgstr ""
 " es para mandarlo ya, o para comprobar en seco a quién le llegaría. Sin nada"
 " pendiente es una consulta y se para."
 
-#: registry.py:1395
+#: registry.py:1455
 msgid ""
 "Right after approving a new version, instead of waiting for the scheduled "
 "run."
@@ -1684,27 +1764,27 @@ msgstr ""
 "Justo después de aprobar una versión nueva, en vez de esperar a la pasada "
 "programada."
 
-#: registry.py:1402
+#: registry.py:1462
 msgid "Only say who would get it"
 msgstr "Sólo decir a quién le llegaría"
 
-#: registry.py:1404
+#: registry.py:1464
 msgid "Sends nothing and marks nothing."
 msgstr "No manda nada ni marca nada."
 
-#: registry.py:1408
+#: registry.py:1468
 msgid "Without the dry run this sends real email to every user."
 msgstr "Sin la opción en seco, esto manda correo real a todos los usuarios."
 
-#: registry.py:1412
+#: registry.py:1472
 msgid "Daily GEA code"
 msgstr "Código diario de GEA"
 
-#: registry.py:1413
+#: registry.py:1473
 msgid "Issues the daily code and mails it to its recipients."
 msgstr "Emite el código diario y lo envía por correo a sus destinatarios."
 
-#: registry.py:1415
+#: registry.py:1475
 msgid ""
 "The same thing the scheduled job does. Running it by hand sends real email, "
 "so only use it if the scheduled run failed."
@@ -1712,23 +1792,23 @@ msgstr ""
 "Lo mismo que hace la tarea programada. Ejecutarlo a mano envía correo de "
 "verdad, así que úsalo solo si la ejecución programada falló."
 
-#: registry.py:1418
+#: registry.py:1478
 msgid "The cron did not run and the code for today is missing."
 msgstr "El cron no se ejecutó y falta el código de hoy."
 
-#: registry.py:1422
+#: registry.py:1482
 msgid "This sends real email to the configured recipients."
 msgstr "Esto envía correo real a los destinatarios configurados."
 
-#: registry.py:1436
+#: registry.py:1496
 msgid "Create an app"
 msgstr "Crear una app"
 
-#: registry.py:1437
+#: registry.py:1497
 msgid "Creates a new app with the project layout already set up."
 msgstr "Crea una app nueva con la estructura del proyecto ya puesta."
 
-#: registry.py:1439
+#: registry.py:1499
 msgid ""
 "It writes the app with its full dotted name, its urls.py and its locale "
 "folder, which is what makes it fit this project — a plain startapp leaves "
@@ -1742,19 +1822,19 @@ msgstr ""
 " le toca en settings.py sigue siendo un paso manual, y ese orden decide el "
 "del URLconf y el de LOCALE_PATHS."
 
-#: registry.py:1446
+#: registry.py:1506
 msgid "Starting a new domain area, on a development machine."
 msgstr "Al empezar un área nueva del dominio, en una máquina de desarrollo."
 
-#: registry.py:1453
+#: registry.py:1513
 msgid "Path of the app"
 msgstr "Ruta de la app"
 
-#: registry.py:1457
+#: registry.py:1517
 msgid "For example apps/project/specific/documents/reports."
 msgstr "Por ejemplo apps/project/specific/documents/reports."
 
-#: registry.py:1463
+#: registry.py:1523
 msgid ""
 "It writes new files into the repository. They are not in git until someone "
 "commits them."
@@ -1762,15 +1842,15 @@ msgstr ""
 "Escribe ficheros nuevos en el repositorio. No están en git hasta que alguien"
 " los commitea."
 
-#: registry.py:1469
+#: registry.py:1529
 msgid "Write migrations"
 msgstr "Escribir migraciones"
 
-#: registry.py:1470
+#: registry.py:1530
 msgid "Writes the migration files for the model changes."
 msgstr "Escribe los ficheros de migración de los cambios de modelo."
 
-#: registry.py:1472
+#: registry.py:1532
 msgid ""
 "The writing version of the pending-changes check. It belongs on a "
 "development machine because a migration is source code: it goes through git,"
@@ -1782,24 +1862,24 @@ msgstr ""
 "git, se revisa y se despliega. Generada en el servidor es un fichero que "
 "nadie ha visto, y el siguiente pull o lo borra o choca con él."
 
-#: registry.py:1478
+#: registry.py:1538
 msgid "After changing a model, before committing."
 msgstr "Después de cambiar un modelo, antes de commitear."
 
-#: registry.py:1484
+#: registry.py:1544
 msgid "A migration is source code: commit it, do not leave it on a server."
 msgstr ""
 "Una migración es código fuente: commitéala, no la dejes en un servidor."
 
-#: registry.py:1490
+#: registry.py:1550
 msgid "Extract translatable text"
 msgstr "Extraer el texto traducible"
 
-#: registry.py:1491
+#: registry.py:1551
 msgid "Rewrites the .po catalogs with the strings found in the code."
 msgstr "Reescribe los catálogos .po con las cadenas encontradas en el código."
 
-#: registry.py:1494
+#: registry.py:1554
 msgid ""
 "It rewrites every catalog in the project, so it belongs where the result can"
 " be reviewed and committed. It also needs gettext installed. On the server "
@@ -1811,26 +1891,26 @@ msgstr ""
 "servidor la mitad útil es la otra —compilar los catálogos— que sí está "
 "disponible en todas partes."
 
-#: registry.py:1499
+#: registry.py:1559
 msgid "After adding text wrapped in gettext, on a development machine."
 msgstr ""
 "Después de añadir texto envuelto en gettext, en una máquina de desarrollo."
 
-#: registry.py:1511
+#: registry.py:1571
 msgid "Which catalog to rebuild."
 msgstr "Qué catálogo reconstruir."
 
-#: registry.py:1518
+#: registry.py:1578
 msgid "Models from the schema"
 msgstr "Modelos a partir del esquema"
 
-#: registry.py:1519
+#: registry.py:1579
 msgid "Prints the models that would match the tables already in the database."
 msgstr ""
 "Imprime los modelos que corresponderían a las tablas que ya hay en la base "
 "de datos."
 
-#: registry.py:1522
+#: registry.py:1582
 msgid ""
 "Reads the schema and writes nothing. It is for comparing what the database "
 "really has against what the code declares, when the two have drifted apart. "
@@ -1840,21 +1920,21 @@ msgstr ""
 "en la base de datos con lo que declara el código, cuando los dos se han "
 "separado. La salida es un borrador, nunca algo que pegar tal cual."
 
-#: registry.py:1527
+#: registry.py:1587
 msgid "Chasing a mismatch between a table and its model."
 msgstr "Persiguiendo un desajuste entre una tabla y su modelo."
 
-#: registry.py:1535
+#: registry.py:1595
 msgid "SQL to fix the sequences"
 msgstr "SQL para arreglar las secuencias"
 
-#: registry.py:1536
+#: registry.py:1596
 msgid "Prints the SQL that puts the auto-increment counters back in place."
 msgstr ""
 "Imprime el SQL que vuelve a poner en su sitio los contadores de "
 "autoincremento."
 
-#: registry.py:1539
+#: registry.py:1599
 msgid ""
 "It only prints: nothing runs. It is what is needed after loading rows with "
 "explicit ids, when the counter is left behind and the next insert collides "
@@ -1864,24 +1944,24 @@ msgstr ""
 "filas con ids explícitos, cuando el contador se queda atrás y el siguiente "
 "insert choca con una fila que ya existe."
 
-#: registry.py:1543
+#: registry.py:1603
 msgid "After importing data with fixed ids into a development database."
 msgstr ""
 "Después de importar datos con ids fijos en una base de datos de desarrollo."
 
-#: registry.py:1555
+#: registry.py:1615
 msgid "Label of the app, for example buyers."
 msgstr "Etiqueta de la app, por ejemplo buyers."
 
-#: registry.py:1563
+#: registry.py:1623
 msgid "Run the test suite"
 msgstr "Ejecutar la suite de pruebas"
 
-#: registry.py:1564
+#: registry.py:1624
 msgid "Runs the tests against SQLite in memory."
 msgstr "Ejecuta las pruebas contra SQLite en memoria."
 
-#: registry.py:1566
+#: registry.py:1626
 msgid ""
 "They run with app_core.settings_test because the MySQL user on cPanel cannot"
 " create the test_ database — which is also why this is a development-only "
@@ -1894,15 +1974,15 @@ msgstr ""
 "cerraron, así que un resultado en rojo merece leerse antes de dar por hecho "
 "que la prueba está vieja."
 
-#: registry.py:1572
+#: registry.py:1632
 msgid "Before pushing, on a development machine."
 msgstr "Antes de hacer push, en una máquina de desarrollo."
 
-#: registry.py:1582
+#: registry.py:1642
 msgid "Runs the suite and writes the summary the charts read."
 msgstr "Ejecuta la suite y escribe el resumen que leen las gráficas."
 
-#: registry.py:1584
+#: registry.py:1644
 msgid ""
 "The same suite as the entry above, but keeping what it usually throws away: "
 "which test, from which app, how long it took and how it ended. It also "
@@ -1919,23 +1999,23 @@ msgstr ""
 "subproceso propio porque coverage tiene que arrancar antes de que Django "
 "importe nada."
 
-#: registry.py:1593
+#: registry.py:1653
 msgid "Before a release, to see which app is thin on tests."
 msgstr "Antes de una entrega, para ver qué app va floja de pruebas."
 
-#: registry.py:1600
+#: registry.py:1660
 msgid "Skip coverage"
 msgstr "Saltar la cobertura"
 
-#: registry.py:1602
+#: registry.py:1662
 msgid "Only the results. Runs noticeably faster."
 msgstr "Solo los resultados. Va bastante más rápido."
 
-#: registry.py:1606
+#: registry.py:1666
 msgid "Also the navigable HTML"
 msgstr "También el HTML navegable"
 
-#: registry.py:1608
+#: registry.py:1668
 msgid ""
 "Writes htmlcov/, which is what shows the missing line. Only useful on a "
 "machine you can browse."
@@ -1943,15 +2023,15 @@ msgstr ""
 "Escribe htmlcov/, que es lo que enseña la línea que falta. Solo sirve en una"
 " máquina donde puedas navegar."
 
-#: registry.py:1620
+#: registry.py:1680
 msgid "Database backup"
 msgstr "Copia de seguridad de la base de datos"
 
-#: registry.py:1621
+#: registry.py:1681
 msgid "Writes a full dump of the database to disk."
 msgstr "Escribe un volcado completo de la base de datos en disco."
 
-#: registry.py:1623
+#: registry.py:1683
 msgid ""
 "Produces a file with everything in the database. Where it lands matters: "
 "anyone who can read that path can read every record, including the encrypted"
@@ -1961,19 +2041,19 @@ msgstr ""
 "importa: quien pueda leer esa ruta puede leer todos los registros, incluidos"
 " los campos de datos personales cifrados."
 
-#: registry.py:1627
+#: registry.py:1687
 msgid "Right before applying a risky migration."
 msgstr "Justo antes de aplicar una migración arriesgada."
 
-#: registry.py:1633
+#: registry.py:1693
 msgid "Output folder"
 msgstr "Carpeta de salida"
 
-#: registry.py:1636
+#: registry.py:1696
 msgid "Folder for the dump, relative to the project root."
 msgstr "Carpeta para el volcado, relativa a la raíz del proyecto."
 
-#: registry.py:1642
+#: registry.py:1702
 msgid ""
 "The dump contains every record. Keep it out of any folder the web server can"
 " serve."
@@ -2028,6 +2108,3 @@ msgstr "Saltada"
 #: summary.py:38
 msgid "Expected failure"
 msgstr "Fallo esperado"
-
-#~ msgid "manage.py could not be found. Check BASE_DIR."
-#~ msgstr "No se encontró manage.py. Revise BASE_DIR."

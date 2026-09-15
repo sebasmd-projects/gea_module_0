@@ -607,6 +607,135 @@ problemas.
 
 ---
 
+## Paso 10. El canal de tiempo real (solo si se montan notificaciones)
+
+Este paso existe porque es el que sorprende. **Los patrones de clave de una ACL
+no gobiernan los canales de pub/sub.** El usuario `gea` del paso 3 tiene
+`~gea:*`: escribe y lee todas las claves de la cache, y aun así responde
+`NOPERM` a un `PUBLISH` o a un `SUBSCRIBE`. Los canales se conceden aparte, con
+patrones `&`, y desde Redis 7 el valor de fábrica de `acl-pubsub-default` es
+`resetchannels` — o sea, ninguno.
+
+Comprobado contra un Redis real con la ACL de arriba:
+
+```
+NOPERM this user has no permissions to run the 'subscribe' command
+```
+
+Es el mismo tropiezo que el broker con `~celery*` (paso 9), en otro sitio. Y se
+parece al que no es: la cache va perfecta, así que nada avisa.
+
+### Qué añadir
+
+Al usuario `gea` del `redis.conf`, dos cosas y sólo dos:
+
+```
+user gea on #PEGA_AQUI_EL_SHA256 ~gea:* &gea:* +@read +@write +@keyspace +@pubsub -@dangerous +flushdb
+```
+
+`&gea:*` da los canales que empiezan por el prefijo de Django, y `+@pubsub` los
+comandos. **El patrón de canales sigue el mismo prefijo que las claves a
+propósito**: así lo que se le concede al usuario de la aplicación se dice una
+vez y se lee de un vistazo.
+
+> El prefijo sale de `REDIS_KEY_PREFIX` (por defecto `gea`). Si lo cambias,
+> cambia también el `&`, o el canal cae fuera del patrón y vuelve el `NOPERM`.
+
+**Lo que NO hay que añadir es `+@connection`.** Este usuario no puede hacer
+`PING`, y está bien así: la caché no lo necesita. La tentación aparece porque un
+diagnóstico que mida con `PING` contesta «no se pudo medir» contra un Redis
+perfectamente sano, y la salida parece pedir el permiso. Por eso `check_realtime`
+mide con una **lectura de una clave `gea:`**, que es lo que la aplicación hace de
+verdad en cada comprobación de límite. Una herramienta de diagnóstico que exige
+ensanchar la ACL para poder ejecutarse está midiendo otra cosa.
+
+### Por qué al usuario de la cache y no a uno nuevo
+
+Porque por ese canal **no viaja contenido**. Lo que se publica es un aviso de
+que hay novedad y hasta qué identificador; lo que hay dentro lo pide después el
+navegador a Django, que comprueba permisos como siempre. Quien robara esa clave
+podría hacer que un navegador recargue su propia lista de notificaciones, que es
+lo que puede hacer pulsando F5.
+
+Eso vale mientras el canal siga siendo un aviso. El día que se publique el texto
+de una notificación por ahí, esto deja de ser cierto y hace falta un usuario
+aparte — y, sobre todo, preguntarse por qué se está mandando contenido por un
+sitio donde nadie comprueba quién escucha.
+
+### Comprobarlo
+
+```bash
+python manage.py check_realtime
+```
+
+Hace el recorrido entero desde cPanel —suscribirse, publicar y **recibir**— y
+además mide la latencia y las conexiones salientes. No basta con que `PUBLISH`
+no dé error: `PUBLISH` devuelve «0 receptores» sin quejarse cuando nadie
+escucha, y dos conexiones a Redis distintos detrás de un balanceador dan
+exactamente eso. Lo que decide es que el mensaje vuelva.
+
+### Qué es el relay, y qué no
+
+Esto se malentiende con facilidad, así que va antes que nada: **el relay no es
+la aplicación**, ni una copia de ella, ni un despliegue de Django en otro
+subdominio.
+
+Es un proceso pequeño que vive en el VPS, al lado del Redis, y hace una sola
+cosa: se suscribe a los canales y reenvía al navegador lo que Django publique.
+No ejecuta Django, no consulta MySQL, no renderiza plantillas y no comprueba
+permisos contra la base de datos. Son unas decenas de líneas.
+
+Que sea así de tonto es justo lo que hace que el plan funcione:
+
+- **Por eso la aplicación puede quedarse en cPanel.** Quien tiene que estar vivo
+  todo el rato es el consumidor, no el productor. Django sólo publica, dentro de
+  la petición, y se va.
+- **Por eso si se cae no se pierde nada.** La notificación ya está escrita en
+  MySQL antes de publicar; sin relay, el efecto es *tiempo real degradado a
+  recargar la página*.
+- **Por eso no necesita la base de datos.** Lo que viaja por el canal es un
+  aviso («hay novedad, id N»), no contenido. Lo que hay dentro lo pide después
+  el navegador a Django, que comprueba permisos como siempre.
+
+Si en ese host corre la aplicación, ese host no es el del relay.
+
+### El subdominio: que exista no es que esté en el sitio
+
+`--realtime-host` comprueba DNS y TLS, pero eso no dice **qué hay escuchando**,
+y el relay tiene que vivir donde vive el Redis. Comprobado contra producción:
+`rt.propensionesabogados.com` resuelve, tiene certificado válido y contesta —
+apuntando a la misma dirección que la propia aplicación, o sea al cPanel.
+
+Un «saludo TLS correcto» a secas ahí es media verdad de las que cuestan una
+tarde: se da la sección por buena, se monta el relay en el VPS y el navegador
+sigue abriendo el socket contra cPanel, donde no hay nada escuchando. Así que el
+comando compara contra las dos máquinas que ya conoce —la del `REDIS_URL` y la
+del `PUBLIC_BASE_URL`— y dice cuál de las dos es.
+
+**Hay dos arquitecturas posibles y son decisiones distintas**, no dos formas de
+hacer lo mismo:
+
+| | El relay tiene su host en el VPS | Apache de cPanel hace de proxy |
+|---|---|---|
+| DNS | un registro al VPS | nada que cambiar |
+| Certificado | uno propio en el VPS | ya lo tiene |
+| Origen | cruzado → hace falta token efímero firmado | mismo origen → vale la cookie |
+| Coste | ninguno en cPanel | **cada conexión abierta ocupa un proceso de cPanel** |
+| Requisito | ninguno | `mod_proxy_wstunnel`, que en hosting compartido no siempre está |
+
+La segunda parece más cómoda y es la que hay que mirar con cuidado: un
+WebSocket es una conexión que **no se cierra**, y el límite de procesos de
+cPanel es el mismo que atiende las visitas. Eso es justo lo que el plan A
+evitaba.
+
+Esto se decide en la Fase 4, no ahora.
+
+Lo que ese comando **no** puede comprobar es la otra dirección: si el worker del
+VPS alcanza la base de datos de cPanel. Esa conexión sale del VPS, así que la
+imprime como un comando para ejecutar allá.
+
+---
+
 ## Dos notas
 
 **Certificados de cliente (mTLS).** El montaje de arriba autentica al servidor,

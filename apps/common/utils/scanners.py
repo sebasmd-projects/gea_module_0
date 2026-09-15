@@ -98,6 +98,7 @@ PIP_AUDIT_TIMEOUT = 240
 #: Rutas que salen en más de una entrada, para que un fichero que se mueva se
 #: renombre en un sitio y no en cinco.
 _WORKERS = 'apps/common/utils/management/commands/check_workers.py'
+_REALTIME = 'apps/common/utils/management/commands/check_realtime.py'
 _CACHE = 'apps/common/utils/management/commands/check_cache.py'
 _CRON = 'apps/common/utils/management/commands/check_cron.py'
 _REPORT = 'apps/common/utils/management/commands/test_report.py'
@@ -180,6 +181,14 @@ BANDIT_ACCEPTED = {
         'Un diagnostico no puede fallar por lo que esta diagnosticando: si '
         'leer /proc o el estado de un proceso revienta, se informa de lo que '
         'si se pudo leer en vez de abortar el informe entero.'
+    ),
+    ('B110', _REALTIME): (
+        'Es el cierre de las conexiones de prueba, y no puede tener otra '
+        'forma: se cierra lo que se abrio para medir, y si una ya estaba rota '
+        '--que es justo lo que a veces se acaba de medir-- cerrarla vuelve a '
+        'fallar. Dejar que eso suba taparia el resultado con la excepcion de '
+        'recoger la mesa. Lo que se diagnostica se cuenta antes, con su tipo '
+        'de error y su explicacion; aqui ya no queda nada que informar.'
     ),
     ('B110', 'apps/project/specific/assets_management/buyers/form.py'): (
         'Formateo de un valor para mostrarlo. Si no se puede formatear se '
