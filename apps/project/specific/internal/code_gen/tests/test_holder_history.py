@@ -438,3 +438,139 @@ class TestLosingTheHolderDoesNotWidenAccess(HolderTestCase):
             self.codigo_ana,
             list(visible_registrations(self.listing(), self.operator)),
         )
+
+
+class TestImpersonationShowsWhatThatPersonSees(HolderTestCase):
+    """
+    Impersonar es ver la plataforma **como la ve esa persona**, y eso incluye
+    el recorte del historial.
+
+    Vino de un desconcierto real: impersonando a alguien con seis certificados
+    asignados se veian los diecisiete. La causa no era el filtro sino **quien
+    estaba siendo impersonado**: si el objetivo es personal interno, ve todo,
+    porque eso es exactamente lo que ve cuando entra por su cuenta. Estas
+    pruebas dejan los dos casos escritos para que nadie vuelva a perseguir un
+    fallo donde no lo hay.
+    """
+
+    def impersonate(self, target):
+        self.client.force_login(self.operator)
+        self.client.get(
+            reverse('impersonate-start', args=[str(target.pk)]))
+
+    def test_impersonating_a_holder_shows_only_their_own(self):
+        """
+        El caso que se creia roto. `request.user` **si** se sustituye por el
+        impersonado (el middleware de `impersonate` va el ultimo), asi que
+        `is_operator()` contesta por el titular y el recorte se aplica.
+        """
+        self.impersonate(self.ana)
+
+        response = self.client.get(self.history)
+
+        self.assertFalse(response.context['is_operator'])
+        self.assertEqual(response.context['code_count'], 1)
+
+        html = response.content.decode('utf-8')
+        self.assertIn('PAYLOAD-ANA', html)
+        self.assertNotIn('PAYLOAD-BETO', html)
+
+    def test_impersonating_an_operator_shows_everything(self):
+        """
+        Y esto **no es un fallo**: si el impersonado es personal interno, ve
+        todo, porque es lo que ve por su cuenta. Impersonar no puede enseñar
+        menos de lo que esa persona tiene.
+        """
+        interno = UserModel.objects.create_user(
+            username='interno', email='interno@example.com',
+            password=PASSWORD, is_staff=True)
+
+        self.impersonate(interno)
+
+        response = self.client.get(self.history)
+
+        self.assertTrue(response.context['is_operator'])
+        self.assertEqual(response.context['code_count'], 4)
+
+
+class TestTheHolderCanGetThere(HolderTestCase):
+    """
+    La vista se abrio al titular y el enlace se quedo dentro del bloque de
+    `is_staff`: para llegar a lo suyo habia que saberse la URL.
+    """
+
+    SIDENAV = 'dashboard/partials/sidenav/dashboard_sidenav.html'
+
+    def sidenav(self, user) -> str:
+        from django.template.loader import render_to_string
+        from django.test import RequestFactory
+
+        request = RequestFactory().get('/')
+        request.user = user
+
+        return render_to_string(self.SIDENAV, request=request)
+
+    def test_a_holder_has_a_link_to_the_history(self):
+        html = self.sidenav(self.ana)
+
+        self.assertIn(self.history, html)
+
+    def test_and_it_is_called_what_they_actually_see(self):
+        """
+        «Codigos generados» describe la pantalla del operador. Al titular, que
+        solo ve los suyos, le describe otra.
+        """
+        self.assertIn('My certificates', self.sidenav(self.ana))
+        self.assertIn('Generated codes', self.sidenav(self.operator))
+
+    def test_the_operator_keeps_the_rest_of_the_block(self):
+        """Sacar un enlace del bloque no puede sacar los demas."""
+        html = self.sidenav(self.operator)
+
+        self.assertIn('href="%s"' % reverse('code_gen:code_generate'), html)
+        self.assertIn('href="%s"' % reverse('code_gen:layout_list'), html)
+
+    def test_a_holder_still_gets_none_of_those(self):
+        # Con `href="…"`: `/generate/code/` es **prefijo** de
+        # `/generate/code/history/`, que ahora si esta en su menu, asi que
+        # buscarlo suelto da un falso positivo. Es el mismo error que hizo que
+        # el termino `env` bloqueara `/envio/` (invariante 14).
+        html = self.sidenav(self.ana)
+
+        self.assertNotIn(
+            'href="%s"' % reverse('code_gen:code_generate'), html)
+        self.assertNotIn(
+            'href="%s"' % reverse('code_gen:layout_list'), html)
+
+
+class TestAnOperatorCanLookUpSomeonesCertificates(HolderTestCase):
+    """«Ver todos o los asignados»: lo segundo, por el buscador que ya habia."""
+
+    def search(self, user, term):
+        self.client.force_login(user)
+
+        return self.client.get(self.history, {'q': term})
+
+    def test_searching_a_username_finds_their_certificates(self):
+        response = self.search(self.operator, 'ana')
+
+        self.assertEqual(response.context['code_count'], 1)
+        self.assertIn('PAYLOAD-ANA', response.content.decode('utf-8'))
+
+    def test_searching_by_surname_works_too(self):
+        self.beto.last_name = 'Restrepo'
+        self.beto.save(update_fields=['last_name'])
+
+        response = self.search(self.operator, 'Restrepo')
+
+        self.assertEqual(response.context['code_count'], 1)
+
+    def test_a_holder_cannot_look_up_anyone(self):
+        """
+        Buscar por titular es del operador. Ofrecerselo a un titular sugeriria
+        que puede preguntar por otros, y el recorte ya lo impide: lo unico que
+        conseguiria es una pagina vacia que parece una averia.
+        """
+        response = self.search(self.ana, 'beto')
+
+        self.assertEqual(response.context['code_count'], 0)

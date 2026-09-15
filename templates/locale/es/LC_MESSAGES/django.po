@@ -8,9 +8,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 02:17+0000\n"
+"POT-Creation-Date: 2026-09-15 06:57+0000\n"
 "PO-Revision-Date: 2026-09-01 08:07+0000\n"
-"Last-Translator: Juan Sebastian Morales Delgado <cto@propensionesabogados.com>\n"
+"Last-Translator: Juan Sebastian Morales Delgado <cto@propensionesabogados."
+"com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -239,8 +240,8 @@ msgstr "Esta versión es un borrador."
 
 #: admin/core/legaldocumentversionmodel/_approve_row.html:31
 msgid ""
-"Approving it publishes it, freezes its text and its fingerprint, and records"
-" your name and today's date. It cannot be edited afterwards."
+"Approving it publishes it, freezes its text and its fingerprint, and records "
+"your name and today's date. It cannot be edited afterwards."
 msgstr ""
 "Aprobarla la publica, congela su texto y su huella, y deja registrado tu "
 "nombre y la fecha de hoy. Después ya no se puede editar."
@@ -267,7 +268,7 @@ msgstr "Inicio"
 #: admin/ops/command.html:7 admin/ops/commandrunmodel_change_list.html:16
 #: admin/ops/console.html:21 admin/ops/console.html:100
 #: admin/ops/test_summary.html:30
-#: dashboard/partials/sidenav/dashboard_sidenav.html:251
+#: dashboard/partials/sidenav/dashboard_sidenav.html:267
 msgid "Operations console"
 msgstr "Consola de operaciones"
 
@@ -280,8 +281,8 @@ msgid ""
 "this command writes into the repository, so it is not offered on a server. "
 "Its result belongs in git, reviewed and deployed like any other change."
 msgstr ""
-"este comando escribe en el repositorio, así que no se ofrece en un servidor."
-" Su resultado va en git, revisado y desplegado como cualquier otro cambio."
+"este comando escribe en el repositorio, así que no se ofrece en un servidor. "
+"Su resultado va en git, revisado y desplegado como cualquier otro cambio."
 
 #: admin/ops/command.html:77
 msgid "What it does"
@@ -341,8 +342,7 @@ msgstr "Cuándo"
 #: dashboard/pages/buyers/profitability.html:70
 #: dashboard/pages/buyers/purchase_orders.html:67
 #: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:38
-#: dashboard/pages/documents/code_gen/summary_list.html:42
-#: pqrs/receipt.html:55
+#: dashboard/pages/documents/code_gen/summary_list.html:42 pqrs/receipt.html:55
 msgid "Status"
 msgstr "Estado"
 
@@ -376,9 +376,9 @@ msgid ""
 "SSH. Every run is recorded — who, what and the full output — and the record "
 "cannot be edited or deleted."
 msgstr ""
-"Estos comandos se ejecutan en el servidor, con el mismo efecto que lanzarlos"
-" por SSH. Cada ejecución queda registrada —quién, qué y la salida completa— "
-"y el registro no se puede editar ni borrar."
+"Estos comandos se ejecutan en el servidor, con el mismo efecto que lanzarlos "
+"por SSH. Cada ejecución queda registrada —quién, qué y la salida completa— y "
+"el registro no se puede editar ni borrar."
 
 #: admin/ops/console.html:132
 msgid "Search by name, title or what it does…"
@@ -428,8 +428,8 @@ msgstr "Resumen de pruebas"
 #: admin/ops/test_summary.html:185
 msgid ""
 "There is no report yet. It is written by the “Test summary” command, which "
-"runs the suite and keeps what it usually throws away: which test, from which"
-" app, how long it took and how it ended."
+"runs the suite and keeps what it usually throws away: which test, from which "
+"app, how long it took and how it ended."
 msgstr ""
 "Todavía no hay informe. Lo escribe el comando «Resumen de pruebas», que "
 "ejecuta la suite y guarda lo que normalmente se tira: qué prueba, de qué "
@@ -475,8 +475,8 @@ msgstr "Pruebas por app"
 
 #: admin/ops/test_summary.html:294
 msgid ""
-"Measured against the app with the most, not against the total: with thirteen"
-" apps, measuring against the total leaves every bar glued to the axis."
+"Measured against the app with the most, not against the total: with thirteen "
+"apps, measuring against the total leaves every bar glued to the axis."
 msgstr ""
 "Se mide contra la app que más tiene, no contra el total: con trece apps, "
 "medir contra el total deja todas las barras pegadas al eje."
@@ -519,8 +519,8 @@ msgstr "Cobertura por app"
 #: admin/ops/test_summary.html:344
 #, python-format
 msgid ""
-"%(covered)s of %(statements)s statements. Thinnest first, which is the order"
-" you would work in."
+"%(covered)s of %(statements)s statements. Thinnest first, which is the order "
+"you would work in."
 msgstr ""
 "%(covered)s de %(statements)s sentencias. Primero las más flojas, que es el "
 "orden en el que se trabajaría."
@@ -549,8 +549,7 @@ msgid "The ten slowest"
 msgstr "Las diez más lentas"
 
 #: admin/ops/test_summary.html:401
-msgid ""
-"The useful figure is which one is slow, not what the whole suite takes."
+msgid "The useful figure is which one is slow, not what the whole suite takes."
 msgstr "La cifra útil es cuál es lenta, no lo que tarda la suite entera."
 
 #: admin/ops/test_summary.html:420
@@ -1359,8 +1358,8 @@ msgstr "Asistente de Aprobación"
 #: dashboard/pages/buyers/wizard/offer_wizard_page.html:32
 msgid "Track and advance the purchase order through the approval pipeline"
 msgstr ""
-"Siga y haga avanzar la orden de compra por el flujo de aprobaciónRealizar un"
-" seguimiento y avanzar la orden de compra a través del proceso de aprobación"
+"Siga y haga avanzar la orden de compra por el flujo de aprobaciónRealizar un "
+"seguimiento y avanzar la orden de compra a través del proceso de aprobación"
 
 #: dashboard/pages/buyers/wizard/offer_wizard_page.html:57
 msgid "Loading wizard…"
@@ -1716,9 +1715,9 @@ msgstr "Descargar"
 
 #: dashboard/pages/certificates/documents/aegis_documents/certificate_detail.html:114
 msgid ""
-"This is the distributable copy. It carries a hidden watermark that lets this"
-" platform recognise it as a certified copy even if its metadata changes "
-"while being emailed or shared."
+"This is the distributable copy. It carries a hidden watermark that lets this "
+"platform recognise it as a certified copy even if its metadata changes while "
+"being emailed or shared."
 msgstr ""
 "Esta es la copia distribuible. Lleva una marca de agua oculta que permite a "
 "esta plataforma reconocerla como copia certificada aunque sus metadatos "
@@ -1738,8 +1737,8 @@ msgstr "Registro de certificación"
 
 #: dashboard/pages/certificates/documents/aegis_documents/certificate_detail.html:134
 msgid ""
-"The record below is what an auditor needs. It states what this certification"
-" does and does not attest, and lets anyone check the file they hold without "
+"The record below is what an auditor needs. It states what this certification "
+"does and does not attest, and lets anyone check the file they hold without "
 "having to come back to this platform."
 msgstr ""
 "El registro que aparece abajo es lo que necesita un auditor. Indica qué "
@@ -1754,8 +1753,8 @@ msgstr "Contenido jurídico"
 #: dashboard/pages/certificates/documents/aegis_documents/certificate_detail.html:144
 msgid ""
 "What the firm declares about the asset. It rests on the document itself and "
-"the signature of the legal representative — the platform records it, it does"
-" not vouch for it."
+"the signature of the legal representative — the platform records it, it does "
+"not vouch for it."
 msgstr ""
 "Lo que la firma declara sobre el activo. Descansa en el propio documento y "
 "en la firma del representante legal: la plataforma lo registra, no lo avala."
@@ -1835,28 +1834,28 @@ msgid ""
 "INSTITUTIONAL CERTIFICATION OF AUTHENTICITY, ORIGINALITY AND LEGAL VALIDITY "
 "PROPENSIONES ABOGADOS INTERNACIONAL S.A.S., a legally constituted entity "
 "identified with Tax ID (NIT) 901409813-7, duly incorporated and in full "
-"legal capacity under the laws of the Republic of Colombia, acting within the"
-" scope of its institutional authority, HEREBY CERTIFIES, DECLARES AND "
+"legal capacity under the laws of the Republic of Colombia, acting within the "
+"scope of its institutional authority, HEREBY CERTIFIES, DECLARES AND "
 "ATTESTS, with full legal and doctrinal effect, that: The document to which "
-"this certification is attached is original, authentic and legally effective,"
-" having been issued under formal procedures of control, verification and due"
-" diligence. It constitutes the primary, prevailing and determinative "
+"this certification is attached is original, authentic and legally effective, "
+"having been issued under formal procedures of control, verification and due "
+"diligence. It constitutes the primary, prevailing and determinative "
 "instrument to evidence the legitimacy, origin and legal backing of the act, "
 "right, asset or legal situation contained therein. This certification "
 "consolidates, reaffirms and ratifies the originality of the certified "
 "document, conferring upon it full legal effectiveness, sufficient "
-"evidentiary force and institutional validity. It serves as the governing and"
-" interpretative instrument of authenticity, not subject to informal or "
-"extrajuridical challenge. Likewise, it is expressly stated that the document"
-" has been issued in accordance with the foundational principles of the legal"
-" system, including legality, objective good faith, legal certainty and "
+"evidentiary force and institutional validity. It serves as the governing and "
+"interpretative instrument of authenticity, not subject to informal or "
+"extrajuridical challenge. Likewise, it is expressly stated that the document "
+"has been issued in accordance with the foundational principles of the legal "
+"system, including legality, objective good faith, legal certainty and "
 "regulatory compliance, incorporating international compliance standards, "
 "anti-money laundering (AML) and counter-terrorist financing (CFT) "
 "frameworks, in accordance with the applicable regulatory regimes."
 msgstr ""
-"CERTIFICACIÓN INSTITUCIONAL DE AUTENTICIDAD, ORIGINALIDAD Y VALIDEZ JURÍDICA"
-" PROPENSIONES ABOGADOS INTERNACIONAL S.A.S., entidad legalmente constituida,"
-" identificada con NIT 901409813-7, debidamente incorporada y en pleno "
+"CERTIFICACIÓN INSTITUCIONAL DE AUTENTICIDAD, ORIGINALIDAD Y VALIDEZ JURÍDICA "
+"PROPENSIONES ABOGADOS INTERNACIONAL S.A.S., entidad legalmente constituida, "
+"identificada con NIT 901409813-7, debidamente incorporada y en pleno "
 "ejercicio de su capacidad jurídica conforme a las leyes de la República de "
 "Colombia, actuando dentro del ámbito de su autoridad institucional, "
 "CERTIFICA, DECLARA Y DA FE, con pleno efecto legal y doctrinal, que: El "
@@ -1864,14 +1863,14 @@ msgstr ""
 "y jurídicamente eficaz, habiendo sido emitido bajo procedimientos formales "
 "de control, verificación y debida diligencia. Constituye el instrumento "
 "primario, prevalente y determinante para evidenciar la legitimidad, el "
-"origen y el respaldo jurídico del acto, derecho, activo o situación jurídica"
-" que en él se consigna. La presente certificación consolida, reafirma y "
+"origen y el respaldo jurídico del acto, derecho, activo o situación jurídica "
+"que en él se consigna. La presente certificación consolida, reafirma y "
 "ratifica la originalidad del documento certificado, confiriéndole plena "
 "eficacia jurídica, fuerza probatoria suficiente y validez institucional. Se "
 "erige como el instrumento rector e interpretativo de autenticidad, no "
 "susceptible de impugnación por vías informales o extrajurídicas. Así mismo, "
-"se deja expresa constancia de que dicho documento ha sido emitido conforme a"
-" los principios fundamentales del ordenamiento jurídico, incluidos la "
+"se deja expresa constancia de que dicho documento ha sido emitido conforme a "
+"los principios fundamentales del ordenamiento jurídico, incluidos la "
 "legalidad, la buena fe objetiva, la seguridad jurídica y el cumplimiento "
 "normativo, incorporando estándares internacionales de compliance, marcos de "
 "prevención del lavado de activos (AML) y de financiación del terrorismo "
@@ -1890,21 +1889,28 @@ msgid ""
 "corresponding legal framework."
 msgstr ""
 "ALCANCE DE LA VALIDACIÓN Y EFECTOS JURÍDICOS APLICABLES\n"
-"La presente certificación y el documento que autentica producen efectos jurídicos plenos, exigibles y oponibles. Su eficacia legal resulta idónea, adecuada y suficiente dentro de procesos de verificación, debida diligencia, análisis de riesgo, custodia, aseguramiento o validación institucional, sin que ello implique dispensa, sustitución o limitación de los controles que cada entidad deba adelantar conforme a su régimen jurídico aplicable.\n"
-"En consecuencia, el documento podrá ser válidamente aceptado, incorporado y utilizado como soporte jurídico suficiente, de conformidad con el ordenamiento jurídico correspondiente."
+"La presente certificación y el documento que autentica producen efectos "
+"jurídicos plenos, exigibles y oponibles. Su eficacia legal resulta idónea, "
+"adecuada y suficiente dentro de procesos de verificación, debida diligencia, "
+"análisis de riesgo, custodia, aseguramiento o validación institucional, sin "
+"que ello implique dispensa, sustitución o limitación de los controles que "
+"cada entidad deba adelantar conforme a su régimen jurídico aplicable.\n"
+"En consecuencia, el documento podrá ser válidamente aceptado, incorporado y "
+"utilizado como soporte jurídico suficiente, de conformidad con el "
+"ordenamiento jurídico correspondiente."
 
 #: dashboard/pages/certificates/documents/aegis_documents/certificate_detail.html:258
 msgid ""
 "APPLICABLE LEGAL REGIME Private International Law, General Principles of "
-"International Law, Vienna Convention on the Law of Treaties (1969), UNIDROIT"
-" Principles of International Commercial Contracts, international compliance "
+"International Law, Vienna Convention on the Law of Treaties (1969), UNIDROIT "
+"Principles of International Commercial Contracts, international compliance "
 "standards, international AML/CFT regulations, Financial Action Task Force "
 "(FATF/GAFI) recommendations, and applicable provisions of the USA PATRIOT "
 "Act."
 msgstr ""
 "RÉGIMEN JURÍDICO APLICABLE Derecho Internacional Privado, Principios "
-"Generales del Derecho Internacional, Convención de Viena sobre el Derecho de"
-" los Tratados (1969), Principios UNIDROIT sobre los Contratos Comerciales "
+"Generales del Derecho Internacional, Convención de Viena sobre el Derecho de "
+"los Tratados (1969), Principios UNIDROIT sobre los Contratos Comerciales "
 "Internacionales, estándares internacionales de compliance, normativa "
 "internacional en materia de prevención del lavado de activos y financiación "
 "del terrorismo (AML/CFT), recomendaciones del Grupo de Acción Financiera "
@@ -1927,8 +1933,8 @@ msgstr "Verificar certificado de documento"
 #: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:27
 msgid "Enter your email to receive a verification code."
 msgstr ""
-"Escriba su correo para recibir un código de verificación.Introduce tu correo"
-" electrónico para recibir un código de verificación."
+"Escriba su correo para recibir un código de verificación.Introduce tu correo "
+"electrónico para recibir un código de verificación."
 
 #: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:31
 msgid "Enter the verification code sent to your email."
@@ -2011,8 +2017,7 @@ msgstr "Cambiar dirección de correo electrónico"
 
 #: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:250
 msgid "Verify by uploading the file — this is the one that checks integrity"
-msgstr ""
-"Verificar subiendo el archivo — esta es la que comprueba la integridad"
+msgstr "Verificar subiendo el archivo — esta es la que comprueba la integridad"
 
 #: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:252
 msgid ""
@@ -2036,8 +2041,8 @@ msgid ""
 "The file is never stored: only its fingerprint is computed, in memory, and "
 "then discarded."
 msgstr ""
-"El archivo nunca se almacena: solo se calcula su huella, en memoria, y luego"
-" se descarta."
+"El archivo nunca se almacena: solo se calcula su huella, en memoria, y luego "
+"se descarta."
 
 #: dashboard/pages/certificates/documents/aegis_documents/certificate_input.html:294
 msgid "The code expires in a few minutes."
@@ -2050,8 +2055,7 @@ msgstr "Puedes solicitar un nuevo código en"
 #: dashboard/pages/certificates/documents/aegis_documents/includes/_anchor_proof_button.html:19
 msgid "The proof file: this is what lets anyone check the anchor without us."
 msgstr ""
-"El archivo de la prueba: es lo que permite comprobar el anclaje sin "
-"nosotros."
+"El archivo de la prueba: es lo que permite comprobar el anclaje sin nosotros."
 
 #: dashboard/pages/certificates/documents/aegis_documents/includes/_anchor_proof_button.html:26
 #, python-format
@@ -2085,8 +2089,8 @@ msgstr "Confirmado en la cadena de bloques"
 
 #: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:57
 msgid ""
-"The block that attests it is already recorded below. Its exact time is still"
-" being resolved, and that changes nothing about the proof: the block itself "
+"The block that attests it is already recorded below. Its exact time is still "
+"being resolved, and that changes nothing about the proof: the block itself "
 "is what attests the date, and anyone can look it up."
 msgstr ""
 "El bloque que lo acredita ya está anotado abajo. Su hora exacta se está "
@@ -2103,8 +2107,8 @@ msgid ""
 "page updates on its own as anchors arrive: the printed code never needs "
 "reissuing."
 msgstr ""
-"El resumen está sellada pero todavía ningún sello externo confirma su fecha."
-" Esta página se actualiza sola según llegan los anclajes: el código impreso "
+"El resumen está sellada pero todavía ningún sello externo confirma su fecha. "
+"Esta página se actualiza sola según llegan los anclajes: el código impreso "
 "no hay que volver a emitirlo nunca."
 
 #: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:78
@@ -2117,8 +2121,8 @@ msgstr "Master hash"
 #: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:81
 msgid ""
 "One figure that commits to the fingerprints of every document in the "
-"summary. It is the only thing that leaves the platform: never the documents,"
-" never their content."
+"summary. It is the only thing that leaves the platform: never the documents, "
+"never their content."
 msgstr ""
 "Una sola cifra que compromete las huellas de todos los documentos del "
 "resumen. Es lo único que sale de la plataforma: nunca los documentos, nunca "
@@ -2156,8 +2160,8 @@ msgid ""
 "A single extra byte — the newline most editors add on save — produces a "
 "completely different hash."
 msgstr ""
-"Un solo byte de más —el salto de línea que casi todos los editores añaden al"
-" guardar— produce un hash completamente distinto."
+"Un solo byte de más —el salto de línea que casi todos los editores añaden al "
+"guardar— produce un hash completamente distinto."
 
 #: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:134
 msgid "Anchors"
@@ -2223,8 +2227,8 @@ msgstr ""
 
 #: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:230
 msgid ""
-"Open that block in any explorer and compare its merkle root with the one the"
-" proof states. Careful: the two are printed in reverse byte order, so one "
+"Open that block in any explorer and compare its merkle root with the one the "
+"proof states. Careful: the two are printed in reverse byte order, so one "
 "reads backwards against the other."
 msgstr ""
 "Abre ese bloque en cualquier explorador y compara su merkle root con el que "
@@ -2252,8 +2256,8 @@ msgstr "Qué prueba esto y qué no."
 msgid ""
 "It proves WHEN: that this content existed on the stated date, attested by a "
 "third party. Who issued it is proven by the platform signature on each "
-"certification record. That what the documents claim is TRUE is not proven by"
-" any of this."
+"certification record. That what the documents claim is TRUE is not proven by "
+"any of this."
 msgstr ""
 "Prueba CUÁNDO: que este contenido existía en la fecha indicada, acreditado "
 "por un tercero. Quién lo emitió lo prueba la firma de la plataforma en cada "
@@ -2301,12 +2305,12 @@ msgstr "Certificación AEGIS"
 #: dashboard/pages/certificates/includes/habeas_data.html:9
 msgid ""
 "We remind you that, in accordance with the provisions of the Habeas Data "
-"Law, all your personal data has been treated with due confidentiality and is"
-" protected under the strictest security standards, guaranteeing its "
-"integrity and privacy."
+"Law, all your personal data has been treated with due confidentiality and is "
+"protected under the strictest security standards, guaranteeing its integrity "
+"and privacy."
 msgstr ""
-"Le recordamos que, de conformidad con la Ley de Habeas Data, todos sus datos"
-" personales han sido tratados con la debida confidencialidad y están "
+"Le recordamos que, de conformidad con la Ley de Habeas Data, todos sus datos "
+"personales han sido tratados con la debida confidencialidad y están "
 "protegidos bajo los más estrictos estándares de seguridad, garantizando su "
 "integridad y privacidad. Sus datos se utilizarán exclusivamente para los "
 "fines autorizados y de conformidad con la normativa vigente en materia de "
@@ -2362,7 +2366,8 @@ msgstr "Este documento certifica que"
 #: dashboard/pages/certificates/users/employee_ipcon/certificate_detail.html:97
 msgid ""
 "is currently verified as a member, employee, or authorized collaborator of\n"
-"              <strong>Propensiones</strong> and <strong>IPCON (International Private Consortium)</strong> the new financial era."
+"              <strong>Propensiones</strong> and <strong>IPCON (International "
+"Private Consortium)</strong> the new financial era."
 msgstr ""
 "está actualmente verificado como miembro, empleado o colaborador autorizado "
 "de <strong>Propensiones</strong> e <strong>IPCON (Consorcio Privado "
@@ -2445,7 +2450,7 @@ msgstr "Código emitido"
 #: dashboard/pages/documents/code_gen/code_detail.html:25
 #: dashboard/pages/documents/code_gen/code_history.html:6
 #: dashboard/pages/documents/code_gen/code_history.html:58
-#: dashboard/partials/sidenav/dashboard_sidenav.html:220
+#: dashboard/partials/sidenav/dashboard_sidenav.html:223
 msgid "Generated codes"
 msgstr "Códigos generados"
 
@@ -2550,8 +2555,8 @@ msgstr "Cómo comprobarlo"
 #: dashboard/pages/documents/code_gen/code_detail.html:237
 msgid ""
 "Upload the PDF on the public verification page and it will tell you whether "
-"it is still exactly the file that was certified. Typing the public code does"
-" not do that: it only looks up the record."
+"it is still exactly the file that was certified. Typing the public code does "
+"not do that: it only looks up the record."
 msgstr ""
 "Sube el PDF en la página pública de verificación y te dirá si sigue siendo "
 "exactamente el archivo que se certificó. Teclear el código público no hace "
@@ -2586,12 +2591,12 @@ msgstr "Emite códigos de barras y QR, y certifica un PDF de principio a fin."
 #: dashboard/pages/documents/code_gen/code_history.html:66
 #: dashboard/pages/documents/code_gen/layout_list.html:25
 #: dashboard/pages/documents/code_gen/summary_list.html:18
-#: dashboard/partials/sidenav/dashboard_sidenav.html:207
+#: dashboard/partials/sidenav/dashboard_sidenav.html:230
 msgid "Documents"
 msgstr "Documentos"
 
 #: dashboard/pages/documents/code_gen/code_form.html:32
-#: dashboard/partials/sidenav/dashboard_sidenav.html:213
+#: dashboard/partials/sidenav/dashboard_sidenav.html:236
 msgid "Code generator"
 msgstr "Generador de códigos"
 
@@ -2621,8 +2626,8 @@ msgid ""
 "Anything with \"://\", \"?\", \"&amp;\" or other URL characters must go in "
 "the QR code instead."
 msgstr ""
-"Un código de barras solo admite letras, dígitos, espacios y los símbolos . _"
-" - . Todo lo que lleve \"://\", \"?\", \"&amp;\" u otros caracteres de URL "
+"Un código de barras solo admite letras, dígitos, espacios y los símbolos . _ "
+"- . Todo lo que lleve \"://\", \"?\", \"&amp;\" u otros caracteres de URL "
 "tiene que ir en el código QR."
 
 #: dashboard/pages/documents/code_gen/code_form.html:225
@@ -2704,13 +2709,12 @@ msgid "Every code issued, so you can come back to any of them."
 msgstr "Todos los códigos emitidos, para poder volver a cualquiera de ellos."
 
 #: dashboard/pages/documents/code_gen/code_history.html:61
-#| msgid "Verify certificate"
+#: dashboard/partials/sidenav/dashboard_sidenav.html:225
 msgid "My certificates"
 msgstr "Mis certificados"
 
 #: dashboard/pages/documents/code_gen/code_history.html:62
-msgid ""
-"The certificates issued in your name. To check one, verify it publicly."
+msgid "The certificates issued in your name. To check one, verify it publicly."
 msgstr ""
 "Los certificados emitidos a tu nombre. Para comprobar uno, verifícalo "
 "públicamente."
@@ -2809,7 +2813,7 @@ msgstr ""
 #: dashboard/pages/documents/code_gen/layout_form.html:26
 #: dashboard/pages/documents/code_gen/layout_list.html:6
 #: dashboard/pages/documents/code_gen/layout_list.html:22
-#: dashboard/partials/sidenav/dashboard_sidenav.html:234
+#: dashboard/partials/sidenav/dashboard_sidenav.html:250
 msgid "Stamp layouts"
 msgstr "Disposiciones de estampado"
 
@@ -2892,9 +2896,8 @@ msgstr "Vista previa en vivo"
 #: dashboard/pages/documents/code_gen/layout_list.html:23
 msgid "Reusable positions for the QR and the barcode inside the PDF."
 msgstr ""
-"Posiciones reutilizables para el QR y el código de barras dentro del "
-"PDF.Posiciones reutilizables para el QR y el código de barras dentro del "
-"PDF."
+"Posiciones reutilizables para el QR y el código de barras dentro del PDF."
+"Posiciones reutilizables para el QR y el código de barras dentro del PDF."
 
 #: dashboard/pages/documents/code_gen/layout_list.html:33
 msgid "New layout"
@@ -2957,14 +2960,14 @@ msgid ""
 "updates with it. Boxes are only shown on the pages where they actually land."
 msgstr ""
 "Sube el PDF arriba para verlo aquí. Arrastra un resumen para moverla; la "
-"tabla se actualiza con ella. Las cajas solo se muestran en las páginas donde"
-" realmente caen."
+"tabla se actualiza con ella. Las cajas solo se muestran en las páginas donde "
+"realmente caen."
 
 #: dashboard/pages/documents/code_gen/partials/_layout_workspace.html:52
 msgid "Drag a box to move it; the offsets update as you go."
 msgstr ""
-"Arrastre un resumen para moverla; los desplazamientos se actualizan sobre la"
-" marcha.Arrastra un resumen para moverla; los desplazamientos se actualizan "
+"Arrastre un resumen para moverla; los desplazamientos se actualizan sobre la "
+"marcha.Arrastra un resumen para moverla; los desplazamientos se actualizan "
 "sobre la marcha."
 
 #: dashboard/pages/documents/code_gen/partials/_layout_workspace.html:55
@@ -3015,9 +3018,9 @@ msgstr "No se puede exportar todavía (%(counter)s pendiente(s))"
 
 #: dashboard/pages/documents/code_gen/partials/_usb_export.html:46
 msgid ""
-"A device leaves here and does not come back: it does not update, it does not"
-" warn and it cannot be withdrawn. So it is only handed out once all five are"
-" green."
+"A device leaves here and does not come back: it does not update, it does not "
+"warn and it cannot be withdrawn. So it is only handed out once all five are "
+"green."
 msgstr ""
 "Un dispositivo sale de aquí y no vuelve: no se actualiza, no avisa y no se "
 "puede retirar. Por eso solo se entrega con las cinco en verde."
@@ -3034,14 +3037,14 @@ msgstr "Pendiente:"
 msgid ""
 "Pick the documents, place their barcodes on the summary, seal and anchor."
 msgstr ""
-"Elige los documentos, coloca sus códigos de barras sobre el resumen, sella y"
-" ancla."
+"Elige los documentos, coloca sus códigos de barras sobre el resumen, sella y "
+"ancla."
 
 #: dashboard/pages/documents/code_gen/summary_composer.html:27
 #: dashboard/pages/documents/code_gen/summary_form.html:26
 #: dashboard/pages/documents/code_gen/summary_list.html:5
 #: dashboard/pages/documents/code_gen/summary_list.html:15
-#: dashboard/partials/sidenav/dashboard_sidenav.html:227
+#: dashboard/partials/sidenav/dashboard_sidenav.html:243
 msgid "AEGIS summaries"
 msgstr "Resúmenes AEGIS"
 
@@ -3133,11 +3136,11 @@ msgstr "Cadena de bloques"
 #: dashboard/pages/documents/code_gen/summary_composer.html:178
 msgid ""
 "A sealed summary can be sent later: the hash is the same one. The proof is "
-"born pending and matures into a Bitcoin block within a few hours, on its own"
-" — nothing needs re-stamping."
+"born pending and matures into a Bitcoin block within a few hours, on its own "
+"— nothing needs re-stamping."
 msgstr ""
-"Un resumen sellado se puede enviar después: la huella es la misma. La prueba"
-" nace pendiente y madura sola hasta un bloque de Bitcoin en unas horas, sin "
+"Un resumen sellado se puede enviar después: la huella es la misma. La prueba "
+"nace pendiente y madura sola hasta un bloque de Bitcoin en unas horas, sin "
 "reestampar nada."
 
 #: dashboard/pages/documents/code_gen/summary_composer.html:184
@@ -3161,8 +3164,8 @@ msgid ""
 "blockchain — that QR points at a page that updates itself, so nothing needs "
 "re-stamping when the Bitcoin block arrives."
 msgstr ""
-"El resumen tiene su propio PDF: lleva el master hash, el código de barras de"
-" cada miembro y el QR de la página de anclaje. No espera a la cadena de "
+"El resumen tiene su propio PDF: lleva el master hash, el código de barras de "
+"cada miembro y el QR de la página de anclaje. No espera a la cadena de "
 "bloques: ese QR apunta a una página que se actualiza sola, así que no hay "
 "que reestampar nada cuando llegue el bloque de Bitcoin."
 
@@ -3266,8 +3269,8 @@ msgstr "Nuevo resumen AEGIS"
 
 #: dashboard/pages/documents/code_gen/summary_form.html:24
 msgid ""
-"A summary gathers several certificates into one document that carries all of"
-" their barcodes."
+"A summary gathers several certificates into one document that carries all of "
+"their barcodes."
 msgstr ""
 "Un resumen reúne varios certificados en un documento que lleva todos sus "
 "códigos de barras."
@@ -3297,8 +3300,8 @@ msgid ""
 "You place each member barcode on the summary page, plus the summary own QR "
 "and barcode."
 msgstr ""
-"Colocas el código de barras de cada miembro en la página del resumen, más el"
-" QR y el código de barras del propio resumen."
+"Colocas el código de barras de cada miembro en la página del resumen, más el "
+"QR y el código de barras del propio resumen."
 
 #: dashboard/pages/documents/code_gen/summary_form.html:138
 msgid ""
@@ -3312,8 +3315,8 @@ msgstr ""
 
 #: dashboard/pages/documents/code_gen/summary_form.html:141
 msgid ""
-"The anchor QR points to a page that updates itself as the timestamp matures,"
-" so nothing has to be stamped again."
+"The anchor QR points to a page that updates itself as the timestamp matures, "
+"so nothing has to be stamped again."
 msgstr ""
 "El QR del anclaje apunta a una página que se actualiza sola según madura el "
 "sellado, así que no hay que reestampar nada."
@@ -3331,8 +3334,7 @@ msgid "New summary"
 msgstr "Nuevo resumen"
 
 #: dashboard/pages/documents/code_gen/summary_list.html:33
-msgid ""
-"No summaries yet. Create the first one to start gathering certificates."
+msgid "No summaries yet. Create the first one to start gathering certificates."
 msgstr ""
 "Todavía no hay resúmenes. Cree la primera para empezar a agrupar "
 "certificados.Todavía no hay resúmenes. Crea la primera para empezar a "
@@ -3396,12 +3398,14 @@ msgstr "¿Necesitas ayuda?"
 #: dashboard/pages/holders/asset_location_base.html:59
 msgid ""
 "\n"
-"                        The Asset Location ties a specific asset to a location, defining where and in what quantity the\n"
+"                        The Asset Location ties a specific asset to a "
+"location, defining where and in what quantity the\n"
 "                        asset is available.\n"
 "                        "
 msgstr ""
 "\n"
-"La ubicación del activo vincula un activo específico a una ubicación, definiendo dónde y en qué cantidad está disponible el activo."
+"La ubicación del activo vincula un activo específico a una ubicación, "
+"definiendo dónde y en qué cantidad está disponible el activo."
 
 #: dashboard/pages/holders/edit_asset_location.html:5
 #: dashboard/pages/holders/edit_asset_location.html:62
@@ -3464,17 +3468,20 @@ msgstr "Su cuenta está bajo proceso de verificación."
 #: dashboard/pages/holders/holder_dashboard.html:408
 msgid ""
 "\n"
-"                    This process can take between 24 to 72 hours (1 to 3 business days), Please be patient while we\n"
+"                    This process can take between 24 to 72 hours (1 to 3 "
+"business days), Please be patient while we\n"
 "                    verify your account.\n"
 "                    "
 msgstr ""
 "\n"
-"Este proceso puede tardar entre 24 y 72 horas (1 a 3 días hábiles). Por favor, tenga paciencia mientras verificamos su cuenta."
+"Este proceso puede tardar entre 24 y 72 horas (1 a 3 días hábiles). Por "
+"favor, tenga paciencia mientras verificamos su cuenta."
 
 #: dashboard/pages/holders/holder_dashboard.html:414
 msgid ""
 "\n"
-"                    If you have any questions, please contact our support team.\n"
+"                    If you have any questions, please contact our support "
+"team.\n"
 "                    "
 msgstr ""
 "\n"
@@ -3494,24 +3501,30 @@ msgstr "Agregar referencia de ubicación"
 #: dashboard/pages/holders/location/edit_location.html:108
 msgid ""
 "\n"
-"                        The Location Reference serves as a unique identifier to manage inventory across various\n"
+"                        The Location Reference serves as a unique identifier "
+"to manage inventory across various\n"
 "                        locations.\n"
 "                        "
 msgstr ""
 "\n"
-"La referencia de ubicación sirve como un identificador único para administrar el inventario en varias ubicaciones."
+"La referencia de ubicación sirve como un identificador único para "
+"administrar el inventario en varias ubicaciones."
 
 #: dashboard/pages/holders/location/add_location.html:124
 #: dashboard/pages/holders/location/edit_location.html:115
 msgid ""
 "\n"
-"                        It allows differentiation between inventory located in the same country but in different areas,\n"
-"                        inventory in different countries, or inventory in the same country as well as across multiple\n"
+"                        It allows differentiation between inventory located "
+"in the same country but in different areas,\n"
+"                        inventory in different countries, or inventory in "
+"the same country as well as across multiple\n"
 "                        countries.\n"
 "                        "
 msgstr ""
 "\n"
-"Permite diferenciar entre inventario ubicado en el mismo país pero en diferentes áreas, inventario en diferentes países o inventario en el mismo país y en varios países."
+"Permite diferenciar entre inventario ubicado en el mismo país pero en "
+"diferentes áreas, inventario en diferentes países o inventario en el mismo "
+"país y en varios países."
 
 #: dashboard/pages/holders/location/edit_location.html:52
 msgid "Edit Location Reference"
@@ -3569,11 +3582,11 @@ msgstr "Activos"
 msgid "Verification"
 msgstr "Verificación"
 
-#: dashboard/partials/sidenav/dashboard_sidenav.html:237
+#: dashboard/partials/sidenav/dashboard_sidenav.html:253
 msgid "Administration"
 msgstr "Administración"
 
-#: dashboard/partials/sidenav/dashboard_sidenav.html:243
+#: dashboard/partials/sidenav/dashboard_sidenav.html:259
 msgid "Admin panel"
 msgstr "Panel de administración"
 
@@ -3667,11 +3680,11 @@ msgstr "Puedes leer el texto completo, y descargarlo en PDF, aquí:"
 #: email/legal_change_email.html:83
 msgid ""
 "If you keep using the platform after this notice, we record it as your "
-"acceptance of the new text. If you do not agree with it, tell us through the"
-" PQRS form before continuing."
+"acceptance of the new text. If you do not agree with it, tell us through the "
+"PQRS form before continuing."
 msgstr ""
-"Si sigues usando la plataforma después de este aviso, lo registramos como tu"
-" aceptación del texto nuevo. Si no estás de acuerdo con él, dínoslo por el "
+"Si sigues usando la plataforma después de este aviso, lo registramos como tu "
+"aceptación del texto nuevo. Si no estás de acuerdo con él, dínoslo por el "
 "formulario de PQRS antes de continuar."
 
 #: email/legal_change_email.html:98
@@ -3699,10 +3712,12 @@ msgstr "¿No has solicitado este código? Ponte en contacto con nosotros."
 
 #: email/otp_email.html:78
 msgid ""
-"This is an automated message. <strong>Nobody from the firm will ever ask you\n"
+"This is an automated message. <strong>Nobody from the firm will ever ask "
+"you\n"
 "            for this code</strong> by phone, WhatsApp or email."
 msgstr ""
-"Este mensaje es automático. <strong>Nadie del despacho te pedirá este código</strong>\n"
+"Este mensaje es automático. <strong>Nadie del despacho te pedirá este "
+"código</strong>\n"
 "            por teléfono, por WhatsApp ni por correo."
 
 #: email/otp_email.html:85
@@ -3767,8 +3782,7 @@ msgstr ""
 msgid "Thank you for your understanding."
 msgstr "Gracias por su comprensión."
 
-#: partials/footer/_legal_links.html:22 pqrs/wizard.html:16
-#: pqrs/wizard.html:30
+#: partials/footer/_legal_links.html:22 pqrs/wizard.html:16 pqrs/wizard.html:30
 msgid "Requests and complaints (PQRS)"
 msgstr "Peticiones, quejas, reclamos y sugerencias (PQRS)"
 
@@ -3829,8 +3843,7 @@ msgid "Your request has been filed"
 msgstr "Tu solicitud quedó radicada"
 
 #: pqrs/receipt.html:35
-msgid ""
-"Keep this reference. Quote it if you need to ask us about your request."
+msgid "Keep this reference. Quote it if you need to ask us about your request."
 msgstr ""
 "Guarda este radicado. Cítalo si necesitas preguntarnos por tu solicitud."
 
@@ -3845,8 +3858,8 @@ msgstr "Te responderemos antes del"
 #: pqrs/receipt.html:66
 msgid ""
 "Claims are answered within 15 business days (Law 1581 of 2012, article 15). "
-"If we need longer we will tell you why and give you a new date, which cannot"
-" go beyond 8 further business days."
+"If we need longer we will tell you why and give you a new date, which cannot "
+"go beyond 8 further business days."
 msgstr ""
 "Los reclamos se responden en 15 días hábiles (Ley 1581 de 2012, artículo "
 "15). Si necesitamos más tiempo te diremos por qué y te daremos una nueva "
@@ -3854,9 +3867,9 @@ msgstr ""
 
 #: pqrs/receipt.html:72
 msgid ""
-"Queries are answered within 10 business days (Law 1581 of 2012, article 14)."
-" If we need longer we will tell you why and give you a new date, which "
-"cannot go beyond 5 further business days."
+"Queries are answered within 10 business days (Law 1581 of 2012, article 14). "
+"If we need longer we will tell you why and give you a new date, which cannot "
+"go beyond 5 further business days."
 msgstr ""
 "Las consultas se responden en 10 días hábiles (Ley 1581 de 2012, artículo "
 "14). Si necesitamos más tiempo te diremos por qué y te daremos una nueva "
@@ -3864,13 +3877,13 @@ msgstr ""
 
 #: pqrs/receipt.html:81
 msgid ""
-"We also sent this reference to the email address you gave us. If it does not"
-" arrive, check your spam folder before filing again — a second request does "
+"We also sent this reference to the email address you gave us. If it does not "
+"arrive, check your spam folder before filing again — a second request does "
 "not speed the first one up."
 msgstr ""
-"También enviamos este radicado al correo que nos diste. Si no llega, mira en"
-" la carpeta de no deseado antes de volver a radicar: una segunda solicitud "
-"no acelera la primera."
+"También enviamos este radicado al correo que nos diste. Si no llega, mira en "
+"la carpeta de no deseado antes de volver a radicar: una segunda solicitud no "
+"acelera la primera."
 
 #: pqrs/receipt.html:89
 msgid "Back to the site"
@@ -3881,8 +3894,8 @@ msgid ""
 "If you have a question, claim, complaint or suggestion, fill in this form "
 "and we will get back to you within the legal term."
 msgstr ""
-"Si tienes una petición, queja, reclamo o sugerencia, rellena este formulario"
-" y te responderemos dentro del término legal."
+"Si tienes una petición, queja, reclamo o sugerencia, rellena este formulario "
+"y te responderemos dentro del término legal."
 
 #: pqrs/wizard.html:62
 msgid "Check your details"
@@ -3911,9 +3924,9 @@ msgstr "Procesando…"
 #: two_factor/core/backup_tokens.html:17
 msgid "Backup tokens can be used when your primary method is not available."
 msgstr ""
-"Los códigos de respaldo sirven cuando su método principal no está "
-"disponible.Los tokens de respaldo se pueden utilizar cuando su método "
-"principal no está disponible."
+"Los códigos de respaldo sirven cuando su método principal no está disponible."
+"Los tokens de respaldo se pueden utilizar cuando su método principal no está "
+"disponible."
 
 #: two_factor/core/backup_tokens.html:22
 msgid ""
@@ -3937,8 +3950,7 @@ msgstr "Copia estos tokens y guárdalos en un lugar seguro."
 msgid "You don't have any backup codes yet."
 msgstr "Aún no tienes códigos de respaldo."
 
-#: two_factor/core/backup_tokens.html:45
-#: two_factor/core/setup_complete.html:17
+#: two_factor/core/backup_tokens.html:45 two_factor/core/setup_complete.html:17
 msgid "Back to Account Security"
 msgstr "Volver a la seguridad de la cuenta"
 
@@ -3988,8 +4000,8 @@ msgstr "Se ha enviado un código OTP a tu correo"
 
 #: two_factor/core/login.html:161
 msgid ""
-"After several failed password attempts we sent you a code so you can sign in"
-" without getting locked out."
+"After several failed password attempts we sent you a code so you can sign in "
+"without getting locked out."
 msgstr ""
 "Tras varios intentos fallidos con la contraseña te hemos enviado un código "
 "para que puedas entrar sin quedarte bloqueado."
@@ -4047,8 +4059,8 @@ msgstr ""
 
 #: two_factor/core/otp_required.html:12 two_factor/profile/profile.html:27
 msgid ""
-"Two-factor authentication is not enabled for your account. Enable two-factor"
-" authentication for enhanced account security."
+"Two-factor authentication is not enabled for your account. Enable two-factor "
+"authentication for enhanced account security."
 msgstr ""
 "La autenticación de dos factores no está habilitada en tu cuenta. Actívala "
 "para mejorar la seguridad de tu cuenta."
@@ -4064,9 +4076,9 @@ msgstr "Habilitar autenticación de dos factores"
 #: two_factor/core/setup.html:34
 msgid "Follow the steps in this wizard to enable two-factor authentication."
 msgstr ""
-"Siga los pasos de este asistente para activar la verificación en dos "
-"pasos.Siga los pasos de este asistente para habilitar la autenticación de "
-"dos factores."
+"Siga los pasos de este asistente para activar la verificación en dos pasos."
+"Siga los pasos de este asistente para habilitar la autenticación de dos "
+"factores."
 
 #: two_factor/core/setup.html:38
 msgid "Please select which authentication method you would like to use."
@@ -4081,12 +4093,11 @@ msgid "Copied to clipboard"
 msgstr "Copiado al portapapeles"
 
 #: two_factor/core/setup.html:56
-msgid ""
-"Token validated successfully. Two-factor authentication is now enabled."
+msgid "Token validated successfully. Two-factor authentication is now enabled."
 msgstr ""
-"Código validado correctamente. La verificación en dos pasos ya está "
-"activa.Token validado exitosamente. La autenticación de dos factores ahora "
-"está habilitada."
+"Código validado correctamente. La verificación en dos pasos ya está activa."
+"Token validado exitosamente. La autenticación de dos factores ahora está "
+"habilitada."
 
 #: two_factor/core/setup.html:60
 msgid "Token validation failed. Please try again."
@@ -4097,8 +4108,7 @@ msgid "Back to login"
 msgstr "Volver al inicio de sesión"
 
 #: two_factor/core/setup_complete.html:13
-msgid ""
-"Congratulations, you've successfully enabled two-factor authentication."
+msgid "Congratulations, you've successfully enabled two-factor authentication."
 msgstr "¡Felicidades! Has habilitado la autenticación de dos factores."
 
 #: two_factor/profile/profile.html:14
