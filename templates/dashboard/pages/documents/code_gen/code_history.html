@@ -224,20 +224,32 @@
                           {% comment %}
                             Componer un resumen y llevarselo en un USB son actos
                             del emisor, y el dossier del USB lleva ademas
-                            documentos de otros titulares. La rama se le sigue
-                            enseñando a un titular --saber de que resumen es su
-                            certificado es suyo-- pero sin las acciones.
+                            documentos de otros titulares: esas dos quedan
+                            detras de `can_compose`. Pero el enlace a la
+                            verificacion publica del resumen --su estado, su
+                            master hash y el anclaje temporal-- es justo lo que
+                            `access.py` dice que un titular si ve para sus
+                            propios certificados, y aqui no llegaba a la rama
+                            del resumen: solo estaba dentro del bloque del
+                            operador, asi que un titular no tenia por donde
+                            llegar salvo tecleando la URL de memoria.
                           {% endcomment %}
-                          {% if can_compose %}
-                            <span class="float-end d-inline-flex flex-wrap gap-2 align-items-start">
+                          <span class="float-end d-inline-flex flex-wrap gap-2 align-items-start">
+                            <a class="btn btn-outline-secondary btn-sm"
+                               href="{% url 'certificates:summary_detail' node.summary.pk %}">
+                              <i class="bi bi-shield-check" aria-hidden="true"></i>
+                              {% trans 'Verify' %}
+                            </a>
+
+                            {% if can_compose %}
                               {% include 'dashboard/pages/documents/code_gen/partials/_usb_export.html' with export=node.export summary=node.summary %}
 
                               <a class="btn btn-outline-primary btn-sm"
                                  href="{% url 'code_gen:summary_compose' node.summary.pk %}">
                                 {% trans 'Compose' %}
                               </a>
-                            </span>
-                          {% endif %}
+                            {% endif %}
+                          </span>
                         </th>
                       </tr>
                     {% endif %}
