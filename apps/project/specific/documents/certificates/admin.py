@@ -323,6 +323,7 @@ class DocumentVerificationModelAdmin(GeneralAdminModel):
     list_display = (
         "uuid_prefix",
         "document_title",
+        "holder",
         "certificate_type",
         "status_badge",
         "public_code",
@@ -356,7 +357,15 @@ class DocumentVerificationModelAdmin(GeneralAdminModel):
         "public_copy_hash",
         "code_sequence",
         "code_payload",
+        "holder__username",
+        "holder__first_name",
+        "holder__last_name",
     )
+
+    # Un desplegable con todos los usuarios no se puede usar en cuanto hay unos
+    # cuantos, y el correo va cifrado: se busca por usuario, nombre y apellido,
+    # que es por lo que `filter(email=...)` no sirve en este proyecto.
+    autocomplete_fields = ("holder",)
 
     autocomplete_fields = ()
 
@@ -395,6 +404,7 @@ class DocumentVerificationModelAdmin(GeneralAdminModel):
                 "public_code",
                 "certificate_type",
                 "document_title",
+                "holder",
             )
         }),
         (_("Certificacion"), {

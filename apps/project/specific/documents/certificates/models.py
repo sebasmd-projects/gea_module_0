@@ -391,6 +391,27 @@ class DocumentVerificationModel(TimeStampedModel):
         db_index=True
     )
 
+    # `SET_NULL` y no `CASCADE` ni `PROTECT`: un certificado es un documento
+    # con valor juridico propio y no se borra porque se vaya su titular. Y de
+    # los tres comportamientos es el unico que **nunca ensancha el acceso**:
+    # sin titular no hay ningun usuario que encaje, asi que el certificado
+    # desaparece de todas las vistas de titular en vez de aparecer en la que
+    # no toca. Un fallo aqui tiene que dejar a la gente fuera, no dentro.
+    holder = models.ForeignKey(
+        UserModel,
+        on_delete=models.SET_NULL,
+        verbose_name=_('Holder'),
+        related_name='held_certificates',
+        blank=True,
+        null=True,
+        db_index=True,
+        help_text=_(
+            'The user this certificate was issued for. They can see it in the '
+            'code history, read-only: never the original file, the symbols or '
+            'where they were stamped.'
+        )
+    )
+
     stamp_layout = models.ForeignKey(
         'code_gen.StampLayoutModel',
         on_delete=models.SET_NULL,

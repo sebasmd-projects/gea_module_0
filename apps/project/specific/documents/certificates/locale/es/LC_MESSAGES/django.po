@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GEAUSA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-14 15:25+0000\n"
+"POT-Creation-Date: 2026-09-15 02:17+0000\n"
 "PO-Revision-Date: 2026-01-11 02:56+0000\n"
 "Last-Translator: Sebastian Morales <sebasmoralesd@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Certify: stamp codes, hash and issue the copy"
 msgstr "Certificar: estampar códigos, calcular el hash y emitir la copia"
 
-#: admin.py:45 admin.py:659 admin.py:693 admin.py:726
+#: admin.py:45 admin.py:669 admin.py:703 admin.py:736
 #, python-format
 msgid "%(title)s: %(error)s"
 msgstr "%(title)s: %(error)s"
@@ -74,7 +74,7 @@ msgstr "Documentos (sensibles)"
 msgid "Estado legal"
 msgstr "Estado legal"
 
-#: admin.py:229 admin.py:440
+#: admin.py:229 admin.py:450
 msgid "Vigencia"
 msgstr "Vigencia"
 
@@ -94,19 +94,19 @@ msgstr "Nombre completo"
 msgid "Approved"
 msgstr "Aprobado"
 
-#: admin.py:272 admin.py:496 views.py:447
+#: admin.py:272 admin.py:506 views.py:448
 msgid "Expired"
 msgstr "Vencido"
 
-#: admin.py:276 models.py:45 views.py:448
+#: admin.py:276 models.py:45 views.py:449
 msgid "Revoked"
 msgstr "Revocado"
 
-#: admin.py:280 admin.py:500
+#: admin.py:280 admin.py:510
 msgid "Views"
 msgstr "Visitas"
 
-#: admin.py:284 admin.py:504
+#: admin.py:284 admin.py:514
 msgid "Unique"
 msgstr "Únicas"
 
@@ -126,47 +126,43 @@ msgstr "Foto"
 msgid "Detail"
 msgstr "Detalle"
 
-#: admin.py:392 admin.py:804
+#: admin.py:401 admin.py:814
 msgid "Identificacion"
 msgstr "Identificación"
 
-#: admin.py:400
+#: admin.py:410
 msgid "Certificacion"
 msgstr "Certificación"
 
-#: admin.py:411
+#: admin.py:421
 msgid "Archivos generados"
 msgstr "Archivos generados"
 
-#: admin.py:418
+#: admin.py:428
 msgid "Huellas"
 msgstr "Huellas"
 
-#: admin.py:429
+#: admin.py:439
 msgid "Codigo emitido"
 msgstr "Código emitido"
 
-#: admin.py:439
+#: admin.py:449
 msgid "Entrega"
 msgstr "Entrega"
 
-#: admin.py:441
+#: admin.py:451
 msgid "Metricas"
 msgstr "Métricas"
 
-#: admin.py:445 admin.py:815
+#: admin.py:455 admin.py:825
 msgid "Auditoria"
 msgstr "Auditoría"
 
-#: admin.py:467 admin.py:820
+#: admin.py:477 admin.py:830
 msgid "How it works"
 msgstr "Cómo funciona"
 
-#: admin.py:472
-#| msgid ""
-#| "1) Upload the ORIGINAL PDF without codes. 2) Pick the stamp layout (or leave"
-#| " it empty for the default one). 3) Save. 4) Run the action “Certify” from "
-#| "the list view."
+#: admin.py:482
 msgid ""
 "1) Upload the ORIGINAL PDF without codes. 2) Pick the stamp layout (or leave"
 " it empty for the default one). 3) Save. 4) Run the action "
@@ -176,7 +172,7 @@ msgstr ""
 " déjala vacía para usar la de por defecto). 3) Guarda. 4) Ejecuta la acción "
 "«Certificar» desde el listado."
 
-#: admin.py:477
+#: admin.py:487
 msgid ""
 "Certifying produces the certified PDF with its QR and barcode, the "
 "distributable copy carrying a hidden watermark, and the fingerprints of all "
@@ -186,99 +182,99 @@ msgstr ""
 "copia distribuible con una marca de agua oculta, y las huellas de los tres "
 "archivos."
 
-#: admin.py:483 models.py:798
+#: admin.py:493 models.py:819
 msgid "Status"
 msgstr "Estado"
 
-#: admin.py:508
+#: admin.py:518
 msgid "Files"
 msgstr "Archivos"
 
-#: admin.py:515
+#: admin.py:525
 msgid "Original"
 msgstr "Original"
 
-#: admin.py:516 models.py:44
+#: admin.py:526 models.py:44
 msgid "Certified"
 msgstr "Certificado"
 
-#: admin.py:517
+#: admin.py:527
 msgid "Public copy"
 msgstr "Copia pública"
 
-#: admin.py:537
+#: admin.py:547
 msgid "Certification record"
 msgstr "Registro de certificación"
 
-#: admin.py:547
+#: admin.py:557
 msgid "Download the signed JSON record (for auditors)"
 msgstr "Descargar el registro JSON sellado (para auditoría)"
 
-#: admin.py:550
+#: admin.py:560
 msgid "Hash"
 msgstr "Hash"
 
-#: admin.py:607 admin.py:621
+#: admin.py:617 admin.py:631
 msgid "Target"
 msgstr "Objetivo"
 
-#: admin.py:609 admin.py:634
+#: admin.py:619 admin.py:644
 msgid "Viewer"
 msgstr "Visitante"
 
-#: admin.py:611
+#: admin.py:621
 msgid "Technical"
 msgstr "Técnico"
 
-#: admin.py:613
+#: admin.py:623
 msgid "Audit"
 msgstr "Auditoría"
 
-#: admin.py:617
+#: admin.py:627
 msgid "Type"
 msgstr "Tipo"
 
-#: admin.py:619 models.py:621
+#: admin.py:629 models.py:642
 msgid "User Certificate"
 msgstr "Certificado de usuario"
 
-#: admin.py:619
+#: admin.py:629
 msgid "Document Certificate"
 msgstr "Certificado de documento"
 
-#: admin.py:646
+#: admin.py:656
 msgid "Seal: compute the master hash of the summary"
 msgstr "Sellar: calcular el master hash del resumen"
 
-#: admin.py:668
+#: admin.py:678
 #, python-format
 msgid "%(title)s sealed: %(hash)s"
 msgstr "%(title)s sellado: %(hash)s"
 
-#: admin.py:675
+#: admin.py:685
 #, python-format
 msgid "%(count)s summary/summaries sealed."
 msgstr "%(count)s resumen(es) sellado(s)."
 
-#: admin.py:679
+#: admin.py:689
 msgid "Anchor with the timestamp authority (RFC 3161)"
 msgstr "Anclar con la autoridad de sellado de tiempo (RFC 3161)"
 
-#: admin.py:702
+#: admin.py:712
 #, python-format
 msgid "%(title)s anchored at %(time)s"
 msgstr "%(title)s anclado el %(time)s"
 
-#: admin.py:709
+#: admin.py:719
 #, python-format
 msgid "%(count)s summary/summaries anchored."
 msgstr "%(count)s resumen(es) anclado(s)."
 
-#: admin.py:713
+#: admin.py:723
 msgid "Anchor in Bitcoin (OpenTimestamps, free)"
 msgstr "Anclar en Bitcoin (OpenTimestamps, gratis)"
 
-#: admin.py:737
+#: admin.py:747
 #, python-format
 msgid ""
 "%(count)s summary/summaries submitted to Bitcoin. The proof takes a few "
@@ -289,23 +285,23 @@ msgstr ""
 "madurar; la página del anclaje se actualiza sola (manage.py "
 "upgrade_ots_anchors)."
 
-#: admin.py:778 models.py:774
+#: admin.py:788 models.py:795
 msgid "The asset this summary of certificates belongs to."
 msgstr "El activo al que pertenece este resumen de certificados."
 
-#: admin.py:780
+#: admin.py:790
 msgid "Add a new asset"
 msgstr "Agregar nuevo activo"
 
-#: admin.py:808
+#: admin.py:818
 msgid "Sello"
 msgstr "Sello"
 
-#: admin.py:812
+#: admin.py:822
 msgid "Documento resumen"
 msgstr "Documento resumen"
 
-#: admin.py:824
+#: admin.py:834
 msgid ""
 "1) Add the member documents below (all must be certified). 2) Run \"Seal\" "
 "to compute the master hash. 3) Issue the summary document, which carries "
@@ -319,19 +315,19 @@ msgstr ""
 "autoridad de sellado acredite la fecha. El master hash nunca cubre al propio"
 " resumen: no puede, todavía no existe cuando se calcula el hash."
 
-#: admin.py:832
+#: admin.py:842
 msgid "Members"
 msgstr "Miembros"
 
-#: admin.py:836 models.py:816
+#: admin.py:846 models.py:837
 msgid "Master hash"
 msgstr "Master hash"
 
-#: admin.py:841
+#: admin.py:851
 msgid "Anchor"
 msgstr "Anclaje"
 
-#: admin.py:846
+#: admin.py:856
 msgid "Not anchored"
 msgstr "Sin anclar"
 
@@ -497,11 +493,11 @@ msgstr "Copia distribuible identificada por su marca de agua oculta"
 msgid "Public UUID"
 msgstr "UUID público"
 
-#: models.py:73 models.py:372 models.py:758
+#: models.py:73 models.py:372 models.py:779
 msgid "UUID Prefix"
 msgstr "Prefijo UUID"
 
-#: models.py:82 models.py:363 models.py:749
+#: models.py:82 models.py:363 models.py:770
 msgid "Public verification code"
 msgstr "Código de verificación pública"
 
@@ -545,7 +541,7 @@ msgstr "Fecha de aprobación"
 msgid "Certificate type"
 msgstr "Tipo de Certificado"
 
-#: models.py:181 models.py:542 models.py:844
+#: models.py:181 models.py:563 models.py:865
 msgid "Issued at"
 msgstr "Emitido en"
 
@@ -553,7 +549,7 @@ msgstr "Emitido en"
 msgid "Legal issuance date of the certificate"
 msgstr "Fecha de emisión legal del certificado"
 
-#: models.py:188 models.py:546
+#: models.py:188 models.py:567
 msgid "Expires at"
 msgstr "Vence en"
 
@@ -593,11 +589,25 @@ msgstr "Título del documento"
 msgid "Certification status"
 msgstr "Estado de la certificación"
 
-#: models.py:397
+#: models.py:403
+msgid "Holder"
+msgstr "Titular"
+
+#: models.py:409
+msgid ""
+"The user this certificate was issued for. They can see it in the code "
+"history, read-only: never the original file, the symbols or where they were "
+"stamped."
+msgstr ""
+"El usuario para el que se emitió este certificado. Puede verlo en el "
+"histórico de códigos, en solo lectura: nunca el archivo original, ni los "
+"símbolos, ni dónde se estamparon."
+
+#: models.py:418
 msgid "Stamp layout"
 msgstr "Disposición de los códigos"
 
-#: models.py:402
+#: models.py:423
 msgid ""
 "Where the QR and the barcode are placed inside the PDF. Leave empty to use "
 "the default layout."
@@ -605,143 +615,143 @@ msgstr ""
 "Dónde se colocan el QR y el código de barras dentro del PDF. Déjalo vacío "
 "para usar la disposición por defecto."
 
-#: models.py:409
+#: models.py:430
 msgid "Original document (without codes)"
 msgstr "Documento original (sin códigos)"
 
-#: models.py:416
+#: models.py:437
 msgid "Original file hash"
 msgstr "Hash del archivo original"
 
-#: models.py:424
+#: models.py:445
 msgid "Original content hash"
 msgstr "Hash del contenido original"
 
-#: models.py:433
+#: models.py:454
 msgid "Certified document (with codes)"
 msgstr "Documento certificado (con códigos)"
 
-#: models.py:440
+#: models.py:461
 msgid "Certified file hash"
 msgstr "Hash del archivo certificado"
 
-#: models.py:448
+#: models.py:469
 msgid "Certified content hash"
 msgstr "Hash del contenido certificado"
 
-#: models.py:457
+#: models.py:478
 msgid "Distributable digital copy"
 msgstr "Copia digital distribuible"
 
-#: models.py:464
+#: models.py:485
 msgid "Distributable copy hash"
 msgstr "Hash de la copia distribuible"
 
-#: models.py:472
+#: models.py:493
 msgid "Distributable copy content hash"
 msgstr "Hash del contenido de la copia distribuible"
 
-#: models.py:480
+#: models.py:501
 msgid "Watermark token"
 msgstr "Token de la marca de agua"
 
-#: models.py:489
+#: models.py:510
 msgid "Code payload"
 msgstr "Contenido del código"
 
-#: models.py:495
+#: models.py:516
 msgid "Certificate initials"
 msgstr "Iniciales del certificado"
 
-#: models.py:502
+#: models.py:523
 msgid "Autonomous sequence"
 msgstr "Secuencia autónoma"
 
-#: models.py:510
+#: models.py:531
 msgid "Hash fragment in the code"
 msgstr "Fragmento del hash en el código"
 
-#: models.py:517
+#: models.py:538
 msgid "QR payload"
 msgstr "Contenido del QR"
 
-#: models.py:523
+#: models.py:544
 msgid "Certified at"
 msgstr "Certificado el"
 
-#: models.py:529
+#: models.py:550
 msgid "Delivery method"
 msgstr "Método de entrega"
 
-#: models.py:536
+#: models.py:557
 msgid "Sent at"
 msgstr "Enviado a"
 
-#: models.py:600 models.py:601 models.py:630
+#: models.py:621 models.py:622 models.py:651
 msgid "Document Verification"
 msgstr "Verificación de documentos"
 
-#: models.py:639
+#: models.py:660
 msgid "Authenticated user"
 msgstr "Usuario autenticado"
 
-#: models.py:645
+#: models.py:666
 msgid "Anonymous email"
 msgstr "Correo electrónico anónimo"
 
-#: models.py:651
+#: models.py:672
 msgid "IP address"
 msgstr "Dirección IP"
 
-#: models.py:657
+#: models.py:678
 msgid "User agent"
 msgstr "agente del usuario"
 
-#: models.py:663
+#: models.py:684
 msgid "Viewed at"
 msgstr "Visto a las"
 
-#: models.py:672
+#: models.py:693
 msgid "You must relate the view to a certificate or a document."
 msgstr "Debe relacionar la vista con un certificado o un documento."
 
-#: models.py:677
+#: models.py:698
 msgid "Anonymous view require an email address."
 msgstr "La vista anónima requiere una dirección de correo electrónico."
 
-#: models.py:693
+#: models.py:714
 msgid "Certificate View Log"
 msgstr "Registro de vista de certificado"
 
-#: models.py:694
+#: models.py:715
 msgid "Certificate View Logs"
 msgstr "Registros de visualización de certificados"
 
-#: models.py:717
+#: models.py:738
 msgid "Draft (members selected, not sealed)"
 msgstr "Borrador (miembros elegidos, sin sellar)"
 
-#: models.py:718
+#: models.py:739
 msgid "Sealed (master hash computed)"
 msgstr "Sellado (master hash calculado)"
 
-#: models.py:719
+#: models.py:740
 msgid "Certified (summary document issued)"
 msgstr "Certificado (documento resumen emitido)"
 
-#: models.py:744
+#: models.py:765
 msgid "Summary title"
 msgstr "Título del resumen"
 
-#: models.py:770
+#: models.py:791
 msgid "Asset"
 msgstr "Activo"
 
-#: models.py:778
+#: models.py:799
 msgid "Asset label"
 msgstr "Etiqueta del activo"
 
-#: models.py:783
+#: models.py:804
 msgid ""
 "Human readable name of the asset. Only a label: the binding is made through "
 "the asset UUID."
@@ -749,15 +759,15 @@ msgstr ""
 "Nombre legible del activo. Solo una etiqueta: el vínculo se hace por el UUID"
 " del activo."
 
-#: models.py:793
+#: models.py:814
 msgid "Documents"
 msgstr "Documentos"
 
-#: models.py:806
+#: models.py:827
 msgid "Canonical payload"
 msgstr "Payload canónico"
 
-#: models.py:810
+#: models.py:831
 msgid ""
 "The exact bytes the master hash was computed over (JCS/RFC8785). Stored "
 "verbatim so anyone can recompute it."
@@ -765,15 +775,15 @@ msgstr ""
 "Los bytes exactos sobre los que se calculó el master hash (JCS/RFC8785). Se "
 "guardan tal cual para que cualquiera pueda recalcularlo."
 
-#: models.py:824
+#: models.py:845
 msgid "Sealed at"
 msgstr "Sellado el"
 
-#: models.py:833
+#: models.py:854
 msgid "Summary document"
 msgstr "Documento resumen"
 
-#: models.py:838
+#: models.py:859
 msgid ""
 "The certified PDF that carries the master hash and the barcodes of every "
 "member. Issued after sealing, never part of the hash."
@@ -781,39 +791,39 @@ msgstr ""
 "El PDF certificado que lleva el master hash y los códigos de barras de todos"
 " los miembros. Se emite después de sellar, y nunca forma parte del hash."
 
-#: models.py:878
+#: models.py:899
 msgid "AEGIS Summary"
 msgstr "Resumen AEGIS"
 
-#: models.py:879
+#: models.py:900
 msgid "AEGIS Summaries"
 msgstr "Resúmenes AEGIS"
 
-#: models.py:897
+#: models.py:918
 msgid "Summary"
 msgstr "Resumen"
 
-#: models.py:904
+#: models.py:925
 msgid "Document"
 msgstr "Documento"
 
-#: models.py:908
+#: models.py:929
 msgid "Code in the summary"
 msgstr "Código dentro del resumen"
 
-#: models.py:910
+#: models.py:931
 msgid "For example AEGIS-1, AEGIS-2…"
 msgstr "Por ejemplo AEGIS-1, AEGIS-2…"
 
-#: models.py:914
+#: models.py:935
 msgid "Document type"
 msgstr "Tipo de documento"
 
-#: models.py:918
+#: models.py:939
 msgid "As it appears in the master payload."
 msgstr "Tal como aparece en el payload maestro."
 
-#: models.py:926
+#: models.py:947
 msgid ""
 "Only certified documents can be part of a summary: an uncertified one has no"
 " fingerprint to include."
@@ -821,11 +831,11 @@ msgstr ""
 "Solo los documentos certificados pueden formar parte de un resumen: uno sin "
 "certificar no tiene huella que incluir."
 
-#: models.py:938
+#: models.py:959
 msgid "Summary member"
 msgstr "Miembro del resumen"
 
-#: models.py:939
+#: models.py:960
 msgid "Summary members"
 msgstr "Miembros del resumen"
 
@@ -841,29 +851,29 @@ msgstr ""
 msgid "Use the following code to validate the certifications."
 msgstr "Utiliza el siguiente código para validar las certificaciones."
 
-#: views.py:105 views.py:363
+#: views.py:106 views.py:364
 msgid "Too many verification attempts. Try again later."
 msgstr "Demasiados intentos de verificación. Inténtalo más tarde."
 
-#: views.py:120
+#: views.py:121
 msgid "ID Number not found."
 msgstr "Número de identificación no encontrado."
 
-#: views.py:194
+#: views.py:195
 #, python-format
 msgid "Please wait %(seconds)s seconds before requesting a new code."
 msgstr "Espere %(seconds)s segundos antes de solicitar un nuevo código."
 
-#: views.py:202 views.py:330
+#: views.py:203 views.py:331
 msgid "Too many code requests. Try again later."
 msgstr "Demasiadas solicitudes de código. Inténtalo más tarde."
 
-#: views.py:214
+#: views.py:215
 msgid "A new verification code has been sent to your email."
 msgstr ""
 "Se ha enviado un nuevo código de verificación a su correo electrónico."
 
-#: views.py:285
+#: views.py:286
 msgid ""
 "This file is not valid: it is neither the original nor a certified digital "
 "copy issued by this platform."
@@ -871,7 +881,7 @@ msgstr ""
 "Este archivo no es válido: no es el original ni una copia digital "
 "certificada emitida por esta plataforma."
 
-#: views.py:295
+#: views.py:296
 msgid ""
 "This file carries the hidden watermark of the platform, so it originated "
 "from a certified copy, but its content has been modified. It is not a valid "
@@ -881,27 +891,27 @@ msgstr ""
 "procede de una copia certificada, pero su contenido ha sido modificado. No "
 "es una copia certificada válida."
 
-#: views.py:347
+#: views.py:348
 msgid "Invalid or expired code."
 msgstr "Código inválido o caducado."
 
-#: views.py:376
+#: views.py:377
 msgid "Document not found."
 msgstr "Documento no encontrado."
 
-#: views.py:379
+#: views.py:380
 msgid "We could not verify the document with the provided data."
 msgstr "No pudimos verificar el documento con los datos proporcionados."
 
-#: views.py:446
+#: views.py:447
 msgid "Valid"
 msgstr "Válido"
 
-#: views.py:449
+#: views.py:450
 msgid "Not certified"
 msgstr "Sin certificar"
 
-#: views.py:481
+#: views.py:482
 msgid ""
 "Verified file: this is the ORIGINAL document filed with the platform, "
 "unmodified."
@@ -909,7 +919,7 @@ msgstr ""
 "Archivo verificado: es el documento ORIGINAL depositado en la plataforma, "
 "sin modificar."
 
-#: views.py:485
+#: views.py:486
 msgid ""
 "Verified file: this is the CERTIFIED document, with its codes embedded, "
 "unmodified."
@@ -917,7 +927,7 @@ msgstr ""
 "Archivo verificado: es el documento CERTIFICADO, con sus códigos "
 "incrustados, sin modificar."
 
-#: views.py:489
+#: views.py:490
 msgid ""
 "Verified file: this is a CERTIFIED DIGITAL COPY of the original and it is "
 "valid."
@@ -925,11 +935,11 @@ msgstr ""
 "Archivo verificado: es una COPIA DIGITAL CERTIFICADA del original y es "
 "válida."
 
-#: views.py:496
+#: views.py:497
 msgid "Recognised by the exact fingerprint of the file (SHA-256)."
 msgstr "Reconocido por la huella exacta del archivo (SHA-256)."
 
-#: views.py:499
+#: views.py:500
 msgid ""
 "The bytes of the file changed (typically document metadata rewritten while "
 "it was emailed or re-saved), but its renderable content matches the "
@@ -939,7 +949,7 @@ msgstr ""
 "reescritos al enviarlo por correo o al reguardarlo), pero su contenido "
 "visible coincide exactamente con el certificado, página a página."
 
-#: views.py:624
+#: views.py:625
 msgid ""
 "This platform is not configured with a public signing key. Certification "
 "records are sealed with a symmetric HMAC that only the platform itself can "
@@ -949,7 +959,7 @@ msgstr ""
 "registros de certificación se sellan con un HMAC simétrico que solo la "
 "propia plataforma puede verificar."
 
-#: views.py:639
+#: views.py:640
 msgid ""
 "The \"seal.signature\" field of a GEA certification record, over every other"
 " field serialised as compact JSON with sorted keys, UTF-8."
@@ -958,11 +968,11 @@ msgstr ""
 "todos los demás campos serializados como JSON compacto con las claves "
 "ordenadas, en UTF-8."
 
-#: views.py:725
+#: views.py:782
 msgid "AEGIS Documents Certificates"
 msgstr "Certificados de documentos AEGIS"
 
-#: views.py:727
+#: views.py:784
 msgid ""
 "Verify documents protected and issued through the AEGIS certification "
 "system."
@@ -970,11 +980,11 @@ msgstr ""
 "Verifica documentos protegidos y emitidos a través del sistema de "
 "certificación AEGIS."
 
-#: views.py:735
+#: views.py:792
 msgid "IPCON Employee Certificate"
 msgstr "Certificado de empleado IPCON"
 
-#: views.py:737
+#: views.py:794
 msgid "Validate employment and institutional certificates issued by IPCON."
 msgstr ""
 "Valida los certificados laborales e institucionales emitidos por IPCON."

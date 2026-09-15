@@ -111,7 +111,14 @@
               </dl>
 
               <div class="d-grid gap-2">
-                {% if document.document_file %}
+                {% comment %}
+                  El que hace fe tambien es interno (`files.py`): al titular se
+                  le entrega la copia distribuible, que es la de abajo. El
+                  boton se esconde por lo mismo que el del original: ya
+                  contestaba que no, y un boton que contesta que no se lee como
+                  una averia.
+                {% endcomment %}
+                {% if document.document_file and can_see_internals %}
                   <a class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer"
                      href="{% url 'certificates:document_file' document.pk 'certified' %}">
                     {% trans 'Certified PDF (with codes)' %}
@@ -123,7 +130,17 @@
                     {% trans 'Distributable copy (watermarked)' %}
                   </a>
                 {% endif %}
-                {% if document.source_file %}
+                {% comment %}
+                  El original es el certificado **sin los codigos estampados**:
+                  quien lo tenga tiene una version limpia de un documento que
+                  hace fe. No sale de casa, ni para su titular.
+
+                  El enlace ya estaba cerrado en el servidor --`files.py` lo
+                  reserva a personal interno-- pero enseñarlo era ofrecer un
+                  boton que contesta que no: quien lo pulsa se queda pensando
+                  que algo esta roto en vez de entendiendo que no le toca.
+                {% endcomment %}
+                {% if document.source_file and can_see_internals %}
                   <a class="btn btn-outline-secondary btn-sm" target="_blank" rel="noopener noreferrer"
                      href="{% url 'certificates:document_file' document.pk 'source' %}">
                     {% trans 'Original filed (without codes)' %}
@@ -148,6 +165,19 @@
 
       {% comment %} ================= RIGHT: SYMBOLS ================= {% endcomment %}
       <div class="col-xl-5">
+
+        {% comment %}
+          Los simbolos sueltos, en PNG y descargables, son las piezas con las
+          que se monta algo que se parezca a un certificado. La tarjeta entera
+          se esconde, no solo los botones: dejandola, un titular leeria «no se
+          generaron simbolos para este codigo», que es falso — se generaron, y
+          estan estampados en su documento.
+
+          La vista previa de estampado de mas abajo no necesita condicion: la
+          vista no produce `stamp_preview` para quien no puede verla, asi que
+          la tarjeta no llega a existir.
+        {% endcomment %}
+        {% if can_see_internals %}
         <div class="card mb-4">
           <div class="card-header">
             <i class="fa-solid fa-qrcode me-2"></i>{% trans 'Symbols' %}
@@ -183,6 +213,36 @@
             {% endif %}
           </div>
         </div>
+        {% endif %}
+
+        {% comment %}
+          Para el titular, en el hueco que dejan los simbolos: donde se
+          comprueba de verdad. Es la pregunta que trae a alguien a esta
+          pantalla, y la respuesta no esta aqui sino en la pagina publica.
+        {% endcomment %}
+        {% if not can_see_internals and verification_url %}
+          <div class="card mb-4">
+            <div class="card-header">
+              <i class="fa-solid fa-shield-halved me-2"></i>{% trans 'How to check it' %}
+            </div>
+            <div class="card-body">
+              <p class="small text-muted">
+                {% blocktrans trimmed %}
+                  Upload the PDF on the public verification page and it will
+                  tell you whether it is still exactly the file that was
+                  certified. Typing the public code does not do that: it only
+                  looks up the record.
+                {% endblocktrans %}
+              </p>
+              <div class="d-grid">
+                <a class="btn btn-success btn-sm" target="_blank" rel="noopener noreferrer"
+                   href="{{ verification_url }}">
+                  {% trans 'Open public verification page' %}
+                </a>
+              </div>
+            </div>
+          </div>
+        {% endif %}
 
         {% comment %} ================= STAMP PREVIEW ================= {% endcomment %}
         {% if stamp_preview %}

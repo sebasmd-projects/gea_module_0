@@ -45,8 +45,21 @@
 
 {% block main_layout %}
   {% url 'core:index' as dashboard_url %}
-  {% trans 'Generated codes' as page_title %}
-  {% trans 'Every code issued, so you can come back to any of them.' as page_description %}
+
+  {% comment %}
+    El titulo y la descripcion cambian con el papel, y no por cortesia: a un
+    titular «todos los codigos emitidos» le describe una pagina que no esta
+    viendo. Aqui solo salen los suyos, y decir otra cosa le haria pensar que la
+    plataforma ha emitido tres certificados en total.
+  {% endcomment %}
+  {% if is_operator %}
+    {% trans 'Generated codes' as page_title %}
+    {% trans 'Every code issued, so you can come back to any of them.' as page_description %}
+  {% else %}
+    {% trans 'My certificates' as page_title %}
+    {% trans 'The certificates issued in your name. To check one, verify it publicly.' as page_description %}
+  {% endif %}
+
   {% trans 'Dashboard' as dashboard_title %}
   {% trans 'Documents' as documents_title %}
 
@@ -57,9 +70,20 @@
       <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
         <span><i class="fa-solid fa-list me-2"></i>{% trans 'History' %}</span>
 
-        <a class="btn btn-primary btn-sm" href="{% url 'code_gen:code_generate' %}">
-          <i class="bi bi-plus-lg"></i> {% trans 'Generate a new code' %}
-        </a>
+        {% comment %}
+          Emitir es del operador. A un titular no se le enseña: un boton que
+          emitiera de verdad le daria la capacidad del operador, y uno que no
+          hiciera nada seria peor que no estar.
+
+          Lo que le falta a un titular no es este boton — es **pedir** un
+          certificado, con su solicitud, su revision y su traza. Eso todavia no
+          existe (ver el TODO de `access.can_generate_codes`).
+        {% endcomment %}
+        {% if can_generate %}
+          <a class="btn btn-primary btn-sm" href="{% url 'code_gen:code_generate' %}">
+            <i class="bi bi-plus-lg"></i> {% trans 'Generate a new code' %}
+          </a>
+        {% endif %}
       </div>
 
       <div class="card-body">
@@ -112,7 +136,18 @@
         </div>
 
         {% if not object_list %}
-          <p class="text-muted mb-0">{% trans 'No codes issued yet.' %}</p>
+          {% comment %}
+            «Todavia no se ha emitido ninguno» es cierto para el operador y
+            enganoso para el titular: lo que pasa es que no hay ninguno
+            **suyo**, no que la plataforma este vacia.
+          {% endcomment %}
+          {% if is_operator %}
+            <p class="text-muted mb-0">{% trans 'No codes issued yet.' %}</p>
+          {% else %}
+            <p class="text-muted mb-0">
+              {% trans 'There are no certificates issued in your name yet.' %}
+            </p>
+          {% endif %}
         {% else %}
           {% comment %}
             El `|default:0` no es cosmetico: sin el, esta pagina se cae entera.
@@ -186,14 +221,23 @@
                             {% endblocktrans %}
                           </span>
 
-                          <span class="float-end d-inline-flex flex-wrap gap-2 align-items-start">
-                            {% include 'dashboard/pages/documents/code_gen/partials/_usb_export.html' with export=node.export summary=node.summary %}
+                          {% comment %}
+                            Componer un resumen y llevarselo en un USB son actos
+                            del emisor, y el dossier del USB lleva ademas
+                            documentos de otros titulares. La rama se le sigue
+                            enseñando a un titular --saber de que resumen es su
+                            certificado es suyo-- pero sin las acciones.
+                          {% endcomment %}
+                          {% if can_compose %}
+                            <span class="float-end d-inline-flex flex-wrap gap-2 align-items-start">
+                              {% include 'dashboard/pages/documents/code_gen/partials/_usb_export.html' with export=node.export summary=node.summary %}
 
-                            <a class="btn btn-outline-primary btn-sm"
-                               href="{% url 'code_gen:summary_compose' node.summary.pk %}">
-                              {% trans 'Compose' %}
-                            </a>
-                          </span>
+                              <a class="btn btn-outline-primary btn-sm"
+                                 href="{% url 'code_gen:summary_compose' node.summary.pk %}">
+                                {% trans 'Compose' %}
+                              </a>
+                            </span>
+                          {% endif %}
                         </th>
                       </tr>
                     {% endif %}

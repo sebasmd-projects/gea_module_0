@@ -9,6 +9,11 @@
 {% block custom_css %}
   {{ block.super }}
   <link rel="stylesheet" href="{% static 'css/stamp_preview.css' %}" />
+  {% comment %}
+    Para el selector de titular: un `<select>` con todas las cuentas activas
+    deja de poderse usar en cuanto hay unas cuantas.
+  {% endcomment %}
+  <link rel="stylesheet" href="{% static 'css/searchable_select.css' %}" />
 {% endblock custom_css %}
 
 {% block icons %}
@@ -250,6 +255,22 @@
                   {% endif %}
                 </div>
 
+                {% comment %}
+                  Para quien se emite. Es lo unico que hace que un certificado
+                  aparezca en el historial de alguien que no es operador, asi
+                  que va junto al titulo y no escondido al final: si se olvida,
+                  el titular no sabra nunca que existe.
+                {% endcomment %}
+                <div class="col-md-6">
+                  <label class="form-label" for="{{ form.holder.id_for_label }}">
+                    {{ form.holder.label }}
+                  </label>
+                  {{ form.holder }}
+                  {% if form.holder.help_text %}
+                    <div class="form-text">{{ form.holder.help_text }}</div>
+                  {% endif %}
+                </div>
+
                 <div class="col-md-6">
                   <label class="form-label" for="{{ form.stamp_layout.id_for_label }}">
                     {{ form.stamp_layout.label }}
@@ -341,4 +362,5 @@
   </script>
   <script src="{% static 'js/stamp_preview.js' %}"></script>
   <script src="{% static 'js/layout_workspace.js' %}"></script>
+  <script src="{% static 'js/searchable_select.js' %}"></script>
 {% endblock body_custom_js %}

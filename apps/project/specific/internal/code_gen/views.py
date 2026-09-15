@@ -15,6 +15,9 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import (CreateView, DetailView, FormView,
                                   ListView, TemplateView, View)
 
+from .access import (can_compose_summaries, can_generate_codes,
+                     can_see_internals, can_use_history, can_view_registration,
+                     is_operator, visible_registrations)
 from .history import annotate_flat, build_history_tree
 from .services.usb_bundle import NotReadyToExport, build_bundle
 from .services.usb_readiness import export_state
@@ -46,8 +49,20 @@ class InternalToolAccessMixin(LoginRequiredMixin, UserPassesTestMixin):
     """
 
     def test_func(self) -> bool:
-        user = self.request.user
-        return bool(user.is_active and (user.is_superuser or user.is_staff))
+        return is_operator(self.request.user)
+
+
+class HistoryAccessMixin(LoginRequiredMixin, UserPassesTestMixin):
+    """
+    El historial lo abren dos papeles distintos, no uno con menos botones.
+
+    El operador ve todo; el titular ve **sus** certificados y en solo lectura.
+    Quien decide que es cada uno es `access.py`, no esta clase: aqui solo se
+    deja pasar, y lo que se ve lo recorta el queryset.
+    """
+
+    def test_func(self) -> bool:
+        return can_use_history(self.request.user)
 
 
 class CodeGeneratorView(InternalToolAccessMixin, FormView):
@@ -197,6 +212,10 @@ class CodeGeneratorView(InternalToolAccessMixin, FormView):
             issued_at=data.get('issued_at') or timezone.localdate(),
             expires_at=data.get('expires_at'),
             code_initials=options.initials,
+            # Para quien se emite. Vacio es valido: hay certificados que no son
+            # de nadie en particular. Puesto, es lo unico que le deja ver este
+            # certificado en su historial (`access.visible_registrations`).
+            holder=data.get('holder'),
         )
 
         document.source_file = data['source_file']
@@ -255,7 +274,7 @@ class CodeGeneratorView(InternalToolAccessMixin, FormView):
 # Historial: el resultado de una generacion vive en una URL permanente
 # ======================================================================
 
-class CodeHistoryListView(InternalToolAccessMixin, ListView):
+class CodeHistoryListView(HistoryAccessMixin, ListView):
     """
     Todos los codigos emitidos, en dos modos que no dicen lo mismo.
 
@@ -294,6 +313,12 @@ class CodeHistoryListView(InternalToolAccessMixin, ListView):
             .select_related('document')
             .order_by('-created')
         )
+
+        # Antes de buscar y antes de agrupar. Recortar despues dejaria que la
+        # busqueda contestara sobre filas que esta persona no puede ver --el
+        # numero de resultados ya dice si existe algo con ese texto-- y que el
+        # arbol se armara con ramas que luego habria que quitar.
+        queryset = visible_registrations(queryset, self.request.user)
 
         search = (self.request.GET.get('q') or '').strip()
 
@@ -334,17 +359,28 @@ class CodeHistoryListView(InternalToolAccessMixin, ListView):
         context['grouped'] = self.grouped
         context['flat_value'] = self.FLAT
 
+        # Lo que la plantilla puede enseñar. Sale de `access.py` y no de
+        # `user.is_staff` escrito en la plantilla: con la regla en un solo
+        # sitio, cambiarla no obliga a acordarse de siete plantillas.
+        usuario = self.request.user
+        context['is_operator'] = is_operator(usuario)
+        context['can_compose'] = can_compose_summaries(usuario)
+        context['can_generate'] = can_generate_codes(usuario)
+
         if self.grouped:
             nodes = context['object_list']
 
-            # Solo las ramas de esta pagina. Comprobar si un resumen se puede
-            # llevar en un USB obliga a rehacer su master hash y a leer sus
-            # pruebas de anclaje; hacerlo sobre el historial entero para
-            # enseñar una pagina seria pagar por lo que no se ve. Todo es
-            # local: leer un `.ots` es parsearlo, no consultar la cadena.
-            for node in nodes:
-                if node.is_summary:
-                    node.export = export_state(node.summary)
+            # Solo las ramas de esta pagina, y solo para quien puede exportar.
+            # Comprobar si un resumen se puede llevar en un USB obliga a rehacer
+            # su master hash y a leer sus pruebas de anclaje; hacerlo sobre el
+            # historial entero para enseñar una pagina seria pagar por lo que no
+            # se ve, y hacerlo para un titular seria pagarlo por lo que ademas
+            # no se le enseña. Todo es local: leer un `.ots` es parsearlo, no
+            # consultar la cadena.
+            if context['can_compose']:
+                for node in nodes:
+                    if node.is_summary:
+                        node.export = export_state(node.summary)
 
             context['nodes'] = nodes
             context['code_count'] = getattr(self, 'code_count', 0)
@@ -419,7 +455,7 @@ class SummaryUSBExportView(InternalToolAccessMixin, View):
         return respuesta
 
 
-class CodeDetailView(InternalToolAccessMixin, DetailView):
+class CodeDetailView(HistoryAccessMixin, DetailView):
     """
     Resultado de una generacion, reconstruido a partir de lo almacenado.
 
@@ -432,13 +468,31 @@ class CodeDetailView(InternalToolAccessMixin, DetailView):
     context_object_name = 'registration'
 
     def get_queryset(self):
-        return CodeRegistrationModel.objects.select_related('document')
+        """
+        Recortado en la base de datos, no en la plantilla.
+
+        Un titular que teclee el id de un codigo que no es suyo se lleva un
+        **404**, que es lo mismo que le contesta una ruta que no existe. Un 403
+        le confirmaria que ese codigo existe, que es justo lo que no tiene que
+        poder averiguar (invariantes 7 y 20).
+        """
+        queryset = CodeRegistrationModel.objects.select_related(
+            'document', 'document__holder')
+
+        return visible_registrations(queryset, self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         registration = self.object
 
-        if registration.has_barcode:
+        # Las piezas de trabajo: los simbolos sueltos, el original y la
+        # geometria del estampado. Aqui no se decide esconderlas: **no se
+        # producen**. Renderizar un QR para no enseñarlo lo deja en la memoria
+        # del proceso y a una linea de plantilla de distancia de salir.
+        internals = can_see_internals(self.request.user)
+        context['can_see_internals'] = internals
+
+        if internals and registration.has_barcode:
             try:
                 context['barcode_image'] = png_to_data_uri(
                     render_barcode_png(registration.code_information)
@@ -449,7 +503,7 @@ class CodeDetailView(InternalToolAccessMixin, DetailView):
             except Exception:
                 logger.exception('Could not re-render the barcode')
 
-        if registration.generated_qr and registration.qr_payload:
+        if internals and registration.generated_qr and registration.qr_payload:
             try:
                 context['qr_image'] = png_to_data_uri(
                     render_qr_png(registration.qr_payload)
@@ -466,6 +520,8 @@ class CodeDetailView(InternalToolAccessMixin, DetailView):
                 'certificates:certification_record',
                 kwargs={'pk': document.pk}
             )
+
+        if document is not None and internals:
             context['layout_placements'] = placements_as_data(
                 document.stamp_layout
             )
