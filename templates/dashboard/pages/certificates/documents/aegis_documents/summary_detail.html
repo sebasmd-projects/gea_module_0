@@ -104,7 +104,8 @@
                   <td>{{ member.document_type_label|default:member.document.document_title }}</td>
                   <td class="text-end">
                     <a class="btn btn-outline-secondary btn-sm"
-                       href="{% url 'certificates:detail_document_verification_aegis' member.document.pk %}">
+                       href="{% url 'certificates:detail_document_verification_aegis' member.document.pk %}"
+                       target="_blank" rel="noopener">
                       {% trans 'View' %}
                     </a>
                   </td>

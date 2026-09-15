@@ -236,7 +236,8 @@
                           {% endcomment %}
                           <span class="float-end d-inline-flex flex-wrap gap-2 align-items-start">
                             <a class="btn btn-outline-secondary btn-sm"
-                               href="{% url 'certificates:summary_detail' node.summary.pk %}">
+                               href="{% url 'certificates:summary_detail' node.summary.pk %}"
+                               target="_blank" rel="noopener">
                               <i class="bi bi-shield-check" aria-hidden="true"></i>
                               {% trans 'Verify' %}
                             </a>
