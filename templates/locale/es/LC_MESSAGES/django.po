@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-14 16:30+0000\n"
+"POT-Creation-Date: 2026-09-15 02:17+0000\n"
 "PO-Revision-Date: 2026-09-01 08:07+0000\n"
 "Last-Translator: Juan Sebastian Morales Delgado <cto@propensionesabogados.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1608,8 +1608,8 @@ msgstr "Certificaciones"
 
 #: dashboard/pages/certificates/certificates_landing.html:26
 #: dashboard/pages/documents/code_gen/code_detail.html:24
-#: dashboard/pages/documents/code_gen/code_form.html:24
-#: dashboard/pages/documents/code_gen/code_history.html:51
+#: dashboard/pages/documents/code_gen/code_form.html:30
+#: dashboard/pages/documents/code_gen/code_history.html:65
 #: dashboard/pages/documents/code_gen/layout_form.html:25
 #: dashboard/pages/documents/code_gen/layout_list.html:24
 #: dashboard/pages/documents/code_gen/summary_composer.html:26
@@ -1653,7 +1653,7 @@ msgstr "Verificar un documento"
 
 #: dashboard/pages/certificates/documents/aegis_documents/certificate_detail.html:22
 #: dashboard/pages/certificates/users/employee_ipcon/certificate_detail.html:21
-#: dashboard/pages/documents/code_gen/code_form.html:307
+#: dashboard/pages/documents/code_gen/code_form.html:330
 msgid "Result"
 msgstr "Resultado"
 
@@ -1808,7 +1808,7 @@ msgid "on Windows."
 msgstr "en Windows."
 
 #: dashboard/pages/certificates/documents/aegis_documents/certificate_detail.html:205
-#: dashboard/pages/documents/code_gen/code_detail.html:136
+#: dashboard/pages/documents/code_gen/code_detail.html:155
 msgid "Download certification record (JSON)"
 msgstr "Descargar registro de certificación (JSON)"
 
@@ -2080,7 +2080,6 @@ msgid "A third party attested the date. It is not this platform saying so."
 msgstr "La fecha la acreditó un tercero. No es esta plataforma quien lo dice."
 
 #: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:54
-#| msgid "Send to blockchain"
 msgid "Confirmed in the blockchain"
 msgstr "Confirmado en la cadena de bloques"
 
@@ -2178,7 +2177,6 @@ msgid "Attested time"
 msgstr "Hora acreditada"
 
 #: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:145
-#| msgid "Blockchain"
 msgid "Block"
 msgstr "Bloque"
 
@@ -2236,7 +2234,7 @@ msgstr ""
 #: dashboard/pages/certificates/documents/aegis_documents/summary_anchor.html:250
 #: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:97
 #: dashboard/pages/documents/code_gen/code_detail.html:37
-#: dashboard/pages/documents/code_gen/code_history.html:154
+#: dashboard/pages/documents/code_gen/code_history.html:192
 #: dashboard/pages/documents/code_gen/summary_composer.html:81
 msgid "Code"
 msgstr "Código"
@@ -2268,7 +2266,7 @@ msgstr "Comprobado el"
 
 #: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:32
 #: dashboard/pages/documents/code_gen/code_detail.html:68
-#: dashboard/pages/documents/code_gen/code_history.html:155
+#: dashboard/pages/documents/code_gen/code_history.html:193
 #: dashboard/pages/documents/code_gen/summary_list.html:41
 msgid "Public code"
 msgstr "Código público"
@@ -2284,7 +2282,6 @@ msgid "Attested in the blockchain since %(since)s UTC."
 msgstr "Acreditado en la cadena de bloques desde el %(since)s UTC."
 
 #: dashboard/pages/certificates/documents/aegis_documents/summary_detail.html:59
-#| msgid "Send to blockchain"
 msgid "Confirmed in the blockchain."
 msgstr "Confirmado en la cadena de bloques."
 
@@ -2447,13 +2444,13 @@ msgstr "Código emitido"
 
 #: dashboard/pages/documents/code_gen/code_detail.html:25
 #: dashboard/pages/documents/code_gen/code_history.html:6
-#: dashboard/pages/documents/code_gen/code_history.html:49
+#: dashboard/pages/documents/code_gen/code_history.html:58
 #: dashboard/partials/sidenav/dashboard_sidenav.html:220
 msgid "Generated codes"
 msgstr "Códigos generados"
 
 #: dashboard/pages/documents/code_gen/code_detail.html:49
-#: dashboard/pages/documents/code_gen/code_history.html:153
+#: dashboard/pages/documents/code_gen/code_history.html:191
 #: dashboard/pages/holders/location/add_location.html:72
 #: dashboard/pages/holders/location/edit_location.html:63
 msgid "Reference"
@@ -2480,7 +2477,7 @@ msgid "Original SHA-256"
 msgstr "SHA-256 del original"
 
 #: dashboard/pages/documents/code_gen/code_detail.html:82
-#: dashboard/pages/documents/code_gen/code_history.html:152
+#: dashboard/pages/documents/code_gen/code_history.html:190
 msgid "Date"
 msgstr "Fecha"
 
@@ -2501,60 +2498,75 @@ msgstr "SHA-256 del certificado"
 msgid "Copy SHA-256"
 msgstr "SHA-256 de la copia"
 
-#: dashboard/pages/documents/code_gen/code_detail.html:119
+#: dashboard/pages/documents/code_gen/code_detail.html:127
 msgid "Certified PDF (with codes)"
 msgstr "PDF certificado (con códigos)"
 
-#: dashboard/pages/documents/code_gen/code_detail.html:125
+#: dashboard/pages/documents/code_gen/code_detail.html:133
 msgid "Distributable copy (watermarked)"
 msgstr "Copia distribuible (con marca de agua)"
 
-#: dashboard/pages/documents/code_gen/code_detail.html:131
+#: dashboard/pages/documents/code_gen/code_detail.html:150
 msgid "Original filed (without codes)"
 msgstr "Original depositado (sin códigos)"
 
-#: dashboard/pages/documents/code_gen/code_detail.html:142
+#: dashboard/pages/documents/code_gen/code_detail.html:161
+#: dashboard/pages/documents/code_gen/code_detail.html:247
 msgid "Open public verification page"
 msgstr "Abrir la página pública de verificación"
 
-#: dashboard/pages/documents/code_gen/code_detail.html:156
-#: dashboard/pages/documents/code_gen/code_form.html:166
-#: dashboard/pages/documents/code_gen/code_history.html:156
+#: dashboard/pages/documents/code_gen/code_detail.html:189
+#: dashboard/pages/documents/code_gen/code_form.html:172
+#: dashboard/pages/documents/code_gen/code_history.html:194
 msgid "Symbols"
 msgstr "Símbolos"
 
-#: dashboard/pages/documents/code_gen/code_detail.html:161
+#: dashboard/pages/documents/code_gen/code_detail.html:194
 #: dashboard/pages/documents/code_gen/partials/_code_row.html:46
 msgid "Barcode"
 msgstr "Código de barras"
 
-#: dashboard/pages/documents/code_gen/code_detail.html:165
+#: dashboard/pages/documents/code_gen/code_detail.html:198
 msgid "Download barcode"
 msgstr "Descargar código de barras"
 
-#: dashboard/pages/documents/code_gen/code_detail.html:172
+#: dashboard/pages/documents/code_gen/code_detail.html:205
 #: dashboard/pages/documents/code_gen/partials/_code_row.html:47
 msgid "QR code"
 msgstr "Código QR"
 
-#: dashboard/pages/documents/code_gen/code_detail.html:176
+#: dashboard/pages/documents/code_gen/code_detail.html:209
 msgid "Download QR"
 msgstr "Descargar QR"
 
-#: dashboard/pages/documents/code_gen/code_detail.html:185
+#: dashboard/pages/documents/code_gen/code_detail.html:218
 msgid "No symbols were generated for this code."
 msgstr "No se generó ningún símbolo para este código."
 
-#: dashboard/pages/documents/code_gen/code_detail.html:195
+#: dashboard/pages/documents/code_gen/code_detail.html:233
+msgid "How to check it"
+msgstr "Cómo comprobarlo"
+
+#: dashboard/pages/documents/code_gen/code_detail.html:237
+msgid ""
+"Upload the PDF on the public verification page and it will tell you whether "
+"it is still exactly the file that was certified. Typing the public code does"
+" not do that: it only looks up the record."
+msgstr ""
+"Sube el PDF en la página pública de verificación y te dirá si sigue siendo "
+"exactamente el archivo que se certificó. Teclear el código público no hace "
+"eso: solo busca la ficha."
+
+#: dashboard/pages/documents/code_gen/code_detail.html:259
 msgid "Where the codes were placed"
 msgstr "Dónde se colocaron los códigos"
 
-#: dashboard/pages/documents/code_gen/code_detail.html:200
+#: dashboard/pages/documents/code_gen/code_detail.html:264
 #: dashboard/pages/documents/code_gen/layout_form.html:49
 msgid "Layout"
 msgstr "Disposición"
 
-#: dashboard/pages/documents/code_gen/code_detail.html:203
+#: dashboard/pages/documents/code_gen/code_detail.html:267
 msgid "Default layout."
 msgstr "Disposición por defecto."
 
@@ -2562,48 +2574,48 @@ msgstr "Disposición por defecto."
 msgid "Code Generator"
 msgstr "Generador de códigos"
 
-#: dashboard/pages/documents/code_gen/code_form.html:22
+#: dashboard/pages/documents/code_gen/code_form.html:28
 msgid "Code generator and document certification"
 msgstr "Generador de códigos y certificación documental"
 
-#: dashboard/pages/documents/code_gen/code_form.html:23
+#: dashboard/pages/documents/code_gen/code_form.html:29
 msgid "Issue barcodes and QR codes, and certify a PDF end to end."
 msgstr "Emite códigos de barras y QR, y certifica un PDF de principio a fin."
 
-#: dashboard/pages/documents/code_gen/code_form.html:25
-#: dashboard/pages/documents/code_gen/code_history.html:52
+#: dashboard/pages/documents/code_gen/code_form.html:31
+#: dashboard/pages/documents/code_gen/code_history.html:66
 #: dashboard/pages/documents/code_gen/layout_list.html:25
 #: dashboard/pages/documents/code_gen/summary_list.html:18
 #: dashboard/partials/sidenav/dashboard_sidenav.html:207
 msgid "Documents"
 msgstr "Documentos"
 
-#: dashboard/pages/documents/code_gen/code_form.html:26
+#: dashboard/pages/documents/code_gen/code_form.html:32
 #: dashboard/partials/sidenav/dashboard_sidenav.html:213
 msgid "Code generator"
 msgstr "Generador de códigos"
 
-#: dashboard/pages/documents/code_gen/code_form.html:53
+#: dashboard/pages/documents/code_gen/code_form.html:59
 msgid "Identification"
 msgstr "Identificación"
 
-#: dashboard/pages/documents/code_gen/code_form.html:89
+#: dashboard/pages/documents/code_gen/code_form.html:95
 msgid "Code segments"
 msgstr "Segmentos del código"
 
-#: dashboard/pages/documents/code_gen/code_form.html:93
+#: dashboard/pages/documents/code_gen/code_form.html:99
 msgid "The selected segments are joined in this order:"
 msgstr "Los segmentos seleccionados se unen en este orden:"
 
-#: dashboard/pages/documents/code_gen/code_form.html:94
+#: dashboard/pages/documents/code_gen/code_form.html:100
 msgid "custom text"
 msgstr "texto personalizado"
 
-#: dashboard/pages/documents/code_gen/code_form.html:94
+#: dashboard/pages/documents/code_gen/code_form.html:100
 msgid "random code"
 msgstr "código aleatorio"
 
-#: dashboard/pages/documents/code_gen/code_form.html:179
+#: dashboard/pages/documents/code_gen/code_form.html:185
 msgid ""
 "A barcode only accepts letters, digits, spaces and the symbols . _ - . "
 "Anything with \"://\", \"?\", \"&amp;\" or other URL characters must go in "
@@ -2613,11 +2625,11 @@ msgstr ""
 " - . Todo lo que lleve \"://\", \"?\", \"&amp;\" u otros caracteres de URL "
 "tiene que ir en el código QR."
 
-#: dashboard/pages/documents/code_gen/code_form.html:219
+#: dashboard/pages/documents/code_gen/code_form.html:225
 msgid "Document certification"
 msgstr "Certificación del documento"
 
-#: dashboard/pages/documents/code_gen/code_form.html:266
+#: dashboard/pages/documents/code_gen/code_form.html:289
 msgid ""
 "Defines where the QR and the barcode are placed inside the PDF. Edit it "
 "below, over the document itself."
@@ -2625,19 +2637,19 @@ msgstr ""
 "Define dónde se colocan el QR y el código de barras dentro del PDF. Edítala "
 "abajo, sobre el propio documento."
 
-#: dashboard/pages/documents/code_gen/code_form.html:268
+#: dashboard/pages/documents/code_gen/code_form.html:291
 msgid "Manage layouts"
 msgstr "Gestionar disposiciones"
 
-#: dashboard/pages/documents/code_gen/code_form.html:292
+#: dashboard/pages/documents/code_gen/code_form.html:315
 msgid "Generating…"
 msgstr "Generando…"
 
-#: dashboard/pages/documents/code_gen/code_form.html:293
+#: dashboard/pages/documents/code_gen/code_form.html:316
 msgid "Generate"
 msgstr "Generar"
 
-#: dashboard/pages/documents/code_gen/code_form.html:311
+#: dashboard/pages/documents/code_gen/code_form.html:334
 msgid ""
 "After pressing Generate you land on the permanent page of the issued code, "
 "with its symbols and downloads. It stays available: you can close this tab "
@@ -2647,94 +2659,110 @@ msgstr ""
 "símbolos y sus descargas. Queda disponible: puedes cerrar esta pestaña y "
 "volver a ella más tarde."
 
-#: dashboard/pages/documents/code_gen/code_form.html:317
+#: dashboard/pages/documents/code_gen/code_form.html:340
 msgid "See previously generated codes"
 msgstr "Ver códigos generados antes"
 
-#: dashboard/pages/documents/code_gen/code_form.html:342
+#: dashboard/pages/documents/code_gen/code_form.html:365
 msgid "Pick a layout first, or use \"Save and create\"."
 msgstr "Elige primero una disposición, o usa «Guardar y crear»."
 
-#: dashboard/pages/documents/code_gen/code_form.html:343
+#: dashboard/pages/documents/code_gen/code_form.html:366
 msgid "Add at least one placement."
 msgstr "Añade al menos una posición."
 
-#: dashboard/pages/documents/code_gen/code_form.html:344
+#: dashboard/pages/documents/code_gen/code_form.html:367
 msgid "The layout could not be loaded."
 msgstr "No se pudo cargar la disposición."
 
-#: dashboard/pages/documents/code_gen/code_form.html:345
+#: dashboard/pages/documents/code_gen/code_form.html:368
 msgid "The layout could not be saved."
 msgstr "No se pudo guardar la disposición."
 
-#: dashboard/pages/documents/code_gen/code_form.html:346
+#: dashboard/pages/documents/code_gen/code_form.html:369
 msgid "The layout name is required."
 msgstr "El nombre de la disposición es obligatorio."
 
-#: dashboard/pages/documents/code_gen/code_form.html:347
+#: dashboard/pages/documents/code_gen/code_form.html:370
 msgid "Placement moved. Press Save to store it in the layout."
 msgstr "Posición movida. Pulsa Guardar para almacenarla en la disposición."
 
-#: dashboard/pages/documents/code_gen/code_form.html:348
+#: dashboard/pages/documents/code_gen/code_form.html:371
 #: dashboard/pages/documents/code_gen/layout_form.html:168
 #: dashboard/pages/documents/code_gen/summary_composer.html:68
 #: dashboard/pages/documents/code_gen/summary_composer.html:262
 msgid "Saving…"
 msgstr "Guardando…"
 
-#: dashboard/pages/documents/code_gen/code_form.html:349
+#: dashboard/pages/documents/code_gen/code_form.html:372
 #: dashboard/pages/documents/code_gen/summary_form.html:112
 msgid "Creating…"
 msgstr "Creando…"
 
-#: dashboard/pages/documents/code_gen/code_history.html:50
+#: dashboard/pages/documents/code_gen/code_history.html:59
 msgid "Every code issued, so you can come back to any of them."
 msgstr "Todos los códigos emitidos, para poder volver a cualquiera de ellos."
 
-#: dashboard/pages/documents/code_gen/code_history.html:59
+#: dashboard/pages/documents/code_gen/code_history.html:61
+#| msgid "Verify certificate"
+msgid "My certificates"
+msgstr "Mis certificados"
+
+#: dashboard/pages/documents/code_gen/code_history.html:62
+msgid ""
+"The certificates issued in your name. To check one, verify it publicly."
+msgstr ""
+"Los certificados emitidos a tu nombre. Para comprobar uno, verifícalo "
+"públicamente."
+
+#: dashboard/pages/documents/code_gen/code_history.html:73
 msgid "History"
 msgstr "Historial"
 
-#: dashboard/pages/documents/code_gen/code_history.html:62
+#: dashboard/pages/documents/code_gen/code_history.html:87
 msgid "Generate a new code"
 msgstr "Generar un código nuevo"
 
-#: dashboard/pages/documents/code_gen/code_history.html:78
+#: dashboard/pages/documents/code_gen/code_history.html:104
 msgid "Search by reference, code, sequence or hash"
 msgstr "Buscar por referencia, código, secuencia o hash"
 
-#: dashboard/pages/documents/code_gen/code_history.html:82
+#: dashboard/pages/documents/code_gen/code_history.html:108
 msgid "Search"
 msgstr "Buscar"
 
-#: dashboard/pages/documents/code_gen/code_history.html:87
+#: dashboard/pages/documents/code_gen/code_history.html:113
 msgid "Clear"
 msgstr "Limpiar"
 
-#: dashboard/pages/documents/code_gen/code_history.html:102
+#: dashboard/pages/documents/code_gen/code_history.html:128
 msgid "How to show the codes"
 msgstr "Cómo mostrar los códigos"
 
-#: dashboard/pages/documents/code_gen/code_history.html:107
+#: dashboard/pages/documents/code_gen/code_history.html:133
 msgid "Grouped by summary"
 msgstr "Agrupados por resumen"
 
-#: dashboard/pages/documents/code_gen/code_history.html:113
+#: dashboard/pages/documents/code_gen/code_history.html:139
 msgid "One row per code"
 msgstr "Una fila por código"
 
-#: dashboard/pages/documents/code_gen/code_history.html:118
+#: dashboard/pages/documents/code_gen/code_history.html:151
 msgid "No codes issued yet."
 msgstr "Todavía no se ha emitido ningún código."
 
-#: dashboard/pages/documents/code_gen/code_history.html:137
+#: dashboard/pages/documents/code_gen/code_history.html:154
+msgid "There are no certificates issued in your name yet."
+msgstr "Todavía no hay ningún certificado emitido a tu nombre."
+
+#: dashboard/pages/documents/code_gen/code_history.html:175
 #, python-format
 msgid "%(counter)s code issued."
 msgid_plural "%(counter)s codes issued."
 msgstr[0] "%(counter)s código emitido."
 msgstr[1] "%(counter)s códigos emitidos."
 
-#: dashboard/pages/documents/code_gen/code_history.html:144
+#: dashboard/pages/documents/code_gen/code_history.html:182
 msgid ""
 "A certificate that belongs to more than one summary appears under each of "
 "them, so there may be more rows than codes."
@@ -2742,22 +2770,22 @@ msgstr ""
 "Un certificado que pertenece a más de un resumen aparece en cada uno de "
 "ellos, así que puede haber más filas que códigos."
 
-#: dashboard/pages/documents/code_gen/code_history.html:157
+#: dashboard/pages/documents/code_gen/code_history.html:195
 msgid "Certified"
 msgstr "Certificado"
 
-#: dashboard/pages/documents/code_gen/code_history.html:179
+#: dashboard/pages/documents/code_gen/code_history.html:217
 msgid "Summary:"
 msgstr "Resumen:"
 
-#: dashboard/pages/documents/code_gen/code_history.html:187
+#: dashboard/pages/documents/code_gen/code_history.html:225
 #, python-format
 msgid "%(counter)s code"
 msgid_plural "%(counter)s codes"
 msgstr[0] "%(counter)s código"
 msgstr[1] "%(counter)s códigos"
 
-#: dashboard/pages/documents/code_gen/code_history.html:199
+#: dashboard/pages/documents/code_gen/code_history.html:246
 #: dashboard/pages/documents/code_gen/summary_list.html:59
 msgid "Compose"
 msgstr "Componer"

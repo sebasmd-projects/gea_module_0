@@ -223,6 +223,29 @@ class CodeGeneratorForm(forms.Form):
         widget=forms.Select(attrs={'class': 'form-select'})
     )
 
+    #: Para quien se emite. Opcional: hay certificados institucionales que no
+    #: son de nadie en particular, y exigirlo obligaria a inventarse un titular
+    #: para emitirlos. Puesto, le deja ver **este** certificado en su
+    #: historial, en solo lectura; vacio, el certificado sigue siendo solo del
+    #: operador. Ver `code_gen/access.py`.
+    holder = forms.ModelChoiceField(
+        label=_('Issued for (holder)'),
+        required=False,
+        # Se rellena en `__init__`: un queryset evaluado aqui se resolveria al
+        # importar el modulo y se quedaria con la lista de usuarios de ese
+        # momento.
+        queryset=None,
+        empty_label=_('Nobody in particular'),
+        widget=forms.Select(attrs={
+            'class': 'form-select',
+            'data-searchable': '1',
+        }),
+        help_text=_(
+            'The user this certificate is for. They will see it in their own '
+            'history, read-only.'
+        )
+    )
+
     stamp_layout = forms.ModelChoiceField(
         label=_('Stamp layout'),
         required=False,
@@ -263,6 +286,16 @@ class CodeGeneratorForm(forms.Form):
         self.fields['source_file'].help_text = (
             _('Accepted formats: %(formats)s.')
             % {'formats': ', '.join(CERTIFIABLE_EXTENSIONS)}
+        )
+
+        # Solo cuentas activas: emitir un certificado a nombre de alguien dado
+        # de baja lo deja sin quien lo vea, que es peor que no ponerle titular.
+        from apps.project.common.users.models import UserModel
+
+        self.fields['holder'].queryset = (
+            UserModel.objects
+            .filter(is_active=True)
+            .order_by('username')
         )
 
         # Que es y donde se ve: sale impreso en la pagina publica de
