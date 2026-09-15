@@ -627,7 +627,7 @@ parece al que no es: la cache va perfecta, así que nada avisa.
 
 ### Qué añadir
 
-Al usuario `gea` del `redis.conf`, dos cosas:
+Al usuario `gea` del `redis.conf`, dos cosas y sólo dos:
 
 ```
 user gea on #PEGA_AQUI_EL_SHA256 ~gea:* &gea:* +@read +@write +@keyspace +@pubsub -@dangerous +flushdb
@@ -640,6 +640,14 @@ vez y se lee de un vistazo.
 
 > El prefijo sale de `REDIS_KEY_PREFIX` (por defecto `gea`). Si lo cambias,
 > cambia también el `&`, o el canal cae fuera del patrón y vuelve el `NOPERM`.
+
+**Lo que NO hay que añadir es `+@connection`.** Este usuario no puede hacer
+`PING`, y está bien así: la caché no lo necesita. La tentación aparece porque un
+diagnóstico que mida con `PING` contesta «no se pudo medir» contra un Redis
+perfectamente sano, y la salida parece pedir el permiso. Por eso `check_realtime`
+mide con una **lectura de una clave `gea:`**, que es lo que la aplicación hace de
+verdad en cada comprobación de límite. Una herramienta de diagnóstico que exige
+ensanchar la ACL para poder ejecutarse está midiendo otra cosa.
 
 ### Por qué al usuario de la cache y no a uno nuevo
 
@@ -665,6 +673,20 @@ además mide la latencia y las conexiones salientes. No basta con que `PUBLISH`
 no dé error: `PUBLISH` devuelve «0 receptores» sin quejarse cuando nadie
 escucha, y dos conexiones a Redis distintos detrás de un balanceador dan
 exactamente eso. Lo que decide es que el mensaje vuelva.
+
+### El subdominio: que exista no es que esté en el sitio
+
+`--realtime-host` comprueba DNS y TLS, pero eso no dice **en qué máquina** está,
+y el relay tiene que vivir donde vive el Redis. Comprobado contra producción:
+`rt.propensionesabogados.com` ya existe, tiene certificado válido y contesta —
+apuntando a la misma dirección que la propia aplicación, o sea al cPanel. El
+registro está creado; lo que no está es apuntando al VPS.
+
+Un «saludo TLS correcto» a secas ahí es media verdad de las que cuestan una
+tarde: se da la sección por buena, se monta el relay en el VPS y el navegador
+sigue abriendo el socket contra cPanel, donde no hay nada escuchando. Así que el
+comando compara contra las dos máquinas que ya conoce —la del `REDIS_URL` y la
+del `PUBLIC_BASE_URL`— y dice cuál de las dos es.
 
 Lo que ese comando **no** puede comprobar es la otra dirección: si el worker del
 VPS alcanza la base de datos de cPanel. Esa conexión sale del VPS, así que la

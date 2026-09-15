@@ -85,6 +85,9 @@ LOOPBACK = {'', 'localhost', '127.0.0.1', '::1'}
 
 NOT_ASKED = 'not_asked'
 
+# El subdominio existe y sirve TLS, pero no esta en la maquina que deberia.
+WRONG_MACHINE = 'wrong_machine'
+
 
 class Command(BaseCommand):
     help = (
@@ -215,6 +218,25 @@ class Command(BaseCommand):
 
     def _prefix(self) -> str:
         return getattr(settings, 'REDIS_KEY_PREFIX', None) or 'gea'
+
+    def _round_trip(self, client):
+        """
+        Una ida y vuelta con **lo que la aplicacion hace de verdad**.
+
+        Aqui habia un ``PING``, y era la eleccion equivocada por un motivo que
+        solo se ve ejecutandolo contra el Redis de produccion: al usuario de la
+        cache **no se le concede `@connection`**, a proposito, porque la cache
+        no necesita hacer ping. Asi que las dos secciones que median con PING
+        contestaban «no se pudo medir» en un Redis que funciona perfectamente,
+        y la salida invitaba a abrir un permiso para poder diagnosticar.
+
+        Un diagnostico que pide ensanchar la ACL para poder ejecutarse esta
+        midiendo otra cosa. Una lectura de una clave `gea:` es justo lo que
+        hace la aplicacion en cada comprobacion de limite, entra en `~gea:*`
+        con la ACL que ya hay, y como la clave no existe el servidor contesta
+        nil: el coste es el viaje, que es lo que se queria medir.
+        """
+        return client.get(f'{self._prefix()}:rt.round-trip-probe')
 
     def _no_redis(self) -> bool:
         """
@@ -448,12 +470,11 @@ class Command(BaseCommand):
 
         try:
             client = self._client()
-            client.ping()
+            self._round_trip(client)
         except Exception as error:  # noqa: BLE001
             # Decia «no se llega al Redis» pasara lo que pasara, y con la ACL
-            # de la cache --que no deja hacer PING-- eso era falso: el Redis
-            # estaba ahi y contestaba. Mandaba a mirar el cortafuegos por un
-            # problema de permisos.
+            # de la cache eso era falso: el Redis estaba ahi y contestaba.
+            # Mandaba a mirar el cortafuegos por un problema de permisos.
             self.stdout.write(self.style.ERROR(
                 f'   No se pudo medir: {type(error).__name__}: {error}'
             ))
@@ -466,7 +487,7 @@ class Command(BaseCommand):
             arranque = time.perf_counter()
 
             try:
-                client.ping()
+                self._round_trip(client)
             except Exception as error:  # noqa: BLE001
                 self.stdout.write(self.style.ERROR(
                     f'   La conexion se corto a mitad de la medicion: '
@@ -487,8 +508,10 @@ class Command(BaseCommand):
             f'la peor {peor:.1f} ms.'
         )
         self.stdout.write(
-            '   (El primer PING no cuenta: paga la conexion y el saludo TLS, '
-            'que se hacen una vez.)'
+            '   (La primera no cuenta: paga la conexion y el saludo TLS, que '
+            'se hacen una vez. Se mide leyendo una clave, que es lo que hace '
+            'la aplicacion, y no con PING, que el usuario de la cache no '
+            'necesita ni tiene.)'
         )
 
         if mediana <= LATENCY_GOOD_MS:
@@ -546,7 +569,7 @@ class Command(BaseCommand):
         for _ in range(connections):
             try:
                 client = self._client()
-                client.ping()
+                self._round_trip(client)
             except Exception as error:  # noqa: BLE001
                 fallo = error
                 break
@@ -559,7 +582,7 @@ class Command(BaseCommand):
 
         if fallo is not None:
             # Un NOPERM aqui no es un tope de conexiones: la conexion se abrio
-            # perfectamente y lo que fallo fue el PING. Contarlo como «se
+            # perfectamente y lo que fallo fue la lectura. Contarlo como «se
             # abrieron 0 de 10» era acusar al hosting de algo que hacia la ACL.
             if self._diagnose(fallo) in ('refused', 'auth'):
                 self.stdout.write(self.style.WARNING(
@@ -567,9 +590,9 @@ class Command(BaseCommand):
                     f'{type(fallo).__name__}: {fallo}'
                 ))
                 self.stdout.write(
-                    '      La conexion se abrio; lo que no le dejan es hacer '
-                    'PING. Eso es la ACL y no un tope de conexiones. Arregla '
-                    'la seccion 1 y vuelve.'
+                    '      La conexion se abrio; lo que no le dejan es leer. '
+                    'Eso es la ACL y no un tope de conexiones. Arregla la '
+                    'seccion 1 y vuelve.'
                 )
                 return None
 
@@ -677,7 +700,85 @@ class Command(BaseCommand):
 
         self._say_expiry(certificado)
 
+        return self._say_which_machine(host, {d[4][0] for d in direcciones})
+
+    def _say_which_machine(self, host, direcciones):
+        """
+        En que maquina esta ese subdominio, que es la pregunta de verdad.
+
+        Que resuelva y sirva TLS no dice nada de **donde** esta, y el relay
+        tiene que vivir donde vive el Redis. Comprobado en produccion:
+        `rt.propensionesabogados.com` existe, tiene certificado valido y
+        contesta -- y apunta a la misma direccion que la propia aplicacion, o
+        sea al cPanel. El registro esta creado; lo que no esta es apuntando al
+        VPS.
+
+        Un «saludo TLS correcto» a secas ahi es media verdad, de las que
+        cuestan una tarde: se da la seccion por buena, se monta el relay en el
+        VPS y el navegador sigue abriendo el socket contra cPanel, donde no hay
+        nada escuchando.
+
+        Asi que se compara contra las dos maquinas que ya se conocen --la del
+        Redis (`REDIS_URL`) y la de la aplicacion (`PUBLIC_BASE_URL`)-- y se
+        dice cual de las dos es. Ninguna de las dos resuelve por su cuenta a
+        una tercera cosa, asi que cuando no coincide con ninguna no se
+        adivina: se dice lo que se ve.
+        """
+        del_redis = self._addresses(self._host_of(
+            getattr(settings, 'REDIS_URL', '')))
+        del_sitio = self._addresses(self._host_of(
+            getattr(settings, 'PUBLIC_BASE_URL', '')))
+
+        if del_redis and direcciones & del_redis:
+            self.stdout.write(self.style.SUCCESS(
+                '   Y esta en la misma maquina que el Redis, que es donde '
+                'tiene que estar el relay.'
+            ))
+            return True
+
+        if del_sitio and direcciones & del_sitio:
+            self.stdout.write(self.style.WARNING(
+                f'   Pero {host} apunta a la MISMA maquina que sirve la '
+                'aplicacion, no al VPS.'
+            ))
+            self.stdout.write(
+                '      El registro existe y el certificado vale, asi que esta '
+                'seccion parecia resuelta. No lo esta: el relay vive donde '
+                'vive el Redis, y el navegador abriria el socket contra '
+                'cPanel, donde no hay nada escuchando. Lo que falta es '
+                'apuntar el registro al VPS (o, si se prefiere dejarlo aqui, '
+                'un proxy de WebSocket en Apache, que es otra arquitectura y '
+                'hay que decidirla a proposito).'
+            )
+            return WRONG_MACHINE
+
+        self.stdout.write(
+            '   No es ni la maquina del Redis ni la de la aplicacion. '
+            'Comprueba que sea el VPS.'
+        )
+
         return True
+
+    def _host_of(self, url: str) -> str:
+        """El nombre de host de una URL, o vacio si no lo tiene."""
+        if not url:
+            return ''
+
+        try:
+            return urlsplit(url).hostname or ''
+        except ValueError:
+            return ''
+
+    def _addresses(self, host: str):
+        """Las direcciones de un host, o None si no se pudo resolver."""
+        if not host:
+            return None
+
+        try:
+            return {d[4][0] for d in socket.getaddrinfo(
+                host, None, proto=socket.IPPROTO_TCP)}
+        except OSError:
+            return None
 
     def _bare_host(self, host: str) -> str:
         """Quedarse con el nombre, venga como venga escrito."""
@@ -843,6 +944,17 @@ class Command(BaseCommand):
             self.stdout.write(
                 'Es trabajo de sistemas en el VPS --DNS, un proceso que '
                 'escuche y un certificado--, no de la aplicacion.'
+            )
+            return
+
+        if host == WRONG_MACHINE:
+            self.stdout.write(self.style.WARNING(
+                'El canal funciona desde cPanel, y el subdominio existe pero '
+                'esta en la maquina equivocada.'
+            ))
+            self.stdout.write(
+                'Es lo mas facil de dar por resuelto de todo esto, porque '
+                'responde: un registro DNS que hay que apuntar al VPS.'
             )
             return
 

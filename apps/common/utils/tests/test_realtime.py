@@ -110,6 +110,7 @@ class FakeRedis:
         self.ping_calls = 0
         self.published = None
         self.pubsubs = []
+        self.reads = []
 
     def pubsub(self, **kwargs):
         creada = FakePubSub(self, allow=self.pubsub_allowed)
@@ -125,11 +126,18 @@ class FakeRedis:
 
         return 1 if self.delivers else 0
 
-    def ping(self):
+    def get(self, key):
+        """
+        La sonda de ida y vuelta: leer una clave, que es lo que hace la app.
+
+        Los nombres `ping_error` / `ping_calls` se quedan porque es la misma
+        sonda con otro comando, y renombrarlos no diria nada mas.
+        """
+        self.reads.append(key)
         self.ping_calls += 1
 
         if self.ping_error is None:
-            return True
+            return None
 
         if self.ping_calls_before_error is None:
             raise self.ping_error
@@ -137,7 +145,18 @@ class FakeRedis:
         if self.ping_calls > self.ping_calls_before_error:
             raise self.ping_error
 
-        return True
+        return None
+
+    def ping(self):
+        """
+        Denegado, igual que en produccion.
+
+        Al usuario de la cache **no se le concede `@connection`** a proposito.
+        Que el doble lo permitiera haria pasar una version del comando que
+        mide con PING -- que es justo la que contestaba «no se pudo medir»
+        contra un Redis sano.
+        """
+        raise denied('ping')
 
     def close(self):
         pass
@@ -349,6 +368,48 @@ class LatenciaTestCase(SimpleTestCase):
 
 
 @override_settings(REDIS_URL=REDIS_URL)
+class SondaTestCase(SimpleTestCase):
+    """Con que se mide la ida y vuelta, que no es un detalle."""
+
+    def test_no_se_mide_con_ping(self):
+        """
+        El fallo que encontro ejecutarlo contra el Redis de produccion.
+
+        Al usuario de la cache no se le concede `@connection`, a proposito,
+        porque la cache no hace ping. Midiendo con PING, las dos secciones que
+        miden contestaban «no se pudo medir» en un Redis perfectamente sano, y
+        la salida invitaba a abrir un permiso **para poder diagnosticar**. Una
+        herramienta que pide ensanchar la ACL para ejecutarse esta midiendo
+        otra cosa.
+        """
+        cliente = FakeRedis()
+
+        texto = run(cliente)
+
+        # Se midio: si la sonda fuera PING, el doble lo habria denegado y
+        # estas dos secciones dirian que no se pudo.
+        self.assertIn('idas y vueltas: mediana', texto)
+        self.assertIn('conexiones simultaneas, todas vivas', texto)
+        self.assertNotIn('No se pudo medir', texto)
+
+    def test_la_sonda_cae_dentro_del_patron_de_claves(self):
+        """
+        Y lee una clave `gea:`, que es lo que la ACL ya permite.
+
+        Una clave fuera del prefijo volveria a necesitar un permiso nuevo, que
+        es de lo que se venia.
+        """
+        cliente = FakeRedis()
+
+        run(cliente)
+
+        self.assertTrue(cliente.reads)
+
+        for clave in cliente.reads:
+            self.assertTrue(clave.startswith('gea:'), clave)
+
+
+@override_settings(REDIS_URL=REDIS_URL)
 class SubdominioTestCase(SimpleTestCase):
     """Preguntar por un host que nadie nombro no es contestar."""
 
@@ -390,6 +451,72 @@ class SubdominioTestCase(SimpleTestCase):
         self.assertIn('El certificado de rt.example.org no vale', texto)
         self.assertIn('no es un aviso que el usuario pueda aceptar', texto)
         self.assertIn('corta el socket sin preguntar', texto)
+
+    def _resolviendo(self, mapa):
+        """Un DNS de mentira: cada host a las direcciones que se le digan."""
+        def getaddrinfo(host, *args, **kwargs):
+            if host not in mapa:
+                raise OSError('Name or service not known')
+
+            return [(0, 0, 0, '', (ip, 443)) for ip in mapa[host]]
+
+        return mock.patch(f'{MODULE}.socket.getaddrinfo', getaddrinfo)
+
+    def _con_tls(self):
+        """El saludo TLS, dado por bueno: aqui no es lo que se prueba."""
+        contexto = mock.MagicMock()
+        envuelto = contexto.wrap_socket.return_value.__enter__.return_value
+        envuelto.getpeercert.return_value = {}
+        envuelto.version.return_value = 'TLSv1.3'
+
+        return (
+            mock.patch(f'{MODULE}.socket.create_connection'),
+            mock.patch(f'{MODULE}.ssl.create_default_context',
+                       return_value=contexto),
+        )
+
+    @override_settings(PUBLIC_BASE_URL='https://geausa.example.org')
+    def test_apuntar_a_la_maquina_de_la_aplicacion_es_un_hallazgo(self):
+        """
+        Lo que paso de verdad: el subdominio existe, tiene certificado, y
+        apunta al cPanel.
+
+        Es lo mas facil de dar por resuelto de todo esto, **porque responde**.
+        Un «saludo TLS correcto» a secas ahi se da por bueno, se monta el relay
+        en el VPS y el navegador sigue abriendo el socket contra cPanel, donde
+        no hay nada escuchando.
+        """
+        conexion, contexto = self._con_tls()
+
+        with self._resolviendo({
+            'rt.example.org': ['190.90.160.103'],
+            'geausa.example.org': ['190.90.160.103'],
+            'redis.example.org': ['203.0.113.7'],
+        }), conexion, contexto:
+            texto = run(FakeRedis(), realtime_host='rt.example.org')
+
+        self.assertIn('Saludo TLS correcto', texto)
+        self.assertIn('MISMA maquina que sirve la aplicacion', texto)
+        self.assertIn('esta en la maquina equivocada', texto)
+
+        # Y no se cuenta como si no existiera: el registro esta, el
+        # certificado vale, y lo que falta es a donde apunta.
+        self.assertNotIn('Falta el registro DNS', texto)
+
+    @override_settings(PUBLIC_BASE_URL='https://geausa.example.org')
+    def test_apuntar_a_la_maquina_del_redis_es_lo_correcto(self):
+        """El relay vive donde vive el Redis; ahi si esta resuelta."""
+        conexion, contexto = self._con_tls()
+
+        with self._resolviendo({
+            'rt.example.org': ['203.0.113.7'],
+            'geausa.example.org': ['190.90.160.103'],
+            'redis.example.org': ['203.0.113.7'],
+        }), conexion, contexto:
+            texto = run(FakeRedis(), realtime_host='rt.example.org')
+
+        self.assertIn('misma maquina que el Redis', texto)
+        self.assertIn('Las cuatro que se miden desde aqui salen bien', texto)
 
     def test_el_nombre_se_limpia_venga_como_venga(self):
         vistos = []
