@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 06:57+0000\n"
+"POT-Creation-Date: 2026-09-15 18:10+0000\n"
 "PO-Revision-Date: 2026-09-01 08:07+0000\n"
 "Last-Translator: Juan Sebastian Morales Delgado <cto@propensionesabogados."
 "com>\n"
@@ -2439,6 +2439,7 @@ msgid "Enter the badge details to verify."
 msgstr "Ingrese los detalles de la escarapela a verificar."
 
 #: dashboard/pages/certificates/users/employee_ipcon/certificate_input.html:60
+#: dashboard/pages/documents/code_gen/code_history.html:250
 #: two_factor/core/login.html:219
 msgid "Verify"
 msgstr "Verificar"
@@ -2789,7 +2790,7 @@ msgid_plural "%(counter)s codes"
 msgstr[0] "%(counter)s código"
 msgstr[1] "%(counter)s códigos"
 
-#: dashboard/pages/documents/code_gen/code_history.html:246
+#: dashboard/pages/documents/code_gen/code_history.html:258
 #: dashboard/pages/documents/code_gen/summary_list.html:59
 msgid "Compose"
 msgstr "Componer"
