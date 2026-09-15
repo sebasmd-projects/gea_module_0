@@ -607,6 +607,71 @@ problemas.
 
 ---
 
+## Paso 10. El canal de tiempo real (solo si se montan notificaciones)
+
+Este paso existe porque es el que sorprende. **Los patrones de clave de una ACL
+no gobiernan los canales de pub/sub.** El usuario `gea` del paso 3 tiene
+`~gea:*`: escribe y lee todas las claves de la cache, y aun así responde
+`NOPERM` a un `PUBLISH` o a un `SUBSCRIBE`. Los canales se conceden aparte, con
+patrones `&`, y desde Redis 7 el valor de fábrica de `acl-pubsub-default` es
+`resetchannels` — o sea, ninguno.
+
+Comprobado contra un Redis real con la ACL de arriba:
+
+```
+NOPERM this user has no permissions to run the 'subscribe' command
+```
+
+Es el mismo tropiezo que el broker con `~celery*` (paso 9), en otro sitio. Y se
+parece al que no es: la cache va perfecta, así que nada avisa.
+
+### Qué añadir
+
+Al usuario `gea` del `redis.conf`, dos cosas:
+
+```
+user gea on #PEGA_AQUI_EL_SHA256 ~gea:* &gea:* +@read +@write +@keyspace +@pubsub -@dangerous +flushdb
+```
+
+`&gea:*` da los canales que empiezan por el prefijo de Django, y `+@pubsub` los
+comandos. **El patrón de canales sigue el mismo prefijo que las claves a
+propósito**: así lo que se le concede al usuario de la aplicación se dice una
+vez y se lee de un vistazo.
+
+> El prefijo sale de `REDIS_KEY_PREFIX` (por defecto `gea`). Si lo cambias,
+> cambia también el `&`, o el canal cae fuera del patrón y vuelve el `NOPERM`.
+
+### Por qué al usuario de la cache y no a uno nuevo
+
+Porque por ese canal **no viaja contenido**. Lo que se publica es un aviso de
+que hay novedad y hasta qué identificador; lo que hay dentro lo pide después el
+navegador a Django, que comprueba permisos como siempre. Quien robara esa clave
+podría hacer que un navegador recargue su propia lista de notificaciones, que es
+lo que puede hacer pulsando F5.
+
+Eso vale mientras el canal siga siendo un aviso. El día que se publique el texto
+de una notificación por ahí, esto deja de ser cierto y hace falta un usuario
+aparte — y, sobre todo, preguntarse por qué se está mandando contenido por un
+sitio donde nadie comprueba quién escucha.
+
+### Comprobarlo
+
+```bash
+python manage.py check_realtime
+```
+
+Hace el recorrido entero desde cPanel —suscribirse, publicar y **recibir**— y
+además mide la latencia y las conexiones salientes. No basta con que `PUBLISH`
+no dé error: `PUBLISH` devuelve «0 receptores» sin quejarse cuando nadie
+escucha, y dos conexiones a Redis distintos detrás de un balanceador dan
+exactamente eso. Lo que decide es que el mensaje vuelva.
+
+Lo que ese comando **no** puede comprobar es la otra dirección: si el worker del
+VPS alcanza la base de datos de cPanel. Esa conexión sale del VPS, así que la
+imprime como un comando para ejecutar allá.
+
+---
+
 ## Dos notas
 
 **Certificados de cliente (mTLS).** El montaje de arriba autentica al servidor,

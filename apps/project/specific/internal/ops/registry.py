@@ -668,6 +668,66 @@ COMMANDS = (
         timeout=90,
     ),
     Command(
+        name='check_realtime',
+        title=_('Real-time channel'),
+        summary=_(
+            'Measures whether this server can push events in real time '
+            'through the Redis on the VPS.'
+        ),
+        detail=_(
+            'The application lives here and Redis lives on a VPS. That is '
+            'what would let real-time notifications work without moving the '
+            'application: Django only publishes, and the process that has to '
+            'stay alive lives over there. Whether that holds is not a design '
+            'question, it is a measurement — the channel end to end, how long '
+            'a round trip takes (with ATOMIC_REQUESTS that is time with a '
+            'transaction open), and whether this hosting allows several '
+            'outbound connections at once. One thing it does NOT measure, and '
+            'says so: whether the VPS reaches this database. That connection '
+            'starts on the other side.'
+        ),
+        example=_('Before committing to a real-time design, and after any '
+                  'change to the Redis ACL.'),
+        risk=RISK_READ_ONLY,
+        area=AREA_DIAGNOSTICS,
+        timeout=180,
+        options=[
+            Option(
+                flag='--realtime-host',
+                label=_('Real-time subdomain'),
+                kind=KIND_TEXT,
+                help=_(
+                    'The host that would serve the socket to the browser, for '
+                    'example rt.propensionesabogados.com. Left empty that '
+                    'check is skipped rather than guessed: answering about a '
+                    'host nobody named is not an answer.'
+                ),
+                pattern=r'^[A-Za-z0-9.\-]{1,253}$',
+            ),
+            Option(
+                flag='--samples',
+                label=_('Latency samples'),
+                kind=KIND_NUMBER,
+                default=20,
+                help=_(
+                    'How many round trips to measure. One measures nothing: '
+                    'the first pays for the connection and the TLS handshake.'
+                ),
+            ),
+            Option(
+                flag='--connections',
+                label=_('Simultaneous connections'),
+                kind=KIND_NUMBER,
+                default=10,
+                help=_(
+                    'How many outbound connections to hold open at the same '
+                    'time. Ten is not the production number — it is enough to '
+                    'rule out a hosting that cuts at the second one.'
+                ),
+            ),
+        ],
+    ),
+    Command(
         name='check_workers',
         title=_('Background workers'),
         summary=_(
