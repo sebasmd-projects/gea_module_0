@@ -85,6 +85,19 @@ class CodeGeneratorView(InternalToolAccessMixin, FormView):
         context['page_selector_choices'] = PageSelectorChoices.choices
         context['anchor_choices'] = AnchorChoices.choices
 
+        # Todavia no hay codigo ni documento: la vista previa dibuja una
+        # muestra ajustable, igual que el editor de disposiciones
+        # (`StampLayoutEditView`). Es el mismo componente en los dos sitios;
+        # antes este formulario montaba el contenedor a mano en la plantilla,
+        # sin pasar por `render_preview_container()`, y se quedaba sin los
+        # simbolos de muestra que el componente necesita para dibujar algo.
+        context['stamp_preview'] = render_preview_container(
+            row_selector='[data-placement-row]',
+            form_scope='#placementTable',
+            pdf_input='#id_source_file',
+            editable=True,
+        )
+
         return context
 
     def form_valid(self, form):
