@@ -382,13 +382,24 @@ REDIS_URL = os.getenv('REDIS_URL', '').strip()
 
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', '').strip()
 
+# El prefijo con el que la cache nombra sus claves. Va aqui arriba, y no
+# dentro de CACHES, porque lo lee alguien mas: las comprobaciones que miran si
+# el usuario del broker alcanza las claves de la cache necesitan saber como se
+# llaman de verdad. Leyendolo solo dentro del diccionario, `settings` no tenia
+# el atributo, los comandos caian en su propio 'gea' por defecto y, con un
+# prefijo distinto configurado, probaban una clave que no existe -- que
+# responde que no por no encontrarla, no por estar prohibida. Un verde falso
+# justo en la comprobacion de aislamiento. Es la trampa ya documentada de los
+# ajustes que solo se leen con `getattr(settings, ...)`.
+REDIS_KEY_PREFIX = os.getenv('REDIS_KEY_PREFIX', 'gea')
+
 if REDIS_URL:
     CACHES = {
         'default': {
             'BACKEND': 'django_redis.cache.RedisCache',
             'LOCATION': REDIS_URL,
             'TIMEOUT': 300,
-            'KEY_PREFIX': os.getenv('REDIS_KEY_PREFIX', 'gea'),
+            'KEY_PREFIX': REDIS_KEY_PREFIX,
             'OPTIONS': {
                 'CLIENT_CLASS': 'django_redis.client.DefaultClient',
 

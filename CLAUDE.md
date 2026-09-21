@@ -100,6 +100,28 @@ uv run python manage.py check_attack_terms
 uv run python manage.py check_security
 ```
 
+```bash
+uv run python manage.py check_realtime
+```
+
+La Fase 0 del centro de notificaciones: si la aplicación puede quedarse en
+cPanel publicando contra el Redis del VPS, o hay que mudarla entera. Mide el
+canal de punta a punta —suscribir, publicar y **recibir**, porque `PUBLISH`
+devuelve «0 receptores» sin quejarse—, la latencia (con `ATOMIC_REQUESTS` eso es
+tiempo con una transacción abierta) y las conexiones salientes simultáneas. Con
+`--realtime-host` comprueba además el DNS y el TLS del subdominio; sin él se
+salta esa pregunta en vez de adivinar un nombre.
+
+La quinta pregunta —si el worker del VPS alcanza el MySQL de cPanel— **no la
+mide y lo dice**: esa conexión sale del otro lado. Imprime el comando para
+ejecutar allá. Un comando de verificación que da por buena una comprobación que
+nunca ocurrió es peor que no tenerlo.
+
+⚠️ La ACL de la cache **no** sirve para esto tal cual: `~gea:*` da las claves y
+aun así responde `NOPERM` a un `PUBLISH`, porque los canales van aparte con `&`.
+Es el mismo tropiezo del broker con `~celery*`. Se abre en una línea:
+[`deploy/REDIS.md`](deploy/REDIS.md) paso 10.
+
 Nueve secciones: las seis propias de este proyecto (vistas sin guardia,
 formularios sin freno, shell, SQL por cadenas, carpetas de subidas, ajustes) y
 tres de herramientas de fuera.
@@ -330,6 +352,7 @@ Reglas que se deducen del grafo — respétalas al añadir código:
 | **Duración de un bloqueo y columnas de la fila** | `apps/common/utils/blocking.py` |
 | **Cifrado de los respaldos** | `apps/common/utils/backup_crypto.py` + `management/commands/db_backup.py` |
 | Tareas programadas | `apps/common/utils/cron.py` |
+| **Si cPanel aguanta tiempo real contra el VPS** | `apps/common/utils/management/commands/check_realtime.py` — las cuatro que se miden desde aquí, y la quinta que no |
 | Filtros y tags de plantilla | `apps/common/utils/templatetags/custom_filters.py` |
 | Landing pública y `health/` | `apps/common/core/views.py` |
 | **Documentos legales: texto, aprobación y aceptación** | `apps/common/core/models.py` + `legal.py` (constancia) + `legal_html.py` (saneado) + `legal_pdf.py` |
@@ -714,7 +737,7 @@ Sin build ni SPA. Plantillas Django + Bootstrap 5 por CDN; `templates/raw.html` 
 | **`CACHES` sale de `REDIS_URL`** | Con la variable puesta se usa `django-redis` con `IGNORE_EXCEPTIONS`: un Redis caído degrada a «sin cache» en vez de tumbar el login. Cuidado con lo que significa eso exactamente: **no lanza la excepción, devuelve `None`**, así que un `try/except` alrededor de una operación de caché no se entera de nada y `cache.get(k) or 0` da `0`. Eso apagaba los seis contadores de intentos en silencio; hoy todos pasan por `apps/common/utils/throttling.py`, que detecta la avería por lo que devuelve `incr` y **falla cerrado salvo donde hay una razón escrita para lo contrario**. Sin la variable, Django cae en `LocMemCache`, que es **por proceso**: los límites son entonces por worker. Montaje del Redis: [`deploy/REDIS.md`](deploy/REDIS.md). |
 | **`ERROR_TEMPLATE` no está definido** | Varios módulos hacen `settings.ERROR_TEMPLATE` dentro de `try/except` y caen a `'errors_template.html'`. Funciona, pero el `getattr` es engañoso. |
 | **`settings.py` no arranca sin el `.env` completo, pero ya dice qué falta** | Muchos `os.getenv(...)` se pasan directos a `int()` o `.split(',')` sin valor por defecto (`DB_PORT`, `DJANGO_EMAIL_PORT`, `IP_BLOCKED_TIME_IN_MINUTES`, `CORS_ALLOWED_ORIGINS`, `COMMON_ATTACK_TERMS`, `GEA_DAILY_CODE_*`), y el error que salía era `int() argument must be a string … not 'NoneType'`: no nombraba la variable, y como el arranque muere en la primera, había que repetirlo una vez por cada una que faltara. Hoy `app_core/env.py::check_environment()` corre **antes de que `settings.py` lea nada** y levanta un `ImproperlyConfigured` con **todas** las que faltan, cada una con para qué sirve y con `cp docs/env.example .env` al pie. Tres cosas al tocarlo: una variable **vacía cuenta como ausente** salvo en `ALLOWED_EMPTY` (vacío significa algo en `CORS_ALLOWED_ORIGINS`, `COMMON_ATTACK_TERMS` y las contraseñas); `DJANGO_ALLOWED_HOSTS` va en `REQUIRED_IN_PRODUCTION` porque sólo la lee la rama de `DEBUG=False`, y exigirla siempre rompería un `.env` de portátil que hoy funciona; y lo que se lee sin defecto y aun así puede faltar va en `OPTIONAL_WITHOUT_DEFAULT` **con su motivo escrito**, que `app_core/tests/test_env.py` comprueba recorriendo `settings.py` — una lectura nueva sin declarar falla la prueba. Sólo cubre lo que impide arrancar: lo que falta y sólo degrada (`REDIS_URL`, `CERTIFICATION_SIGNING_KEY`, `GEA_BACKUP_PASSPHRASE`, `PQRS_NOTIFICATION_RECIPIENTS`) no sale ahí a propósito. |
-| **Un ajuste que sólo se lee con `getattr(settings, …)` no se configura por entorno** | `SCAN_404_THRESHOLD`, `SCAN_404_WINDOW_SECONDS` y `GEOIP_PATH` estaban documentados como variables de entorno y no lo eran: `scanning.py` y `netintel.py` los leen del objeto `settings` con su propio defecto, y `settings.py` no los definía. Ponerlos en el `.env` no hacía nada — que es peor que no poder configurarlos, porque parece que sí. Ya se leen en `settings.py`. Al añadir un ajuste que quieras poder cambiar por entorno, defínelo ahí aunque el módulo que lo usa tenga un defecto. |
+| **Un ajuste que sólo se lee con `getattr(settings, …)` no se configura por entorno** | `SCAN_404_THRESHOLD`, `SCAN_404_WINDOW_SECONDS` y `GEOIP_PATH` estaban documentados como variables de entorno y no lo eran: `scanning.py` y `netintel.py` los leen del objeto `settings` con su propio defecto, y `settings.py` no los definía. Ponerlos en el `.env` no hacía nada — que es peor que no poder configurarlos, porque parece que sí. Ya se leen en `settings.py`. Volvió a morder con **`REDIS_KEY_PREFIX`**, y ahí la variante era peor: **sí se leía del entorno**, pero solo dentro del diccionario `CACHES`, así que `settings` no tenía el atributo. La cache usaba el prefijo configurado y los comandos que lo consultan caían en su propio `'gea'`. `check_workers` comprobaba entonces que el broker no alcanza `gea:worker-probe-isolation` **con otro prefijo en uso**: una clave que no existe responde que no por no encontrarla, no por estar prohibida — un verde falso justo en la comprobación de aislamiento. Al añadir un ajuste que quieras poder cambiar por entorno, defínelo en `settings.py` **como nombre de módulo**, aunque el sitio que lo consume sea un diccionario. |
 | **Los UUID de MariaDB: el motor es propio y no se puede quitar** | `settings.py` no instala `django.db.backends.mysql` sino `app_core/db/mysql`, que es ese mismo con `has_native_uuid_field = False`. Django 5.0 empezó a usar el tipo nativo `uuid` de MariaDB 10.7+, y con él `UUIDField.get_db_prep_value` manda el UUID **con guiones** en vez del hex de 32 — contra columnas que Django 4.2 creó como `char(32)` con el hex. No falla: la fila se lee y `filter(username=…)` la encuentra; sólo deja de funcionar lo que busca **por clave primaria**, así que la contraseña se acepta y acto seguido el asistente no puede recargar al usuario. Migrar sería convertir diez columnas `UUIDField` y todas las claves ajenas que apuntan a ellas, en producción y sin vuelta atrás a mitad; el tipo nativo no aporta nada que este proyecto use. La decisión vive en `app_core/db/engine_for()` para poder probarla, y la fija `app_core/tests/test_db_backend.py`. Ver [`docs/DJANGO_5_2.md`](docs/DJANGO_5_2.md) §4.4. |
 | **Las opciones de conexion son de cada motor** | `DATABASES['default']['OPTIONS']` va **vacio** y cada motor pone las suyas en su propio bloque. Antes el diccionario base traia el `charset`/`init_command` de MySQL para todos: con MySQL no hacia nada --el bloque de abajo lo reemplazaba entero, perdiendo de paso el `COLLATE utf8mb4_bin`-- y con cualquier otro motor **rompia la conexion** (`TypeError: 'charset' is an invalid keyword argument for Connection()`), asi que levantar el proyecto contra PostgreSQL o SQLite en local era imposible sin editar `settings.py`. Inutil donde se usaba, impeditivo donde no. Al anadir una opcion de conexion, ponla en el bloque de su motor. |
 | **Allowlist de usuarios hardcodeada** | `OnlySpecificUserMixin.allowed_user_username = ['jose.henry', 'kalichemorales']` en `buyers/views.py` controla el acceso a Orion. |
