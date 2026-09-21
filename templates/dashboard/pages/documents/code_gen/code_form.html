@@ -74,11 +74,30 @@
                 {% endfor %}
               </div>
 
-              <div class="mb-0">
+              <div class="mb-3">
                 <label class="form-label" for="{{ form.description.id_for_label }}">
                   {{ form.description.label }}
                 </label>
                 {{ form.description|add_class:"form-control" }}
+              </div>
+
+              <hr>
+
+              {% comment %}
+                Lo que decide si esto es solo un codigo o un certificado
+                entero. Vive aqui, no dentro de la tarjeta de certificacion,
+                porque es la casilla que hace que esa tarjeta -- y el hash del
+                documento, y la URL publica de verificacion, y las posiciones
+                sobre el documento -- aparezcan o no. Escondida dentro de lo
+                que ella misma revela, habia que abrir la tarjeta para
+                encontrar el interruptor que la abre.
+              {% endcomment %}
+              <div class="form-check form-switch mb-0">
+                {{ form.certify_document|add_class:"form-check-input" }}
+                <label class="form-check-label" for="{{ form.certify_document.id_for_label }}">
+                  <strong>{{ form.certify_document.label }}</strong>
+                </label>
+                <div class="form-text">{{ form.certify_document.help_text }}</div>
               </div>
             </div>
           </div>
@@ -118,7 +137,14 @@
                   </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-6" id="documentHashField">
+                  {% comment %}
+                    Solo tiene sentido certificando: el hash sale del archivo
+                    que se sube en esa seccion, y sin el no hay de donde
+                    sacarlo. `code_generator_certify.js` la esconde y
+                    descarta la casilla cuando "Certificar documento" no
+                    esta marcada.
+                  {% endcomment %}
                   <div class="form-check">
                     {{ form.include_document_hash|add_class:"form-check-input" }}
                     <label class="form-check-label" for="{{ form.include_document_hash.id_for_label }}">
@@ -211,8 +237,16 @@
             </div>
           </div>
 
-          {% comment %} -------- 4. Certification -------- {% endcomment %}
-          <div class="card mb-4">
+          {% comment %}
+            -------- 4. Certification --------
+            Solo tiene sentido si "Certificar documento" esta marcada, en
+            Identificacion: sin eso no hay archivo que certificar y estos
+            campos no significan nada. `code_generator_certify.js` esconde
+            la tarjeta entera (con `id="certificationCard"`) cuando no lo
+            esta, y la muestra -- con lo que ya se hubiera escrito -- si el
+            formulario vuelve con un error y la casilla seguia marcada.
+          {% endcomment %}
+          <div class="card mb-4" id="certificationCard">
             <div class="card-header">
               <i class="fa-solid fa-shield-halved me-2"></i>{% trans 'Document certification' %}
             </div>
@@ -227,14 +261,6 @@
                 {% for error in form.source_file.errors %}
                   <div class="invalid-feedback d-block">{{ error }}</div>
                 {% endfor %}
-              </div>
-
-              <div class="form-check mb-3">
-                {{ form.certify_document|add_class:"form-check-input" }}
-                <label class="form-check-label" for="{{ form.certify_document.id_for_label }}">
-                  <strong>{{ form.certify_document.label }}</strong>
-                </label>
-                <div class="form-text">{{ form.certify_document.help_text }}</div>
               </div>
 
               <div class="row g-3">
@@ -363,4 +389,5 @@
   <script src="{% static 'js/stamp_preview.js' %}"></script>
   <script src="{% static 'js/layout_workspace.js' %}"></script>
   <script src="{% static 'js/searchable_select.js' %}"></script>
+  <script src="{% static 'js/code_generator_certify.js' %}"></script>
 {% endblock body_custom_js %}

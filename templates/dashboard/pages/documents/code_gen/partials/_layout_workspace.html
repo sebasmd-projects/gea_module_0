@@ -39,20 +39,14 @@
     <div class="row">
       {% comment %} -------- Preview -------- {% endcomment %}
       <div class="col-lg-6">
-        <div data-gea-preview="1"
-             id="layoutPreview"
-             data-page-width="612"
-             data-page-height="793.5"
-             data-row-selector="[data-placement-row]"
-             data-form-scope="#placementTable"
-             data-pdf-input="#id_source_file"
-             data-editable="true"
-             data-label-page="{% trans 'Page size' %}"
-             data-label-hint="{% trans 'Drag a box to move it; the offsets update as you go.' %}"
-             data-label-empty="{% trans 'No placements yet. Add one to see it here.' %}"
-             data-label-outside="{% trans 'This placement falls outside the page.' %}"
-             data-label-loading="{% trans 'Rendering the document…' %}"
-             data-label-pdffailed="{% trans 'The document could not be rendered; the placements still work.' %}"></div>
+        {% comment %}
+          `stamp_preview` viene de `render_preview_container()`
+          (`CodeGeneratorView.get_context_data()`): sin el, este contenedor se
+          montaba a mano aqui mismo, sin los simbolos de muestra ni la URL del
+          endpoint que hace falta para dibujar algo -- por eso no habia
+          vista previa de verdad de como quedaba el codigo de barras o el QR.
+        {% endcomment %}
+        <div id="layoutPreview">{{ stamp_preview }}</div>
       </div>
 
       {% comment %} -------- Table -------- {% endcomment %}
