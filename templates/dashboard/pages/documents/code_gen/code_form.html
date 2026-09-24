@@ -102,8 +102,18 @@
             </div>
           </div>
 
-          {% comment %} -------- 2. Code segments -------- {% endcomment %}
-          <div class="card mb-4">
+          {% comment %}
+            -------- 2. Code segments --------
+            Solo hace falta componer un codigo cuando algo lo va a usar de
+            verdad: un barcode en modo "The code composed below", un QR con
+            "The generated code itself", o certificar un documento (que
+            siempre estampa el codigo institucional). Generar un simbolo
+            suelto con su propio contenido -- un texto en el barcode, una URL
+            en el QR -- no depende de nada de aqui, y `code_generator_segments.js`
+            esconde la tarjeta entera cuando ninguno de los tres aplica: antes
+            habia que rellenarla igual aunque no fuera a usarse para nada.
+          {% endcomment %}
+          <div class="card mb-4" id="codeSegmentsCard">
             <div class="card-header">
               <i class="fa-solid fa-list-check me-2"></i>{% trans 'Code segments' %}
             </div>
@@ -203,6 +213,32 @@
                     <i class="bi bi-exclamation-triangle me-1"></i>
                     {% trans 'A barcode only accepts letters, digits, spaces and the symbols . _ - . Anything with "://", "?", "&amp;" or other URL characters must go in the QR code instead.' %}
                   </div>
+
+                  {% comment %}
+                    Igual que el QR: el barcode puede llevar el codigo
+                    compuesto de "Code segments", o un texto propio. Sin
+                    esto, un barcode suelto obligaba a pasar por segmentos
+                    que no pintaban nada en lo que se iba a imprimir.
+                  {% endcomment %}
+                  <div class="mt-2">
+                    <label class="form-label small mb-1" for="{{ form.barcode_content.id_for_label }}">
+                      {{ form.barcode_content.label }}
+                    </label>
+                    {{ form.barcode_content }}
+                    {% for error in form.barcode_content.errors %}
+                      <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                  </div>
+
+                  <div class="mt-2">
+                    <label class="form-label small mb-1" for="{{ form.barcode_custom_value.id_for_label }}">
+                      {{ form.barcode_custom_value.label }}
+                    </label>
+                    {{ form.barcode_custom_value|add_class:"form-control" }}
+                    {% for error in form.barcode_custom_value.errors %}
+                      <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                  </div>
                 </div>
 
                 <div class="col-md-6">
@@ -229,6 +265,30 @@
                     </label>
                     {{ form.qr_custom_value|add_class:"form-control" }}
                     {% for error in form.qr_custom_value.errors %}
+                      <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                  </div>
+
+                  {% comment %}
+                    El favicon de GEA sigue siendo el logo por defecto de
+                    todo QR, pero ya no es obligatorio: se puede apagar o
+                    cambiar por una imagen propia.
+                  {% endcomment %}
+                  <div class="mt-3">
+                    <label class="form-label small mb-1" for="{{ form.qr_logo_mode.id_for_label }}">
+                      {{ form.qr_logo_mode.label }}
+                    </label>
+                    {{ form.qr_logo_mode }}
+                    <div class="form-text">{{ form.qr_logo_mode.help_text }}</div>
+                  </div>
+
+                  <div class="mt-2" id="qrLogoImageField">
+                    <label class="form-label small mb-1" for="{{ form.qr_logo_image.id_for_label }}">
+                      {{ form.qr_logo_image.label }}
+                    </label>
+                    {{ form.qr_logo_image }}
+                    <div class="form-text">{{ form.qr_logo_image.help_text }}</div>
+                    {% for error in form.qr_logo_image.errors %}
                       <div class="invalid-feedback d-block">{{ error }}</div>
                     {% endfor %}
                   </div>
@@ -390,4 +450,6 @@
   <script src="{% static 'js/layout_workspace.js' %}"></script>
   <script src="{% static 'js/searchable_select.js' %}"></script>
   <script src="{% static 'js/code_generator_certify.js' %}"></script>
+  <script src="{% static 'js/code_generator_segments.js' %}"></script>
+  <script src="{% static 'js/code_generator_live_preview.js' %}"></script>
 {% endblock body_custom_js %}

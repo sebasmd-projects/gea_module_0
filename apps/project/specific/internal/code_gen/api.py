@@ -800,8 +800,11 @@ def preview_symbols(request):
     ``pdf_stamp`` va a dibujar.
 
     Parametros de consulta:
-        ``length``  longitud de la carga de ejemplo del codigo de barras.
-        ``payload`` codigo real, si se quiere ver el caso concreto.
+        ``length``     longitud de la carga de ejemplo del codigo de barras.
+        ``payload``    codigo real del barcode, si se quiere ver el caso
+            concreto.
+        ``qr_payload`` contenido real del QR, para el mismo motivo. Sin el,
+            el QR de muestra sigue apuntando a ``PUBLIC_BASE_URL``.
     """
     if not _is_internal(request.user):
         return _forbidden()
@@ -819,6 +822,7 @@ def preview_symbols(request):
         'symbols': sample_symbols(
             barcode_length=length,
             barcode_payload=(request.GET.get('payload') or '').strip(),
+            qr_payload=(request.GET.get('qr_payload') or '').strip(),
         ),
         'length': length,
         'min_length': BARCODE_SAMPLE_MIN_LENGTH,

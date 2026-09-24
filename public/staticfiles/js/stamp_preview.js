@@ -1045,20 +1045,32 @@
   };
 
   /**
-   * Pide al servidor las muestras con otra longitud de carga.
+   * Pide al servidor las muestras con otra longitud de carga, u otra carga
+   * real.
    *
    * Solo cambia el dibujo: ninguna posicion se toca. Si la peticion falla se
    * conservan las muestras que ya habia, que es mejor que quedarse sin nada.
+   *
+   * Acepta un numero (la longitud, como antes -- lo usa el campo "Sample
+   * characters") o un objeto ``{length, payload, qrPayload}``: lo segundo es
+   * lo que usa la vista previa en vivo del generador, que quiere mostrar el
+   * contenido real que se esta configurando y no solo una muestra del mismo
+   * ancho.
    */
-  StampPreview.prototype.reloadSymbols = function (length) {
+  StampPreview.prototype.reloadSymbols = function (options) {
     var self = this;
 
     if (!this.symbolsUrl) {
       return;
     }
 
+    var opts = (typeof options === 'object' && options !== null)
+      ? options
+      : { length: options };
+
     var wanted = Math.max(
-      this.sampleMin, Math.min(this.sampleMax, toNumber(length, this.sampleLength))
+      this.sampleMin,
+      Math.min(this.sampleMax, toNumber(opts.length, this.sampleLength))
     );
 
     if (this.sampleInput) {
@@ -1066,7 +1078,16 @@
       this.sampleInput.disabled = true;
     }
 
-    fetch(this.symbolsUrl + '?length=' + encodeURIComponent(wanted), {
+    var query = 'length=' + encodeURIComponent(wanted);
+
+    if (opts.payload) {
+      query += '&payload=' + encodeURIComponent(opts.payload);
+    }
+    if (opts.qrPayload) {
+      query += '&qr_payload=' + encodeURIComponent(opts.qrPayload);
+    }
+
+    fetch(this.symbolsUrl + '?' + query, {
       headers: { 'X-Requested-With': 'XMLHttpRequest' },
       credentials: 'same-origin'
     })

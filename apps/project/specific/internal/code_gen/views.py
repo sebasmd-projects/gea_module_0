@@ -24,8 +24,10 @@ from .services.usb_readiness import export_state
 from .preview import placements_as_data, render_preview_container
 
 from .constants import (HASH_B64_DEFAULT_LENGTH, RANDOM_CODE_DEFAULT_LENGTH)
-from .forms import (QR_CONTENT_CODE, QR_CONTENT_CUSTOM,
-                    QR_CONTENT_VERIFICATION, CodeGeneratorForm)
+from .forms import (BARCODE_CONTENT_COMPOSED, BARCODE_CONTENT_CUSTOM,
+                    QR_CONTENT_CODE, QR_CONTENT_CUSTOM,
+                    QR_CONTENT_VERIFICATION, QR_LOGO_DEFAULT,
+                    CodeGeneratorForm)
 from .forms import (AegisSummaryForm, StampLayoutForm,
                     StampPlacementFormSet)
 from .models import (AnchorChoices, CodeKindChoices, CodeRegistrationModel,
@@ -162,7 +164,16 @@ class CodeGeneratorView(InternalToolAccessMixin, FormView):
         return self._issue_code(form, data, options, source_hash)
 
     def _issue_code(self, form, data, options: CodeOptions, source_hash: str):
-        """Emite el codigo sin certificar ningun archivo."""
+        """
+        Emite el codigo sin certificar ningun archivo.
+
+        Los segmentos de "Code segments" solo hacen falta cuando lo que se
+        va a imprimir de verdad los necesita: un barcode compuesto, o un QR
+        que pida "el codigo generado". Generar un simbolo suelto con un
+        contenido propio (texto en el barcode, URL en el QR) no depende de
+        ellos, y exigirlos ahi era obligar a rellenar una tarjeta entera que
+        no pintaba nada en lo que se iba a producir.
+        """
         sequence = next_sequence() if options.include_initials_sequence else ''
         random_code = (
             generate_random_code(options.random_code_length)
@@ -183,18 +194,34 @@ class CodeGeneratorView(InternalToolAccessMixin, FormView):
             random_code=random_code,
         )
 
-        if not code_payload:
+        generate_barcode = bool(data.get('generate_barcode'))
+        barcode_content = data.get('barcode_content') or BARCODE_CONTENT_COMPOSED
+        qr_content = data.get('qr_content') or QR_CONTENT_VERIFICATION
+
+        composed_code_needed = (
+            (generate_barcode and barcode_content == BARCODE_CONTENT_COMPOSED)
+            or (data.get('generate_qr') and qr_content == QR_CONTENT_CODE)
+        )
+
+        if composed_code_needed and not code_payload:
             raise ValidationError(
                 _('Select at least one segment to build the code.')
             )
 
-        if data.get('generate_barcode'):
-            # Se valida ahora para fallar antes de guardar nada.
-            validate_barcode_payload(code_payload)
+        if generate_barcode:
+            if barcode_content == BARCODE_CONTENT_CUSTOM:
+                barcode_payload = validate_barcode_payload(
+                    data.get('barcode_custom_value') or ''
+                )
+            else:
+                # Se valida ahora para fallar antes de guardar nada.
+                barcode_payload = validate_barcode_payload(code_payload)
 
-            warning = barcode_length_warning(code_payload)
+            warning = barcode_length_warning(barcode_payload)
             if warning:
                 messages.warning(self.request, warning)
+        else:
+            barcode_payload = ''
 
         qr_payload = self._resolve_qr_payload(data, code_payload)
 
@@ -202,15 +229,17 @@ class CodeGeneratorView(InternalToolAccessMixin, FormView):
             reference=data.get('reference', ''),
             description=data.get('description') or '',
             custom_text_input=data.get('custom_text_input') or '',
-            code_information=code_payload,
+            code_information=barcode_payload or code_payload,
             initials=options.initials,
             sequence=sequence,
             random_code=random_code,
             source_file_hash=source_hash,
             hash_fragment=hash_fragment,
-            generated_barcode=bool(data.get('generate_barcode')),
+            generated_barcode=generate_barcode,
             generated_qr=bool(qr_payload),
             qr_payload=qr_payload or '',
+            qr_logo_mode=data.get('qr_logo_mode') or QR_LOGO_DEFAULT,
+            qr_logo_image=data.get('qr_logo_image') or None,
         )
 
     def _certify(self, form, data, options: CodeOptions) -> dict:
@@ -246,6 +275,8 @@ class CodeGeneratorView(InternalToolAccessMixin, FormView):
             request=self.request,
             options=options,
             qr_payload=qr_override,
+            qr_logo_mode=data.get('qr_logo_mode') or QR_LOGO_DEFAULT,
+            qr_logo_image=data.get('qr_logo_image'),
         )
 
         warning = barcode_length_warning(outcome.code_payload)
@@ -546,7 +577,10 @@ class CodeDetailView(HistoryAccessMixin, DetailView):
         if internals and registration.generated_qr and registration.qr_payload:
             try:
                 context['qr_image'] = png_to_data_uri(
-                    render_qr_png(registration.qr_payload)
+                    render_qr_png(
+                        registration.qr_payload,
+                        **registration.qr_render_kwargs(),
+                    )
                 )
             except Exception:
                 logger.exception('Could not re-render the QR code')

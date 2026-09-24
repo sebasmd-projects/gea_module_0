@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ATLAS 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 19:47+0000\n"
+"POT-Creation-Date: 2026-09-24 14:57+0000\n"
 "PO-Revision-Date: 2024-12-15 02:02-0500\n"
 "Last-Translator: Sebastián Morales <sebastian.morales@propensionesabogados."
 "com>\n"
@@ -18,35 +18,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: admin.py:51
+#: apps/project/specific/internal/code_gen/admin.py:51
 msgid "Code information"
 msgstr "Información del código"
 
-#: admin.py:62
+#: apps/project/specific/internal/code_gen/admin.py:62
 msgid "Segments"
 msgstr "Segmentos"
 
-#: admin.py:74
+#: apps/project/specific/internal/code_gen/admin.py:74
 msgid "Symbols"
 msgstr "Símbolos"
 
-#: admin.py:84 models.py:483
+#: apps/project/specific/internal/code_gen/admin.py:84
+#: apps/project/specific/internal/code_gen/models.py:536
 msgid "Status"
 msgstr "Estado"
 
-#: admin.py:92
+#: apps/project/specific/internal/code_gen/admin.py:92
 msgid "System Information"
 msgstr "Información del sistema"
 
-#: admin.py:133 models.py:181
+#: apps/project/specific/internal/code_gen/admin.py:133
+#: apps/project/specific/internal/code_gen/models.py:197
 msgid "Layout"
 msgstr "Disposición"
 
-#: admin.py:144
+#: apps/project/specific/internal/code_gen/admin.py:144
 msgid "Live preview"
 msgstr "Vista previa en vivo"
 
-#: admin.py:148
+#: apps/project/specific/internal/code_gen/admin.py:148
 msgid ""
 "Updates as you edit the placements below. Drag a summary to move it: the "
 "offsets are written back into the form."
@@ -54,58 +56,58 @@ msgstr ""
 "Se actualiza mientras editas las posiciones de abajo. Arrastra un resumen "
 "para moverlo: los desplazamientos se escriben de vuelta en el formulario."
 
-#: admin.py:159
+#: apps/project/specific/internal/code_gen/admin.py:159
 msgid "Placements"
 msgstr "Posiciones"
 
-#: api.py:36
+#: apps/project/specific/internal/code_gen/api.py:36
 msgid "You are not allowed to do this."
 msgstr "No tienes permiso para hacer esto."
 
-#: api.py:54
+#: apps/project/specific/internal/code_gen/api.py:54
 msgid "Malformed JSON body."
 msgstr "El cuerpo JSON está mal formado."
 
-#: api.py:83
+#: apps/project/specific/internal/code_gen/api.py:83
 msgid "\"placements\" must be a list."
 msgstr "\"placements\" tiene que ser una lista."
 
-#: api.py:90
+#: apps/project/specific/internal/code_gen/api.py:90
 #, python-format
 msgid "Placement %(number)s is not an object."
 msgstr "La posición %(number)s no es un objeto."
 
-#: api.py:100
+#: apps/project/specific/internal/code_gen/api.py:100
 #, python-format
 msgid "Placement %(number)s: unknown code kind."
 msgstr "Posición %(number)s: tipo de código desconocido."
 
-#: api.py:106
+#: apps/project/specific/internal/code_gen/api.py:106
 #, python-format
 msgid "Placement %(number)s: unknown anchor."
 msgstr "Posición %(number)s: anclaje desconocido."
 
-#: api.py:112
+#: apps/project/specific/internal/code_gen/api.py:112
 #, python-format
 msgid "Placement %(number)s: unknown page selector."
 msgstr "Posición %(number)s: selector de páginas desconocido."
 
-#: api.py:126
+#: apps/project/specific/internal/code_gen/api.py:126
 #, python-format
 msgid "Placement %(number)s: the measurements must be numbers."
 msgstr "Posición %(number)s: las medidas tienen que ser números."
 
-#: api.py:132
+#: apps/project/specific/internal/code_gen/api.py:132
 #, python-format
 msgid "Placement %(number)s: width and height must be at least 1 pt."
 msgstr "Posición %(number)s: el ancho y el alto deben ser de al menos 1 pt."
 
-#: api.py:138
+#: apps/project/specific/internal/code_gen/api.py:138
 #, python-format
 msgid "Placement %(number)s: opacity must be between 0 and 1."
 msgstr "Posición %(number)s: la opacidad debe estar entre 0 y 1."
 
-#: api.py:146
+#: apps/project/specific/internal/code_gen/api.py:146
 #, python-format
 msgid ""
 "Placement %(number)s: a member barcode must say which document of the "
@@ -114,64 +116,65 @@ msgstr ""
 "Posición %(number)s: un código de barras de miembro tiene que indicar qué "
 "documento del resumen lleva."
 
-#: api.py:222
+#: apps/project/specific/internal/code_gen/api.py:222
 msgid "Stamp layout updated."
 msgstr "Disposición de estampado actualizada."
 
-#: api.py:244
+#: apps/project/specific/internal/code_gen/api.py:244
 msgid "The layout name is required."
 msgstr "El nombre de la disposición es obligatorio."
 
-#: api.py:254
+#: apps/project/specific/internal/code_gen/api.py:254
 msgid "A layout with this name already exists."
 msgstr "Ya existe una disposición con este nombre."
 
-#: api.py:277
+#: apps/project/specific/internal/code_gen/api.py:277
 msgid "Stamp layout created."
 msgstr "Disposición de estampado creada."
 
-#: api.py:348 views.py:777
+#: apps/project/specific/internal/code_gen/api.py:348
+#: apps/project/specific/internal/code_gen/views.py:824
 msgid "Not sent"
 msgstr "Sin enviar"
 
-#: api.py:401
+#: apps/project/specific/internal/code_gen/api.py:401
 msgid "\"members\" must be a list."
 msgstr "«members» tiene que ser una lista."
 
-#: api.py:411
+#: apps/project/specific/internal/code_gen/api.py:411
 #, python-format
 msgid "Member %(number)s is not an object."
 msgstr "El miembro %(number)s no es un objeto."
 
-#: api.py:422
+#: apps/project/specific/internal/code_gen/api.py:422
 #, python-format
 msgid "Member %(number)s has no code."
 msgstr "El miembro %(number)s no tiene código."
 
-#: api.py:429
+#: apps/project/specific/internal/code_gen/api.py:429
 #, python-format
 msgid "The code %(code)s is repeated in the summary."
 msgstr "El código %(code)s está repetido en el resumen."
 
-#: api.py:443
+#: apps/project/specific/internal/code_gen/api.py:443
 #, python-format
 msgid "Member %(code)s points to a document that does not exist."
 msgstr "El miembro %(code)s apunta a un documento que no existe."
 
-#: api.py:451
+#: apps/project/specific/internal/code_gen/api.py:451
 #, python-format
 msgid "%(code)s is not certified: it has no fingerprint to include."
 msgstr "%(code)s no está certificado: no tiene huella que incluir."
 
-#: api.py:490
+#: apps/project/specific/internal/code_gen/api.py:490
 msgid "Members updated. The summary needs sealing again."
 msgstr "Miembros actualizados. Hay que volver a sellar el resumen."
 
-#: api.py:546
+#: apps/project/specific/internal/code_gen/api.py:546
 msgid "It was already sent to the blockchain."
 msgstr "Ya se envió a la cadena de bloques."
 
-#: api.py:554
+#: apps/project/specific/internal/code_gen/api.py:554
 #, python-format
 msgid ""
 "Sealed, but the blockchain calendars did not answer (%(reason)s). The seal "
@@ -184,7 +187,7 @@ msgstr ""
 "cadena de bloques». Ejecuta «Anclaje en blockchain» en la consola de "
 "operaciones para ver si este servidor tiene la librería y salida a internet."
 
-#: api.py:562
+#: apps/project/specific/internal/code_gen/api.py:562
 #, python-format
 msgid ""
 "Sealed, but the OpenTimestamps library is not installed on this server "
@@ -198,7 +201,7 @@ msgstr ""
 "«Dependencias», en la consola de operaciones, que el paquete llegó de verdad "
 "a ese fichero."
 
-#: api.py:571
+#: apps/project/specific/internal/code_gen/api.py:571
 #, python-format
 msgid ""
 "Sealed, but sending to the blockchain failed: %(kind)s: %(reason)s. The seal "
@@ -210,7 +213,7 @@ msgstr ""
 "bloques». Ejecuta «Anclaje en blockchain» en la consola de operaciones para "
 "un diagnóstico completo."
 
-#: api.py:578
+#: apps/project/specific/internal/code_gen/api.py:578
 msgid ""
 "Sealed and sent to the blockchain. The proof is born pending: it matures "
 "into a Bitcoin block within a few hours, on its own."
@@ -218,15 +221,15 @@ msgstr ""
 "Sellado y enviado a la cadena de bloques. La prueba nace pendiente: madura "
 "hasta un bloque de Bitcoin en unas horas, ella sola."
 
-#: api.py:615
+#: apps/project/specific/internal/code_gen/api.py:615
 msgid "Summary sealed."
 msgstr "Resumen sellado."
 
-#: api.py:650
+#: apps/project/specific/internal/code_gen/api.py:650
 msgid "Seal the summary before sending it."
 msgstr "Sella el resumen antes de enviarlo."
 
-#: api.py:658
+#: apps/project/specific/internal/code_gen/api.py:658
 msgid ""
 "Sent to the blockchain. The proof is born pending: it matures into a Bitcoin "
 "block within a few hours, on its own."
@@ -234,14 +237,14 @@ msgstr ""
 "Enviado a la cadena de bloques. La prueba nace pendiente: madura hasta un "
 "bloque de Bitcoin en unas horas, ella sola."
 
-#: api.py:707
+#: apps/project/specific/internal/code_gen/api.py:707
 msgid ""
 "Seal the summary before issuing its document: it carries the master hash "
 "inside."
 msgstr ""
 "Sella el resumen antes de emitir su documento: lleva el master hash dentro."
 
-#: api.py:719
+#: apps/project/specific/internal/code_gen/api.py:719
 msgid ""
 "Upload the summary PDF without codes: there is no original stored yet to "
 "stamp over."
@@ -249,18 +252,18 @@ msgstr ""
 "Sube el PDF del resumen sin códigos: todavía no hay un original guardado "
 "sobre el que estampar."
 
-#: api.py:730
+#: apps/project/specific/internal/code_gen/api.py:730
 msgid "Choose a stamp layout: it decides where each code goes on the page."
 msgstr ""
 "Elige una disposición de estampado: es la que decide dónde va cada código en "
 "la página."
 
-#: api.py:753
+#: apps/project/specific/internal/code_gen/api.py:753
 #, python-format
 msgid "The summary document could not be issued: %(error)s"
 msgstr "No se pudo emitir el documento del resumen: %(error)s"
 
-#: api.py:762
+#: apps/project/specific/internal/code_gen/api.py:762
 msgid ""
 "Summary document issued. Its QR points at the anchor page, which updates "
 "itself: there is nothing to reissue when the Bitcoin block arrives."
@@ -268,75 +271,86 @@ msgstr ""
 "Documento del resumen emitido. Su QR apunta a la página de anclaje, que se "
 "actualiza sola: no hay nada que reemitir cuando llegue el bloque de Bitcoin."
 
-#: apps.py:8
+#: apps/project/specific/internal/code_gen/apps.py:8
 msgid "Code generation and document certification"
 msgstr "Generación de códigos y certificación documental"
 
-#: forms.py:23
+#: apps/project/specific/internal/code_gen/forms.py:23
 msgid "Public verification URL (requires certifying a document)"
 msgstr "URL pública de verificación (requiere certificar un documento)"
 
-#: forms.py:25
+#: apps/project/specific/internal/code_gen/forms.py:25
 msgid "The generated code itself"
 msgstr "El propio código generado"
 
-#: forms.py:26
+#: apps/project/specific/internal/code_gen/forms.py:26
 msgid "A custom URL or text"
 msgstr "Una URL o un texto personalizado"
 
-#: forms.py:43 models.py:320
+#: apps/project/specific/internal/code_gen/forms.py:37
+msgid "The code composed below (Code segments)"
+msgstr "El código compuesto abajo (Segmentos del código)"
+
+#: apps/project/specific/internal/code_gen/forms.py:38
+msgid "A custom text"
+msgstr "Un texto personalizado"
+
+#: apps/project/specific/internal/code_gen/forms.py:61
+#: apps/project/specific/internal/code_gen/models.py:336
 msgid "Reference"
 msgstr "Referencia"
 
-#: forms.py:48
+#: apps/project/specific/internal/code_gen/forms.py:66
 msgid "e.g. AEGIS Special Edition"
 msgstr "p. ej. AEGIS Special Edition"
 
-#: forms.py:54 models.py:105 models.py:325
+#: apps/project/specific/internal/code_gen/forms.py:72
+#: apps/project/specific/internal/code_gen/models.py:121
+#: apps/project/specific/internal/code_gen/models.py:341
 msgid "Description"
 msgstr "Descripción"
 
-#: forms.py:60
+#: apps/project/specific/internal/code_gen/forms.py:78
 msgid "Internal notes about this code"
 msgstr "Notas internas sobre este código"
 
-#: forms.py:66
+#: apps/project/specific/internal/code_gen/forms.py:84
 msgid "Custom text"
 msgstr "Texto personalizado"
 
-#: forms.py:72
+#: apps/project/specific/internal/code_gen/forms.py:90
 msgid "Free text added to the code"
 msgstr "Texto libre que se añade al código"
 
-#: forms.py:81
+#: apps/project/specific/internal/code_gen/forms.py:99
 msgid "NIT"
 msgstr "NIT"
 
-#: forms.py:84
+#: apps/project/specific/internal/code_gen/forms.py:102
 msgid "Adds the tax ID of the firm at the beginning."
 msgstr "Añade el NIT de la firma al principio."
 
-#: forms.py:88
+#: apps/project/specific/internal/code_gen/forms.py:106
 msgid "Certificate initials + autonomous sequence"
 msgstr "Iniciales del certificado + secuencia autónoma"
 
-#: forms.py:92
+#: apps/project/specific/internal/code_gen/forms.py:110
 msgid "Non-consecutive and non-repeating sequence, reserved by the platform."
 msgstr "Secuencia no consecutiva y no repetida, reservada por la plataforma."
 
-#: forms.py:98
+#: apps/project/specific/internal/code_gen/forms.py:116
 msgid "Initials"
 msgstr "Iniciales"
 
-#: forms.py:104
+#: apps/project/specific/internal/code_gen/forms.py:122
 msgid "Derived from the reference if left empty"
 msgstr "Se deriva de la referencia si se deja vacío"
 
-#: forms.py:110
+#: apps/project/specific/internal/code_gen/forms.py:128
 msgid "Document hash"
 msgstr "Hash del documento"
 
-#: forms.py:113
+#: apps/project/specific/internal/code_gen/forms.py:131
 msgid ""
 "Requires uploading the document. The code carries the base64 fingerprint of "
 "the original file."
@@ -344,27 +358,28 @@ msgstr ""
 "Requiere subir el documento. El código lleva la huella en base64 del archivo "
 "original."
 
-#: forms.py:119
+#: apps/project/specific/internal/code_gen/forms.py:137
 msgid "Hash characters"
 msgstr "Caracteres del hash"
 
-#: forms.py:128
+#: apps/project/specific/internal/code_gen/forms.py:146
 msgid "Date (DDMMYYYY)"
 msgstr "Fecha (DDMMAAAA)"
 
-#: forms.py:134 models.py:359
+#: apps/project/specific/internal/code_gen/forms.py:152
+#: apps/project/specific/internal/code_gen/models.py:375
 msgid "Unique random code"
 msgstr "Código único aleatorio"
 
-#: forms.py:140
+#: apps/project/specific/internal/code_gen/forms.py:158
 msgid "Random code length"
 msgstr "Longitud del código aleatorio"
 
-#: forms.py:152
+#: apps/project/specific/internal/code_gen/forms.py:170
 msgid "Generate barcode (Code128)"
 msgstr "Generar código de barras (Code128)"
 
-#: forms.py:156
+#: apps/project/specific/internal/code_gen/forms.py:174
 msgid ""
 "Only letters, digits, spaces and . _ - are allowed. URLs cannot be encoded "
 "in a barcode."
@@ -372,27 +387,60 @@ msgstr ""
 "Solo se admiten letras, dígitos, espacios y los símbolos . _ - . Las URLs no "
 "se pueden codificar en un código de barras."
 
-#: forms.py:162
+#: apps/project/specific/internal/code_gen/forms.py:180
+msgid "Barcode content"
+msgstr "Contenido del código de barras"
+
+#: apps/project/specific/internal/code_gen/forms.py:188
+msgid "Custom barcode text"
+msgstr "Texto personalizado del código de barras"
+
+#: apps/project/specific/internal/code_gen/forms.py:194
+msgid "Text to encode, without segments"
+msgstr "Texto a codificar, sin segmentos"
+
+#: apps/project/specific/internal/code_gen/forms.py:200
 msgid "Generate QR code"
 msgstr "Generar código QR"
 
-#: forms.py:168
+#: apps/project/specific/internal/code_gen/forms.py:206
 msgid "QR content"
 msgstr "Contenido del QR"
 
-#: forms.py:176
+#: apps/project/specific/internal/code_gen/forms.py:214
 msgid "Custom QR content"
 msgstr "Contenido personalizado del QR"
 
-#: forms.py:191
+#: apps/project/specific/internal/code_gen/forms.py:229
+#: apps/project/specific/internal/code_gen/models.py:414
+msgid "QR logo"
+msgstr "Logo del QR"
+
+#: apps/project/specific/internal/code_gen/forms.py:235
+msgid ""
+"The institutional favicon is embedded in the center of every QR by default. "
+"It can be removed or swapped for another image."
+msgstr ""
+"El favicon institucional se incrusta por defecto en el centro de todo QR. "
+"Se puede apagar o cambiar por otra imagen."
+
+#: apps/project/specific/internal/code_gen/forms.py:241
+msgid "Custom logo image"
+msgstr "Imagen de logo personalizada"
+
+#: apps/project/specific/internal/code_gen/forms.py:244
+msgid "Used only with \"Custom image\" above."
+msgstr "Solo se usa con «Imagen personalizada» de arriba."
+
+#: apps/project/specific/internal/code_gen/forms.py:251
 msgid "Original document (without codes)"
 msgstr "Documento original (sin códigos)"
 
-#: forms.py:205
+#: apps/project/specific/internal/code_gen/forms.py:265
 msgid "Certify this document"
 msgstr "Certificar este documento"
 
-#: forms.py:208
+#: apps/project/specific/internal/code_gen/forms.py:268
 msgid ""
 "Embeds the codes in the PDF, computes its fingerprints and issues the "
 "distributable digital copy."
@@ -400,19 +448,19 @@ msgstr ""
 "Incrusta los códigos en el PDF, calcula sus huellas y emite la copia digital "
 "distribuible."
 
-#: forms.py:214
+#: apps/project/specific/internal/code_gen/forms.py:274
 msgid "Document title"
 msgstr "Título del documento"
 
-#: forms.py:221
+#: apps/project/specific/internal/code_gen/forms.py:281
 msgid "Certificate type"
 msgstr "Tipo de Certificado"
 
-#: forms.py:233
+#: apps/project/specific/internal/code_gen/forms.py:293
 msgid "Issued for (holders)"
 msgstr "Se emite para (titulares)"
 
-#: forms.py:241
+#: apps/project/specific/internal/code_gen/forms.py:301
 msgid ""
 "The users this certificate is for. They will see it in their own history, "
 "read-only."
@@ -420,28 +468,28 @@ msgstr ""
 "Los usuarios para los que es este certificado. Lo verán en su propio "
 "histórico, en solo lectura."
 
-#: forms.py:247
+#: apps/project/specific/internal/code_gen/forms.py:307
 msgid "Stamp layout"
 msgstr "Disposición de los códigos"
 
-#: forms.py:250
+#: apps/project/specific/internal/code_gen/forms.py:310
 msgid "Default layout"
 msgstr "Disposición por defecto"
 
-#: forms.py:255
+#: apps/project/specific/internal/code_gen/forms.py:315
 msgid "Issued at"
 msgstr "Emitido en"
 
-#: forms.py:263
+#: apps/project/specific/internal/code_gen/forms.py:323
 msgid "Expires at"
 msgstr "Vence en"
 
-#: forms.py:284
+#: apps/project/specific/internal/code_gen/forms.py:344
 #, python-format
 msgid "Accepted formats: %(formats)s."
 msgstr "Formatos aceptados: %(formats)s."
 
-#: forms.py:301
+#: apps/project/specific/internal/code_gen/forms.py:361
 msgid ""
 "What kind of document this is. It is shown on the public verification page, "
 "under the document title. Use \"Asset Certificate (AEGIS)\" for the "
@@ -452,33 +500,46 @@ msgstr ""
 "debajo del título. Usa «Certificado de activo (AEGIS)» para los certificados "
 "de un resumen de activos, y «Documento genérico» para todo lo demás."
 
-#: forms.py:320 services/certification.py:203
+#: apps/project/specific/internal/code_gen/forms.py:380
+#: apps/project/specific/internal/code_gen/services/certification.py:203
 #, python-format
 msgid "Only these formats can be certified: %(formats)s."
 msgstr "Solo se pueden certificar estos formatos: %(formats)s."
 
-#: forms.py:326
+#: apps/project/specific/internal/code_gen/forms.py:386
 #, python-format
 msgid "The file is too large. The maximum is %(size)s MB."
 msgstr "El archivo es demasiado grande. El máximo son %(size)s MB."
 
-#: forms.py:340
+#: apps/project/specific/internal/code_gen/forms.py:400
 msgid "Upload the document to include its hash in the code."
 msgstr "Sube el documento para incluir su hash en el código."
 
-#: forms.py:347
+#: apps/project/specific/internal/code_gen/forms.py:407
 msgid "Upload the document you want to certify."
 msgstr "Sube el documento que quieres certificar."
 
-#: forms.py:358
+#: apps/project/specific/internal/code_gen/forms.py:418
 msgid "Select at least one symbol to generate: barcode or QR."
 msgstr "Selecciona al menos un símbolo a generar: código de barras o QR."
 
-#: forms.py:367
+#: apps/project/specific/internal/code_gen/forms.py:436
+msgid ""
+"A certified document always carries the composed code (Code segments), not a "
+"custom barcode text."
+msgstr ""
+"Un documento certificado siempre lleva el código compuesto (Segmentos del "
+"código), no un texto personalizado en el código de barras."
+
+#: apps/project/specific/internal/code_gen/forms.py:443
+msgid "Enter the text to encode in the barcode."
+msgstr "Introduce el texto a codificar en el código de barras."
+
+#: apps/project/specific/internal/code_gen/forms.py:452
 msgid "Enter the content for the QR code."
 msgstr "Introduce el contenido del código QR."
 
-#: forms.py:374
+#: apps/project/specific/internal/code_gen/forms.py:459
 msgid ""
 "The public verification URL only exists once the document is certified. "
 "Certify the document or choose another QR content."
@@ -486,19 +547,23 @@ msgstr ""
 "La URL pública de verificación solo existe una vez certificado el documento. "
 "Certifica el documento o elige otro contenido para el QR."
 
-#: forms.py:500
+#: apps/project/specific/internal/code_gen/forms.py:470
+msgid "Upload the image to use as the QR logo."
+msgstr "Sube la imagen que se usará como logo del QR."
+
+#: apps/project/specific/internal/code_gen/forms.py:593
 msgid "— none —"
 msgstr "— ninguno —"
 
-#: forms.py:506
+#: apps/project/specific/internal/code_gen/forms.py:599
 msgid "Search asset…"
 msgstr "Buscar activo…"
 
-#: forms.py:507
+#: apps/project/specific/internal/code_gen/forms.py:600
 msgid "No asset matches."
 msgstr "Ningún activo coincide."
 
-#: forms.py:511
+#: apps/project/specific/internal/code_gen/forms.py:604
 msgid ""
 "How this summary is identified internally, e.g. \"AEGIS summary - Zimbabwe "
 "gold micro-ingots\"."
@@ -506,7 +571,7 @@ msgstr ""
 "Cómo se identifica este resumen internamente, p. ej. «Resumen AEGIS - "
 "microlingotes de oro de Zimbabue»."
 
-#: forms.py:515
+#: apps/project/specific/internal/code_gen/forms.py:608
 msgid ""
 "Optional. Readable name printed on the summary. The binding is made through "
 "the asset UUID, never through this text."
@@ -514,107 +579,119 @@ msgstr ""
 "Opcional. Nombre legible que se imprime en el resumen. El vínculo se hace "
 "por el UUID del activo, nunca por este texto."
 
-#: forms.py:519
+#: apps/project/specific/internal/code_gen/forms.py:612
 msgid "Issue date printed on the summary document."
 msgstr "Fecha de emisión que se imprime en el documento resumen."
 
-#: models.py:16
+#: apps/project/specific/internal/code_gen/models.py:16
 msgid "Barcode (Code128)"
 msgstr "Código de barras (Code128)"
 
-#: models.py:17
+#: apps/project/specific/internal/code_gen/models.py:17
 msgid "QR code"
 msgstr "Código QR"
 
-#: models.py:20
+#: apps/project/specific/internal/code_gen/models.py:20
 msgid "Member barcode (summary only)"
 msgstr "Código de barras de un miembro (solo resumen)"
 
-#: models.py:22
+#: apps/project/specific/internal/code_gen/models.py:22
 msgid "Anchor QR (summary only)"
 msgstr "QR del anclaje (solo resumen)"
 
-#: models.py:26
+#: apps/project/specific/internal/code_gen/models.py:26
 msgid "First page"
 msgstr "Primera página"
 
-#: models.py:27
+#: apps/project/specific/internal/code_gen/models.py:27
 msgid "Last page"
 msgstr "Última página"
 
-#: models.py:28
+#: apps/project/specific/internal/code_gen/models.py:28
 msgid "Every page"
 msgstr "Todas las páginas"
 
-#: models.py:29
+#: apps/project/specific/internal/code_gen/models.py:29
 msgid "Specific pages"
 msgstr "Páginas concretas"
 
-#: models.py:33
+#: apps/project/specific/internal/code_gen/models.py:33
 msgid "Bottom left"
 msgstr "Inferior izquierda"
 
-#: models.py:34
+#: apps/project/specific/internal/code_gen/models.py:34
 msgid "Bottom center"
 msgstr "Inferior centro"
 
-#: models.py:35
+#: apps/project/specific/internal/code_gen/models.py:35
 msgid "Bottom right"
 msgstr "Inferior derecha"
 
-#: models.py:36
+#: apps/project/specific/internal/code_gen/models.py:36
 msgid "Top left"
 msgstr "Superior izquierda"
 
-#: models.py:37
+#: apps/project/specific/internal/code_gen/models.py:37
 msgid "Top center"
 msgstr "Superior centro"
 
-#: models.py:38
+#: apps/project/specific/internal/code_gen/models.py:38
 msgid "Top right"
 msgstr "Superior derecha"
 
-#: models.py:51
+#: apps/project/specific/internal/code_gen/models.py:52
+msgid "GEA institutional logo (default)"
+msgstr "Logo institucional de GEA (por defecto)"
+
+#: apps/project/specific/internal/code_gen/models.py:53
+msgid "No logo"
+msgstr "Sin logo"
+
+#: apps/project/specific/internal/code_gen/models.py:54
+msgid "Custom image"
+msgstr "Imagen personalizada"
+
+#: apps/project/specific/internal/code_gen/models.py:67
 msgid "Sequence name"
 msgstr "Nombre de la secuencia"
 
-#: models.py:58
+#: apps/project/specific/internal/code_gen/models.py:74
 msgid "Internal counter"
 msgstr "Contador interno"
 
-#: models.py:88
+#: apps/project/specific/internal/code_gen/models.py:104
 msgid "Code Sequence"
 msgstr "Secuencia de códigos"
 
-#: models.py:89
+#: apps/project/specific/internal/code_gen/models.py:105
 msgid "Code Sequences"
 msgstr "Secuencias de códigos"
 
-#: models.py:99
+#: apps/project/specific/internal/code_gen/models.py:115
 msgid "Layout name"
 msgstr "Nombre de la disposición"
 
-#: models.py:111
+#: apps/project/specific/internal/code_gen/models.py:127
 msgid "Use as default layout"
 msgstr "Usar como disposición por defecto"
 
-#: models.py:165
+#: apps/project/specific/internal/code_gen/models.py:181
 msgid "Stamp Layout"
 msgstr "Disposición de estampado"
 
-#: models.py:166
+#: apps/project/specific/internal/code_gen/models.py:182
 msgid "Stamp Layouts"
 msgstr "Disposiciones de estampado"
 
-#: models.py:185
+#: apps/project/specific/internal/code_gen/models.py:201
 msgid "Code kind"
 msgstr "Tipo de código"
 
-#: models.py:192
+#: apps/project/specific/internal/code_gen/models.py:208
 msgid "Member code"
 msgstr "Código del miembro"
 
-#: models.py:197
+#: apps/project/specific/internal/code_gen/models.py:213
 msgid ""
 "Only for the member barcode: which document of the summary this position "
 "carries (AEGIS-1, AEGIS-2…)."
@@ -622,221 +699,229 @@ msgstr ""
 "Solo para el código de barras de miembro: qué documento del resumen lleva "
 "esta posición (AEGIS-1, AEGIS-2…)."
 
-#: models.py:203
+#: apps/project/specific/internal/code_gen/models.py:219
 msgid "Pages"
 msgstr "Páginas"
 
-#: models.py:210
+#: apps/project/specific/internal/code_gen/models.py:226
 msgid "Page numbers"
 msgstr "Números de página"
 
-#: models.py:215
+#: apps/project/specific/internal/code_gen/models.py:231
 msgid "Comma separated, 1-based. Only used with the specific pages selector."
 msgstr ""
 "Separados por comas, empezando en 1. Solo se usa con el selector de páginas "
 "concretas."
 
-#: models.py:220
+#: apps/project/specific/internal/code_gen/models.py:236
 msgid "Anchor"
 msgstr "Anclaje"
 
-#: models.py:227
+#: apps/project/specific/internal/code_gen/models.py:243
 msgid "Horizontal offset (pt)"
 msgstr "Desplazamiento horizontal (pt)"
 
-#: models.py:232
+#: apps/project/specific/internal/code_gen/models.py:248
 msgid "Vertical offset (pt)"
 msgstr "Desplazamiento vertical (pt)"
 
-#: models.py:237
+#: apps/project/specific/internal/code_gen/models.py:253
 msgid "Width (pt)"
 msgstr "Ancho (pt)"
 
-#: models.py:243
+#: apps/project/specific/internal/code_gen/models.py:259
 msgid "Height (pt)"
 msgstr "Alto (pt)"
 
-#: models.py:249
+#: apps/project/specific/internal/code_gen/models.py:265
 msgid "Opacity"
 msgstr "Opacidad"
 
-#: models.py:258
+#: apps/project/specific/internal/code_gen/models.py:274
 msgid "A member barcode needs to say which document of the summary it carries."
 msgstr ""
 "Un código de barras de miembro tiene que indicar qué documento del resumen "
 "lleva."
 
-#: models.py:264
+#: apps/project/specific/internal/code_gen/models.py:280
 msgid "Provide at least one page number for this selector."
 msgstr "Indica al menos un número de página para este selector."
 
-#: models.py:274
+#: apps/project/specific/internal/code_gen/models.py:290
 msgid "Page numbers must be positive integers separated by commas."
 msgstr "Los números de página deben ser enteros positivos separados por comas."
 
-#: models.py:279
+#: apps/project/specific/internal/code_gen/models.py:295
 msgid "Opacity must be greater than 0 and up to 1."
 msgstr "La opacidad debe ser mayor que 0 y como máximo 1."
 
-#: models.py:309
+#: apps/project/specific/internal/code_gen/models.py:325
 msgid "Stamp Placement"
 msgstr "Posición de estampado"
 
-#: models.py:310
+#: apps/project/specific/internal/code_gen/models.py:326
 msgid "Stamp Placements"
 msgstr "Posiciones de estampado"
 
-#: models.py:331
+#: apps/project/specific/internal/code_gen/models.py:347
 msgid "Custom Text Input"
 msgstr "Entrada de Texto Personalizado"
 
-#: models.py:338
+#: apps/project/specific/internal/code_gen/models.py:354
 msgid "Code Information"
 msgstr "Información del Código"
 
-#: models.py:344
+#: apps/project/specific/internal/code_gen/models.py:360
 msgid "Certificate initials"
 msgstr "Iniciales del certificado"
 
-#: models.py:351
+#: apps/project/specific/internal/code_gen/models.py:367
 msgid "Autonomous sequence"
 msgstr "Secuencia autónoma"
 
-#: models.py:367
+#: apps/project/specific/internal/code_gen/models.py:383
 msgid "Source file hash (SHA-256)"
 msgstr "Hash del archivo original (SHA-256)"
 
-#: models.py:375
+#: apps/project/specific/internal/code_gen/models.py:391
 msgid "Hash fragment (base64)"
 msgstr "Fragmento del hash (base64)"
 
-#: models.py:382
+#: apps/project/specific/internal/code_gen/models.py:398
 msgid "Barcode generated"
 msgstr "Código de barras generado"
 
-#: models.py:387
+#: apps/project/specific/internal/code_gen/models.py:403
 msgid "QR generated"
 msgstr "QR generado"
 
-#: models.py:392
+#: apps/project/specific/internal/code_gen/models.py:408
 msgid "QR payload"
 msgstr "Contenido del QR"
 
-#: models.py:400
+#: apps/project/specific/internal/code_gen/models.py:421
+msgid "Custom QR logo image"
+msgstr "Imagen personalizada del logo del QR"
+
+#: apps/project/specific/internal/code_gen/models.py:425
+msgid "Only used when the QR logo is set to \"Custom image\"."
+msgstr "Solo se usa cuando el logo del QR es «Imagen personalizada»."
+
+#: apps/project/specific/internal/code_gen/models.py:431
 msgid "Certified document"
 msgstr "Documento certificado"
 
-#: models.py:405
+#: apps/project/specific/internal/code_gen/models.py:436
 msgid "Set when the code was issued as part of certifying a document."
 msgstr "Se rellena cuando el código se emitió al certificar un documento."
 
-#: models.py:433
+#: apps/project/specific/internal/code_gen/models.py:486
 msgid "Code Registration"
 msgstr "Registro de Código"
 
-#: models.py:434
+#: apps/project/specific/internal/code_gen/models.py:487
 msgid "Code Registrations"
 msgstr "Registros de Códigos"
 
-#: models.py:438
+#: apps/project/specific/internal/code_gen/models.py:491
 msgid "Timestamp authority (RFC 3161)"
 msgstr "Autoridad de sellado de tiempo (RFC 3161)"
 
-#: models.py:439
+#: apps/project/specific/internal/code_gen/models.py:492
 msgid "OpenTimestamps (Bitcoin)"
 msgstr "OpenTimestamps (Bitcoin)"
 
-#: models.py:443
+#: apps/project/specific/internal/code_gen/models.py:496
 msgid "Pending confirmation"
 msgstr "Pendiente de confirmación"
 
-#: models.py:444
+#: apps/project/specific/internal/code_gen/models.py:497
 msgid "Confirmed"
 msgstr "Confirmado"
 
-#: models.py:445
+#: apps/project/specific/internal/code_gen/models.py:498
 msgid "Failed"
 msgstr "Fallido"
 
-#: models.py:466
+#: apps/project/specific/internal/code_gen/models.py:519
 msgid "Summary"
 msgstr "Resumen"
 
-#: models.py:470
+#: apps/project/specific/internal/code_gen/models.py:523
 msgid "Anchor type"
 msgstr "Tipo de anclaje"
 
-#: models.py:476
+#: apps/project/specific/internal/code_gen/models.py:529
 msgid "Anchored hash"
 msgstr "Hash anclado"
 
-#: models.py:479
+#: apps/project/specific/internal/code_gen/models.py:532
 msgid "The master hash at the moment it was anchored."
 msgstr "El master hash en el momento en que se ancló."
 
-#: models.py:491
+#: apps/project/specific/internal/code_gen/models.py:544
 msgid "Proof"
 msgstr "Prueba"
 
-#: models.py:494
+#: apps/project/specific/internal/code_gen/models.py:547
 msgid "DER timestamp token, or the .ots proof file."
 msgstr "Token de sello de tiempo en DER, o el archivo de prueba .ots."
 
-#: models.py:498
+#: apps/project/specific/internal/code_gen/models.py:551
 msgid "Provider"
 msgstr "Proveedor"
 
-#: models.py:505
+#: apps/project/specific/internal/code_gen/models.py:558
 msgid "Attested time"
 msgstr "Hora acreditada"
 
-#: models.py:508
+#: apps/project/specific/internal/code_gen/models.py:561
 msgid "The time the anchor itself attests, not our clock."
 msgstr "La hora que acredita el propio anclaje, no nuestro reloj."
 
-#: models.py:512
+#: apps/project/specific/internal/code_gen/models.py:565
 msgid "Serial"
 msgstr "Número de serie"
 
-#: models.py:519
+#: apps/project/specific/internal/code_gen/models.py:572
 msgid "Detail"
 msgstr "Detalle"
 
-#: models.py:548
+#: apps/project/specific/internal/code_gen/models.py:601
 msgid "Certification anchor"
 msgstr "Anclaje de certificación"
 
-#: models.py:549
+#: apps/project/specific/internal/code_gen/models.py:602
 msgid "Certification anchors"
 msgstr "Anclajes de certificación"
 
-#: preview.py:26
+#: apps/project/specific/internal/code_gen/preview.py:26
 msgid "Page size"
 msgstr "Tamaño de página"
 
-#: preview.py:27
+#: apps/project/specific/internal/code_gen/preview.py:27
 msgid "Drag a box to move it; the offsets update as you go."
 msgstr ""
 "Arrastra un resumen para moverla; los desplazamientos se actualizan sobre la "
 "marcha."
 
-#: preview.py:28
+#: apps/project/specific/internal/code_gen/preview.py:28
 msgid "Rendering the document…"
 msgstr "Dibujando el documento…"
 
-#: preview.py:30
+#: apps/project/specific/internal/code_gen/preview.py:30
 msgid "The document could not be rendered; the placements still work."
 msgstr "No se pudo dibujar el documento; las posiciones siguen funcionando."
 
-#: preview.py:32
+#: apps/project/specific/internal/code_gen/preview.py:32
 msgid "No placements yet. Add one to see it here."
 msgstr "Todavía no hay posiciones. Añade una para verla aquí."
 
-#: preview.py:33
+#: apps/project/specific/internal/code_gen/preview.py:33
 msgid "This placement falls outside the page."
 msgstr "Esta posición queda fuera de la página."
 
-#: preview.py:35
+#: apps/project/specific/internal/code_gen/preview.py:35
 msgid ""
 "Drag a corner to resize keeping the proportion, or an edge to change only "
 "the width or the height."
@@ -844,7 +929,7 @@ msgstr ""
 "Arrastra una esquina para redimensionar conservando la proporción, o un lado "
 "para cambiar solo el ancho o el alto."
 
-#: preview.py:39
+#: apps/project/specific/internal/code_gen/preview.py:39
 #, python-format
 msgid ""
 "The symbol keeps its proportion, so it uses %(w)s x %(h)s pt of the %(bw)s x "
@@ -853,15 +938,15 @@ msgstr ""
 "El símbolo conserva su proporción, así que ocupa %(w)s x %(h)s pt del "
 "resumen de %(bw)s x %(bh)s pt."
 
-#: preview.py:42
+#: apps/project/specific/internal/code_gen/preview.py:42
 msgid "The symbol fills the box exactly."
 msgstr "El símbolo llena el resumen exactamente."
 
-#: preview.py:43
+#: apps/project/specific/internal/code_gen/preview.py:43
 msgid "Sample characters"
 msgstr "Caracteres de muestra"
 
-#: preview.py:45
+#: apps/project/specific/internal/code_gen/preview.py:45
 msgid ""
 "Number of characters in the sample barcode. The more characters, the wider "
 "the symbol gets."
@@ -869,24 +954,25 @@ msgstr ""
 "Número de caracteres del código de barras de muestra. Cuantos más "
 "caracteres, más ancho sale el símbolo."
 
-#: services/anchoring.py:65 services/anchoring.py:100
+#: apps/project/specific/internal/code_gen/services/anchoring.py:65
+#: apps/project/specific/internal/code_gen/services/anchoring.py:100
 msgid "Seal the summary before anchoring it."
 msgstr "Sella el resumen antes de anclarlo."
 
-#: services/anchoring.py:81
+#: apps/project/specific/internal/code_gen/services/anchoring.py:81
 #, python-format
 msgid "Policy %(policy)s"
 msgstr "Política %(policy)s"
 
-#: services/anchoring.py:111
+#: apps/project/specific/internal/code_gen/services/anchoring.py:111
 msgid "Waiting for inclusion in a Bitcoin block."
 msgstr "Esperando a entrar en un bloque de Bitcoin."
 
-#: services/anchoring.py:284
+#: apps/project/specific/internal/code_gen/services/anchoring.py:284
 msgid "This anchor type cannot be verified by the platform yet."
 msgstr "La plataforma todavía no puede verificar este tipo de anclaje."
 
-#: services/anchoring.py:289
+#: apps/project/specific/internal/code_gen/services/anchoring.py:289
 msgid ""
 "The anchor is valid, but it covers an earlier master hash: the summary was "
 "re-sealed after being anchored."
@@ -894,24 +980,24 @@ msgstr ""
 "El anclaje es válido, pero cubre un master hash anterior: el resumen se "
 "volvió a sellar después de anclarlo."
 
-#: services/certification.py:195
+#: apps/project/specific/internal/code_gen/services/certification.py:195
 msgid "Upload the original document (without codes) first."
 msgstr "Sube primero el documento original (sin códigos)."
 
-#: services/certification.py:212
+#: apps/project/specific/internal/code_gen/services/certification.py:212
 msgid "The uploaded file is not a readable PDF."
 msgstr "El archivo subido no es un PDF legible."
 
-#: services/certification.py:378
+#: apps/project/specific/internal/code_gen/services/certification.py:396
 #, python-format
 msgid "Automatic certification of document %(pk)s"
 msgstr "Certificación automática del documento %(pk)s"
 
-#: services/codes.py:77
+#: apps/project/specific/internal/code_gen/services/codes.py:77
 msgid "The barcode text cannot be empty."
 msgstr "El texto del código de barras no puede estar vacío."
 
-#: services/codes.py:83
+#: apps/project/specific/internal/code_gen/services/codes.py:83
 msgid ""
 "URLs and resource schemes (\":\", \"://\") cannot be encoded in a barcode. "
 "Use the QR code for links."
@@ -919,7 +1005,7 @@ msgstr ""
 "Las URLs y los esquemas de recurso (\":\", \"://\") no se pueden codificar "
 "en un código de barras. Usa el código QR para los enlaces."
 
-#: services/codes.py:91
+#: apps/project/specific/internal/code_gen/services/codes.py:91
 #, python-format
 msgid ""
 "The sequence \"%(token)s\" is not allowed in a barcode. Use the QR code "
@@ -928,7 +1014,7 @@ msgstr ""
 "La secuencia \"%(token)s\" no está permitida en un código de barras. Usa el "
 "código QR en su lugar."
 
-#: services/codes.py:98
+#: apps/project/specific/internal/code_gen/services/codes.py:98
 #, python-format
 msgid ""
 "These characters are not allowed in a barcode: %(chars)s. Use the QR code "
@@ -937,14 +1023,14 @@ msgstr ""
 "Estos caracteres no están permitidos en un código de barras: %(chars)s. Usa "
 "el código QR en su lugar."
 
-#: services/codes.py:104
+#: apps/project/specific/internal/code_gen/services/codes.py:104
 msgid ""
 "Only letters, digits, spaces and the symbols . _ - are allowed in a barcode."
 msgstr ""
 "En un código de barras solo se admiten letras, dígitos, espacios y los "
 "símbolos . _ - ."
 
-#: services/codes.py:110
+#: apps/project/specific/internal/code_gen/services/codes.py:110
 #, python-format
 msgid ""
 "The barcode text is too long (%(length)s characters). The maximum is "
@@ -953,7 +1039,7 @@ msgstr ""
 "El texto del código de barras es demasiado largo (%(length)s caracteres). El "
 "máximo es %(maximum)s."
 
-#: services/codes.py:124
+#: apps/project/specific/internal/code_gen/services/codes.py:124
 #, python-format
 msgid ""
 "The barcode has %(length)s characters; above %(maximum)s the symbol becomes "
@@ -962,36 +1048,36 @@ msgstr ""
 "El código de barras tiene %(length)s caracteres; por encima de %(maximum)s "
 "el símbolo queda muy ancho y cuesta más escanearlo impreso."
 
-#: services/codes.py:157
+#: apps/project/specific/internal/code_gen/services/codes.py:157
 msgid "Could not generate a unique code. Try again."
 msgstr "No se pudo generar un código único. Inténtalo de nuevo."
 
-#: services/master.py:67
+#: apps/project/specific/internal/code_gen/services/master.py:67
 msgid "The summary has no member documents."
 msgstr "El resumen no tiene documentos miembros."
 
-#: services/master.py:78
+#: apps/project/specific/internal/code_gen/services/master.py:78
 #, python-format
 msgid "%(code)s is not certified yet."
 msgstr "%(code)s todavía no está certificado."
 
-#: services/master.py:86
+#: apps/project/specific/internal/code_gen/services/master.py:86
 #, python-format
 msgid "%(code)s has no certified fingerprint."
 msgstr "%(code)s no tiene huella certificada."
 
-#: services/master.py:190
+#: apps/project/specific/internal/code_gen/services/master.py:190
 msgid "The summary has not been sealed yet."
 msgstr "El resumen todavía no se ha sellado."
 
-#: services/master.py:210
+#: apps/project/specific/internal/code_gen/services/master.py:210
 msgid ""
 "The stored hash does not match the stored payload: the record is corrupt."
 msgstr ""
 "El hash guardado no corresponde al payload guardado: el registro está "
 "corrupto."
 
-#: services/master.py:215
+#: apps/project/specific/internal/code_gen/services/master.py:215
 msgid ""
 "The summary changed after it was sealed: its members no longer match the "
 "sealed payload."
@@ -999,40 +1085,43 @@ msgstr ""
 "El resumen cambió después de sellarse: sus miembros ya no coinciden con el "
 "payload sellado."
 
-#: services/master.py:219
+#: apps/project/specific/internal/code_gen/services/master.py:219
 msgid "The master hash is consistent."
 msgstr "El master hash es consistente."
 
-#: services/ots.py:114 services/tsa.py:93
+#: apps/project/specific/internal/code_gen/services/ots.py:114
+#: apps/project/specific/internal/code_gen/services/tsa.py:93
 msgid "The hash is not valid hexadecimal."
 msgstr "El hash no es hexadecimal válido."
 
-#: services/ots.py:117 services/tsa.py:96
+#: apps/project/specific/internal/code_gen/services/ots.py:117
+#: apps/project/specific/internal/code_gen/services/tsa.py:96
 msgid "Only SHA-256 digests are supported."
 msgstr "Solo se admiten digests SHA-256."
 
-#: services/ots.py:135
+#: apps/project/specific/internal/code_gen/services/ots.py:135
 msgid "No OpenTimestamps calendar could be reached."
 msgstr "No se pudo contactar con ningún calendario de OpenTimestamps."
 
-#: services/ots.py:176
+#: apps/project/specific/internal/code_gen/services/ots.py:176
 msgid "There is no OpenTimestamps proof stored."
 msgstr "No hay ninguna prueba de OpenTimestamps almacenada."
 
-#: services/ots.py:182 services/ots.py:235
+#: apps/project/specific/internal/code_gen/services/ots.py:182
+#: apps/project/specific/internal/code_gen/services/ots.py:235
 msgid "The proof file could not be read."
 msgstr "No se pudo leer el archivo de prueba."
 
-#: services/ots.py:187
+#: apps/project/specific/internal/code_gen/services/ots.py:187
 msgid "The proof covers a different hash: it does not attest this summary."
 msgstr "La prueba cubre un hash distinto: no acredita este resumen."
 
-#: services/ots.py:209
+#: apps/project/specific/internal/code_gen/services/ots.py:209
 #, python-format
 msgid "Committed to Bitcoin block %(block)s."
 msgstr "Comprometido en el bloque de Bitcoin %(block)s."
 
-#: services/ots.py:214
+#: apps/project/specific/internal/code_gen/services/ots.py:214
 msgid ""
 "The commitment is made; waiting for it to be included in a Bitcoin block "
 "(usually a few hours)."
@@ -1040,89 +1129,90 @@ msgstr ""
 "El compromiso ya está hecho; falta que entre en un bloque de Bitcoin "
 "(normalmente unas horas)."
 
-#: services/samples.py:141
+#: apps/project/specific/internal/code_gen/services/samples.py:141
 msgid "Sample QR pointing to the platform."
 msgstr "QR de muestra que apunta a la plataforma."
 
-#: services/samples.py:165
+#: apps/project/specific/internal/code_gen/services/samples.py:165
 #, python-format
 msgid "Sample payload of %(count)s characters."
 msgstr "Carga de muestra de %(count)s caracteres."
 
-#: services/samples.py:169
+#: apps/project/specific/internal/code_gen/services/samples.py:169
 msgid "Real code for this document."
 msgstr "Código real de este documento."
 
-#: services/summary.py:52 services/summary.py:206
+#: apps/project/specific/internal/code_gen/services/summary.py:52
+#: apps/project/specific/internal/code_gen/services/summary.py:206
 msgid "Seal the summary before issuing its document."
 msgstr "Sella el resumen antes de emitir su documento."
 
-#: services/tsa.py:65
+#: apps/project/specific/internal/code_gen/services/tsa.py:65
 msgid "The timestamp token has no readable TSTInfo."
 msgstr "El token de sello de tiempo no tiene un TSTInfo legible."
 
-#: services/tsa.py:132
+#: apps/project/specific/internal/code_gen/services/tsa.py:132
 msgid "The timestamp authority returned an unreadable response."
 msgstr "La autoridad de sellado devolvió una respuesta ilegible."
 
-#: services/tsa.py:149
+#: apps/project/specific/internal/code_gen/services/tsa.py:149
 #, python-format
 msgid ""
 "The timestamp authority refused the request (status %(status)s). %(reason)s"
 msgstr ""
 "La autoridad de sellado rechazó la petición (estado %(status)s). %(reason)s"
 
-#: services/tsa.py:163
+#: apps/project/specific/internal/code_gen/services/tsa.py:163
 msgid "The timestamp token could not be parsed."
 msgstr "No se pudo interpretar el token de sello de tiempo."
 
-#: services/tsa.py:172
+#: apps/project/specific/internal/code_gen/services/tsa.py:172
 msgid "The timestamp covers a different hash than the one sent."
 msgstr "El sello cubre un hash distinto del que se envió."
 
-#: services/tsa.py:207
+#: apps/project/specific/internal/code_gen/services/tsa.py:207
 msgid "No timestamp authority is configured (CERTIFICATION_TSA_URL)."
 msgstr ""
 "No hay ninguna autoridad de sellado configurada (CERTIFICATION_TSA_URL)."
 
-#: services/tsa.py:237
+#: apps/project/specific/internal/code_gen/services/tsa.py:237
 #, python-format
 msgid "Could not reach the timestamp authority: %(error)s"
 msgstr "No se pudo contactar con la autoridad de sellado: %(error)s"
 
-#: services/tsa.py:264
+#: apps/project/specific/internal/code_gen/services/tsa.py:264
 msgid "There is no timestamp token stored."
 msgstr "No hay ningún token de sello de tiempo almacenado."
 
-#: services/tsa.py:271
+#: apps/project/specific/internal/code_gen/services/tsa.py:271
 msgid "The stored token could not be parsed."
 msgstr "No se pudo interpretar el token almacenado."
 
-#: services/tsa.py:282
+#: apps/project/specific/internal/code_gen/services/tsa.py:282
 msgid "The token covers a different hash: it does not attest this summary."
 msgstr "El token cubre un hash distinto: no acredita este resumen."
 
-#: services/tsa.py:289
+#: apps/project/specific/internal/code_gen/services/tsa.py:289
 msgid "The token attests this hash existed at the time it states."
 msgstr "El token acredita que este hash existía en la hora que indica."
 
-#: services/usb_readiness.py:94
+#: apps/project/specific/internal/code_gen/services/usb_readiness.py:94
 msgid "not certified"
 msgstr "sin certificar"
 
-#: services/usb_readiness.py:98
+#: apps/project/specific/internal/code_gen/services/usb_readiness.py:98
 msgid "no public copy"
 msgstr "sin copia pública"
 
-#: services/usb_readiness.py:101
+#: apps/project/specific/internal/code_gen/services/usb_readiness.py:101
 msgid "its public copy is not on disk"
 msgstr "su copia pública no está en disco"
 
-#: services/usb_readiness.py:124
+#: apps/project/specific/internal/code_gen/services/usb_readiness.py:124
 msgid "It has no master hash yet: seal it first."
 msgstr "Todavía no tiene master hash: séllalo primero."
 
-#: services/usb_readiness.py:127
+#: apps/project/specific/internal/code_gen/services/usb_readiness.py:127
 msgid ""
 "The stored payload does not produce the stored hash. Do not export this: "
 "something rewrote one of the two."
@@ -1130,7 +1220,7 @@ msgstr ""
 "El payload guardado no produce el hash guardado. No exportes esto: algo "
 "reescribió uno de los dos."
 
-#: services/usb_readiness.py:132
+#: apps/project/specific/internal/code_gen/services/usb_readiness.py:132
 msgid ""
 "The sealed payload no longer describes the current members. Seal it again so "
 "the hash covers what the summary holds today."
@@ -1138,7 +1228,7 @@ msgstr ""
 "El payload sellado ya no describe a los miembros de ahora. Vuelve a sellarlo "
 "para que el hash cubra lo que el resumen lleva hoy."
 
-#: services/usb_readiness.py:150
+#: apps/project/specific/internal/code_gen/services/usb_readiness.py:150
 msgid ""
 "There is no certified PDF for the summary. Issue it: it is the paper that "
 "goes on the device."
@@ -1146,7 +1236,7 @@ msgstr ""
 "No hay PDF certificado del resumen. Emítelo: es el papel que va en el "
 "dispositivo."
 
-#: services/usb_readiness.py:155
+#: apps/project/specific/internal/code_gen/services/usb_readiness.py:155
 msgid ""
 "The summary PDF is certified, but its public copy is not on disk. Issue it "
 "again: what is not on disk cannot be copied."
@@ -1154,7 +1244,7 @@ msgstr ""
 "El PDF del resumen está certificado, pero su copia pública no está en disco. "
 "Vuelve a emitirlo: lo que no está en disco no se puede copiar."
 
-#: services/usb_readiness.py:176
+#: apps/project/specific/internal/code_gen/services/usb_readiness.py:176
 msgid ""
 "The OpenTimestamps proof is still pending: there is a commitment but no "
 "block yet. It matures on its own — the scheduled task upgrades it every 15 "
@@ -1164,74 +1254,74 @@ msgstr ""
 "bloque. Madura sola — la tarea programada la actualiza cada 15 minutos, y "
 "suele tardar unas horas."
 
-#: services/usb_readiness.py:182
+#: apps/project/specific/internal/code_gen/services/usb_readiness.py:182
 msgid ""
 "It has never been sent to OpenTimestamps. Send it from the anchoring page."
 msgstr ""
 "Nunca se ha enviado a OpenTimestamps. Mándalo desde la página de anclaje."
 
-#: services/usb_readiness.py:193
+#: apps/project/specific/internal/code_gen/services/usb_readiness.py:193
 #, python-format
 msgid "%(anchors)s failed anchor(s), and: %(members)s"
 msgstr "%(anchors)s anclaje(s) fallido(s), y: %(members)s"
 
-#: services/usb_readiness.py:196
+#: apps/project/specific/internal/code_gen/services/usb_readiness.py:196
 #, python-format
 msgid "%(anchors)s failed anchor(s)."
 msgstr "%(anchors)s anclaje(s) fallido(s)."
 
-#: services/usb_readiness.py:206
+#: apps/project/specific/internal/code_gen/services/usb_readiness.py:206
 msgid "Active"
 msgstr "Activo"
 
-#: services/usb_readiness.py:209
+#: apps/project/specific/internal/code_gen/services/usb_readiness.py:209
 msgid "The summary is withdrawn. A withdrawn summary is not handed out."
 msgstr "El resumen está retirado. Un resumen retirado no se reparte."
 
-#: services/usb_readiness.py:215
+#: apps/project/specific/internal/code_gen/services/usb_readiness.py:215
 msgid "Sealed, and the seal still matches"
 msgstr "Sellado, y el sello sigue cuadrando"
 
-#: services/usb_readiness.py:221
+#: apps/project/specific/internal/code_gen/services/usb_readiness.py:221
 msgid "Summary document issued"
 msgstr "Documento del resumen emitido"
 
-#: services/usb_readiness.py:227
+#: apps/project/specific/internal/code_gen/services/usb_readiness.py:227
 msgid "Confirmed on the blockchain"
 msgstr "Confirmado en la cadena de bloques"
 
-#: services/usb_readiness.py:233
+#: apps/project/specific/internal/code_gen/services/usb_readiness.py:233
 msgid "No errors"
 msgstr "Sin errores"
 
-#: views.py:102
+#: apps/project/specific/internal/code_gen/views.py:117
 msgid "The code could not be generated. Check the logs for details."
 msgstr "No se pudo generar el código. Revisa los registros para más detalle."
 
-#: views.py:175
+#: apps/project/specific/internal/code_gen/views.py:208
 msgid "Select at least one segment to build the code."
 msgstr "Selecciona al menos un segmento para construir el código."
 
-#: views.py:245
+#: apps/project/specific/internal/code_gen/views.py:289
 #, python-format
 msgid "Some placements did not match any page: %(items)s"
 msgstr "Algunas posiciones no coincidieron con ninguna página: %(items)s"
 
-#: views.py:251
+#: apps/project/specific/internal/code_gen/views.py:295
 #, python-format
 msgid "Document certified. Public code: %(code)s"
 msgstr "Documento certificado. Código público: %(code)s"
 
-#: views.py:465
+#: apps/project/specific/internal/code_gen/views.py:509
 #, python-format
 msgid "This summary cannot be exported yet. %(reasons)s"
 msgstr "Este resumen todavía no se puede exportar. %(reasons)s"
 
-#: views.py:650
+#: apps/project/specific/internal/code_gen/views.py:697
 msgid "Stamp layout saved."
 msgstr "Disposición de estampado guardada."
 
-#: views.py:732
+#: apps/project/specific/internal/code_gen/views.py:779
 msgid "Summary created. Now add the certificates it gathers."
 msgstr "Resumen creado. Ahora añade los certificados que contiene."
 

@@ -175,6 +175,11 @@ PUBLICLY_SERVABLE_MEDIA = {
     'media_assets': 'la galeria multimedia, que es para verse',
     'video_masonry': 'idem',
     'logos': 'imagenes de marca',
+
+    'code_gen': (
+        'logos personalizados incrustados en el centro del QR '
+        '(qr_logo_image); acaban impresos en un codigo publico, sin PII'
+    ),
 }
 
 #: Donde se declara el bloqueo, para leerlo y contrastarlo.

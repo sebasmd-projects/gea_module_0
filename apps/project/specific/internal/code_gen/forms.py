@@ -10,7 +10,7 @@ from .constants import (CERTIFIABLE_EXTENSIONS, HASH_B64_DEFAULT_LENGTH,
                         HASH_B64_MAX_LENGTH, HASH_B64_MIN_LENGTH,
                         MAX_UPLOAD_BYTES, RANDOM_CODE_DEFAULT_LENGTH,
                         RANDOM_CODE_MAX_LENGTH, RANDOM_CODE_MIN_LENGTH)
-from .models import StampLayoutModel, StampPlacementModel
+from .models import QRLogoModeChoices, StampLayoutModel, StampPlacementModel
 
 
 QR_CONTENT_VERIFICATION = 'VERIFICATION'
@@ -25,6 +25,24 @@ QR_CONTENT_CHOICES = (
     (QR_CONTENT_CODE, _('The generated code itself')),
     (QR_CONTENT_CUSTOM, _('A custom URL or text')),
 )
+
+#: Igual que el QR: el codigo de barras puede llevar el codigo compuesto en
+#: "Code segments", o un texto propio que no depende de ningun segmento. Sin
+#: esto, generar un barcode suelto obligaba a configurar segmentos que no
+#: tenian nada que ver con lo que se queria imprimir.
+BARCODE_CONTENT_COMPOSED = 'COMPOSED'
+BARCODE_CONTENT_CUSTOM = 'CUSTOM'
+
+BARCODE_CONTENT_CHOICES = (
+    (BARCODE_CONTENT_COMPOSED, _('The code composed below (Code segments)')),
+    (BARCODE_CONTENT_CUSTOM, _('A custom text')),
+)
+
+#: Alias de los valores de `QRLogoModeChoices`, para no repetir la cadena
+#: literal en cada comparacion de este modulo y de `views.py`.
+QR_LOGO_DEFAULT = QRLogoModeChoices.DEFAULT
+QR_LOGO_NONE = QRLogoModeChoices.NONE
+QR_LOGO_CUSTOM = QRLogoModeChoices.CUSTOM
 
 
 class CodeGeneratorForm(forms.Form):
@@ -158,6 +176,26 @@ class CodeGeneratorForm(forms.Form):
         )
     )
 
+    barcode_content = forms.ChoiceField(
+        label=_('Barcode content'),
+        required=False,
+        choices=BARCODE_CONTENT_CHOICES,
+        initial=BARCODE_CONTENT_COMPOSED,
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+    barcode_custom_value = forms.CharField(
+        label=_('Custom barcode text'),
+        required=False,
+        max_length=80,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': _('Text to encode, without segments'),
+            }
+        )
+    )
+
     generate_qr = forms.BooleanField(
         label=_('Generate QR code'),
         required=False,
@@ -182,6 +220,28 @@ class CodeGeneratorForm(forms.Form):
                 'placeholder': 'https://...',
             }
         )
+    )
+
+    # ------------------------------------------------------------------
+    # Logo del QR
+    # ------------------------------------------------------------------
+    qr_logo_mode = forms.ChoiceField(
+        label=_('QR logo'),
+        required=False,
+        choices=QRLogoModeChoices.choices,
+        initial=QRLogoModeChoices.DEFAULT,
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        help_text=_(
+            'The institutional favicon is embedded in the center of every QR '
+            'by default. It can be removed or swapped for another image.'
+        )
+    )
+
+    qr_logo_image = forms.ImageField(
+        label=_('Custom logo image'),
+        required=False,
+        widget=forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        help_text=_('Used only with "Custom image" above.')
     )
 
     # ------------------------------------------------------------------
@@ -358,6 +418,31 @@ class CodeGeneratorForm(forms.Form):
                 _('Select at least one symbol to generate: barcode or QR.')
             )
 
+        if cleaned.get('generate_barcode'):
+            barcode_content = (
+                cleaned.get('barcode_content') or BARCODE_CONTENT_COMPOSED
+            )
+
+            # Certificar siempre estampa el codigo institucional compuesto:
+            # es el que lleva el NIT, la secuencia autonoma y el hash del
+            # original, y el registro de certificacion lo da por hecho. Un
+            # texto libre en el barcode de un certificado dejaria el codigo
+            # impreso sin relacion con lo que el resto del sistema registra.
+            if barcode_content == BARCODE_CONTENT_CUSTOM:
+                if cleaned.get('certify_document'):
+                    self.add_error(
+                        'barcode_content',
+                        _(
+                            'A certified document always carries the composed '
+                            'code (Code segments), not a custom barcode text.'
+                        )
+                    )
+                elif not cleaned.get('barcode_custom_value'):
+                    self.add_error(
+                        'barcode_custom_value',
+                        _('Enter the text to encode in the barcode.')
+                    )
+
         if cleaned.get('generate_qr'):
             qr_content = cleaned.get('qr_content') or QR_CONTENT_VERIFICATION
 
@@ -376,6 +461,14 @@ class CodeGeneratorForm(forms.Form):
                         'another QR content.'
                     )
                 )
+
+        qr_logo_mode = cleaned.get('qr_logo_mode') or QR_LOGO_DEFAULT
+
+        if qr_logo_mode == QR_LOGO_CUSTOM and not cleaned.get('qr_logo_image'):
+            self.add_error(
+                'qr_logo_image',
+                _('Upload the image to use as the QR logo.')
+            )
 
         return cleaned
 

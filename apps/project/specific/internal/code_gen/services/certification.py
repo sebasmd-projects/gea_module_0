@@ -39,7 +39,7 @@ from .codes import (build_code_payload, derive_initials, generate_random_code,
                     next_sequence, validate_barcode_payload)
 from .hashing import canonical_pdf_hash, hash_to_base64, read_all_bytes, sha256_hex
 from .pdf_stamp import StampSpec, pdf_page_count, stamp_pdf
-from .render import render_barcode_png, render_qr_png
+from .render import render_barcode_png, render_qr_png, resolve_qr_logo
 from .watermark import build_token, embed_watermark
 
 logger = logging.getLogger(__name__)
@@ -224,6 +224,8 @@ def certify_document(
     options: Optional[CodeOptions] = None,
     qr_payload: Optional[str] = None,
     specs_builder=None,
+    qr_logo_mode: str = 'DEFAULT',
+    qr_logo_image=None,
 ):
     """
     Ejecuta la certificacion completa de un documento.
@@ -237,6 +239,11 @@ def certify_document(
         issue_date: fecha a incrustar en el codigo (por defecto, la de emision).
         options: que segmentos entran en el codigo.
         qr_payload: contenido del QR; por defecto la URL publica del documento.
+        qr_logo_mode: valor de ``QRLogoModeChoices``. Por defecto, el favicon
+            institucional -- lo mismo que hacia esta funcion antes de que
+            existiera esta opcion.
+        qr_logo_image: archivo subido con el logo propio, solo si
+            ``qr_logo_mode`` es ``CUSTOM``.
 
     Returns:
         CertificationOutcome
@@ -298,8 +305,14 @@ def certify_document(
     qr_payload = qr_payload or build_verification_url(document)
 
     # ---- 3. Simbolos --------------------------------------------------
+    qr_logo_bytes = None
+    if qr_logo_mode == 'CUSTOM' and qr_logo_image:
+        qr_logo_image.seek(0)
+        qr_logo_bytes = qr_logo_image.read()
+        qr_logo_image.seek(0)
+
     barcode_png = render_barcode_png(code_payload)
-    qr_png = render_qr_png(qr_payload)
+    qr_png = render_qr_png(qr_payload, **resolve_qr_logo(qr_logo_mode, qr_logo_bytes))
 
     # ---- 4. Estampado -------------------------------------------------
     page_count = pdf_page_count(source_bytes)
@@ -354,7 +367,9 @@ def certify_document(
     document.save()
 
     registration = _register_code(
-        document, code_payload, qr_payload, source_hash, hash_fragment
+        document, code_payload, qr_payload, source_hash, hash_fragment,
+        qr_logo_mode=qr_logo_mode,
+        qr_logo_image=qr_logo_image if qr_logo_mode == 'CUSTOM' else None,
     )
 
     return CertificationOutcome(
@@ -367,7 +382,10 @@ def certify_document(
     )
 
 
-def _register_code(document, code_payload, qr_payload, source_hash, hash_fragment):
+def _register_code(
+    document, code_payload, qr_payload, source_hash, hash_fragment, *,
+    qr_logo_mode='DEFAULT', qr_logo_image=None,
+):
     """Deja traza del codigo emitido en el registro historico del generador."""
     from ..models import CodeRegistrationModel
 
@@ -387,4 +405,6 @@ def _register_code(document, code_payload, qr_payload, source_hash, hash_fragmen
         generated_barcode=True,
         generated_qr=True,
         qr_payload=qr_payload,
+        qr_logo_mode=qr_logo_mode,
+        qr_logo_image=qr_logo_image,
     )

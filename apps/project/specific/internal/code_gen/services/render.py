@@ -91,15 +91,22 @@ def render_qr_png(
     text: str,
     *,
     transparent: bool = True,
-    logo_static_path: str = DEFAULT_LOGO_STATIC_PATH,
+    logo_static_path: Optional[str] = DEFAULT_LOGO_STATIC_PATH,
+    logo_bytes: Optional[bytes] = None,
     box_size: int = 10,
     border: int = 4
 ) -> bytes:
     """
-    Genera un QR con correccion de errores alta y el logo institucional.
+    Genera un QR con correccion de errores alta y, opcionalmente, un logo.
 
     El QR admite cualquier contenido, incluidas URLs completas: es el canal
     indicado para todo lo que el codigo de barras no puede representar.
+
+    El logo por defecto es el favicon institucional (``logo_static_path``),
+    pero es opcional y cambiable: ``logo_bytes`` lo sustituye por una imagen
+    cualquiera (tiene prioridad si se da), y ``logo_static_path=None``
+    apaga el logo del todo. La correccion de errores va alta precisamente
+    para que el hueco del logo no impida leer el QR, con o sin el.
     """
     qr = qrcode.QRCode(
         version=None,
@@ -115,16 +122,20 @@ def render_qr_png(
         back_color='transparent' if transparent else 'white',
     ).convert('RGBA')
 
-    if logo_static_path:
+    if logo_bytes or logo_static_path:
         try:
-            logo_path = finders.find(logo_static_path)
+            if logo_bytes:
+                icon = Image.open(BytesIO(logo_bytes)).convert('RGBA')
+            else:
+                logo_path = finders.find(logo_static_path)
 
-            if not logo_path:
-                raise FileNotFoundError(
-                    f'Static file not found: {logo_static_path}'
-                )
+                if not logo_path:
+                    raise FileNotFoundError(
+                        f'Static file not found: {logo_static_path}'
+                    )
 
-            icon = Image.open(logo_path).convert('RGBA')
+                icon = Image.open(logo_path).convert('RGBA')
+
             size = image.size[0] // 5
             icon = icon.resize((size, size), Image.LANCZOS)
 
@@ -135,8 +146,28 @@ def render_qr_png(
             image.paste(icon, position, mask=icon.split()[3])
 
         except Exception:
-            logger.exception('Could not overlay the institutional logo on the QR')
+            logger.exception('Could not overlay the logo on the QR')
 
     output = BytesIO()
     image.save(output, format='PNG')
     return output.getvalue()
+
+
+def resolve_qr_logo(mode: str, custom_bytes: Optional[bytes] = None) -> dict:
+    """
+    Traduce la eleccion de logo del formulario en argumentos para
+    :func:`render_qr_png`.
+
+    ``mode`` son los valores de ``QRLogoModeChoices``: el por defecto no
+    cambia nada (``render_qr_png`` ya trae el favicon institucional),
+    ``NONE`` lo apaga, y ``CUSTOM`` lo sustituye por ``custom_bytes`` --si
+    no hay bytes, se cae al por defecto en vez de dejar el QR sin logo por
+    un fallo de lectura del archivo subido.
+    """
+    if mode == 'NONE':
+        return {'logo_static_path': None}
+
+    if mode == 'CUSTOM' and custom_bytes:
+        return {'logo_static_path': None, 'logo_bytes': custom_bytes}
+
+    return {}

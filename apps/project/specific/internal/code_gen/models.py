@@ -38,6 +38,22 @@ class AnchorChoices(models.TextChoices):
     TOP_RIGHT = 'TR', _('Top right')
 
 
+class QRLogoModeChoices(models.TextChoices):
+    """
+    Que logo lleva el QR generado.
+
+    ``DEFAULT`` es el favicon institucional que ``render_qr_png()`` ya traia
+    incrustado por defecto -- eso no cambia. Lo que faltaba era poder
+    apagarlo (``NONE``) o cambiarlo por otro (``CUSTOM``, con la imagen que
+    suba el operador) sin tocar codigo: la capacidad ya existia en
+    ``render_qr_png(logo_static_path=...)``, pero ningun formulario la
+    exponia.
+    """
+    DEFAULT = 'DEFAULT', _('GEA institutional logo (default)')
+    NONE = 'NONE', _('No logo')
+    CUSTOM = 'CUSTOM', _('Custom image')
+
+
 class CodeSequenceModel(TimeStampedModel):
     """
     Contador interno de la secuencia autonoma.
@@ -394,6 +410,21 @@ class CodeRegistrationModel(TimeStampedModel):
         null=True
     )
 
+    qr_logo_mode = models.CharField(
+        _('QR logo'),
+        max_length=10,
+        choices=QRLogoModeChoices.choices,
+        default=QRLogoModeChoices.DEFAULT,
+    )
+
+    qr_logo_image = models.ImageField(
+        _('Custom QR logo image'),
+        upload_to='code_gen/qr_logos/',
+        blank=True,
+        null=True,
+        help_text=_('Only used when the QR logo is set to "Custom image".')
+    )
+
     document = models.ForeignKey(
         'certificates.DocumentVerificationModel',
         on_delete=models.SET_NULL,
@@ -420,6 +451,28 @@ class CodeRegistrationModel(TimeStampedModel):
             return False
 
         return True
+
+    def qr_render_kwargs(self) -> dict:
+        """
+        Los argumentos de logo para volver a dibujar este QR.
+
+        Los simbolos no se guardan como archivo (invariante de
+        ``CodeDetailView``): se re-renderizan desde el payload cada vez, y
+        eso incluye el logo elegido al emitir el codigo, no siempre el de
+        GEA por defecto.
+        """
+        from .services.render import resolve_qr_logo
+
+        image_bytes = None
+
+        if self.qr_logo_mode == QRLogoModeChoices.CUSTOM and self.qr_logo_image:
+            self.qr_logo_image.open('rb')
+            try:
+                image_bytes = self.qr_logo_image.read()
+            finally:
+                self.qr_logo_image.close()
+
+        return resolve_qr_logo(self.qr_logo_mode, image_bytes)
 
     def __str__(self) -> str:
         return self.reference

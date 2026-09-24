@@ -90,3 +90,21 @@ class TestTheGeneratorPageRenders(TestCase):
         html = self.client.get(self.url).content.decode('utf-8')
 
         self.assertIn('code_generator_certify.js', html)
+
+    def test_the_segments_and_live_preview_scripts_are_loaded(self):
+        """
+        `code_generator_segments.js` esconde "Code segments" cuando no hace
+        falta; `code_generator_live_preview.js` pide los simbolos reales
+        mientras se escribe. Los dos leen `codeSegmentsCard` y los campos
+        nuevos por su id, asi que un cambio de plantilla que los pierda
+        rompe el script sin que nada avise -- esto es lo que lo detecta.
+        """
+        html = self.client.get(self.url).content.decode('utf-8')
+
+        self.assertIn('code_generator_segments.js', html)
+        self.assertIn('code_generator_live_preview.js', html)
+        self.assertIn('id="codeSegmentsCard"', html)
+        self.assertIn('id="id_barcode_content"', html)
+        self.assertIn('id="id_barcode_custom_value"', html)
+        self.assertIn('id="id_qr_logo_mode"', html)
+        self.assertIn('id="id_qr_logo_image"', html)
