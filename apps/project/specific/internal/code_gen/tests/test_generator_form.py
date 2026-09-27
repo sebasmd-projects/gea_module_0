@@ -153,10 +153,19 @@ class TestTheGeneratorPageRenders(TestCase):
         "Placements over the document", en la fila de abajo. Aqui solo se
         comprueba que la clase siga puesta y que envuelva a las dos
         tarjetas, no el layout en si (eso se verifico con un navegador real).
+
+        `top` no puede ser un `1rem` cualquiera: este layout lleva
+        `nav-fixed`, que deja `.topnav` fija (3.625rem de alto) por encima de
+        toda tarjeta. Con menos hueco que eso, en cuanto la tarjeta se queda
+        fija su cabecera queda tapada detras de la barra -- el titulo
+        "Preview" se veia cortado. Un cambio que vuelva a dejarlo en `1rem`
+        reintroduce ese corte, y esto lo detecta.
         """
         html = self.client.get(self.url).content.decode('utf-8')
 
-        sticky_at = html.index('class="sticky-top" style="top: 1rem;"')
+        sticky_at = html.index(
+            'class="sticky-top" style="top: calc(3.625rem + 1rem);"'
+        )
         preview_at = html.index('id="symbolPreviewCard"')
         result_header_at = html.index('square-poll-horizontal')
 
