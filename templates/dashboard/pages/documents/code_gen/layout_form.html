@@ -175,7 +175,16 @@
 
         {% comment %} ================= RIGHT: LIVE PREVIEW ================= {% endcomment %}
         <div class="col-xl-4">
-          <div class="card mb-4 sticky-top" style="top: 1rem;">
+          {% comment %}
+            `top` no puede ser un `1rem` cualquiera: este layout lleva
+            `nav-fixed` (`dashboard_layout_base.html`), que deja `.topnav`
+            fija -- 3.625rem de alto, z-index por encima de cualquier
+            tarjeta. Con solo 1rem de hueco, en cuanto la tarjeta se queda
+            fija su cabecera ("Live preview") queda tapada detras de esa
+            barra. El hueco tiene que cubrirla entera y dejar ademas el
+            mismo respiro de 1rem. Mismo ajuste que en `code_form.html`.
+          {% endcomment %}
+          <div class="card mb-4 sticky-top" style="top: calc(3.625rem + 1rem);">
             <div class="card-header">
               <i class="fa-regular fa-eye me-2"></i>{% trans 'Live preview' %}
             </div>

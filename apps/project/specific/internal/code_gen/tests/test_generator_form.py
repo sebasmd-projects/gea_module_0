@@ -171,3 +171,27 @@ class TestTheGeneratorPageRenders(TestCase):
 
         self.assertTrue(sticky_at < preview_at)
         self.assertTrue(preview_at < result_header_at)
+
+
+class TestTheLayoutEditorStickyPreview(TestCase):
+    """
+    `layout_form.html` tiene el mismo `sticky-top` sobre el mismo layout
+    `nav-fixed`, y el mismo corte de cabecera con `top: 1rem` a secas.
+    """
+
+    def setUp(self):
+        self.operator = UserModel.objects.create_user(
+            username='ops-layout-editor', email='ops-layout-editor@example.com',
+            password=PASSWORD, is_staff=True,
+        )
+        self.client.force_login(self.operator)
+
+    def test_the_live_preview_clears_the_fixed_topnav(self):
+        html = self.client.get(
+            reverse('code_gen:layout_create')
+        ).content.decode('utf-8')
+
+        self.assertIn(
+            'class="card mb-4 sticky-top" style="top: calc(3.625rem + 1rem);"',
+            html,
+        )
