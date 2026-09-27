@@ -400,57 +400,66 @@
         {% comment %} ============================================================ {% endcomment %}
         <div class="col-xl-5">
           {% comment %}
-            -------- Preview --------
-            Siempre visible, independiente de "Certificar documento": antes
-            el unico sitio donde se dibujaba un simbolo era el banco de
-            trabajo de posiciones, que solo se enseña certificando (ahi si
-            hace falta, porque coloca los codigos sobre un PDF). Generar un
-            QR o un barcode suelto se quedaba entonces sin ninguna vista
-            previa. `code_generator_live_preview.js` actualiza estas dos
-            imagenes segun se configura el codigo.
+            "Preview" y "Result" se desplazan juntos con la pagina como
+            cualquier otra tarjeta -- eso es lo que hace `sticky-top` por su
+            cuenta, sin nada mas: no se fijan arriba desde el principio,
+            solo dejan de subir cuando su borde llegaria a menos de `top` del
+            viewport. Mismo patron que `layout_form.html`.
           {% endcomment %}
-          <div class="card mb-4" id="symbolPreviewCard"
-               data-symbols-url="{% url 'code_gen:preview_symbols' %}"
-               data-company-nit="{{ company_nit }}"
-               data-sequence-pad="{{ sequence_pad }}">
-            <div class="card-header">
-              <i class="fa-solid fa-eye me-2"></i>{% trans 'Preview' %}
-            </div>
-            <div class="card-body text-center">
-              <div class="mb-3" id="barcodePreviewWrap">
-                <div class="small text-muted mb-1">{% trans 'Barcode' %}</div>
-                <img id="barcodePreviewImg" class="img-fluid" alt=""
-                     style="max-height: 110px;"
-                     src="{{ barcode_preview_src }}" />
+          <div class="sticky-top" style="top: 1rem;">
+            {% comment %}
+              -------- Preview --------
+              Siempre visible, independiente de "Certificar documento": antes
+              el unico sitio donde se dibujaba un simbolo era el banco de
+              trabajo de posiciones, que solo se enseña certificando (ahi si
+              hace falta, porque coloca los codigos sobre un PDF). Generar un
+              QR o un barcode suelto se quedaba entonces sin ninguna vista
+              previa. `code_generator_live_preview.js` actualiza estas dos
+              imagenes segun se configura el codigo.
+            {% endcomment %}
+            <div class="card mb-4" id="symbolPreviewCard"
+                 data-symbols-url="{% url 'code_gen:preview_symbols' %}"
+                 data-company-nit="{{ company_nit }}"
+                 data-sequence-pad="{{ sequence_pad }}">
+              <div class="card-header">
+                <i class="fa-solid fa-eye me-2"></i>{% trans 'Preview' %}
               </div>
+              <div class="card-body text-center">
+                <div class="mb-3" id="barcodePreviewWrap">
+                  <div class="small text-muted mb-1">{% trans 'Barcode' %}</div>
+                  <img id="barcodePreviewImg" class="img-fluid" alt=""
+                       style="max-height: 110px;"
+                       src="{{ barcode_preview_src }}" />
+                </div>
 
-              <div id="qrPreviewWrap">
-                <div class="small text-muted mb-1">{% trans 'QR code' %}</div>
-                <img id="qrPreviewImg" class="img-fluid" alt=""
-                     style="max-height: 160px;"
-                     src="{{ qr_preview_src }}" />
+                <div id="qrPreviewWrap">
+                  <div class="small text-muted mb-1">{% trans 'QR code' %}</div>
+                  <img id="qrPreviewImg" class="img-fluid" alt=""
+                       style="max-height: 160px;"
+                       src="{{ qr_preview_src }}" />
+                </div>
+
+                <p class="small text-muted mt-3 mb-0">
+                  {% trans 'A sample while the composed segments are not final; the custom barcode text and QR content are shown exactly as typed.' %}
+                </p>
               </div>
-
-              <p class="small text-muted mt-3 mb-0">
-                {% trans 'A sample while the composed segments are not final; the custom barcode text and QR content are shown exactly as typed.' %}
-              </p>
             </div>
-          </div>
 
-          <div class="card mb-4">
-            <div class="card-header">
-              <i class="fa-solid fa-square-poll-horizontal me-2"></i>{% trans 'Result' %}
-            </div>
-            <div class="card-body">
-              <p class="text-muted">
-                {% trans 'After pressing Generate you land on the permanent page of the issued code, with its symbols and downloads. It stays available: you can close this tab and come back to it later.' %}
-              </p>
+            <div class="card mb-4">
+              <div class="card-header">
+                <i class="fa-solid fa-square-poll-horizontal me-2"></i>{% trans 'Result' %}
+              </div>
+              <div class="card-body">
+                <p class="text-muted">
+                  {% trans 'After pressing Generate you land on the permanent page of the issued code, with its symbols and downloads. It stays available: you can close this tab and come back to it later.' %}
+                </p>
 
-              <div class="d-grid">
-                <a class="btn btn-outline-secondary btn-sm" href="{% url 'code_gen:code_history' %}">
-                  <i class="bi bi-clock-history"></i>
-                  {% trans 'See previously generated codes' %}
-                </a>
+                <div class="d-grid">
+                  <a class="btn btn-outline-secondary btn-sm" href="{% url 'code_gen:code_history' %}">
+                    <i class="bi bi-clock-history"></i>
+                    {% trans 'See previously generated codes' %}
+                  </a>
+                </div>
               </div>
             </div>
           </div>

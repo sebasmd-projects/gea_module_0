@@ -143,3 +143,22 @@ class TestTheGeneratorPageRenders(TestCase):
         self.assertIn('id="barcodePreviewImg"', html)
         self.assertIn('id="qrPreviewImg"', html)
         self.assertIn('data-symbols-url', html[card_start:card_start + 200])
+
+    def test_the_preview_and_result_cards_scroll_together_and_stick(self):
+        """
+        `position: sticky` ya hace exactamente lo que se pidio sin nada mas:
+        normal mientras se desplaza la pagina, fija en cuanto su borde
+        llegaria a menos de `top` del viewport, y libre otra vez en cuanto
+        se acaba el hueco de su columna -- que es justo donde empieza
+        "Placements over the document", en la fila de abajo. Aqui solo se
+        comprueba que la clase siga puesta y que envuelva a las dos
+        tarjetas, no el layout en si (eso se verifico con un navegador real).
+        """
+        html = self.client.get(self.url).content.decode('utf-8')
+
+        sticky_at = html.index('class="sticky-top" style="top: 1rem;"')
+        preview_at = html.index('id="symbolPreviewCard"')
+        result_header_at = html.index('square-poll-horizontal')
+
+        self.assertTrue(sticky_at < preview_at)
+        self.assertTrue(preview_at < result_header_at)
