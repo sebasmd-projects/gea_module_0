@@ -98,14 +98,12 @@ class CodeGeneratorForm(forms.Form):
     include_nit = forms.BooleanField(
         label=_('NIT'),
         required=False,
-        initial=True,
         help_text=_('Adds the tax ID of the firm at the beginning.')
     )
 
     include_initials_sequence = forms.BooleanField(
         label=_('Certificate initials + autonomous sequence'),
         required=False,
-        initial=True,
         help_text=_(
             'Non-consecutive and non-repeating sequence, reserved by the '
             'platform.'
@@ -145,13 +143,11 @@ class CodeGeneratorForm(forms.Form):
     include_date = forms.BooleanField(
         label=_('Date (DDMMYYYY)'),
         required=False,
-        initial=True
     )
 
     include_random_code = forms.BooleanField(
         label=_('Unique random code'),
         required=False,
-        initial=True
     )
 
     random_code_length = forms.IntegerField(

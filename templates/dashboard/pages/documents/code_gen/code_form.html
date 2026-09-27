@@ -399,6 +399,44 @@
         {% comment %} ====================== RIGHT: GUIDE ======================== {% endcomment %}
         {% comment %} ============================================================ {% endcomment %}
         <div class="col-xl-5">
+          {% comment %}
+            -------- Preview --------
+            Siempre visible, independiente de "Certificar documento": antes
+            el unico sitio donde se dibujaba un simbolo era el banco de
+            trabajo de posiciones, que solo se enseña certificando (ahi si
+            hace falta, porque coloca los codigos sobre un PDF). Generar un
+            QR o un barcode suelto se quedaba entonces sin ninguna vista
+            previa. `code_generator_live_preview.js` actualiza estas dos
+            imagenes segun se configura el codigo.
+          {% endcomment %}
+          <div class="card mb-4" id="symbolPreviewCard"
+               data-symbols-url="{% url 'code_gen:preview_symbols' %}"
+               data-company-nit="{{ company_nit }}"
+               data-sequence-pad="{{ sequence_pad }}">
+            <div class="card-header">
+              <i class="fa-solid fa-eye me-2"></i>{% trans 'Preview' %}
+            </div>
+            <div class="card-body text-center">
+              <div class="mb-3" id="barcodePreviewWrap">
+                <div class="small text-muted mb-1">{% trans 'Barcode' %}</div>
+                <img id="barcodePreviewImg" class="img-fluid" alt=""
+                     style="max-height: 110px;"
+                     src="{{ barcode_preview_src }}" />
+              </div>
+
+              <div id="qrPreviewWrap">
+                <div class="small text-muted mb-1">{% trans 'QR code' %}</div>
+                <img id="qrPreviewImg" class="img-fluid" alt=""
+                     style="max-height: 160px;"
+                     src="{{ qr_preview_src }}" />
+              </div>
+
+              <p class="small text-muted mt-3 mb-0">
+                {% trans 'A sample while the composed segments are not final; the custom barcode text and QR content are shown exactly as typed.' %}
+              </p>
+            </div>
+          </div>
+
           <div class="card mb-4">
             <div class="card-header">
               <i class="fa-solid fa-square-poll-horizontal me-2"></i>{% trans 'Result' %}

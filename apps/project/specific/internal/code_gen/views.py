@@ -23,7 +23,8 @@ from .services.usb_bundle import NotReadyToExport, build_bundle
 from .services.usb_readiness import export_state
 from .preview import placements_as_data, render_preview_container
 
-from .constants import (HASH_B64_DEFAULT_LENGTH, RANDOM_CODE_DEFAULT_LENGTH)
+from .constants import (COMPANY_NIT, HASH_B64_DEFAULT_LENGTH,
+                        RANDOM_CODE_DEFAULT_LENGTH, SEQUENCE_PAD)
 from .forms import (BARCODE_CONTENT_COMPOSED, BARCODE_CONTENT_CUSTOM,
                     QR_CONTENT_CODE, QR_CONTENT_CUSTOM,
                     QR_CONTENT_VERIFICATION, QR_LOGO_DEFAULT,
@@ -41,6 +42,7 @@ from .services.codes import (barcode_length_warning, build_code_payload,
                              next_sequence, validate_barcode_payload)
 from .services.hashing import hash_to_base64, sha256_hex
 from .services.render import png_to_data_uri, render_barcode_png, render_qr_png
+from .services.samples import sample_symbols
 
 logger = logging.getLogger(__name__)
 
@@ -99,6 +101,17 @@ class CodeGeneratorView(InternalToolAccessMixin, FormView):
             pdf_input='#id_source_file',
             editable=True,
         )
+
+        # La tarjeta "Preview" de la derecha, en cambio, es siempre visible
+        # -- a diferencia del banco de trabajo de arriba, que solo tiene
+        # sentido certificando (coloca codigos sobre un PDF). Sin archivo ni
+        # codigo todavia, se arranca con una muestra; `code_generator_live_
+        # preview.js` la sustituye por lo que se va configurando.
+        preview_symbols_sample = sample_symbols()
+        context['barcode_preview_src'] = preview_symbols_sample['BARCODE']['src']
+        context['qr_preview_src'] = preview_symbols_sample['QR']['src']
+        context['company_nit'] = COMPANY_NIT
+        context['sequence_pad'] = SEQUENCE_PAD
 
         return context
 

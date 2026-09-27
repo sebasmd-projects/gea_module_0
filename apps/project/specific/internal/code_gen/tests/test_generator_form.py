@@ -108,3 +108,38 @@ class TestTheGeneratorPageRenders(TestCase):
         self.assertIn('id="id_barcode_custom_value"', html)
         self.assertIn('id="id_qr_logo_mode"', html)
         self.assertIn('id="id_qr_logo_image"', html)
+
+    def test_no_segment_is_preselected(self):
+        """
+        Un fallo real ya reportado: los cuatro segmentos venian marcados de
+        salida, asi que "no seleccionar nada" no era una opcion -- el codigo
+        salia compuesto igual aunque nadie hubiera tocado la tarjeta.
+        """
+        html = self.client.get(self.url).content.decode('utf-8')
+
+        for field_id in (
+            'id_include_nit', 'id_include_initials_sequence',
+            'id_include_date', 'id_include_random_code',
+        ):
+            fragment = html[html.index(f'id="{field_id}"') - 200:
+                             html.index(f'id="{field_id}"') + 20]
+            self.assertNotIn('checked', fragment)
+
+    def test_the_preview_card_is_always_visible(self):
+        """
+        El otro fallo reportado: el unico sitio donde se dibujaba un simbolo
+        era el banco de posiciones, que `code_generator_certify.js` esconde
+        hasta marcar "Certificar documento" -- asi que generar un QR o un
+        barcode sueltos se quedaba sin ninguna vista previa. Esta tarjeta es
+        independiente de esa y no lleva ninguna clase que la oculte de
+        entrada.
+        """
+        html = self.client.get(self.url).content.decode('utf-8')
+
+        card_start = html.index('id="symbolPreviewCard"')
+        card_tag = html[html.rindex('<div', 0, card_start):card_start + 40]
+
+        self.assertNotIn('d-none', card_tag)
+        self.assertIn('id="barcodePreviewImg"', html)
+        self.assertIn('id="qrPreviewImg"', html)
+        self.assertIn('data-symbols-url', html[card_start:card_start + 200])
