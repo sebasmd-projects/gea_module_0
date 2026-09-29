@@ -1,0 +1,11 @@
+# Reglas propias de graphify, ademas de las que ya trae .gitignore.
+#
+# - media/: nunca se incluye en el grafo (documentos y fotos subidas, no
+#   codigo ni contenido del proyecto en si).
+# - public/staticfiles/assets/: es el "vendor" de public/staticfiles/ --
+#   fuentes, imagenes WebP y video-- y no aporta nada al grafo. Solo
+#   public/staticfiles/css/, public/staticfiles/js/, manifest.json y
+#   site.webmanifest quedan dentro.
+media/
+public/media/
+public/staticfiles/assets/

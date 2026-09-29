@@ -4,6 +4,11 @@
 ### DEVOPS ###
 sonar-project.properties
 
+### graphify ###
+# Salida generada por `/graphify .` (graph.json, GRAPH_REPORT.md, graph.html,
+# cache de extraccion): se regenera desde el codigo, no es codigo fuente.
+graphify-out/
+
 ### Files ###
 database_schema.sql
 users.json
