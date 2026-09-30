@@ -427,6 +427,18 @@ PUBLIC_BASE_URL = os.getenv(
 # Sin ella el registro se sella con HMAC y solo la propia plataforma puede
 CERTIFICATION_SIGNING_KEY = os.getenv('CERTIFICATION_SIGNING_KEY', '')
 
+# Plataformas externas que mandan documentos a certificar por servidor
+# (`POST /api/certificates/external/`). `{slug: {'name': ..., 'key': ...}}`.
+# Un emisor sin clave queda DESHABILITADO. La clave se compara en tiempo
+# constante y debe tener 32 caracteres o mas (system check `gea.E001`). Ver
+# docs/SEGURIDAD.md, «Emisores externos».
+GEA_EXTERNAL_ISSUERS = {
+    'propensiones': {
+        'name': 'Propensiones Abogados',
+        'key': os.getenv('GEA_ISSUER_KEY_PROPENSIONES', ''),
+    },
+}
+
 CERTIFICATION_TSA_URL = os.getenv('CERTIFICATION_TSA_URL', '')
 CERTIFICATION_TSA_USERNAME = os.getenv('CERTIFICATION_TSA_USERNAME', '')
 CERTIFICATION_TSA_PASSWORD = os.getenv('CERTIFICATION_TSA_PASSWORD', '')

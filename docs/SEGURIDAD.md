@@ -451,6 +451,53 @@ aparece un tercero nuevo sin firmar**.
 
 ---
 
+## Emisores externos: certificar desde otra plataforma
+
+`POST /api/certificates/external/` deja que otra plataforma (hoy Propensiones
+Abogados, slug `propensiones`) mande un PDF sin códigos y reciba la copia
+distribuible certificada. Quien tenga la clave **emite documentos con el sello
+de esta plataforma**, así que la clave es el único control y se trata como una
+credencial de producción.
+
+**Qué protege**
+
+- Cabecera `X-Issuer-Key` comparada con `hmac.compare_digest` contra la clave
+  del emisor de `GEA_EXTERNAL_ISSUERS`. Clave mala, emisor inexistente y emisor
+  sin clave dan el **mismo 403 genérico**; un emisor sin clave está
+  deshabilitado.
+- Cupo por emisor y hora (`RateLimit`, falla **cerrado**: con la caché caída
+  responde 429). Se consume después de autenticar, así que quien no tiene la
+  clave no gasta el cupo del emisor; sus intentos se cuentan aparte, por IP.
+- Cada emisor sólo ve lo suyo: descargar o revocar un documento de otro emisor
+  es un 404.
+- `manage.py check` falla sin `DJANGO_DEBUG` (`gea.E001`) si hay una clave de
+  menos de 32 caracteres.
+- El endpoint no usa CSRF (no hay sesión), por eso la clave no puede ir en una
+  cookie ni en la URL.
+- La revocación no borra nada: marca el documento como `REVOKED` y la página
+  pública de verificación lo muestra revocado. El motivo se guarda pero **no se
+  publica**.
+
+**Rotar la clave**
+
+1. Genera la nueva: `python -c "import secrets; print(secrets.token_urlsafe(48))"`.
+2. Cambia `GEA_ISSUER_KEY_PROPENSIONES` en el `.env` de gea y reinicia la
+   aplicación.
+3. Cambia la misma clave en el `.env` de la plataforma emisora y reinicia.
+   Entre 2 y 3 las peticiones del emisor darán 403: hazlo en una ventana
+   corta. No hay dos claves válidas a la vez.
+4. Si la clave se filtró, revisa los documentos con `external_issuer` del emisor
+   emitidos desde la filtración (admin, o `DocumentVerificationModel` filtrando
+   por `external_issuer`) y revoca los que no reconozca.
+
+Para dar de baja a un emisor basta con vaciar su variable: queda deshabilitado
+sin tocar el código. Un emisor nuevo es una entrada más en
+`GEA_EXTERNAL_ISSUERS` con su propia variable de entorno.
+
+Lo cubre `certificates/tests/test_external_issuer.py`.
+
+---
+
 ## Decisiones pendientes
 
 No son fallos, son cosas que alguien tiene que decidir:

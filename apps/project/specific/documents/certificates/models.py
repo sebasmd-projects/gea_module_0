@@ -410,6 +410,57 @@ class DocumentVerificationModel(TimeStampedModel):
         )
     )
 
+    # ---------- Emisor externo ----------
+    # Documentos que otra plataforma (p. ej. Propensiones Abogados) manda a
+    # certificar por servidor (ver `external.py`). Van vacios en los
+    # documentos propios de gea. `null` y no cadena vacia en los dos que entran
+    # en la restriccion: NULL no choca con NULL en MySQL ni en SQLite, que es
+    # lo que deja a los documentos propios fuera de la unicidad sin necesitar
+    # una restriccion condicional (MySQL no las soporta).
+    external_issuer = models.CharField(
+        _('External issuer'),
+        max_length=40,
+        blank=True,
+        null=True,
+        db_index=True,
+        editable=False,
+        help_text=_(
+            'Slug of the external platform that sent this document to be '
+            'certified. Empty for documents issued by GEA itself.'
+        )
+    )
+
+    external_reference = models.CharField(
+        _('External reference'),
+        max_length=200,
+        blank=True,
+        default='',
+        editable=False,
+        help_text=_('Identifier of the case or record in the external platform.')
+    )
+
+    external_idempotency_key = models.CharField(
+        _('External idempotency key'),
+        max_length=128,
+        blank=True,
+        null=True,
+        editable=False
+    )
+
+    revoked_at = models.DateTimeField(
+        _('Revoked at'),
+        blank=True,
+        null=True,
+        editable=False
+    )
+
+    revocation_reason = models.TextField(
+        _('Revocation reason'),
+        blank=True,
+        default='',
+        editable=False
+    )
+
     stamp_layout = models.ForeignKey(
         'code_gen.StampLayoutModel',
         on_delete=models.SET_NULL,
@@ -624,6 +675,12 @@ class DocumentVerificationModel(TimeStampedModel):
             models.Index(fields=['uuid_prefix']),
             models.Index(fields=['expires_at']),
             models.Index(fields=['certification_status']),
+        ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['external_issuer', 'external_idempotency_key'],
+                name='uniq_document_external_idempotency',
+            ),
         ]
 
 
