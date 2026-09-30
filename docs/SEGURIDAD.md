@@ -481,7 +481,7 @@ credencial de producción.
 **Rotar la clave**
 
 1. Genera la nueva: `python -c "import secrets; print(secrets.token_urlsafe(48))"`.
-2. Cambia `GEA_ISSUER_KEY_PROPENSIONES` en el `.env` de gea y reinicia la
+2. Cambia `SERVER_KEY` en el `.env` de gea y reinicia la
    aplicación.
 3. Cambia la misma clave en el `.env` de la plataforma emisora y reinicia.
    Entre 2 y 3 las peticiones del emisor darán 403: hazlo en una ventana
@@ -493,6 +493,16 @@ credencial de producción.
 Para dar de baja a un emisor basta con vaciar su variable: queda deshabilitado
 sin tocar el código. Un emisor nuevo es una entrada más en
 `GEA_EXTERNAL_ISSUERS` con su propia variable de entorno.
+
+**Nombre de la variable.** La clave del emisor `propensiones` se llama
+`SERVER_KEY` y es la misma en pag, gea y fundacionattlas.org (Vercel). La
+antigua `GEA_ISSUER_KEY_PROPENSIONES` se sigue leyendo solo si falta
+`SERVER_KEY`, y `manage.py check` avisa (`gea.W001`); se retirará. Las
+cabeceras `X-Issuer` y `X-Issuer-Key` no cambian.
+
+**Despliegue:** poner `SERVER_KEY` con el mismo valor en el `.env` de pag, el
+`.env` de gea y Vercel; reiniciar los tres; comprobar que `check` no avisa y
+después borrar las variables viejas.
 
 Lo cubre `certificates/tests/test_external_issuer.py`.
 

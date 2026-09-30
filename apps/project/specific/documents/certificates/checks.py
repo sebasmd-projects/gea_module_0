@@ -17,10 +17,19 @@ MIN_ISSUER_KEY_LENGTH = 32
 
 @checks.register(checks.Tags.security)
 def check_external_issuer_keys(app_configs=None, **kwargs):
-    if settings.DEBUG:
-        return []
-
     errors = []
+
+    legacy = getattr(settings, 'SERVER_KEY_LEGACY_VARS_IN_USE', None) or []
+    if legacy:
+        errors.append(checks.Warning(
+            'The legacy environment variable %s is in use; define SERVER_KEY '
+            '(same value in gea, pag and Vercel) and remove the old one.'
+            % ', '.join(legacy),
+            id='gea.W001',
+        ))
+
+    if settings.DEBUG:
+        return errors
 
     for slug, issuer in (
         getattr(settings, 'GEA_EXTERNAL_ISSUERS', None) or {}
@@ -30,7 +39,8 @@ def check_external_issuer_keys(app_configs=None, **kwargs):
         # Sin clave = deshabilitado: no es un error.
         if key and len(key) < MIN_ISSUER_KEY_LENGTH:
             errors.append(checks.Error(
-                f'The key of the external issuer "{slug}" is shorter than '
+                f'The key of the external issuer "{slug}" (SERVER_KEY for '
+                f'"propensiones") is shorter than '
                 f'{MIN_ISSUER_KEY_LENGTH} characters.',
                 hint='Generate a longer one with '
                      '`python -c "import secrets; '

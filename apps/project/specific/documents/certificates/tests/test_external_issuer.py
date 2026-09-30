@@ -626,3 +626,14 @@ class TestSystemCheck(ExternalTestCase):
     def test_a_long_key_is_fine(self):
         self.assertEqual(
             self.run_check({'x': {'name': 'X', 'key': 'k' * 32}}, False), [])
+
+    def test_a_legacy_variable_in_use_warns(self):
+        with override_settings(
+            GEA_EXTERNAL_ISSUERS={'x': {'name': 'X', 'key': 'k' * 32}},
+            DEBUG=False,
+            SERVER_KEY_LEGACY_VARS_IN_USE=['GEA_ISSUER_KEY_PROPENSIONES'],
+        ):
+            problems = check_external_issuer_keys()
+
+        self.assertEqual([e.id for e in problems], ['gea.W001'])
+        self.assertIsInstance(problems[0], checks.Warning)
