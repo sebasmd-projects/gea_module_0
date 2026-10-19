@@ -10,6 +10,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, FormView, TemplateView
 
+from apps.common.utils.functions import safe_next
 from apps.common.utils.throttling import RateLimit
 from apps.project.specific.internal.code_gen.services.record import (
     document_status, key_id, public_key_b64, record_filename, record_json)
@@ -164,6 +165,22 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
     template_name = 'dashboard/pages/certificates/documents/aegis_documents/certificate_input.html'
 
     form_class = DocumentVerificationForm
+
+    #: A donde volver cuando el OTP se supere, si se llegó aquí redirigido
+    #: desde un documento concreto. Va en sesión y no en la query string
+    #: porque el paso de correo y el de código son dos POST distintos, cada
+    #: uno con su propio `redirect(self.request.path)` -- un `next` que solo
+    #: viajara en la URL se perdia en el primer salto.
+    NEXT_SESSION_KEY = 'document_otp_next'
+
+    def dispatch(self, request, *args, **kwargs):
+        next_param = request.GET.get('next')
+        if next_param:
+            next_url = safe_next(request, next_param)
+            if next_url:
+                request.session[self.NEXT_SESSION_KEY] = next_url
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get_form_class(self):
         request = self.request
@@ -349,6 +366,16 @@ class InputDocumentVerificationFormView(OTPSessionMixin, FormView):
             return self.form_invalid(form)
 
         self.mark_otp_verified()
+
+        # Si se llegó aquí redirigido desde un documento concreto, se vuelve
+        # directo a él: sin esto, quien ya superó el OTP tenía que teclear el
+        # código del documento otra vez en el formulario de identificador.
+        next_url = self.request.session.pop(self.NEXT_SESSION_KEY, None)
+        if next_url:
+            next_url = safe_next(self.request, next_url)
+            if next_url:
+                return redirect(next_url)
+
         return redirect(self.request.path)
 
     def form_valid(self, form):

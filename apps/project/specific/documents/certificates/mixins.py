@@ -3,6 +3,7 @@
 import hashlib
 import hmac
 from datetime import timedelta
+from urllib.parse import urlencode
 
 from django.conf import settings
 from django.shortcuts import redirect
@@ -10,6 +11,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.crypto import constant_time_compare
 
+from apps.common.utils.functions import safe_next
 from apps.common.utils.throttling import RateLimit
 
 
@@ -352,8 +354,18 @@ class OTPProtectedDocumentMixin:
 
     def dispatch(self, request, *args, **kwargs):
         if self.otp_required and not self.has_otp_access():
-            return redirect(
-                reverse('certificates:input_document_verification_aegis')
-            )
+            target = reverse('certificates:input_document_verification_aegis')
+
+            # Sin esto, al anonimo que llega por un enlace a un documento
+            # concreto se le manda a la pantalla generica y, ya con el OTP
+            # superado, tiene que volver a teclear el codigo -- el destino se
+            # perdia en el camino. Se valida con `safe_next` por si acaso
+            # `get_full_path()` trajera algo raro, no porque se espere que lo
+            # traiga.
+            next_url = safe_next(request, request.get_full_path())
+            if next_url:
+                target = f'{target}?{urlencode({"next": next_url})}'
+
+            return redirect(target)
 
         return super().dispatch(request, *args, **kwargs)
