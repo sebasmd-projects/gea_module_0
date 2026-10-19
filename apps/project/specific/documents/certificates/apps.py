@@ -7,3 +7,6 @@ class CertificatesConfig(AppConfig):
     name = 'apps.project.specific.documents.certificates'
     verbose_name = _("Certificate")
     verbose_name_plural = _("Certificates")
+
+    def ready(self):
+        from . import checks  # noqa: F401

@@ -4,7 +4,6 @@ window.addEventListener('DOMContentLoaded', event => {
         'offers_table',
         'locations_table',
         'asset_and_category_table',
-        'offers_table',
         'categories_table',
         'assetinline_table',
         'tblByCategory',

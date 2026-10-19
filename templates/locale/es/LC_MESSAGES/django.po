@@ -4195,3 +4195,9 @@ msgstr "Página"
 
 #~ msgid "The document could not be rendered; the placements still work."
 #~ msgstr "No se pudo dibujar el documento; las posiciones siguen funcionando."
+
+msgid "This certificate has been revoked and is no longer valid."
+msgstr "Este certificado ha sido revocado y ya no es válido."
+
+msgid "Revoked at:"
+msgstr "Revocado el:"

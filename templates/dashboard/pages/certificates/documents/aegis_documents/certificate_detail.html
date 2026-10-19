@@ -30,6 +30,19 @@
         </p>
       </div>
 
+      {% comment %} ================== REVOKED ================== {% endcomment %}
+      {% if record_status == 'REVOKED' %}
+        <div class="alert alert-danger shadow-sm" role="alert">
+          <h2 class="h5 alert-heading">
+            <i class="bi bi-x-octagon-fill me-1"></i>
+            {% trans 'This certificate has been revoked and is no longer valid.' %}
+          </h2>
+          {% if document.revoked_at %}
+            <p class="mb-0 small">{% trans 'Revoked at:' %} {{ document.revoked_at|date:'F d, Y' }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+
       {% comment %} ================== FILE MATCH RESULT ================== {% endcomment %}
       {% if file_match %}
         <div class="alert {% if file_match.is_exact %}alert-success{% else %}alert-info{% endif %} shadow-sm">
@@ -116,7 +129,7 @@
           {% endif %}
 
           {% comment %} ================== CERTIFICATION RECORD (AUDIT) ================== {% endcomment %}
-          {% if document.is_certified %}
+          {% if document.is_certified or record_status == 'REVOKED' %}
             <div class="card border-secondary my-4">
               <div class="card-header bg-light">
                 <strong>{% trans 'Certification record' %}</strong>

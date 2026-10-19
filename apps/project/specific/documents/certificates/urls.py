@@ -1,5 +1,6 @@
 from django.urls import path
 
+from . import external
 from .views import (AegisSummaryAnchorView, AegisSummaryDetailView,
                     CertificatesLandingTemplateView, CertificationRecordView,
                     DocumentFileView, DocumentVerificationDetailView,
@@ -83,6 +84,24 @@ urlpatterns = [
         'verify/aegis/summary/<uuid:pk>/anchor/<int:anchor_id>/proof/',
         summary_anchor_proof,
         name='summary_anchor_proof'
+    ),
+
+    # Emisores externos (otra plataforma manda PDF por servidor). JSON, con
+    # clave por emisor en cabecera; ver `external.py`.
+    path(
+        'api/certificates/external/',
+        external.issue_document,
+        name='external_issue'
+    ),
+    path(
+        'api/certificates/external/<uuid:document_id>/public-copy/',
+        external.public_copy,
+        name='external_public_copy'
+    ),
+    path(
+        'api/certificates/external/<uuid:document_id>/revoke/',
+        external.revoke_document,
+        name='external_revoke'
     ),
 
     path(

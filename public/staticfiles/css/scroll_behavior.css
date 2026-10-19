@@ -5,3 +5,38 @@
 :root {
     scroll-behavior: smooth;
 }
+
+/*--------------------------------------------------------------
+# Scroll horizontal en movil
+--------------------------------------------------------------
+  Un contenedor con scroll solo recorta a los descendientes cuyo bloque
+  contenedor esta dentro de el. Un `position: absolute` toma como bloque el
+  ancestro posicionado mas cercano, y ni `.table-responsive` ni el
+  `.datatable-container` de simple-datatables lo estaban: el primero hacia
+  arriba era `#layoutSidenav_content`.
+
+  El kit de Font Awesome pone un `<span class="sr-only">` absoluto junto a
+  cada icono con `title` (los de estado de las ordenes, por ejemplo). En una
+  tabla mas ancha que la pantalla ese span quedaba a la derecha de la
+  ultima columna, se escapaba del scroll de la tabla y ensanchaba la pagina.
+  `overflow-x: hidden` en el `body` lo tapa en escritorio, pero el navegador
+  movil agranda el viewport hasta abarcarlo: en «Purchase Orders» pasaba de
+  375 px a 1068, la barra superior fija se estiraba con el y el boton del
+  menu y el del usuario quedaban fuera de la pantalla.
+*/
+.table-responsive,
+.datatable-container {
+    position: relative;
+}
+
+/*
+  Red de seguridad para lo que venga despues: lo que se salga del area de
+  contenido se recorta en vez de ensanchar el viewport. `clip` y no `hidden`
+  porque no convierte el elemento en contenedor de scroll, asi que no rompe
+  `position: sticky` ni deja un segundo scroll vertical. Una tabla nueva
+  sigue necesitando su `.table-responsive`: sin el, sus ultimas columnas
+  quedarian cortadas en lugar de desplazables.
+*/
+#layoutSidenav_content {
+    overflow-x: clip;
+}
