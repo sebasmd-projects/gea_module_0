@@ -578,10 +578,14 @@ def run_safety() -> ScanResult:
         return result
 
     if not _module_available('safety'):
+        # Es el estado previsto desde que safety salio del grupo de
+        # desarrollo: fijaba filelock<4 y bloqueaba un arreglo de seguridad.
+        # La pregunta de las dependencias la contesta pip-audit.
+        result.by_design = True
         result.skipped = (
-            'safety no esta instalado, asi que las dependencias no se han '
-            'contrastado con ninguna base de vulnerabilidades. '
-            'Para tenerla: uv add --dev safety'
+            'safety no esta instalado (se quito del grupo de desarrollo: '
+            'fijaba filelock<4 y bloqueaba una correccion de seguridad). '
+            'Las dependencias las contrasta pip-audit, seccion 8.'
         )
         return result
 

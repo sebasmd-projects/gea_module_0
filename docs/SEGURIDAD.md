@@ -24,10 +24,10 @@ Los cuatro están también en la consola de operaciones.
 |---|---|---|---|
 | **bandit** | el código | servidor y local | ninguna |
 | **pip-audit** | las dependencias instaladas | servidor y local | **ninguna** |
-| **safety** | lo mismo, con una base más rica | **sólo local** | `SAFETY_API_KEY` |
+| **safety** | lo mismo, con una base más rica | **sólo local**, y hoy no está instalada | `SAFETY_API_KEY` |
 
 ```bash
-uv add --dev bandit pip-audit safety
+uv add --dev bandit pip-audit
 ```
 
 **`pip-audit` es la de producción, y lo es precisamente porque no lleva
@@ -36,6 +36,13 @@ servidor, ni que se pueda filtrar. Un chequeo que depende de un secreto deja de
 funcionar el día que el secreto caduca, y eso no se nota hasta el despliegue
 siguiente. Mira el **entorno instalado**, no `requirements.txt`: la versión que
 se está ejecutando es la que puede tener el fallo.
+
+**`safety` se quitó del grupo de desarrollo** (octubre de 2026) porque fijaba
+`filelock<4` y eso impedía subir a `filelock>=4.2.1`, que corrige tres CVE; la
+pregunta de las dependencias la contesta `pip-audit`. El soporte sigue en
+`check_security` §9 y, sin el paquete, la sección se omite sin contar como
+hueco. Si algún día se reinstala, comprobar antes que ya no fije `filelock`.
+Lo que sigue describe cómo se comporta cuando está.
 
 **`safety` se queda en local.** Safety CLI 3 siempre se autentica: sin clave
 abre un navegador o se queda esperando en el terminal, y en el servidor —por
@@ -48,7 +55,7 @@ lo ve cualquiera que liste procesos, y además la consola guarda la línea
 ejecutada y su salida en `CommandRunModel` —un secreto que pase por ahí queda
 escrito en una tabla que se lee desde el propio panel.
 
-Los tres son opcionales, y lo que falte **sin estar previsto** se dice al final
+Los escáneres son opcionales, y lo que falte **sin estar previsto** se dice al final
 del informe, aparte de los hallazgos: no haberlos ejecutado no es una
 vulnerabilidad, pero un «sin hallazgos» que se ha saltado una sección entera es
 una media verdad.

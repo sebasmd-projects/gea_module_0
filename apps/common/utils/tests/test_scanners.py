@@ -116,6 +116,9 @@ class WhatHappensWithoutTheToolTests(SimpleTestCase):
         self.assertFalse(result.ran)
         self.assertEqual(result.findings, [])
         self.assertIn('safety', result.skipped)
+        # Safety ya no esta en el grupo de desarrollo: que falte es lo
+        # previsto, no un hueco que sacar en cada informe.
+        self.assertTrue(result.by_design)
 
 
 class WhichScannerRunsWhereTests(SimpleTestCase):

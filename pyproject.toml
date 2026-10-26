@@ -86,5 +86,4 @@ dev = [
     "coverage>=7.16.1",
     "django-debug-toolbar>=8.0.0",
     "joserfc>=1.7.5",
-    "safety>=3.8.1",
 ]

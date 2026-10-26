@@ -131,7 +131,7 @@ tres de herramientas de fuera.
 | | Dónde corre | Credencial |
 |---|---|---|
 | **pip-audit** | servidor **y** local | ninguna |
-| **safety** | sólo local (`DEBUG=True`) | `SAFETY_API_KEY` |
+| **safety** | sólo local (`DEBUG=True`), **y ya no está instalada** | `SAFETY_API_KEY` |
 
 - **`pip-audit` es la de producción, y lo es porque no lleva credencial.** Un
   chequeo que depende de un secreto deja de funcionar el día que el secreto
@@ -145,7 +145,13 @@ tres de herramientas de fuera.
   está bien acaba ignorándose junto con los que no lo están. Y la clave va **por
   el entorno, nunca como `--key=…`**: un argumento lo ve quien liste procesos y
   acaba escrito en `CommandRunModel` con el resto de la salida.
-- Los tres son **opcionales** (`uv add --dev bandit pip-audit safety`) y lo que
+- **`safety` se quitó del grupo de desarrollo** (octubre de 2026): fijaba
+  `filelock<4` y eso bloqueaba la subida a `filelock>=4.2.1`, que corrige tres
+  CVE. Reinstalarla (`uv add --dev safety`) vuelve a cerrar esa puerta. El
+  soporte sigue en `check_security` §9 por ser opcional: sin el paquete la
+  sección se omite y no cuenta como hueco. Las dependencias las cubre
+  `pip-audit`, que no lleva credencial.
+- `bandit` y `pip-audit` son **opcionales** (`uv add --dev bandit pip-audit`) y lo que
   falte *sin estar previsto* se cuenta **aparte de los hallazgos**, al final: no
   haberlo ejecutado no es una vulnerabilidad, pero un «sin hallazgos» que se
   saltó una sección entera es una media verdad.
