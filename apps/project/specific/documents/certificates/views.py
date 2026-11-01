@@ -25,8 +25,8 @@ from .functions import (generate_barcode, generate_otp,
                         normalize_identifier)
 from .mixins import OTPProtectedDocumentMixin, OTPSessionMixin
 from .models import (AegisSummaryModel, DocumentCopyKind, DocumentTypeChoices,
-                     DocumentVerificationModel, UserCertificateTypeChoices,
-                     UserVerificationModel)
+                     DocumentVerificationModel, ExternalIssuerModel,
+                     UserCertificateTypeChoices, UserVerificationModel)
 from .utils import send_otp_email, track_certificate_view, track_document_view
 from .verification import identify_uploaded_document, resolve_identifier
 from django.urls import reverse_lazy
@@ -463,8 +463,30 @@ class DocumentVerificationDetailView(OTPProtectedDocumentMixin, DetailView):
 
         context.update(self._file_match_context())
         context.update(self._record_status_context())
+        context['external_issuer_name'] = self._external_issuer_name()
 
         return context
+
+    def _external_issuer_name(self) -> str:
+        """
+        Quien emitio el documento, si lo mando otra plataforma.
+
+        Para que quien verifica sepa **que entidad** lo emitio y no solo que
+        esta plataforma lo certifico. Un emisor dado de baja sigue contando: el
+        documento ya esta emitido. Si la fila ya no existe se cae al slug, que
+        es lo unico que queda escrito en el documento.
+        """
+        slug = self.object.external_issuer
+
+        if not slug:
+            return ''
+
+        name = (
+            ExternalIssuerModel.objects.filter(slug=slug)
+            .values_list('name', flat=True).first()
+        )
+
+        return name or slug
 
     def _record_status_context(self) -> dict:
         """Estado del certificado, tal y como lo publica el registro."""

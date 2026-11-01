@@ -3,6 +3,11 @@
 Certificacion para emisores externos: autenticacion, cupo, idempotencia,
 estampado, copia distribuible y revocacion.
 
+Los emisores son filas de ``ExternalIssuerModel`` (antes, un diccionario de
+``settings``): cada prueba los crea en la base de datos. ``propensiones`` ya
+existe de antes --lo crea la migracion de datos--, asi que se actualiza en vez
+de crearse.
+
 No hay decodificador de QR ni de Code128 en el entorno, asi que lo que se
 comprueba del estampado son los argumentos: con que texto se renderizan los
 dos simbolos y en que posicion se estampan.
@@ -11,17 +16,25 @@ dos simbolos y en que posicion se estampan.
         --settings=app_core.settings_test
 """
 
+import importlib
 import io
 import json
+import re
 from unittest import mock
 
-from django.core.cache import cache
+from auditlog.models import LogEntry
+from django.apps import apps as django_apps
 from django.core import checks
+from django.core.cache import cache
+from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from PIL import Image
 from reportlab.pdfgen import canvas
 
+from apps.common.utils.testing import login_with_otp
 from apps.common.utils.tests.test_throttling import dead_cache
 from apps.project.common.users.models import UserModel
 from apps.project.specific.internal.code_gen.services.hashing import \
@@ -33,18 +46,14 @@ from apps.project.specific.internal.code_gen.services.watermark import \
 
 from .. import external
 from ..checks import check_external_issuer_keys
-from ..models import (CertificationStatusChoices, DocumentCopyKind,
-                      DocumentVerificationModel)
+from ..admin import ExternalIssuerAdminForm
+from ..models import (CertificationStatusChoices, DocumentCertificateTypeChoices,
+                      DocumentCopyKind, DocumentVerificationModel,
+                      ExternalIssuerKindChoices, ExternalIssuerModel)
 from ..verification import MATCH_EXACT, identify_uploaded_document
 
 KEY = 'k' * 48
 OTHER_KEY = 'o' * 48
-
-ISSUERS = {
-    'propensiones': {'name': 'Propensiones Abogados', 'key': KEY},
-    'otro': {'name': 'Otro', 'key': OTHER_KEY},
-    'apagado': {'name': 'Sin clave', 'key': ''},
-}
 
 QR_URL = 'https://propensionesabogados.com/verificar/abc123'
 BARCODE = 'PAZ-2026-000123'
@@ -74,13 +83,45 @@ def a_placement():
     }
 
 
-@override_settings(GEA_EXTERNAL_ISSUERS=ISSUERS)
+def make_issuer(slug, name, key=None, **fields):
+    """Un emisor en la base de datos, con clave propia si se da una."""
+    issuer = ExternalIssuerModel(slug=slug, name=name, **fields)
+
+    if key:
+        issuer.set_key(key)
+
+    issuer.save()
+    return issuer
+
+
+def a_logo() -> bytes:
+    buffer = io.BytesIO()
+    Image.new('RGBA', (32, 32), (200, 30, 30, 255)).save(buffer, 'PNG')
+    return buffer.getvalue()
+
+
+# `propensiones` usa SERVER_KEY, que en el entorno de pruebas puede ser
+# cualquier cosa (o estar vacia): se fija aqui.
+@override_settings(SERVER_KEY=KEY)
 class ExternalTestCase(TestCase):
 
     def setUp(self):
         cache.clear()
         self.addCleanup(cache.clear)
         self.pdf = a_pdf()
+
+        # Existe desde la migracion de datos; se deja como lo dejaria el admin.
+        self.propensiones, _ = ExternalIssuerModel.objects.update_or_create(
+            slug='propensiones',
+            defaults={
+                'name': 'Propensiones Abogados',
+                'kind': ExternalIssuerKindChoices.GROUP,
+                'uses_server_key': True,
+                'is_active': True,
+            },
+        )
+        self.other = make_issuer('otro', 'Otro', OTHER_KEY)
+        self.off = make_issuer('apagado', 'Sin clave')
 
     def payload(self, **changes):
         data = {
@@ -336,17 +377,61 @@ class TestIdempotency(ExternalTestCase):
 class TestRateLimit(ExternalTestCase):
 
     def test_the_issuer_quota_answers_429(self):
-        with mock.patch.object(external, 'issue_limit',
-                               external.RateLimit('t_issue', limit=2,
-                                                  window=60)):
-            self.assertEqual(self.issue(idempotency_key='a').status_code, 201)
-            self.assertEqual(self.issue(idempotency_key='b').status_code, 201)
-            self.assertEqual(self.issue(idempotency_key='c').status_code, 429)
+        self.propensiones.issue_limit_per_hour = 2
+        self.propensiones.save()
 
-            # El cupo es del emisor, no compartido con los demas.
-            other = self.issue(
-                issuer='otro', key=OTHER_KEY, idempotency_key='c')
-            self.assertEqual(other.status_code, 201)
+        self.assertEqual(self.issue(idempotency_key='a').status_code, 201)
+        self.assertEqual(self.issue(idempotency_key='b').status_code, 201)
+        self.assertEqual(self.issue(idempotency_key='c').status_code, 429)
+
+        # El cupo es del emisor, no compartido con los demas.
+        other = self.issue(issuer='otro', key=OTHER_KEY, idempotency_key='c')
+        self.assertEqual(other.status_code, 201)
+
+    def test_each_issuer_has_its_own_limits(self):
+        self.propensiones.issue_limit_per_hour = 1
+        self.propensiones.save()
+        self.other.issue_limit_per_hour = 3
+        self.other.save()
+
+        codes = [
+            self.issue(idempotency_key=f'p{n}').status_code
+            for n in range(3)
+        ]
+        others = [
+            self.issue(issuer='otro', key=OTHER_KEY,
+                       idempotency_key=f'o{n}').status_code
+            for n in range(4)
+        ]
+
+        self.assertEqual(codes, [201, 429, 429])
+        self.assertEqual(others, [201, 201, 201, 429])
+
+    def test_the_access_quota_is_separate_from_the_issue_quota(self):
+        body = self.issued()
+        self.propensiones.access_limit_per_hour = 1
+        self.propensiones.save()
+
+        url = reverse('certificates:external_public_copy',
+                      kwargs={'document_id': body['document_id']})
+
+        self.assertEqual(self.client.get(url, **self.headers()).status_code,
+                         200)
+        self.assertEqual(self.client.get(url, **self.headers()).status_code,
+                         429)
+
+    def test_changing_the_limit_in_the_admin_applies_without_losing_the_count(
+            self):
+        self.assertEqual(self.issue(idempotency_key='a').status_code, 201)
+        self.assertEqual(self.issue(idempotency_key='b').status_code, 201)
+
+        self.propensiones.issue_limit_per_hour = 2
+        self.propensiones.save()
+        self.assertEqual(self.issue(idempotency_key='c').status_code, 429)
+
+        self.propensiones.issue_limit_per_hour = 10
+        self.propensiones.save()
+        self.assertEqual(self.issue(idempotency_key='c').status_code, 201)
 
     def test_a_dead_cache_answers_429(self):
         with dead_cache():
@@ -356,13 +441,13 @@ class TestRateLimit(ExternalTestCase):
         self.assertFalse(DocumentVerificationModel.objects.exists())
 
     def test_bad_keys_do_not_spend_the_issuer_quota(self):
-        with mock.patch.object(external, 'issue_limit',
-                               external.RateLimit('t_issue2', limit=1,
-                                                  window=60)):
-            for _ in range(3):
-                self.assertEqual(self.issue(key='x' * 48).status_code, 403)
+        self.propensiones.issue_limit_per_hour = 1
+        self.propensiones.save()
 
-            self.assertEqual(self.issue().status_code, 201)
+        for _ in range(3):
+            self.assertEqual(self.issue(key='x' * 48).status_code, 403)
+
+        self.assertEqual(self.issue().status_code, 201)
 
     def test_repeated_bad_keys_from_one_address_are_throttled(self):
         with mock.patch.object(external, 'auth_failures',
@@ -604,36 +689,40 @@ class TestRevocation(ExternalTestCase):
 
 
 class TestSystemCheck(ExternalTestCase):
+    """Los issuers estan en la base de datos: el check solo mira SERVER_KEY."""
 
-    def run_check(self, issuers, debug):
-        with override_settings(GEA_EXTERNAL_ISSUERS=issuers, DEBUG=debug):
+    def run_check(self, key, debug, **extra):
+        with override_settings(SERVER_KEY=key, DEBUG=debug, **extra):
             return check_external_issuer_keys()
 
-    def test_a_short_key_is_an_error_without_debug(self):
-        errors = self.run_check({'x': {'name': 'X', 'key': 'corta'}}, False)
+    def test_a_short_server_key_is_an_error_without_debug(self):
+        errors = self.run_check('corta', False)
 
         self.assertEqual([e.id for e in errors], ['gea.E001'])
         self.assertIsInstance(errors[0], checks.Error)
 
-    def test_a_short_key_is_tolerated_with_debug(self):
-        self.assertEqual(
-            self.run_check({'x': {'name': 'X', 'key': 'corta'}}, True), [])
+    def test_a_short_server_key_is_tolerated_with_debug(self):
+        self.assertEqual(self.run_check('corta', True), [])
 
-    def test_no_key_is_just_disabled(self):
-        self.assertEqual(
-            self.run_check({'x': {'name': 'X', 'key': ''}}, False), [])
+    def test_no_server_key_is_just_disabled(self):
+        self.assertEqual(self.run_check('', False), [])
 
-    def test_a_long_key_is_fine(self):
-        self.assertEqual(
-            self.run_check({'x': {'name': 'X', 'key': 'k' * 32}}, False), [])
+    def test_a_long_server_key_is_fine(self):
+        self.assertEqual(self.run_check('k' * 32, False), [])
+
+    def test_it_does_not_touch_the_database(self):
+        with self.assertNumQueries(0):
+            self.run_check('k' * 32, False)
 
     def test_a_legacy_variable_in_use_warns(self):
-        with override_settings(
-            GEA_EXTERNAL_ISSUERS={'x': {'name': 'X', 'key': 'k' * 32}},
-            DEBUG=False,
-            SERVER_KEY_LEGACY_VARS_IN_USE=['GEA_ISSUER_KEY_PROPENSIONES'],
-        ):
-            problems = check_external_issuer_keys()
+        problems = self.run_check(
+            'k' * 32, False,
+            SERVER_KEY_LEGACY_VARS_IN_USE=['GEA_ISSUER_KEY_PROPENSIONES'])
 
         self.assertEqual([e.id for e in problems], ['gea.W001'])
         self.assertIsInstance(problems[0], checks.Warning)
+
+    def test_the_issuers_are_no_longer_a_setting(self):
+        from django.conf import settings
+
+        self.assertFalse(hasattr(settings, 'GEA_EXTERNAL_ISSUERS'))
