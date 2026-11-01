@@ -77,6 +77,13 @@
             {{ document.get_certificate_type_display }}
           </p>
 
+          {% if external_issuer_name %}
+            <p class="mb-1">
+              <strong>{% trans 'Issued by:' %}</strong>
+              {{ external_issuer_name }}
+            </p>
+          {% endif %}
+
           <p class="mb-1">
             <strong>{% trans "Document Title:" %}</strong>
             {{ document.document_title }}

@@ -899,14 +899,15 @@ COMMANDS = (
             'the first time this runs rather than when somebody finds it. It '
             'does not replace "check --deploy", which looks at Django\'s own '
             'settings; this looks at what is specific to this project. Three '
-            'more sections come from outside tools: bandit reads the code, '
-            'pip-audit compares the installed dependencies against the public '
-            'advisory database — it needs no credential, which is why it is '
-            'the one that runs on the server — and safety asks the same '
-            'question against a richer database, but only in development, '
-            'because it always authenticates and here there is nobody to '
-            'answer. All three are optional, and when one is missing the '
-            'report says so instead of quietly shrinking.'
+            'more sections come from outside tools: pip-audit compares the '
+            'installed dependencies against the public advisory database — it '
+            'needs no credential, which is why it is the one that runs on the '
+            'server — while bandit (which reads the code) and safety (the '
+            'same question against a richer database, which always '
+            'authenticates and here there is nobody to answer) run only in '
+            'development: on the server they are neither run nor printed. '
+            'When a tool that should run is missing, the report says so '
+            'instead of quietly shrinking.'
         ),
         example=_('Before every deploy, together with the dependency check.'),
         risk=RISK_READ_ONLY,

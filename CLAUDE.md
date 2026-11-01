@@ -10,6 +10,7 @@ Documentos complementarios:
   cambios rompedores comprobado uno a uno contra este codigo, lo que hubo que cambiar, y **lo
   unico que puede impedir que el servidor arranque** (la version de la base de datos).
 - [`docs/SEGURIDAD.md`](docs/SEGURIDAD.md) — checklist de despliegue en dos minutos, y la auditoría con lo que se encontró y por qué importa.
+- [`docs/API_CERTIFICACION_EXTERNA.md`](docs/API_CERTIFICACION_EXTERNA.md) — la API `/api/certificates/external/` para que otra plataforma certifique PDF por servidor, **para entregar al emisor**: autenticación, los tres endpoints con ejemplos `curl`, errores, idempotencia y cupos, y cómo da de alta el operador a un emisor nuevo en el admin.
 - [`docs/ANCLAJE.md`](docs/ANCLAJE.md) — el anclaje temporal explicado de punta a punta: los dos tiempos, quién madura las pruebas, dónde se mira el estado y qué significa cada uno.
 - [`docs/verificar-certificado.html`](docs/verificar-certificado.html) y [`docs/verify-certificate.html`](docs/verify-certificate.html) — **para enseñar fuera**, no para desarrollar: el recorrido público de verificación paso a paso, con capturas anotadas, qué se entrega y qué se puede compartir. Es el mismo recorrido que describen los otros documentos, contado para un titular o un auditor. **Son la misma guía en español y en inglés**, generadas del mismo guion: el texto vive en tablas por idioma con las mismas claves, así que una frase añadida en uno y olvidada en el otro falla al generar y no en la página. Los recuadros de las capturas salen de medir la caja real de cada elemento en el navegador, no de estimarla. Si cambian esas pantallas, las capturas se quedan viejas y hay que rehacerlas.
 
@@ -122,16 +123,28 @@ aun así responde `NOPERM` a un `PUBLISH`, porque los canales van aparte con `&`
 Es el mismo tropiezo del broker con `~celery*`. Se abre en una línea:
 [`deploy/REDIS.md`](deploy/REDIS.md) paso 10.
 
-Nueve secciones: las seis propias de este proyecto (vistas sin guardia,
-formularios sin freno, shell, SQL por cadenas, carpetas de subidas, ajustes) y
-tres de herramientas de fuera.
+Nueve secciones en local y **siete en el servidor**: las seis propias de este
+proyecto (vistas sin guardia, formularios sin freno, shell, SQL por cadenas,
+carpetas de subidas, ajustes) y tres de herramientas de fuera, de las que en el
+servidor sólo sale `pip-audit`. Se numeran por las que se muestran (1-7 allí,
+1-9 en local), sin saltos.
 
-**El reparto de los escáneres de dependencias no es redundancia:**
+**El reparto de los escáneres de fuera no es redundancia:**
 
 | | Dónde corre | Credencial |
 |---|---|---|
+| **bandit** | sólo local (`DEBUG=True`) | ninguna |
 | **pip-audit** | servidor **y** local | ninguna |
 | **safety** | sólo local (`DEBUG=True`), **y ya no está instalada** | `SAFETY_API_KEY` |
+
+**Con `DEBUG=False` bandit y safety ni se ejecutan ni se imprimen**, y no cuentan
+en «comprobaciones no hechas»: en el servidor no van a estar nunca, y un
+«SIN MIRAR bandit» en cada despliegue es un aviso que siempre sale por algo que
+está bien — se acaba ignorando junto con los que no deberían salir. Tampoco salen
+las notas que explican cómo lanzar el comando «para que valga» (secciones 6 y
+8): ya se está lanzando donde vale. Con `DEBUG=True` todo sigue como antes,
+incluido el «SIN MIRAR» si falta bandit. La decisión vive en `Command.handle()`,
+no en el escáner; pruebas en `utils/tests/test_check_security.py`.
 
 - **`pip-audit` es la de producción, y lo es porque no lleva credencial.** Un
   chequeo que depende de un secreto deja de funcionar el día que el secreto
@@ -141,7 +154,9 @@ tres de herramientas de fuera.
 - **`safety` ni se intenta en el servidor.** Safety CLI 3 siempre se autentica y
   sin credencial se queda esperando en el terminal — por cron o desde la
   consola, eso es un cuelgue. Saltársela en producción **no cuenta como hueco**
-  (`ScanResult.by_design`): un aviso que sale en cada despliegue por algo que
+  y, desde que el comando no la llama con `DEBUG=False`, ni siquiera se imprime
+  (`ScanResult.by_design` sigue cubriendo el caso local de «no está
+  instalada»): un aviso que sale en cada despliegue por algo que
   está bien acaba ignorándose junto con los que no lo están. Y la clave va **por
   el entorno, nunca como `--key=…`**: un argumento lo ve quien liste procesos y
   acaba escrito en `CommandRunModel` con el resto de la salida.
@@ -152,7 +167,8 @@ tres de herramientas de fuera.
   sección se omite y no cuenta como hueco. Las dependencias las cubre
   `pip-audit`, que no lleva credencial.
 - `bandit` y `pip-audit` son **opcionales** (`uv add --dev bandit pip-audit`) y lo que
-  falte *sin estar previsto* se cuenta **aparte de los hallazgos**, al final: no
+  falte *sin estar previsto* — bandit en local, `pip-audit` en cualquier sitio — se
+  cuenta **aparte de los hallazgos**, al final: no
   haberlo ejecutado no es una vulnerabilidad, pero un «sin hallazgos» que se
   saltó una sección entera es una media verdad.
 - Lo que bandit da por bueno está en `apps/common/utils/scanners.py`
@@ -375,6 +391,7 @@ Reglas que se deducen del grafo — respétalas al añadir código:
 | Wizard de aprobación (UI + acciones) | `buyers/views.py` (`OfferApprovalWizard*`) + `templates/dashboard/pages/buyers/wizard/` |
 | PDFs de orden de compra / de servicio | `buyers/functions/generate_*.py` |
 | Verificación pública, OTP, entrega de PDF | `certificates/views.py`, `mixins.py`, `files.py` |
+| **API de certificación externa y sus emisores** | `certificates/external.py` (vistas y `issuer_required`) + `ExternalIssuerModel` (`models.py`) y su admin — guía en `docs/API_CERTIFICACION_EXTERNA.md` |
 | Cotejo de un archivo subido | `certificates/verification.py` |
 | Modelos de certificación y resúmenes AEGIS | `certificates/models.py` |
 | **Algoritmos de certificación** | `internal/code_gen/services/` (ver §4-bis.E) |
@@ -694,7 +711,7 @@ Sin build ni SPA. Plantillas Django + Bootstrap 5 por CDN; `templates/raw.html` 
 1. **El estado de una orden es derivado, no almacenado.** `OfferModel.status_code` se calcula desde los sellos `*_at`. Nunca añadas un campo `status` ni escribas estado directamente.
 2. **El flujo de la orden está protegido en tres capas**: métodos `mark_*()` atómicos, `clean()`/`save()`, y **10 `CheckConstraint` en la base de datos**. Cualquier cambio en el flujo obliga a actualizar las tres, más la migración correspondiente.
 3. **`profitability_paid_at` exige los tres subpagos** (`recovery_repatriation_foundation_paid`, `pay_master_service_paid`, `propensiones_paid`). Lo garantiza la restricción `profit_paid_requires_3_subpaids`.
-4. **Los números de documento de certificados nunca se almacenan en claro**: solo su HMAC (`get_hmac`). Los OTP también se guardan hasheados con HMAC-SHA256 sobre `SECRET_KEY` y se comparan con `constant_time_compare`.
+4. **Los números de documento de certificados nunca se almacenan en claro**: solo su HMAC (`get_hmac`). Los OTP también se guardan hasheados con HMAC-SHA256 sobre `SECRET_KEY` y se comparan con `constant_time_compare`. Lo mismo vale para la clave de cada emisor de la API externa (`ExternalIssuerModel.key_hash`, que además se excluye del historial de auditoría): se muestra una sola vez al generarla y no se puede recuperar.
 5. **`email_hash`** (SHA-256 del email normalizado) se recalcula en `UserModel.save()`; los flujos de recuperación de contraseña dependen de él.
 6. **Cada etapa del wizard exige su permiso Django concreto** (`buyers.can_*`). Los permisos están declarados en `OfferModel.Meta.permissions`; añadir una etapa implica migración.
 7. **El admin se protege con la sesión, no con la URL.** `app_core/admin.py::GeaAdminSite` (instalado vía `AdminConfig.default_site`, así que `admin.site` sigue siendo el mismo objeto y ningún `@admin.register` cambia) exige personal activo **con segundo factor verificado**, y a quien no cumple le responde **404**, nunca 403 ni el formulario de login del admin: un 403 confirmaría la ruta. La excepción es el personal interno sin OTP verificado, al que se redirige a `two_factor:setup`. La `ADMIN_URL` sigue viniendo de entorno y no se escribe en el código, pero ya no es el control de acceso. El panel se alcanza desde el enlace del sidenav.
@@ -878,6 +895,9 @@ DocumentVerificationModel  ─FK──  StampLayoutModel        (dónde se estam
 DocumentVerificationModel  ─M2M─  UserModel (holders)     (para quiénes se emitió, uno o
                                                            varios; decide qué ven en el
                                                            histórico)
+ExternalIssuerModel              (emisores de la API externa: clave hasheada, cupos, hosts
+                                  del QR, logo. Se une a los documentos por el slug, que
+                                  va en DocumentVerificationModel.external_issuer; no hay FK)
 StampLayoutModel           ─1:N─ StampPlacementModel
 CodeSequenceModel                (contador de la secuencia autónoma)
 CodeRegistrationModel            (traza de cada código emitido)

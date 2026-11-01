@@ -8,11 +8,20 @@ Tres endpoints JSON, sin Django REST Framework (el proyecto no lo usa):
 * ``GET  /api/certificates/external/<id>/public-copy/``      bajar la copia
 * ``POST /api/certificates/external/<id>/revoke/``           revocar
 
+Los emisores son filas de ``ExternalIssuerModel`` (se dan de alta en el
+admin): cada uno con su clave, sus cupos, los hosts a los que puede apuntar su
+QR, su logo y su tipo de certificado.
+
 Autenticacion: cabecera ``X-Issuer-Key`` comparada en tiempo constante con la
-clave del emisor de ``settings.GEA_EXTERNAL_ISSUERS``. El emisor se indica en
+clave del emisor (``ExternalIssuerModel.check_key``). El emisor se indica en
 el campo ``issuer`` (POST) o en la cabecera ``X-Issuer``. Un fallo de cualquier
-tipo --clave mala, emisor inexistente, emisor sin clave-- responde el mismo
-403 generico, para que no sirva de oraculo.
+tipo --clave mala, emisor inexistente, inactivo o sin clave-- responde el
+mismo 403 generico, para que no sirva de oraculo.
+
+Las tres vistas pasan por el decorador ``issuer_required``, que autentica,
+aplica el cupo y deja el emisor en ``request.external_issuer``. Que el control
+sea un decorador a la vista y no una llamada dentro de su cuerpo es lo que
+permite a ``check_security`` reconocerlo como guardia.
 
 El cupo es de ``RateLimit`` (falla cerrado si la cache cae) y se consume
 **despues** de autenticar: quien no tiene la clave no puede gastar el cupo del
@@ -20,17 +29,17 @@ emisor. Los intentos fallidos se cuentan aparte, por IP.
 
 Propietario: ``DocumentVerificationModel`` no exige usuario --los titulares son
 un M2M opcional (``holders``)--, asi que estos documentos quedan sin titulares
-y se asocian al emisor por ``external_issuer``. No hay usuario de servicio.
+y se asocian al emisor por ``external_issuer`` (su slug). No hay usuario de
+servicio.
 """
 
-import hmac
 import json
 import logging
 import math
+from functools import wraps
 from io import BytesIO
 from urllib.parse import urlparse
 
-from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.db import IntegrityError, transaction
@@ -55,8 +64,8 @@ from apps.project.specific.internal.code_gen.services.render import (
     render_barcode_png, render_qr_png)
 
 from .files import KIND_PUBLIC, serve
-from .models import (CertificationStatusChoices, DocumentCertificateTypeChoices,
-                     DocumentVerificationModel)
+from .models import (CertificationStatusChoices, DocumentVerificationModel,
+                     ExternalIssuerModel)
 
 logger = logging.getLogger(__name__)
 
@@ -68,8 +77,17 @@ EPSILON = 0.01             # tolerancia de coma flotante al medir contra la pagi
 
 # Cupos por emisor y hora. Fallan cerrado (defecto de RateLimit): si la cache
 # cae, se rechaza; emitir sin freno es peor que esperar a que vuelva.
-issue_limit = RateLimit('external_issue', limit=60, window=3600)
-access_limit = RateLimit('external_access', limit=300, window=3600)
+#
+# El valor del cupo es de cada emisor (``issue_limit_per_hour`` y
+# ``access_limit_per_hour``), asi que el ``RateLimit`` se construye por
+# peticion. No cambia nada del contador: la llave de cache es el nombre mas el
+# emisor, no el limite, y el limite se compara al consumir; subirlo o bajarlo
+# desde el admin vale desde la siguiente peticion, sin perder la cuenta.
+QUOTA_WINDOW = 3600
+QUOTAS = {
+    'issue': ('external_issue', 'issue_limit_per_hour'),
+    'access': ('external_access', 'access_limit_per_hour'),
+}
 # Intentos con credenciales malas, por IP.
 auth_failures = RateLimit('external_auth_failures', limit=30, window=3600)
 
@@ -119,42 +137,78 @@ def _issuer_slug(request) -> str:
 
 def authenticate_issuer(request):
     """
-    Devuelve el slug del emisor autenticado, o ``None``.
+    Devuelve el ``ExternalIssuerModel`` autenticado, o ``None``.
 
-    Compara siempre, aunque el emisor no exista o no tenga clave, para no
-    delatar por el tiempo cual de los tres casos fue.
+    Compara siempre, aunque el emisor no exista, este inactivo o no tenga
+    clave, para no delatar por el tiempo cual de los casos fue.
     """
     slug = _issuer_slug(request)
-    issuers = getattr(settings, 'GEA_EXTERNAL_ISSUERS', None) or {}
-    issuer = issuers.get(slug) if slug else None
-
-    expected = str((issuer or {}).get('key') or '')
     given = request.headers.get('X-Issuer-Key') or ''
 
-    matches = hmac.compare_digest(
-        given.encode('utf-8'),
-        (expected or 'no-key-configured').encode('utf-8'),
+    issuer = (
+        ExternalIssuerModel.objects.filter(slug=slug).first()
+        if slug else None
     )
 
-    if issuer is None or not expected or not matches:
+    if issuer is None:
+        # Mismo trabajo que con un emisor real: el HMAC y la comparacion.
+        ExternalIssuerModel(uses_server_key=False).check_key(given)
         return None
 
-    return slug
+    return issuer if issuer.check_key(given) else None
 
 
-def _gate(request, limit):
-    """Autentica y aplica el cupo. Devuelve ``(slug, respuesta_de_error)``."""
-    slug = authenticate_issuer(request)
+def _quota(kind, issuer) -> RateLimit:
+    name, attribute = QUOTAS[kind]
 
-    if slug is None:
+    return RateLimit(
+        name, limit=getattr(issuer, attribute), window=QUOTA_WINDOW)
+
+
+def _gate(request, kind):
+    """Autentica y aplica el cupo. Devuelve ``(emisor, respuesta_de_error)``."""
+    issuer = authenticate_issuer(request)
+
+    if issuer is None:
         if not auth_failures.consume(request):
             return None, _throttled()
         return None, _forbidden()
 
-    if not limit.consume(request, scope=slug):
+    if not _quota(kind, issuer).consume(request, scope=issuer.slug):
         return None, _throttled()
 
-    return slug, None
+    return issuer, None
+
+
+def issuer_required(kind):
+    """
+    Decorador de las vistas externas: emisor autenticado y cupo consumido.
+
+    ``kind`` es ``'issue'`` (emitir) o ``'access'`` (descargar o revocar). Deja
+    el emisor en ``request.external_issuer``; si no autentica o se pasa del
+    cupo, responde 403 o 429 y la vista no llega a ejecutarse.
+
+    Va **dentro** de ``require_POST``/``require_GET``: un metodo equivocado
+    es un 405 sin gastar cupo ni delatar nada.
+    """
+    if kind not in QUOTAS:
+        raise ValueError(f'issuer_required: unknown kind {kind!r}')
+
+    def decorator(view):
+        @wraps(view)
+        def wrapper(request, *args, **kwargs):
+            issuer, error = _gate(request, kind)
+
+            if error is not None:
+                return error
+
+            request.external_issuer = issuer
+
+            return view(request, *args, **kwargs)
+
+        return wrapper
+
+    return decorator
 
 
 # ==========================================================
@@ -279,7 +333,7 @@ def _placement(raw, pdf):
     }
 
 
-def _qr_payload(value):
+def _qr_payload(value, issuer):
     value = (value or '').strip()
     parsed = urlparse(value)
 
@@ -287,6 +341,15 @@ def _qr_payload(value):
             or len(value) > MAX_QR_PAYLOAD
             or any(ord(c) <= 32 or ord(c) == 127 for c in value)):
         raise InvalidRequest('qr_payload', 'It must be an https URL.')
+
+    allowed = issuer.qr_hosts
+
+    # `hostname` y no `netloc`: en `https://bueno.com@malo.com/` el host real
+    # es `malo.com`, y `netloc` lo disfrazaria de `bueno.com@malo.com`.
+    if allowed and parsed.hostname not in allowed:
+        raise InvalidRequest(
+            'qr_payload', 'The host is not one of those allowed for this '
+            'issuer.')
 
     return value
 
@@ -317,21 +380,44 @@ def _body(document):
     }
 
 
-def _stamp_builder(placement, qr_payload, barcode_text):
+def _issuer_logo(issuer):
+    """
+    Los bytes del logo del emisor, o ``None`` para dejar el de gea.
+
+    Un logo que no se puede leer (el fichero se perdio del disco) no impide
+    certificar: se registra y el QR sale con el logo por defecto.
+    """
+    if not issuer.qr_logo:
+        return None
+
+    try:
+        with issuer.qr_logo.open('rb') as handle:
+            return handle.read() or None
+    except (OSError, ValueError):
+        logger.warning(
+            'The QR logo of external issuer %s cannot be read; using the '
+            'default one.', issuer.slug)
+        return None
+
+
+def _stamp_builder(placement, qr_payload, barcode_text, logo=None):
     """
     Posiciones del ``placement`` de quien emite, en vez de las de un layout.
 
-    El QR es el de gea con su logo por defecto y el contenido recibido; el
-    Code128 lleva exactamente ``barcode_text``. Las coordenadas van en puntos
-    con origen abajo a la izquierda: el ancla ``BL`` de ``StampSpec``.
+    El QR lleva el contenido recibido y el logo del emisor (``logo``), o el de
+    gea por defecto si no tiene; el Code128 lleva exactamente
+    ``barcode_text``. Las coordenadas van en puntos con origen abajo a la
+    izquierda: el ancla ``BL`` de ``StampSpec``.
     """
+    qr_options = {'logo_bytes': logo} if logo else {}
+
     def build(document, page_count):
         qr = placement['qr']
         bar = placement['barcode']
 
         return [
             StampSpec(
-                image_png=render_qr_png(qr_payload),
+                image_png=render_qr_png(qr_payload, **qr_options),
                 pages=[qr['page'] - 1],
                 anchor='BL',
                 offset_x=qr['x'],
@@ -361,11 +447,12 @@ def _existing(slug, key):
     ).first()
 
 
-def _create(slug, key, reference, title, qr_payload, barcode_text, placement,
+def _create(issuer, key, reference, title, qr_payload, barcode_text, placement,
             pdf):
+    slug = issuer.slug
     document = DocumentVerificationModel(
         document_title=title,
-        certificate_type=DocumentCertificateTypeChoices.GENERIC,
+        certificate_type=issuer.default_certificate_type,
         issued_at=timezone.localdate(),
         external_issuer=slug,
         external_reference=reference,
@@ -393,7 +480,8 @@ def _create(slug, key, reference, title, qr_payload, barcode_text, placement,
                 ),
                 qr_payload=qr_payload,
                 specs_builder=_stamp_builder(
-                    placement, qr_payload, barcode_text),
+                    placement, qr_payload, barcode_text,
+                    logo=_issuer_logo(issuer)),
             )
     except IntegrityError:
         # Dos peticiones con la misma clave a la vez: gana la primera.
@@ -413,11 +501,10 @@ def _create(slug, key, reference, title, qr_payload, barcode_text, placement,
 
 @csrf_exempt
 @require_POST
+@issuer_required('issue')
 def issue_document(request):
-    slug, error = _gate(request, issue_limit)
-
-    if error is not None:
-        return error
+    issuer = request.external_issuer
+    slug = issuer.slug
 
     try:
         key = _text(request.POST, 'idempotency_key', MAX_IDEMPOTENCY_KEY)
@@ -431,7 +518,7 @@ def issue_document(request):
 
         reference = _text(request.POST, 'reference', MAX_TEXT)
         title = _text(request.POST, 'title', MAX_TEXT)
-        qr_payload = _qr_payload(request.POST.get('qr_payload'))
+        qr_payload = _qr_payload(request.POST.get('qr_payload'), issuer)
         barcode_text = _barcode_text(request.POST.get('barcode_text'))
         pdf = _read_source(request)
         placement = _placement(request.POST.get('placement'), pdf)
@@ -444,8 +531,8 @@ def issue_document(request):
 
     try:
         document = _create(
-            slug, key, reference, title, qr_payload, barcode_text, placement,
-            pdf,
+            issuer, key, reference, title, qr_payload, barcode_text,
+            placement, pdf,
         )
     except _Replay as replay:
         return _json(_body(replay.document), status=200)
@@ -460,14 +547,10 @@ def issue_document(request):
 
 
 @require_GET
+@issuer_required('access')
 def public_copy(request, document_id):
-    slug, error = _gate(request, access_limit)
-
-    if error is not None:
-        return error
-
     document = DocumentVerificationModel.objects.filter(
-        pk=document_id, external_issuer=slug,
+        pk=document_id, external_issuer=request.external_issuer.slug,
     ).first()
 
     if document is None:
@@ -481,14 +564,10 @@ def public_copy(request, document_id):
 
 @csrf_exempt
 @require_POST
+@issuer_required('access')
 def revoke_document(request, document_id):
-    slug, error = _gate(request, access_limit)
-
-    if error is not None:
-        return error
-
     document = DocumentVerificationModel.objects.filter(
-        pk=document_id, external_issuer=slug,
+        pk=document_id, external_issuer=request.external_issuer.slug,
     ).first()
 
     if document is None:

@@ -232,6 +232,9 @@ Certificados de documentos (línea "Aegis"): archivo, `document_hash` (huella de
 
 El OTP se guarda **hasheado con HMAC-SHA256** usando `SECRET_KEY`; la comparación es en tiempo constante (`constant_time_compare`). Hay detección de emails temporales/desechables y de dominios IPCON.
 
+### `ExternalIssuerModel` — `apps_certificates_external_issuer`
+Emisores de la API de certificación externa (`/api/certificates/external/`): plataformas del grupo corporativo o terceros que mandan un PDF por servidor y reciben la copia distribuible certificada. Se dan de alta **en el admin**, no en `settings`. Cada uno lleva su `slug` (el `X-Issuer`; inmutable si ya hay documentos), su clave (solo el HMAC-SHA256 y los 4 últimos caracteres; o `uses_server_key` para la `SERVER_KEY` del entorno, que es lo que usa `propensiones`), sus cupos por hora de emisión y de acceso, los hosts a los que puede apuntar su QR (`allowed_qr_hosts`), su logo del QR y el tipo de certificado por defecto. Un emisor inactivo o sin clave no autentica y recibe el mismo 403 que una clave mala; cada emisor solo ve y revoca sus documentos (404 para los ajenos). La página pública de un documento emitido así dice «Emitido por <nombre>». Reglas y ejemplos para el emisor: [`API_CERTIFICACION_EXTERNA.md`](API_CERTIFICACION_EXTERNA.md).
+
 ### `CertificateViewLogModel` — `apps_certificates_view_log`
 Bitácora de cada consulta: certificado (de usuario o de documento), usuario autenticado o email anónimo, IP, user-agent y timestamp. Alimenta `total_views` / `unique_views`.
 

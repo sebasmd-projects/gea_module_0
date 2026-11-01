@@ -1,7 +1,12 @@
+import hashlib
+import hmac
+import re
 import uuid
 
 from auditlog.registry import auditlog
+from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -10,6 +15,7 @@ from encrypted_model_fields.fields import EncryptedCharField
 from apps.common.utils.models import TimeStampedModel
 from apps.project.common.users.models import UserModel
 
+from .checks import MIN_ISSUER_KEY_LENGTH
 from .constants import DOCUMENT_PUBLIC_CODE_LENGTH
 from .functions import (generate_public_code, generate_unique_public_code,
                         get_hmac, masked_document_number, normalize_text)
@@ -1027,3 +1033,267 @@ class AegisSummaryDocumentModel(TimeStampedModel):
 
 
 auditlog.register(AegisSummaryModel, serialize_data=True)
+
+
+# ==========================================================
+# Emisores externos
+# ==========================================================
+
+class ExternalIssuerKindChoices(models.TextChoices):
+    GROUP = 'GROUP', _('Corporate group company')
+    THIRD_PARTY = 'THIRD_PARTY', _('Third party')
+
+
+#: Un host por linea: nombre de dominio, sin puerto, esquema, ruta ni
+#: credenciales; lo que no encaje aqui nunca coincidiria con un
+#: ``urlparse(...).hostname``, y aceptarlo en silencio dejaria la lista
+#: pareciendo mas amplia (o mas estrecha) de lo que es.
+_HOST_LINE = re.compile(r'^[a-z0-9]([a-z0-9.-]*[a-z0-9])?$')
+
+#: Hash que no corresponde a ninguna clave: con lo que se compara cuando el
+#: emisor no tiene clave, para que comparar cueste lo mismo que con una.
+NO_KEY_HASH = '0' * 64
+
+MAX_ISSUER_LOGO_BYTES = 1024 * 1024
+
+
+def hash_issuer_key(raw: str) -> str:
+    """
+    HMAC-SHA256 de una clave de emisor con ``SECRET_KEY``.
+
+    Es el mismo mecanismo que el de los numeros de documento y los OTP
+    (invariante 4): la base de datos nunca guarda la clave, solo algo que no
+    sirve para presentarla. El prefijo es de dominio: el mismo texto como
+    clave de emisor y como numero de documento no produce el mismo hash.
+    """
+    return hmac.new(
+        key=settings.SECRET_KEY.encode('utf-8'),
+        msg=b'external-issuer-key:' + str(raw).encode('utf-8'),
+        digestmod=hashlib.sha256,
+    ).hexdigest()
+
+
+def validate_issuer_logo_size(file):
+    if file and file.size > MAX_ISSUER_LOGO_BYTES:
+        raise ValidationError(
+            _('The logo is too large (1 MB at most).'), code='too_large')
+
+
+class ExternalIssuerModel(TimeStampedModel):
+    """
+    Una plataforma que certifica documentos por servidor
+    (``/api/certificates/external/``).
+
+    Antes los emisores estaban en ``settings.GEA_EXTERNAL_ISSUERS`` y solo
+    existia uno. Ahora son filas, para poder dar de alta a una empresa del
+    grupo o a un tercero desde el admin sin tocar el codigo ni desplegar.
+
+    **La clave nunca se guarda.** Se guarda ``key_hash`` (HMAC con
+    ``SECRET_KEY``) y ``key_hint``, los cuatro ultimos caracteres, para
+    reconocerla en el listado. La unica excepcion de diseno es
+    ``uses_server_key``: Propensiones comparte su clave con pag y Vercel
+    (``SERVER_KEY``) y esa vive en el entorno, no aqui.
+
+    Los documentos se asocian al emisor por el slug que llevan en
+    ``DocumentVerificationModel.external_issuer`` --no hay clave ajena--, de
+    ahi que el slug no pueda cambiar si ya hay documentos con el.
+    """
+
+    id = models.UUIDField(
+        'ID', default=uuid.uuid4, primary_key=True, editable=False)
+
+    slug = models.SlugField(
+        _('Slug'),
+        max_length=40,
+        unique=True,
+        help_text=_(
+            'What the issuer sends as "issuer" or in the X-Issuer header. It '
+            'cannot be changed once documents have been issued with it.'
+        ),
+    )
+
+    name = models.CharField(_('Name'), max_length=120)
+
+    kind = models.CharField(
+        _('Kind'),
+        max_length=20,
+        choices=ExternalIssuerKindChoices.choices,
+        default=ExternalIssuerKindChoices.THIRD_PARTY,
+    )
+
+    contact_email = models.EmailField(_('Contact email'), blank=True)
+
+    key_hash = models.CharField(
+        _('Key hash'), max_length=64, blank=True, editable=False)
+
+    key_hint = models.CharField(
+        _('Key ends in'), max_length=4, blank=True, editable=False)
+
+    key_rotated_at = models.DateTimeField(
+        _('Key set at'), null=True, blank=True, editable=False)
+
+    uses_server_key = models.BooleanField(
+        _('Uses the environment key (SERVER_KEY)'),
+        default=False,
+        help_text=_(
+            'The key is the SERVER_KEY of the environment, shared with other '
+            'platforms, instead of one stored here. It is not generated or '
+            'changed from the admin.'
+        ),
+    )
+
+    issue_limit_per_hour = models.PositiveIntegerField(
+        _('Documents it can issue per hour'),
+        default=60,
+        validators=[MinValueValidator(1)],
+    )
+
+    access_limit_per_hour = models.PositiveIntegerField(
+        _('Downloads and revocations per hour'),
+        default=300,
+        validators=[MinValueValidator(1)],
+    )
+
+    allowed_qr_hosts = models.TextField(
+        _('Allowed hosts for the QR'),
+        blank=True,
+        help_text=_(
+            'One host per line (for example verify.example.com). Empty: any '
+            'https URL. Otherwise the QR can only point to these hosts.'
+        ),
+    )
+
+    qr_logo = models.ImageField(
+        _('QR logo'),
+        upload_to='code_gen/issuers/',
+        blank=True,
+        validators=[validate_issuer_logo_size],
+        help_text=_(
+            'Printed in the centre of the QR. Empty: the GEA logo.'),
+    )
+
+    default_certificate_type = models.CharField(
+        _('Certificate type'),
+        max_length=100,
+        choices=DocumentCertificateTypeChoices.choices,
+        default=DocumentCertificateTypeChoices.GENERIC,
+    )
+
+    notes = models.TextField(_('Notes'), blank=True)
+
+    # ---------- clave ----------
+
+    def set_key(self, raw: str) -> None:
+        """Guarda el hash de una clave nueva. No guarda el modelo."""
+        raw = str(raw or '')
+
+        if len(raw) < MIN_ISSUER_KEY_LENGTH:
+            raise ValidationError(
+                _('The key must have at least %(min)s characters.'),
+                params={'min': MIN_ISSUER_KEY_LENGTH},
+                code='key_too_short',
+            )
+
+        self.key_hash = hash_issuer_key(raw)
+        self.key_hint = raw[-4:]
+        self.key_rotated_at = timezone.now()
+
+    @property
+    def has_key(self) -> bool:
+        if self.uses_server_key:
+            return bool(getattr(settings, 'SERVER_KEY', ''))
+
+        return bool(self.key_hash)
+
+    def check_key(self, given: str) -> bool:
+        """
+        Si la clave presentada es la de este emisor.
+
+        Calcula siempre el HMAC y compara siempre, tenga clave o no, para que
+        el tiempo no diga cual de los casos fue. Se compara hash con hash: asi
+        la longitud de la clave del entorno tampoco se filtra por el tiempo.
+        """
+        presented = hash_issuer_key(given or '')
+
+        if self.uses_server_key:
+            server_key = getattr(settings, 'SERVER_KEY', '') or ''
+            expected = hash_issuer_key(server_key) if server_key else ''
+        else:
+            expected = self.key_hash or ''
+
+        matches = hmac.compare_digest(
+            presented.encode('ascii'),
+            (expected or NO_KEY_HASH).encode('ascii'),
+        )
+
+        return bool(self.is_active and expected and matches)
+
+    # ---------- QR ----------
+
+    @property
+    def qr_hosts(self) -> list:
+        return [
+            line.strip().lower()
+            for line in (self.allowed_qr_hosts or '').splitlines()
+            if line.strip()
+        ]
+
+    # ---------- validacion ----------
+
+    def documents_issued(self) -> int:
+        return DocumentVerificationModel.objects.filter(
+            external_issuer=self.slug).count()
+
+    def _check_slug_can_change(self):
+        if not self.pk:
+            return
+
+        previous = type(self).objects.filter(pk=self.pk).values_list(
+            'slug', flat=True).first()
+
+        if previous and previous != self.slug and (
+            DocumentVerificationModel.objects.filter(
+                external_issuer=previous).exists()
+        ):
+            raise ValidationError({
+                'slug': _(
+                    'There are documents issued with "%(slug)s": the slug '
+                    'cannot change or they would be left without an issuer.'
+                ) % {'slug': previous}
+            })
+
+    def clean(self):
+        super().clean()
+
+        self._check_slug_can_change()
+
+        for line in (self.allowed_qr_hosts or '').splitlines():
+            host = line.strip().lower()
+
+            if host and not _HOST_LINE.match(host):
+                raise ValidationError({
+                    'allowed_qr_hosts': _(
+                        '"%(host)s" is not a host name. Write only the host, '
+                        'without https:// or a path.'
+                    ) % {'host': line.strip()}
+                })
+
+    def save(self, *args, **kwargs):
+        # Fuera de `clean()` tambien: un guardado directo no pasa por los
+        # formularios, y cambiar el slug deja documentos huerfanos.
+        self._check_slug_can_change()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.name} [{self.slug}]'
+
+    class Meta:
+        db_table = 'apps_certificates_external_issuer'
+        verbose_name = _('External issuer')
+        verbose_name_plural = _('External issuers')
+        ordering = ['name']
+
+
+# Sin `key_hash` en el historial: es lo unico que permite comprobar una clave,
+# y el historial lo lee cualquiera con acceso al admin.
+auditlog.register(ExternalIssuerModel, exclude_fields=['key_hash'])

@@ -4184,6 +4184,10 @@ msgstr "archivos"
 msgid "Page"
 msgstr "Página"
 
+#: templates/dashboard/pages/certificates/documents/aegis_documents/certificate_detail.html:82
+msgid "Issued by:"
+msgstr "Emitido por:"
+
 #~ msgid "Drag a box to move it; the offsets update as you go."
 #~ msgstr ""
 #~ "Arrastre un resumen para moverla; los desplazamientos se actualizan sobre "

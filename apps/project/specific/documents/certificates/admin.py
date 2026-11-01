@@ -1,10 +1,15 @@
 # apps/project/specific/documents/certificates/admin.py
 
+import secrets
+
+from django import forms
 from django.contrib import admin, messages
+from django.core.exceptions import ValidationError
 from django.db import transaction
-from django.db.models import Count, Q
+from django.db.models import Count, IntegerField, OuterRef, Q, Subquery
 from django.urls import reverse
 from django.utils.html import format_html
+from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _
 from django.db.models import F, Value, CharField
 from django.db.models.functions import Coalesce, Cast, Concat
@@ -14,6 +19,7 @@ from apps.common.utils.admin import GeneralAdminModel
 from apps.project.specific.internal.code_gen.services.certification import (
     CertificationError, certify_document)
 
+from .checks import MIN_ISSUER_KEY_LENGTH
 from .models import (
     AegisSummaryDocumentModel,
     AegisSummaryModel,
@@ -21,6 +27,7 @@ from .models import (
     CertificationStatusChoices,
     DocumentCertificateTypeChoices,
     DocumentVerificationModel,
+    ExternalIssuerModel,
     UserCertificateTypeChoices,
     UserVerificationModel,
 )
@@ -860,3 +867,180 @@ class AegisSummaryModelAdmin(GeneralAdminModel):
 
         confirmed = obj.anchors.filter(status='CONFIRMED').count()
         return f'{confirmed}/{total}'
+
+
+# ==========================================================
+# Emisores externos
+# ==========================================================
+
+@admin.action(
+    description=_('Generate a new key (shown once, replaces the current one)'),
+    permissions=['change'],
+)
+def action_generate_issuer_key(modeladmin, request, queryset):
+    """
+    Una clave nueva por emisor, mostrada **una sola vez**.
+
+    Lo que se guarda es el hash: despues de este mensaje la clave no se puede
+    recuperar, solo sustituir. La anterior deja de valer en el acto, asi que
+    hay que avisar al emisor antes de que su integracion empiece a recibir 403.
+    Con ``uses_server_key`` no se genera nada: esa clave vive en el entorno y
+    la comparten otras plataformas.
+    """
+    for issuer in queryset:
+        if issuer.uses_server_key:
+            messages.error(
+                request,
+                _('%(name)s uses the environment key (SERVER_KEY): it is '
+                  'changed in the .env, not here.') % {'name': issuer.name}
+            )
+            continue
+
+        raw = secrets.token_urlsafe(48)
+        issuer.set_key(raw)
+        issuer.save(update_fields=[
+            'key_hash', 'key_hint', 'key_rotated_at', 'updated'])
+
+        messages.warning(
+            request,
+            format_html(
+                '{} <code>{}</code><br>{}',
+                _('New key for %(name)s:') % {'name': issuer.name},
+                raw,
+                _('Copy it now: it will not be shown again. The previous '
+                  'key no longer works.'),
+            )
+        )
+
+
+class ExternalIssuerAdminForm(forms.ModelForm):
+    new_key = forms.CharField(
+        label=_('New key'),
+        required=False,
+        strip=False,
+        min_length=MIN_ISSUER_KEY_LENGTH,
+        widget=forms.PasswordInput(
+            render_value=False, attrs={'autocomplete': 'new-password'}),
+        help_text=format_lazy(
+            _('Write-only. At least {min} characters; it replaces the '
+              'current one. Or use the "Generate a new key" action in the '
+              'list.'),
+            min=MIN_ISSUER_KEY_LENGTH,
+        ),
+    )
+
+    class Meta:
+        model = ExternalIssuerModel
+        fields = '__all__'
+
+    def clean(self):
+        cleaned = super().clean()
+
+        if cleaned.get('new_key') and cleaned.get('uses_server_key'):
+            raise ValidationError(
+                _('This issuer uses the environment key: a key written here '
+                  'would be ignored. Untick that option first.'))
+
+        return cleaned
+
+
+# Un `ModelAdmin` simple y no `GeneralAdminModel`: este ultimo trae
+# importar/exportar, y exportar la tabla sacaria `key_hash` a un CSV.
+@admin.register(ExternalIssuerModel)
+class ExternalIssuerModelAdmin(admin.ModelAdmin):
+    form = ExternalIssuerAdminForm
+    actions = [action_generate_issuer_key]
+    empty_value_display = '-'
+
+    list_display = (
+        'name', 'slug', 'kind', 'is_active', 'key_status',
+        'issue_limit_per_hour', 'access_limit_per_hour', 'documents_issued',
+    )
+    list_filter = ('kind', 'is_active', 'uses_server_key')
+    search_fields = ('name', 'slug', 'contact_email')
+    ordering = ('name',)
+
+    readonly_fields = (
+        'key_status', 'key_rotated_at', 'documents_issued', 'created',
+        'updated',
+    )
+
+    fieldsets = (
+        (_('Issuer'), {
+            'fields': (
+                'name', 'slug', 'kind', 'contact_email', 'is_active', 'notes',
+            )
+        }),
+        (_('Key'), {
+            'fields': (
+                'key_status', 'key_rotated_at', 'uses_server_key', 'new_key',
+            )
+        }),
+        (_('Limits'), {
+            'fields': ('issue_limit_per_hour', 'access_limit_per_hour')
+        }),
+        (_('Certificates it issues'), {
+            'fields': (
+                'default_certificate_type', 'allowed_qr_hosts', 'qr_logo',
+            )
+        }),
+        (_('Activity'), {
+            'fields': ('documents_issued', 'created', 'updated')
+        }),
+    )
+
+    def get_queryset(self, request):
+        issued = (
+            DocumentVerificationModel.objects
+            .filter(external_issuer=OuterRef('slug'))
+            .order_by()
+            .values('external_issuer')
+            .annotate(total=Count('pk'))
+            .values('total')
+        )
+
+        return super().get_queryset(request).annotate(
+            _documents=Subquery(issued, output_field=IntegerField()))
+
+    def get_readonly_fields(self, request, obj=None):
+        readonly = super().get_readonly_fields(request, obj)
+
+        # El slug no cambia con documentos emitidos (lo valida el modelo; aqui
+        # ni se ofrece).
+        if obj is not None and obj.documents_issued():
+            return readonly + ('slug',)
+
+        return readonly
+
+    @admin.display(description=_('Key'))
+    def key_status(self, obj):
+        if obj.uses_server_key:
+            return _('From the environment (SERVER_KEY)')
+
+        if obj.key_hash:
+            return _('Own key ...%(hint)s') % {'hint': obj.key_hint}
+
+        return _('No key (cannot authenticate)')
+
+    @admin.display(description=_('Documents issued'),
+                   ordering='_documents')
+    def documents_issued(self, obj):
+        # En el listado viene anotado; en la ficha se cuenta.
+        annotated = getattr(obj, '_documents', None)
+
+        if annotated is not None:
+            return annotated
+
+        return obj.documents_issued() if obj.pk else 0
+
+    def save_model(self, request, obj, form, change):
+        new_key = form.cleaned_data.get('new_key')
+
+        if obj.uses_server_key:
+            # Una clave propia que no se usa solo es un hash que sobra.
+            obj.key_hash = ''
+            obj.key_hint = ''
+        elif new_key:
+            obj.set_key(new_key)
+
+        super().save_model(request, obj, form, change)
