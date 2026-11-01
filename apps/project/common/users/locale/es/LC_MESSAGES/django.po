@@ -1114,3 +1114,19 @@ msgstr ""
 "Ingrese un nombre de usuario válido. Este valor solo puede contener letras, "
 "números y los siguientes caracteres: /./+/-/_min (longitud mínima: 4); sin "
 "espacios."
+
+#: apps/project/common/users/models.py
+msgid "Admin access without second factor"
+msgstr "Acceso al panel sin segundo factor"
+
+#: apps/project/common/users/models.py
+msgid ""
+"Lets this staff member enter the admin panel without a verified second "
+"factor. It does not apply to superusers."
+msgstr ""
+"Permite que este miembro del personal entre al panel de administración sin "
+"un segundo factor verificado. No aplica a superusuarios."
+
+#: apps/project/common/users/models.py
+msgid "A superuser always needs the second factor."
+msgstr "Un superusuario siempre necesita el segundo factor."

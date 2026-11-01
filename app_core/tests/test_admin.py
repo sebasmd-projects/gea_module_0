@@ -160,3 +160,115 @@ class AdminPermissionsStillApplyTests(TestCase):
         response = self.client.get(reverse('admin:users_usermodel_changelist'))
 
         self.assertIn(response.status_code, (403, 404))
+
+
+class TwoFactorExemptionTests(TestCase):
+    """
+    La casilla «Admin access without second factor» de la ficha del usuario.
+
+    Es una excepcion a la puerta, asi que se fija por los dos lados: lo que
+    abre y, sobre todo, lo que no abre.
+    """
+
+    def make_staff(self, username, *, exempt, superuser=False):
+        return UserModel.objects.create_user(
+            username=username,
+            email=f'{username}@example.com',
+            password=PASSWORD,
+            is_staff=True,
+            is_superuser=superuser,
+            two_factor_exempt=exempt,
+        )
+
+    def test_exempt_staff_gets_in_without_the_second_factor(self):
+        self.client.force_login(self.make_staff('recepcion', exempt=True))
+
+        response = self.client.get(reverse('admin:index'))
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_staff_without_the_mark_is_still_sent_to_set_it_up(self):
+        self.client.force_login(self.make_staff('operador', exempt=False))
+
+        response = self.client.get(reverse('admin:index'))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(reverse('two_factor:setup'), response['Location'])
+
+    def test_the_mark_does_not_cover_a_superuser(self):
+        """La consola de operaciones cuelga de este panel: un superusuario
+        entra siempre con segundo factor, aunque la casilla este marcada."""
+        user = self.make_staff('jefe', exempt=True, superuser=True)
+        self.client.force_login(user)
+
+        response = self.client.get(reverse('admin:index'))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(reverse('two_factor:setup'), response['Location'])
+
+    def test_a_superuser_cannot_be_marked(self):
+        from django.core.exceptions import ValidationError
+
+        user = self.make_staff('jefe', exempt=True, superuser=True)
+
+        with self.assertRaises(ValidationError) as raised:
+            user.clean()
+
+        self.assertIn('two_factor_exempt', raised.exception.message_dict)
+
+    def test_the_mark_does_not_reach_someone_who_is_not_staff(self):
+        user = self.make_staff('cliente', exempt=True)
+        user.is_staff = False
+        user.save(update_fields=['is_staff'])
+        self.client.force_login(user)
+
+        response = self.client.get(reverse('admin:index'))
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_a_deactivated_exempt_account_loses_the_panel(self):
+        user = self.make_staff('exempleado', exempt=True)
+        self.client.force_login(user)
+
+        user.is_active = False
+        user.save(update_fields=['is_active'])
+
+        response = self.client.get(reverse('admin:index'))
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_only_a_superuser_can_set_the_mark(self):
+        """Quien edita usuarios sin ser superusuario la ve pero no la cambia:
+        no se puede quitar la puerta a si mismo ni a otro."""
+        from django.contrib.admin.sites import site
+        from django.test import RequestFactory
+
+        model_admin = site._registry[UserModel]
+        editor = UserModel.objects.create_user(
+            username='editor', email='editor@example.com',
+            password=PASSWORD, is_staff=True,
+        )
+        boss = UserModel.objects.create_user(
+            username='jefa', email='jefa@example.com',
+            password=PASSWORD, is_staff=True, is_superuser=True,
+        )
+        request = RequestFactory().get('/')
+
+        request.user = editor
+        self.assertIn(
+            'two_factor_exempt', model_admin.get_readonly_fields(request, editor))
+
+        request.user = boss
+        self.assertNotIn(
+            'two_factor_exempt', model_admin.get_readonly_fields(request, editor))
+
+    def test_marking_someone_is_recorded_in_the_audit_history(self):
+        from auditlog.models import LogEntry
+
+        user = self.make_staff('recepcion', exempt=False)
+        user.two_factor_exempt = True
+        user.save()
+
+        entry = LogEntry.objects.get_for_object(user).order_by('-timestamp').first()
+
+        self.assertIn('two_factor_exempt', entry.changes_dict)
