@@ -117,6 +117,11 @@ Solo con `DEBUG=True` se añaden rutas de prueba de páginas de error:
 | `verify/aegis/asset/certification/<uuid:pk>/` | `certificates:detail_document_verification_aegis` | `DocumentVerificationDetailView` | Requiere sesión OTP válida |
 | `verify/aegis/asset/certification/<uuid:pk>/record/` | `certificates:certification_record` | `CertificationRecordView` | Requiere sesión OTP válida |
 | `verify/aegis/certification/key/` | `certificates:certification_public_key` | `certification_public_key` | Público |
+| `api/certificates/external/` | `certificates:external_issue` | `issue_document` | Emisor externo (`X-Issuer` + `X-Issuer-Key`), solo `POST`, sin CSRF |
+| `api/certificates/external/<uuid:document_id>/public-copy/` | `certificates:external_public_copy` | `public_copy` | Emisor externo; 404 si el documento es de otro emisor |
+| `api/certificates/external/<uuid:document_id>/revoke/` | `certificates:external_revoke` | `revoke_document` | Emisor externo; solo `POST`, sin CSRF |
+
+Las tres rutas `api/certificates/external/` autentican con el decorador `issuer_required` de `external.py` (clave por emisor en base de datos, cupo por hora por emisor). Guía completa: [`API_CERTIFICACION_EXTERNA.md`](API_CERTIFICACION_EXTERNA.md).
 
 Las rutas `aegis` están protegidas por `OTPSessionMixin` / `OTPProtectedDocumentMixin` (código de un solo uso enviado por email, TTL 10 min, límites de reenvío y de intentos).
 

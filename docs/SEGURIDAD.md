@@ -465,45 +465,65 @@ aparece un tercero nuevo sin firmar**.
 ## Emisores externos: certificar desde otra plataforma
 
 `POST /api/certificates/external/` deja que otra plataforma (hoy Propensiones
-Abogados, slug `propensiones`) mande un PDF sin códigos y reciba la copia
-distribuible certificada. Quien tenga la clave **emite documentos con el sello
-de esta plataforma**, así que la clave es el único control y se trata como una
-credencial de producción.
+Abogados, slug `propensiones`; mañana las empresas del grupo y terceros) mande un
+PDF sin códigos y reciba la copia distribuible certificada. Quien tenga la clave
+**emite documentos con el sello de esta plataforma**, así que la clave es el único
+control y se trata como una credencial de producción. Guía para el emisor y para
+el operador: [`API_CERTIFICACION_EXTERNA.md`](API_CERTIFICACION_EXTERNA.md).
+
+**Dónde viven los emisores.** En la tabla `ExternalIssuerModel`, editable desde el
+admin. Ya no hay un diccionario en `settings.py` (`GEA_EXTERNAL_ISSUERS` se
+retiró): tener una lista en el código y otra en la base de datos es dos marcas
+que nada obliga a mantener de acuerdo.
 
 **Qué protege**
 
-- Cabecera `X-Issuer-Key` comparada con `hmac.compare_digest` contra la clave
-  del emisor de `GEA_EXTERNAL_ISSUERS`. Clave mala, emisor inexistente y emisor
-  sin clave dan el **mismo 403 genérico**; un emisor sin clave está
-  deshabilitado.
-- Cupo por emisor y hora (`RateLimit`, falla **cerrado**: con la caché caída
-  responde 429). Se consume después de autenticar, así que quien no tiene la
-  clave no gasta el cupo del emisor; sus intentos se cuentan aparte, por IP.
-- Cada emisor sólo ve lo suyo: descargar o revocar un documento de otro emisor
-  es un 404.
-- `manage.py check` falla sin `DJANGO_DEBUG` (`gea.E001`) si hay una clave de
-  menos de 32 caracteres.
+- Cabecera `X-Issuer-Key` comparada con `hmac.compare_digest`. De la clave **no se
+  guarda nada utilizable**: solo su HMAC-SHA256 con `SECRET_KEY` (`key_hash`, que
+  además se excluye del historial de auditoría) y los cuatro últimos caracteres
+  para reconocerla en el listado. Se muestra **una sola vez**, al generarla.
+- Clave mala, emisor inexistente, **inactivo** o sin clave dan el **mismo 403
+  genérico**, y el HMAC y la comparación se hacen siempre, para que el tiempo no
+  diga cuál fue.
+- Cupo **por emisor** y hora (`RateLimit`, falla **cerrado**: con la caché caída
+  responde 429). Los valores salen de cada fila, y se consume después de
+  autenticar, así que quien no tiene la clave no gasta el cupo del emisor; sus
+  intentos se cuentan aparte, por IP.
+- Cada emisor sólo ve lo suyo: descargar o revocar un documento de otro emisor es
+  un 404.
+- `allowed_qr_hosts` acota a dónde puede apuntar el QR que se estampa con la
+  firma de esta plataforma (se compara contra `urlparse().hostname`, no contra el
+  `netloc`: `https://bueno.com@malo.com/` apunta a `malo.com`).
+- `manage.py check` falla sin `DJANGO_DEBUG` (`gea.E001`) si `SERVER_KEY` tiene
+  menos de 32 caracteres. Un check de Django no consulta la base de datos, así que
+  la longitud de las claves propias se valida al guardarlas
+  (`ExternalIssuerModel.set_key`).
 - El endpoint no usa CSRF (no hay sesión), por eso la clave no puede ir en una
   cookie ni en la URL.
 - La revocación no borra nada: marca el documento como `REVOKED` y la página
   pública de verificación lo muestra revocado. El motivo se guarda pero **no se
   publica**.
+- Las vistas van con el decorador `issuer_required`, que es lo que
+  `check_security` §1 reconoce como control de acceso.
 
-**Rotar la clave**
+**Rotar la clave de un emisor con clave propia.** En el admin, la acción
+«Generate a new key» sobre el emisor: la clave nueva se muestra una vez y la
+anterior deja de valer en el acto (no hay dos válidas a la vez), así que avisa al
+emisor antes. Si la clave se filtró, revisa los documentos con `external_issuer`
+del emisor emitidos desde la filtración (admin, `DocumentVerificationModel`
+filtrando por `external_issuer`) y revoca los que no reconozca.
+
+**Rotar `SERVER_KEY`** (el emisor `propensiones`, con *Uses the environment key*
+marcado):
 
 1. Genera la nueva: `python -c "import secrets; print(secrets.token_urlsafe(48))"`.
-2. Cambia `SERVER_KEY` en el `.env` de gea y reinicia la
-   aplicación.
+2. Cambia `SERVER_KEY` en el `.env` de gea y reinicia la aplicación.
 3. Cambia la misma clave en el `.env` de la plataforma emisora y reinicia.
-   Entre 2 y 3 las peticiones del emisor darán 403: hazlo en una ventana
-   corta. No hay dos claves válidas a la vez.
-4. Si la clave se filtró, revisa los documentos con `external_issuer` del emisor
-   emitidos desde la filtración (admin, o `DocumentVerificationModel` filtrando
-   por `external_issuer`) y revoca los que no reconozca.
+   Entre 2 y 3 las peticiones del emisor darán 403: hazlo en una ventana corta.
 
-Para dar de baja a un emisor basta con vaciar su variable: queda deshabilitado
-sin tocar el código. Un emisor nuevo es una entrada más en
-`GEA_EXTERNAL_ISSUERS` con su propia variable de entorno.
+Para **dar de baja** a un emisor basta con desmarcar *Is active* en el admin: queda
+deshabilitado sin tocar el código ni el entorno, y sus documentos ya emitidos
+siguen siendo verificables.
 
 **Nombre de la variable.** La clave del emisor `propensiones` se llama
 `SERVER_KEY` y es la misma en pag, gea y fundacionattlas.org (Vercel). La
@@ -511,9 +531,11 @@ antigua `GEA_ISSUER_KEY_PROPENSIONES` se sigue leyendo solo si falta
 `SERVER_KEY`, y `manage.py check` avisa (`gea.W001`); se retirará. Las
 cabeceras `X-Issuer` y `X-Issuer-Key` no cambian.
 
-**Despliegue:** poner `SERVER_KEY` con el mismo valor en el `.env` de pag, el
-`.env` de gea y Vercel; reiniciar los tres; comprobar que `check` no avisa y
-después borrar las variables viejas.
+**Despliegue:** `migrate` (crea la tabla y el emisor `propensiones` con
+`uses_server_key`), `compilemessages`, y comprobar en el admin que `propensiones`
+aparece con la clave «From the environment (SERVER_KEY)». `SERVER_KEY` con el
+mismo valor en el `.env` de pag, el de gea y Vercel; reiniciar los tres; comprobar
+que `check` no avisa y después borrar las variables viejas.
 
 Lo cubre `certificates/tests/test_external_issuer.py`.
 
