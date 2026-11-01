@@ -76,6 +76,7 @@ una media verdad.
 | ☐ | `migrate` y `collectstatic` ejecutados | Una restricción sin migrar no existe; un JS sin recoger no llega |
 | ☐ | `GEA_BACKUP_PASSPHRASE` puesta antes de respaldar | `dumpdata` serializa el valor **descifrado**, así que sin ella el volcado de usuarios sería la PII en claro. Sin contraseña, `db_backup` no lo escribe |
 | ☐ | El correo sale de verdad | Desde que el acceso se puede hacer con un código enviado al buzón, un servidor de correo caído no es una molestia: es gente que no entra. `DJANGO_EMAIL_*` completas y una prueba de envío |
+| ☐ | Quién entra al panel sin segundo factor | La casilla «Acceso al panel sin segundo factor» de la ficha del usuario quita la puerta del 2FA a ese miembro del personal. Revisa la lista en el admin (Usuarios, filtro por esa casilla) y que cada marca tenga motivo. Solo la pone un superusuario, queda en el historial y nunca vale para un superusuario |
 
 ### Después de desplegar
 

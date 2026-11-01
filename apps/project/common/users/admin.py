@@ -113,6 +113,12 @@ class UserModelAdmin(UserAdmin, GeneralAdminModel):
         if not request.user.has_perm('users.can_deactivate_users'):
             ro_fields |= {'is_active'}
 
+        # Entrar al admin sin segundo factor: solo lo decide un superusuario.
+        # Un miembro del personal con permiso de editar usuarios no puede
+        # quitarse la puerta a si mismo ni a otro.
+        if not request.user.is_superuser:
+            ro_fields |= {'two_factor_exempt'}
+
         return tuple(ro_fields)
 
     search_fields = (
@@ -140,6 +146,7 @@ class UserModelAdmin(UserAdmin, GeneralAdminModel):
 
     list_filter = (
         "is_staff",
+        "two_factor_exempt",
         "is_superuser",
         "is_active",
         "is_verified_holder",
@@ -203,6 +210,7 @@ class UserModelAdmin(UserAdmin, GeneralAdminModel):
                     'is_verified_holder',
                     'is_active',
                     'is_staff',
+                    'two_factor_exempt',
                     'is_superuser',
                     'is_referred',
                     'groups',

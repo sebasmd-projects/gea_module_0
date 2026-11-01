@@ -299,6 +299,20 @@ class UserModel(TimeStampedModel, AbstractUser):
         default=False
     )
 
+    #: Personal que entra al admin sin segundo factor. Es una excepcion a la
+    #: puerta de `GeaAdminSite` (invariante 7), asi que la marca solo un
+    #: superusuario, queda en el historial de auditlog y **no vale para
+    #: superusuarios**: ellos tienen la consola de operaciones, que ejecuta
+    #: comandos en el servidor.
+    two_factor_exempt = models.BooleanField(
+        _('Admin access without second factor'),
+        default=False,
+        help_text=_(
+            'Lets this staff member enter the admin panel without a verified '
+            'second factor. It does not apply to superusers.'
+        ),
+    )
+
     phone_number_code = models.CharField(
         _('Phone Number Code'),
         max_length=7,
@@ -359,6 +373,11 @@ class UserModel(TimeStampedModel, AbstractUser):
         if '@' in self.username:
             raise ValidationError(
                 _('The username cannot contain the "@" character.'))
+        if self.two_factor_exempt and self.is_superuser:
+            raise ValidationError({
+                'two_factor_exempt': _(
+                    'A superuser always needs the second factor.'),
+            })
         super().clean()
 
     class Meta:

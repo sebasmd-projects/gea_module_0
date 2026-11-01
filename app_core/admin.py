@@ -60,6 +60,30 @@ class GeaAdminSite(AdminSiteOTPRequiredMixin, AdminSite):
     se cumple, que es la mitad que importa.
     """
 
+    def has_permission(self, request):
+        """
+        Personal activo con segundo factor verificado, o exento de el.
+
+        La exencion (`UserModel.two_factor_exempt`) la marca un superusuario
+        en la ficha del usuario y nunca cubre a un superusuario: la consola de
+        operaciones cuelga de este panel y ejecuta comandos en el servidor.
+        """
+        if super().has_permission(request):
+            return True
+
+        return self._is_two_factor_exempt(request)
+
+    def _is_two_factor_exempt(self, request) -> bool:
+        user = getattr(request, 'user', None)
+
+        # `AdminSite.has_permission` es personal activo, sin el segundo factor
+        # que anade el mixin de `two_factor`.
+        return bool(
+            AdminSite.has_permission(self, request)
+            and getattr(user, 'two_factor_exempt', False)
+            and not user.is_superuser
+        )
+
     def _is_internal_staff(self, request) -> bool:
         """
         Si quien pide ya sabe legitimamente que este panel existe.
