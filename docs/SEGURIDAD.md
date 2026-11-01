@@ -18,11 +18,15 @@ python manage.py check_cron          # que las tareas estén instaladas
 
 Los cuatro están también en la consola de operaciones.
 
-`check_security` incluye además tres escáneres de fuera:
+`check_security` incluye además tres escáneres de fuera. **En el servidor
+(`DJANGO_DEBUG=False`) sólo sale `pip-audit`**: bandit y safety ni se ejecutan ni
+se imprimen y no cuentan como «comprobación no hecha», porque allí no van a estar
+y un «SIN MIRAR» en cada despliegue acaba ignorándose. El informe del servidor
+tiene siete secciones, el local nueve; se numeran por las que se muestran.
 
 | | Qué mira | Dónde corre | Credencial |
 |---|---|---|---|
-| **bandit** | el código | servidor y local | ninguna |
+| **bandit** | el código | **sólo local** | ninguna |
 | **pip-audit** | las dependencias instaladas | servidor y local | **ninguna** |
 | **safety** | lo mismo, con una base más rica | **sólo local**, y hoy no está instalada | `SAFETY_API_KEY` |
 

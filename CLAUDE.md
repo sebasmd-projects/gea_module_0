@@ -122,16 +122,28 @@ aun así responde `NOPERM` a un `PUBLISH`, porque los canales van aparte con `&`
 Es el mismo tropiezo del broker con `~celery*`. Se abre en una línea:
 [`deploy/REDIS.md`](deploy/REDIS.md) paso 10.
 
-Nueve secciones: las seis propias de este proyecto (vistas sin guardia,
-formularios sin freno, shell, SQL por cadenas, carpetas de subidas, ajustes) y
-tres de herramientas de fuera.
+Nueve secciones en local y **siete en el servidor**: las seis propias de este
+proyecto (vistas sin guardia, formularios sin freno, shell, SQL por cadenas,
+carpetas de subidas, ajustes) y tres de herramientas de fuera, de las que en el
+servidor sólo sale `pip-audit`. Se numeran por las que se muestran (1-7 allí,
+1-9 en local), sin saltos.
 
-**El reparto de los escáneres de dependencias no es redundancia:**
+**El reparto de los escáneres de fuera no es redundancia:**
 
 | | Dónde corre | Credencial |
 |---|---|---|
+| **bandit** | sólo local (`DEBUG=True`) | ninguna |
 | **pip-audit** | servidor **y** local | ninguna |
 | **safety** | sólo local (`DEBUG=True`), **y ya no está instalada** | `SAFETY_API_KEY` |
+
+**Con `DEBUG=False` bandit y safety ni se ejecutan ni se imprimen**, y no cuentan
+en «comprobaciones no hechas»: en el servidor no van a estar nunca, y un
+«SIN MIRAR bandit» en cada despliegue es un aviso que siempre sale por algo que
+está bien — se acaba ignorando junto con los que no deberían salir. Tampoco salen
+las notas que explican cómo lanzar el comando «para que valga» (secciones 6 y
+8): ya se está lanzando donde vale. Con `DEBUG=True` todo sigue como antes,
+incluido el «SIN MIRAR» si falta bandit. La decisión vive en `Command.handle()`,
+no en el escáner; pruebas en `utils/tests/test_check_security.py`.
 
 - **`pip-audit` es la de producción, y lo es porque no lleva credencial.** Un
   chequeo que depende de un secreto deja de funcionar el día que el secreto
@@ -141,7 +153,9 @@ tres de herramientas de fuera.
 - **`safety` ni se intenta en el servidor.** Safety CLI 3 siempre se autentica y
   sin credencial se queda esperando en el terminal — por cron o desde la
   consola, eso es un cuelgue. Saltársela en producción **no cuenta como hueco**
-  (`ScanResult.by_design`): un aviso que sale en cada despliegue por algo que
+  y, desde que el comando no la llama con `DEBUG=False`, ni siquiera se imprime
+  (`ScanResult.by_design` sigue cubriendo el caso local de «no está
+  instalada»): un aviso que sale en cada despliegue por algo que
   está bien acaba ignorándose junto con los que no lo están. Y la clave va **por
   el entorno, nunca como `--key=…`**: un argumento lo ve quien liste procesos y
   acaba escrito en `CommandRunModel` con el resto de la salida.
@@ -152,7 +166,8 @@ tres de herramientas de fuera.
   sección se omite y no cuenta como hueco. Las dependencias las cubre
   `pip-audit`, que no lleva credencial.
 - `bandit` y `pip-audit` son **opcionales** (`uv add --dev bandit pip-audit`) y lo que
-  falte *sin estar previsto* se cuenta **aparte de los hallazgos**, al final: no
+  falte *sin estar previsto* — bandit en local, `pip-audit` en cualquier sitio — se
+  cuenta **aparte de los hallazgos**, al final: no
   haberlo ejecutado no es una vulnerabilidad, pero un «sin hallazgos» que se
   saltó una sección entera es una media verdad.
 - Lo que bandit da por bueno está en `apps/common/utils/scanners.py`

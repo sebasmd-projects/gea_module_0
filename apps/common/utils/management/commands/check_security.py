@@ -21,7 +21,8 @@ Las seis primeras son las que ya sacaron algo real:
    donde un formulario publico deposita cedulas.
 6. **Ajustes de produccion** que dependen de que ``DEBUG`` este apagado.
 
-Y tres que no las sabe este proyecto, sino herramientas de fuera:
+Y tres que no las sabe este proyecto, sino herramientas de fuera --dos de ellas
+solo en local, ver mas abajo--:
 
 7. **bandit** sobre el codigo, con las excepciones razonadas en
    ``utils/scanners.py``. Lo que encontro la primera vez que se ejecuto:
@@ -43,6 +44,20 @@ paginas-- y si faltan, la seccion lo dice en voz alta y sigue. No haberlas
 ejecutado no es una vulnerabilidad, pero callarselo convertiria un "sin
 hallazgos" en una media verdad, asi que se cuenta aparte al final.
 
+**Segun donde se ejecute** (``DEBUG``):
+
+* **Con ``DEBUG=True`` (local)** salen las nueve, y lo que falte sin estar
+  previsto (bandit sin instalar) se cuenta como "sin mirar".
+* **Con ``DEBUG=False`` (servidor)** bandit y safety **ni se ejecutan ni se
+  imprimen**, y no cuentan en las comprobaciones no hechas. En el servidor no
+  van a estar nunca --son herramientas de desarrollo, y safety ademas se
+  autentica--, asi que un "SIN MIRAR bandit" en cada despliegue es un aviso
+  que siempre sale por algo que esta bien, y un aviso asi se acaba ignorando
+  junto con los que no deberian salir. Tampoco salen las notas entre
+  parentesis que explican como lanzar el comando "para que valga": ya se esta
+  lanzando donde vale. Las secciones se numeran por las que se muestran
+  (1-7 en el servidor), sin saltos.
+
 No sustituye a `manage.py check --deploy`, que mira los ajustes de Django.
 Esto mira lo que es propio de este proyecto.
 
@@ -61,6 +76,22 @@ from django.urls import get_resolver
 from django.urls.resolvers import URLPattern, URLResolver
 
 from ...scanners import run_bandit, run_pip_audit, run_safety
+
+#: Lo que, escrito en el codigo de una vista de **funcion**, cuenta como
+#: control de acceso. Las clases se reconocen por sus mixins (``GUARD_MIXINS``);
+#: una funcion no tiene herencia, asi que se busca en su texto.
+FUNCTION_GUARD_TOKENS = (
+    'login_required', '_is_internal', 'is_staff', 'is_superuser',
+    'has_perm', '_forbidden',
+    # El decorador de la API de certificacion externa
+    # (`certificates/external.py`). Las tres vistas estan autenticadas --clave
+    # de emisor en cabecera, comparada en tiempo constante, y cupo por
+    # emisor--, pero lo hacen en el decorador y el cuerpo de la vista solo
+    # llama a `request.external_issuer`: sin este token salian como vistas
+    # desprotegidas, tres falsos positivos que tapaban los avisos de verdad.
+    # No estan en INTENTIONALLY_PUBLIC a proposito: no son publicas.
+    'issuer_required',
+)
 
 #: Mixins que cuentan como control de acceso.
 GUARD_MIXINS = frozenset({
@@ -204,15 +235,30 @@ class Command(BaseCommand):
 
         self.not_checked = []
 
+        # Se lee aqui y no al importar: las pruebas cambian `DEBUG`.
+        self.in_development = bool(settings.DEBUG)
+
+        # Numeracion por las secciones que se muestran, no por un numero
+        # fijo: en el servidor no hay 7 ni 9, y saltar del 6 al 8 parecia que
+        # faltaba una.
+        self.section_number = 0
+
         self._check_unguarded_views()
         self._check_throttles()
         self._check_shell_calls()
         self._check_string_sql()
         self._check_uploads_are_not_served()
         self._check_settings()
-        self._check_bandit()
+
+        # bandit y safety son herramientas de desarrollo: en el servidor no
+        # se ejecutan ni se imprimen (ver el docstring del modulo).
+        if self.in_development:
+            self._check_bandit()
+
         self._check_dependencies()
-        self._check_dependencies_deeply()
+
+        if self.in_development:
+            self._check_dependencies_deeply()
 
         self.stdout.write('')
 
@@ -245,8 +291,10 @@ class Command(BaseCommand):
 
     # ------------------------------------------------------------------
     def _section(self, title):
+        self.section_number += 1
         self.stdout.write('')
-        self.stdout.write(self.style.MIGRATE_HEADING(title))
+        self.stdout.write(
+            self.style.MIGRATE_HEADING(f'{self.section_number}. {title}'))
 
     def _ok(self, message):
         self.stdout.write(self.style.SUCCESS(f'   OK    {message}'))
@@ -288,7 +336,7 @@ class Command(BaseCommand):
         return True
 
     def _check_bandit(self):
-        self._section('7. Analisis estatico del codigo (bandit)')
+        self._section('Analisis estatico del codigo (bandit)')
 
         result = run_bandit()
 
@@ -314,14 +362,17 @@ class Command(BaseCommand):
         )
 
     def _check_dependencies(self):
-        self._section('8. Vulnerabilidades en las dependencias (pip-audit)')
+        self._section('Vulnerabilidades en las dependencias (pip-audit)')
 
-        self.stdout.write(
-            '   (mira lo que hay INSTALADO en este entorno, no '
-            'requirements.txt: la version que se ejecuta es la que puede '
-            'tener el fallo, asi que para que valga hay que lanzarlo donde '
-            'corre la aplicacion)'
-        )
+        # Solo en local: en el servidor ya se esta lanzando donde corre la
+        # aplicacion, que es lo que la nota pide.
+        if self.in_development:
+            self.stdout.write(
+                '   (mira lo que hay INSTALADO en este entorno, no '
+                'requirements.txt: la version que se ejecuta es la que puede '
+                'tener el fallo, asi que para que valga hay que lanzarlo '
+                'donde corre la aplicacion)'
+            )
 
         result = run_pip_audit()
 
@@ -336,7 +387,7 @@ class Command(BaseCommand):
             self._finding(finding)
 
     def _check_dependencies_deeply(self):
-        self._section('9. Segunda opinion sobre las dependencias (safety)')
+        self._section('Segunda opinion sobre las dependencias (safety)')
 
         result = run_safety()
 
@@ -479,7 +530,7 @@ class Command(BaseCommand):
         Apache sirve antes de que Django lo vea (invariante 13). Y lo que se
         sube aqui no son fotos de catalogo: son cedulas, pasaportes y firmas.
         """
-        self._section('5. Carpetas de subidas que serviria el servidor web')
+        self._section('Carpetas de subidas que serviria el servidor web')
 
         blocked_file = Path(settings.BASE_DIR) / MEDIA_HTACCESS
 
@@ -576,7 +627,7 @@ class Command(BaseCommand):
         return f'{row["namespace"]}:{row["name"]}'
 
     def _check_unguarded_views(self):
-        self._section('1. Vistas propias sin control de acceso')
+        self._section('Vistas propias sin control de acceso')
 
         unexpected = []
 
@@ -619,18 +670,21 @@ class Command(BaseCommand):
         import inspect
 
         try:
-            source = inspect.getsource(callback)
-        except (OSError, TypeError):
+            # Una vista envuelta por `csrf_exempt`, `require_POST` o un
+            # decorador propio es la funcion de fuera, no la del cuerpo. Todos
+            # copian `__wrapped__` con `functools.wraps`, y `unwrap` baja hasta
+            # la original: su texto incluye las lineas de los decoradores
+            # (Python cuenta `def` desde el primero), que es donde esta el
+            # control. Sin `wraps`, `getsource` veria solo el envoltorio.
+            source = inspect.getsource(inspect.unwrap(callback))
+        except (OSError, TypeError, ValueError):
             return True  # ante la duda, no se avisa
 
-        return any(token in source for token in (
-            'login_required', '_is_internal', 'is_staff', 'is_superuser',
-            'has_perm', '_forbidden',
-        ))
+        return any(token in source for token in FUNCTION_GUARD_TOKENS)
 
     # ------------------------------------------------------------------
     def _check_throttles(self):
-        self._section('2. Formularios publicos con limite de intentos')
+        self._section('Formularios publicos con limite de intentos')
 
         rows = {self._label(row): row for row in self._own_views()}
 
@@ -690,7 +744,7 @@ class Command(BaseCommand):
                 continue
 
     def _check_shell_calls(self):
-        self._section('3. Ejecucion por shell')
+        self._section('Ejecucion por shell')
 
         found = [
             (path, line)
@@ -709,7 +763,7 @@ class Command(BaseCommand):
             )
 
     def _check_string_sql(self):
-        self._section('4. SQL construido con cadenas')
+        self._section('SQL construido con cadenas')
 
         found = [
             (path, line)
@@ -729,12 +783,15 @@ class Command(BaseCommand):
 
     # ------------------------------------------------------------------
     def _check_settings(self):
-        self._section('6. Ajustes del entorno')
+        self._section('Ajustes del entorno')
 
-        self.stdout.write(
-            '   (esta seccion depende de donde se ejecute: para que valga, '
-            'lanzalo con los ajustes de produccion)'
-        )
+        # Solo en local, que es donde hay que acordarse de lanzarlo con los
+        # ajustes de produccion; en el servidor ya se hace.
+        if self.in_development:
+            self.stdout.write(
+                '   (esta seccion depende de donde se ejecute: para que '
+                'valga, lanzalo con los ajustes de produccion)'
+            )
 
         if settings.DEBUG:
             self._finding(
