@@ -209,7 +209,8 @@ PUBLICLY_SERVABLE_MEDIA = {
 
     'code_gen': (
         'logos personalizados incrustados en el centro del QR '
-        '(qr_logo_image); acaban impresos en un codigo publico, sin PII'
+        '(qr_logo_image y el logo de cada emisor externo, '
+        'code_gen/issuers/); acaban impresos en un codigo publico, sin PII'
     ),
 }
 
